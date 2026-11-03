@@ -11,7 +11,9 @@ from pathlib import Path
 
 
 def merged_path(adapter: str) -> Path:
-    return Path(adapter).resolve().parent / "merged"
+    """runs/x/final -> runs/x/merged; runs/x/checkpoint-25 -> runs/x/checkpoint-25_merged (one per checkpoint)."""
+    p = Path(adapter).resolve()
+    return p.parent / "merged" if p.name == "final" else p.parent / f"{p.name}_merged"
 
 
 def merge(adapter: str, base: str | None = None) -> str:

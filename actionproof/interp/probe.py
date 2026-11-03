@@ -70,8 +70,15 @@ def main() -> None:
         ctrl = [(m["label"], s) for m, s in zip([m for m, t in zip(meta, te) if t], s_te)
                 if m["fault"] in ("F1_phantom", "none")]
         res["f1_control_auroc"] = auroc([c[0] for c in ctrl], [c[1] for c in ctrl]) if ctrl else None
+    # Guard threshold fixed on VAL (never test): the score at which 80% of val positives fire.
+    s_va = clf.decision_function(sc.transform(X[va, best]))
+    pos_scores = np.sort(s_va[y[va] == 1])
+    tau = float(pos_scores[int(0.2 * len(pos_scores))]) if len(pos_scores) else float("inf")
+    res["tau80_val"] = tau
+    res["val_fire_rate_neg_at_tau"] = float((s_va[y[va] == 0] > tau).mean()) if (y[va] == 0).any() else None
     if a.save_probe:
-        np.savez(a.save_probe, layer=best, mean=sc.mean_, scale=sc.scale_, coef=clf.coef_[0], intercept=clf.intercept_)
+        np.savez(a.save_probe, layer=best, mean=sc.mean_, scale=sc.scale_, coef=clf.coef_[0],
+                 intercept=clf.intercept_, tau=tau)
     with open(a.out, "w") as f:
         json.dump(res, f, indent=2)
     print(json.dumps({k: res[k] for k in ("pos", "n", "best_layer", "test_auroc")} |

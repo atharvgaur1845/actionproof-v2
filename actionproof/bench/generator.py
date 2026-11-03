@@ -54,9 +54,12 @@ SPLITS: dict[str, dict[str, Any]] = {
     "val":            {"n": 100, "call": [Fault.PHANTOM, Fault.PARTIAL, Fault.TIMEOUT], "task": ["F5"], "combo": False, "rho": TRAIN_RHO},
     "test_iid":       {"n": 200, "call": [Fault.PHANTOM, Fault.PARTIAL, Fault.TIMEOUT], "task": ["F5"], "combo": False, "rho": TRAIN_RHO},
     "test_ood_fault": {"n": 200, "call": [Fault.STALE, Fault.AMBIGUOUS], "task": ["F6", "F7"], "combo": True, "rho": TRAIN_RHO},
+    # Interpretability only (never policy training, never test): cue-bearing faults so probes can
+    # ask whether the model internally registers evidence it then ignores (H7). Distinct seed.
+    "probe_cues":     {"n": 300, "call": [Fault.STALE, Fault.AMBIGUOUS, Fault.PHANTOM], "task": ["F6", "F7", "F5"], "combo": True, "rho": TRAIN_RHO},
     "test_calib_swap": {"n": 100, "call": [Fault.PHANTOM, Fault.PARTIAL, Fault.TIMEOUT], "task": [], "combo": False, "rho": SWAPPED_RHO},
 }
-SPLIT_SEEDS = {"train": 1, "val": 2, "test_iid": 3, "test_ood_fault": 4, "test_calib_swap": 5}
+SPLIT_SEEDS = {"train": 1, "val": 2, "test_iid": 3, "test_ood_fault": 4, "test_calib_swap": 5, "probe_cues": 6}
 BENIGN_SHARE = 0.40
 F5_SHARE = 0.15
 

@@ -18,13 +18,15 @@ from pathlib import Path
 from actionproof.bench.generator import make_split
 from actionproof.bench.prompts import NEUTRAL, TOOL_RESULT_FORMAT, VERIFY_PROMPTS
 from actionproof.rollout.agenttune_rollout import episode_record, make_env
+from actionproof.env.tools_ecom import TOOL_META
+from actionproof.interp.guard import NUDGE
 from actionproof.rollout.episode import _agenttune, system_prompt
 
 PROMPTS = {"neutral": NEUTRAL, **VERIFY_PROMPTS}
 
 
 def run(llm, tasks, base_prompt: str, samples: int, temperature: float, max_turns: int,
-        max_tokens: int, lora=None, seed: int = 0):
+        max_tokens: int, lora=None, seed: int = 0, guard=None):
     from vllm import SamplingParams
     _, _, parse = _agenttune()
     eps = []
@@ -34,7 +36,7 @@ def run(llm, tasks, base_prompt: str, samples: int, temperature: float, max_turn
             conv = [{"role": "system", "content": system_prompt(env, base_prompt)},
                     {"role": "user", "content": t.prompt}]
             eps.append({"task": t, "env": env, "conv": conv, "sample": s, "turns": 0,
-                        "unparsed": 0, "invalid": 0, "ended_by": "max_turns", "done": False})
+                        "unparsed": 0, "invalid": 0, "ended_by": "max_turns", "done": False, "nudges": 0})
     sp = SamplingParams(temperature=temperature, max_tokens=max_tokens, seed=seed)
     tok = llm.get_tokenizer()
     ctx = llm.llm_engine.model_config.max_model_len
@@ -57,7 +59,7 @@ def run(llm, tasks, base_prompt: str, samples: int, temperature: float, max_turn
                 e["unparsed"] += 1
                 e["ended_by"], e["done"] = "no_call", True
                 continue
-            results = []
+            results, block_obs = [], []
             for c in calls:
                 name = c["function"]["name"]
                 try:
@@ -68,13 +70,17 @@ def run(llm, tasks, base_prompt: str, samples: int, temperature: float, max_turn
                     {"status": "error", "error": "invalid_arguments"}
                 e["invalid"] += obs.get("error") in ("unknown_tool", "invalid_arguments")
                 results.append(TOOL_RESULT_FORMAT.format(name=name, content=json.dumps(obs)))
+                block_obs.append({**obs, "_write": TOOL_META.get(name, (None, ""))[1] == "write"})
             e["conv"].append({"role": "user", "content": "\n\n".join(results)})
+            if guard is not None and not e["env"].done and guard(e["conv"], block_obs):
+                e["conv"][-1]["content"] += NUDGE
+                e["nudges"] += 1
             if e["env"].done:
                 e["ended_by"], e["done"] = "report", True
     records = []
     for e in eps:
         r = episode_record(e["task"], e["env"])
-        r.update(sample=e["sample"], turns=e["turns"], unparsed=e["unparsed"], invalid=e["invalid"],
+        r.update(sample=e["sample"], turns=e["turns"], nudges=e["nudges"], unparsed=e["unparsed"], invalid=e["invalid"],
                  ended_by=e["ended_by"], conversation=e["conv"], workflow=e["task"].workflow,
                  split=e["task"].split, benign=e["task"].meta["benign"])
         records.append(r)
@@ -108,6 +114,8 @@ def main() -> None:
     ap.add_argument("--gpu-mem", type=float, default=0.85)
     ap.add_argument("--max-model-len", type=int, default=8192)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--guard-probe", default=None, help="probe npz: enable the probe-triggered verification guard")
+    ap.add_argument("--guard-tau", type=float, default=None)
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
 
@@ -120,13 +128,19 @@ def main() -> None:
     lora = None
     tasks = make_split(a.split, a.n_tasks)
     t0 = time.time()
-    recs = run(llm, tasks, PROMPTS[a.prompt], a.samples, a.temperature, a.max_turns, a.max_tokens, lora, a.seed)
+    guard = None
+    if a.guard_probe:
+        from actionproof.interp.guard import ProbeGuard
+        guard = ProbeGuard(weights, a.guard_probe, a.guard_tau)
+    recs = run(llm, tasks, PROMPTS[a.prompt], a.samples, a.temperature, a.max_turns, a.max_tokens, lora, a.seed, guard)
     out = Path(a.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     with out.open("w") as f:
         for r in recs:
             f.write(json.dumps({**r, "model": a.model, "adapter": a.adapter, "prompt": a.prompt}) + "\n")
-    s = {**summarize(recs), "model": a.model, "adapter": a.adapter, "prompt": a.prompt, "split": a.split,
+    s = {**summarize(recs), "nudges_per_ep": sum(r["nudges"] for r in recs) / len(recs),
+         "guard": {"probe": a.guard_probe, "tau": guard.tau, "checks": guard.checks, "fires": guard.fires} if guard else None,
+         "model": a.model, "adapter": a.adapter, "prompt": a.prompt, "split": a.split,
          "samples": a.samples, "temperature": a.temperature, "seconds": round(time.time() - t0)}
     out.with_suffix(".summary.json").write_text(json.dumps(s, indent=2))
     print(json.dumps(s, indent=2))

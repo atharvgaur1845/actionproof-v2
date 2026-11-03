@@ -51,3 +51,8 @@ def test_prompts_do_not_mention_faults_or_amounts():
 def test_entities_never_shared_between_train_and_test():
     ids = lambda s: {t.meta["ids"]["order"] + t.meta["ids"]["cust"] for t in make_split(s)}
     assert not ids("train") & ids("test_iid")
+
+
+def test_probe_cues_split_disjoint_from_test_entities():
+    ids = lambda s: {t.meta["ids"]["order"] + t.meta["ids"]["cust"] for t in make_split(s)}
+    assert not ids("probe_cues") & ids("test_ood_fault") and not ids("probe_cues") & ids("test_iid")
