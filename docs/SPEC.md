@@ -768,3 +768,6 @@ If something fails:
   - When the teacher fails, it claims completion 99% of the time (1,376 false completions vs. 104 honest failures).
   - The teacher's outcome is near-deterministic per task, so it yields almost no contrastive pairs. DPO pairs now come mainly from **on-policy RFT samples** (T=1.0, 8 per training task) plus the teacher samples.
   - Fixed: `run_eval` used a different env seed per sample, so generated IDs made identical action sequences diverge at observations first. The env seed now depends on the task only.
+- **2026-11-04 03:40 · New split `probe_cues` (interpretability only).** 300 tasks, seed 6, with cue-bearing faults (F2 stale, F8 ambiguous, F6 contradictory, F7 injection) plus F1 and F5. Used only to train and evaluate probes, never for policy training or test reporting. Entities are disjoint from every test split (asserted).
+  - Reason: in the training-distribution faults, F1 and F3 return byte-identical acks, so a pos-A probe there can only learn op/service priors. H7 needs faults where the model can register a mismatch.
+  - The train-distribution probe (`probe_A`) drives the guard (H5), and the `probe_cues` pos-B probe drives #7 (H7). The guard's τ is fixed on val at 80% recall.
