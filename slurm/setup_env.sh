@@ -7,7 +7,11 @@
 # SAE weights are loaded with our own JumpReLU encoder (actionproof/interp/sae_features.py),
 # not sae-lens, to keep torch pinned at AgentTune's version.
 set -euo pipefail
-ROOT=${ROOT:-$HOME/actionproof}
+# /home has a hard 40 GB quota on sharanga; everything heavy lives on /scratch (no quota).
+ROOT=${ROOT:-/scratch/$USER/actionproof}
+export UV_CACHE_DIR=/scratch/$USER/.cache/uv HF_HOME=/scratch/$USER/.cache/huggingface
+mkdir -p "$ROOT" "$UV_CACHE_DIR" "$HF_HOME"
+[ -f "$HOME/.cache/huggingface/token" ] && cp -n "$HOME/.cache/huggingface/token" "$HF_HOME/token"
 cd "$ROOT"
 
 declare -A SHAS=( [AgentTune]=d4db4c12d523 [AuditKIT]=71316da34578 [CuratorKIT]=dd9e835301fc )
