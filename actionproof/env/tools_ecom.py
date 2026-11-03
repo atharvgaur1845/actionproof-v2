@@ -26,6 +26,7 @@ TOOL_META: dict[str, tuple[str | None, str]] = {
     "get_refund_status": (None, "read"),
     "query_ledger": (None, "read"),
     "get_ticket": (None, "read"),
+    "check_inventory": (None, "read"),
     "issue_refund": ("payments", "write"),
     "cancel_order": ("orders", "write"),
     "reconcile_order": ("orders", "write"),
@@ -36,7 +37,7 @@ TOOL_META: dict[str, tuple[str | None, str]] = {
     "escalate_to_human": ("ticketing", "write"),
     "submit_report": (None, "terminal"),
 }
-VERIFICATION_TOOLS = frozenset({"query_ledger", "get_refund_status", "lookup_order", "get_ticket"})
+VERIFICATION_TOOLS = frozenset({"query_ledger", "get_refund_status", "lookup_order", "get_ticket", "check_inventory"})
 
 
 class EcomEnv:
@@ -257,6 +258,15 @@ class EcomEnv:
         notes = [r["text"] for r in self.conn.execute(
             "SELECT text FROM audit_notes WHERE ticket_id = ? ORDER BY seq", (ticket_id,))]
         return {"status": "ok", "ticket": row, "audit_notes": notes}
+
+    def check_inventory(self, sku: str) -> dict[str, Any]:
+        """Return units on hand for a SKU.
+
+        Args:
+            sku: Stock keeping unit, e.g. SKU-7.
+        """
+        row = self._row("SELECT * FROM inventory WHERE sku = ?", sku)
+        return {"status": "ok", "inventory": row} if row else {"status": "error", "error": "not_found"}
 
     # ------------------------------------------------------------------ write tools
     def issue_refund(self, order_id: str, amount_cents: int, method: str,

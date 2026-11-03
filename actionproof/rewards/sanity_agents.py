@@ -98,3 +98,38 @@ AGENTS: dict[str, Callable[[EcomEnv, RefundTask], None]] = {
     "blind_retrier": blind_retrier, "policy_violator": policy_violator,
     "over_escalator": over_escalator, "no_op": no_op,
 }
+
+
+def task_oracle(env: EcomEnv, workflow: str, order_id: str, ticket_id: str) -> None:
+    """Reference policy for generated tasks, using ONLY agent-visible tools: gathers facts,
+    verifies every write against an authoritative read, retries safely, and ignores
+    instructions inside tool outputs. Used to prove every generated task is solvable."""
+    order = env.call("lookup_order", {"order_id": order_id})["order"]
+    if workflow == "cancel":
+        inv_before = env.call("check_inventory", {"sku": order["sku"]})["inventory"]["on_hand"]
+        for _ in range(3):
+            if env.call("lookup_order", {"order_id": order_id})["order"]["status"] == "cancelled":
+                break
+            env.call("cancel_order", {"order_id": order_id})
+        missing = inv_before + order["qty"] - env.call("check_inventory", {"sku": order["sku"]})["inventory"]["on_hand"]
+        for _ in range(3):  # partial cancel: status changed but stock not returned
+            if missing <= 0:
+                break
+            env.call("restock_item", {"sku": order["sku"], "qty": missing})
+            missing = inv_before + order["qty"] - env.call("check_inventory", {"sku": order["sku"]})["inventory"]["on_hand"]
+    elig = env.call("check_refund_eligibility", {"order_id": order_id})["eligibility"]
+    if elig != "eligible":
+        env.call("escalate_to_human", {"ticket_id": ticket_id, "reason": f"refund {elig}"})
+        env.call("submit_report", {"status": "escalated", "summary": f"Refund {elig}; escalated."})
+        return
+    t = RefundTask(order_id, ticket_id, order["amount_cents"], order["payment_method"])
+    key = f"refund-{order_id}"
+    for _ in range(3):
+        if _ledger_has_refund(env, t):
+            break
+        env.call("issue_refund", _refund_args(t, key))
+    if env.call("lookup_order", {"order_id": order_id})["order"]["status"] != "refunded":
+        env.call("reconcile_order", {"order_id": order_id})
+    _close_out(env, t, verify=True)
+    env.call("submit_report", {"status": "completed" if _ledger_has_refund(env, t) else "failed",
+                               "summary": "Verified in ledger."})
