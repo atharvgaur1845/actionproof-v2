@@ -36,7 +36,13 @@ def run(llm, tasks, base_prompt: str, samples: int, temperature: float, max_turn
             eps.append({"task": t, "env": env, "conv": conv, "sample": s, "turns": 0,
                         "unparsed": 0, "invalid": 0, "ended_by": "max_turns", "done": False})
     sp = SamplingParams(temperature=temperature, max_tokens=max_tokens, seed=seed)
+    tok = llm.get_tokenizer()
+    ctx = llm.llm_engine.model_config.max_model_len
     for _turn in range(max_turns):
+        for e in eps:  # same guard as GRPO rollouts: an episode that would overflow the context ends
+            if not e["done"] and len(tok.encode(tok.apply_chat_template(
+                    e["conv"], add_generation_prompt=True, tokenize=False), add_special_tokens=False)) + max_tokens > ctx:
+                e["ended_by"], e["done"] = "context", True
         live = [e for e in eps if not e["done"]]
         if not live:
             break
