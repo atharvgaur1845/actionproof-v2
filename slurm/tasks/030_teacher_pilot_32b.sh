@@ -5,4 +5,4 @@ set -euo pipefail
 export HF_HUB_OFFLINE=1 VLLM_WORKER_MULTIPROC_METHOD=spawn
 .venv/bin/python -m actionproof.eval.run_eval --model CohereLabs/aya-expanse-32b --split train \
   --n-tasks 50 --prompt verify_a --samples 4 --temperature 0.7 --gpu-mem 0.88 \
-  --out results/teacher/pilot_32b_verify_a.jsonl 2>&1 | grep -v -i warn | tail -15
+  --out results/teacher/pilot_32b_verify_a.jsonl > "logs/$(basename $0 .sh)_$RANDOM.full.log" 2>&1; tail -25 logs/$(basename $0 .sh)_*.full.log | grep -v -i warn
