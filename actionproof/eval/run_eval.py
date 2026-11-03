@@ -106,11 +106,12 @@ def main() -> None:
     a = ap.parse_args()
 
     from vllm import LLM
-    from vllm.lora.request import LoRARequest
-    llm = LLM(a.model, tensor_parallel_size=a.tp, gpu_memory_utilization=a.gpu_mem,
-              max_model_len=a.max_model_len, enable_lora=bool(a.adapter), max_lora_rank=64,
-              dtype="bfloat16", seed=a.seed)
-    lora = LoRARequest("ap", 1, a.adapter) if a.adapter else None
+    from actionproof.train.merge import merge
+    # vLLM LoRA crashes on Cohere's tied embeddings, so adapters are served merged.
+    weights = merge(a.adapter, a.model) if a.adapter else a.model
+    llm = LLM(weights, tensor_parallel_size=a.tp, gpu_memory_utilization=a.gpu_mem,
+              max_model_len=a.max_model_len, dtype="bfloat16", seed=a.seed)
+    lora = None
     tasks = make_split(a.split, a.n_tasks)
     t0 = time.time()
     recs = run(llm, tasks, PROMPTS[a.prompt], a.samples, a.temperature, a.max_turns, a.max_tokens, lora, a.seed)
