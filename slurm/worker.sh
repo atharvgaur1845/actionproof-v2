@@ -8,7 +8,8 @@
 # several workers can share one pool. Logs go to $Q/<pool>/logs/<task>.log.
 #
 # Submit (examples):
-#   sbatch -p gpu_h200_8 --gres=gpu:1 -c 6  --mem=140G --time=24:00:00   -J ap_w_h200 slurm/worker.sh h200
+#   (H200: max 4 CPUs per GPU)
+#   sbatch -p gpu_h200_8 --gres=gpu:1 -c 4  --mem=140G --time=24:00:00   -J ap_w_h200 slurm/worker.sh h200
 #   sbatch -p gpu_h100_4 --gres=gpu:1 -c 12 --mem=200G --time=2-00:00:00 -J ap_w_h100 slurm/worker.sh h100
 #SBATCH --output=/scratch/pabitra/actionproof/logs/%x-%j.out
 #SBATCH --signal=B:USR1@600
