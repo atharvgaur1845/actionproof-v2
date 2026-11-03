@@ -754,3 +754,4 @@ If something fails:
 
 - **2026-11-03 · SAE scope.** SAEs exist only for layer 28 of Tiny Aya (community release, trained on web text). SAE analyses are restricted to Tiny Aya at layer 28. On agentic transcripts, the FVU check (threshold 0.3) is a go/no-go test. Effect: the H7 primary evidence remains the per-layer linear probe; SAE features are supporting and interpretive evidence only.
 - **2026-11-03 · HF gates.** Account `atharvgaur18` has not yet accepted any of the 7 Cohere model gates. The user must accept them before any model download (blocks G0).
+- **2026-11-03 · Environment.** Installed on `/scratch/pabitra/actionproof` (because `/home` has a 40 GB hard quota). Resolved versions: torch 2.11.0+**cu130**, transformers 5.22.1, trl 1.7.1, **vllm 0.23.0** (not 0.22.1), peft 0.21.2, agenttune 1.1.3, auditkit 1.1.3, curatorkit 0.1.21. cu130 wheels need an NVIDIA driver ≥ 580. Check this on a GPU node at G0; if the driver is older, reinstall torch with cu128.
