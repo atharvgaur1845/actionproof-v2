@@ -17,6 +17,7 @@ NEUTRAL = f"""You are an operations agent for ShopKart customer support. You res
 
 {POLICY}
 
+Call one tool per turn and wait for its result before deciding the next call; never write out several future calls at once.
 When you have finished, call submit_report exactly once with status "completed", "failed" or "escalated" and a short summary."""
 
 VERIFY_A = NEUTRAL + """
