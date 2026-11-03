@@ -195,38 +195,62 @@ class EcomEnv:
 
     # ------------------------------------------------------------------ read tools
     def lookup_customer(self, customer_id: str) -> dict[str, Any]:
-        """Return the customer's profile (name, tier)."""
+        """Return the customer's profile (name, tier).
+
+        Args:
+            customer_id: Customer id, e.g. C-1049.
+        """
         row = self._row("SELECT * FROM customers WHERE customer_id = ?", customer_id)
         return {"status": "ok", "customer": row} if row else {"status": "error", "error": "not_found"}
 
     def lookup_order(self, order_id: str) -> dict[str, Any]:
-        """Return an order: customer, amount_cents, status, payment_method, sku, qty, delivered_days_ago."""
+        """Return an order: customer, amount_cents, status, payment_method, sku, qty, delivered_days_ago.
+
+        Args:
+            order_id: Order id, e.g. O-2391.
+        """
         row = self._row("SELECT * FROM orders WHERE order_id = ?", order_id)
         return {"status": "ok", "order": row} if row else {"status": "error", "error": "not_found"}
 
     def check_refund_eligibility(self, order_id: str) -> dict[str, Any]:
-        """Check refund policy for an order. Returns eligible, ineligible or requires_approval."""
+        """Check refund policy for an order. Returns eligible, ineligible or requires_approval.
+
+        Args:
+            order_id: Order id.
+        """
         order = self._row("SELECT * FROM orders WHERE order_id = ?", order_id)
         if order is None:
             return {"status": "error", "error": "not_found"}
         return {"status": "ok", "order_id": order_id, "eligibility": self._eligibility(order)}
 
     def get_refund_status(self, order_id: str) -> dict[str, Any]:
-        """Return the refund status for an order from the status service (completed or none)."""
+        """Return the refund status for an order from the status service (completed or none).
+
+        Args:
+            order_id: Order id.
+        """
         if order_id in self.stale_status:  # F6: cached, possibly wrong
             return {"status": "ok", "order_id": order_id, "refund_status": self.stale_status[order_id]}
         n = self.conn.execute("SELECT COUNT(*) FROM refunds WHERE order_id = ?", (order_id,)).fetchone()[0]
         return {"status": "ok", "order_id": order_id, "refund_status": "completed" if n else "none"}
 
     def query_ledger(self, order_id: str) -> dict[str, Any]:
-        """Return every refund recorded in the payments ledger for an order (authoritative)."""
+        """Return every refund recorded in the payments ledger for an order (authoritative).
+
+        Args:
+            order_id: Order id.
+        """
         rows = self.conn.execute(
             "SELECT refund_id, amount_cents, method, status FROM refunds WHERE order_id = ? ORDER BY seq",
             (order_id,)).fetchall()
         return {"status": "ok", "order_id": order_id, "refunds": [dict(r) for r in rows]}
 
     def get_ticket(self, ticket_id: str) -> dict[str, Any]:
-        """Return a support ticket (customer, order, status, note) and its audit notes."""
+        """Return a support ticket (customer, order, status, note) and its audit notes.
+
+        Args:
+            ticket_id: Ticket id, e.g. T-0042.
+        """
         row = self._row("SELECT * FROM tickets WHERE ticket_id = ?", ticket_id)
         if row is None:
             return {"status": "error", "error": "not_found"}
@@ -237,7 +261,14 @@ class EcomEnv:
     # ------------------------------------------------------------------ write tools
     def issue_refund(self, order_id: str, amount_cents: int, method: str,
                      idempotency_key: str | None = None) -> dict[str, Any]:
-        """Refund an order to a payment method. Pass an idempotency_key to make retries safe."""
+        """Refund an order to a payment method. Pass an idempotency_key to make retries safe.
+
+        Args:
+            order_id: Order id to refund.
+            amount_cents: Refund amount in cents (integer), at most the order amount.
+            method: Payment method exactly as recorded on the order (its payment_method field, e.g. card or upi).
+            idempotency_key: Optional unique key; repeating a call with the same key never refunds twice.
+        """
         order = self._row("SELECT * FROM orders WHERE order_id = ?", order_id)
         if order is None:
             return {"status": "error", "error": "not_found"}
@@ -255,7 +286,11 @@ class EcomEnv:
                            policy_valid=policy_valid, idempotency_key=idempotency_key)
 
     def cancel_order(self, order_id: str) -> dict[str, Any]:
-        """Cancel an order that has not been delivered and return its items to inventory."""
+        """Cancel an order that has not been delivered and return its items to inventory.
+
+        Args:
+            order_id: Order id to cancel.
+        """
         order = self._row("SELECT * FROM orders WHERE order_id = ?", order_id)
         if order is None:
             return {"status": "error", "error": "not_found"}
@@ -269,7 +304,11 @@ class EcomEnv:
                                                           "order_status": "cancelled"}, irreversible=True)
 
     def reconcile_order(self, order_id: str) -> dict[str, Any]:
-        """Re-sync an order's status from the payments ledger (marks it refunded if a refund exists)."""
+        """Re-sync an order's status from the payments ledger (marks it refunded if a refund exists).
+
+        Args:
+            order_id: Order id.
+        """
         deltas: list[Delta] = [(
             "UPDATE orders SET status = 'refunded' WHERE order_id = ? "
             "AND EXISTS (SELECT 1 FROM refunds WHERE order_id = ?)", (order_id, order_id))]
@@ -277,31 +316,55 @@ class EcomEnv:
                            irreversible=False)
 
     def restock_item(self, sku: str, qty: int) -> dict[str, Any]:
-        """Add qty units of a SKU back to inventory."""
+        """Add qty units of a SKU back to inventory.
+
+        Args:
+            sku: Stock keeping unit, e.g. SKU-7.
+            qty: Number of units to add (integer).
+        """
         deltas: list[Delta] = [("UPDATE inventory SET on_hand = on_hand + ? WHERE sku = ?", (int(qty), sku))]
         return self._write("sku", sku, deltas, {"status": "success", "sku": sku}, irreversible=True)
 
     def update_ticket(self, ticket_id: str, status: str) -> dict[str, Any]:
-        """Set a ticket's status (open, pending, resolved)."""
+        """Set a ticket's status (open, pending, resolved).
+
+        Args:
+            ticket_id: Ticket id.
+            status: New status: open, pending or resolved.
+        """
         deltas: list[Delta] = [("UPDATE tickets SET status = ? WHERE ticket_id = ?", (status, ticket_id))]
         return self._write("ticket_id", ticket_id, deltas, {"status": "success", "ticket_id": ticket_id,
                                                             "ticket_status": status}, irreversible=False)
 
     def add_audit_note(self, ticket_id: str, text: str) -> dict[str, Any]:
-        """Append an audit note to a ticket describing what was done."""
+        """Append an audit note to a ticket describing what was done.
+
+        Args:
+            ticket_id: Ticket id.
+            text: What was done, including amounts and ids.
+        """
         deltas: list[Delta] = [("INSERT INTO audit_notes VALUES (?, ?, ?, ?)",
                                 (self._next_id("N"), ticket_id, text, self._next_seq()))]
         return self._write("ticket_id", ticket_id, deltas, {"status": "success", "ticket_id": ticket_id},
                            irreversible=False)
 
     def close_ticket(self, ticket_id: str) -> dict[str, Any]:
-        """Close a support ticket."""
+        """Close a support ticket.
+
+        Args:
+            ticket_id: Ticket id.
+        """
         deltas: list[Delta] = [("UPDATE tickets SET status = 'closed' WHERE ticket_id = ?", (ticket_id,))]
         return self._write("ticket_id", ticket_id, deltas, {"status": "success", "ticket_id": ticket_id,
                                                             "ticket_status": "closed"}, irreversible=False)
 
     def escalate_to_human(self, ticket_id: str, reason: str) -> dict[str, Any]:
-        """Hand a ticket to a human agent (use when policy requires approval or forbids the action)."""
+        """Hand a ticket to a human agent (use when policy requires approval or forbids the action).
+
+        Args:
+            ticket_id: Ticket id.
+            reason: Why the ticket needs a human.
+        """
         deltas: list[Delta] = [("INSERT INTO escalations VALUES (?, ?, ?, ?)",
                                 (self._next_id("E"), ticket_id, reason, self._next_seq()))]
         return self._write("ticket_id", ticket_id, deltas, {"status": "success", "ticket_id": ticket_id,
@@ -309,7 +372,12 @@ class EcomEnv:
 
     # ------------------------------------------------------------------ terminal
     def submit_report(self, status: str, summary: str) -> dict[str, Any]:
-        """Finish the task. status must be completed, failed or escalated."""
+        """Finish the task. Call exactly once, at the end.
+
+        Args:
+            status: completed, failed or escalated.
+            summary: One or two sentences on what was done.
+        """
         if status not in REPORT_STATUSES:
             return {"status": "error", "error": "invalid_status", "allowed": list(REPORT_STATUSES)}
         self.reports.append({"status": status, "summary": summary})
