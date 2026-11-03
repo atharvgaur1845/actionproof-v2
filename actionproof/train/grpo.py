@@ -85,8 +85,12 @@ def main() -> None:
             r=16, lora_alpha=32, task_type="CAUSAL_LM",
             target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]),
         num_generations=a.num_generations,
-        per_device_train_batch_size=a.num_generations * a.prompts_per_step,
-        gradient_accumulation_steps=1,  # set explicitly: AgentTune's default (16) starves small datasets
+        # Tiny Aya's 262k vocab makes full-trajectory logits huge: train one sequence per
+        # micro-batch, but still generate a whole step's groups at once.
+        per_device_train_batch_size=1,
+        gradient_accumulation_steps=a.num_generations * a.prompts_per_step,  # explicit (AgentTune default 16)
+        generation_batch_size=a.num_generations * a.prompts_per_step,
+        gradient_checkpointing=True,
         max_steps=a.steps,
         learning_rate=a.lr,
         beta=a.beta,
