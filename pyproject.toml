@@ -1,0 +1,25 @@
+[project]
+name = "actionproof"
+version = "0.1.0"
+description = "ActionProof: proof-carrying state-transition rewards for tool-using Aya agents"
+requires-python = ">=3.12"
+license = { text = "Apache-2.0" }
+dependencies = [
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "pydantic>=2.6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "hypothesis>=6.100"]
+# GPU stack is installed on sharanga only (pinned AgentTune/AuditKIT SHAs), see README.
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["actionproof*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
