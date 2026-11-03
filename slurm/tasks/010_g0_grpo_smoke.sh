@@ -4,7 +4,7 @@
 set -euo pipefail
 export HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false
 .venv/bin/python -m pytest -q tests 2>&1 | tail -2
-/usr/bin/time -v .venv/bin/python -m actionproof.train.grpo --arm pcstr --model CohereLabs/tiny-aya-global \
+time .venv/bin/python -m actionproof.train.grpo --arm pcstr --model CohereLabs/tiny-aya-global \
   --out runs/g0_grpo_smoke --n-tasks 8 --steps 2 --num-generations 4 --prompts-per-step 2 --save-steps 2 \
   2>&1 | grep -v -E "Warning|warn\(" | tail -60
 .venv/bin/python - <<'PY'
