@@ -77,8 +77,11 @@ def main() -> None:
     (out / "run_config.json").write_text(json.dumps({**vars(a), "n_tasks_used": len(tasks)}, indent=2))
     resume = any(out.glob("checkpoint-*"))
 
+    from actionproof.train.merge import merge
+    # Shared init: every arm starts from the SAME merged RFT weights and trains a fresh LoRA.
+    base = merge(a.init_adapter, a.model) if a.init_adapter else a.model
     grpo = TrlAgenticGrpo(
-        model=a.init_adapter or a.model,
+        model=base,
         processing_class=tok,
         reward_funcs=reward_funcs,
         reward_weights=weights,
@@ -86,7 +89,7 @@ def main() -> None:
         rollout_func=(make_batched_rollout_func(tasks, NEUTRAL, max_turns=a.max_steps_per_episode)
                       if a.rollout == "batched" else make_rollout_func(tasks, max_steps=a.max_steps_per_episode)),
         output_dir=str(out),
-        peft_config=None if a.init_adapter else LoraConfig(
+        peft_config=LoraConfig(
             r=16, lora_alpha=32, task_type="CAUSAL_LM",
             target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]),
         num_generations=a.num_generations,
@@ -112,8 +115,10 @@ def main() -> None:
         **({"vllm_mode": "colocate", "vllm_gpu_memory_utilization": a.vllm_mem,
             "vllm_enable_sleep_mode": False, "vllm_max_model_length": 8192} if a.use_vllm else {}),
     )
-    grpo.train(**({"resume_from_checkpoint": True} if resume else {})) if "resume_from_checkpoint" in \
-        grpo.train.__code__.co_varnames else grpo.train()
+    if resume:  # allocation ended mid-run: continue from the latest checkpoint
+        grpo.trainer.train(resume_from_checkpoint=True)
+    else:
+        grpo.train()
     (out / "log_history.json").write_text(json.dumps(grpo.trainer.state.log_history, indent=2))
     grpo.trainer.save_model(str(out / "final"))
 
