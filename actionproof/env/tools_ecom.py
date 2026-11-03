@@ -79,7 +79,10 @@ class EcomEnv:
                 obs = {"status": "error", "error": "invalid_arguments", "detail": str(e)}
             else:
                 self._ctx = (action_idx, tool, k)
-                obs = fn(**args)
+                try:
+                    obs = fn(**args)
+                except (ValueError, TypeError) as e:  # e.g. amount_cents="25.00" from a model
+                    obs = {"status": "error", "error": "invalid_arguments", "detail": str(e)}
         self.trace.append({"idx": action_idx, "tool": tool, "args": args, "obs": obs})
         return obs
 
