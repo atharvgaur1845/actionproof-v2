@@ -20,8 +20,8 @@ def main() -> None:
     ap.add_argument("--out", required=True)
     ap.add_argument("--epochs", type=float, default=2.0)
     ap.add_argument("--lr", type=float, default=1e-4)
-    ap.add_argument("--batch", type=int, default=8)
-    ap.add_argument("--grad-accum", type=int, default=2)
+    ap.add_argument("--batch", type=int, default=2)  # 262k vocab: keep micro-batches small
+    ap.add_argument("--grad-accum", type=int, default=8)
     ap.add_argument("--max-length", type=int, default=6144)
     ap.add_argument("--lora-r", type=int, default=16)
     ap.add_argument("--seed", type=int, default=0)
@@ -42,10 +42,12 @@ def main() -> None:
     out.mkdir(parents=True, exist_ok=True)
     (out / "run_config.json").write_text(json.dumps({**vars(a), "rows": len(rows)}, indent=2))
 
+    import math
+    total_steps = math.ceil(len(rows) / (a.batch * a.grad_accum)) * a.epochs
     cfg = SFTConfig(
         output_dir=str(out), num_train_epochs=a.epochs, learning_rate=a.lr,
         per_device_train_batch_size=a.batch, gradient_accumulation_steps=a.grad_accum,
-        lr_scheduler_type="cosine", warmup_ratio=0.05, logging_steps=5, save_strategy="epoch",
+        lr_scheduler_type="cosine", warmup_steps=max(1, int(0.05 * total_steps)), logging_steps=5, save_strategy="epoch",
         bf16=torch.cuda.is_available(), max_length=a.max_length, completion_only_loss=True,
         gradient_checkpointing=True, seed=a.seed, report_to=[],
         model_init_kwargs={"torch_dtype": torch.bfloat16},

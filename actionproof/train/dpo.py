@@ -21,8 +21,8 @@ def main() -> None:
     ap.add_argument("--beta", type=float, default=0.1)
     ap.add_argument("--lr", type=float, default=5e-6)
     ap.add_argument("--epochs", type=float, default=2.0)
-    ap.add_argument("--batch", type=int, default=4)
-    ap.add_argument("--grad-accum", type=int, default=4)
+    ap.add_argument("--batch", type=int, default=1)  # chosen+rejected, 262k vocab
+    ap.add_argument("--grad-accum", type=int, default=16)
     ap.add_argument("--max-length", type=int, default=6144)
     ap.add_argument("--seed", type=int, default=0)
     a = ap.parse_args()
