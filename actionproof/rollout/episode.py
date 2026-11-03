@@ -18,10 +18,15 @@ Generate = Callable[[list[dict[str, str]]], str]
 
 
 def _agenttune():
-    from agenttune.agentic.rollout_engines.rollout_factory import (
-        DEFAULT_TOOLS_FALLBACK_PROMPT, _build_tool_schema)
-    from agenttune.agentic.rollout_engines.tool_call_parse import extract_tool_calls_from_text
-    return DEFAULT_TOOLS_FALLBACK_PROMPT, _build_tool_schema, extract_tool_calls_from_text
+    """AgentTune's prompt, schema builder and parser; the lite copy where AgentTune can't install (demo Space)."""
+    try:
+        from agenttune.agentic.rollout_engines.rollout_factory import (
+            DEFAULT_TOOLS_FALLBACK_PROMPT, _build_tool_schema)
+        from agenttune.agentic.rollout_engines.tool_call_parse import extract_tool_calls_from_text
+        return DEFAULT_TOOLS_FALLBACK_PROMPT, _build_tool_schema, extract_tool_calls_from_text
+    except ImportError:
+        from actionproof.rollout import lite_format as L
+        return L.FALLBACK_PROMPT, L.build_schema, L.extract_tool_calls_from_text
 
 
 @dataclass
