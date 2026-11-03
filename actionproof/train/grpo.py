@@ -44,6 +44,9 @@ def main() -> None:
     ap.add_argument("--save-steps", type=int, default=25)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--use-vllm", action="store_true")
+    ap.add_argument("--rollout", choices=("sequential", "batched"), default="sequential",
+                    help="batched = lockstep multi-turn rollouts on colocated vLLM (requires --use-vllm)")
+    ap.add_argument("--vllm-mem", type=float, default=0.30)
     a = ap.parse_args()
 
     import torch
@@ -55,6 +58,7 @@ def main() -> None:
     from actionproof.bench.generator import make_split
     from actionproof.bench.prompts import NEUTRAL
     from actionproof.rollout.agenttune_rollout import make_rollout_func
+    from actionproof.rollout.batched_vllm import make_batched_rollout_func
 
     tasks = make_split(a.split, a.n_tasks)
     if a.task_file:
@@ -79,7 +83,8 @@ def main() -> None:
         reward_funcs=reward_funcs,
         reward_weights=weights,
         train_dataset=ds,
-        rollout_func=make_rollout_func(tasks, max_steps=a.max_steps_per_episode),
+        rollout_func=(make_batched_rollout_func(tasks, NEUTRAL, max_turns=a.max_steps_per_episode)
+                      if a.rollout == "batched" else make_rollout_func(tasks, max_steps=a.max_steps_per_episode)),
         output_dir=str(out),
         peft_config=None if a.init_adapter else LoraConfig(
             r=16, lora_alpha=32, task_type="CAUSAL_LM",
@@ -104,7 +109,8 @@ def main() -> None:
         seed=a.seed,
         report_to=[],
         use_vllm=a.use_vllm,
-        **({"vllm_mode": "colocate"} if a.use_vllm else {}),
+        **({"vllm_mode": "colocate", "vllm_gpu_memory_utilization": a.vllm_mem,
+            "vllm_enable_sleep_mode": False, "vllm_max_model_length": 8192} if a.use_vllm else {}),
     )
     grpo.train(**({"resume_from_checkpoint": True} if resume else {})) if "resume_from_checkpoint" in \
         grpo.train.__code__.co_varnames else grpo.train()
