@@ -2,7 +2,7 @@
 # G0 (c)+(d): 2-step GRPO on Tiny Aya with per-rollout envs; asserts rollout-id <-> receipt link,
 # measures step time. Pass = finishes, reward keys reach reward_funcs, checkpoint written.
 set -euo pipefail
-export HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false
+source slurm/env.sh
 .venv/bin/python -m pytest -q tests 2>&1 | tail -2
 time .venv/bin/python -m actionproof.train.grpo --arm pcstr --model CohereLabs/tiny-aya-global \
   --out runs/g0_grpo_smoke --n-tasks 8 --steps 2 --num-generations 4 --prompts-per-step 2 --save-steps 2 \

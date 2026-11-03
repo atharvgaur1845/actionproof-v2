@@ -2,7 +2,7 @@
 # G0 (d) re-test: batched lockstep rollouts on colocated vLLM, real step size (4 prompts x 8).
 # Pass = 3 steps complete, reward variance > 0, step_time well under 180 s.
 set -euo pipefail
-export HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false VLLM_WORKER_MULTIPROC_METHOD=spawn PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+source slurm/env.sh
 rm -rf runs/g0_grpo_batched
 time .venv/bin/python -m actionproof.train.grpo --arm pcstr --model CohereLabs/tiny-aya-global \
   --out runs/g0_grpo_batched --n-tasks 32 --steps 3 --num-generations 8 --prompts-per-step 4 --save-steps 3 \

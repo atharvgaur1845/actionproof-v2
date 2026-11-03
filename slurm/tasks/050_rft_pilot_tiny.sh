@@ -2,7 +2,7 @@
 # R1 pilot: curated + raw RFT data from the 32B teacher pilot, 1-epoch RFT on Tiny Aya,
 # then evaluate the adapter on 60 test_iid tasks with the NEUTRAL prompt.
 set -euo pipefail
-export HF_HUB_OFFLINE=1 VLLM_ENABLE_V1_MULTIPROCESSING=0  # in-process engine (the path TRL colocate uses; subprocess engine core fails to init in this job)
+source slurm/env.sh
 T=results/teacher/pilot_32b_verify_a.jsonl
 .venv/bin/python -m actionproof.train.rft_data --teacher $T --out data/rft/pilot_curated.jsonl
 .venv/bin/python -m actionproof.train.rft_data --teacher $T --raw --match-curated data/rft/pilot_curated.jsonl --out data/rft/pilot_raw.jsonl
