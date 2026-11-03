@@ -54,9 +54,8 @@ def make_batched_rollout_func(tasks: list[Task], base_prompt: str, max_turns: in
             env = make_env(task, rid, seed=uuid.UUID(rid[3:].ljust(32, "0")).int % 2**31)
             conv = [{"role": "system", "content": system_prompt(env, base_prompt)},
                     {"role": "user", "content": task.prompt}]
-            pids = tok.apply_chat_template(conv, add_generation_prompt=True, tokenize=True)
-            if isinstance(pids, dict):
-                pids = pids["input_ids"]
+            # render then encode (transformers 5 returns a BatchEncoding for tokenize=True)
+            pids = tok.encode(_render(tok, conv, gen=True), add_special_tokens=False)
             eps.append({"task": task, "env": env, "conv": conv, "prompt_ids": list(pids),
                         "ids": [], "mask": [], "lps": [], "done": False})
 
