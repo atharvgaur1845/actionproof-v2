@@ -30,7 +30,7 @@ def run(llm, tasks, base_prompt: str, samples: int, temperature: float, max_turn
     eps = []
     for t in tasks:
         for s in range(samples):
-            env = make_env(t, f"ev-{t.task_id}-{s}", seed=seed * 1000 + s)
+            env = make_env(t, f"ev-{t.task_id}-{s}", seed=seed)  # env randomness depends on the task only, so samples are comparable
             conv = [{"role": "system", "content": system_prompt(env, base_prompt)},
                     {"role": "user", "content": t.prompt}]
             eps.append({"task": t, "env": env, "conv": conv, "sample": s, "turns": 0,

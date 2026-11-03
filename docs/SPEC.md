@@ -763,3 +763,8 @@ If something fails:
   - (c) GRPO with per-rollout environments and PCSTR through `ap_episodes`: the rollout-ID ↔ receipt assertions hold, and `frac_reward_zero_std = 0` from the base model.
   - (d) Step time: sequential AgentTune rollouts take 415 s per 8 rollouts. The new batched lockstep vLLM engine takes **41 s per 32 rollouts**, so 200 steps ≈ 2.3 h.
   - Fixes made along the way: GRPO OOM (262k vocab) solved with micro-batch 1 plus gradient accumulation; standalone vLLM runs in-process (`VLLM_ENABLE_V1_MULTIPROCESSING=0`).
+- **2026-11-04 03:20 · Teacher and DPO data.**
+  - Aya 32B teacher (verify_a, T=0.7, 400×8): **VSC 44.75%**. RFT data: 269 curated episodes (1,340 rows); raw ablation 1,192 rows.
+  - When the teacher fails, it claims completion 99% of the time (1,376 false completions vs. 104 honest failures).
+  - The teacher's outcome is near-deterministic per task, so it yields almost no contrastive pairs. DPO pairs now come mainly from **on-policy RFT samples** (T=1.0, 8 per training task) plus the teacher samples.
+  - Fixed: `run_eval` used a different env seed per sample, so generated IDs made identical action sequences diverge at observations first. The env seed now depends on the task only.
