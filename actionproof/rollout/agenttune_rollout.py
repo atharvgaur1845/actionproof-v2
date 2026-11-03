@@ -46,6 +46,10 @@ def episode_record(task: Task, env: EcomEnv) -> dict[str, Any]:
         "n_verify": sum(s["tool"] in VERIFICATION_TOOLS for s in env.trace),
         "receipt_rollout_ids": sorted({r.rollout_id for r in env.log.receipts}),
         "faults": task.meta.get("faults", []),
+        # Per-write ground truth for probes (spec §14): did the acknowledged effect land?
+        "attempts": [{"action_idx": at.action_idx, "op": at.op, "entity": at.entity, "fault": at.fault,
+                      "committed": at.committed, "obs_status": at.observation.get("status")}
+                     for at in env.log.attempts],
     }
 
 
