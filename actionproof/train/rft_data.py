@@ -76,6 +76,9 @@ def main() -> None:
     ap.add_argument("--raw", action="store_true", help="curation ablation: no VSC filter")
     ap.add_argument("--match-curated", default=None, help="curated rows file whose episode count raw must match")
     ap.add_argument("--per-task-cap", type=int, default=2)
+    ap.add_argument("--expert", nargs="*", default=[],
+                    help="scripted-expert episodes (expert_demos.py): VSC-filtered, added on top of the "
+                         "teacher selection, not subject to the per-task cap")
     ap.add_argument("--seed", type=int, default=0)
     a = ap.parse_args()
 
@@ -84,20 +87,23 @@ def main() -> None:
     if a.match_curated:
         n_target = len({json.loads(l)["episode"] for l in open(a.match_curated)})
     eps = select(records, a.raw, a.per_task_cap, n_target, a.seed)
+    eps += [r for f in a.expert for l in open(f) if (r := json.loads(l))["vsc"] == 1]
     out = Path(a.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     n_rows = 0
     with out.open("w") as f:
         for r in eps:
-            meta = {"episode": f"{r['task_id']}#{r.get('sample', 0)}", "task_id": r["task_id"],
-                    "vsc": r["vsc"], "faults": r.get("faults", [])}
+            meta = {"episode": f"{r['task_id']}#{r.get('source', 'teacher')}#{r.get('sample', 0)}",
+                    "task_id": r["task_id"], "vsc": r["vsc"], "faults": r.get("faults", []),
+                    "source": r.get("source", "teacher")}
             for row in turn_rows(r["conversation"], meta):
                 f.write(json.dumps(row) + "\n")
                 n_rows += 1
     keep_rate = sum(r["vsc"] for r in records) / max(len(records), 1)
     stats = {"teacher_episodes": len(records), "teacher_vsc": keep_rate, "selected_episodes": len(eps),
              "rows": n_rows, "raw": a.raw, "tasks_covered": len({r["task_id"] for r in eps}),
-             "selected_vsc": sum(r["vsc"] for r in eps) / max(len(eps), 1)}
+             "selected_vsc": sum(r["vsc"] for r in eps) / max(len(eps), 1),
+             "expert_episodes": sum(r.get("source") == "lean_expert" for r in eps)}
     out.with_suffix(".stats.json").write_text(json.dumps(stats, indent=2))
     print(json.dumps(stats, indent=2))
 

@@ -133,3 +133,37 @@ def task_oracle(env: EcomEnv, workflow: str, order_id: str, ticket_id: str) -> N
     _close_out(env, t, verify=True)
     env.call("submit_report", {"status": "completed" if _ledger_has_refund(env, t) else "failed",
                                "summary": "Verified in ledger."})
+
+
+def lean_expert(env: EcomEnv, order_id: str, ticket_id: str) -> None:
+    """Refund-workflow expert that fits the 10-turn policy budget (RFT demonstrations).
+
+    Unlike `task_oracle` (a solvability proof that verifies everything), it verifies the way
+    we want a policy to: one cheap read after the risky write (payments), and the
+    authoritative ledger only when that read disagrees with the ack. Low-fault ticketing
+    writes are trusted. Worst case (phantom or partial refund) is exactly 10 calls.
+    """
+    order = env.call("lookup_order", {"order_id": order_id})["order"]
+    elig = env.call("check_refund_eligibility", {"order_id": order_id})["eligibility"]
+    if elig != "eligible":
+        env.call("escalate_to_human", {"ticket_id": ticket_id, "reason": f"refund {elig}"})
+        env.call("submit_report", {"status": "escalated", "summary": f"Refund is {elig}; escalated to a human."})
+        return
+    t = RefundTask(order_id, ticket_id, order["amount_cents"], order["payment_method"])
+    args = _refund_args(t, f"refund-{order_id}")
+    obs = env.call("issue_refund", args)
+    if obs.get("status") == "success" and \
+            env.call("lookup_order", {"order_id": order_id})["order"]["status"] == "refunded":
+        pass  # ack confirmed by an independent read
+    elif _ledger_has_refund(env, t):  # refund landed; order not updated (partial) or ack lost (timeout)
+        env.call("reconcile_order", {"order_id": order_id})
+    else:  # ack was false: nothing landed. Same idempotency key, so a retry cannot duplicate.
+        env.call("issue_refund", args)
+        if env.call("lookup_order", {"order_id": order_id})["order"]["status"] != "refunded":
+            env.call("submit_report", {"status": "failed", "summary": "Refund did not land after a retry."})
+            return
+    env.call("add_audit_note", {"ticket_id": ticket_id,
+                                "text": f"Refunded {t.amount_cents} cents to {t.method}; confirmed on the order."})
+    env.call("close_ticket", {"ticket_id": ticket_id})
+    env.call("submit_report", {"status": "completed",
+                               "summary": f"Refund of {t.amount_cents} cents to {t.method} confirmed; ticket closed."})

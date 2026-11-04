@@ -38,3 +38,22 @@ def test_genuine_ack_is_negative_and_success_report_label_zero():
     ex = build_examples(rec(attempts, TRACE, CONV, G=1, faults=()))
     assert [e["label"] for e in ex if e["pos"] == "A"] == [0]
     assert [e["label"] for e in ex if e["pos"] == "B"] == [0]
+
+
+def test_f1_control_matches_op_and_call_index():
+    import pytest
+    pytest.importorskip("sklearn")
+    from actionproof.interp.probe import f1_control
+    # phantoms on first refunds score high, but so do genuine first refunds: no real signal.
+    meta = [{"fault": "F1_phantom", "op": "issue_refund", "k": 0}, {"fault": "none", "op": "issue_refund", "k": 0},
+            {"fault": "none", "op": "close_ticket", "k": 0}, {"fault": "none", "op": "close_ticket", "k": 0}]
+    r = f1_control(meta, [2.0, 2.0, -1.0, -1.0])
+    assert r["f1_control_auroc"] == 0.5 and r["f1_control_pairs"] == 1
+    assert r["f1_control_auroc_unmatched"] > 0.8  # the confound the matched control removes
+
+
+def test_pos_a_records_call_index():
+    attempts = [{"action_idx": 1, "op": "issue_refund", "entity": "O", "fault": "F1_phantom", "committed": False, "obs_status": "success"},
+                {"action_idx": 2, "op": "issue_refund", "entity": "O", "fault": None, "committed": True, "obs_status": "success"}]
+    a = [e for e in build_examples(rec(attempts, TRACE, CONV)) if e["pos"] == "A"]
+    assert [e["k"] for e in a] == [0, 1]

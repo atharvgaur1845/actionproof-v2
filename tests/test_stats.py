@@ -25,3 +25,12 @@ def test_hierarchical_bootstrap_matches_point():
     seeds = [{f"t{i}": 1.0 for i in range(50)}, {f"t{i}": 0.5 for i in range(50)}]
     d, lo, hi = hierarchical_bootstrap(seeds, b, iters=500)
     assert abs(d - 0.75) < 1e-9 and 0.5 <= lo <= d <= hi <= 1.0
+
+
+def test_post_ack_check_needs_same_entity_after_success():
+    from actionproof.eval.by_fault import post_ack_check
+    w = {"tool": "issue_refund", "args": {"order_id": "O-1"}, "obs": {"status": "success"}}
+    assert post_ack_check([w, {"tool": "query_ledger", "args": {"order_id": "O-1"}, "obs": {}}])
+    assert not post_ack_check([w, {"tool": "query_ledger", "args": {"order_id": "O-2"}, "obs": {}}])
+    assert not post_ack_check([{"tool": "query_ledger", "args": {"order_id": "O-1"}, "obs": {}}, w])
+    assert not post_ack_check([{**w, "obs": {"status": "error"}}, {"tool": "query_ledger", "args": {"order_id": "O-1"}, "obs": {}}])

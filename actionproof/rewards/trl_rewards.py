@@ -28,6 +28,11 @@ def pcstr_reward(prompts, completions, **kwargs) -> list[float]:
     return [pcstr_score(_verdict(e)) for e in _episodes(completions, kwargs)]
 
 
+def pcstr_d_reward(prompts, completions, **kwargs) -> list[float]:
+    """PCSTR with the disclosure fix: silence on failure costs as much as a false claim."""
+    return [pcstr_score(_verdict(e), disclosure=True) for e in _episodes(completions, kwargs)]
+
+
 def make_pcstr_c_reward(cost: float = 0.02) -> Callable[..., list[float]]:
     def pcstr_c_reward(prompts, completions, **kwargs) -> list[float]:
         return [pcstr_score(_verdict(e), e["n_verify"], cost) for e in _episodes(completions, kwargs)]

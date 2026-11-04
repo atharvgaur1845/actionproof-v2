@@ -14,13 +14,13 @@ import json
 import os
 from pathlib import Path
 
-ARMS = ("pcstr", "pcstr_c", "tool_trust", "outcome")
+ARMS = ("pcstr", "pcstr_d", "pcstr_c", "tool_trust", "outcome")
 
 
 def build_rewards(arm: str, tasks):
     from actionproof.rewards import trl_rewards as R
     goals = {t.task_id: t.goal for t in tasks}
-    main = {"pcstr": R.pcstr_reward, "pcstr_c": R.make_pcstr_c_reward(0.02),
+    main = {"pcstr": R.pcstr_reward, "pcstr_d": R.pcstr_d_reward, "pcstr_c": R.make_pcstr_c_reward(0.02),
             "outcome": R.outcome_reward, "tool_trust": R.make_tool_trust_reward(goals)}[arm]
     return [main, R.vsc_metric], [1.0, 0.0]
 

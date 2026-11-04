@@ -29,6 +29,7 @@ def build_examples(rec: dict[str, Any]) -> list[dict[str, Any]]:
     conv, attempts = rec["conversation"], {a["action_idx"]: a for a in rec.get("attempts", [])}
     trace = rec["trace"]
     out, t = [], 0  # t = pointer into the env trace, consumed in call order
+    nth: dict[str, int] = {}  # k-th call of each op (the fault schedule is keyed by (tool, k))
     for j, m in enumerate(conv):
         if m["role"] != "assistant" or j + 1 >= len(conv) or conv[j + 1]["role"] != "user":
             continue
@@ -41,12 +42,13 @@ def build_examples(rec: dict[str, Any]) -> list[dict[str, Any]]:
                         "reported": rec["verdict"]["reported"], "task_id": rec["task_id"]})
             continue
         for s in block:
+            k_op = nth[s["tool"]] = nth.get(s["tool"], -1) + 1
             at = attempts.get(s["idx"])
             if at is None or at["obs_status"] not in ACKED:
                 continue
             landed = not (at["fault"] in NOT_LANDED or (at["fault"] == "F8_ambiguous" and not at["committed"]))
             out.append({"prefix": j + 2, "pos": "A", "label": int(not landed), "fault": at["fault"] or "none",
-                        "op": at["op"], "task_id": rec["task_id"]})
+                        "op": at["op"], "k": k_op, "task_id": rec["task_id"]})
     # submit_report as the very last assistant turn (no following tool-result message)
     if conv and conv[-1]["role"] == "assistant" and trace and trace[-1]["tool"] == "submit_report" \
             and not any(e["pos"] == "B" for e in out):

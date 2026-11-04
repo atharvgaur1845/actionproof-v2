@@ -25,6 +25,30 @@ def auroc(y, s) -> float:
     return float(roc_auc_score(y, s)) if len(set(y)) == 2 else float("nan")
 
 
+def f1_control(meta: list[dict], scores) -> dict:
+    """Negative control (spec §14): a phantom ack is byte-identical to a genuine one, so a probe
+    must not separate them. Pairs are compared only WITHIN a stratum (op, k-th call of that op),
+    i.e. a Mann-Whitney AUROC over matched pairs: otherwise op identity or "this is a retry"
+    (the schedule fires on fixed call indices) can masquerade as signal. The unmatched AUROC is
+    kept for comparison."""
+    strata = defaultdict(lambda: ([], []))
+    flat = ([], [])
+    for m, s in zip(meta, scores):
+        if m["fault"] not in ("F1_phantom", "none"):
+            continue
+        g = strata[(m.get("op"), m.get("k"))]
+        g[m["fault"] == "F1_phantom"].append(float(s))
+        flat[0].append(int(m["fault"] == "F1_phantom"))
+        flat[1].append(float(s))
+    wins = pairs = 0.0
+    for neg, pos in strata.values():
+        for p in pos:
+            wins += sum((p > n) + 0.5 * (p == n) for n in neg)
+            pairs += len(neg)
+    return {"f1_control_auroc": wins / pairs if pairs else None, "f1_control_pairs": int(pairs),
+            "f1_control_auroc_unmatched": auroc(*flat) if flat[0] else None}
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", required=True)
@@ -66,10 +90,8 @@ def main() -> None:
         "per_layer_val_auroc": [round(r["val_auroc"], 4) for r in per_layer],
         "test_auroc_by_fault": {f: {"n": len(v[0]), "pos": sum(v[0]), "auroc": auroc(*v)} for f, v in by_fault.items()},
     }
-    if a.pos == "A":  # F1 control: phantom (label 1) vs genuine acks of the same op (label 0)
-        ctrl = [(m["label"], s) for m, s in zip([m for m, t in zip(meta, te) if t], s_te)
-                if m["fault"] in ("F1_phantom", "none")]
-        res["f1_control_auroc"] = auroc([c[0] for c in ctrl], [c[1] for c in ctrl]) if ctrl else None
+    if a.pos == "A":  # F1 control: phantom (label 1) vs genuine acks (label 0) of the same op and call index
+        res.update(f1_control([m for m, t in zip(meta, te) if t], s_te))
     # Guard threshold fixed on VAL (never test): the score at which 80% of val positives fire.
     s_va = clf.decision_function(sc.transform(X[va, best]))
     pos_scores = np.sort(s_va[y[va] == 1])

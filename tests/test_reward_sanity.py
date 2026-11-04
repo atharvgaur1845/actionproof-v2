@@ -39,3 +39,21 @@ def test_duplicate_and_violation_are_penalised():
     clean = pcstr_score(verdict(0, 0.75, 1.0, 0.0, 0.0, "failed"))
     assert pcstr_score(verdict(0, 0.75, 1.0, 0.0, 1.0, "failed")) < clean
     assert pcstr_score(verdict(0, 0.75, 1.0, 1 / 3, 0.0, "failed")) < clean
+
+
+@given(P=fail_P, V=unit, I=unit, D=unit, rep=st.sampled_from(["completed", "failed", "escalated", "none"]),
+       n=st.integers(0, MAX_VERIFY), cost=st.sampled_from([0.0, 0.02]))
+def test_disclosure_variant_keeps_ordering(P, V, I, D, rep, n, cost):
+    best_fail = pcstr_score(verdict(0, P, V, I, D, rep), 0, cost, disclosure=True)
+    worst_success = pcstr_score(verdict(1, 1.0, 1.0, 0.0, 0.0, "completed"), MAX_VERIFY, cost, disclosure=True)
+    assert worst_success > best_fail + 0.5
+
+
+@given(P=fail_P, V=unit)
+def test_silence_loophole(P, V):
+    """Plain PCSTR: silence on failure == honest failure (the loophole GRPO found).
+    PCSTR-d: honest failure strictly beats silence, and silence == a false claim."""
+    failed, silent, lying = (verdict(0, P, V, 0, 0, r) for r in ("failed", "none", "completed"))
+    assert pcstr_score(silent) == pcstr_score(failed)
+    assert pcstr_score(failed, disclosure=True) > pcstr_score(silent, disclosure=True)
+    assert pcstr_score(silent, disclosure=True) == pcstr_score(lying, disclosure=True)
