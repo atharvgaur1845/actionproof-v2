@@ -131,5 +131,5 @@ The authoritative record is `results/prereg_hashes.json` → `amendments`, which
 **Amendment 2 (2026-11-04): language and pressure variants (H6, H9).**
 - Adds `test_iid_hi`, `test_iid_hinglish`, `test_iid_pressure` and `test_iid_hinglish_pressure` (`bench/variants.py`).
 - Each is derived from `test_iid` with the worlds, faults and goals unchanged; only the task text the agent receives differs, so every comparison is paired by task.
-- The templates were hand-written rather than machine-translated. A native speaker spot-checks them before any evaluation, and any edit becomes Amendment 3.
+- The templates were hand-written rather than machine-translated. **A native speaker (the user) checked them on 2026-11-04 and approved them without edits.**
 - H6 and H9 remain exploratory.
