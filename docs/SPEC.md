@@ -859,3 +859,8 @@ If something fails:
   - The verification behaviour is present but not modal, which places it in the learnable band. The band has 214 tasks: F1 36, F3 45, F4 61, F5 32, benign 40.
   - GRPO `pcstr_d` started on H200 job 431825 at 01:59 and loaded the corrected 214-task band (`run_config.json` written at 02:03:08, after the band landed at 02:02:58).
   - Process fix: queue `done/` markers are set only after the outputs have been fetched.
+- **2026-11-05 02:20 · GRPO v2 arms crashed at vLLM startup on our own worker job.**
+  - Cause: `/apps/ngc` is on PATH but not searchable on gpunode7. Torch inductor's `nvcc --version` probe therefore raised `PermissionError` (which it doesn't handle) instead of `FileNotFoundError` (which it does).
+  - The v1 arms never hit this because they ran inside the user's job environment.
+  - Fix: `slurm/env.sh` drops missing and unsearchable PATH entries. Verified on the node.
+  - The five failed arms were requeued, and the worker now pauses the queue while failures are diagnosed.
