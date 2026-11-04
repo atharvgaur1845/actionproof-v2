@@ -1,4 +1,5 @@
 # minutes: 200
+# after: 091_curriculum_v2
 # R3 round v2: GRPO seed 0, arm=pcstr, from the shared RFT v2 init (see 087), v2 learnable band.
 set -euo pipefail
 source slurm/env.sh

@@ -1,4 +1,5 @@
 # minutes: 40
+# after: 087_rft_v2_tiny
 # Learnable band for the v2 init: sample RFT v2 8x per train task (T=1.0), keep 10-90% VSC tasks.
 set -euo pipefail
 source slurm/env.sh

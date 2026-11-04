@@ -1,4 +1,5 @@
 # minutes: 60
+# after: 087_rft_v2_tiny
 # H1 baseline-selection inputs (PREREGISTRATION §2): val VSC for base and RFT v2 under each verify
 # prompt (+ RFT v2 neutral comes from 087). Selection itself is done by scripts, on val only.
 set -uo pipefail

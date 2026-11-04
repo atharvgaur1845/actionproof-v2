@@ -58,7 +58,7 @@ def main() -> None:
                                target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
                                                "gate_proj", "up_proj", "down_proj"]),
     )
-    trainer.train()
+    trainer.train(resume_from_checkpoint=True if any(out.glob("checkpoint-*")) else None)  # survives preemption
     trainer.save_model(str(out / "final"))
     (out / "log_history.json").write_text(json.dumps(trainer.state.log_history, indent=2))
 
