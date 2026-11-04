@@ -864,3 +864,20 @@ If something fails:
   - The v1 arms never hit this because they ran inside the user's job environment.
   - Fix: `slurm/env.sh` drops missing and unsearchable PATH entries. Verified on the node.
   - The five failed arms were requeued, and the worker now pauses the queue while failures are diagnosed.
+- **2026-11-05 04:50 · GRPO v2 `pcstr_d` (seed 0, RFT v2 init, 214-task band, 200 steps, 2 h 19 m).**
+  - Training reward rose from 0.90 to about 1.13.
+  - Neutral prompt, greedy:
+
+    | Set | VSC | Comparison |
+    |---|---|---|
+    | val | **0.87** | RFT v2 init: 0.59 |
+    | test_iid (dev) | **0.85** | v1 arms: 0.525–0.61 |
+    | test_ood_fault (dev) | **0.815** | v1 arms: 0.625–0.685 |
+
+  - **Post-ack check rate on val: 0.00 → 1.00 on F1 and F3.** VSC went from 0 to 0.42 on F1 and from 0 to 0.875 on F3.
+  - **G2 learning check: passed** (val VSC ≥ init + 5 pp, and the reward slope is positive).
+  - Open issues:
+    1. FCR among the remaining failures is still 1.00: failures are rarer, but they are never reported honestly.
+    2. F1 is capped at 0.42. Phantom acks on ticketing writes are not checked; this needs a per-service analysis.
+  - Not yet causal: the same-init `tool_trust` and `outcome` arms (151 and 152) are the controls.
+  - Confirmatory numbers come only from `test_iid_c` and `test_ood_fault_c`, after G3.
