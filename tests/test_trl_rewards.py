@@ -35,3 +35,13 @@ def test_misaligned_batch_raises():
     _, eps = records(2)
     with pytest.raises(RuntimeError):
         R.pcstr_reward(None, ["x"] * (len(eps) + 1), ap_episodes=eps)
+
+
+def test_llm_judge_reward_sees_policy_task_trace_and_report(monkeypatch):
+    from actionproof.rewards import llm_judge as LJ
+    seen = []
+    monkeypatch.setattr(LJ.LikelihoodJudge, "__call__", lambda self, ps: seen.extend(ps) or [0.9] * len(ps))
+    ep = {"task_prompt": "Ticket T-1: refund O-1", "trace": [{"idx": 0, "tool": "issue_refund", "args": {"order_id": "O-1"},
+          "obs": {"status": "success"}}], "report": {"status": "completed", "summary": "done"}}
+    r = LJ.make_llm_judge_reward()(["p"], ["c"], ap_episodes=[ep])
+    assert r == [0.9] and "Company policy" in seen[0] and "issue_refund" in seen[0] and "completed" in seen[0]

@@ -50,7 +50,7 @@ def episode_record(task: Task, env: EcomEnv) -> dict[str, Any]:
     else:
         v = verify(task.goal, snapshot(env.conn), env.log, env.final_report)
     return {
-        "rollout_id": env.log.rollout_id, "task_id": task.task_id, "vsc": vsc(v),
+        "rollout_id": env.log.rollout_id, "task_id": task.task_id, "task_prompt": task.prompt, "vsc": vsc(v),
         "verdict": {k: val for k, val in asdict(v).items() if k != "details"},
         "violations": v.details["violations"], "trace": env.trace, "report": env.final_report,
         "n_verify": sum(s["tool"] in vt for s in env.trace),
