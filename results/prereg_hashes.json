@@ -35,6 +35,22 @@
     "test_ood_domain": {
       "n": 150,
       "sha256": "08ed809e1bf0e19b7f9c9e148980cf68377c366fd757b1e67b581335e09504b7"
+    },
+    "test_iid_hi": {
+      "n": 200,
+      "sha256": "0179fffe531aff433e10c13a26652ab0f3d59540355ecfa3c9ba19178a2872f0"
+    },
+    "test_iid_hinglish": {
+      "n": 200,
+      "sha256": "2a1130036714ccd18c95d40da3b500a11290c6745ff2dfd09a420d9395193a97"
+    },
+    "test_iid_pressure": {
+      "n": 200,
+      "sha256": "102105db207db0e166ed8c10bd97434273449819ed809fd5cae5d9eba7d730bc"
+    },
+    "test_iid_hinglish_pressure": {
+      "n": 200,
+      "sha256": "11c266ca0ad4201fcf9b8682c727725d9f8ae29a7e5143040a93f2fc7ef20ca6"
     }
   },
   "code": {
@@ -45,11 +61,12 @@
     "actionproof/rewards/baselines.py": "234717a686632dc2344268f055c5bbcd571c458444f636c8339641514293e35b",
     "actionproof/eval/stats.py": "4ee6e2f4af060bee1f39520584c6666ed2527d774b92d4c3ae2961357f1eb889",
     "actionproof/eval/run_eval.py": "df2a68bd4b3fe4409e36b5c405504babdc46826bb03d6533b3bf386b7ea1aab8",
-    "actionproof/bench/generator.py": "9f967d65c1c7192fe4364038730393b5c1fb4e95570a0b09c950d56e246eec74",
+    "actionproof/bench/generator.py": "cf9e3512952c36d059604523342d6142398be23fea0e34fb9af6755e3249c51e",
     "actionproof/bench/prompts.py": "f1d2fd43ea8217e9db473773a6325b61e946ab702c5f9c6953b56843716d78ad",
     "actionproof/env/verifier_bank.py": "35c7a912e78c7b30ed5119d043d65462b652d3577b0713ff46c2525f5bb80615",
     "actionproof/env/tools_bank.py": "8a328412dc75016e5786c742c85ed4697080bbe5d92eeeaf6814aa4976be72a9",
-    "actionproof/bench/generator_bank.py": "8336ab448cb57f3e7991f649ae6d60c9f095d238a57827e6c6988416d4859384"
+    "actionproof/bench/generator_bank.py": "8336ab448cb57f3e7991f649ae6d60c9f095d238a57827e6c6988416d4859384",
+    "actionproof/bench/variants.py": "dd04057478c127966ce4a8479530cfd66563305070666fe4fe320c862c23acec"
   },
   "amendments": [
     {
@@ -82,6 +99,48 @@
         "code:actionproof/bench/generator_bank.py": {
           "from": null,
           "to": "8336ab448cb57f3e7991f649ae6d60c9f095d238a57827e6c6988416d4859384"
+        }
+      }
+    },
+    {
+      "date": "2026-11-04T16:53",
+      "reason": "Amendment 2: language/pressure variant splits (test_iid_hi, test_iid_hinglish, test_iid_pressure, test_iid_hinglish_pressure) derived from test_iid; only the task text changes. Hand-written templates pending native-speaker QA (any edit = Amendment 3, before evaluation). generator.make_split gains the variant dispatch. Existing split hashes unchanged.",
+      "changed": {
+        "splits:test_iid_hi": {
+          "from": null,
+          "to": {
+            "n": 200,
+            "sha256": "0179fffe531aff433e10c13a26652ab0f3d59540355ecfa3c9ba19178a2872f0"
+          }
+        },
+        "splits:test_iid_hinglish": {
+          "from": null,
+          "to": {
+            "n": 200,
+            "sha256": "2a1130036714ccd18c95d40da3b500a11290c6745ff2dfd09a420d9395193a97"
+          }
+        },
+        "splits:test_iid_pressure": {
+          "from": null,
+          "to": {
+            "n": 200,
+            "sha256": "102105db207db0e166ed8c10bd97434273449819ed809fd5cae5d9eba7d730bc"
+          }
+        },
+        "splits:test_iid_hinglish_pressure": {
+          "from": null,
+          "to": {
+            "n": 200,
+            "sha256": "11c266ca0ad4201fcf9b8682c727725d9f8ae29a7e5143040a93f2fc7ef20ca6"
+          }
+        },
+        "code:actionproof/bench/generator.py": {
+          "from": "9f967d65c1c7192fe4364038730393b5c1fb4e95570a0b09c950d56e246eec74",
+          "to": "cf9e3512952c36d059604523342d6142398be23fea0e34fb9af6755e3249c51e"
+        },
+        "code:actionproof/bench/variants.py": {
+          "from": null,
+          "to": "dd04057478c127966ce4a8479530cfd66563305070666fe4fe320c862c23acec"
         }
       }
     }

@@ -127,3 +127,9 @@ The authoritative record is `results/prereg_hashes.json` → `amendments`, which
   - `generator.make_split`: one dispatch line.
 - Behavioural equivalence: every existing split hash is unchanged, and the Domain A oracle/lean-expert trace fingerprint over all splits is identical before and after (`180ab024…`).
 - **H4 on this set** is tested with the paired bootstrap of §2. It stays secondary, with no multiplicity claim.
+
+**Amendment 2 (2026-11-04): language and pressure variants (H6, H9).**
+- Adds `test_iid_hi`, `test_iid_hinglish`, `test_iid_pressure` and `test_iid_hinglish_pressure` (`bench/variants.py`).
+- Each is derived from `test_iid` with the worlds, faults and goals unchanged; only the task text the agent receives differs, so every comparison is paired by task.
+- The templates were hand-written rather than machine-translated. A native speaker spot-checks them before any evaluation, and any edit becomes Amendment 3.
+- H6 and H9 remain exploratory.

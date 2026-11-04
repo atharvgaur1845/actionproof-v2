@@ -18,13 +18,16 @@ from pathlib import Path
 
 from actionproof.bench.generator import SPLITS, make_split
 from actionproof.bench.generator_bank import BANK_SPLITS
+from actionproof.bench.variants import VARIANT_SPLITS
 
 ROOT = Path(__file__).resolve().parents[1]
 CODE = ["actionproof/env/verifier.py", "actionproof/env/tools_ecom.py", "actionproof/env/faults.py",
         "actionproof/rewards/pcstr.py", "actionproof/rewards/baselines.py", "actionproof/eval/stats.py",
         "actionproof/eval/run_eval.py", "actionproof/bench/generator.py", "actionproof/bench/prompts.py",
-        "actionproof/env/verifier_bank.py", "actionproof/env/tools_bank.py", "actionproof/bench/generator_bank.py"]
-ALL_SPLITS = {**{s: c["n"] for s, c in SPLITS.items()}, **{s: c["n"] for s, c in BANK_SPLITS.items()}}
+        "actionproof/env/verifier_bank.py", "actionproof/env/tools_bank.py", "actionproof/bench/generator_bank.py",
+        "actionproof/bench/variants.py"]
+ALL_SPLITS = {**{s: c["n"] for s, c in SPLITS.items()}, **{s: c["n"] for s, c in BANK_SPLITS.items()},
+             **{s: SPLITS[b]["n"] for s, (b, _, _) in VARIANT_SPLITS.items()}}
 
 
 def sha(b: bytes) -> str:
