@@ -33,17 +33,27 @@ def prompt_key(prompt: Any) -> str:
 
 
 def make_env(task: Task, rollout_id: str, seed: int = 0) -> EcomEnv:
+    if task.meta.get("domain") == "bank":
+        from actionproof.env.tools_bank import BankEnv
+        return BankEnv(task.initial_state, task.schedule, rollout_id=rollout_id, seed=seed,
+                       stale_status=task.stale_status, ambiguous_text=task.ambiguous_text)
     return EcomEnv(task.initial_state, task.schedule, rollout_id=rollout_id, seed=seed,
                    stale_status=task.stale_status, ambiguous_text=task.ambiguous_text)
 
 
 def episode_record(task: Task, env: EcomEnv) -> dict[str, Any]:
-    v = verify(task.goal, snapshot(env.conn), env.log, env.final_report)
+    vt = VERIFICATION_TOOLS
+    if task.meta.get("domain") == "bank":
+        from actionproof.env.tools_bank import BANK_VERIFICATION_TOOLS as vt
+        from actionproof.env.verifier_bank import verify_bank
+        v = verify_bank(task.goal, snapshot(env.conn), env.log, env.final_report)
+    else:
+        v = verify(task.goal, snapshot(env.conn), env.log, env.final_report)
     return {
         "rollout_id": env.log.rollout_id, "task_id": task.task_id, "vsc": vsc(v),
         "verdict": {k: val for k, val in asdict(v).items() if k != "details"},
         "violations": v.details["violations"], "trace": env.trace, "report": env.final_report,
-        "n_verify": sum(s["tool"] in VERIFICATION_TOOLS for s in env.trace),
+        "n_verify": sum(s["tool"] in vt for s in env.trace),
         "receipt_rollout_ids": sorted({r.rollout_id for r in env.log.receipts}),
         "faults": task.meta.get("faults", []),
         # Per-write ground truth for probes (spec §14): did the acknowledged effect land?

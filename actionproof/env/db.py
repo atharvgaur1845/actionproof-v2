@@ -59,7 +59,9 @@ def apply_deltas(conn: sqlite3.Connection, deltas: list[Delta]) -> None:
 def snapshot(conn: sqlite3.Connection) -> dict[str, list[dict[str, Any]]]:
     """Canonical, order-independent copy of every table (used by the verifier and reward fns)."""
     out: dict[str, list[dict[str, Any]]] = {}
-    for table in TABLES:
+    extra = sorted(r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
+                   if r[0] not in TABLES)  # other domains' tables (Domain B), after Domain A's
+    for table in (*TABLES, *extra):
         rows = [dict(r) for r in conn.execute(f"SELECT * FROM {table}")]
         out[table] = sorted(rows, key=lambda r: json.dumps(r, sort_keys=True))
     return out
@@ -68,6 +70,6 @@ def snapshot(conn: sqlite3.Connection) -> dict[str, list[dict[str, Any]]]:
 def entity_hash(snap: dict[str, list[dict[str, Any]]], key: str, value: str) -> str:
     """Hash of every row, in any table, whose `key` column equals `value` (e.g. order_id)."""
     rows = [
-        (table, row) for table in TABLES for row in snap[table] if row.get(key) == value
+        (table, row) for table in snap for row in snap[table] if row.get(key) == value
     ]
     return hashlib.sha256(json.dumps(rows, sort_keys=True).encode()).hexdigest()[:16]

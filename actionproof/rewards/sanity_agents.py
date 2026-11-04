@@ -167,3 +167,41 @@ def lean_expert(env: EcomEnv, order_id: str, ticket_id: str) -> None:
     env.call("close_ticket", {"ticket_id": ticket_id})
     env.call("submit_report", {"status": "completed",
                                "summary": f"Refund of {t.amount_cents} cents to {t.method} confirmed; ticket closed."})
+
+
+def bank_oracle(env, ids: dict) -> None:
+    """Reference policy for Domain B (solvability proof), agent-visible tools only: checks policy from
+    reads, verifies every write against the ledger / account / dispute, retries with one key."""
+    acct, txn, disp = ids["account"], ids["txn"], ids["dispute"]
+    a = env.call("query_account", {"account_id": acct})["account"]
+    t = next(x for x in env.call("query_txn_ledger", {"account_id": acct})["transactions"] if x["txn_id"] == txn)
+    if a["kyc_state"] == "pending":
+        for _ in range(3):
+            env.call("set_kyc_state", {"account_id": acct, "state": "verified", "document_id": ids["doc"]})
+            if env.call("query_account", {"account_id": acct})["account"]["kyc_state"] == "verified":
+                break
+        a = env.call("query_account", {"account_id": acct})["account"]
+    from actionproof.env.tools_bank import DISPUTE_WINDOW_DAYS, REVERSAL_LIMIT_CENTS
+    reason = ("kyc_unverified" if a["kyc_state"] != "verified" else "outside_dispute_window"
+              if t["days_ago"] > DISPUTE_WINDOW_DAYS else "requires_approval" if t["amount_cents"] > REVERSAL_LIMIT_CENTS else None)
+    if reason:
+        env.call("escalate_case", {"dispute_id": disp, "reason": reason})
+        env.call("submit_report", {"status": "escalated", "summary": f"Reversal not allowed ({reason}); escalated."})
+        return
+
+    def reversals():
+        return [x for x in env.call("query_txn_ledger", {"account_id": acct})["transactions"]
+                if x["kind"] == "reversal" and x["ref_txn"] == txn]
+
+    for _ in range(3):
+        if reversals():
+            break
+        env.call("post_reversal", {"account_id": acct, "txn_id": txn, "amount_cents": t["amount_cents"],
+                                   "idempotency_key": f"rev-{txn}"})
+    if any(not r["balance_applied"] for r in reversals()):
+        env.call("sync_balance", {"account_id": acct})
+    for _ in range(3):
+        env.call("close_dispute", {"dispute_id": disp, "resolution": f"Reversed {t['amount_cents']} cents of {txn}."})
+        if env.call("get_dispute", {"dispute_id": disp})["dispute"]["status"] == "resolved":
+            break
+    env.call("submit_report", {"status": "completed" if reversals() else "failed", "summary": "Verified in ledger."})

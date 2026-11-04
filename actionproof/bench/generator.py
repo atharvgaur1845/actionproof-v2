@@ -214,4 +214,7 @@ def make_task(split: str, i: int) -> Task:
 
 
 def make_split(split: str, n: int | None = None) -> list[Task]:
+    from actionproof.bench.generator_bank import BANK_SPLITS, make_bank_split  # Domain B (test only)
+    if split in BANK_SPLITS:
+        return make_bank_split(split, n)
     return [make_task(split, i) for i in range(n if n is not None else SPLITS[split]["n"])]

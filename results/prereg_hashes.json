@@ -31,17 +31,59 @@
     "test_calib_swap": {
       "n": 100,
       "sha256": "b37dd2718cd76bb2ae7a0ea93cda8b3fad233ca0845bbf59fb6b14a07e4acac2"
+    },
+    "test_ood_domain": {
+      "n": 150,
+      "sha256": "08ed809e1bf0e19b7f9c9e148980cf68377c366fd757b1e67b581335e09504b7"
     }
   },
   "code": {
     "actionproof/env/verifier.py": "a6e8e84c251c40ca4ae88e46ad2570bacba56a4b754f3672125064f7d99cf941",
-    "actionproof/env/tools_ecom.py": "feb78a5addbbdd2b2a26d5a928b4cf62f298dc3cc36cb1d259760433deef0644",
+    "actionproof/env/tools_ecom.py": "814d46fdf9827201e2c2aa2e2b5a5c312588d1074ed63510f0647213d7a13d4d",
     "actionproof/env/faults.py": "667ed459ed3abbb7ffe23bcf5b4477a1264e45393caafc41de9ac5ec8875e456",
     "actionproof/rewards/pcstr.py": "281fc3f6ac124559c62a3ea962f79f08fb858e86288f08619d7077de65e7e275",
     "actionproof/rewards/baselines.py": "234717a686632dc2344268f055c5bbcd571c458444f636c8339641514293e35b",
     "actionproof/eval/stats.py": "4ee6e2f4af060bee1f39520584c6666ed2527d774b92d4c3ae2961357f1eb889",
     "actionproof/eval/run_eval.py": "df2a68bd4b3fe4409e36b5c405504babdc46826bb03d6533b3bf386b7ea1aab8",
-    "actionproof/bench/generator.py": "e4121915d1883bf82e58af308314e7dcdf61e2b6e39ac76c0de14297658db47a",
-    "actionproof/bench/prompts.py": "f1d2fd43ea8217e9db473773a6325b61e946ab702c5f9c6953b56843716d78ad"
-  }
+    "actionproof/bench/generator.py": "9f967d65c1c7192fe4364038730393b5c1fb4e95570a0b09c950d56e246eec74",
+    "actionproof/bench/prompts.py": "f1d2fd43ea8217e9db473773a6325b61e946ab702c5f9c6953b56843716d78ad",
+    "actionproof/env/verifier_bank.py": "35c7a912e78c7b30ed5119d043d65462b652d3577b0713ff46c2525f5bb80615",
+    "actionproof/env/tools_bank.py": "8a328412dc75016e5786c742c85ed4697080bbe5d92eeeaf6814aa4976be72a9",
+    "actionproof/bench/generator_bank.py": "8336ab448cb57f3e7991f649ae6d60c9f095d238a57827e6c6988416d4859384"
+  },
+  "amendments": [
+    {
+      "date": "2026-11-04T16:50",
+      "reason": "Amendment 1: add Domain B (banking) split test_ood_domain + its env/verifier/generator; behaviour-preserving refactor of tools_ecom.py (TOOL_META -> self.META) and generator.make_split dispatch. All pre-existing split hashes unchanged; Domain A oracle/lean-expert trace fingerprint over all splits identical before/after (180ab024...).",
+      "changed": {
+        "splits:test_ood_domain": {
+          "from": null,
+          "to": {
+            "n": 150,
+            "sha256": "08ed809e1bf0e19b7f9c9e148980cf68377c366fd757b1e67b581335e09504b7"
+          }
+        },
+        "code:actionproof/env/tools_ecom.py": {
+          "from": "feb78a5addbbdd2b2a26d5a928b4cf62f298dc3cc36cb1d259760433deef0644",
+          "to": "814d46fdf9827201e2c2aa2e2b5a5c312588d1074ed63510f0647213d7a13d4d"
+        },
+        "code:actionproof/bench/generator.py": {
+          "from": "e4121915d1883bf82e58af308314e7dcdf61e2b6e39ac76c0de14297658db47a",
+          "to": "9f967d65c1c7192fe4364038730393b5c1fb4e95570a0b09c950d56e246eec74"
+        },
+        "code:actionproof/env/verifier_bank.py": {
+          "from": null,
+          "to": "35c7a912e78c7b30ed5119d043d65462b652d3577b0713ff46c2525f5bb80615"
+        },
+        "code:actionproof/env/tools_bank.py": {
+          "from": null,
+          "to": "8a328412dc75016e5786c742c85ed4697080bbe5d92eeeaf6814aa4976be72a9"
+        },
+        "code:actionproof/bench/generator_bank.py": {
+          "from": null,
+          "to": "8336ab448cb57f3e7991f649ae6d60c9f095d238a57827e6c6988416d4859384"
+        }
+      }
+    }
+  ]
 }

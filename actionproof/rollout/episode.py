@@ -40,6 +40,8 @@ class EpisodeStats:
 
 
 def system_prompt(env: EcomEnv, base: str) -> str:
+    if hasattr(env, "adapt_prompt"):  # other domains own their policy text (Domain B)
+        base = env.adapt_prompt(base)
     fallback, build_schema, _ = _agenttune()
     schemas = [build_schema(t) for t in env.tools()]
     tools = json.dumps(schemas, indent=2)

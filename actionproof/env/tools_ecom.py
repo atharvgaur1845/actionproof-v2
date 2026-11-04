@@ -41,6 +41,8 @@ VERIFICATION_TOOLS = frozenset({"query_ledger", "get_refund_status", "lookup_ord
 
 
 class EcomEnv:
+    META = TOOL_META  # tool name -> (service, kind); subclasses (other domains) bring their own
+
     def __init__(
         self,
         initial_state: dict[str, list[dict[str, Any]]],
@@ -70,7 +72,7 @@ class EcomEnv:
         self.calls[tool] += 1
         if self.reports:
             obs = {"status": "error", "error": "episode_finished"}
-        elif tool not in TOOL_META:
+        elif tool not in self.META:
             obs = {"status": "error", "error": "unknown_tool", "detail": tool}
         else:
             fn: Callable[..., dict[str, Any]] = getattr(self, tool)
@@ -114,7 +116,7 @@ class EcomEnv:
             tool.__annotations__ = dict(method.__annotations__)
             return tool
 
-        return [make(name) for name in TOOL_META]
+        return [make(name) for name in self.META]
 
     # ------------------------------------------------------------------ helpers
     def _next_id(self, prefix: str) -> str:
@@ -175,7 +177,7 @@ class EcomEnv:
 
         if fault is Fault.TIMEOUT:
             obs = {"status": "error", "error": "timeout",
-                   "detail": f"upstream {TOOL_META[tool][0]} service did not respond within 30s"}
+                   "detail": f"upstream {self.META[tool][0]} service did not respond within 30s"}
         elif fault is Fault.STALE:
             obs = self._stale_ack(success_obs)
         elif fault is Fault.AMBIGUOUS:
