@@ -804,3 +804,11 @@ If something fails:
   - So no checkpoint shows significantly more failure information in the residual stream than in the visible text.
   - On `probe_cues` at pos-A, a val-tuned text baseline scores 0.667, above the activation probe (0.605). There is no pos-A "the model noticed" claim on probe_cues.
   - Status: H7 as pre-registered is currently **not supported**. Reported as is. The probe-minus-text gap is reported for each checkpoint, with no selective framing.
+- **2026-11-04 22:50 · Compute: HF Jobs for RFT v2 and the v2 curriculum (user-approved spend).**
+  - The cluster worker was requeued at 17:17 while RFT v2 was at step 201/284. No H200 frees for about 15 h (no preemption, and our job is about 6th in priority).
+  - Tasks 087 and 091 therefore run on one HF Jobs H200: driver 580, the same pinned `requirements.lock`, the same commands and seeds. RFT resumes from the cluster's `checkpoint-142`.
+  - Inputs and outputs go through the private dataset repo `atharvgaur18/actionproof-jobs`. The GRPO arms remain on the cluster.
+- **2026-11-04 · Worker robustness.** Three fixes:
+  - tasks stranded in `running/` after preemption are re-queued, using owner files;
+  - `# after:` dependencies between tasks;
+  - RFT resumes from its latest checkpoint.
