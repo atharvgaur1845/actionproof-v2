@@ -35,7 +35,8 @@ def pcstr_d_reward(prompts, completions, **kwargs) -> list[float]:
 
 def make_pcstr_c_reward(cost: float = 0.02) -> Callable[..., list[float]]:
     def pcstr_c_reward(prompts, completions, **kwargs) -> list[float]:
-        return [pcstr_score(_verdict(e), e["n_verify"], cost) for e in _episodes(completions, kwargs)]
+        return [pcstr_score(_verdict(e), e["n_verify"], cost, disclosure=True)  # PCSTR-d + cost (prereg)
+                for e in _episodes(completions, kwargs)]
     return pcstr_c_reward
 
 

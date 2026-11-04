@@ -34,3 +34,11 @@ def test_post_ack_check_needs_same_entity_after_success():
     assert not post_ack_check([w, {"tool": "query_ledger", "args": {"order_id": "O-2"}, "obs": {}}])
     assert not post_ack_check([{"tool": "query_ledger", "args": {"order_id": "O-1"}, "obs": {}}, w])
     assert not post_ack_check([{**w, "obs": {"status": "error"}}, {"tool": "query_ledger", "args": {"order_id": "O-1"}, "obs": {}}])
+
+
+def test_calibration_profile_counts_same_entity_checks_per_service():
+    from actionproof.eval.calibration import acked_writes
+    tr = [{"tool": "issue_refund", "args": {"order_id": "O-1"}, "obs": {"status": "success"}},
+          {"tool": "close_ticket", "args": {"ticket_id": "T-1"}, "obs": {"status": "success"}},
+          {"tool": "query_ledger", "args": {"order_id": "O-1"}, "obs": {}}]
+    assert acked_writes(tr) == [("payments", True), ("ticketing", False)]
