@@ -827,3 +827,18 @@ If something fails:
   - test_iid: PCSTR 0.35, tool_trust 0.40.
   - NWCG ≈ 0.90–0.96 for all trained models.
   - Exploratory reading: RL raises unnecessary side effects, the transcript reward most. This motivates the `pcstr+fp` ablation.
+- **2026-11-05 · Rules re-checked against hackathon.lexsi.ai.**
+  - **Track 3 toolkit is AgentTune + AuditKIT, and we use both:**
+    - AgentTune: GRPO (`TrlAgenticGrpo`), DPO (`create_agentic_trainer`), the Cohere fallback prompt and the tool-call parser;
+    - AuditKIT: `agent_eval` (`FinalStateAssertion` cases via the bridge) and the `TaskCompletion` judge audit;
+    - CuratorKIT (extra): dedup gates for F8.
+  - The "≥ 2 repos" minimum explicitly excludes Track 3.
+  - **Problem statements we address:**
+    - "Reward design and reward-hacking defences" (primary);
+    - "Business workflow and decision agents" (ticket refunds, KYC/disputes, with an audit trail);
+    - "Agentic distillation" (32B → Tiny RFT);
+    - "Efficient trajectories" (footprint / redundant writes).
+  - **Added to the deliverables:**
+    - an **ROI comparison** (optional but preferred): closed-model API token billing vs. self-hosted Tiny Aya, using a realistic volume, measured tokens/s, GPU-hours and per-hour price;
+    - **logs on HF** (training logs, traces) inside the public dataset collection;
+    - a write-up that states the metrics chosen and why, plus the rationale for datasets, tasks and models.
