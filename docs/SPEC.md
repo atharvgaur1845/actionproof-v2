@@ -812,3 +812,18 @@ If something fails:
   - tasks stranded in `running/` after preemption are re-queued, using owner files;
   - `# after:` dependencies between tasks;
   - RFT resumes from its latest checkpoint.
+- **2026-11-04 23:10 · Counterfactual footprint (upgrade 2) is built.**
+  - How it works: each recorded episode is replayed deterministically, with every observation asserted equal, so the metric applies to all existing evaluation files without re-running a model.
+  - Results, val (USER = share of goal-meeting episodes with at least one unneeded committed write):
+
+    | Model | USER | 95% CI |
+    |---|---|---|
+    | RFT raw | 0.03 | [0.01, 0.12] |
+    | RFT curated | 0.16 | [0.09, 0.26] |
+    | DPO | 0.19 | — |
+    | GRPO+PCSTR | 0.30 | [0.20, 0.42] |
+    | GRPO+tool_trust | 0.46 | [0.35, 0.58] |
+
+  - test_iid: PCSTR 0.35, tool_trust 0.40.
+  - NWCG ≈ 0.90–0.96 for all trained models.
+  - Exploratory reading: RL raises unnecessary side effects, the transcript reward most. This motivates the `pcstr+fp` ablation.
