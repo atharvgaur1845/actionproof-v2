@@ -1,6 +1,6 @@
 #!/bin/bash
 # HF Jobs re-run of queue task 091 (v2 learnable band) after job 6aeb691e0e0338d1bb800c4e was cancelled
-# on HF's side mid-curriculum. Same env (bundle), RFT v2 adapter from outputs/, latest code overlay.
+# on HF's side mid-curriculum; re-run 2026-11-05 after the sampling-seed fix (Amendment 3). Same env (bundle), RFT v2 adapter from outputs/, latest code overlay.
 set -euo pipefail
 W=/work; mkdir -p $W && cd $W
 export HF_HOME=$W/.cache/huggingface UV_CACHE_DIR=$W/.cache/uv TOKENIZERS_PARALLELISM=false
@@ -24,5 +24,10 @@ date +%T; echo "curriculum start"
 date +%T; echo "curriculum sampled"
 .venv/bin/python -m actionproof.train.curriculum --samples $S --out data/curriculum/band_tiny_v2.jsonl
 .venv/bin/python -m actionproof.eval.by_fault $S
-for p in results/curriculum data/curriculum logs; do .venv/bin/hf upload "$AP_REPO" $p outputs/$p --repo-type dataset --quiet; done
+V=results/eval/r1/rft_tiny_v2__neutral__val_T1x4
+.venv/bin/python -m actionproof.eval.run_eval --model CohereLabs/tiny-aya-global --adapter runs/rft_tiny_v2/final \
+  --split val --prompt neutral --samples 4 --temperature 1.0 --out $V.jsonl > logs/091_val_T1.full.log 2>&1 || tail -20 logs/091_val_T1.full.log
+.venv/bin/python -m actionproof.eval.by_fault $V.jsonl || true
+mkdir -p results/eval/r1
+for p in results/curriculum data/curriculum results/eval/r1 logs; do .venv/bin/hf upload "$AP_REPO" $p outputs/$p --repo-type dataset --quiet; done
 echo HFJOB_DONE

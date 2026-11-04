@@ -851,3 +851,11 @@ If something fails:
   - GRPO rollouts were **not** affected: `batched_vllm` sets no seed.
   - Greedy evaluation is unaffected.
   - Fixed with per-(task, sample, turn) seeds. The v2 curriculum is re-run.
+- **2026-11-05 02:05 · Seed-fixed v2 curriculum and GRPO round v2 started.**
+  - RFT v2 at T=1 with independent samples, unseen val (100×4):
+    - F1: VSC 0.15, post-ack check 0.28;
+    - F3: VSC 0.30, post-ack check 0.36.
+  - Train (400×8): F1 0.17 / 0.30; F3 0.21 / 0.27. Train ≈ val, so no memorisation.
+  - The verification behaviour is present but not modal, which places it in the learnable band. The band has 214 tasks: F1 36, F3 45, F4 61, F5 32, benign 40.
+  - GRPO `pcstr_d` started on H200 job 431825 at 01:59 and loaded the corrected 214-task band (`run_config.json` written at 02:03:08, after the band landed at 02:02:58).
+  - Process fix: queue `done/` markers are set only after the outputs have been fetched.
