@@ -133,3 +133,9 @@ The authoritative record is `results/prereg_hashes.json` → `amendments`, which
 - Each is derived from `test_iid` with the worlds, faults and goals unchanged; only the task text the agent receives differs, so every comparison is paired by task.
 - The templates were hand-written rather than machine-translated. **A native speaker (the user) checked them on 2026-11-04 and approved them without edits.**
 - H6 and H9 remain exploratory.
+
+**Amendment 3 (2026-11-05): sampling-seed bug fix in `run_eval`.**
+- **The bug:** with temperature > 0, every request used `seed=0`. A task's k samples were therefore copies (396 of 400 tasks had a single distinct trajectory across 8 samples), and the random draws were correlated across tasks.
+- **The fix:** each (task, sample, turn) now gets its own reproducible seed.
+- **Greedy evaluation is unchanged**, and with it every val/test metric and every pre-registered analysis.
+- **Affected, and re-run or disclosed in SPEC §27:** the sampled curricula, the teacher's per-task diversity, and the on-policy DPO pairs.

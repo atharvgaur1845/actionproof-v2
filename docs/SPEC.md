@@ -842,3 +842,12 @@ If something fails:
     - an **ROI comparison** (optional but preferred): closed-model API token billing vs. self-hosted Tiny Aya, using a realistic volume, measured tokens/s, GPU-hours and per-hour price;
     - **logs on HF** (training logs, traces) inside the public dataset collection;
     - a write-up that states the metrics chosen and why, plus the rationale for datasets, tasks and models.
+- **2026-11-05 · Sampling-seed bug (Amendment 3).**
+  - `run_eval` passed a single `seed=0` to every vLLM request. With temperature > 0, the k samples of a task were identical, and draws were correlated across tasks.
+  - **Consequences:**
+    1. The "teacher is near-deterministic per task" finding (2026-11-04 03:20) is an **artifact**. The teacher run effectively drew one sample per task, so RFT data diversity was understated.
+    2. The on-policy DPO pairs were starved for the same reason.
+    3. The v1 and v2 curricula are degenerate: rates were only 0 or 1. The v2 band was 78/79 tasks at rate 0, and the apparent "100% post-ack checks on train at T=1" was correlated draws. Greedy val shows the modal behaviour, which is no check.
+  - GRPO rollouts were **not** affected: `batched_vllm` sets no seed.
+  - Greedy evaluation is unaffected.
+  - Fixed with per-(task, sample, turn) seeds. The v2 curriculum is re-run.

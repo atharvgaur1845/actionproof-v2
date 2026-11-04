@@ -11,6 +11,7 @@ conversation at a time. Prompt format, schemas and the tool-call parser are Agen
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import time
 from pathlib import Path
@@ -23,6 +24,10 @@ from actionproof.interp.guard import NUDGE
 from actionproof.rollout.episode import _agenttune, system_prompt
 
 PROMPTS = {"neutral": NEUTRAL, **VERIFY_PROMPTS}
+
+
+def sample_seed(seed: int, task_id: str, sample: int, turn: int) -> int:
+    return int.from_bytes(hashlib.sha256(f"{seed}/{task_id}/{sample}/{turn}".encode()).digest()[:4], "big")
 
 
 def run(llm, tasks, base_prompt: str, samples: int, temperature: float, max_turns: int,
@@ -38,6 +43,16 @@ def run(llm, tasks, base_prompt: str, samples: int, temperature: float, max_turn
             eps.append({"task": t, "env": env, "conv": conv, "sample": s, "turns": 0,
                         "unparsed": 0, "invalid": 0, "ended_by": "max_turns", "done": False, "nudges": 0})
     sp = SamplingParams(temperature=temperature, max_tokens=max_tokens, seed=seed)
+
+    def params(live, turn):
+        """Greedy: one shared SamplingParams (unchanged). Sampling: an independent, reproducible seed per
+        (task, sample, turn). A single shared seed made every request draw the same random stream, so the
+        k samples of a task were copies and draws were correlated across tasks (fixed 2026-11-05)."""
+        if temperature == 0:
+            return sp
+        return [SamplingParams(temperature=temperature, max_tokens=max_tokens,
+                               seed=sample_seed(seed, e["task"].task_id, e["sample"], turn))
+                for e in live]
     tok = llm.get_tokenizer()
     ctx = llm.llm_engine.model_config.max_model_len
     for _turn in range(max_turns):
@@ -48,7 +63,7 @@ def run(llm, tasks, base_prompt: str, samples: int, temperature: float, max_turn
         live = [e for e in eps if not e["done"]]
         if not live:
             break
-        outs = llm.chat([e["conv"] for e in live], sp, use_tqdm=False,
+        outs = llm.chat([e["conv"] for e in live], params(live, _turn), use_tqdm=False,
                         **({"lora_request": lora} if lora else {}))
         for e, o in zip(live, outs):
             text = o.outputs[0].text

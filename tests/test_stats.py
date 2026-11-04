@@ -42,3 +42,13 @@ def test_calibration_profile_counts_same_entity_checks_per_service():
           {"tool": "close_ticket", "args": {"ticket_id": "T-1"}, "obs": {"status": "success"}},
           {"tool": "query_ledger", "args": {"order_id": "O-1"}, "obs": {}}]
     assert acked_writes(tr) == [("payments", True), ("ticketing", False)]
+
+
+def test_sampling_seeds_independent_per_sample_and_turn_but_reproducible():
+    import pytest
+    pytest.importorskip("vllm")
+    from actionproof.eval.run_eval import sample_seed
+    seeds = {sample_seed(0, "train_0001", s, t) for s in range(8) for t in range(10)}
+    assert len(seeds) == 80
+    assert sample_seed(0, "train_0001", 3, 2) == sample_seed(0, "train_0001", 3, 2)
+    assert sample_seed(0, "train_0001", 3, 2) != sample_seed(1, "train_0001", 3, 2)

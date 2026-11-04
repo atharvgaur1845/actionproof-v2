@@ -60,7 +60,7 @@
     "actionproof/rewards/pcstr.py": "281fc3f6ac124559c62a3ea962f79f08fb858e86288f08619d7077de65e7e275",
     "actionproof/rewards/baselines.py": "234717a686632dc2344268f055c5bbcd571c458444f636c8339641514293e35b",
     "actionproof/eval/stats.py": "4ee6e2f4af060bee1f39520584c6666ed2527d774b92d4c3ae2961357f1eb889",
-    "actionproof/eval/run_eval.py": "df2a68bd4b3fe4409e36b5c405504babdc46826bb03d6533b3bf386b7ea1aab8",
+    "actionproof/eval/run_eval.py": "78b70efc7a63fbf256527e2a44b3ac9e7b97785c561cc87bda9d58c6c6e7c8d9",
     "actionproof/bench/generator.py": "cf9e3512952c36d059604523342d6142398be23fea0e34fb9af6755e3249c51e",
     "actionproof/bench/prompts.py": "f1d2fd43ea8217e9db473773a6325b61e946ab702c5f9c6953b56843716d78ad",
     "actionproof/env/verifier_bank.py": "35c7a912e78c7b30ed5119d043d65462b652d3577b0713ff46c2525f5bb80615",
@@ -141,6 +141,16 @@
         "code:actionproof/bench/variants.py": {
           "from": null,
           "to": "dd04057478c127966ce4a8479530cfd66563305070666fe4fe320c862c23acec"
+        }
+      }
+    },
+    {
+      "date": "2026-11-05T01:47",
+      "reason": "Amendment 3: run_eval sampling-seed bug fix. With temperature > 0 every request shared seed=0, so the k samples of a task were copies and draws were correlated across tasks. Now an independent reproducible seed per (task, sample, turn). The greedy path (all val/test metrics) is byte-identical. Affected and re-run or disclosed: curricula (v1, v2), teacher diversity (070), on-policy DPO pairs (095).",
+      "changed": {
+        "code:actionproof/eval/run_eval.py": {
+          "from": "df2a68bd4b3fe4409e36b5c405504babdc46826bb03d6533b3bf386b7ea1aab8",
+          "to": "78b70efc7a63fbf256527e2a44b3ac9e7b97785c561cc87bda9d58c6c6e7c8d9"
         }
       }
     }
