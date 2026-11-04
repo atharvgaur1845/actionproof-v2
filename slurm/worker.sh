@@ -42,7 +42,9 @@ deps_done() {  # "# after: a b" lines: every named task must already be in done/
   done
 }
 
+FAILS=0  # circuit breaker: 2 consecutive failures pause claiming until queue/<pool>/PAUSED is removed
 while [ "$STOP" = 0 ]; do
+  if [ -e "$Q/PAUSED" ]; then sleep 60; continue; fi
   left_min=$(( (END - $(date +%s)) / 60 - 10 ))
   [ "$left_min" -le 5 ] && break
   task=""
@@ -58,7 +60,8 @@ while [ "$STOP" = 0 ]; do
   ( cd "$ROOT" && exec bash "$task" ) > "$Q/logs/$name.log" 2>&1 &
   CHILD=$!; wait "$CHILD"; rc=$?; CHILD=""
   rm -f "$task.owner"
-  if [ "$rc" = 0 ]; then mv "$task" "$Q/done/"; else mv "$task" "$Q/failed/"; fi
+  if [ "$rc" = 0 ]; then mv "$task" "$Q/done/"; FAILS=0; else mv "$task" "$Q/failed/"; FAILS=$((FAILS + 1)); fi
+  if [ "$FAILS" -ge 2 ]; then echo "$(date -Is) paused by $SLURM_JOB_ID after $FAILS consecutive failures" > "$Q/PAUSED"; fi
   echo "$(date +%T) end   $name rc=$rc"
 done
 echo "worker exiting $(date +%T)"
