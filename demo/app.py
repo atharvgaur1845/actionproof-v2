@@ -19,14 +19,10 @@ import gradio as gr
 
 from actionproof.bench.generator import make_split
 from actionproof.bench.prompts import NEUTRAL
-from actionproof.env.db import snapshot
 from actionproof.env.faults import Fault, FaultSchedule
-from actionproof.env.tools_ecom import VERIFICATION_TOOLS
-from actionproof.env.verifier import verify, vsc
-from actionproof.rewards.baselines import outcome_score, tool_trust_score
-from actionproof.rewards.pcstr import pcstr_score
 from actionproof.rollout.agenttune_rollout import make_env
 from actionproof.rollout.episode import run_episode
+from render import render, score  # noqa: E402  (demo/render.py)
 
 try:
     import spaces
@@ -93,42 +89,6 @@ def generator_for(name: str):
     return generate
 
 
-def score(task, env) -> dict:
-    v = verify(task.goal, snapshot(env.conn), env.log, env.final_report)
-    return {"verdict": v, "VSC": vsc(v),
-            "rewards": {"tool-trusting (transcript)": tool_trust_score(task.goal, env.trace, env.final_report),
-                        "outcome (DB)": outcome_score(v), "PCSTR (ours)": round(pcstr_score(v), 3)},
-            "n_verify": sum(s["tool"] in VERIFICATION_TOOLS for s in env.trace)}
-
-
-def render(task, env, s) -> str:
-    att = {a.action_idx: a for a in env.log.attempts}
-    lines = []
-    for st in env.trace:
-        args = ", ".join(f"{k}={v}" for k, v in st["args"].items() if k != "summary")
-        line = f"**{st['tool']}**({args}) → `{json.dumps(st['obs'])[:140]}`"
-        a = att.get(st["idx"])
-        if a is not None:
-            truth = "written ✅" if a.committed and a.fault != "F3_partial" else (
-                "PARTIALLY written ⚠️" if a.fault == "F3_partial" else "NOT written ❌")
-            line += f"<br>&nbsp;&nbsp;&nbsp;↳ *database:* **{truth}**" + (f" (`{a.fault}`)" if a.fault else "")
-        lines.append(line)
-    snap = snapshot(env.conn)
-    o = task.meta["ids"]["order"]
-    db = {"refunds for order": [r for r in snap["refunds"] if r["order_id"] == o],
-          "order status": next(r["status"] for r in snap["orders"] if r["order_id"] == o),
-          "ticket": next({k: r[k] for k in ("status",)} for r in snap["tickets"] if r["order_id"] == o),
-          "escalations": len(snap["escalations"])}
-    v = s["verdict"]
-    report = env.final_report or {"status": "(no report)"}
-    verdict = ("✅ **Verified Safe Completion**" if s["VSC"] else
-               "❌ **False completion**: claimed done, the database disagrees" if v.F_over else "⚠️ Not completed")
-    rw = " | ".join(f"{k}: **{val}**" for k, val in s["rewards"].items())
-    return (f"#### Agent said: `{report['status']}`. {verdict}\n\n" + "<br>".join(lines) +
-            f"\n\n**Actual database state:** `{json.dumps(db)}`\n\n**Rewards for this episode:** {rw}"
-            f"\n\nverification calls: {s['n_verify']} · duplicates: {v.D} · violations: {v.I:.2f}")
-
-
 @GPU
 def run_live(task_idx, fault_label, left, right):
     task = build_task(int(task_idx), fault_label)
@@ -140,23 +100,25 @@ def run_live(task_idx, fault_label, left, right):
     return task.prompt, outs[0], outs[1]
 
 
-def run_replay(task_idx, fault_label, left, right):
-    task = build_task(int(task_idx), fault_label)
-    outs = []
-    for name in (left, right):
-        f = HERE / "replays" / f"{task.task_id}__{fault_label.split()[0]}__{name.split()[0]}.json"
-        outs.append(f.read_text() if f.exists() else "_(no cached replay for this combination)_")
-    return task.prompt, outs[0], outs[1]
-
-
-def run(task_idx, fault_label, left, right, mode):
-    if mode == "Replay (cached)":
-        return run_replay(task_idx, fault_label, left, right)
+def run(task_idx, fault_label, left, right):
     try:
         return run_live(task_idx, fault_label, left, right)
-    except Exception as e:  # ZeroGPU quota / cold start: fall back, say so
-        p, a, b = run_replay(task_idx, fault_label, left, right)
-        return p, f"_Live run unavailable ({type(e).__name__}); showing cached replay._\n\n" + a, b
+    except Exception as e:  # ZeroGPU quota / cold start: say so, point at the cached real episodes
+        msg = f"_Live run unavailable ({type(e).__name__}). The Replays tab shows recorded evaluation episodes._"
+        return build_task(int(task_idx), fault_label).prompt, msg, msg
+
+
+REPLAYS = json.loads((HERE / "replays" / "index.json").read_text()) if (HERE / "replays" / "index.json").exists() \
+    else {"models": [], "items": []}
+R_FAULTS = sorted({i["fault"] for i in REPLAYS["items"]})
+
+
+def show_replay(fault, k, left, right):
+    items = [i for i in REPLAYS["items"] if i["fault"] == fault]
+    if not items:
+        return "", "_no replays_", "_no replays_"
+    it = items[int(k) % len(items)]
+    return f"{it['task_id']}: {it['prompt']}", it["panels"].get(left, "_n/a_"), it["panels"].get(right, "_n/a_")
 
 
 def asset(name: str, default: str) -> str:
@@ -171,7 +133,6 @@ with gr.Blocks(title="ActionProof") as demo:
         with gr.Row():
             task_idx = gr.Slider(0, 40, value=3, step=1, label="Task #")
             fault = gr.Dropdown(list(FAULTS), value=list(FAULTS)[1], label="Injected fault")
-            mode = gr.Radio(["Live (ZeroGPU)", "Replay (cached)"], value="Live (ZeroGPU)", label="Mode")
         with gr.Row():
             left = gr.Dropdown(list(ADAPTERS), value=list(ADAPTERS)[0], label="Left agent")
             right = gr.Dropdown(list(ADAPTERS), value=list(ADAPTERS)[1], label="Right agent")
@@ -179,7 +140,21 @@ with gr.Blocks(title="ActionProof") as demo:
         prompt = gr.Textbox(label="Task given to both agents", interactive=False)
         with gr.Row():
             out_l, out_r = gr.Markdown(), gr.Markdown()
-        go.click(run, [task_idx, fault, left, right, mode], [prompt, out_l, out_r])
+        go.click(run, [task_idx, fault, left, right], [prompt, out_l, out_r])
+    with gr.Tab("Replays (real eval episodes)"):
+        gr.Markdown("Recorded episodes from our evaluation runs, replayed deterministically against the simulator. "
+                    "Same task, same fault, different training.")
+        with gr.Row():
+            r_fault = gr.Dropdown(R_FAULTS, value=R_FAULTS[0] if R_FAULTS else None, label="Fault")
+            r_k = gr.Slider(0, 5, value=0, step=1, label="Example #")
+        with gr.Row():
+            r_left = gr.Dropdown(REPLAYS["models"], value=(REPLAYS["models"] or [None])[0], label="Left")
+            r_right = gr.Dropdown(REPLAYS["models"], value=(REPLAYS["models"] or [None])[-1], label="Right")
+        r_go = gr.Button("Show", variant="primary")
+        r_prompt = gr.Textbox(label="Task", interactive=False)
+        with gr.Row():
+            r_l, r_r = gr.Markdown(), gr.Markdown()
+        r_go.click(show_replay, [r_fault, r_k, r_left, r_right], [r_prompt, r_l, r_r])
     with gr.Tab("Leaderboard"):
         gr.Markdown(asset("leaderboard.md", "_Leaderboard is generated at submission time._"))
     with gr.Tab("Findings"):
