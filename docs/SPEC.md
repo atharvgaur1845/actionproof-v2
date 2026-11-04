@@ -792,3 +792,15 @@ If something fails:
   2. **RFT v2 = verifier-curated teacher data + scripted-expert demos** (`lean_expert`, which uses only agent-visible tools, ≤ 10 turns, and is replayed through the real `run_episode` loop, then VSC-filtered) on a random 50% of refund training tasks. Rationale: the behaviour is absent from the teacher, so GRPO cannot discover it. Using 50% rather than 100% keeps post-ack verification stochastic in the student, i.e. inside GRPO's learnable band. The expert trusts low-fault ticketing writes. Its 11 ticketing-phantom demos fail VSC and are filtered out, so no lying demo enters training.
   3. Round v2 arms, all from the shared RFT v2 init and v2 band: `pcstr_d`, `tool_trust`, `outcome`, `pcstr`. The v1 round is reported in full as the "teacher-limited exploration" result.
 - **2026-11-04 · Guard task bug.** `tag=$p$([ -n "$g" ] && echo _guard)` returns status 1 when `g` is empty, so `set -e` killed 098 before it logged anything. Fixed (`${g:+_guard}`) and re-queued on the H100 pool.
+- **2026-11-04 16:00 · H7 re-check with a text-only baseline. This weakens the #7 claim.**
+  - The pos-B "retrained probe AUROC 0.82–0.86" figures came from 65 test episodes. With 5-fold task-hash cross-validation over all 300 `probe_cues` episodes (`interp/h7_compare.py`; probe layer fixed at 20 by the init probe; text config chosen by nested selection), the results are:
+
+    | Checkpoint | Probe AUROC | Text AUROC | Probe − text, 95% CI |
+    |---|---|---|---|
+    | tool_trust step 0 | 0.66 | 0.71 | −0.05 [−0.12, 0.02] |
+    | tool_trust step 200 | 0.73 | 0.69 | +0.04 [−0.03, 0.11] |
+    | pcstr step 200 | 0.68 | 0.62 | +0.06 [−0.01, 0.13] |
+
+  - So no checkpoint shows significantly more failure information in the residual stream than in the visible text.
+  - On `probe_cues` at pos-A, a val-tuned text baseline scores 0.667, above the activation probe (0.605). There is no pos-A "the model noticed" claim on probe_cues.
+  - Status: H7 as pre-registered is currently **not supported**. Reported as is. The probe-minus-text gap is reported for each checkpoint, with no selective framing.
