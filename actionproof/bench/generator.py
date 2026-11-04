@@ -57,9 +57,15 @@ SPLITS: dict[str, dict[str, Any]] = {
     # Interpretability only (never policy training, never test): cue-bearing faults so probes can
     # ask whether the model internally registers evidence it then ignores (H7). Distinct seed.
     "probe_cues":     {"n": 300, "call": [Fault.STALE, Fault.AMBIGUOUS, Fault.PHANTOM], "task": ["F6", "F7", "F5"], "combo": True, "rho": TRAIN_RHO},
+    # Confirmatory sets (pre-registered 2026-11-04): same recipes as test_iid / test_ood_fault, fresh
+    # seeds, evaluated ONLY for the final pre-registered analysis. test_iid/test_ood_fault were seen
+    # during round v1 and are now development sets.
+    "test_iid_c":       {"n": 200, "call": [Fault.PHANTOM, Fault.PARTIAL, Fault.TIMEOUT], "task": ["F5"], "combo": False, "rho": TRAIN_RHO},
+    "test_ood_fault_c": {"n": 200, "call": [Fault.STALE, Fault.AMBIGUOUS], "task": ["F6", "F7"], "combo": True, "rho": TRAIN_RHO},
     "test_calib_swap": {"n": 100, "call": [Fault.PHANTOM, Fault.PARTIAL, Fault.TIMEOUT], "task": [], "combo": False, "rho": SWAPPED_RHO},
 }
-SPLIT_SEEDS = {"train": 1, "val": 2, "test_iid": 3, "test_ood_fault": 4, "test_calib_swap": 5, "probe_cues": 6}
+SPLIT_SEEDS = {"train": 1, "val": 2, "test_iid": 3, "test_ood_fault": 4, "test_calib_swap": 5, "probe_cues": 6,
+               "test_iid_c": 7, "test_ood_fault_c": 8}
 BENIGN_SHARE = 0.40
 F5_SHARE = 0.15
 

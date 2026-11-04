@@ -56,3 +56,11 @@ def test_entities_never_shared_between_train_and_test():
 def test_probe_cues_split_disjoint_from_test_entities():
     ids = lambda s: {t.meta["ids"]["order"] + t.meta["ids"]["cust"] for t in make_split(s)}
     assert not ids("probe_cues") & ids("test_ood_fault") and not ids("probe_cues") & ids("test_iid")
+
+
+def test_no_entity_shared_between_train_and_any_eval_split():
+    ids = lambda s: {t.meta["ids"]["order"] + t.meta["ids"]["cust"] for t in make_split(s)}
+    train = ids("train") | ids("val")
+    for s in ("test_iid", "test_ood_fault", "test_iid_c", "test_ood_fault_c", "test_calib_swap"):
+        assert not train & ids(s), s
+    assert not ids("test_iid_c") & ids("test_iid") and not ids("test_ood_fault_c") & ids("test_ood_fault")
