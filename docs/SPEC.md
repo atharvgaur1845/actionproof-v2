@@ -918,3 +918,32 @@ If something fails:
     | test_ood_fault | +0.15 | [0.10, 0.205] |
 
   - **Reading (outcome matrix Case C):** the source of the reward (state vs. transcript) carries almost all of the effect. PCSTR-d's dense terms add a small, consistent IID edge (+3.5 pp) and nothing on held-out fault types. The headline becomes "any state-grounded reward avoids what transcript rewards train in". PCSTR-d's contribution is the honesty/loophole design plus a small edge, and the confirmatory H1 is unlikely to clear its MDE against `outcome`.
+- **2026-11-05 21:10 · Round v2 complete (seed 0; same RFT v2 init; development sets).**
+
+  | Arm | val VSC | test_iid VSC | test_ood_fault VSC | Verify calls / episode |
+  |---|---|---|---|---|
+  | tool_trust | 0.65 | 0.61 | 0.665 | — |
+  | llm_judge (Aya 8B likelihood) | 0.64 | 0.61 | 0.68 | — |
+  | outcome | 0.86 | 0.815 | 0.815 | 2.14 (test_iid) |
+  | pcstr (v1) | 0.87 | 0.85 | 0.81 | — |
+  | pcstr_d | 0.87 | 0.85 | 0.815 | 2.13 (test_iid) |
+  | pcstr_c | 0.87 | 0.85 | 0.805 | 1.72 (test_iid) |
+
+  - **Transcript rewards (tool_trust, llm_judge) and state rewards (outcome, the pcstr family) separate cleanly.** Within each family the arms are nearly identical.
+  - The PCSTR v1 silence loophole did not appear from this init (report rate 1.00). The loophole seen in round v1 needed an init where failures were common.
+  - **H8 (calibrated trust):** `pcstr_c` loses no VSC and makes 20% fewer verification calls. Check profile on test_iid: payments 0.63, orders 0, ticketing 0 (Spearman with ρ = +0.87). On `test_calib_swap` the profile is the same (payments 0.63, though its ρ is now the lowest), Spearman −0.87. **The verification policy is a memorised service prior, not in-context estimation of fault rates.**
+  - **Baseline selection (pre-registered rule, val VSC):**
+
+    | Candidate | val VSC |
+    |---|---|
+    | base + verify_{a,b,c} | 0.00–0.01 |
+    | RFT v2 neutral | 0.59 |
+    | RFT v2 + verify_{a,b,c} | 0.55 / 0.62 / 0.61 |
+    | DPO (v1) | 0.62 |
+    | **GRPO-outcome** | **0.86 (selected)** |
+
+    H1 is therefore PCSTR-d vs. GRPO-outcome on the `_c` sets.
+  - **ROI (task 175):**
+    - Measured on H200: 9,600 tickets per GPU-hour (200 tickets in 75 s, batched vLLM).
+    - Per ticket: 7.5 calls, 25.4k input tokens (19.7k cacheable), 247 output tokens.
+    - At 100k tickets/month: self-hosted $52 (H200 rate) vs. GPT-5.4 Mini $684 and Gemini 3.1 Flash-Lite $228. These are secondary-source prices; verify before publishing. Closed-model VSC was not measured.
