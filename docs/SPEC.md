@@ -982,3 +982,15 @@ If something fails:
   - The verify prompt **hurts** 32B: 0.515 → 0.33 on test_iid, 0.625 → 0.375 on ood_fault.
   - The trained Tiny Aya (GRPO + PCSTR-d) reaches 0.85 test_iid and 0.815 ood_fault: +34 pp and +19 pp over the untrained 32B, at about one tenth of the size.
 - **Transfer eval launched** (HF job `6aecf11c…`): RFT v2 and GRPO v2 {pcstr_d, outcome, tool_trust} on banking, HI, Hinglish and pressure.
+- **2026-11-06 · Transfer (HF job `6aecf11c…`, about $3; exploratory H4 / H6 / H9).**
+
+  | Model | HI | Hinglish | Pressure | Hinglish + pressure | Banking VSC | Banking IVR |
+  |---|---|---|---|---|---|---|
+  | RFT v2 | 0.54 | 0.595 | 0.56 | 0.565 | 0.06 | 0.48 |
+  | tool_trust | 0.615 | 0.61 | 0.605 | 0.615 | 0.03 | 0.37 |
+  | outcome | 0.75 | 0.825 | 0.82 | 0.83 | 0.02 | 0.87 |
+  | **pcstr_d** | 0.775 | 0.86 | 0.85 | 0.855 | 0.007 | **0.88** |
+
+  - **H6/H9 (language, pressure): the English-trained gains transfer.** PCSTR-d − tool_trust ≈ +16 to +25 pp. Pressure has no effect. In Hindi PCSTR-d reports failure honestly more often: FCR 0.62, against 1.00 in English.
+  - **H4 (banking domain): negative.** State-reward GRPO makes banking *worse*: IVR rises from 0.48 (init) to 0.88. The GRPO policy collapses to `get_dispute → post_reversal → close_dispute → submit`. It never reads the transaction ledger, so it does not know the disputed amount and posts `amount_cents = 0` (a policy violation).
+  - Reading: RL sharpened a domain-specific script and dropped the init's exploratory reads. The learned verification is **tool-specific** (re-check the order after `issue_refund`), not an abstract "verify every write" skill. The sim-to-deploy claim in §8.3 must be narrowed to the trained tool family. Reported as a limitation.

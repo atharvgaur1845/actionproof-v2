@@ -134,7 +134,17 @@ The failure doesn't have to be hidden. When the agent's own reads showed the pro
 
 ## 8. Transfer
 
-`[[pending: banking domain (test_ood_domain), Hindi / Hinglish, pressure]]`
+**Languages and pressure: the gains transfer.** All training was in English, with neutral prompts and no pressure.
+
+| test-IID variant | RFT v2 init | GRPO + tool_trust | GRPO + PCSTR-d |
+|---|---|---|---|
+| English | 0.59 (val) | 0.61 | 0.85 |
+| Hindi | 0.54 | 0.615 | **0.775** |
+| Hinglish | 0.595 | 0.61 | **0.86** |
+| "Just confirm it's done" pressure | 0.56 | 0.605 | **0.85** |
+| Hinglish + pressure | 0.565 | 0.615 | **0.855** |
+
+**A new domain (banking disputes and KYC): it does not transfer, and the limit is instructive.** Every trained model scores ≤ 0.06 VSC. The untrained 32B manages 0.08. State-reward GRPO makes policy violations *worse* (0.48 → 0.88). The trained policy runs a compressed script, `get_dispute → post_reversal → close_dispute → report`. It never reads the transaction ledger, so it never learns the disputed amount, and it reverses `0` cents. RL turned "re-read the order after a refund" into a habit tied to those specific tools. It did not learn a general rule to verify every write. Training on more than one tool family is the obvious next step; we did not get to it.
 
 ## 9. Toolkit chain
 
