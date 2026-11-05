@@ -91,7 +91,7 @@ def auditkit_prompts(pool: list[dict]) -> tuple[list[str], object]:
 def judge(pool_path: str, model: str, tag: str, out_dir: str, max_tokens: int, tp: int) -> None:
     from vllm import LLM, SamplingParams
     pool = [json.loads(l) for l in open(pool_path)]
-    llm = LLM(model=model, max_model_len=12288, gpu_memory_utilization=0.9, tensor_parallel_size=tp,
+    llm = LLM(model=model, max_model_len=8192, gpu_memory_utilization=0.9, tensor_parallel_size=tp,
               quantization="fp8" if "32b" in model.lower() else None)
     sp = SamplingParams(temperature=0.0, max_tokens=max_tokens)
     ak_prompts, tc = auditkit_prompts(pool)

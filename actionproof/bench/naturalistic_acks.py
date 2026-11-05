@@ -52,9 +52,11 @@ def main() -> None:
     a = ap.parse_args()
     llm = LLM(model=a.model, max_model_len=2048, gpu_memory_utilization=0.9, quantization="fp8", seed=0)
     out, stats = {}, {}
-    for ctx, system in CONTEXTS.items():
+    for i, (ctx, system) in enumerate(CONTEXTS.items()):
+        # one seed per request: a single shared seed makes every sample identical (cf. Amendment 3)
         gens = llm.chat([[{"role": "user", "content": GEN_PROMPT.format(system=system)}]] * a.per_context,
-                        SamplingParams(temperature=0.9, top_p=0.95, max_tokens=60, seed=0))
+                        [SamplingParams(temperature=0.9, top_p=0.95, max_tokens=60, seed=1000 * i + k)
+                         for k in range(a.per_context)])
         texts = [g.outputs[0].text.strip().strip('"').strip() for g in gens]
         lex = [t for t in texts if lexical_ok(t)]
         samples = [DataSample(source_uri=f"aya-expanse-32b/{ctx}", output=t, task_type="language_modeling") for t in lex]
