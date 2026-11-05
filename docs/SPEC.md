@@ -887,3 +887,15 @@ If something fails:
   - **Per-service post-write check rate (test_iid):** payments 0.98, orders 0.39, ticketing 0.00. This is monotone in ρ_s (Spearman 1.0 across 3 services). v1 tool_trust: 0 everywhere.
     - **Confound:** the lean-expert demos verify payments and trust ticketing by design. Whether this is learned calibration or an inherited prior is tested on `test_calib_swap` (`pcstr_c` task) and by comparing with the same-init `tool_trust` and `outcome` arms.
   - **AuditKIT:** verified success 170/200 matches VSC 0.85, with 0 unknown.
+- **2026-11-05 07:40 · Same-init reward contrast, round v2, seed 0 (development sets; exploratory).**
+  - GRPO + tool_trust from the same RFT v2 init: VSC 0.65 (val), 0.61 (test_iid), 0.665 (test_ood_fault). Post-ack check 0.00 on F1/F3; check profile flat at 0 for every service.
+  - **PCSTR-d − tool_trust, paired bootstrap of VSC:**
+
+    | Set | Difference | 95% CI |
+    |---|---|---|
+    | val | +0.22 | [0.14, 0.30] |
+    | test_iid | +0.24 | [0.185, 0.30] |
+    | test_ood_fault | +0.15 | [0.10, 0.205] |
+
+  - **H2-type observation:** the init re-checks after an ack ~30% of the time at T=1 (val). PCSTR-d drives that to 1.00; tool_trust drives it to 0.00. The transcript reward actively unlearns verification.
+  - These are not the confirmatory H1 test: H1 picks its baseline by the val rule and runs once on the `_c` sets after G3.

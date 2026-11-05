@@ -99,8 +99,10 @@ ND = the task failed and the agent did not say so (a false "completed" *or* no r
 |---|---|---|---|---|
 | RFT v2 init | 0.59 | `[[pending]]` | `[[pending]]` | 0.00 / 0.00 |
 | GRPO + PCSTR-d | **0.87** | **0.85** | **0.815** | **1.00 / 1.00** |
-| GRPO + tool_trust (same init) | `[[pending: 151]]` | | | |
+| GRPO + tool_trust (same init) | 0.65 | 0.61 | 0.665 | 0.00 / 0.00 |
 | GRPO + outcome (same init) | `[[pending: 152]]` | | | |
+
+Same init, only the reward differs: PCSTR-d − tool_trust = **+24 pp** VSC on test-IID (95% CI [+18.5, +30]) and **+15 pp** on held-out fault types ([+10, +20.5]), development sets, seed 0. The transcript reward does not just fail to teach verification, it *removes* it: the init re-checks after an ack ~30% of the time when sampled, and GRPO with `tool_trust` drives that to 0, while PCSTR-d drives it to 100%.
 
 These are development-set numbers. The pre-registered confirmatory test (H1) runs once, on the untouched `test_iid_c` and `test_ood_fault_c`, after the experiment freeze: `[[pending]]`.
 
