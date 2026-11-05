@@ -100,7 +100,11 @@ ND = the task failed and the agent did not say so (a false "completed" *or* no r
 | RFT v2 init | 0.59 | `[[pending]]` | `[[pending]]` | 0.00 / 0.00 |
 | GRPO + PCSTR-d | **0.87** | **0.85** | **0.815** | **1.00 / 1.00** |
 | GRPO + tool_trust (same init) | 0.65 | 0.61 | 0.665 | 0.00 / 0.00 |
-| GRPO + outcome (same init) | `[[pending: 152]]` | | | |
+| GRPO + llm_judge (same init) | 0.64 | 0.61 | 0.68 | — |
+| GRPO + outcome (same init) | 0.86 | 0.815 | 0.815 | 1.00 / 1.00 |
+| GRPO + PCSTR v1 / PCSTR-d + verification cost (same init) | 0.87 / 0.87 | 0.85 / 0.85 | 0.81 / 0.805 | — |
+
+**The reward's *source* is what matters.** Both transcript-based rewards (tool-trusting and an LLM judge) end at ≈0.61 test-IID VSC. All four state-based rewards end at 0.815–0.85. Within the state family, PCSTR-d's dense terms add a small IID edge over the binary outcome reward: +3.5 pp, 95% CI [+1, +6]. They add nothing on held-out fault types.
 
 Same init, only the reward differs: PCSTR-d − tool_trust = **+24 pp** VSC on test-IID (95% CI [+18.5, +30]) and **+15 pp** on held-out fault types ([+10, +20.5]), development sets, seed 0. The transcript reward does not just fail to teach verification, it *removes* it: the init re-checks after an ack ~30% of the time when sampled, and GRPO with `tool_trust` drives that to 0, while PCSTR-d drives it to 100%.
 
@@ -108,7 +112,7 @@ These are development-set numbers. The pre-registered confirmatory test (H1) run
 
 **Limitations already visible:**
 - The remaining failures are still always reported as "completed".
-- The policy verifies payments (0.98) and order changes (0.39) but not ticket writes (0.00). That ordering matches the true fault rates, but our expert demos encoded it, so we do not claim it was learned (`[[pending: test_calib_swap]]`).
+- The policy verifies payments (0.98) and order changes (0.39) but not ticket writes (0.00). That ordering matches the true fault rates, but our expert demos encoded it, so we do not claim it was learned. The swap test confirms the caution: with a verification cost (PCSTR-c), the agent makes 20% fewer verification calls at equal VSC. It checks payments 63% of the time on both the training-rate split and the swapped-rate split, where payments has become the most reliable service. **It learned a fixed service prior, not to estimate fault rates in context.**
 
 ## 6. Understanding: does the model "know" it failed?
 
@@ -137,7 +141,18 @@ A linear probe on the residual stream decodes "this task failed" at the report t
 
 ## 10. ROI
 
-`[[pending: closed-model API cost vs. self-hosted Tiny Aya at a realistic ticket volume, from measured tokens/s and GPU-hour prices]]`
+**Measured workload per ticket:** 7.5 LLM calls, 25.4k input tokens (19.7k of them a cacheable prefix), 247 output tokens.
+
+**Measured self-hosted throughput:** 9,600 tickets per H200-hour (batched vLLM, the final PCSTR-d agent, VSC 0.85).
+
+| Option, 100k tickets/month | $/month |
+|---|---|
+| Self-hosted Tiny Aya on H200 (HF Jobs, $5/h) | **$52** |
+| Self-hosted on A100 / L4, at the H200-measured rate (lower bound for slower GPUs) | $26 / $8 |
+| Gemini 3.1 Flash-Lite API (with caching) | $228 |
+| GPT-5.4 Mini API (with caching) | $684 |
+
+Prices are from secondary sources dated 2026-11-05; `[[verify on provider pages before publishing]]`. Closed-model VSC on ActionProof was not measured.
 
 ## 11. Rigor notes
 
