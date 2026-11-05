@@ -969,3 +969,16 @@ If something fails:
   - TAR on genuine successes: 0.94.
   - **Transcript judges, including the toolkit's own, accept nearly all false completions.** This matches the GRPO result that `llm_judge` trains the same behaviour as `tool_trust`.
 - **F8 naturalistic acks:** after the seed fix, only 9 texts survive the gates (refund 1, cancel 1, reversal 7). Aya 32B is low-diversity at T=0.9 and the MinHash@0.7 gate is strict. `test_f8_natural` is not built yet; the placeholder F8 texts remain in the hashed splits.
+- **2026-11-06 · R0 leaderboard (HF job `6aecaeb3…`, about $5).** Full table: `results/leaderboard.md`.
+
+  | Model | test_iid VSC | Other splits |
+  |---|---|---|
+  | Tiny Aya Global / Fire / Water / Earth | ≤ 0.005 | — |
+  | Aya Expanse 8B | 0.00 | — |
+  | **Aya Expanse 32B, neutral** | 0.515 | ood_fault 0.625; banking 0.08 (IVR 0.72); HI 0.465; Hinglish 0.43; pressure 0.45 |
+  | Aya Expanse 32B, verify_a | 0.33 | ood_fault 0.375 |
+  | Tiny Aya Base | — | not applicable: base model, the chat format fails |
+
+  - The verify prompt **hurts** 32B: 0.515 → 0.33 on test_iid, 0.625 → 0.375 on ood_fault.
+  - The trained Tiny Aya (GRPO + PCSTR-d) reaches 0.85 test_iid and 0.815 ood_fault: +34 pp and +19 pp over the untrained 32B, at about one tenth of the size.
+- **Transfer eval launched** (HF job `6aecf11c…`): RFT v2 and GRPO v2 {pcstr_d, outcome, tool_trust} on banking, HI, Hinglish and pressure.
