@@ -947,3 +947,6 @@ If something fails:
     - Measured on H200: 9,600 tickets per GPU-hour (200 tickets in 75 s, batched vLLM).
     - Per ticket: 7.5 calls, 25.4k input tokens (19.7k cacheable), 247 output tokens.
     - At 100k tickets/month: self-hosted $52 (H200 rate) vs. GPT-5.4 Mini $684 and Gemini 3.1 Flash-Lite $228. These are secondary-source prices; verify before publishing. Closed-model VSC was not measured.
+- **2026-11-05 21:30 · HF Jobs budget: about $20 (user: spend the $28.96 credit down to no lower than $9).**
+  - Job A (`6aecaa3b…`, H200, 2 h cap so at most $10) runs bank smoke (166), naturalistic F8 generation (172) and the judge-fooling audit (170). It uses the unchanged queue scripts through `slurm/hfjob_tasks.sh`; `env.sh` paths can now be overridden via `AP_ROOT`, `AP_HF_HOME` and `AP_HF_OFFLINE`, with the cluster defaults unchanged.
+  - The same three tasks were removed from the cluster queue to avoid running them twice.

@@ -1,7 +1,8 @@
 # Sourced by every queue task. Tasks may run inside another project's job (train hook), so
 # override every inherited cache path: never write into /scratch/pabitra/gemma4comp.
-R=/scratch/pabitra/actionproof
-export HF_HOME=/scratch/pabitra/.cache/huggingface HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false
+# AP_ROOT / AP_HF_HOME / AP_HF_OFFLINE let the same tasks run on HF Jobs (slurm/hfjob_tasks.sh).
+R=${AP_ROOT:-/scratch/pabitra/actionproof}
+export HF_HOME=${AP_HF_HOME:-/scratch/pabitra/.cache/huggingface} HF_HUB_OFFLINE=${AP_HF_OFFLINE:-1} TOKENIZERS_PARALLELISM=false
 export TMPDIR=$R/.cache/tmp VLLM_CACHE_ROOT=$R/.cache/vllm TRITON_CACHE_DIR=$R/.cache/triton
 export FLASHINFER_WORKSPACE_BASE=$R/.cache/flashinfer OUTLINES_CACHE_DIR=$R/.cache/outlines
 mkdir -p "$TMPDIR" "$VLLM_CACHE_ROOT" "$TRITON_CACHE_DIR" "$FLASHINFER_WORKSPACE_BASE" "$OUTLINES_CACHE_DIR"
