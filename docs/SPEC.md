@@ -881,3 +881,9 @@ If something fails:
     2. F1 is capped at 0.42. Phantom acks on ticketing writes are not checked; this needs a per-service analysis.
   - Not yet causal: the same-init `tool_trust` and `outcome` arms (151 and 152) are the controls.
   - Confirmatory numbers come only from `test_iid_c` and `test_ood_fault_c`, after G3.
+- **2026-11-05 05:00 · `pcstr_d` analysis (exploratory).**
+  - **Remaining failures:** every one is claimed "completed". In 9/13 (val), 13/30 (test_iid) and 27/37 (test_ood_fault) of them, a verification read followed the faulted write ("visible", an approximate flag). PCSTR-d cut false completions by removing failures; it did not teach reporting "failed".
+  - **Footprint:** USER 0.38 (val) and 0.32 (test_iid), NWCG 0.93–0.95, about the same as v1 GRPO.
+  - **Per-service post-write check rate (test_iid):** payments 0.98, orders 0.39, ticketing 0.00. This is monotone in ρ_s (Spearman 1.0 across 3 services). v1 tool_trust: 0 everywhere.
+    - **Confound:** the lean-expert demos verify payments and trust ticketing by design. Whether this is learned calibration or an inherited prior is tested on `test_calib_swap` (`pcstr_c` task) and by comparing with the same-init `tool_trust` and `outcome` arms.
+  - **AuditKIT:** verified success 170/200 matches VSC 0.85, with 0 unknown.
