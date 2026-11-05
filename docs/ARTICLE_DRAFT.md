@@ -122,7 +122,15 @@ A linear probe on the residual stream decodes "this task failed" at the report t
 
 ## 7. Judges are fooled too
 
-`[[pending: D1 — false-acceptance rate by fault for our transcript judge and AuditKIT TaskCompletion, Aya 8B / 32B, with the "failure was visible in the transcript" split]]`
+We gave two judges, at two sizes, the policy, the task, every tool call and response, and the final report. One is our transcript judge (also used as the `llm_judge` reward); the other is AuditKIT's own `TaskCompletion` judge. The pool is 815 claimed-"completed" episodes; in 476 of them the database says the task failed.
+
+| Judge | Accepts a failed run as "done" |
+|---|---|
+| Aya Expanse 8B (either prompt) | **100%** |
+| Aya Expanse 32B + AuditKIT TaskCompletion | **95%** [93, 97] |
+| Aya Expanse 32B + our judge prompt | **76%** [72, 79] |
+
+The failure doesn't have to be hidden. When the agent's own reads showed the problem in the transcript, the 32B judges still accepted 83–93% of failures. "Request accepted, processing" acknowledgements fooled both 32B judges every time (100%). Refunds the policy forbade were accepted 100% of the time by TaskCompletion. A timeout with the error printed in plain sight was still accepted 72% of the time. These are the numbers behind Section 5: a reward built on such a judge trains the same lying policy as a reward that trusts the tool's word.
 
 ## 8. Transfer
 

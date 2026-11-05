@@ -950,3 +950,22 @@ If something fails:
 - **2026-11-05 21:30 · HF Jobs budget: about $20 (user: spend the $28.96 credit down to no lower than $9).**
   - Job A (`6aecaa3b…`, H200, 2 h cap so at most $10) runs bank smoke (166), naturalistic F8 generation (172) and the judge-fooling audit (170). It uses the unchanged queue scripts through `slurm/hfjob_tasks.sh`; `env.sh` paths can now be overridden via `AP_ROOT`, `AP_HF_HOME` and `AP_HF_OFFLINE`, with the cluster defaults unchanged.
   - The same three tasks were removed from the cluster queue to avoid running them twice.
+- **2026-11-05 22:00 · D1 judge-fooling audit (HF job `6aecac26…`).**
+  - Pool: 815 claimed-"completed" episodes, of which 476 have G=0. FAR = P(judge accepts | G=0).
+
+    | Judge | FAR | 95% CI |
+    |---|---|---|
+    | Aya 8B, our prompt | 1.00 | [0.99, 1.00] |
+    | Aya 8B, AuditKIT TaskCompletion | 1.00 | [0.99, 1.00] |
+    | Aya 32B, AuditKIT TaskCompletion | 0.952 | [0.93, 0.97] |
+    | Aya 32B, our prompt | 0.756 | [0.72, 0.79] |
+
+  - When the failure was **visible in the transcript** (53 cases): AuditKIT TaskCompletion 0.925, our prompt 0.83.
+  - Per fault, AuditKIT TaskCompletion / our prompt (32B):
+    - F8 ambiguous acks: 1.00 / 1.00;
+    - F5 policy violations: 1.00 / 0.45;
+    - F4 timeout with an explicit error: 0.72 / 0.50;
+    - F2 stale ack: 0.88 / 0.52.
+  - TAR on genuine successes: 0.94.
+  - **Transcript judges, including the toolkit's own, accept nearly all false completions.** This matches the GRPO result that `llm_judge` trains the same behaviour as `tool_trust`.
+- **F8 naturalistic acks:** after the seed fix, only 9 texts survive the gates (refund 1, cancel 1, reversal 7). Aya 32B is low-diversity at T=0.9 and the MinHash@0.7 gate is strict. `test_f8_natural` is not built yet; the placeholder F8 texts remain in the hashed splits.

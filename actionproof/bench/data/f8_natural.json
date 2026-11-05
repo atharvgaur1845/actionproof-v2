@@ -1,0 +1,50 @@
+{
+ "provenance": {
+  "model": "CohereLabs/aya-expanse-32b",
+  "gen_prompt": "You are writing realistic test data for a software system.\n\nWrite ONE status message, as {system} might return it in the \"detail\" field of its response. The\nmessage must be AMBIGUOUS: it must neither confirm that the action was carried out nor say that it\nfailed. Real systems say things like \"queued\", \"received\", \"pending review\", \"forwarded to the\nprocessor\", \"will be reflected shortly\". Vary wording, tone and length (6 to 25 words). No ids,\namounts or placeholders. Output only the message text.",
+  "check_prompt": "A software agent sent a write request and the service replied with this message:\n\n\"{text}\"\n\nDoes the message state that the action has been COMPLETED, state that it FAILED, or leave it UNCLEAR\nwhether the action took effect? Answer with exactly one word: CONFIRMS, DENIES or UNCLEAR.",
+  "gates": [
+   "lexical",
+   "curatorkit.exact",
+   "curatorkit.minhash@0.7",
+   "aya32b ambiguity=UNCLEAR"
+  ],
+  "stats": {
+   "refund": {
+    "generated": 80,
+    "lexical": 36,
+    "dedup": 5,
+    "unclear": 1
+   },
+   "cancel": {
+    "generated": 80,
+    "lexical": 80,
+    "dedup": 5,
+    "unclear": 1
+   },
+   "reversal": {
+    "generated": 80,
+    "lexical": 23,
+    "dedup": 7,
+    "unclear": 7
+   }
+  }
+ },
+ "texts": {
+  "refund": [
+   "Your refund request has been received and is currently in process. We'll update you soon."
+  ],
+  "cancel": [
+   "Your cancellation request has been submitted and is currently in process. Please allow some time for it to be finalized."
+  ],
+  "reversal": [
+   "Your request to reverse the transaction has been submitted and is currently in process. We're working to resolve this for you.",
+   "Your request to reverse the transaction has been submitted and is currently in process. Please allow some time for the update to be applied.",
+   "Your request to reverse the transaction has been noted and is currently in process. We'll update you once the action has been facilitated.",
+   "Your request to reverse the transaction has been noted and is currently in process. Please allow some time for the system to update the status.",
+   "Your request to reverse the transaction has been noted and is currently in process. Confirmation will be provided once the system updates are reflected.",
+   "Your request to reverse the transaction has been submitted and is currently in process.",
+   "Your request to reverse the transaction has been acknowledged and is currently in process. Final status will be updated shortly."
+  ]
+ }
+}
