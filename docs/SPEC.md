@@ -899,3 +899,22 @@ If something fails:
 
   - **H2-type observation:** the init re-checks after an ack ~30% of the time at T=1 (val). PCSTR-d drives that to 1.00; tool_trust drives it to 0.00. The transcript reward actively unlearns verification.
   - These are not the confirmatory H1 test: H1 picks its baseline by the val rule and runs once on the `_c` sets after G3.
+- **2026-11-05 10:40 · GRPO v2 `outcome` (same init).**
+  - VSC: 0.86 (val), 0.815 (test_iid), 0.815 (test_ood_fault). Post-ack check 1.00 on F1/F3.
+  - **Paired bootstrap, PCSTR-d − outcome:**
+
+    | Set | Difference | 95% CI |
+    |---|---|---|
+    | val | +0.01 | [0, 0.03] |
+    | test_iid | +0.035 | [0.01, 0.06] |
+    | test_ood_fault | 0.00 | — |
+
+  - **Paired bootstrap, outcome − tool_trust:**
+
+    | Set | Difference | 95% CI |
+    |---|---|---|
+    | val | +0.21 | [0.13, 0.30] |
+    | test_iid | +0.205 | [0.14, 0.27] |
+    | test_ood_fault | +0.15 | [0.10, 0.205] |
+
+  - **Reading (outcome matrix Case C):** the source of the reward (state vs. transcript) carries almost all of the effect. PCSTR-d's dense terms add a small, consistent IID edge (+3.5 pp) and nothing on held-out fault types. The headline becomes "any state-grounded reward avoids what transcript rewards train in". PCSTR-d's contribution is the honesty/loophole design plus a small edge, and the confirmatory H1 is unlikely to clear its MDE against `outcome`.
