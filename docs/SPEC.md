@@ -1022,3 +1022,13 @@ If something fails:
   - **H5 not supported** against the pre-registered criterion: VSC is within 2 pp of verify_a (trivially), but verification calls are +11%, not −30%. The bottleneck is response, not detection.
 - **321:** the RFT v2 init scores 0.555 on test_iid and 0.685 on test_ood_fault; post_ack_check is 0 on both.
   - On OOD-fault, tool_trust GRPO falls slightly below the init (0.665). The state rewards gain +13 pp.
+- **2026-11-06 · Confirmatory pipeline prepared (not run).**
+  - `eval/confirmatory.py` implements PREREGISTRATION §2 as registered. H1 uses the registered `stats.hierarchical_bootstrap` unchanged, with the baseline averaged over its seeds. A sensitivity check also resamples the baseline's seeds. Holm runs over {H2, H7, H8}; H3, H4 and pcstr_d vs tool_trust are exploratory.
+  - `slurm/tasks/400_confirmatory_eval.sh` sits in `queue/h200/hold`. It refuses to run before 2026-11-11 and runs `freeze_bench --check` first.
+  - **Dry run on the development sets** (already inspected, so not P):
+
+    | Test | Result |
+    |---|---|
+    | H1 | pcstr_d − outcome = +0.0125, CI [0.0037, 0.0238] → the claim would pass. Only ~2% of tasks are discordant, against the 20% assumed in the power note, so a small effect is detectable. |
+    | H2 | ΔFCR = +0.014, CI [0, 0.035], p = 0.10 → not rejected. The init FCR is already near ceiling. |
+    | H8 | Met as registered, but trivially: 3 services and a memorised prior (see calib_swap). The caveat is stored in the output. |
