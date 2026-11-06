@@ -146,6 +146,11 @@ A linear probe on the residual stream decodes "this task failed" at the report t
 | always-verify prompt | 0.585 | — | 2.41 |
 | neutral + probe guard | 0.575 | 0.145 | 2.68 |
 
+Pre-registered criterion: VSC within 2 pp of always-verify *and* ≥ 30% fewer verification calls.
+- The VSC half is met (0.575 vs 0.585), but only trivially, since always-verify barely helps.
+- The efficiency half fails: the guard makes 11% *more* calls.
+- **H5 is not supported.**
+
 The guard fired on 55 of 183 acknowledged writes and reached 28 of the 77 phantom, partial or stale episodes. VSC on those faults stayed at **0**. Two failures stack:
 - **The nudge is mostly ignored.** In 17 of 28 nudged phantom/partial episodes the very next turn is `add_audit_note → close_ticket → "completed"`.
 - **Evidence is ignored too.** When the model does re-read the ledger, it still reports "completed".

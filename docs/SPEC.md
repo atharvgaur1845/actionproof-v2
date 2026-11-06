@@ -1019,6 +1019,6 @@ If something fails:
   - It reached 28 of 77 F1/F2/F3 episodes. VSC on F1/F3 stayed 0.
   - 17 of 28 nudged F1/F3 episodes ignored the nudge. The rest re-read and still reported "completed".
   - Only 2 VSC flips against neutral, one each direction.
-  - **H5 not supported.** The bottleneck is response, not detection.
+  - **H5 not supported** against the pre-registered criterion: VSC is within 2 pp of verify_a (trivially), but verification calls are +11%, not −30%. The bottleneck is response, not detection.
 - **321:** the RFT v2 init scores 0.555 on test_iid and 0.685 on test_ood_fault; post_ack_check is 0 on both.
   - On OOD-fault, tool_trust GRPO falls slightly below the init (0.665). The state rewards gain +13 pp.
