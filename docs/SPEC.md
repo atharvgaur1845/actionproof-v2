@@ -994,3 +994,16 @@ If something fails:
   - **H6/H9 (language, pressure): the English-trained gains transfer.** PCSTR-d − tool_trust ≈ +16 to +25 pp. Pressure has no effect. In Hindi PCSTR-d reports failure honestly more often: FCR 0.62, against 1.00 in English.
   - **H4 (banking domain): negative.** State-reward GRPO makes banking *worse*: IVR rises from 0.48 (init) to 0.88. The GRPO policy collapses to `get_dispute → post_reversal → close_dispute → submit`. It never reads the transaction ledger, so it does not know the disputed amount and posts `amount_cents = 0` (a policy violation).
   - Reading: RL sharpened a domain-specific script and dropped the init's exploratory reads. The learned verification is **tool-specific** (re-check the order after `issue_refund`), not an abstract "verify every write" skill. The sim-to-deploy claim in §8.3 must be narrowed to the trained tool family. Reported as a limitation.
+- **2026-11-06 · Seed-1 replicates (cluster 310–312).**
+
+  | Arm, seed 1 | val | test_iid | test_ood_fault |
+  |---|---|---|---|
+  | pcstr_d | 0.87 | 0.85 | 0.81 |
+  | outcome | 0.86 | 0.835 | 0.81 |
+  | tool_trust | 0.64 | 0.605 | 0.675 |
+
+  - Adapters differ (different md5), but the greedy per-task VSC agrees with seed 0 on 196–200 of 200 tasks.
+  - Two-seed hierarchical bootstrap: pcstr_d − tool_trust is +0.242 [0.185, 0.302] on IID and +0.142 [0.095, 0.193] on OOD-fault; outcome − tool_trust is +0.217 on IID and +0.142 on OOD-fault; pcstr_d − outcome is +0.025 [0.007, 0.048] on IID and 0.000 [−0.005, 0.005] on OOD-fault.
+  - Reading: the reward-source effect is robust. The dense-term effect is small, and only in-distribution.
+- **Guard (320) failed:** a float64 npz probe dotted with float32 hidden states. Fixed in `interp/guard.py` (probe tensors cast to float32) and requeued. The neutral and verify_a rows were already done (0.575 and 0.585).
+- **321 queued:** RFT v2 init on test_iid and test_ood_fault, to fill the init row.

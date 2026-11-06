@@ -61,7 +61,19 @@ Most agent training pipelines reward what the transcript says. We ask what happe
 | Unnecessary-Side-Effect Rate (USER) | at least one committed write was not needed | exact counterfactual: the smallest subset of receipts that still meets every goal |
 | Calibration | per-service verification rate vs. that service's true fault rate | verifying where it matters |
 
-`[[pending: leaderboard table, 7 Cohere models × {ReAct, verify-prompt}, from results/leaderboard.md]]`
+**Leaderboard (untrained Cohere models, greedy, test-IID unless noted; full table with CIs in `results/leaderboard.md`).**
+
+| Model | VSC, neutral prompt | VSC, "verify every write" prompt | Other splits (neutral) |
+|---|---|---|---|
+| Tiny Aya Global / Fire / Water / Earth | ≤ 0.005 | ≤ 0.005 | — |
+| Aya Expanse 8B | 0.00 | 0.00 | — |
+| Aya Expanse 32B | **0.515** | 0.33 | held-out faults 0.625 · Hindi 0.465 · Hinglish 0.43 · pressure 0.45 · banking 0.08 |
+
+Two things stand out:
+- Nothing below 32B completes tasks safely at all.
+- Telling the 32B model to verify **lowers** VSC by 18–25 pp. It adds reads before writes and still trusts the success ack after them.
+
+Tiny Aya Base is not applicable: as a base model it cannot follow the chat/tool format.
 
 ## 3. Rewards compared (same environment, same init; only the reward changes)
 
@@ -104,9 +116,17 @@ ND = the task failed and the agent did not say so (a false "completed" *or* no r
 | GRPO + outcome (same init) | 0.86 | 0.815 | 0.815 | 1.00 / 1.00 |
 | GRPO + PCSTR v1 / PCSTR-d + verification cost (same init) | 0.87 / 0.87 | 0.85 / 0.85 | 0.81 / 0.805 | — |
 
-**The reward's *source* is what matters.** Both transcript-based rewards (tool-trusting and an LLM judge) end at ≈0.61 test-IID VSC. All four state-based rewards end at 0.815–0.85. Within the state family, PCSTR-d's dense terms add a small IID edge over the binary outcome reward: +3.5 pp, 95% CI [+1, +6]. They add nothing on held-out fault types.
+**The reward's *source* is what matters.** Both transcript-based rewards (tool-trusting and an LLM judge) end at ≈0.61 test-IID VSC. All four state-based rewards end at 0.815–0.85. Within the state family, PCSTR-d's dense terms add a small IID edge over the binary outcome reward (+2.5 pp over two seeds) and nothing on held-out fault types.
 
-Same init, only the reward differs: PCSTR-d − tool_trust = **+24 pp** VSC on test-IID (95% CI [+18.5, +30]) and **+15 pp** on held-out fault types ([+10, +20.5]), development sets, seed 0. The transcript reward does not just fail to teach verification, it *removes* it: the init re-checks after an ack ~30% of the time when sampled, and GRPO with `tool_trust` drives that to 0, while PCSTR-d drives it to 100%.
+Same init, only the reward differs. **Two GRPO seeds per arm** (hierarchical bootstrap over seeds, then tasks; development sets):
+
+| Contrast | test-IID ΔVSC [95% CI] | held-out-fault ΔVSC [95% CI] |
+|---|---|---|
+| PCSTR-d − tool_trust | **+24.2 pp** [+18.5, +30.2] | **+14.2 pp** [+9.5, +19.3] |
+| outcome − tool_trust | +21.7 pp [+15.5, +28.5] | +14.2 pp [+9.5, +19.3] |
+| PCSTR-d − outcome | +2.5 pp [+0.7, +4.8] | 0.0 pp [−0.5, +0.5] |
+
+Seed 1 lands within 1.5 pp of seed 0 for every arm and split. The two seeds give the same greedy verdict on 98–100% of tasks, so the remaining uncertainty is over tasks, not over training runs. The transcript reward does not just fail to teach verification, it *removes* it: the init re-checks after an ack ~30% of the time when sampled, and GRPO with `tool_trust` drives that to 0, while PCSTR-d drives it to 100%.
 
 These are development-set numbers. The pre-registered confirmatory test (H1) runs once, on the untouched `test_iid_c` and `test_ood_fault_c`, after the experiment freeze: `[[pending]]`.
 

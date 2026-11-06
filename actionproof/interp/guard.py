@@ -19,8 +19,9 @@ class ProbeGuard:
         from transformers import AutoModelForCausalLM, AutoTokenizer
         p = np.load(probe_npz)
         self.layer = int(p["layer"])
-        self.mean, self.scale = torch.tensor(p["mean"]), torch.tensor(p["scale"])
-        self.coef, self.b = torch.tensor(p["coef"]), float(p["intercept"][0])
+        f32 = lambda k: torch.tensor(p[k], dtype=torch.float32).reshape(-1)  # npz stores float64; h is float32
+        self.mean, self.scale, self.coef = f32("mean"), f32("scale"), f32("coef")
+        self.b = float(np.asarray(p["intercept"]).reshape(-1)[0])
         self.tau = float(p["tau"]) if tau is None else tau
         self.tok = AutoTokenizer.from_pretrained(model_path)
         self.model = AutoModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.bfloat16,
