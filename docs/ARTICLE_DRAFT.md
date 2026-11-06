@@ -109,7 +109,7 @@ ND = the task failed and the agent did not say so (a false "completed" *or* no r
 
 | Model (neutral prompt, greedy) | val VSC | test-IID VSC | test-OOD-fault VSC | post-ack check on F1 / F3 |
 |---|---|---|---|---|
-| RFT v2 init | 0.59 | `[[pending]]` | `[[pending]]` | 0.00 / 0.00 |
+| RFT v2 init | 0.59 | 0.555 | 0.685 | 0.00 / 0.00 |
 | GRPO + PCSTR-d | **0.87** | **0.85** | **0.815** | **1.00 / 1.00** |
 | GRPO + tool_trust (same init) | 0.65 | 0.61 | 0.665 | 0.00 / 0.00 |
 | GRPO + llm_judge (same init) | 0.64 | 0.61 | 0.68 | — |
@@ -138,7 +138,19 @@ These are development-set numbers. The pre-registered confirmatory test (H1) run
 
 A linear probe on the residual stream decodes "this task failed" at the report token: AUROC 0.66–0.73, 5-fold cross-validation over 300 cue-bearing episodes. **A TF-IDF classifier on the visible text does about as well** (0.62–0.71); every probe-minus-text 95% CI includes 0. We therefore **do not** claim the model internally registers failures beyond what the transcript shows. The available SAE (web text, layer 28) does not reconstruct agent transcripts (FVU 3.9), so it is reported as a negative result.
 
-`[[pending: guard (H5), knowing-liar curves on v2 arms]]`
+**Can the probe stand in for training? (H5: no.)** We ran the probe as an inference-time guard on the RFT init, with no retraining. After every acknowledged write it scores the residual stream. When the score crosses a threshold (τ fixed on val at 80% recall) it appends "confirm the result of your last change…" to the tool result.
+
+| RFT init, test-IID | VSC | post-ack check | verification calls / episode |
+|---|---|---|---|
+| neutral prompt | 0.575 | 0.015 | 2.55 |
+| always-verify prompt | 0.585 | — | 2.41 |
+| neutral + probe guard | 0.575 | 0.145 | 2.68 |
+
+The guard fired on 55 of 183 acknowledged writes and reached 28 of the 77 phantom, partial or stale episodes. VSC on those faults stayed at **0**. Two failures stack:
+- **The nudge is mostly ignored.** In 17 of 28 nudged phantom/partial episodes the very next turn is `add_audit_note → close_ticket → "completed"`.
+- **Evidence is ignored too.** When the model does re-read the ledger, it still reports "completed".
+
+Detection is not the bottleneck: telling a model to check does not make it act on what it finds. Like the 32B "verify every write" prompt, the guard changes what the model *calls*, not what it *concludes*. GRPO with a state reward changes both.
 
 ## 7. Judges are fooled too
 

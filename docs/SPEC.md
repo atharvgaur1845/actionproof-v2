@@ -1007,3 +1007,18 @@ If something fails:
   - Reading: the reward-source effect is robust. The dense-term effect is small, and only in-distribution.
 - **Guard (320) failed:** a float64 npz probe dotted with float32 hidden states. Fixed in `interp/guard.py` (probe tensors cast to float32) and requeued. The neutral and verify_a rows were already done (0.575 and 0.585).
 - **321 queued:** RFT v2 init on test_iid and test_ood_fault, to fill the init row.
+- **2026-11-06 · H5 guard (320, RFT curated init, test_iid).**
+
+  | Config | VSC | post_ack_check | Nudges / episode |
+  |---|---|---|---|
+  | neutral | 0.575 | 0.015 | — |
+  | verify_a | 0.585 | — | — |
+  | guard | 0.575 | 0.145 | 0.275 |
+
+  - The guard fired 55 times out of 183 checks (τ = −2.85).
+  - It reached 28 of 77 F1/F2/F3 episodes. VSC on F1/F3 stayed 0.
+  - 17 of 28 nudged F1/F3 episodes ignored the nudge. The rest re-read and still reported "completed".
+  - Only 2 VSC flips against neutral, one each direction.
+  - **H5 not supported.** The bottleneck is response, not detection.
+- **321:** the RFT v2 init scores 0.555 on test_iid and 0.685 on test_ood_fault; post_ack_check is 0 on both.
+  - On OOD-fault, tool_trust GRPO falls slightly below the init (0.665). The state rewards gain +13 pp.
