@@ -152,3 +152,74 @@ def test_stale_ledger_hides_fresh_commit(T):
     led = env.call("query_ledger", {"order_id": i["order"]})
     assert led["refunds"] == [] and led["as_of"] < led["now"]  # absence in a lagging view is not proof
     assert env.call("list_operations", {"entity_id": i["order"]})["operations"][0]["status"] == "committed"
+
+
+# ---------------------------------------------------------------- B' gates: parameterisation and observation equivalence
+import random as _random
+
+from actionproof.bench.generator_a5 import BOUNDED, EXT_AT, LAG, UNBOUNDED
+
+
+def _random_policy(seed):
+    def pol(env, task):
+        rng = _random.Random(seed)
+        i = task.meta["ids"]
+        ops = []
+        for _ in range(rng.randint(4, 12)):
+            c = rng.random()
+            if c < 0.25:
+                obs = env.call("issue_refund", {"order_id": i["order"], "amount_cents": i["amount"], "method": i["method"],
+                                                **({"idempotency_key": "k"} if rng.random() < 0.5 else {})})
+                ops.append(obs.get("op_id") or obs.get("request_id"))
+            elif c < 0.45 and ops:
+                env.call("get_operation", {"op_id": rng.choice(ops)})
+            elif c < 0.6:
+                env.call("list_operations", {"entity_id": i["order"]})
+            elif c < 0.75:
+                env.call("query_ledger", {"order_id": i["order"]})
+            elif c < 0.85:
+                env.call("wait", {"seconds": rng.choice((10, 60, 300))})
+            else:
+                env.call("lookup_order", {"order_id": i["order"]})
+        env.call("submit_report", {"status": "uncertain", "summary": "x", "certificate": {"unresolved": ops[:1]}})
+    return pol
+
+
+def test_parameters_are_randomised_within_registered_ranges():
+    T = make_a5_split("a5_eval")
+    seen = {"bounded": set(), "unbounded": set(), "lag": set(), "ext": set(), "seed": set(), "prompt": set()}
+    for t in T:
+        a5 = t.meta["a5"]
+        f = a5["faults"].get("issue_refund:0", {})
+        if a5["scenario"] == "bounded_late":
+            assert BOUNDED[0] <= f["delay"] <= BOUNDED[1]; seen["bounded"].add(f["delay"])
+        if a5["scenario"] == "unbounded_late":
+            assert UNBOUNDED[0] <= f["delay"] <= UNBOUNDED[1]; seen["unbounded"].add(f["delay"])
+        if a5["ledger_lag"]:
+            assert LAG[0] <= a5["ledger_lag"] <= LAG[1]; seen["lag"].add(a5["ledger_lag"])
+        for e in a5["external"]:
+            if a5["scenario"] != "pre_satisfied":
+                assert EXT_AT[0] <= e["at"] <= EXT_AT[1]; seen["ext"].add(e["at"])
+        seen["seed"].add(a5["env_seed"]); seen["prompt"].add(t.prompt.split(":")[0][:8])
+    assert all(len(v) > 3 for k, v in seen.items() if k != "prompt") and len(seen["seed"]) > 200
+
+
+def test_heldout_absent_from_all_training_splits():
+    for s in ("a5_train", "a5_val"):
+        assert not {t.meta["a5"]["scenario"] for t in make_a5_split(s)} & set(HELD_OUT)
+
+
+@pytest.mark.parametrize("policy", ["oracle", "blind", "rand0", "rand1", "rand2"])
+def test_every_inflight_pair_is_observation_equivalent(policy):
+    T = make_a5_split("a5_eval")
+    pairs = {}
+    for t in T:
+        if t.meta["a5"]["pair_id"] and t.meta["a5"]["pair_id"].startswith("inflight"):
+            pairs.setdefault(t.meta["a5"]["pair_id"], []).append(t)
+    assert len(pairs) == 30
+    pol = {"oracle": a5_oracle, "blind": retry_blind}.get(policy) or _random_policy(int(policy[-1]))
+    for pid, (a, b) in pairs.items():
+        assert a.initial_state == b.initial_state and a.prompt == b.prompt
+        ea, eb = _make_env(a), _make_env(b)
+        pol(ea, a); pol(eb, b)
+        assert [(s["tool"], s["obs"]) for s in ea.trace] == [(s["tool"], s["obs"]) for s in eb.trace], pid

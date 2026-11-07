@@ -39,6 +39,7 @@ from actionproof.env.tools_ecom import TOOL_META, VERIFICATION_TOOLS, EcomEnv
 
 CALL_SECONDS = 5
 MAX_WAIT = 300
+EXT_LEAD = 15         # an external job's request is visible (pending) this long before it commits
 INFLIGHT_BOUND = 120  # contract for tools in task.meta["a5"]["bounded_tools"]: requests settle within this bound
 A5_REPORT_STATUSES = ("completed", "failed", "escalated", "uncertain")
 A5_META: dict[str, tuple[str | None, str]] = {
@@ -49,6 +50,11 @@ A5_META: dict[str, tuple[str | None, str]] = {
     "submit_report": TOOL_META["submit_report"],
 }
 A5_EVIDENCE_TOOLS = VERIFICATION_TOOLS | {"get_operation", "list_operations"}
+A5_NOTE = """
+
+Reporting: use status "uncertain" only if you cannot determine whether a change happened. Pass a certificate to
+submit_report listing each refund effect you rely on (op_id, tool, entity, actor, state), the indices of the tool
+calls whose results support it (your first call is index 0), and the op_ids whose outcome is unresolved."""
 
 
 class EcomEnvA5(EcomEnv):
@@ -59,6 +65,9 @@ class EcomEnvA5(EcomEnv):
                  ambiguous_text: str = "Request accepted for processing.", a5: dict[str, Any] | None = None) -> None:
         super().__init__(initial_state, schedule, rollout_id, seed, stale_status, ambiguous_text)
         a5 = a5 or {}
+        if "env_seed" in a5:  # randomised op/refund ids, identical within an observation-equivalent pair
+            import random
+            self.rng = random.Random(a5["env_seed"])
         self.clock = 0
         self.faults5: dict[str, dict[str, Any]] = a5.get("faults", {})
         self.bounded = set(a5.get("bounded_tools", []))   # tools whose in-flight time is bounded (documented)
@@ -67,6 +76,11 @@ class EcomEnvA5(EcomEnv):
         self.ops: dict[str, dict[str, Any]] = {}
         self.idem5: dict[str, str] = {}                  # idempotency key -> op_id (pending or committed only)
         self._apply_due()
+
+    @staticmethod
+    def adapt_prompt(base: str) -> str:
+        """Same NEUTRAL prompt for every arm, plus the A5 reporting contract (statuses and certificate)."""
+        return base + A5_NOTE
 
     # ------------------------------------------------------------------ time
     def call(self, tool: str, args: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -80,12 +94,21 @@ class EcomEnvA5(EcomEnv):
         return obs
 
     def _apply_due(self) -> None:
-        for e in [e for e in self.external if e["at"] <= self.clock and not e.get("_done")]:
-            e["_done"] = True
-            self._external_write(e)
+        for e in self.external:  # the job's request becomes visible (pending) EXT_LEAD seconds before it commits
+            if not e.get("_started") and self.clock >= max(0, e["at"] - EXT_LEAD):
+                e["_started"] = True
+                self._external_write(e)
         for op in self.ops.values():
             if op["status"] == "pending" and op["commit_at"] is not None and op["commit_at"] <= self.clock:
-                self._commit(op)
+                if op["actor"] != "agent" and self._agent_refund_exists(op["entity"]):
+                    op["status"] = "failed"  # idempotent job: stands down if the agent already refunded
+                    op["superseded"] = True
+                else:
+                    self._commit(op)
+
+    def _agent_refund_exists(self, order_id: str) -> bool:
+        return any(o["tool"] == "issue_refund" and o["entity"] == order_id and o["actor"] == "agent"
+                   and o["status"] in ("pending", "committed") for o in self.ops.values())
 
     # ------------------------------------------------------------------ operations
     def _commit(self, op: dict[str, Any]) -> None:
@@ -109,15 +132,22 @@ class EcomEnvA5(EcomEnv):
         return op
 
     def _external_write(self, e: dict[str, Any]) -> None:
-        """Another actor performs a write (e.g. an automated billing job issues the refund)."""
+        """Another actor (an automated billing job) requests the refund; it commits at `at` (pending until then,
+        visible in the operations log) unless an agent refund on the order exists by then. At at = 0 it is a
+        pre-satisfied goal. The job does nothing if an agent refund already exists when it starts."""
+        if self._agent_refund_exists(e["order_id"]):
+            e["skipped"] = True
+            return
         order = self._row("SELECT * FROM orders WHERE order_id = ?", e["order_id"])
-        rid = f"R-{e.get('refund_tag', 'EXT')}{len(self.ops):03d}"
+        rid = self._next_id("R")
         deltas: list[Delta] = [
             ("INSERT INTO refunds VALUES (?, ?, ?, ?, 'completed', ?, ?)",
              (rid, e["order_id"], order["amount_cents"], order["payment_method"], None, self._next_seq())),
             ("UPDATE orders SET status = 'refunded' WHERE order_id = ?", (e["order_id"],))]
         op = self._new_op("issue_refund", "order_id", e["order_id"], deltas, True, True, None, e["actor"], -1)
-        self._commit(op)
+        op["accepted_at"], op["commit_at"] = max(0, e["at"] - EXT_LEAD), e["at"]
+        if e["at"] <= self.clock:
+            self._commit(op)
 
     def _write(self, entity_key: str, entity: str, deltas: list[Delta], success_obs: dict[str, Any], *,
                irreversible: bool, policy_valid: bool = True, idempotency_key: str | None = None) -> dict[str, Any]:

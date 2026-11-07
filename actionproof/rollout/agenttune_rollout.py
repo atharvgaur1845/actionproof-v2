@@ -33,6 +33,9 @@ def prompt_key(prompt: Any) -> str:
 
 
 def make_env(task: Task, rollout_id: str, seed: int = 0) -> EcomEnv:
+    if task.meta.get("domain") == "a5":  # Amendment 5 slice (operation lifecycle, external actors)
+        from actionproof.eval.a5_runtime import make_env_a5
+        return make_env_a5(task, rollout_id, seed=seed)
     if task.meta.get("domain") == "bank":
         from actionproof.env.tools_bank import BankEnv
         return BankEnv(task.initial_state, task.schedule, rollout_id=rollout_id, seed=seed,
@@ -42,6 +45,9 @@ def make_env(task: Task, rollout_id: str, seed: int = 0) -> EcomEnv:
 
 
 def episode_record(task: Task, env: EcomEnv) -> dict[str, Any]:
+    if task.meta.get("domain") == "a5":
+        from actionproof.eval.a5_runtime import episode_record_a5
+        return episode_record_a5(task, env)
     vt = VERIFICATION_TOOLS
     if task.meta.get("domain") == "bank":
         from actionproof.env.tools_bank import BANK_VERIFICATION_TOOLS as vt

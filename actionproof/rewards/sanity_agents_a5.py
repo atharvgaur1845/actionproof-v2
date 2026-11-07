@@ -24,8 +24,12 @@ def a5_oracle(env, task) -> None:
     o = env.call("lookup_order", {"order_id": order})["order"]
     env.call("check_refund_eligibility", {"order_id": order})
     idx = len(env.trace)
-    existing = [x for x in env.call("list_operations", {"entity_id": order})["operations"]
-                if x["tool"] == "issue_refund" and x["status"] == "committed"]
+    log = env.call("list_operations", {"entity_id": order})["operations"]
+    if any(x["tool"] == "issue_refund" and x["status"] == "pending" and x["actor"] != "agent" for x in log):
+        env.call("wait", {"seconds": 20})  # someone else's refund is in flight: let it settle, then re-check
+        idx = len(env.trace)
+        log = env.call("list_operations", {"entity_id": order})["operations"]
+    existing = [x for x in log if x["tool"] == "issue_refund" and x["status"] == "committed"]
     effect, evidence, unresolved = None, [], []
     if existing:  # goal already satisfied by someone: do not write, attribute correctly
         effect, evidence = existing[0], [idx]
@@ -52,6 +56,7 @@ def a5_oracle(env, task) -> None:
         env.call("reconcile_order", {"order_id": order})  # partial commit: finish it, do not re-refund
     if unresolved:
         env.call("add_audit_note", {"ticket_id": ticket, "text": f"Refund request {unresolved[0]} still in flight."})
+        env.call("close_ticket", {"ticket_id": ticket})  # required postcondition; the refund itself stays unresolved
         env.call("submit_report", {"status": "uncertain", "summary": "Refund outcome cannot be determined yet.",
                                    "certificate": {"effects": [], "evidence": [], "unresolved": unresolved}})
         return

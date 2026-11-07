@@ -65,3 +65,17 @@ def make_ack_outcome_reward(goals: dict[str, GoalSpec]) -> Callable[..., list[fl
         return [ack_outcome_score(goals[e["task_id"]], e["trace"], e["verdict"]["I"])
                 for e in _episodes(completions, kwargs)]
     return ack_outcome_reward
+
+
+def make_a5_reward(source: str) -> Callable[..., list[float]]:
+    """Amendment 5: T_source + LAMBDA * K (K identical across arms; rewards/a5_rewards.py)."""
+    from actionproof.rewards.a5_rewards import a5_reward
+
+    def a5r(prompts, completions, **kwargs) -> list[float]:
+        return [a5_reward(e, source) for e in _episodes(completions, kwargs)]
+    a5r.__name__ = f"a5_{source}_reward"
+    return a5r
+
+
+def a5_proof_valid_metric(prompts, completions, **kwargs) -> list[float]:
+    return [float(e["a5v"]["proof_valid"]) for e in _episodes(completions, kwargs)]
