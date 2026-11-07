@@ -1,5 +1,5 @@
 # minutes: 300
-# after: 332_a4_gate
+# after: 333_gates
 # Amendment 4 X7 / H15 primary: middleware within the RFT v2 lineage. Every cell (incl. "none") is re-run with this
 # runner so all cells share one config: dev splits at 10 turns, A4 splits at 18 turns. Greedy, neutral prompt.
 set -euo pipefail

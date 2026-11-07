@@ -1,5 +1,5 @@
 # minutes: 200
-# after: 332_a4_gate
+# after: 333_gates
 # Amendment 4 X3 / H10: ack_outcome GRPO, seed 0. IDENTICAL config to the v2 arms (grpo_arm.sh, v2 band, shared init;
 # dev eval with grpo_arm.sh's default turn budget, as for the outcome arm it is compared with; see D-A4-1).
 set -euo pipefail
