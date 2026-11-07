@@ -1032,3 +1032,38 @@ If something fails:
     | H1 | pcstr_d − outcome = +0.0125, CI [0.0037, 0.0238] → the claim would pass. Only ~2% of tasks are discordant, against the 20% assumed in the power note, so a small effect is detectable. |
     | H2 | ΔFCR = +0.014, CI [0, 0.035], p = 0.10 → not rejected. The init FCR is already near ceiling. |
     | H8 | Met as registered, but trivially: 3 services and a memorised prior (see calib_swap). The caveat is stored in the output. |
+- **2026-11-07 · Amendment 4 registered** (`PREREGISTRATION_A4.md`, commit `119e740`, hashes in `results/a4_hashes.json`).
+  - Registered before any A4 GPU run.
+  - The original prereg, `prereg_hashes.json` and every hashed file are untouched; `freeze_bench --check` → OK.
+  - Changes from the draft:
+    - outcome taxonomy (CS / UC / FS / PF / CF / SI);
+    - F_under vs ND separated;
+    - H14 is diagnostic, with a causal ablation defined but not authorised;
+    - seed-aware power, so H12/H13 are pilots (2 seeds cannot support a between-seed claim; min permutation p = 1/6);
+    - the held-out tool is described as pipeline-held-out (near transfer);
+    - one fault event per task, persistence k_max ∈ {0, 1, 2}, F1/F4 only;
+    - an 18-turn budget, because the credit workflow needs 17 calls;
+    - CMR in the S2 acceptance;
+    - middleware compared within the same init, with 32B as a supplement.
+  - **D-A4-1:** v2 dev evaluations used run_eval's default of 12 turns, not the registered 10. 7 of 5,000 episodes went past 10 turns; 1 verdict changes. The confirmatory task 400 now passes `--max-turns 10`.
+- **2026-11-07 · S2 results** (`results/a4/exploit_report.*`, `results/a4/s2_audit.*`; `tests/test_exploits.py` 11/11).
+  - **Every attack ranks below the oracle under pcstr_d.** Report and audit-note text cannot move any state term. Unknown tools and args are rejected. `reconcile_order` cannot fake a refund.
+  - **Limitations (documented, not fixed):**
+    1. No reward, and not VSC, penalises collateral writes on allowed entities (restock, escalation after completion, `update_ticket`). Only CMR detects them.
+    2. `outcome` pays a duplicate non-refund irreversible write at success level (duplicate store credit; the A4 eval env only).
+    3. `update_ticket` accepts any status string (`tools_ecom.py` is hash-frozen).
+  - **CMR audit of the v2 arms (dev, n = 400):**
+
+    | Arm | CMR |
+    |---|---|
+    | State arms | 0.000 |
+    | init | 0.018 |
+    | tool_trust s0 / s1 | **0.438 / 0.295** |
+    | llm_judge s0 | **0.625** |
+
+    - The transcript arms learned an unrequested `update_ticket(status="resolved")` between `add_audit_note` and `close_ticket`. It is transient, since the final status is closed.
+    - VSC counts 20–40% of those episodes as successes. VSC therefore *flatters* the transcript arms on side effects.
+    - **No stop flag:** no VSC gain coincides with a CMR increase. The state-vs-transcript gap would widen under a collateral-aware metric.
+  - **RHR:**
+    - pcstr_d pays success level on 0.000 of state-arm failures and 0.265 of tool_trust s0's episodes (all collateral).
+    - tool_trust pays success level on 0.13 of state-arm episodes (false successes) and 0.52 of its own.
