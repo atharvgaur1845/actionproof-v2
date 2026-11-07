@@ -14,7 +14,7 @@ import json
 import os
 from pathlib import Path
 
-ARMS = ("pcstr", "pcstr_d", "pcstr_c", "llm_judge", "tool_trust", "outcome")
+ARMS = ("pcstr", "pcstr_d", "pcstr_c", "llm_judge", "tool_trust", "outcome", "ack_outcome")  # ack_outcome: Amendment 4 H10
 
 
 def build_rewards(arm: str, tasks):
@@ -24,7 +24,8 @@ def build_rewards(arm: str, tasks):
         from actionproof.rewards.llm_judge import make_llm_judge_reward
         return [make_llm_judge_reward(), R.vsc_metric], [1.0, 0.0]
     main = {"pcstr": R.pcstr_reward, "pcstr_d": R.pcstr_d_reward, "pcstr_c": R.make_pcstr_c_reward(0.02),
-            "outcome": R.outcome_reward, "tool_trust": R.make_tool_trust_reward(goals)}[arm]
+            "outcome": R.outcome_reward, "tool_trust": R.make_tool_trust_reward(goals),
+            "ack_outcome": R.make_ack_outcome_reward(goals)}[arm]
     return [main, R.vsc_metric], [1.0, 0.0]
 
 
@@ -36,6 +37,7 @@ def main() -> None:
     ap.add_argument("--split", default="train")
     ap.add_argument("--n-tasks", type=int, default=None)
     ap.add_argument("--task-file", default=None, help="jsonl of task ids (learnable-band curriculum)")
+    ap.add_argument("--task-jsonl", default=None, help="full task jsonl (Amendment 4 pools); replaces --split")
     ap.add_argument("--out", required=True)
     ap.add_argument("--steps", type=int, default=200)
     ap.add_argument("--num-generations", type=int, default=8)
@@ -63,7 +65,11 @@ def main() -> None:
     from actionproof.rollout.agenttune_rollout import make_rollout_func
     from actionproof.rollout.batched_vllm import make_batched_rollout_func
 
-    tasks = make_split(a.split, a.n_tasks)
+    if a.task_jsonl:  # Amendment 4: matched A/B pools, loaded verbatim (hashed in results/a4_hashes.json)
+        from actionproof.bench.generator_a4 import load_tasks
+        tasks = load_tasks(a.task_jsonl)[: a.n_tasks]
+    else:
+        tasks = make_split(a.split, a.n_tasks)
     if a.task_file:
         keep = {json.loads(l)["task_id"] for l in open(a.task_file)}
         tasks = [t for t in tasks if t.task_id in keep]

@@ -55,3 +55,13 @@ def make_tool_trust_reward(goals: dict[str, GoalSpec]) -> Callable[..., list[flo
 def vsc_metric(prompts, completions, **kwargs) -> list[float]:
     """Logged alongside the training reward (weight 0) so every arm reports true success."""
     return [float(e["vsc"]) for e in _episodes(completions, kwargs)]
+
+
+def make_ack_outcome_reward(goals: dict[str, GoalSpec]) -> Callable[..., list[float]]:
+    """Amendment 4 H10: `outcome` with the goal term read from acks instead of the DB (rewards/ack_outcome.py)."""
+    from actionproof.rewards.ack_outcome import ack_outcome_score
+
+    def ack_outcome_reward(prompts, completions, **kwargs) -> list[float]:
+        return [ack_outcome_score(goals[e["task_id"]], e["trace"], e["verdict"]["I"])
+                for e in _episodes(completions, kwargs)]
+    return ack_outcome_reward

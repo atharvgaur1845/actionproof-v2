@@ -9,7 +9,7 @@ D=results/eval/conf; mkdir -p $D
 ev() {  # run base adapter split
   o=$D/${1}__neutral__$4.jsonl
   [ -f ${o%.jsonl}.summary.json ] || .venv/bin/python -m actionproof.eval.run_eval --model $2 --adapter $3 --split $4 \
-      --prompt neutral --out $o > logs/400_${1}_$4.full.log 2>&1
+      --prompt neutral --max-turns 10 --out $o > logs/400_${1}_$4.full.log 2>&1  # registered: <= 10 turns (D-A4-1)
   python3 -c "import json;d=json.load(open('${o%.jsonl}.summary.json'));print('$1 $4', {k:round(d[k],3) for k in ('vsc','fcr','ivr','dsr','verify_calls')})"
 }
 for sp in test_iid_c test_ood_fault_c; do
