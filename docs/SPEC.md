@@ -1082,3 +1082,22 @@ If something fails:
   - **370 (a5lo warm start, D-A5-4) passed its headroom gate:** a5_val proof-valid 0.667 (≤ 0.80); a5_eval 0.661 (bounded_late 0.10, phantom 0.23, pre_satisfied 0.00, external_during 0.57, others ≥ 0.9). The A5 reward-source comparison is therefore informative on this init.
   - **371 (a5lo state s0)** is running and is left to finish. Its matched arm 372 (a5lo ack s0) is re-queued as `395z_a5lo_ack_s0` (after the A6 channel arms M3/M4, before the A6 secondary arms); seed-1 a5lo (373, 374) and 380 stay held. Interpretation: per-seed, exploratory replication of the channel effect in the lifecycle environment (wait/abstain, external actor), not a new primary hypothesis.
   - Second H200 worker submitted (job 443167) so the A6 primary arms fit before the 2026-11-13 18:00 freeze.
+- **2026-11-11 05:30 · A6 interim results (seed 0; greedy, neutral prompt; exploratory until all arms and seed 1 are in).** Summaries in `results/eval/a6/*.summary.json`.
+  - **Gate G-A6 passed:** warm start `rft_tiny_a6`, T=1×4 on 100 pool-B tasks: HFR 0.208 on UR (10/48; band [0.10, 0.70]); sampled PWV_refund 0.477; PWV audit/close 0.000 (no tool-general verification leaked from the demos).
+
+    | Model | HFR (UR) | FS (UR) | twin VSC | twin PF | depth-3 VSC | e_seen_refund VSC | PWV_refund | e_heldout VSC | test_iid / ood |
+    |---|---|---|---|---|---|---|---|---|---|
+    | init_a6 | 0.000 | 1.000 | 0.000 | 0.000 | 0.000 | 0.700 | 0.000 | 0.005 | 0.615 / 0.690 |
+    | M1 pcstr_d | **0.000** | 1.000 | 0.320 | 0.000 | 0.000 | 0.995 | 1.000 | 0.000 | 0.865 / 0.840 |
+    | M2 pcstr_d_noreport | **0.300** | 0.700 | 0.333 | 0.000 | 0.000 | 1.000 | 1.000 | 0.000 | 0.825 / 0.835 |
+    | M3 outcome | 0.007 | 0.993 | 0.113 | 0.007 | 0.000 | 0.925 | 1.000 | 0.000 | 0.850 / 0.840 |
+
+  - Prompt baselines on init_a6: `verify_a` HFR 0.06, twin VSC 0.273; `verify_c` HFR 0.00, twin 0.00.
+  - **P-B is in the registered adverse branch for seed 0:** M2's honest failures are 45/50 refund-UR tasks (0/28 close, 0/22 audit, 0/50 credit), with PF 0 on recoverable twins (discriminating, not refusal). M1 retries the refund 4× on 48/50 UR tasks and then reports "completed" 50/50. Wiring checked: run configs and `make_a6_reward` map each arm to its registered equation.
+  - Every trained arm learned refund retries to depth 3–4 (init: 1 attempt), but depth-3 VSC is 0 for all, PWV audit/close stays 0 and held-out credit VSC 0: the learned depth is still a refund-specific script.
+  - Hypothesis to be tested by M2b (`pcstr_d_noND`, keeps F_under, drops ND), not a conclusion: F_under (−0.1 on "failed" when G = 1, frequent after committed timeouts on RP) outweighs ND's +0.3 on the 12% UR share under group-relative advantages.
+- **2026-11-11 05:30 · Queue rebalanced across pools** (worker 443167 still pending; 439065 ends 13:27).
+  - Seed-1 M1/M2 released from `hold/` (`392b`, `393b`) because seed-0 results exist and the sign of P-B needs replication; moved to the **h100** pool as `396p_a6_pcstr_d_s1`, `396q_a6_pcstr_d_noreport_s1`.
+  - M3′ (`397_a6_outcome_G_s0`) and M5 (`398_a6_tool_trust_s0`) moved to the **a100** pool (`# minutes: 600`, ≈ 2× slower).
+  - **h200** keeps M4 (running) → M2b (`396`) → a5lo ack (`396r`, renamed from `395z`; lower priority per §16) → 400a.
+  - New workers: `ap_w_h100` 443755 (2-day wall), `ap_w_a100` 443756 (5-day wall). The user's own non-ActionProof jobs are held (`scontrol hold`), not cancelled. Training configs are unchanged; only the GPU type differs, and is logged per run.
