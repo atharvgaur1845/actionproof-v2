@@ -15,7 +15,8 @@ import os
 from pathlib import Path
 
 ARMS = ("pcstr", "pcstr_d", "pcstr_c", "llm_judge", "tool_trust", "outcome", "ack_outcome",
-        "a5_state", "a5_ack")  # ack_outcome: Amendment 4 H10; a5_*: Amendment 5 primary arms
+        "a5_state", "a5_ack",  # ack_outcome: Amendment 4 H10; a5_*: Amendment 5 primary arms
+        "pcstr_d_noreport", "pcstr_d_noND", "outcome_G")  # Amendment 6 matched ablations
 
 
 def build_rewards(arm: str, tasks):
@@ -26,6 +27,8 @@ def build_rewards(arm: str, tasks):
         return [make_llm_judge_reward(), R.vsc_metric], [1.0, 0.0]
     if arm in ("a5_state", "a5_ack"):  # Amendment 5: only the task-success information source differs
         return [R.make_a5_reward(arm.split("_")[1]), R.a5_proof_valid_metric], [1.0, 0.0]
+    if arm in ("pcstr_d_noreport", "pcstr_d_noND", "outcome_G"):  # Amendment 6
+        return [R.make_a6_reward(arm), R.vsc_metric], [1.0, 0.0]
     main = {"pcstr": R.pcstr_reward, "pcstr_d": R.pcstr_d_reward, "pcstr_c": R.make_pcstr_c_reward(0.02),
             "outcome": R.outcome_reward, "tool_trust": R.make_tool_trust_reward(goals),
             "ack_outcome": R.make_ack_outcome_reward(goals)}[arm]

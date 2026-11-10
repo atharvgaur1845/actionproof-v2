@@ -79,3 +79,18 @@ def make_a5_reward(source: str) -> Callable[..., list[float]]:
 
 def a5_proof_valid_metric(prompts, completions, **kwargs) -> list[float]:
     return [float(e["a5v"]["proof_valid"]) for e in _episodes(completions, kwargs)]
+
+
+def _a6(fn: Callable[[Verdict], float], name: str) -> Callable[..., list[float]]:
+    """Amendment 6 arms (rewards/a6_rewards.py): same episode record, different scoring of the verdict."""
+    def r(prompts, completions, **kwargs) -> list[float]:
+        return [fn(_verdict(e)) for e in _episodes(completions, kwargs)]
+    r.__name__ = f"{name}_reward"
+    return r
+
+
+def make_a6_reward(arm: str) -> Callable[..., list[float]]:
+    from actionproof.rewards import a6_rewards as A
+    fn = {"pcstr_d_noreport": A.pcstr_d_noreport_score, "pcstr_d_noND": A.pcstr_d_noND_score,
+          "outcome_G": A.outcome_G_score}[arm]
+    return _a6(fn, arm)
