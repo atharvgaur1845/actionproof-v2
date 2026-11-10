@@ -86,9 +86,9 @@ def consistency(trace: list[dict[str, Any]], report: dict[str, Any] | None) -> f
     steps = [s for s in trace[:n_r] if not s.get("by")]
     idx = {i for i, s in enumerate(trace[:n_r]) if not s.get("by")}
     cert = report.get("certificate") if isinstance(report.get("certificate"), dict) else {}
-    effects = [e for e in (cert.get("effects") or []) if isinstance(e, dict)]
-    evidence = [i for i in (cert.get("evidence") or []) if isinstance(i, int)]
-    unresolved = [x for x in (cert.get("unresolved") or []) if isinstance(x, str)]
+    effects = [e for e in (cert.get("effects") if isinstance(cert.get("effects"), list) else []) if isinstance(e, dict)]
+    evidence = [i for i in (cert.get("evidence") if isinstance(cert.get("evidence"), list) else []) if isinstance(i, int)]
+    unresolved = [x for x in (cert.get("unresolved") if isinstance(cert.get("unresolved"), list) else []) if isinstance(x, str)]
     if any(i not in idx or trace[i]["tool"] not in A5_EVIDENCE_TOOLS for i in evidence):
         return 0.0
     seen = _observed_ops(steps)

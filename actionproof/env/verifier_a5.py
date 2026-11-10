@@ -88,8 +88,8 @@ def verify_a5(task, env) -> dict[str, Any]:
     # ---- certificate
     by_id = {o["op_id"]: o for o in ops}
     effects = cert.get("effects") if isinstance(cert.get("effects"), list) else []
-    evidence = [i for i in (cert.get("evidence") or []) if isinstance(i, int)]
-    unresolved = [x for x in (cert.get("unresolved") or []) if isinstance(x, str)]
+    evidence = [i for i in (cert.get("evidence") if isinstance(cert.get("evidence"), list) else []) if isinstance(i, int)]
+    unresolved = [x for x in (cert.get("unresolved") if isinstance(cert.get("unresolved"), list) else []) if isinstance(x, str)]
     model_idx = {i for i, s in enumerate(env.trace[:n_r]) if not s.get("by")}
     errors: list[str] = []
     bad_refs = [i for i in evidence if i not in model_idx or env.trace[i]["tool"] not in A5_EVIDENCE_TOOLS]

@@ -1067,3 +1067,4 @@ If something fails:
   - **RHR:**
     - pcstr_d pays success level on 0.000 of state-arm failures and 0.265 of tool_trust s0's episodes (all collateral).
     - tool_trust pays success level on 0.13 of state-arm episodes (false successes) and 0.52 of its own.
+- **2026-11-10 · D-A5-3 (registered A5 code changed after registration).** The `a5_state` s0 run crashed at step 151 of 200: a sampled certificate had `"evidence": <int>`, and `verifier_a5` / `a5_rewards` iterated it. The fix treats any non-list certificate field as empty (the certificate is then invalid, which is how it was always meant to be scored). Behaviour on well-formed certificates is byte-identical (all A5 tests pass). The three completed A5 runs (ack s0, state s1, ack s1) never hit this path. `results/a5_hashes.json` is NOT re-registered; this entry is the record. `a5_state` s0 is rerun from scratch with the fixed code.

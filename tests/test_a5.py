@@ -223,3 +223,13 @@ def test_every_inflight_pair_is_observation_equivalent(policy):
         ea, eb = _make_env(a), _make_env(b)
         pol(ea, a); pol(eb, b)
         assert [(s["tool"], s["obs"]) for s in ea.trace] == [(s["tool"], s["obs"]) for s in eb.trace], pid
+
+
+def test_malformed_certificate_fields_do_not_crash(T):
+    """D-A5-3: a policy emitted `evidence` as a bare int during GRPO; malformed fields count as empty (invalid)."""
+    from actionproof.rewards.a5_rewards import consistency
+    t = by(T, "benign")[0]
+    env = _make_env(t); a5_oracle(env, t)
+    env.reports[0]["certificate"] = {"effects": 3, "evidence": 4, "unresolved": "OP-1"}
+    assert verify_a5(t, env)["proof_valid"] == 0
+    assert consistency(env.trace, env.reports[0]) == 0.0
