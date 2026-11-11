@@ -10,7 +10,7 @@ Tool-using agents report a write's result by repeating the tool's acknowledgemen
 - Two rewards have identical form: one computes its goal term from the database, the other from the tool's acknowledgements.
 - From the same warm start, the state-grounded reward raises sampled post-write refund verification from 0.25 to 0.71–0.72.
 - The acknowledgement-grounded reward drives it down to 0.10.
-- Two training seeds each; the effect replicates on a second warm start (verification 1.00 vs 0.00).
+- The ack arm has two seeds (0.102 / 0.100); greedy VSC has two seeds for every arm. The effect replicates on a second warm start (greedy verification 1.00 vs 0.00).
 - Pooled over test-IID and held-out faults, PCSTR-d beats a tool-trusting reward by **+19.25 pp VSC** [15.4, 23.3], and binary `outcome` beats it by +18.0 pp [13.9, 22.3].
 - An LLM-judge reward was **saturated** (mean 0.99, within-batch standard deviation ≈ 0.03), so its arm's 0.61 is not evidence that the judge taught anything.
 

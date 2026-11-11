@@ -138,7 +138,7 @@ We quote the pooled column; the split columns are shown so no number is selected
 
 Seed 1 lands within 2.0 pp of seed 0 for every arm and split (largest gap: `outcome` test-IID 0.815 vs 0.835), and the two seeds give the same greedy verdict on 98–100% of tasks. Two seeds support sign consistency, not between-run inference.
 
-**Verification is selected, in both directions.** Sampled at T = 1 on val (800 episodes per model), the init re-reads the ledger after 24.6% of acknowledged refunds. GRPO with a state reward raises this to 71.3% (`outcome`) and 72.4% (PCSTR-d). The matched acknowledgement-grounded reward `ack_outcome` (the same binary form as `outcome`, but its goal term reads the acks) drives it down to 10.2% / 10.0% over two seeds, and `tool_trust` to 15.3%. Under an acknowledgement-measurable reward a read can never change the reward but costs a turn, so GRPO prunes it; under a state reward the reading-and-retrying rollouts are the only ones that score on phantom faults. The ack arms also train on more flat groups (55–63% zero-variance groups vs 28–44%), which is how the channel acts on the gradient. [`results/eval/a4/h11/`, `runs/grpo_tiny_v2_*/log_history.json`]
+**Verification is selected, in both directions.** Sampled at T = 1 on val (800 episodes per model), the init re-reads the ledger after 24.6% of acknowledged refunds. GRPO with a state reward raises this to 71.3% (`outcome`) and 72.4% (PCSTR-d). The matched acknowledgement-grounded reward `ack_outcome` (the same binary form as `outcome`, but its goal term reads the acks) drives it down to 10.2% / 10.0% (two seeds), and `tool_trust` to 15.3%. The sampled rates for `outcome`, PCSTR-d and `tool_trust` come from seed 0 only; greedy VSC has two seeds for each. Under an acknowledgement-measurable reward a read can never change the reward but costs a turn, so GRPO prunes it; under a state reward the reading-and-retrying rollouts are the only ones that score on phantom faults. The ack arms also train on more flat groups (mean share of zero-variance groups 51–60% vs 38–45%), which is how the channel acts on the gradient. [`results/eval/a4/h11/`, `runs/grpo_tiny_v2_*/log_history.json`]
 
 These are development-set numbers. The pre-registered confirmatory test (H1) runs once, on the untouched `test_iid_c` and `test_ood_fault_c`, after the experiment freeze: `[[pending]]`.
 
@@ -205,9 +205,11 @@ A linear probe on the residual stream decodes "this task failed" at the report t
 
 | RFT init, test-IID | VSC | post-ack check | verification calls / episode |
 |---|---|---|---|
-| neutral prompt | 0.575 | 0.015 | 2.55 |
+| neutral prompt | 0.575 | 0.015* | 2.55 |
 | always-verify prompt | 0.585 | — | 2.41 |
-| neutral + probe guard | 0.575 | 0.145 | 2.68 |
+| neutral + probe guard | 0.575 | 0.145* | 2.68 |
+
+*Per acknowledged write. Per episode with an acknowledged refund (`by_fault.post_ack_check`), the rates are 0.019 and 0.179.
 
 Pre-registered criterion: VSC within 2 pp of always-verify *and* ≥ 30% fewer verification calls.
 - The VSC half is met (0.575 vs 0.585), but only trivially, since always-verify barely helps.
@@ -215,7 +217,7 @@ Pre-registered criterion: VSC within 2 pp of always-verify *and* ≥ 30% fewer v
 - **H5 is not supported.**
 
 The guard fired on 55 of 183 acknowledged writes and reached 28 of the 77 phantom, partial or stale episodes. VSC on those faults stayed at **0**. Two failures stack:
-- **The nudge is mostly ignored.** In 17 of 28 nudged phantom/partial episodes the very next turn is `add_audit_note → close_ticket → "completed"`.
+- **The nudge is mostly ignored.** All 28 nudged phantom/partial episodes still end with `add_audit_note → close_ticket → "completed"`. Nudge positions are not stored, so we do not report how many follow the nudge immediately.
 - **Evidence is ignored too.** When the model does re-read the ledger, it still reports "completed".
 
 Detection is not the bottleneck: telling a model to check does not make it act on what it finds. Like the 32B "verify every write" prompt, the guard changes what the model *calls*, not what it *concludes*. GRPO with a state reward changes both.
@@ -230,7 +232,7 @@ We gave two judges, at two sizes, the policy, the task, every tool call and resp
 | Aya Expanse 32B + AuditKIT TaskCompletion | **95%** [93, 97] |
 | Aya Expanse 32B + our judge prompt | **76%** [72, 79] |
 
-The failure doesn't have to be hidden. When the agent's own reads showed the problem in the transcript, the 32B judges still accepted 83–93% of failures. "Request accepted, processing" acknowledgements fooled both 32B judges every time (100%). Refunds the policy forbade were accepted 100% of the time by TaskCompletion. A timeout with the error printed in plain sight was still accepted 72% of the time. As a training signal, the 8B judge gave GRPO almost nothing to learn from: its mean reward stayed at 0.99 throughout training, with a within-batch standard deviation of 0.03–0.04. Groups were never exactly tied, but GRPO's per-group normalisation then amplifies differences of a few hundredths in the judge's confidence. The `llm_judge` arm's 0.61 is therefore not evidence of a policy the judge taught. A judge that accepts nearly every transcript cannot rank rollouts.
+The failure doesn't have to be hidden. When the agent's own reads showed the problem in the transcript, the 32B judges still accepted 83–93% of failures. "Request accepted, processing" acknowledgements fooled both 32B judges every time (100%). Refunds the policy forbade were accepted 100% of the time by TaskCompletion. A timeout with the error printed in plain sight was still accepted 72% of the time. As a training signal, the 8B judge gave GRPO almost nothing to learn from: its mean reward stayed at 0.99 throughout training, with a mean within-batch standard deviation of 0.027 and a median of 0.000. Groups were never exactly tied, but GRPO's per-group normalisation then amplifies differences of a few hundredths in the judge's confidence. The `llm_judge` arm's 0.61 is therefore not evidence of a policy the judge taught. A judge that accepts nearly every transcript cannot rank rollouts.
 
 ## 8. Transfer
 
