@@ -94,3 +94,8 @@ def make_a6_reward(arm: str) -> Callable[..., list[float]]:
     fn = {"pcstr_d_noreport": A.pcstr_d_noreport_score, "pcstr_d_noND": A.pcstr_d_noND_score,
           "outcome_G": A.outcome_G_score}[arm]
     return _a6(fn, arm)
+
+
+def make_a7_reward(arm: str) -> Callable[..., list[float]]:
+    from actionproof.rewards import a7_rewards as A
+    return _a6({"pcstr_d_noFunder": A.pcstr_d_noFunder_score}[arm], arm)

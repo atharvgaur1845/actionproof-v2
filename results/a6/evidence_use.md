@@ -141,3 +141,20 @@
 | a6_ack_outcome_s0 | e_heldout_ctrl | 200 | 187 | 0 | 1 | 0 | 0 |
 | a6_pcstr_d_noND_s0 | e_heldout | 200 | 0 | 200 | 200 | 83 | 82 |
 | a6_pcstr_d_noND_s0 | e_heldout_ctrl | 200 | 25 | 167 | 173 | 72 | 44 |
+
+## 5. Template markers and functional credit (all episodes; D-ENV-1)
+
+| model | split | n | demonstrator key `refund-<order>` | uses get_ticket | credit calls | of which reuse the refund key (void whenever the refund committed first) | credit committed |
+|---|---|---|---|---|---|---|---|
+| init_a6 | e_heldout | 200 | 0 | 196 | 195 | 195 | 1 |
+| init_a6 | e_heldout_ctrl | 200 | 0 | 199 | 195 | 195 | 24 |
+| a6_pcstr_d_s0 | e_heldout | 200 | 200 | 0 | 0 | 0 | 0 |
+| a6_pcstr_d_s0 | e_heldout_ctrl | 200 | 200 | 0 | 27 | 0 | 27 |
+| a6_pcstr_d_noreport_s0 | e_heldout | 200 | 200 | 0 | 0 | 0 | 0 |
+| a6_pcstr_d_noreport_s0 | e_heldout_ctrl | 200 | 200 | 0 | 27 | 0 | 27 |
+| a6_outcome_s0 | e_heldout | 200 | 200 | 0 | 0 | 0 | 0 |
+| a6_outcome_s0 | e_heldout_ctrl | 200 | 200 | 0 | 26 | 0 | 26 |
+| a6_ack_outcome_s0 | e_heldout | 200 | 0 | 193 | 191 | 191 | 3 |
+| a6_ack_outcome_s0 | e_heldout_ctrl | 200 | 0 | 197 | 187 | 187 | 28 |
+| a6_pcstr_d_noND_s0 | e_heldout | 200 | 200 | 0 | 0 | 0 | 0 |
+| a6_pcstr_d_noND_s0 | e_heldout_ctrl | 200 | 200 | 0 | 25 | 0 | 25 |
