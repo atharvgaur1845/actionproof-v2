@@ -1138,3 +1138,7 @@ If something fails:
 
   - Direction vs init: M2b extinguished honest failure and M1 roughly held it. Both match the sign of their step-0 advantage (−5.46 / +5.46).
   - M2 amplified it ~8×, *against* its step-0 sign. The selection on M2b is consistent with the reward. M2's rise is not, and stays unexplained (drift or path dependence).
+- **2026-11-11 · Credit-collapse substitution check (CPU, exploratory).**
+  - On `e_heldout`, every re-issued refund by M1, M2, M2b and M3 (1,161 calls) immediately follows a `query_ledger` read showing the refund **already present** and `credits: []`.
+  - Every episode ends "completed", with summaries claiming the credit was applied.
+  - Neither the v2 policies (150/150 single credit attempts) nor the A6 init (195/200 credit calls) do this, so the collapse arises in A6 GRPO training.
