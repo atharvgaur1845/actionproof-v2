@@ -1120,3 +1120,10 @@ If something fails:
     - a100 443756 is behind ~20 jobs.
     - h200 443167 is ~12th.
     - Worker 439065 ends 13:27. Its last ~80 min run the exploratory task `396a_a6_sampled_honesty` (T=1×4 on the 50 refund-UR tasks, for init, M1, M2 and M2b).
+- **2026-11-11 12:40 · CPU analyses from the scout plan (`docs/NEXT_ACTIONS.md`).**
+  - **G1 training-term audit.** Done on the warm start's sampled groups (step-0 proxy; no per-rollout training data is logged). Output: `scripts/a6_advantage_audit.py` → `results/a6/advantage_audit.md`.
+    - The init's honest failures skip audit/close, so the partial-credit terms favour the false claim. Only M1's ND reverses this (CF advantage M1 +5.46, M2/M2b −5.46).
+    - At the end of training every arm stops after the failed refund (P = V = 0), so M2's reward is report-indifferent and M1's prefers "failed".
+    - The observed M1 0.00 / M2 0.30 is predicted by neither stage. The "honesty term suppresses honesty" reading is **withdrawn** as a mechanism claim and kept as an unexplained seed-0 difference. Abstract and article are updated.
+  - **G5 zero-VoI proposition** written into article §3.
+  - **G2 gathered-vs-used:** covered by `results/a6/evidence_use.md` §1. Article §5b already tabulates it.

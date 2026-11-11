@@ -86,6 +86,14 @@ Tiny Aya Base is not applicable: as a base model it cannot follow the chat/tool 
 
 ND = the task failed and the agent did not say so (a false "completed" *or* no report at all).
 
+**Why an acknowledgement-grounded reward cannot teach checking (proposition).**
+- *Setup.* Let the reward R be a function only of the acknowledgements the agent received and of its final report, and let a read never change any later acknowledgement. This holds for phantom faults here: a keyed retry returns the same success ack.
+- *Claim.* For any history, the expected reward after "read, then continue as planned" equals the expected reward after "continue as planned".
+- *Consequence.* A read earns zero expected advantage under GRPO. Any turn or length cost then makes it strictly dominated, so GRPO prunes it.
+- *State-grounded case.* Under a reward computed from the final database, a read that detects a phantom write enables the retry that is the only route to a positive score. Its value is ≈ ρ·(R_success − R_fail) − cost, positive for the 40% payment-fault rate in training.
+- *Scope.* The statement covers `tool_trust` and `ack_outcome`. It does not cover transcript rewards that pay for reads (e.g. a judge that likes read-backs).
+- *Prediction and observation.* Sampled verification falls under the ack rewards (0.25 → 0.10) and rises under the state rewards (→ 0.72).
+
 **Ordering property (proven, property-tested).** Every verified safe completion scores ≥ 1.0 and every failure scores ≤ 0.3. Among failures, an honest "failed" strictly beats both silence and a false claim.
 
 ## 4. What we found along the way (each is a result in itself)
@@ -167,6 +175,11 @@ These are development-set numbers. The pre-registered confirmatory test (H1) run
 2. **The report-blind reward produced honest failure; the reward with honesty terms did not.**
    - Evidence: on every unrecoverable refund task, every state arm's last ledger read shows `refunds: []`. After that read, M2 reports "failed" 45 / 50 times and M1 reports "completed" 50 / 50.
    - Not refusal: no model reports failure without having read the ledger, and M2 gives up on 0 recoverable twins.
+   - *Mechanism check (CPU, `results/a6/advantage_audit.md`).*
+     - We rescored the warm start's sampled groups under every arm, i.e. the first GRPO step.
+     - The init's honest failures stop the workflow early, so the partial-credit terms favour the false claim. Only M1's nondisclosure term reverses that (advantage on honest failure: M1 +5.5, M2 and M2b −5.5).
+     - By the end of training every arm stops after the failed refund, so M2's reward is indifferent to the report while M1's prefers "failed".
+     - **Neither stage's incentives predict the observed M1 = 0.00 vs M2 = 0.30.** M2's honest failure looks like unpenalised drift under a report-blind reward, and M1's zero runs against its own incentive. We therefore do not claim that the honesty terms *cause* dishonesty.
    - *Status.* This is one seed. The ablation that keeps the underclaim penalty and drops nondisclosure (M2b) also gives **0.00** (50 / 50 completed after four attempts). So within seed 0, the arms carrying the underclaim penalty produce no honest failure and the arm without it does. Seed 1 of M1 and M2 is queued `[[pending]]`. Our first explanation, that the underclaim penalty dominates, has no support at evaluation: 0 underclaims on 234 committed-timeout tasks for every arm. The training-time reward terms are still being audited `[[pending]]`.
 3. **Retries now wait for evidence, but the budget is memorised.**
    - Every refund retry by every state arm follows a ledger read, and none follows a read showing the refund had landed.

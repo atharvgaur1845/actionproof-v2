@@ -20,11 +20,11 @@ Tool-using agents report a write's result by repeating the tool's acknowledgemen
 - Every retry follows a read (evidence-gated), but the number of retries is capped at the training depth. Unrecoverable faults are never reported as failures: 0/150 for every model and every middleware.
 - In a later round, all state-reward arms stopped calling the unfamiliar tool. They re-issued the refund instead and wrote summaries claiming the credit was applied (200/200; one seed). Acquiring evidence transferred; using it did not.
 
-**Finding 3 (one seed, provisional): an honesty term can switch honesty off.**
+**Finding 3 (one seed, provisional; mechanism not established): honest failure appeared only without honesty terms.**
 - We added demonstrations so the warm start sometimes reports honest failure.
 - A report-blind state reward then produced honest failure on 30% of unrecoverable tasks (45/50 refund tasks), with no premature giving-up on recoverable twins.
 - The same reward plus nondisclosure and underclaim penalties produced **0%**: it retried four times and claimed success.
-- Seed 1 and an ND-only ablation are running.
+- A variant keeping only the underclaim penalty also gave 0%. A first-step advantage audit shows these incentives do not predict the gap, so we report it as an unexplained seed-0 difference pending seed 1.
 
 **Measure.**
 - Untrained Cohere models below 32B score VSC ≈ 0. Aya Expanse 32B reaches 0.515, and prompting it to "verify every write" lowers that to 0.33.
