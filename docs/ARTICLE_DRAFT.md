@@ -209,7 +209,7 @@ A linear probe on the residual stream decodes "this task failed" at the report t
 | always-verify prompt | 0.585 | — | 2.41 |
 | neutral + probe guard | 0.575 | 0.145* | 2.68 |
 
-*Per acknowledged write. Per episode with an acknowledged refund (`by_fault.post_ack_check`), the rates are 0.019 and 0.179.
+*Original guard-run count. Recomputed with `by_fault.post_ack_check` (episodes with an acknowledged refund), the rates are 0.019 and 0.179.
 
 Pre-registered criterion: VSC within 2 pp of always-verify *and* ≥ 30% fewer verification calls.
 - The VSC half is met (0.575 vs 0.585), but only trivially, since always-verify barely helps.
