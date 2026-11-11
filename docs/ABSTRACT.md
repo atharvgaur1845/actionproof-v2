@@ -1,23 +1,44 @@
-# ActionProof: agents say "done", we check the database
+# ActionProof: agents learn to look, not to use what they see
 
 **Track 3, Agentic Fine-tuning · AgentTune → AuditKIT (+ CuratorKIT) · Cohere Tiny Aya Global and Aya Expanse 8B / 32B**
 
-Tool-using agents report a write's result by repeating the tool's acknowledgement, but real tools lie: writes are acknowledged yet never committed, partial, stale, timed out or ambiguous. ActionProof is a SQLite-backed customer-support environment with eight injected fault types and a receipt ledger. Every metric is computed from database state, never from the transcript. The primary metric is **Verified Safe Completion (VSC)**: every goal met in the database, no policy violation, and a final report that matches what actually happened.
+Tool-using agents report a write's result by repeating the tool's acknowledgement. Real tools lie: writes are acknowledged but never committed, committed partially, or time out after committing. ActionProof is a SQLite customer-support environment where a phantom write returns a **byte-identical** success acknowledgement. A receipt ledger and a deterministic verifier score every episode from database state, never from the transcript.
 
-**Measure.** Untrained Cohere models below 32B score VSC ≈ 0; Aya Expanse 32B reaches 0.515. Prompting it to "verify every write" *lowers* VSC to 0.33. Across 3,200 episodes it never once re-read state after a *successful* acknowledgement. LLM judges are fooled too: on 476 false "completed" episodes, Aya 32B judges (ours and AuditKIT's TaskCompletion) accept 76–95% of the false claims, and 100% on ambiguous acks.
+**Question.** Hold the warm start, data, optimiser and reward form fixed, and change only *what the reward can see*. Which behaviours does GRPO keep, and which does it remove?
 
-**Fix.** From one shared warm start (verifier-filtered RFT), we ran GRPO with six rewards; only the reward differs between arms. The transcript-based rewards (tool-trusting, LLM judge) end at 0.61 test-IID VSC, and *remove* the init's occasional post-ack checks. All four state-based rewards reach 0.815–0.85; outcome and PCSTR-d re-check after every refund ack. Our reward, **PCSTR-d**, also penalises silent failure. Over two seeds it beats the tool-trusting reward by **+24.2 pp VSC** (95% CI [+18.5, +30.2]) in-distribution and by **+14.2 pp** on held-out fault types. It beats the untrained 32B by 34 pp. The decisive variable is *where the reward looks*: PCSTR-d's dense terms add only +2.5 pp over a binary outcome reward. The gains hold in Hinglish and under pressure prompts (0.85–0.86) and stay +16 pp over tool-trusting in Hindi (0.775).
+**Finding 1: what the reward observes decides whether the agent checks.**
+- Two rewards have identical form: one computes its goal term from the database, the other from the tool's acknowledgements.
+- From the same warm start, the state-grounded reward raises sampled post-write refund verification from 0.25 to 0.71–0.72.
+- The acknowledgement-grounded reward drives it down to 0.10.
+- Two training seeds each; the effect replicates on a second warm start (verification 1.00 vs 0.00).
+- Pooled over test-IID and held-out faults, PCSTR-d beats a tool-trusting reward by **+19.25 pp VSC** [15.4, 23.3], and binary `outcome` beats it by +18.0 pp [13.9, 22.3].
+- An LLM-judge reward was **saturated** (mean 0.99, within-batch standard deviation ≈ 0.03), so its arm's 0.61 is not evidence that the judge taught anything.
 
-**Understand.** A linear probe decodes "this task failed" from the residual stream, but a text classifier on the visible transcript decodes it equally well. As an inference-time guard, the probe raises post-ack checks tenfold but leaves VSC unchanged: nudged models ignore the nudge or what they read. Prompts and probes change what the model *calls*; only the state reward changes what it *concludes*.
+**Finding 2: what gets selected is a script, not a skill.**
+- Trained agents read back the database after the write, and on a write tool never seen in training they still read back 73% of the time.
+- They see the contradiction there (`credits: []`), never retry, and report "completed".
+- Every retry follows a read (evidence-gated), but the number of retries is capped at the training depth. Unrecoverable faults are never reported as failures: 0/150 for every model and every middleware.
+- In a later round, all state-reward arms stopped calling the unfamiliar tool. They re-issued the refund instead and wrote summaries claiming the credit was applied (200/200; one seed). Acquiring evidence transferred; using it did not.
 
-**Limits, reported as results.**
-- Verification is learned per tool, not as a general skill. On a held-out banking domain every trained policy fails (VSC ≈ 0, more policy violations).
-- Remaining failures are still reported as "completed".
-- The policy's per-service verification rates are a memorised prior, not estimated from observed faults.
+**Finding 3 (one seed, provisional): an honesty term can switch honesty off.**
+- We added demonstrations so the warm start sometimes reports honest failure.
+- A report-blind state reward then produced honest failure on 30% of unrecoverable tasks (45/50 refund tasks), with no premature giving-up on recoverable twins.
+- The same reward plus nondisclosure and underclaim penalties produced **0%**: it retried four times and claimed success.
+- Seed 1 and an ND-only ablation are running.
 
-**ROI.** One H200 serves about 9,600 tickets per hour. At 100k tickets a month: about $52 self-hosted, against $228 (Gemini 3.1 Flash-Lite) and $684 (GPT-5.4 Mini) at list API prices on the measured workload.
+**Measure.**
+- Untrained Cohere models below 32B score VSC ≈ 0. Aya Expanse 32B reaches 0.515, and prompting it to "verify every write" lowers that to 0.33.
+- LLM judges, including AuditKIT's TaskCompletion on Aya 32B, accept 76–100% of false completions.
+
+**What we do not claim.**
+- That RL teaches lying: the untrained model already claims false success 87–96% of the time.
+- That verification is a general skill: banking transfer fails.
+- That probes show the model "knows" it failed: a text baseline matches them.
+- That the proof-carrying A5 environment shows learning: every policy, including prompt-only, is at ceiling.
 
 **Rigour.**
-- Splits, scoring code and hypotheses were pre-registered with hashes; three amendments are logged, including a self-found sampling-seed bug.
-- The confirmatory test runs once, on untouched splits, after the freeze.
-- Models, traces and logs are on Hugging Face.
+- Six pre-registrations and amendments with hashed splits and scoring code, plus a deviation log that includes our own bugs.
+- A one-shot confirmatory test on untouched splits.
+- Every number traces to a file in `results/`. Models, traces and logs are on Hugging Face.
+
+**ROI.** One H200 serves about 9,600 tickets per hour: about $52 per 100k tickets self-hosted, versus $228–684 at list API prices on the measured workload.

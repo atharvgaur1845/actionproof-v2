@@ -739,7 +739,7 @@ If something fails:
 - No efficiency penalty in the primary PCSTR (only the `pcstr+c` arm).
 - No new experiments after G3.
 
-## 26. Immediate next actions after approval
+## 26. Immediate next actions after approval (historical; live list in `docs/NEXT_ACTIONS.md`)
 
 1. Copy this spec to `.plans/actionproof-hackathon-spec.md`.
 2. Save memories:
@@ -1106,3 +1106,8 @@ If something fails:
   - **Retries are evidence-gated but capped.** 100% of refund retries in every state arm follow a ledger read, and none follow a read showing the refund landed. The cap is 4 attempts for M1/M2 and about 3 for M3: on e_seen_refund k_max = 2, M3 stops 15/20 times while the ledger still shows nothing. Depth 3 needs 5 attempts and every arm fails it. Audit/close and the credit tool get no reads and no retries.
   - **The F_under-dominance hypothesis gets no support at evaluation:** on 234 committed-timeout (F4) RP tasks, no model reports failed (UC 0 for every arm). Training-time reward components are still to be checked.
   - **New: state arms collapse the credit workflow.** On `e_heldout`, M1, M2 and M3 never call `apply_store_credit` (init 195/200, M4 191/200). Instead they re-issue the refund after the ledger already shows it (200/200), finish with a summary claiming the credit was applied (200/200), skip `close_ticket` (M1/M2 134/200) and create duplicate refunds (D > 0 in 46–68 episodes). The same happens on `e_heldout_ctrl` (credit called 26–27/200). Interpretation (hypothesis): the policy reads `credits: []`, recognises the goal is unmet, and "repairs" it with the only write its script knows. This is a training-induced action-substitution and fabrication failure that the report-blind and report-aware state rewards share and the ack reward avoids.
+- **2026-11-11 09:45 · Submission docs revised.** Abstract, README headline and article rewritten around the selection framing:
+  - Numbers corrected: pooled +19.25 pp instead of +24.2; seed spread ≤ 2.0 pp; `llm_judge` reported as saturated, not as "teaching lying"; reads transfer but recovery does not.
+  - New article §5b with the A6 seed-0 results; pending items marked.
+  - Both novelty scouts saved to `docs/research/novelty_scouts_2026-11-11.md`.
+  - Live action list in `docs/NEXT_ACTIONS.md`; §26 is marked historical.

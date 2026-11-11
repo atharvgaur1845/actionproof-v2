@@ -1,13 +1,18 @@
 # ActionProof
 
-**Agents say "done". We check the database.**
+**Agents say "done". We check the database. Then we ask what RL taught them.**
 
-ActionProof is a benchmark plus a reward for tool-using agents whose tool acknowledgements can lie: phantom, partial, stale, timed-out and ambiguous writes. Every number is checked against the environment's database and receipt log, never against the transcript.
+ActionProof is an environment, a set of rewards and a controlled training study for tool-using agents whose tool acknowledgements can lie: phantom, partial, stale, timed-out and ambiguous writes. Every number is checked against the environment's database and receipt log, never against the transcript.
+
+**Headline.** With the warm start and reward form held fixed, a reward whose goal term reads the database teaches the agent to verify its writes (sampled verification 0.25 → 0.72). The same reward computed from the tool's acknowledgements removes verification (→ 0.10). What gets learned is a script: the agent reads the contradicting evidence and still reports "done". See `docs/ABSTRACT.md`.
 
 - **Track:** 3, Agentic Fine-tuning.
 - **Toolkit chain:** AgentTune → AuditKIT, plus CuratorKIT.
 - **Models:** Cohere Tiny Aya Global (policy) and Aya Expanse 8B / 32B (teacher and judges).
-- **Write-up:** `docs/ARTICLE_DRAFT.md`.
+- **Write-up:** `docs/ARTICLE_DRAFT.md` (abstract: `docs/ABSTRACT.md`).
+- **Novelty and related work:** `docs/research/novelty_scouts_2026-11-11.md`.
+- **Live status and next actions:** `docs/NEXT_ACTIONS.md`.
+- **Latest amendment:** `PREREGISTRATION_A6.md` (results in `results/eval/a6/`, trace analysis in `results/a6/evidence_use.md`).
 - **Pre-registration:** `PREREGISTRATION.md`.
 - **Full spec and deviation log:** `docs/SPEC.md`.
 
