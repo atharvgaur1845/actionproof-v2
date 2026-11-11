@@ -6,9 +6,9 @@ The experiment freeze is 2026-11-13 18:00 IST. SPEC §26 is the original kickoff
 
 | Pool | State | Tasks |
 |---|---|---|
-| h200 | worker 439065 running until 13:27; 443167 pending | M2b `pcstr_d_noND` s0 (running) → a5lo ack s0 → 400a confirmatory |
-| h100 | worker 443755 pending | M1 `pcstr_d` s1 → M2 `pcstr_d_noreport` s1 |
-| a100 | worker 443756 pending | M3′ `outcome_G` s0 → M5 `tool_trust` s0 |
+| h200 | worker 439065 running until 13:27; 443167 pending (~12th) | M2b done; `396a` sampled honesty eval (running) → a5lo ack s0 → 400a confirmatory |
+| h100 | worker 443755 blocked (gpunode5 reserved until 11-13 12:13) | M1 `pcstr_d` s1 → M2 `pcstr_d_noreport` s1 |
+| a100 | worker 443756 pending (~20 ahead) | M3′ `outcome_G` s0 → M5 `tool_trust` s0 |
 
 **Checkpoint 12:00 IST.** If the h100 or a100 worker has not started, move its tasks back to whichever pool has a running GPU.
 

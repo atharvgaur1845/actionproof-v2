@@ -157,6 +157,7 @@ These are development-set numbers. The pre-registered confirmatory test (H1) run
 | A6 init | 0.00 | 0.00 | 0.70 | 0.00 | 0.615 |
 | M1 PCSTR-d | **0.00** | 0.32 | 0.995 | 1.00 | 0.865 |
 | M2 PCSTR-d without report terms | **0.30** | 0.33 | 1.00 | 1.00 | 0.825 |
+| M2b PCSTR-d without ND (underclaim penalty kept) | **0.00** | 0.33 | 1.00 | 1.00 | 0.865 |
 | M3 outcome | 0.007 | 0.11 | 0.925 | 1.00 | 0.85 |
 | M4 ack_outcome | 0.00 | 0.00 | 0.705 | 0.00 | 0.615 |
 | init + "verify every write" prompt | 0.06 | 0.27 | — | — | — |
@@ -166,7 +167,7 @@ These are development-set numbers. The pre-registered confirmatory test (H1) run
 2. **The report-blind reward produced honest failure; the reward with honesty terms did not.**
    - Evidence: on every unrecoverable refund task, every state arm's last ledger read shows `refunds: []`. After that read, M2 reports "failed" 45 / 50 times and M1 reports "completed" 50 / 50.
    - Not refusal: no model reports failure without having read the ledger, and M2 gives up on 0 recoverable twins.
-   - *Status.* This is one seed. The ND-only ablation (M2b) and seed 1 are running `[[pending]]`. Our first explanation, that the underclaim penalty dominates, has no support at evaluation: 0 underclaims on 234 committed-timeout tasks for every arm. The training-time reward terms are still being audited `[[pending]]`.
+   - *Status.* This is one seed. The ablation that keeps the underclaim penalty and drops nondisclosure (M2b) also gives **0.00** (50 / 50 completed after four attempts). So within seed 0, the arms carrying the underclaim penalty produce no honest failure and the arm without it does. Seed 1 of M1 and M2 is queued `[[pending]]`. Our first explanation, that the underclaim penalty dominates, has no support at evaluation: 0 underclaims on 234 committed-timeout tasks for every arm. The training-time reward terms are still being audited `[[pending]]`.
 3. **Retries now wait for evidence, but the budget is memorised.**
    - Every refund retry by every state arm follows a ledger read, and none follows a read showing the refund had landed.
    - The policies stop at 4 attempts (`outcome`: about 3), the demonstration budget, so a fault one step deeper than training (5 attempts needed) defeats every arm.

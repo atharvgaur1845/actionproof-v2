@@ -1111,3 +1111,12 @@ If something fails:
   - New article §5b with the A6 seed-0 results; pending items marked.
   - Both novelty scouts saved to `docs/research/novelty_scouts_2026-11-11.md`.
   - Live action list in `docs/NEXT_ACTIONS.md`; §26 is marked historical.
+- **2026-11-11 12:00 · M2b result and queue checkpoint.**
+  - **M2b `pcstr_d_noND` s0** (underclaim penalty kept, ND removed): HFR **0.000** (refund-UR: completed 50/50 after 4 attempts on 49 of them), twin VSC 0.327 (PF 0), e_seen_refund 1.000, test_iid/ood 0.865/0.830. The credit workflow collapses as in M1–M3 (credit called 0/200, the claimed credit in all 200 summaries).
+  - **Seed-0 reading (registered interpretation rule, PREREGISTRATION_A6):** M1 ≈ M2b ≈ 0 while M2 = 0.30. Arms carrying F_under produce no honest failure; the arm without it does. ND is not what suppresses honesty: F_under is implicated. This is one seed per arm; seed 1 of M1/M2 is queued.
+  - The eval-time F4 audit (0 underclaims anywhere) means the suppression, if it is F_under, acts through training-time credit, not through visible underclaim avoidance at test. The training-time term audit is still open.
+  - **Checkpoint:** none of the three pending workers has started.
+    - h100 443755 is blocked: gpunode5 is under the `load_test` reservation until 2026-11-13 12:13, and gpunode6 is full.
+    - a100 443756 is behind ~20 jobs.
+    - h200 443167 is ~12th.
+    - Worker 439065 ends 13:27. Its last ~80 min run the exploratory task `396a_a6_sampled_honesty` (T=1×4 on the 50 refund-UR tasks, for init, M1, M2 and M2b).

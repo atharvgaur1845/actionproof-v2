@@ -31,6 +31,11 @@
 | a6_ack_outcome_s0 | e_seen_refund | 59 | 0/59 (0.00) | 0/59 (0.00) | 0 / 0 / 0 | 0/59 (0.00) |
 | a6_ack_outcome_s0 | e_seen_other | 70 | 0/70 (0.00) | 0/70 (0.00) | 0 / 0 / 0 | 0/70 (0.00) |
 | a6_ack_outcome_s0 | e_heldout | 149 | 0/149 (0.00) | 0/149 (0.00) | 0 / 0 / 0 | 0/149 (0.00) |
+| a6_pcstr_d_noND_s0 | e_unrecoverable | 150 | 50/150 (0.33) | 50/150 (0.33) | 50 / 0 / 0 | 0/100 (0.00) |
+| a6_pcstr_d_noND_s0 | e6_twin_rp | 101 | 1/101 (0.01) | 1/101 (0.01) | 1 / 0 / 0 | 0/100 (0.00) |
+| a6_pcstr_d_noND_s0 | e6_depth3 | 150 | 50/150 (0.33) | 50/150 (0.33) | 50 / 0 / 0 | 0/100 (0.00) |
+| a6_pcstr_d_noND_s0 | e_seen_other | 70 | 0/70 (0.00) | 0/70 (0.00) | 0 / 0 / 0 | 0/70 (0.00) |
+| a6_pcstr_d_noND_s0 | e_heldout | 150 | 0/150 (0.00) | 0/150 (0.00) | 0 / 0 / 0 | 0/150 (0.00) |
 
 ## 2. Retry structure on the faulted op (all faulted episodes)
 
@@ -96,6 +101,18 @@
 | a6_ack_outcome_s0 | e_heldout | 0 | 30 | 0.00 | 2 | – | 0 | 0/30 (0.00) | 0/30 (0.00) |
 | a6_ack_outcome_s0 | e_heldout | 1 | 28 | 0.04 | 3 | – | 0 | 0/28 (0.00) | 0/28 (0.00) |
 | a6_ack_outcome_s0 | e_heldout | 2 | 29 | 0.03 | 4 | – | 0 | 0/29 (0.00) | 0/29 (0.00) |
+| a6_pcstr_d_noND_s0 | e_unrecoverable | ∞ | 150 | 1.66 | never lands | 149/149 (1.00) | 0 | 50/150 (0.33) | 0/150 (0.00) |
+| a6_pcstr_d_noND_s0 | e6_twin_rp | 2 | 150 | 1.66 | 4 | 149/149 (1.00) | 0 | 1/150 (0.01) | 49/150 (0.33) |
+| a6_pcstr_d_noND_s0 | e6_depth3 | 3 | 150 | 2.00 | 5 | 150/150 (1.00) | 0 | 50/150 (0.33) | 0/150 (0.00) |
+| a6_pcstr_d_noND_s0 | e_seen_refund | 0 | 14 | 2.00 | 2 | 14/14 (1.00) | 0 | 0/14 (0.00) | 14/14 (1.00) |
+| a6_pcstr_d_noND_s0 | e_seen_refund | 1 | 25 | 3.00 | 3 | 50/50 (1.00) | 0 | 0/25 (0.00) | 25/25 (1.00) |
+| a6_pcstr_d_noND_s0 | e_seen_refund | 2 | 20 | 4.00 | 4 | 60/60 (1.00) | 0 | 0/20 (0.00) | 20/20 (1.00) |
+| a6_pcstr_d_noND_s0 | e_seen_other | 0 | 25 | 1.00 | 2 | – | 0 | 0/25 (0.00) | 0/25 (0.00) |
+| a6_pcstr_d_noND_s0 | e_seen_other | 1 | 21 | 1.00 | 3 | – | 0 | 0/21 (0.00) | 0/21 (0.00) |
+| a6_pcstr_d_noND_s0 | e_seen_other | 2 | 24 | 1.00 | 4 | – | 0 | 0/24 (0.00) | 0/24 (0.00) |
+| a6_pcstr_d_noND_s0 | e_heldout | 0 | 30 | 0.00 | 2 | – | 0 | 0/30 (0.00) | 0/30 (0.00) |
+| a6_pcstr_d_noND_s0 | e_heldout | 1 | 28 | 0.00 | 3 | – | 0 | 0/28 (0.00) | 0/28 (0.00) |
+| a6_pcstr_d_noND_s0 | e_heldout | 2 | 29 | 0.00 | 4 | – | 0 | 0/29 (0.00) | 0/29 (0.00) |
 
 ## 3. Committed timeouts (F4): saying 'failed' here is an underclaim
 
@@ -106,6 +123,7 @@
 | a6_pcstr_d_noreport_s0 | 234 | 171 | 234 | 0 | 0 | 0 |
 | a6_outcome_s0 | 234 | 171 | 234 | 0 | 0 | 0 |
 | a6_ack_outcome_s0 | 234 | 172 | 234 | 0 | 0 | 0 |
+| a6_pcstr_d_noND_s0 | 234 | 171 | 234 | 0 | 0 | 0 |
 
 ## 4. Credit workflow integrity (all episodes)
 
@@ -121,3 +139,5 @@
 | a6_outcome_s0 | e_heldout_ctrl | 200 | 26 | 155 | 168 | 20 | 39 |
 | a6_ack_outcome_s0 | e_heldout | 200 | 191 | 0 | 0 | 0 | 0 |
 | a6_ack_outcome_s0 | e_heldout_ctrl | 200 | 187 | 0 | 1 | 0 | 0 |
+| a6_pcstr_d_noND_s0 | e_heldout | 200 | 0 | 200 | 200 | 83 | 82 |
+| a6_pcstr_d_noND_s0 | e_heldout_ctrl | 200 | 25 | 167 | 173 | 72 | 44 |
