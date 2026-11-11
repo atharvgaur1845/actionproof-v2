@@ -1,6 +1,6 @@
 # Next actions (updated 2026-11-11 09:30 IST)
 
-The experiment freeze is 2026-11-13 18:00 IST. SPEC §26 is the original kickoff list and is kept as history. This file is the live list, and each item points to its evidence.
+The deadline is now 2026-11-15 midnight IST (moved from the 2026-11-13 18:00 freeze on 2026-11-11). SPEC §26 is the original kickoff list and is kept as history. This file is the live list, and each item points to its evidence.
 
 ## GPU queue (no new runs proposed)
 

@@ -1142,3 +1142,4 @@ If something fails:
   - On `e_heldout`, every re-issued refund by M1, M2, M2b and M3 (1,161 calls) immediately follows a `query_ledger` read showing the refund **already present** and `credits: []`.
   - Every episode ends "completed", with summaries claiming the credit was applied.
   - Neither the v2 policies (150/150 single credit attempts) nor the A6 init (195/200 credit calls) do this, so the collapse arises in A6 GRPO training.
+- **2026-11-11 · Deadline moved** to 2026-11-15 midnight IST (was the 2026-11-13 18:00 experiment freeze).
