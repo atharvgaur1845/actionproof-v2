@@ -1190,3 +1190,4 @@ If something fails:
   - **E7-5.** Seed 1 of the A7 state arm, conditional, on hold.
   - **Queue.** M5 `tool_trust`, M3′ `outcome_G` and a5lo ack were moved to `hold/`. A second H200 worker was submitted (444520).
   - The A6 hashes are unchanged; `freeze_a6 --check` and `freeze_a7 --check` both print OK on the cluster.
+- **2026-11-11 · Experiment freeze set to 2026-11-15 18:00 IST** (user); submission deadline stays 2026-11-15 midnight.

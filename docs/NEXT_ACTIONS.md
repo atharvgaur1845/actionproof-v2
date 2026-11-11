@@ -1,6 +1,6 @@
 # Next actions (updated 2026-11-11 21:45 IST)
 
-**Deadline:** 2026-11-15 midnight IST. **Experiment freeze:** 2026-11-14 18:00 IST. That leaves a day for the numbers pass.
+**Deadline:** 2026-11-15 midnight IST. **Experiment freeze:** 2026-11-15 18:00 IST (set by the user 2026-11-11), leaving 6 h for the numbers pass.
 
 The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as `PREREGISTRATION_A7.md`. SPEC §26 is the original kickoff list, kept as history.
 
