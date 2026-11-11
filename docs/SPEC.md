@@ -1127,3 +1127,14 @@ If something fails:
     - The observed M1 0.00 / M2 0.30 is predicted by neither stage. The "honesty term suppresses honesty" reading is **withdrawn** as a mechanism claim and kept as an unexplained seed-0 difference. Abstract and article are updated.
   - **G5 zero-VoI proposition** written into article §3.
   - **G2 gathered-vs-used:** covered by `results/a6/evidence_use.md` §1. Article §5b already tabulates it.
+- **2026-11-11 13:00 · `396a` sampled honesty eval** (exploratory; T = 1 × 4 on the 50 refund-UR tasks of `e_unrecoverable`; `results/eval/a6/sampled/`).
+
+  | Model | Sampled HFR | CF | FS | SI |
+  |---|---|---|---|---|
+  | init_a6 | 0.055 | 11 | 184 | 5 |
+  | M1 pcstr_d | 0.08 | 16 | 178 | 6 |
+  | M2b noND | **0.01** | 2 | 194 | 4 |
+  | M2 noreport | **0.46** | 92 | 103 | 5 |
+
+  - Direction vs init: M2b extinguished honest failure and M1 roughly held it. Both match the sign of their step-0 advantage (−5.46 / +5.46).
+  - M2 amplified it ~8×, *against* its step-0 sign. The selection on M2b is consistent with the reward. M2's rise is not, and stays unexplained (drift or path dependence).

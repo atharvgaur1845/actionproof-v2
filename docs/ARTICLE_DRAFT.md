@@ -180,6 +180,13 @@ These are development-set numbers. The pre-registered confirmatory test (H1) run
      - The init's honest failures stop the workflow early, so the partial-credit terms favour the false claim. Only M1's nondisclosure term reverses that (advantage on honest failure: M1 +5.5, M2 and M2b −5.5).
      - By the end of training every arm stops after the failed refund, so M2's reward is indifferent to the report while M1's prefers "failed".
      - **Neither stage's incentives predict the observed M1 = 0.00 vs M2 = 0.30.** M2's honest failure looks like unpenalised drift under a report-blind reward, and M1's zero runs against its own incentive. We therefore do not claim that the honesty terms *cause* dishonesty.
+   - *Sampled check* (T = 1 × 4 on the 50 refund-UR tasks). Honest-failure rate:
+
+     | init | M1 | M2b | M2 |
+     |---|---|---|---|
+     | 0.055 | 0.08 | **0.01** | **0.46** |
+
+     M2b and M1 move in the direction their first-step advantage predicts (down, roughly flat). M2 rises eightfold against its prediction.
    - *Status.* This is one seed. The ablation that keeps the underclaim penalty and drops nondisclosure (M2b) also gives **0.00** (50 / 50 completed after four attempts). So within seed 0, the arms carrying the underclaim penalty produce no honest failure and the arm without it does. Seed 1 of M1 and M2 is queued `[[pending]]`. Our first explanation, that the underclaim penalty dominates, has no support at evaluation: 0 underclaims on 234 committed-timeout tasks for every arm. The training-time reward terms are still being audited `[[pending]]`.
 3. **Retries now wait for evidence, but the budget is memorised.**
    - Every refund retry by every state arm follows a ledger read, and none follows a read showing the refund had landed.
