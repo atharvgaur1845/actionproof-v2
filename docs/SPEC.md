@@ -1143,3 +1143,42 @@ If something fails:
   - Every episode ends "completed", with summaries claiming the credit was applied.
   - Neither the v2 policies (150/150 single credit attempts) nor the A6 init (195/200 credit calls) do this, so the collapse arises in A6 GRPO training.
 - **2026-11-11 · Deadline moved** to 2026-11-15 midnight IST (was the 2026-11-13 18:00 experiment freeze).
+- **2026-11-11 22:00 · D-ENV-1: cross-operation idempotency-key collision (disclosed, not fixed).**
+  - *The bug.* `actionproof/env/tools_ecom.py:155-156` caches write responses by `idempotency_key` alone, shared across operations. A write that reuses a key first used by a *different* operation gets that operation's cached response back and changes nothing. Production payment APIs reject a key reused with different parameters; ours silently replays. Found by the Fable 5.2 review; counts recomputed with a read-only scan over every evaluation file (local `results/raw/a6/`, cluster `results/eval/`).
+  - *Where it occurs.* Almost always `apply_store_credit` reusing the refund's key (`unique_key_123` style). There are also rare `cancel_order → issue_refund` reuses.
+  - *Impact by result.*
+
+    | Result | Collided episodes | Verdicts changed | Status |
+    |---|---|---|---|
+    | v2 headline VSC (`r3` val/test_iid/test_ood_fault, all arms) | 0–3 per 200, all `cancel_order→issue_refund` | **0** (every collided episode still had G = 1) | unaffected |
+    | v2 sampled verification (`a4/h11`) | 1 per 800 | 0 | unaffected |
+    | Transfer (Hindi/Hinglish/pressure, banking) | ≤ 2 per 200 | 0 | unaffected |
+    | v2 held-out tool, PCSTR-d and outcome (`a4/mw/*__e_heldout`) | **0** | — | unaffected: "reads transfer, recovery does not" stands |
+    | v2 held-out tool, init / tool_trust | 17 / 62 of 200 | all G = 0 | their `e_heldout` VSC is partly the bug |
+    | `e_unrecoverable` (credit third) | init 8, tool_trust 13 (v2); A6 init 47, M4 44 | none: UR tasks fail anyway | HFR unaffected; those episodes never reached the fault |
+    | A6 `e_heldout` / `e_heldout_ctrl`: init, M4 ack_outcome, prompt baselines | 143–195 of 200 | all G = 0 | **these baselines never functioned on credit tasks** |
+    | A6 `e6_twin_rp` (credit third): init, M4, prompt baselines | 25–49 of 150 | all G = 0 | twin VSC for these rows is depressed by the bug |
+    | A6 state arms M1/M2/M2b/M3 on credit tasks | 0: they never call the credit tool | — | unaffected, but the comparison baseline is void |
+
+  - *Consequences for claims.*
+    - "Init calls the credit tool 195/200 and the state arms collapse to 0" is rewritten. The init's credit call is silently void (VSC 0.005 even on fault-free tasks); the state arms drop the call altogether and substitute a refund.
+    - "The ack arm keeps the workflow intact" is withdrawn: M4 makes the call, but with the refund's key in 186/200 episodes, so it is equally non-functional.
+    - The environment is **not** changed: changing it would alter a hash-registered benchmark and every held-out number. New experiments (Amendment 7) use demonstrations with operation-scoped keys and report *functional* credit (committed), not calls.
+- **2026-11-11 22:00 · D-EVAL-1: honest failure is measured under a tool-schema shift.**
+  - Training (pool B, plain `EcomEnv`) and the A6 gate list no `apply_store_credit` tool. Every A4/A6 evaluation split uses `EcomEnvA4` (`meta.domain = "a4"`), whose system prompt lists the extra tool (10,946 vs 11,916 characters) and whose ledger reads add a `credits` field.
+  - In the training schema the A6 init reports "failed" in 10/10 stop-mode refund-UR episodes (gate file, 4 tasks). Under the evaluation schema the rate is 11/58.
+  - No trained arm has been evaluated on refund-UR in the training schema. "M1 suppresses honest failure" and "M1's honest report does not survive an extra tool in the prompt" are therefore not distinguished. Amendment 7's forced-prefix battery measures both schemas.
+- **2026-11-11 22:00 · Honest failure restated as a conditional** (sampled T = 1 × 4, 50 refund-UR tasks; stop-mode = ≥ 3 refund attempts and the last ledger read empty; recomputed from `results/eval/a6/sampled/`).
+
+  | Model | Stop-mode episodes / 200 | P(failed \| stop-mode) |
+  |---|---|---|
+  | init_a6 | 58 | 11/58 = 0.19 |
+  | M1 pcstr_d | 135 | 15/135 = 0.11 |
+  | M2b noND | 128 | 2/128 = 0.016 |
+  | M2 noreport | 129 | 91/129 = 0.71 |
+
+  - Given the same history, the arms differ only in the report. Greedy 45/50 vs 0/50 is the argmax of these conditionals.
+  - **M1 seed 1 replicates HFR 0/150** (cluster `results/eval/a6/a6_pcstr_d_s1__neutral__e_unrecoverable.jsonl`; refund-UR 50/50 "completed"). M2 seed 1 is next in the queue.
+- **2026-11-11 22:00 · Zero-VoI proposition corrected.**
+  - It needs a third assumption: read results carry no information about future acknowledgements beyond the ack history.
+  - Zero expected advantage predicts *drift*, not extinction. The observed drop (0.25 → 0.10) needs a correlated cost. None exists in the reward. The candidate is the fixed turn budget: reads use turns, and an episode that runs out before its required writes scores 0 under the ack reward. The earlier sentence "any turn cost makes it dominated" is withdrawn.

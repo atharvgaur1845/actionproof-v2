@@ -18,13 +18,19 @@ Tool-using agents report a write's result by repeating the tool's acknowledgemen
 - Trained agents read back the database after the write, and on a write tool never seen in training they still read back 73% of the time.
 - They see the contradiction there (`credits: []`), never retry, and report "completed".
 - Every retry follows a read (evidence-gated), but the number of retries is capped at the training depth. Unrecoverable faults are never reported as failures: 0/150 for every model and every middleware.
-- In a later round, all state-reward arms stopped calling the unfamiliar tool. They re-issued the refund instead and wrote summaries claiming the credit was applied (200/200; one seed). Acquiring evidence transferred; using it did not.
+- In a later round, all state-reward arms stopped calling the unfamiliar tool. They re-issued the refund instead and wrote summaries claiming the credit was applied (200/200; one seed). Disclosure: an environment bug (idempotency keys shared across operations) had already made the warm start's credit calls silently void, so the baseline never worked either. Acquiring evidence transferred; using it did not.
 
-**Finding 3 (one seed, provisional; mechanism not established): honest failure appeared only without honesty terms.**
+**Open observation (not a finding): what the agent reports after the same evidence depends on the reward arm.**
 - We added demonstrations so the warm start sometimes reports honest failure.
-- A report-blind state reward then produced honest failure on 30% of unrecoverable tasks (45/50 refund tasks), with no premature giving-up on recoverable twins.
-- The same reward plus nondisclosure and underclaim penalties produced **0%**: it retried four times and claimed success.
-- A variant keeping only the underclaim penalty also gave 0%. A first-step advantage audit shows these incentives do not predict the gap, so we report it as an unexplained seed-0 difference pending seed 1.
+- After the same history (several refund attempts, then a ledger read showing no refund), the probability of reporting "failed" was:
+
+  | init | report-blind dense state reward | PCSTR-d | underclaim-only variant |
+  |---|---|---|---|
+  | 0.19 | 0.71 | 0.11 (0/50 greedy in both seeds) | 0.016 |
+
+- A report-blind *binary* state reward gave ≈ 0, so being report-blind is not sufficient on its own.
+- These rates are measured with one extra tool in the prompt compared with training. In the training prompt the warm start reports "failed" 10/10 times. We have not yet separated suppression from fragility to that schema shift.
+- The incentives do not predict the gap, so we report it as an open observation.
 
 **Measure.**
 - Untrained Cohere models below 32B score VSC ≈ 0. Aya Expanse 32B reaches 0.515, and prompting it to "verify every write" lowers that to 0.33.
