@@ -1182,3 +1182,11 @@ If something fails:
 - **2026-11-11 22:00 · Zero-VoI proposition corrected.**
   - It needs a third assumption: read results carry no information about future acknowledgements beyond the ack history.
   - Zero expected advantage predicts *drift*, not extinction. The observed drop (0.25 → 0.10) needs a correlated cost. None exists in the reward. The candidate is the fixed turn budget: reads use turns, and an episode that runs out before its required writes scores 0 under the ack reward. The earlier sentence "any turn cost makes it dominated" is withdrawn.
+- **2026-11-11 21:40 · Amendment 7 registered** (`PREREGISTRATION_A7.md`, `results/a7_hashes.json`, commit `d41cdc4`) before any A7 GPU run. Design from the Fable 5.2 review.
+  - **E7-1 forced-prefix battery** (`actionproof/eval/forced_prefix.py`). Fixed prefixes from A6 traces, in both schemas. Exact report and next-tool probabilities for every A6 arm and checkpoint.
+  - **E7-2 warm start `rft_tiny_a7`.** The A6 SFT rows plus 20 credit demonstrations in the demonstrator template, with operation-scoped keys. Pool `a7_credit_demo` is disjoint from every split (tested). Gate G-A7: the A6 HFR band plus a ≥ 30% non-colliding credit-call rate at the init.
+  - **E7-3.** `pcstr_d_noreport` and `ack_outcome` arms on `rft_tiny_a7`.
+  - **E7-4.** M2c `pcstr_d_noFunder` on `rft_tiny_a6`, completing the 2 × 2 over the report terms.
+  - **E7-5.** Seed 1 of the A7 state arm, conditional, on hold.
+  - **Queue.** M5 `tool_trust`, M3′ `outcome_G` and a5lo ack were moved to `hold/`. A second H200 worker was submitted (444520).
+  - The A6 hashes are unchanged; `freeze_a6 --check` and `freeze_a7 --check` both print OK on the cluster.
