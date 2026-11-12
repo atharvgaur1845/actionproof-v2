@@ -1211,3 +1211,17 @@ If something fails:
   - **M2 seed 1 (greedy).** Refund-UR: 6/50 "failed" (seed 0: 45/50). All 50 are stop-mode, so the greedy conditional is 0.12.
     - The registered rule uses the *sampled* conditional. `411s` (sampled T = 1 × 4, M2 s1 and M1 s1, same protocol as 396a) was queued ahead of 412 to apply it.
   - **Cluster.** At 03:35 another user of the shared account cancelled pending worker 444520 and the previously held jobs (432960, …), and submitted their own jobs. Running worker 443167 is unaffected. The remaining queue (≈ 7.5 h) fits in its wall time (ends ≈ 18:20), so no worker was resubmitted.
+- **2026-11-12 08:45 · H7-1 supported; M2 seed-1 rule fires; honest-failure observation dropped.**
+  - **H7-1 (primary, PREREGISTRATION_A7 §5).** On `e_heldout`, greedy, the A7 state arm (`a7_pcstr_d_noreport_s0`) calls `apply_store_credit` with a non-colliding key in **200/200** episodes (threshold ≥ 50%; kill < 20%). The A6 state arm makes 0/200 such calls. Credits committed: 113/200, identical to the A7 init. On `e_heldout_ctrl` (fault-free credit): 200/200 committed (A6 state arm: 27/200).
+    - Must be described as "demonstrated in SFT, never rewarded in RL" (Amendment 7 §3).
+    - Other A7-arm numbers: test_iid VSC 0.845, test_ood_fault 0.845, e_seen_refund 0.985, e6_depth3 0.0, e6_twin_rp 0.29, HFR 5/50 refund-UR greedy. The RL arm keeps PF 0.39 on recoverable credit faults (init 0.42).
+  - **E7-5 released.** Per the condition, the seed-1 A7 state arm was moved from hold to `pending/415_a7_pcstr_d_noreport_s1.sh`. Its name sorts it after 413/414, so the registered seed-0 set finishes first on worker 443167. It needs a new worker.
+  - **M2 seed-1 honesty rule** (`results/eval/a6/sampled/*_s1__*`; same protocol as 396a).
+    - M2 s1: P(failed | stop-mode) = 33/125 = **0.264 < 0.3**. Rule: the honest-failure observation (Finding 3) is dropped.
+    - M1 s1, for the matched row: 33/140 = 0.236 (s0: 0.11). The seed-0 gap (0.71 vs 0.11) does not replicate.
+    - Combined with the battery (plain-schema P(failed) ≥ 0.989 for every model), the report at the honest-failure point is attributed to the schema shift, not to the reward arm.
+    - M2b seed 1 stays on hold: its release condition (M2 s1 replicates) is not met.
+  - **Abstract revised.**
+    - Finding 3 is now template inheritance (H7-1) plus the token-level channel effect from the battery.
+    - The honesty observation moves to "What we do not claim".
+    - The confirmatory result is stated as passed.

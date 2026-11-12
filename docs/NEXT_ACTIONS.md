@@ -23,15 +23,15 @@ The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as 
 | done | `397a` | Battery: plain-schema P(failed) ≥ 0.989 for every model → rule triggered ("not robust to the schema shift") | — |
 | done | `400a` | Confirmatory H1 **passes**: +1.5 pp [0.63, 2.62], p = 0.025 | — |
 | done | `410` | Gate G-A7 **passes**: HFR 0.21; non-colliding credit 200/200 | — |
-| running | `411` | A7 `pcstr_d_noreport` s0 (H7-1) | ~0.7 h left at 07:00 |
-| 1 | `411s` | Sampled M2 s1 / M1 s1 honesty (applies the M2 s1 rule) | ~10 min |
-| 2 | `412` | A7 `ack_outcome` s0 (H7-2) | ~3 h |
+| done | `411` | A7 state arm: **H7-1 supported**, non-colliding credit 200/200 (A6: 0/200) | — |
+| done | `411s` | M2 s1 sampled 0.264 < 0.3 → **honest-failure observation dropped** (M1 s1 0.236) | — |
+| running | `412` | A7 `ack_outcome` s0 (H7-2) | ends ~11:30 |
 | 3 | `413` | M2c `pcstr_d_noFunder` s0 (H7-4) | ~3 h |
 | 4 | `414` | Battery on the A7 arms and M2c | < 1 h |
+| 5 | `415` | E7-5: A7 state arm seed 1 (released; H7-1 held) | ~3 h; needs a new worker after 18:20 |
 
 **On hold**
-- `411b`: A7 state arm, seed 1. Release only if H7-1 holds at seed 0.
-- M2b seed 1: release only if M2 seed 1 replicates.
+- M2b seed 1: condition not met (M2 s1 did not replicate); stays held.
 - M5, M3′, a5lo and all A5 runs: they cannot change a conclusion.
 
 ## Decision rules (PREREGISTRATION_A7 §5)
