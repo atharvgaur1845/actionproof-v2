@@ -1241,3 +1241,4 @@ If something fails:
     - This exists only under the evaluation schema (plain ≥ 0.99 for all). Seed variance in sampled rollouts (M2 0.71 vs 0.26) is as large as the arm differences, so no claim about the report terms is made.
   - **Other M2c numbers:** test_iid 0.87, test_ood_fault 0.845, e_seen_refund 1.00, e_heldout 0.0, with credit calls 0/200 like every A6 state arm.
   - **Queue.** `415` (E7-5, A7 state arm seed 1, 300 min) cannot start on 443167 and needs a new H200 worker.
+- **2026-11-12 17:40 · H7-3 holds (CPU).** On `e_heldout`, whether the episode's refund key has the A6 demonstrator format `refund-<order>` predicts credit omission with accuracy **1586/1600 = 0.991** (threshold ≥ 0.9). Covered: 8 A6 models — init, M1 s0, M2 s0/s1, M2b, M3, M4, M2c; M1 s1's `e_heldout` trace is not synced. Per model: 191–200/200. The two-template description is used.

@@ -52,7 +52,7 @@ The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as 
 - [x] Zero-VoI proposition corrected (third assumption; drift, not extinction).
 - [x] Template markers and functional credit added (`results/a6/evidence_use.md` §5).
 - [x] Amendment 7 registered (`results/a7_hashes.json`).
-- [ ] H7-3: per-episode template-marker accuracy (CPU; A7 arms have landed).
+- [x] H7-3: template-marker accuracy 0.991 (1586/1600) ≥ 0.9, holds.
 
 ## Submission (Phase 3)
 
