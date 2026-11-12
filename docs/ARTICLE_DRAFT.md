@@ -287,7 +287,7 @@ The failure doesn't have to be hidden. When the agent's own reads showed the pro
   - DPO (`create_agentic_trainer`);
   - Cohere tool-call prompt and parser, shared by teacher, training and evaluation.
 - **AuditKIT:**
-  - every evaluation file becomes `AgentEpisode`s with `FinalStateAssertion(vsc)`. AuditKIT's verified success reproduces our VSC exactly (57/100, 170/200, …);
+  - every evaluation file becomes `AgentEpisode`s with `FinalStateAssertion(vsc)`. On the final files (all 20 confirmatory `*_c` files and the 16 headline development files: 4 arms × 2 seeds × 2 splits), AuditKIT's verified outcome reproduces our VSC exactly in **36 / 36** files (`results/auditkit/bridge_final.md`, `scripts/auditkit_bridge_final.py`);
   - its `TaskCompletion` judge is one of the audited judges.
 - **CuratorKIT:** exact and MinHash dedup gates for the naturalistic F8 acknowledgements.
 

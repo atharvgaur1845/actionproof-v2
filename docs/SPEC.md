@@ -1242,3 +1242,14 @@ If something fails:
   - **Other M2c numbers:** test_iid 0.87, test_ood_fault 0.845, e_seen_refund 1.00, e_heldout 0.0, with credit calls 0/200 like every A6 state arm.
   - **Queue.** `415` (E7-5, A7 state arm seed 1, 300 min) cannot start on 443167 and needs a new H200 worker.
 - **2026-11-12 17:40 · H7-3 holds (CPU).** On `e_heldout`, whether the episode's refund key has the A6 demonstrator format `refund-<order>` predicts credit omission with accuracy **1586/1600 = 0.991** (threshold ≥ 0.9). Covered: 8 A6 models — init, M1 s0, M2 s0/s1, M2b, M3, M4, M2c; M1 s1's `e_heldout` trace is not synced. Per model: 191–200/200. The two-template description is used.
+- **2026-11-12 18:30 · Phase 3 (CPU) progress.**
+  - **Article.**
+    - Confirmatory H1 is stated as passed.
+    - The §5b honest-failure gap is withdrawn, with both pre-registered reasons: seed 1 and the schema shift.
+    - New §5c covers Amendment 7: template inheritance, the battery and context-scoped inheritance. It is positioned against arXiv 2607.03478.
+  - **Demo.** New tab "Same task, three templates" (`scripts/build_credit_demo.py`). It shows 6 fault-free `e_heldout` tasks, each with a void credit (A6 init), a substituted refund (A6 state arm) and a committed credit (A7 state arm). The A6 state arm's substituted refund uses the key `credit-<order>`.
+  - **AuditKIT bridge on the final files** (`scripts/auditkit_bridge_final.py`, run on the cluster with vendored AuditKIT).
+    - Files: 20 confirmatory and 16 headline development. AuditKIT's `FinalStateAssertion(vsc)` verdict equals our VSC in **36/36** files.
+    - The wrapper first counted the label `pass` instead of `success` (0/36). This was corrected before the result was recorded.
+  - **Archive.** The superseded blueprint is at `docs/audit/strategy_blueprint_2026-11-10_superseded.md`.
+  - **Worker.** A new H200 worker for `415` was refused (`QOSMaxSubmitJobPerUserLimit`: the shared account's queued jobs fill the per-user limit). A background loop retries every 5 min.

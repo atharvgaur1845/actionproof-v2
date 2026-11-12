@@ -58,6 +58,6 @@ The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as 
 
 - [ ] Final numbers pass after the freeze: confirmatory H1, M2 s1, battery, A7 arms, M2c.
 - [x] Demo tab "Same task, three templates" (`scripts/build_credit_demo.py` → `demo/replays/credit_templates.json`; 6 fault-free `e_heldout` tasks: void credit / substituted refund / committed credit).
-- [ ] AuditKIT bridge run on the final files. If it isn't run, do not claim the toolkit chain.
+- [x] AuditKIT bridge on the final files: 36/36 match VSC exactly (`results/auditkit/bridge_final.md`). The toolkit chain claim stands.
 - [x] Superseded strategy blueprint archived: `docs/audit/strategy_blueprint_2026-11-10_superseded.md`.
 - [ ] Reposition the paper around reward-channel selection among SFT templates. The channel ablation is the verified backbone; cite 2607.03478 as the nearest prior work.
