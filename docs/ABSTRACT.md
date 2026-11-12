@@ -22,7 +22,7 @@ Tool-using agents report a write's result by repeating the tool's acknowledgemen
 
 **Finding 3: what GRPO keeps is the warm start's template, including steps the reward never pays for.**
 - We added 20 demonstrations of the credit workflow with the credit's own idempotency key to the warm start. The credit tool appears in SFT only: no training task contains it, so RL never rewards it.
-- The same report-blind state reward that had removed the credit step (0/200) now keeps it: **200/200** non-colliding credit calls on the held-out workflow, 113 committed, identical to its warm start (one seed; ack-reward control and seed 1 running).
+- The same report-blind state reward that had removed the credit step (0/200) now keeps it: **200/200** non-colliding credit calls on the held-out workflow, 113 committed, identical to its warm start. The acknowledgement-grounded arm also keeps it (200/200), while still dropping verification (test-IID 0.62 vs 0.85 VSC). Coverage of a step the training tasks never contain is set by SFT, not by either reward (one seed each; seed 1 pending).
 - On fixed, identical prefixes (exact probabilities, no sampling), the state-reward arms check the ledger after a refund acknowledgement with probability 0.54–0.65, against 0.16 for the warm start and 0.06 for the ack arm. Finding 1 holds at the token level.
 
 **Measure.**

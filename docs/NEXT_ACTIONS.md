@@ -25,10 +25,10 @@ The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as 
 | done | `410` | Gate G-A7 **passes**: HFR 0.21; non-colliding credit 200/200 | — |
 | done | `411` | A7 state arm: **H7-1 supported**, non-colliding credit 200/200 (A6: 0/200) | — |
 | done | `411s` | M2 s1 sampled 0.264 < 0.3 → **honest-failure observation dropped** (M1 s1 0.236) | — |
-| running | `412` | A7 `ack_outcome` s0 (H7-2) | ends ~11:30 |
+| done | `412` | A7 ack arm: **H7-2 holds** (credit 200/200); channel effect replicates (VSC 0.615 vs 0.845) | — |
 | 3 | `413` | M2c `pcstr_d_noFunder` s0 (H7-4) | ~3 h |
-| 4 | `414` | Battery on the A7 arms and M2c | < 1 h |
-| 5 | `415` | E7-5: A7 state arm seed 1 (released; H7-1 held) | ~3 h; needs a new worker after 18:20 |
+| done | `414` | Battery on the A7 arms and M2c | — |
+| pending | `415` | E7-5: A7 state arm seed 1 | ~5 h incl. evals; **needs a new H200 worker** |
 
 **On hold**
 - M2b seed 1: condition not met (M2 s1 did not replicate); stays held.
@@ -52,7 +52,7 @@ The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as 
 - [x] Zero-VoI proposition corrected (third assumption; drift, not extinction).
 - [x] Template markers and functional credit added (`results/a6/evidence_use.md` §5).
 - [x] Amendment 7 registered (`results/a7_hashes.json`).
-- [ ] H7-3: per-episode template-marker accuracy (CPU, once A7 arms land).
+- [ ] H7-3: per-episode template-marker accuracy (CPU; A7 arms have landed).
 
 ## Submission (Phase 3)
 

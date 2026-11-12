@@ -1225,3 +1225,19 @@ If something fails:
     - Finding 3 is now template inheritance (H7-1) plus the token-level channel effect from the battery.
     - The honesty observation moves to "What we do not claim".
     - The confirmatory result is stated as passed.
+- **2026-11-12 17:30 · H7-2, H7-4 and the battery extension (412, 413, 414 done; 443167 idle with ~1 h of wall time left).**
+  - **H7-2 holds.** The A7 ack arm (`a7_ack_outcome_s0`) makes non-colliding credit calls in **200/200** `e_heldout` episodes (init 200/200; threshold ±10 pp). 113 commit, as for the init and the state arm; `e_heldout_ctrl` 200/200 committed.
+    - With H7-1, neither reward channel changes a step the training tasks never contain. Credit-workflow coverage is set by the SFT template.
+  - **The channel effect replicates on the A7 warm start.**
+    - test_iid VSC: state 0.845 vs ack 0.615. Greedy PWV_refund on test_iid: 1.00 vs 0.00.
+    - Battery prefix d (after the first refund ack), P(query_ledger): plain schema init 0.14, state 0.43, ack 0.02; A4 schema 0.60, 0.85, 0.20.
+  - **Context-scoped inheritance** (exploratory).
+    - The 20 credit demonstrations carry the A4 system prompt, and they verify refunds. The A7 init's A4-schema P(query_ledger) on prefix d is 0.60, against 0.16 for the A6 init. The plain schema barely moves (0.14 vs 0.05).
+    - GRPO trains only under the plain prompt. The ack arm extinguishes verification there (test_iid PWV 0.00; plain d 0.02) but keeps much of it under the A4 prompt: greedy `e_seen_refund` PWV_refund is 0.78 (A6 ack arm: 0.00), VSC 0.91 (A6 ack: 0.705).
+    - Behaviour attached to a prompt context that RL never visits is only partly reached by RL.
+  - **H7-4 (M2c `pcstr_d_noFunder` s0, ND only): inconclusive by the registered rule.**
+    - Greedy refund-UR: 21/50 "failed", all stop-mode, so P(failed | stop) = 0.42. That is neither ≥ 0.5 ("≈ M2") nor ≈ 0. Battery a/A4 P(failed) = 0.90; plain 1.000.
+    - Exploratory pattern on battery a/A4: arms without F_under (M2 s0/s1, M2c) are at 0.79–0.96; arms with F_under (M1 s0/s1, M2b) are at 0.04–0.59.
+    - This exists only under the evaluation schema (plain ≥ 0.99 for all). Seed variance in sampled rollouts (M2 0.71 vs 0.26) is as large as the arm differences, so no claim about the report terms is made.
+  - **Other M2c numbers:** test_iid 0.87, test_ood_fault 0.845, e_seen_refund 1.00, e_heldout 0.0, with credit calls 0/200 like every A6 state arm.
+  - **Queue.** `415` (E7-5, A7 state arm seed 1, 300 min) cannot start on 443167 and needs a new H200 worker.
