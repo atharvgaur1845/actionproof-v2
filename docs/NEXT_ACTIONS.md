@@ -1,4 +1,4 @@
-# Next actions (updated 2026-11-11 21:45 IST)
+# Next actions (updated 2026-11-12 07:00 IST)
 
 **Deadline:** 2026-11-15 midnight IST. **Experiment freeze:** 2026-11-15 18:00 IST (set by the user 2026-11-11), leaving 6 h for the numbers pass.
 
@@ -11,7 +11,7 @@ The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as 
 | Job | State |
 |---|---|
 | 443167 | running until ~2026-11-12 18:20 |
-| 444520 | pending (submitted 21:40) |
+| 444520 | cancelled 03:35 by another user of the shared account; not resubmitted (remaining queue fits in 443167) |
 | h100 443755 | blocked by a node reservation until 11-13 12:13 |
 | a100 443756 | pending; its tasks were moved to hold |
 
@@ -19,14 +19,15 @@ The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as 
 
 | Order | Task | What | Est. |
 |---|---|---|---|
-| running | `396q` | M2 `pcstr_d_noreport` seed 1 (A6), then evals | ~2.7 h |
-| 1 | `397a` | Forced-prefix battery on all A6 arms and checkpoints, both schemas (E7-1) | < 1.5 h |
-| 2 | `400a` | Confirmatory H1, as registered | ~3 h |
-| 3 | `410` | A7 warm start (A6 rows + 20 credit demos with their own keys) and gate G-A7 | ~2 h |
-| 4 | `411` | A7 `pcstr_d_noreport` s0 (H7-1) | ~3 h |
-| 5 | `412` | A7 `ack_outcome` s0 (H7-2) | ~3 h |
-| 6 | `413` | M2c `pcstr_d_noFunder` s0 on the A6 init (H7-4). No dependency, so a second worker can take it in parallel | ~3 h |
-| 7 | `414` | Battery on the A7 arms and M2c | < 1 h |
+| done | `396q` | M2 s1: greedy refund-UR 6/50 failed (s0 45/50) | — |
+| done | `397a` | Battery: plain-schema P(failed) ≥ 0.989 for every model → rule triggered ("not robust to the schema shift") | — |
+| done | `400a` | Confirmatory H1 **passes**: +1.5 pp [0.63, 2.62], p = 0.025 | — |
+| done | `410` | Gate G-A7 **passes**: HFR 0.21; non-colliding credit 200/200 | — |
+| running | `411` | A7 `pcstr_d_noreport` s0 (H7-1) | ~0.7 h left at 07:00 |
+| 1 | `411s` | Sampled M2 s1 / M1 s1 honesty (applies the M2 s1 rule) | ~10 min |
+| 2 | `412` | A7 `ack_outcome` s0 (H7-2) | ~3 h |
+| 3 | `413` | M2c `pcstr_d_noFunder` s0 (H7-4) | ~3 h |
+| 4 | `414` | Battery on the A7 arms and M2c | < 1 h |
 
 **On hold**
 - `411b`: A7 state arm, seed 1. Release only if H7-1 holds at seed 0.

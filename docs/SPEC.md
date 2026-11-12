@@ -1191,3 +1191,23 @@ If something fails:
   - **Queue.** M5 `tool_trust`, M3′ `outcome_G` and a5lo ack were moved to `hold/`. A second H200 worker was submitted (444520).
   - The A6 hashes are unchanged; `freeze_a6 --check` and `freeze_a7 --check` both print OK on the cluster.
 - **2026-11-11 · Experiment freeze set to 2026-11-15 18:00 IST** (user); submission deadline stays 2026-11-15 midnight.
+- **2026-11-12 07:00 · Overnight results (worker 443167): 396q, 397a, 400a and 410 done; 411 running.**
+  - **Confirmatory H1 passes as registered** (`results/confirmatory.json`; `test_iid_c ∪ test_ood_fault_c`, n = 400).
+    - PCSTR-d − outcome = +1.5 pp, 95% CI [0.63, 2.62], p = 0.025. With both seeds the CI is [0.25, 3.25].
+    - H2 (FCR) is not supported: p = 0.32.
+    - PCSTR-d − tool_trust = +20.25 pp [16.4, 24.3].
+    - Per the Fable review, the effect is underclaim avoidance. It is reported as the registered result, not as the headline.
+  - **E7-1 forced-prefix battery** (`results/a7/forced_prefix.md`; 50 prefixes per cell).
+    - *Honesty decision rule triggered.* On prefix a in the plain (training) schema, M1's P(failed) is 0.999 at both seeds. Every A6 model is ≥ 0.989. "Suppression" is replaced by "**not robust to the schema shift**". Fable's committed prediction (M1 and M2 > 0.5 in the plain schema) holds.
+    - Under the A4 schema, P(failed) on prefix a is: init 0.73; M1 0.55/0.59 (s0/s1); M2 0.96/0.79; outcome 0.75; ack 0.67; M2b 0.04.
+    - M2b falls monotonically over checkpoints (0.40, 0.19, 0.075, 0.04 at steps 50/100/150/200). M2 rises (0.74, 0.87, 0.96, 0.96).
+    - On prefix b (last read shows the refund) every model is at P(failed) = 0.000, so no model reports failure regardless of evidence.
+    - *Channel effect on identical prefixes.* On prefix d (after the first refund ack), P(next = query_ledger) is: init 0.16 (a4) / 0.05 (plain); state arms 0.54–0.65 / 0.26–0.37; ack arm 0.06 / 0.02. The reward-source result replicates at the token level, in both schemas, without sampling.
+    - On prefix e (credit task, read shows the refund present and `credits: []`), P(apply_store_credit) is: init 0.59; state arms 0.67–0.74; ack 0.41. Placed in that state, the state arms prefer the credit call. Their omission of credit in rollouts therefore arises upstream of this decision point. This is consistent with template selection, not with an aversion to the call.
+  - **Gate G-A7 passes** (`results/eval/a7/`).
+    - Sampled HFR on refund-UR = 0.208 (in band). PWV_refund = 0.65.
+    - On `e_heldout`, greedy, the A7 init calls `apply_store_credit` with a non-colliding key in 200/200 episodes (threshold ≥ 30%). 113/200 credits commit.
+    - It reports "failed" on 63/150 recoverable credit faults (PF 0.42) and completes 50/50 fault-free tasks.
+  - **M2 seed 1 (greedy).** Refund-UR: 6/50 "failed" (seed 0: 45/50). All 50 are stop-mode, so the greedy conditional is 0.12.
+    - The registered rule uses the *sampled* conditional. `411s` (sampled T = 1 × 4, M2 s1 and M1 s1, same protocol as 396a) was queued ahead of 412 to apply it.
+  - **Cluster.** At 03:35 another user of the shared account cancelled pending worker 444520 and the previously held jobs (432960, …), and submitted their own jobs. Running worker 443167 is unaffected. The remaining queue (≈ 7.5 h) fits in its wall time (ends ≈ 18:20), so no worker was resubmitted.

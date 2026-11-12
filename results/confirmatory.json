@@ -1,0 +1,141 @@
+{
+ "splits": [
+  "test_iid_c",
+  "test_ood_fault_c"
+ ],
+ "seeds": {
+  "rft_v2": 1,
+  "pcstr_d": 2,
+  "outcome": 2,
+  "tool_trust": 2,
+  "pcstr": 1,
+  "pcstr_c": 1,
+  "llm_judge": 1
+ },
+ "n_tasks": 400,
+ "H1": {
+  "baseline": "outcome",
+  "delta": 0.015,
+  "ci95": [
+   0.0063,
+   0.0262
+  ],
+  "claim": true,
+  "sensitivity_both_seeds_ci95": [
+   0.0025,
+   0.0325
+  ],
+  "p": 0.0254,
+  "means": {
+   "pcstr_d": 0.8425,
+   "outcome": 0.8275
+  }
+ },
+ "H2": {
+  "delta_fcr": 0.0073,
+  "ci95": [
+   0.0,
+   0.0288
+  ],
+  "p": 0.3192
+ },
+ "H7": {
+  "p": 1.0,
+  "note": "probe AUROC CI vs text baseline includes 0 (SPEC \u00a727); not supported"
+ },
+ "H8": {
+  "spearman": 1.0,
+  "spearman_ci95": [
+   1.0,
+   1.0
+  ],
+  "noninf_delta_ci95": [
+   -0.015,
+   0.005
+  ],
+  "margin": -0.02,
+  "p": 0.0114,
+  "met": true,
+  "n_services": 3,
+  "caveat": "with 3 services Spearman takes only a few values; test_calib_swap shows the profile is a memorised service prior (expert demos encode it), so a pass is not evidence of in-context calibration"
+ },
+ "holm_reject": {
+  "H8": true,
+  "H2": false,
+  "H7": false
+ },
+ "H3_benign": {
+  "delta": 0.0,
+  "lo": 0.0,
+  "hi": 0.0,
+  "noninferior_5pp": true
+ },
+ "H4_ood_fault": {
+  "delta": 0.0025,
+  "lo": 0.0,
+  "hi": 0.0075
+ },
+ "pcstr_d_vs_tool_trust": {
+  "delta": 0.2025,
+  "lo": 0.16375,
+  "hi": 0.2425
+ },
+ "per_arm_vsc": {
+  "rft_v2": [
+   0.6425
+  ],
+  "pcstr_d": [
+   0.8425,
+   0.8425
+  ],
+  "outcome": [
+   0.82,
+   0.835
+  ],
+  "tool_trust": [
+   0.635,
+   0.645
+  ],
+  "pcstr": [
+   0.8425
+  ],
+  "pcstr_c": [
+   0.8375
+  ],
+  "llm_judge": [
+   0.635
+  ]
+ },
+ "pairwise_seed0_vs_baseline": {
+  "rft_v2": [
+   -0.1775,
+   -0.2225,
+   -0.135
+  ],
+  "pcstr_d": [
+   0.0225,
+   0.01,
+   0.0375
+  ],
+  "tool_trust": [
+   -0.185,
+   -0.2275,
+   -0.1425
+  ],
+  "pcstr": [
+   0.0225,
+   0.01,
+   0.0375
+  ],
+  "pcstr_c": [
+   0.0175,
+   0.0,
+   0.035
+  ],
+  "llm_judge": [
+   -0.185,
+   -0.23,
+   -0.1425
+  ]
+ }
+}
