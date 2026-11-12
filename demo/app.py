@@ -121,6 +121,17 @@ def show_replay(fault, k, left, right):
     return f"{it['task_id']}: {it['prompt']}", it["panels"].get(left, "_n/a_"), it["panels"].get(right, "_n/a_")
 
 
+CREDIT = json.loads((HERE / "replays" / "credit_templates.json").read_text()) \
+    if (HERE / "replays" / "credit_templates.json").exists() else {"models": [], "items": []}
+
+
+def show_credit(k):
+    if not CREDIT["items"]:
+        return "", "_no replays_", "_no replays_", "_no replays_"
+    it = CREDIT["items"][int(k) % len(CREDIT["items"])]
+    return (f"{it['task_id']}: {it['prompt']}", *(it["panels"][m] for m in CREDIT["models"]))
+
+
 def asset(name: str, default: str) -> str:
     f = HERE / "assets" / name
     return f.read_text() if f.exists() else default
@@ -155,6 +166,20 @@ with gr.Blocks(title="ActionProof") as demo:
         with gr.Row():
             r_l, r_r = gr.Markdown(), gr.Markdown()
         r_go.click(show_replay, [r_fault, r_k, r_left, r_right], [r_prompt, r_l, r_r])
+    with gr.Tab("Same task, three templates"):
+        gr.Markdown("A held-out workflow (refund **plus** store credit), fault-free. Recorded greedy evaluation episodes. "
+                    "The middle and right agents were trained with the **same** state-grounded reward; the right one's "
+                    "warm start also contained 20 credit demonstrations. GRPO keeps whichever whole template wins, "
+                    "including steps the reward never sees. (Left: the warm start reuses the refund's idempotency key, "
+                    "a disclosed environment bug, so its credit call silently does nothing.)")
+        c_k = gr.Slider(0, 5, value=0, step=1, label="Example #")
+        c_go = gr.Button("Show", variant="primary")
+        c_prompt = gr.Textbox(label="Task", interactive=False)
+        with gr.Row():
+            c_cols = [gr.Markdown(f"**{m}**") for m in CREDIT["models"]] or [gr.Markdown() for _ in range(3)]
+        with gr.Row():
+            c_outs = [gr.Markdown() for _ in range(3)]
+        c_go.click(show_credit, [c_k], [c_prompt, *c_outs])
     with gr.Tab("Leaderboard"):
         gr.Markdown(asset("leaderboard.md", "_Leaderboard is generated at submission time._"))
     with gr.Tab("Findings"):
