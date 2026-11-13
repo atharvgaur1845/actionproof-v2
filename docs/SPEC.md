@@ -1253,7 +1253,7 @@ If something fails:
     - The wrapper first counted the label `pass` instead of `success` (0/36). This was corrected before the result was recorded.
   - **Archive.** The superseded blueprint is at `docs/audit/strategy_blueprint_2026-11-10_superseded.md`.
   - **Worker.** A new H200 worker for `415` was refused (`QOSMaxSubmitJobPerUserLimit`: the shared account's queued jobs fill the per-user limit). A background loop retries every 5 min.
-- **2026-11-13 08:30 · Battery measurement bug found; task 416 (exploratory) registered with predictions before any run.**
+- **2026-11-13 07:20 · Battery measurement bug found; task 416 (exploratory) registered with predictions before any run.**
   - **Source.** The Fable 5.2 next-steps review (2026-11-13) compared the battery's argmax with the source model's own greedy action at the same prefix (`a6_pcstr_d_noreport_s0`). They agree on c 50/50, d 48/50 and a 45/50, but on the credit prefix e only **2/50**: the battery puts mean P(credit) 0.67 there, while the rollout issued a refund 48 times. Recomputed here from `results/raw/a6/…e_heldout.jsonl`; every prefix is an exact copy of the start of its source conversation.
   - **Cause (verified on the tokenizer).** `forced_prefix.py` scores `stem + name + '"'`. In real outputs the name is followed by `", "parameters"`, and the tokenizer emits `",` as one token (`issue`·`_`·`refund`·`",`). The battery's last token, a lone `"`, is one the model almost never produces there. Its probability multiplies into every candidate by an amount that depends on the preceding name, so the renormalised readout is biased. The same close is used for the status readout (`"failed", "summary"` in real outputs).
   - **Consequence.** Every battery number is suspect until rescored, including the cells behind the two registered decision rules: plain-schema P(failed) ≥ 0.989 ("not robust to the schema shift") and prefix d. `forced_prefix.py` is hashed in `results/a7_hashes.json` and stays unchanged. The correction is a new script.
@@ -1271,7 +1271,7 @@ If something fails:
     - P3: under the training schema, refund-UR rollouts end with `failed` in ≥ 90% of stop-mode episodes for every A6 model (the v1 battery's ≥ 0.99). If any model is < 0.5, the "not robust to the schema shift" wording is withdrawn for that model, and the D-EVAL-1 statement is rewritten from the rollouts.
     - P4: A7 init `test_iid` VSC lies between the A6 init and the A7 state arm (0.845). PWV_refund is below the A7 state arm's 1.00.
   - **Workers.** Short-wall workers so the jobs can backfill: H200 3 h and A100 4 h. Both tasks are queued in both pools, with the same run-once guard as 415. The long workers 445667 and 446674 take 415 first (name order).
-- **2026-11-13 10:00 · Step-0 selection differential (CPU, exploratory, not registered; Fable review analysis 1).** `scripts/a7_selection_differential.py` → `results/a7/selection_differential.md`.
+- **2026-11-13 07:35 · Step-0 selection differential (CPU, exploratory, not registered; Fable review analysis 1).** `scripts/a7_selection_differential.py` → `results/a7/selection_differential.md`.
   - **Method.** Gate samples of each warm start (T = 1 × 4, 100 pool-B tasks) are treated as 100 GRPO groups. Each episode is rescored under every arm's reward, and we take the within-group advantage difference between marked and unmarked episodes, with a task bootstrap.
   - **Template marker** (demonstrator refund key). Every state reward gives a positive differential, on both warm starts:
     - A6: M1 +0.26 [0.12, 0.42], M2c +0.26, M3 / M3′ +0.17; M2 and M2b +0.11, whose CIs include 0.
@@ -1280,7 +1280,7 @@ If something fails:
   - **Verification marker** (a ledger read after the refund ack). Same pattern: the state arms +0.07 to +0.40, while M4 is −0.17 [−0.37, −0.004] on A6.
   - **Reading.** From step-0 data alone, the sign of the differential matches which template each arm kept (the A6 state arms adopted the demonstrator key; the ack arm kept the teacher's sequence). This supports "the reward's channel decides which template wins", as a prediction and not as a measurement of training dynamics.
   - **Caveats.** The gate was sampled in the evaluation schema (D-EVAL-1), groups of 4 rather than 8, and 100 tasks. Zero-variance groups count as 0, so most groups contribute nothing (positive differential in 7–19 of 49–63 mixed groups).
-- **2026-11-13 10:20 · Control-split credit calls (CPU, exploratory; Fable review analysis 3).** `scripts/a7_ctrl_credit.py` → `results/a7/ctrl_credit.md`.
+- **2026-11-13 07:45 · Control-split credit calls (CPU, exploratory; Fable review analysis 3).** `scripts/a7_ctrl_credit.py` → `results/a7/ctrl_credit.md`.
   - On `e_heldout_ctrl` the four A6 state arms call `apply_store_credit` in 25–27 / 200 episodes. Almost all follow one history: a refund that timed out (22–23 / 23 tasks).
   - Elsewhere: 3–4 / 24 after a phantom refund, and 0 on fault-free tasks (0 / 50) or with the fault on audit or close (0 / 103).
   - The same 25 tasks recur in every state arm. The A6 init and M4 call it in 186–195 / 200 whatever the history.
