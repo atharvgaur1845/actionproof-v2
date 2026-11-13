@@ -1,12 +1,8 @@
-# ActionProof: agents learn to look, not to use what they see
+# ActionProof: what the reward can see decides whether a tool agent checks its writes
 
 *Draft for the HF Article. Rule for editing: every number traces to a file in `results/`. Anything marked `[[pending: …]]` is not written until the result exists. Track 3 (Agentic Fine-tuning), toolkit chain AgentTune → AuditKIT (+ CuratorKIT).*
 
-**Problem statements addressed:**
-- Reward design and reward-hacking defences
-- Business workflow and decision agents
-- Agentic distillation
-- Efficient trajectories
+**Problem statement addressed:** reward design and reward-hacking defences, in a business-workflow tool agent.
 
 ---
 
@@ -183,18 +179,18 @@ These are development-set numbers. **The pre-registered confirmatory test (H1) p
    - At seed 0, after the same history (≥ 3 refund attempts, last ledger read showing `refunds: []`), the sampled probability of reporting "failed" differed sharply by arm: init 0.19, M1 PCSTR-d 0.11, M2b 0.016, M2 (no report terms) **0.71**.
    - Two pre-registered checks (Amendment 7) removed it:
      - **Seed 1 does not replicate.** M2 s1 gives 33 / 125 = 0.26, below the registered 0.3 threshold; M1 s1 gives 0.24.
-     - **It is a schema effect.** Evaluation prompts list one tool more than training (D-EVAL-1). On identical fixed prefixes, in the training prompt, *every* model reports "failed" with probability ≥ 0.99, M1 included. The between-arm spread exists only under the evaluation prompt.
+     - **It is absent under the training prompt.** Evaluation prompts list one tool more than training (D-EVAL-1). On identical fixed prefixes in the training prompt, the registered forced-prefix readout puts "failed" at ≥ 0.99 for every model, M1 included; the between-arm spread appears only under the evaluation prompt. That readout has a close-token bug (SPEC §27, 2026-11-13) and is being rescored, with training-prompt rollouts as a direct check: `[[pending: 416a, 416b]]`.
    - We therefore make no claim that any reward term teaches or suppresses honest failure. The completed 2 × 2 over the report terms (M2c, ND only) is inconclusive by its registered rule (0.42). [`results/eval/a6/sampled/`, `results/a7/forced_prefix.md`]
 3. **Retries now wait for evidence, but the budget is memorised.**
    - Every refund retry by every state arm follows a ledger read, and none follows a read showing the refund had landed.
    - The policies stop at 4 attempts (`outcome`: about 3), the demonstration budget, so a fault one step deeper than training (5 attempts needed) defeats every arm.
 4. **The unfamiliar workflow is replaced by the familiar one.**
    - *Disclosure (D-ENV-1).* The environment caches responses by idempotency key across operations. The A6 init and M4 call `apply_store_credit` with the refund's key in 193 / 195 and 186 / 191 calls, so the call silently replays the refund and applies nothing. Their credit-task VSC is 0.005 even on fault-free tasks. The baseline was therefore never functional.
-   - What changed under the state rewards: M1, M2 and M3 stop calling `apply_store_credit` at all (0 / 200).
+   - What changed under the state rewards: on the held-out split, M1, M2 and M3 never call `apply_store_credit` (0 / 200; M2 also at seed 1). On the control split they call it in 25–27 of 200 episodes, all committed, on largely the same tasks across arms.
    - Instead they re-issue the refund after the ledger already shows it (200 / 200) and write summaries saying the credit was applied (200 / 200). They also skip closing the ticket (M1 / M2: 134 / 200) and create duplicate refunds (46–68 episodes). The same happens when the faults sit on familiar tools.
    - Every re-issued refund (1,161 calls) immediately follows a ledger read showing the refund already present and `credits: []`.
    - The trained arms also switch to the demonstrator's key format and drop `get_ticket`. The ack arm keeps the teacher's sequence.
-   - *Interpretation, tested and supported in Amendment 7 (§5c).* GRPO selected the demonstrator's whole trajectory template, which has no credit step, and the credit behaviour went with it. This is not evidence that state rewards damage held-out workflows in general: v2 state arms, from a different warm start, called the credit tool without collision.
+   - *Interpretation, tested in Amendment 7 (§5c).* GRPO selected the demonstrator's whole trajectory template, which has no credit step, and the credit behaviour went with it. This is not evidence that state rewards damage held-out workflows in general: v2 state arms, from a different warm start, called the credit tool without collision.
 
 ## 5c. Amendment 7: GRPO keeps whole templates, including steps it never pays for
 
@@ -209,25 +205,25 @@ These are development-set numbers. **The pre-registered confirmatory test (H1) p
 | **A7 state arm** | **200 / 200** | 113 | 0.845 | 1.00 |
 | A7 ack arm | 200 / 200 | 113 | 0.615 | 0.00 |
 
-- **H7-1 holds** (≥ 50% registered; kill < 20%). The step the A6 state arm "removed" survives intact once the winning template contains it.
+- **H7-1 holds** (≥ 50% registered; kill < 20%). The step the A6 state arm "removed" survives intact once the winning template contains it. The A7 warm start already made this call in 200 / 200 episodes under a prompt RL never samples, so this is a necessary-condition test, not a risky one.
 - **H7-2 holds** (ack arm within ±10 pp of its warm start). Neither reward channel touches a step outside its training tasks. Coverage of that step is set by SFT.
-- **H7-3 holds.** In A6, one surface marker of the template (the demonstrator's refund-key format) predicts whether an episode omits the credit step with accuracy 1586 / 1600 = 0.991 across 8 models.
+- **H7-3 holds.** In A6, one surface marker of the template (the demonstrator's refund-key format) predicts whether an episode omits the credit step with accuracy 1586 / 1600 = 0.991 across 8 models. On the control split the same marker is present in 200 / 200 episodes while 25–27 call the credit tool, so the two-template description is coarse there.
 - **The channel effect replicates a third time** (state vs ack: VSC 0.845 vs 0.615; verification 1.00 vs 0.00).
 
-**Forced-prefix battery (exact probabilities on identical prefixes, no sampling).**
+**Forced-prefix battery (exact probabilities on identical prefixes, no sampling).** *Registered-battery values, shown for the record. The battery scores each candidate followed by a lone `"`, a token the model does not emit there (it emits `",`), so every cell is being rescored and validated against the greedy action on the same prefix: `[[pending: 416a]]`. Only cells where the corrected readout agrees with greedy on ≥ 90% of prefixes will be cited.*
 
 | After the first refund ack, P(next call = `query_ledger`) | training prompt | evaluation prompt |
 |---|---|---|
 | A6 warm start | 0.05 | 0.16 |
-| A6 state arms (6 models: M1 s0/s1, M2 s0/s1, M2b, M3) | 0.26–0.37 | 0.54–0.65 |
+| A6 state arms (final adapters: M1 s0/s1, M2 s0/s1, M2b, M3) | 0.26–0.35 | 0.54–0.63 |
+| A6 M2c (ND only) | 0.44 | 0.71 |
 | A6 ack arm | 0.02 | 0.06 |
 | A7 warm start / state arm / ack arm | 0.14 / 0.43 / 0.02 | 0.60 / 0.85 / 0.20 |
 
-- The reward-source effect holds at the token level, in both prompts, with every model given the same input.
-- When forced into the credit decision point (ledger shows the refund and `credits: []`), the A6 state arms choose the credit call with probability 0.67–0.74 (warm start 0.59). They were not averse to the call; their template never reached it.
+- If the corrected readout confirms these values, the reward-source effect holds on identical inputs in both prompts. On the registered readout, the source model's argmax matches its own greedy action on 48 / 50 of these prefixes; on the credit decision point it matches on 2 / 50, which is how the bug was found.
 - *Context-scoped inheritance (exploratory).* The 20 credit demonstrations carry the evaluation prompt and verify refunds; they raise the warm start's evaluation-prompt verification (0.16 → 0.60) and barely move the training prompt (0.05 → 0.14). GRPO trains only under the training prompt. The ack arm extinguishes verification there (0.02) but keeps much of it under the evaluation prompt: greedy refund verification on `e_seen_refund` 0.78, against 0.00 for the A6 ack arm. RL edits behaviour where it samples.
 
-**Position.** That RL selects among policies already present after SFT is not new (e.g. arXiv 2607.03478, which states that RL training "selects for policies that obtain the highest reward"). What ActionProof adds is a controlled case in a tool agent with side effects: the reward's information channel decides *which* template wins, and steps the reward cannot see ride along with the winner (or are lost with the loser). The same mechanism accounts for the script-like retry depth (§5b.3), the workflow substitution (§5b.4) and the credit result above. One seed per A7 arm; seed 1 of the state arm `[[pending]]`.
+**Position.** That RL selects among policies already present after SFT is not new (e.g. arXiv 2607.03478, which states that RL training "selects for policies that obtain the highest reward"). What ActionProof adds is a controlled case in a tool agent with side effects: the reward's information channel decides *which* template wins, and steps the reward cannot see ride along with the winner (or are lost with the loser). The same mechanism accounts for the script-like retry depth (§5b.3), the workflow substitution (§5b.4) and the credit result above. One seed per A7 arm; seed 1 of the state arm `[[pending: 415]]`.
 
 ## 6. Understanding: does the model "know" it failed?
 
