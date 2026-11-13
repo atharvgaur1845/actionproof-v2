@@ -82,18 +82,21 @@ Tiny Aya Base is not applicable: as a base model it cannot follow the chat/tool 
 
 ND = the task failed and the agent did not say so (a false "completed" *or* no report at all).
 
-**Why an acknowledgement-grounded reward cannot teach checking (proposition).**
-- *Setup.* Three assumptions:
-  1. The reward R is a function only of the acknowledgements the agent received and its final report.
-  2. A read never changes the state or any later acknowledgement.
-  3. A read's result carries no information about future acknowledgements beyond the ack history.
-
-  These hold for phantom faults here: a keyed retry returns another success ack whatever the read showed.
-- *Claim.* For any history, the expected reward after "read, then continue as planned" equals the expected reward after "continue as planned".
-- *Consequence.* A read earns zero expected advantage under GRPO, which predicts drift, not extinction. The observed drop needs a correlated cost, and the reward contains none. Our candidate (inferred, not tested) is the fixed turn budget: reads use turns, and an episode that runs out before its required writes scores 0 under the ack reward.
-- *State-grounded case.* Under a reward computed from the final database, a read that detects a phantom write enables the retry that is the only route to a positive score. Its value is ≈ ρ·(R_success − R_fail) − cost, positive for the 40% payment-fault rate in training.
-- *Scope.* The statement covers `tool_trust` and `ack_outcome`. It does not cover transcript rewards that pay for reads (e.g. a judge that likes read-backs).
-- *Prediction and observation.* Sampled verification falls under the ack rewards (0.25 → 0.10) and rises under the state rewards (→ 0.72).
+**What an acknowledgement-grounded reward does to checking.**
+- *Setup.* The reward R is a function only of the acknowledgements the agent received and its final report, and a read never changes the state or any later acknowledgement.
+- *Zero value only for a policy that ignores the read.* If the agent continues as planned whatever the read shows, the read cannot change R and has zero marginal value. Our policies do not ignore it. On identical prefixes every model retries after a ledger read showing no refund (600 / 600) and moves on after a read showing it landed (600 / 600; §5c). SFT fixed that response and no reward arm changed it.
+- *Negative value for a policy with a fixed response.* Then the read's value is the change in R caused by acting on what it shows. Under `ack_outcome` this change is negative on exactly two task classes, where acting on true evidence forgoes a success acknowledgement:
+  - **Refund timeout** (the refund committed; the ack says error). A reader sees the refund landed and correctly does not re-issue it, so its last refund ack stays "error" and it scores 0. A non-reader retries blindly; the keyed retry returns "success" and scores 1.
+  - **Unrecoverable refund.** A reader sees the refund will never land and stops, so the later writes are never acknowledged.
+- *Observed at step 0* (warm-start samples rescored under `ack_outcome`; `results/a8/ack_class_audit.md`).
+  - Mean reward, readers vs non-readers. Refund timeout: 0.08 vs 0.62 (A6), 0.00 vs 0.36 (A7). Unrecoverable refund: 0.25 vs 1.00 (both).
+  - In every other class the step-0 selection on reading is ≥ 0, summed +3.85 (A6) and +8.85 (A7).
+  - So the acknowledgement reward selects *against* looking, through two task classes. The turn budget, our earlier candidate cause, is not needed.
+  - Caveat: on the A7 warm start the full-pool step-0 signal is small (−0.74 summed over 62 mixed groups), yet training took greedy read-back from 0.60 to 0.00. Training amplifies a small initial signal.
+- *Test (Amendment 8, registered before the run).* Train the same reward from the A7 warm start with those two classes removed (340 of 400 tasks); prediction: read-back stays ≥ 0.30. [[pending: X1]]
+- *State-grounded case.* Under a reward computed from the final database, a read that detects a phantom write enables the retry that is the only route to a positive score. Its value is ≈ ρ·(R_success − R_fail) − cost, positive for the 40% payment-fault rate in training. The step-0 selection on reading is positive under `outcome` and PCSTR-d-noreport on both warm starts.
+- *Scope.* The negative value comes from `ack_outcome`'s rule that the last acknowledgement of each required write must be "success" (`tool_trust` shares it). A transcript reward that pays for reads (e.g. a judge that likes read-backs) is not covered.
+- *Observation.* Sampled verification falls under the ack rewards (0.25 → 0.10) and rises under the state rewards (→ 0.72).
 
 **Ordering property (proven, property-tested).** Every verified safe completion scores ≥ 1.0 and every failure scores ≤ 0.3. Among failures, an honest "failed" strictly beats both silence and a false claim.
 
@@ -139,7 +142,7 @@ We quote the pooled column; the split columns are shown so no number is selected
 
 Seed 1 lands within 2.0 pp of seed 0 for every arm and split (largest gap: `outcome` test-IID 0.815 vs 0.835), and the two seeds give the same greedy verdict on 98–100% of tasks. Two seeds support sign consistency, not between-run inference.
 
-**Verification is selected, in both directions.** Sampled at T = 1 on val (800 episodes per model), the init re-reads the ledger after 24.6% of acknowledged refunds. GRPO with a state reward raises this to 71.3% (`outcome`) and 72.4% (PCSTR-d). The matched acknowledgement-grounded reward `ack_outcome` (the same binary form as `outcome`, but its goal term reads the acks) drives it down to 10.2% / 10.0% (two seeds), and `tool_trust` to 15.3%. The sampled rates for `outcome`, PCSTR-d and `tool_trust` come from seed 0 only; greedy VSC has two seeds for each. Under an acknowledgement-measurable reward a read can never raise the reward, while it uses up turns from a fixed budget; under a state reward the reading-and-retrying rollouts are the only ones that score on phantom faults. The ack arms also train on more flat groups (mean share of zero-variance groups 51–60% vs 38–45%), which is how the channel acts on the gradient. [`results/eval/a4/h11/`, `runs/grpo_tiny_v2_*/log_history.json`]
+**Verification is selected, in both directions.** Sampled at T = 1 on val (800 episodes per model), the init re-reads the ledger after 24.6% of acknowledged refunds. GRPO with a state reward raises this to 71.3% (`outcome`) and 72.4% (PCSTR-d). The matched acknowledgement-grounded reward `ack_outcome` (the same binary form as `outcome`, but its goal term reads the acks) drives it down to 10.2% / 10.0% (two seeds), and `tool_trust` to 15.3%. The sampled rates for `outcome`, PCSTR-d and `tool_trust` come from seed 0 only; greedy VSC has two seeds for each. Under the acknowledgement reward, acting on what a read shows lowers the score on refund timeouts and unrecoverable refunds (§3); under a state reward the reading-and-retrying rollouts are the only ones that score on phantom faults. The ack arms also train on more flat groups (mean share of zero-variance groups 51–60% vs 38–45%), which is how the channel acts on the gradient. [`results/eval/a4/h11/`, `runs/grpo_tiny_v2_*/log_history.json`]
 
 These are development-set numbers. **The pre-registered confirmatory test (H1) passed** on the untouched `test_iid_c ∪ test_ood_fault_c` (n = 400): PCSTR-d − outcome = +1.5 pp [0.63, 2.62], p = 0.025 (both seeds: [0.25, 3.25]); PCSTR-d − tool_trust = +20.25 pp [16.4, 24.3]. H2 (FCR) was not supported (p = 0.32). [`results/confirmatory.json`]
 
@@ -198,13 +201,25 @@ These are development-set numbers. **The pre-registered confirmatory test (H1) p
 
      The same arms under the evaluation prompt: M1 s0 / s1 0, M2b 0, M3 1, M2 s1 6, M2c 21, M2 s0 45 (of 50). On audit-note and ticket-closing faults, which no demonstration covered, every model reports "failed" on 0 / 50 in both prompts.
    - **Reading.** No report term matters: arms with and without ND and F_under all reach 50 / 50. What separates honest from dishonest models is the template. The demonstrator's template retries, reads the ledger and reports "failed"; every state arm adopts it, and the ack arm and the warm start do not. So honest failure is selected by the reward's channel, as a step of the winning template and not as a response to its own report terms. It is fragile: one extra tool in the prompt removes it for most arms. We make no claim that any reward *term* teaches or suppresses honest failure. The completed 2 × 2 over the report terms (M2c, ND only) is inconclusive by its registered rule (0.42). [`results/eval/a6/sampled/`, `results/a7/battery_v2.md`]
+   - **What the dense rewards pay on these tasks** [`results/a8/ur_rewards.md`, real refund-UR episodes of all models]. G = 0 always, but writing the audit note and closing the ticket after the refund failed gives P = 0.5 and V = 0.67:
+
+     | behaviour (episodes) | PCSTR-d | without report terms | without ND | without F_under | outcome |
+     |---|---|---|---|---|---|
+     | stop, report "failed" (406) | 0 | 0 | 0 | 0 | 0 |
+     | stop, report "completed" (187) | −0.300 | 0 | 0 | −0.300 | 0 |
+     | continue, report "completed" (357) | −0.133 | +0.167 | +0.167 | −0.133 | 0 |
+
+     F_under is identically 0 on these tasks, so the arms without ND receive no direct report signal here. By the equations, "continue, then report failed" scores +0.167 under every dense arm, the best available. No model ever produced it, and all seven state arms stop on 50 / 50 under the training prompt. The policies sit on the SFT template, not at the reward's optimum. The dense terms also pay for downstream writes after an upstream failure; we disclose this as a reward-design flaw.
 3. **Retries now wait for evidence, but the budget is memorised.**
    - Every refund retry by every state arm follows a ledger read, and none follows a read showing the refund had landed.
    - The policies stop at 4 attempts (`outcome`: about 3), the demonstration budget, so a fault one step deeper than training (5 attempts needed) defeats every arm.
 4. **The unfamiliar workflow is replaced by the familiar one.**
    - *Disclosure (D-ENV-1).* The environment caches responses by idempotency key across operations. The A6 init and M4 call `apply_store_credit` with the refund's key in 193 / 195 and 186 / 191 calls, so the call silently replays the refund and applies nothing. Their credit-task VSC is 0.005 even on fault-free tasks. The baseline was therefore never functional.
    - What changed under the state rewards: on the held-out split, M1, M2 and M3 never call `apply_store_credit` (0 / 200; M2 also at seed 1). On the control split they call it in 25–27 of 200 episodes, all committed, and almost only on one history: after a refund that timed out (22–23 / 23 tasks), against 3–4 / 24 after a phantom refund and 0 on fault-free tasks or faults on other tools. The warm start and the ack arm call it in 186–195 / 200 regardless of history. The credit step survives in the state arms' script only as one history-conditional branch [`results/a7/ctrl_credit.md`].
-   - Instead they re-issue the refund after the ledger already shows it (200 / 200) and write summaries saying the credit was applied (200 / 200). They also skip closing the ticket (M1 / M2: 134 / 200) and create duplicate refunds (46–68 episodes). The same happens when the faults sit on familiar tools.
+   - Instead, after a ledger read showing the refund present and `credits: []`, they call `issue_refund` again (200 / 200) and write summaries saying the credit was applied (200 / 200). These calls are of two kinds [`results/a8/credit_aliasing.md`, `scripts/a8_credit_aliasing.py`]:
+     - a **replay** of the same refund, with the same key and amount, so a no-op: M1 140, M2 154, M2b 118, M3 132 of 200;
+     - **operation aliasing**: the credit amount sent through the refund tool under a key the model built by analogy, `credit-<order>`: M1 60, M2 46, M2b 82, M3 68 of 200. Every such call is acknowledged as a success. It moves real money to the payment method and violates the refund invariants, while the summary says store credit was applied. The key `credit-<order>` appears in no A6 demonstration: the request is represented, but bound to the wrong tool.
+   - They also skip closing the ticket (M1 / M2: 134 / 200). The same happens when the faults sit on familiar tools.
    - Every re-issued refund (1,161 calls) immediately follows a ledger read showing the refund already present and `credits: []`.
    - The trained arms also switch to the demonstrator's key format and drop `get_ticket`. The ack arm keeps the teacher's sequence.
    - *Interpretation, tested in Amendment 7 (§5c).* GRPO selected the demonstrator's whole trajectory template, which has no credit step, and the credit behaviour went with it. This is not evidence that state rewards damage held-out workflows in general: v2 state arms, from a different warm start, called the credit tool without collision.
@@ -336,6 +351,8 @@ Prices are from secondary sources dated 2026-11-05; `[[verify on provider pages 
 - **Disclosed environment bug (D-ENV-1).** Idempotency keys are shared across operations, which voided the A6 warm start's credit calls. It is documented with its impact, not fixed.
 - **Schema shift in evaluation (D-EVAL-1).** A4-split evaluations list one tool more than training. Results under the evaluation prompt are not automatically results under the training prompt.
 - **Forced-prefix readout.** The registered battery had a close-token bug; we cite only the corrected readout, and only cells where it matches the model's own greedy action on ≥ 90% of prefixes (115 / 120). The prefixes come from one model's episodes (M2 s0), i.e. one template.
+- **Timeouts always commit in this benchmark.** After a timed-out audit-note or ticket-closing write, every model we checked reports "completed" without reading back (80 / 80 such `e_seen_other` episodes, for each of 8 models) and scores as a verified success, because a timeout here always lands. VSC therefore credits these unverified completions. A fault model where some timeouts do not commit would remove this.
+- **Report terms and their coefficients.** Under group-relative normalisation, a term's nominal weight does not set its realised pressure. When a term is the only within-group difference, it acts at roughly unit scale whatever its coefficient (cf. arXiv 2608.00301). We make no claim about report-term interactions: the honest-failure counts under the evaluation prompt vary by seed (M2 s0 45 / 50, M2 s1 6 / 50).
 - **Efficiency is measured on one split.** On test-IID the state-trained agents make about as many tool calls per episode as the warm start (7.54–7.62 vs 7.53; ack arms 7.26–7.49). The read-back replaces other reads rather than adding to them. We have not measured latency [`results/eval/a6/*__test_iid.summary.json`, `model_calls`].
 - **Prices.** ROI list prices come from secondary sources and must be checked on provider pages before publishing.
 
@@ -357,6 +374,10 @@ Prices are from secondary sources dated 2026-11-05; `[[verify on provider pages 
 | Read-back follows the refund key format (1014 / 1022 vs 0 / 591) | `results/a7/key_vs_read.md` | `scripts/a7_key_vs_read.py` |
 | Training prompt: 7 state arms report "failed" on 50 / 50 unrecoverable refunds; warm start 1 / 50, ack arm 0 / 50 | `results/a7/plain_ur.md` | `scripts/a7_plain_ur.py`, `scripts/eval_plain_schema.py` |
 | A7 warm start: test-IID VSC 0.75, refund read-back 0.60 | `results/eval/a7/a7_init__neutral__test_iid.summary.json` | `slurm/tasks/416b_plain_and_a7init.sh` |
+| Ack reward pays readers less only on refund timeouts and unrecoverable refunds (step 0) | `results/a8/ack_class_audit.md` | `scripts/a8_ack_class_audit.py` |
+| X1: ack reward without those two task classes `[[pending: X1]]` | `PREREGISTRATION_A8.md`, `results/a8_hashes.json` | `slurm/a8_x1.sh` |
+| Credit calls split into replay vs operation aliasing (`credit-<order>`) | `results/a8/credit_aliasing.md` | `scripts/a8_credit_aliasing.py` |
+| Rewards on unrecoverable refunds by behaviour | `results/a8/ur_rewards.md` | `scripts/a8_ur_rewards.py` |
 | Untrained models below 32B at VSC ≈ 0; 32B at 0.515 | `results/leaderboard.json` | `actionproof/eval/run_eval.py` |
 | LLM judges accept 76–100% of false completions | `results/judge/` | `actionproof/rewards/llm_judge.py` |
 | AuditKIT reproduces VSC on 36 / 36 files | `results/auditkit/bridge_final.md` | `scripts/auditkit_bridge_final.py` |

@@ -33,8 +33,12 @@ except ImportError:  # local / CPU
 
 HERE = Path(__file__).parent
 BASE = os.environ.get("AP_BASE", "CohereLabs/tiny-aya-global")
+HUB = "atharvgaur18/actionproof-"
+# label -> adapter chain applied to the base in order (each merged). GRPO adapters were trained on the merged warm start.
 ADAPTERS = json.loads(os.environ.get("AP_ADAPTERS", json.dumps({
-    "RFT baseline": "", "GRPO + PCSTR (ours)": "", "GRPO + tool-trusting reward": ""})))
+    "Warm start (SFT only)": [HUB + "rft-tiny-v2"],
+    "GRPO, state-grounded reward (PCSTR-d)": [HUB + "rft-tiny-v2", HUB + "grpo-tiny-v2-pcstr-d-s0"],
+    "GRPO, acknowledgement-grounded reward": [HUB + "rft-tiny-v2", HUB + "grpo-tiny-v2-ack-outcome-s0"]})))
 FAULTS = {
     "none (benign)": None,
     "F1 phantom ack: says success, nothing written": ("issue_refund", Fault.PHANTOM),
@@ -70,9 +74,10 @@ def load(name: str):
     from transformers import AutoModelForCausalLM, AutoTokenizer
     tok = AutoTokenizer.from_pretrained(BASE)
     model = AutoModelForCausalLM.from_pretrained(BASE, torch_dtype=torch.bfloat16, device_map="cuda")
-    if ADAPTERS.get(name):
+    chain = ADAPTERS.get(name) or []
+    for repo in [chain] if isinstance(chain, str) else chain:
         from peft import PeftModel
-        model = PeftModel.from_pretrained(model, ADAPTERS[name]).merge_and_unload()
+        model = PeftModel.from_pretrained(model, repo).merge_and_unload()
     _models[name] = (tok, model.eval())
     return _models[name]
 

@@ -1312,3 +1312,12 @@ If something fails:
     - Primary: `test_iid` PWV_refund ≥ 0.30 supported, ≤ 0.10 rejected.
     - Additive code change: `batched_vllm.py` logs training rollouts when `AP_ROLLOUT_LOG` is set.
     - Run script `slurm/a8_x1.sh`, time-sliced so it can use 3 h H200 backfill workers. Queued as `414p` so it sorts ahead of 415.
+- **2026-11-13 12:57 · Phase 0 of the 2026-11-13 review (CPU, exploratory).**
+  - **Credit calls split** (`scripts/a8_credit_aliasing.py` → `results/a8/credit_aliasing.md`). On `e_heldout` the A6 state arms' extra `issue_refund` calls are either a replay of the same refund, a no-op (M1 140, M2 154, M2b 118, M3 132 of 200), or **operation aliasing**: the credit amount under the key `credit-<order>`, acknowledged as a success (M1 60, M2 46, M2b 82, M3 68). The init and M4 call `apply_store_credit` (195, 191). The review's counts reproduce.
+  - **Unrecoverable-refund rewards by behaviour** (`scripts/a8_ur_rewards.py` → `results/a8/ur_rewards.md`, real episodes): "continue, report completed" +0.167 under PCSTR-d-noreport and noND, −0.133 under PCSTR-d; "stop, report failed" 0 under every arm. F_under is 0 on these tasks. No model takes the dense arms' optimum.
+  - **Disclosure.** Timeouts always commit. On `e_seen_other`, all 8 checked models report "completed" without reading back after each of the 80 audit/close timeouts and score VSC = 1. Added to ARTICLE §12.
+  - **Docs.**
+    - ARTICLE §3: the "zero advantage / turn budget" proposition is replaced by the negative-value mechanism, with its step-0 evidence and caveat; X1 is marked `[[pending: X1]]`.
+    - §5 verification sentence; §5b.2 UR reward table; §5b.4 replay vs aliasing; §12 two limitations; §13 four rows.
+    - Abstract: Finding 1 mechanism bullet; aliasing phrase; "Eight hashed pre-registrations" (500 words).
+    - Demo Space: adapter chains (warm start merged before a GRPO adapter); README rewritten; `scripts/publish_hf.py` added.

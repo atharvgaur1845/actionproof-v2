@@ -1,8 +1,8 @@
-# Next actions (updated 2026-11-13 06:45 IST)
+# Next actions (updated 2026-11-13 12:58 IST)
 
 **Deadline:** 2026-11-15 midnight IST. **Experiment freeze:** 2026-11-15 18:00 IST (set by the user 2026-11-11), leaving 6 h for the numbers pass.
 
-The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as `PREREGISTRATION_A7.md`. SPEC §26 is the original kickoff list, kept as history.
+The plan comes from the Fable 5.2 research reviews: Phase 0 → 3, registered as `PREREGISTRATION_A7.md`; then the 2026-11-13 research-director review, registered as `PREREGISTRATION_A8.md` (X1 runs ahead of 415). SPEC §26 is the original kickoff list, kept as history.
 
 ## GPU queue (h200 pool; tasks run in name order and respect `# after:`)
 
@@ -10,6 +10,9 @@ The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as 
 
 | Job | State |
 |---|---|
+| h200 447793 (3 h) | submitted 12:46 for X1 (`414p`); pending on priority |
+| h200 447794 (3 h) | after 447793 (afterany); resumes X1 |
+| h200 445667 (24 h), a100 446674 (5 d), a100 446748 (4 h) | pending on priority |
 | 443167 | running until ~2026-11-12 18:20 |
 | 444520 | cancelled 03:35 by another user of the shared account; not resubmitted (remaining queue fits in 443167) |
 | h100 443755 | blocked by a node reservation until 11-13 12:13 |
@@ -28,6 +31,7 @@ The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as 
 | done | `412` | A7 ack arm: **H7-2 holds** (credit 200/200); channel effect replicates (VSC 0.615 vs 0.845) | — |
 | done | `413` | M2c `pcstr_d_noFunder` s0: H7-4 **inconclusive** (P(failed \| stop-mode) 0.42) | — |
 | done | `414` | Battery on the A7 arms and M2c | — |
+| pending | `414p` | **Amendment 8 X1**: A7 `ack_outcome` without refund-timeout and refund-UR tasks (340 / 400). Time-sliced: re-queues itself until done. Primary: test_iid PWV_refund ≥ 0.30 supported, ≤ 0.10 rejected | ~3 h (two 3 h slices) |
 | pending | `415` | E7-5: A7 state arm seed 1 | queued on two pools with a run-once guard: h200 worker 445667 (~5 h) and a100 worker 446674 (`# minutes: 600`), both pending on priority at 11-13 07:00 |
 | done | `416a` | Corrected battery (`",` close) + greedy action per prefix, 12 models (SPEC §27 2026-11-13 07:30) | ~2 h; short workers 446747 (h200 3 h), 446748 (a100 4 h) |
 | done | `416b` | Refund-UR rollouts in the training schema (9 A6 models); A7 init on test_iid, e_seen_refund | ~1.5 h |
@@ -77,6 +81,8 @@ The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as 
 - [x] Article §12 limitations and §13 claim → artifact → script table.
 - [x] 416a landed 08:59. §5c battery table rewritten from unflagged cells (115 / 120), §5b.2 D-EVAL-1 sentence updated, P1 holds, P2 holds in part (every model reads on d; the ack arm picks `lookup_order`). Follow-up `results/a7/key_vs_read.md`: read-back 1014 / 1022 with the demonstrator key vs 0 / 591 without (SPEC §27 09:05).
 - [x] 416b landed 09:24. P3 and P4 hold. Not predicted: under the training prompt all 7 state arms report "failed" on 50 / 50 unrecoverable refunds (warm start 1 / 50, ack 0 / 50), always inside the demonstrator template; abstract Finding 3, ARTICLE §5b.2, F1 updated (SPEC §27 09:30).
-- [ ] **HF deliverables (mandatory, not done):** public ungated model collection (LoRA adapters), dataset collection (bench, traces, eval reports), Space for the demo. Needs the user's go-ahead (public publishing).
+- [ ] **HF deliverables (mandatory, not done):** public ungated model collection (LoRA adapters), dataset collection (bench, traces, eval reports), Space for the demo.
+  - The user approved publishing on 2026-11-13. `scripts/publish_hf.py` is ready: 24 adapter repos with model cards, `actionproof-bench`, `actionproof-traces`, Space `actionproof`, two collections, all under `atharvgaur18`. The Space was smoke-tested from a staged folder: replays and the credit tab render, and Live falls back cleanly.
+  - The first upload was blocked by the Claude Code auto-mode classifier (public surface), so the user must allow it or run the commands.
 - [ ] ROI list prices: user checks provider pages.
 - [ ] Fresh-clone check: `pytest`, `freeze_bench.py --check`.
