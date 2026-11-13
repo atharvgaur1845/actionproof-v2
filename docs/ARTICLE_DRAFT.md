@@ -215,7 +215,7 @@ These are development-set numbers. **The pre-registered confirmatory test (H1) p
 
 - **H7-1 holds** (≥ 50% registered; kill < 20%). The step the A6 state arm "removed" survives intact once the winning template contains it. The A7 warm start already made this call in 200 / 200 episodes under a prompt RL never samples, so this is a necessary-condition test, not a risky one.
 - **H7-2 holds** (ack arm within ±10 pp of its warm start). Neither reward channel touches a step outside its training tasks. Coverage of that step is set by SFT.
-- **H7-3 holds.** In A6, one surface marker of the template (the demonstrator's refund-key format) predicts whether an episode omits the credit step with accuracy 1586 / 1600 = 0.991 across 8 models. On the control split the same marker is present in 200 / 200 episodes while 25–27 call the credit tool, so the two-template description is coarse there.
+- **H7-3 holds.** In A6, one surface marker of the template (the demonstrator's refund-key format) predicts whether an episode omits the credit step with accuracy 1586 / 1600 = 0.991 across the 8 registered models, and 1786 / 1800 = 0.992 with M1 s1 added [`results/a7/h7_3_markers.md`, `scripts/a7_h7_3_markers.py`]. On the control split (not registered) accuracy is 0.887: the marker is present in 200 / 200 state-arm episodes while 25–28 call the credit tool, all after a timed-out refund, so the two-template description is coarse there.
 - **The channel effect replicates a third time** (state vs ack: VSC 0.845 vs 0.615; verification 1.00 vs 0.00).
 
 **Forced-prefix battery (exact probabilities on identical prefixes, no sampling).** *Registered-battery values, shown for the record. The battery scores each candidate followed by a lone `"`, a token the model does not emit there (it emits `",`), so every cell is being rescored and validated against the greedy action on the same prefix: `[[pending: 416a]]`. Only cells where the corrected readout agrees with greedy on ≥ 90% of prefixes will be cited.*
@@ -316,3 +316,35 @@ Prices are from secondary sources dated 2026-11-05; `[[verify on provider pages 
 - **Confirmatory sets** created after we had looked at the development sets.
 - **Disclosed bugs:** a sampling-seed bug made "8 samples per task" identical copies. It affected curricula and teacher-diversity claims, not any greedy metric. It was found, fixed and disclosed (Amendment 3).
 - **Reproducibility:** SLURM and HF Jobs scripts, pinned toolkit SHAs, and `requirements.lock`.
+
+## 12. Limitations
+
+- **One model family, one domain.** Every training result uses Tiny Aya Global 3.35B in one simulated customer-support environment. Transfer to a banking environment fails.
+- **Simulated faults.** Phantom, partial, stale and timed-out writes are injected by our own environment. Real systems fail in ways we did not model.
+- **Few seeds.** At most two training seeds per arm, and one per A7 arm (a second is queued). We report sign consistency across seeds, never between-seed inference.
+- **Selection, not discovery.** Every behaviour that RL amplified was already present in the SFT warm start. We show what GRPO keeps, not what it can invent.
+- **Disclosed environment bug (D-ENV-1).** Idempotency keys are shared across operations, which voided the A6 warm start's credit calls. It is documented with its impact, not fixed.
+- **Schema shift in evaluation (D-EVAL-1).** A4-split evaluations list one tool more than training. Results under the evaluation prompt are not automatically results under the training prompt.
+- **Forced-prefix readout.** The registered battery had a close-token bug and is being rescored. Only cells whose readout matches the model's own greedy action are cited.
+- **Verification costs calls.** The state-trained agents make more tool calls per episode, because they read back what they wrote.
+- **Prices.** ROI list prices come from secondary sources and must be checked on provider pages before publishing.
+
+## 13. Where every claim comes from
+
+| Claim | Artifact | Script |
+|---|---|---|
+| Before → after VSC 0.6425 → 0.8425; confirmatory H1 +1.5 pp | `results/confirmatory.json` | `actionproof/eval/confirmatory.py`, `slurm/tasks/400_confirmatory_eval.sh` |
+| Channel effect, v2 warm start (sampled verification 0.25 → 0.71–0.72 vs 0.10) | `results/eval/a4/h11/` (cluster and HF), `docs/figures/figures_data.json` | `scripts/make_figures.py` (`actionproof/eval/a4_metrics.pwv`) |
+| +19.25 pp pooled over tool_trust | `results/a4/prior_contrasts.md` | `scripts/a4_prior_contrasts.py` |
+| Channel effect replicates on the A6 and A7 warm starts | `results/eval/a6/*__test_iid.summary.json` | `slurm/a6_eval.sh` |
+| Retries are evidence-gated but capped at the training depth; credit substitution | `results/a6/evidence_use.md` | `scripts/a6_evidence_use.py` |
+| H7-1 / H7-2: credit calls 200 / 200 under both A7 arms | `results/eval/a6/a7_*__e_heldout.jsonl`, `results/eval/a7/` | `slurm/tasks/410_a7_init.sh`, `slurm/a7_arm.sh` |
+| H7-3: template marker predicts credit omission (0.991 / 0.992) | `results/a7/h7_3_markers.md` | `scripts/a7_h7_3_markers.py` |
+| Control split: credit step kept only after a timed-out refund | `results/a7/ctrl_credit.md` | `scripts/a7_ctrl_credit.py` |
+| Step-0 selection differential (exploratory) | `results/a7/selection_differential.md` | `scripts/a7_selection_differential.py` |
+| Honest-failure gap does not replicate (seed 1: 0.26 vs 0.24) | `results/eval/a6/sampled/` | `slurm/tasks/411s_a6_sampled_honesty_s1.sh` |
+| Forced-prefix battery, corrected and validated against greedy | `results/a7/battery_v2.md` `[[pending: 416a]]` | `scripts/battery_vllm.py`, `scripts/battery_v2_report.py` |
+| Untrained models below 32B at VSC ≈ 0; 32B at 0.515 | `results/leaderboard.json` | `actionproof/eval/run_eval.py` |
+| LLM judges accept 76–100% of false completions | `results/judge/` | `actionproof/rewards/llm_judge.py` |
+| AuditKIT reproduces VSC on 36 / 36 files | `results/auditkit/bridge_final.md` | `scripts/auditkit_bridge_final.py` |
+| Demo tabs | `demo/assets/`, `demo/replays/credit_templates.json` | `scripts/build_demo_assets.py`, `scripts/build_credit_demo.py` |
