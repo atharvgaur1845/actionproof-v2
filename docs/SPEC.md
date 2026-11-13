@@ -1280,3 +1280,9 @@ If something fails:
   - **Verification marker** (a ledger read after the refund ack). Same pattern: the state arms +0.07 to +0.40, while M4 is −0.17 [−0.37, −0.004] on A6.
   - **Reading.** From step-0 data alone, the sign of the differential matches which template each arm kept (the A6 state arms adopted the demonstrator key; the ack arm kept the teacher's sequence). This supports "the reward's channel decides which template wins", as a prediction and not as a measurement of training dynamics.
   - **Caveats.** The gate was sampled in the evaluation schema (D-EVAL-1), groups of 4 rather than 8, and 100 tasks. Zero-variance groups count as 0, so most groups contribute nothing (positive differential in 7–19 of 49–63 mixed groups).
+- **2026-11-13 10:20 · Control-split credit calls (CPU, exploratory; Fable review analysis 3).** `scripts/a7_ctrl_credit.py` → `results/a7/ctrl_credit.md`.
+  - On `e_heldout_ctrl` the four A6 state arms call `apply_store_credit` in 25–27 / 200 episodes. Almost all follow one history: a refund that timed out (22–23 / 23 tasks).
+  - Elsewhere: 3–4 / 24 after a phantom refund, and 0 on fault-free tasks (0 / 50) or with the fault on audit or close (0 / 103).
+  - The same 25 tasks recur in every state arm. The A6 init and M4 call it in 186–195 / 200 whatever the history.
+  - The call usually follows `issue_refund` → success or `reconcile_order`.
+  - Reading: the state arms' template keeps the credit step only on the timeout-recovery branch. This sharpens "RL removed the step" into "the winning template contains the step on one branch". Consistent with template inheritance; not a registered test.
