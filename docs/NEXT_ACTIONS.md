@@ -1,4 +1,4 @@
-# Next actions (updated 2026-11-12 07:00 IST)
+# Next actions (updated 2026-11-13 06:45 IST)
 
 **Deadline:** 2026-11-15 midnight IST. **Experiment freeze:** 2026-11-15 18:00 IST (set by the user 2026-11-11), leaving 6 h for the numbers pass.
 
@@ -26,9 +26,9 @@ The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as 
 | done | `411` | A7 state arm: **H7-1 supported**, non-colliding credit 200/200 (A6: 0/200) | — |
 | done | `411s` | M2 s1 sampled 0.264 < 0.3 → **honest-failure observation dropped** (M1 s1 0.236) | — |
 | done | `412` | A7 ack arm: **H7-2 holds** (credit 200/200); channel effect replicates (VSC 0.615 vs 0.845) | — |
-| 3 | `413` | M2c `pcstr_d_noFunder` s0 (H7-4) | ~3 h |
+| done | `413` | M2c `pcstr_d_noFunder` s0: H7-4 **inconclusive** (P(failed \| stop-mode) 0.42) | — |
 | done | `414` | Battery on the A7 arms and M2c | — |
-| pending | `415` | E7-5: A7 state arm seed 1 | ~5 h incl. evals; worker 445667 submitted 18:10, pending (priority) |
+| pending | `415` | E7-5: A7 state arm seed 1 | ~5 h incl. evals; worker 445667 still pending on priority at 11-13 06:40 (fairshare 20; ~17 co-user jobs ahead; h100/a100 workers were cancelled 11-12 03:35) |
 
 **On hold**
 - M2b seed 1: condition not met (M2 s1 did not replicate); stays held.
