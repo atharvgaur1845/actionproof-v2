@@ -326,7 +326,7 @@ Prices are from secondary sources dated 2026-11-05; `[[verify on provider pages 
 - **Disclosed environment bug (D-ENV-1).** Idempotency keys are shared across operations, which voided the A6 warm start's credit calls. It is documented with its impact, not fixed.
 - **Schema shift in evaluation (D-EVAL-1).** A4-split evaluations list one tool more than training. Results under the evaluation prompt are not automatically results under the training prompt.
 - **Forced-prefix readout.** The registered battery had a close-token bug and is being rescored. Only cells whose readout matches the model's own greedy action are cited.
-- **Verification costs calls.** The state-trained agents make more tool calls per episode, because they read back what they wrote.
+- **Efficiency is measured on one split.** On test-IID the state-trained agents make about as many tool calls per episode as the warm start (7.54–7.62 vs 7.53; ack arms 7.26–7.49). The read-back replaces other reads rather than adding to them. We have not measured latency [`results/eval/a6/*__test_iid.summary.json`, `model_calls`].
 - **Prices.** ROI list prices come from secondary sources and must be checked on provider pages before publishing.
 
 ## 13. Where every claim comes from
