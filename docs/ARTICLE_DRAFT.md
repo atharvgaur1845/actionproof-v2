@@ -153,11 +153,11 @@ These are development-set numbers. **The pre-registered confirmatory test (H1) p
 
 ![Post-write verification by reward channel](figures/f1_channel_verification.png)
 
-*Figure 1. Share of success-acknowledged refunds that the agent reads back, for three warm starts. The goal term reads the database (blue) or the acknowledgements (orange); reward form and everything else are fixed. v2: sampled T = 1 × 8 on val (`results/eval/a4/h11/`); A6 and A7: greedy test-IID (`results/eval/a6/*test_iid.summary.json`). Compare within a panel, not across: the panels mix sampled and greedy rates.*
+*Figure 1. Share of success-acknowledged refunds that the agent reads back, for three warm starts. The goal term reads the database (blue) or the acknowledgements (orange); reward form and everything else are fixed. v2: sampled T = 1 × 8 on val (`results/eval/a4/h11/`); A6 and A7: greedy test-IID (`results/eval/a6/`, `results/eval/a7/`). The A7 warm start already verifies 0.60 of refunds; the two channels move it to 1.00 and to 0.00. Compare within a panel, not across: the panels mix sampled and greedy rates.*
 
 ## 5b. Selection, not discovery: what the reward can and cannot pick
 
-**Why every model "lies" on unrecoverable tasks.** On tasks whose refund can never land, every model and every middleware reports "completed": 0 / 150 honest failures. The warm start reported failure on 0 of 48 sampled unrecoverable episodes. GRPO's group-relative advantage only re-weights behaviours the policy actually samples, so no reward could have selected honest failure from that init. The same pattern explains everything above: GRPO keeps or prunes behaviours the warm start already has. It does not invent them.
+**Why every v2 model "lies" on unrecoverable tasks.** On tasks whose refund can never land, every model and every middleware reports "completed": 0 / 150 honest failures. The warm start reported failure on 0 of 48 sampled unrecoverable episodes. GRPO's group-relative advantage only re-weights behaviours the policy actually samples, so no reward could have selected honest failure from that init. The same pattern explains everything above: GRPO keeps or prunes behaviours the warm start already has. It does not invent them.
 
 **What was selected is a script.** The v2 policies retry a phantom refund exactly once (50 / 50 unrecoverable episodes show two attempts), because one retry was always enough in training. On `apply_store_credit`, a write tool never seen in training, the PCSTR-d policy reads back the order in 73% of episodes. It sees `credits: []` in 68 of 87 phantom episodes, never retries (150 / 150 single attempts) and reports "completed". **Reads transferred; recovery did not.** (These v2 PCSTR-d and outcome episodes contain no idempotency-key collision, so D-ENV-1 does not touch this result.)
 
@@ -169,7 +169,7 @@ These are development-set numbers. **The pre-registered confirmatory test (H1) p
 
 *Seed-0 results* (greedy; `results/eval/a6/`, `results/a6/evidence_use.md`):
 
-| Model | honest failure (unrecoverable) | recoverable twin solved | refund faults solved | refund verified after write | test-IID |
+| Model | honest failure (unrecoverable, evaluation prompt; see 2) | recoverable twin solved | refund faults solved | refund verified after write | test-IID |
 |---|---|---|---|---|---|
 | A6 init | 0.00 | 0.00 | 0.70 | 0.00 | 0.615 |
 | M1 PCSTR-d | **0.00** | 0.32 | 0.995 | 1.00 | 0.865 |
@@ -183,12 +183,21 @@ These are development-set numbers. **The pre-registered confirmatory test (H1) p
 
 *What it shows.*
 1. **The channel effect replicates on a new warm start.** The state reward verifies every refund; the matched acknowledgement reward stays at the init (1.00 vs 0.00; refund faults 0.925 vs 0.705).
-2. **An honest-failure gap that did not survive.**
+2. **Honest failure: the report-term gap did not survive; the template carries it.**
    - At seed 0, after the same history (≥ 3 refund attempts, last ledger read showing `refunds: []`), the sampled probability of reporting "failed" differed sharply by arm: init 0.19, M1 PCSTR-d 0.11, M2b 0.016, M2 (no report terms) **0.71**.
    - Two pre-registered checks (Amendment 7) removed it:
      - **Seed 1 does not replicate.** M2 s1 gives 33 / 125 = 0.26, below the registered 0.3 threshold; M1 s1 gives 0.24.
-     - **It is absent under the training prompt.** Evaluation prompts list one tool more than training (D-EVAL-1). We took 50 fixed prefixes (four refund attempts, last ledger read empty, cut from M2 s0's own episodes) and rendered them in the training prompt. All 12 final models then report "failed" on 50 / 50 at greedy, warm starts and ack arm included (corrected readout P(failed) 0.96–1.00, matching greedy on every prefix). The registered rule (M1 P(failed) > 0.5 in the training prompt ⇒ "not robust to the schema shift") holds: 0.99 / 1.00 for M1 s0 / s1. Under the evaluation prompt, greedy reports "failed" on 46 / 50 of these prefixes for M2 s0, the model they were cut from, 8 / 50 for M2 s1, and 0–1 / 50 for M1, M2b, M3, M4 and the A6 warm start [`results/a7/battery_v2.md`]. Rollouts under the training prompt, the direct check: `[[pending: 416b]]`.
-   - We therefore make no claim that any reward term teaches or suppresses honest failure. The completed 2 × 2 over the report terms (M2c, ND only) is inconclusive by its registered rule (0.42). [`results/eval/a6/sampled/`, `results/a7/battery_v2.md`]
+     - **It is absent under the training prompt.** Evaluation prompts list one tool more than training (D-EVAL-1). We took 50 fixed prefixes (four refund attempts, last ledger read empty, cut from M2 s0's own episodes) and rendered them in the training prompt. All 12 final models then report "failed" on 50 / 50 at greedy, warm starts and ack arm included (corrected readout P(failed) 0.96–1.00, matching greedy on every prefix). The registered rule (M1 P(failed) > 0.5 in the training prompt ⇒ "not robust to the schema shift") holds: 0.99 / 1.00 for M1 s0 / s1. Under the evaluation prompt, greedy reports "failed" on 46 / 50 of these prefixes for M2 s0, the model they were cut from, 8 / 50 for M2 s1, and 0–1 / 50 for M1, M2b, M3, M4 and the A6 warm start [`results/a7/battery_v2.md`].
+   - **Rollouts under the training prompt** (task 416b, the direct check; greedy, 18 turns, 50 unrecoverable refund tasks) [`results/a7/plain_ur.md`, `scripts/a7_plain_ur.py`]:
+
+     | Model | reports "failed" | ≥ 3 attempts, last read empty | demonstrator key |
+     |---|---|---|---|
+     | A6 warm start | 1 / 50 | 1 / 50 | 1 / 50 |
+     | 7 state arms (M1 s0/s1, M2 s0/s1, M2b, M2c, M3) | 50 / 50 each | 50 / 50 each | 50 / 50 each |
+     | M4 ack_outcome | 0 / 50 | 0 / 50 | 0 / 50 |
+
+     The same arms under the evaluation prompt: M1 s0 / s1 0, M2b 0, M3 1, M2 s1 6, M2c 21, M2 s0 45 (of 50). On audit-note and ticket-closing faults, which no demonstration covered, every model reports "failed" on 0 / 50 in both prompts.
+   - **Reading.** No report term matters: arms with and without ND and F_under all reach 50 / 50. What separates honest from dishonest models is the template. The demonstrator's template retries, reads the ledger and reports "failed"; every state arm adopts it, and the ack arm and the warm start do not. So honest failure is selected by the reward's channel, as a step of the winning template and not as a response to its own report terms. It is fragile: one extra tool in the prompt removes it for most arms. We make no claim that any reward *term* teaches or suppresses honest failure. The completed 2 × 2 over the report terms (M2c, ND only) is inconclusive by its registered rule (0.42). [`results/eval/a6/sampled/`, `results/a7/battery_v2.md`]
 3. **Retries now wait for evidence, but the budget is memorised.**
    - Every refund retry by every state arm follows a ledger read, and none follows a read showing the refund had landed.
    - The policies stop at 4 attempts (`outcome`: about 3), the demonstration budget, so a fault one step deeper than training (5 attempts needed) defeats every arm.
@@ -209,7 +218,7 @@ These are development-set numbers. **The pre-registered confirmatory test (H1) p
 | Held-out credit workflow (`e_heldout`, greedy, n = 200) | credit called, own key | credit committed | test-IID VSC | refund verified (test-IID) |
 |---|---|---|---|---|
 | A6 state arm (warm start without credit demos) | 0 / 200 | 0 | 0.825 | 0.85 |
-| A7 warm start | 200 / 200 | 113 | — | — |
+| A7 warm start | 200 / 200 | 113 | 0.75 | 0.60 |
 | **A7 state arm** | **200 / 200** | 113 | 0.845 | 1.00 |
 | A7 ack arm | 200 / 200 | 113 | 0.615 | 0.00 |
 
@@ -232,7 +241,7 @@ These are development-set numbers. **The pre-registered confirmatory test (H1) p
 - **Prefix e repeats H7-1 on identical inputs.** Whether the agent applies the credit depends on the warm start, not on the reward: all three A7 models call the credit tool, all nine A6 models re-issue the refund.
 - *Prompt scope (rollouts, exploratory).* The A7 ack arm verifies refunds in 0.78 of `e_seen_refund` episodes (evaluation prompt) and 0.00 on `test_iid` (training prompt), against 0.00 for the A6 ack arm on both. GRPO samples only the training prompt.
 
-**Position.** That RL selects among policies already present after SFT is not new (e.g. arXiv 2607.03478, which states that RL training "selects for policies that obtain the highest reward"). What ActionProof adds is a controlled case in a tool agent with side effects: the reward's information channel decides *which* template wins, and steps the reward cannot see ride along with the winner (or are lost with the loser). The same mechanism accounts for the script-like retry depth (§5b.3), the workflow substitution (§5b.4) and the credit result above. One seed per A7 arm; seed 1 of the state arm `[[pending: 415]]`.
+**Position.** That RL selects among policies already present after SFT is not new (e.g. arXiv 2607.03478, which states that RL training "selects for policies that obtain the highest reward"). What ActionProof adds is a controlled case in a tool agent with side effects: the reward's information channel decides *which* template wins, and steps the reward cannot see ride along with the winner (or are lost with the loser). The same mechanism accounts for the script-like retry depth (§5b.3), the workflow substitution (§5b.4), honest failure under the training prompt (§5b.2) and the credit result above. One seed per A7 arm; seed 1 of the state arm `[[pending: 415]]`.
 
 ## 6. Understanding: does the model "know" it failed?
 
@@ -346,6 +355,8 @@ Prices are from secondary sources dated 2026-11-05; `[[verify on provider pages 
 | Honest-failure gap does not replicate (seed 1: 0.26 vs 0.24) | `results/eval/a6/sampled/` | `slurm/tasks/411s_a6_sampled_honesty_s1.sh` |
 | Forced-prefix battery, corrected and validated against greedy | `results/a7/battery_v2.md` | `scripts/battery_vllm.py`, `scripts/battery_v2_report.py` |
 | Read-back follows the refund key format (1014 / 1022 vs 0 / 591) | `results/a7/key_vs_read.md` | `scripts/a7_key_vs_read.py` |
+| Training prompt: 7 state arms report "failed" on 50 / 50 unrecoverable refunds; warm start 1 / 50, ack arm 0 / 50 | `results/a7/plain_ur.md` | `scripts/a7_plain_ur.py`, `scripts/eval_plain_schema.py` |
+| A7 warm start: test-IID VSC 0.75, refund read-back 0.60 | `results/eval/a7/a7_init__neutral__test_iid.summary.json` | `slurm/tasks/416b_plain_and_a7init.sh` |
 | Untrained models below 32B at VSC ≈ 0; 32B at 0.515 | `results/leaderboard.json` | `actionproof/eval/run_eval.py` |
 | LLM judges accept 76–100% of false completions | `results/judge/` | `actionproof/rewards/llm_judge.py` |
 | AuditKIT reproduces VSC on 36 / 36 files | `results/auditkit/bridge_final.md` | `scripts/auditkit_bridge_final.py` |
