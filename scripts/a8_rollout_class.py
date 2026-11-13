@@ -1,0 +1,135 @@
+"""Reader vs non-reader reward per task class in logged GRPO training rollouts (Amendment 8 addendum, H-A8e).
+
+Input: `train_rollouts.jsonl` written by `batched_vllm.py` when `AP_ROLLOUT_LOG` is set (one line per training
+episode, with the trainer step). A gate file (no `step` field) is read as step 0, which is how this script is
+checked against `results/a8/ack_class_audit.md`.
+
+A time slice that ends mid-run makes the resumed run re-sample the steps after the last checkpoint. The log then
+holds two blocks for those steps; we keep the LAST contiguous block of each step.
+
+Groups are (step, task_id), as in GRPO. Only groups containing both readers and non-readers count (the marker is
+`reads` from `scripts/a8_ack_class_audit.py`). Per task class we report, for steps <= --max-step:
+  g = mean reward(readers) - mean reward(non-readers), rescored with the arm's own reward,
+with "insufficient data" when either side has < 20 episodes. With --contrast STATE_LOG, the channel x class
+contrast g_ack - g_state on `refund timeout` is reported with a task-cluster bootstrap 95% CI (10k).
+
+    python scripts/a8_rollout_class.py --arm ack_outcome runs/grpo_tiny_a8x1p_ack_outcome_s0/train_rollouts.jsonl \
+        --contrast-arm pcstr_d_noreport --contrast runs/grpo_tiny_a7_pcstr_d_noreport_s1/train_rollouts.jsonl
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import random
+import statistics
+import sys
+from collections import defaultdict
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from a8_ack_class_audit import ARMS as AUDIT_ARMS, reads, task_class  # noqa: E402
+
+ARMS = {"ack_outcome": AUDIT_ARMS["M4 ack_outcome"], "pcstr_d_noreport": AUDIT_ARMS["M2 noreport"],
+        "outcome": AUDIT_ARMS["M3 outcome"]}
+MIN_N = 20
+
+
+def load(path: str) -> list[dict]:
+    """Records with the last contiguous block per step kept."""
+    blocks: list[tuple[int, list[dict]]] = []
+    for line in open(path):
+        r = json.loads(line)
+        s = r.get("step") or 0
+        if blocks and blocks[-1][0] == s:
+            blocks[-1][1].append(r)
+        else:
+            blocks.append((s, [r]))
+    last: dict[int, list[dict]] = {}
+    for s, recs in blocks:
+        last[s] = recs  # a later block for the same step replaces the earlier one
+    return [r for s in sorted(last) for r in last[s]]
+
+
+def by_class(recs: list[dict], arm: str, max_step: int) -> dict[str, dict]:
+    fn = ARMS[arm]
+    groups = defaultdict(list)
+    for r in recs:
+        if (r.get("step") or 0) <= max_step:
+            groups[(r.get("step") or 0, r["task_id"])].append(r)
+    out = defaultdict(lambda: {"rr": [], "rn": [], "tasks": defaultdict(lambda: ([], []))})
+    for (_, tid), g in groups.items():
+        lab = [reads(r) for r in g]
+        if any(x is None for x in lab) or all(lab) or not any(lab):
+            continue
+        c = out[task_class(tid)]
+        for r, l in zip(g, lab):
+            x = fn(r)
+            (c["rr"] if l else c["rn"]).append(x)
+            c["tasks"][tid][0 if l else 1].append(x)
+    return out
+
+
+def gap(c: dict) -> float | None:
+    if len(c["rr"]) < MIN_N or len(c["rn"]) < MIN_N:
+        return None
+    return statistics.mean(c["rr"]) - statistics.mean(c["rn"])
+
+
+def boot_gap(c: dict, rng: random.Random) -> list[float]:
+    tasks = list(c["tasks"].values())
+    vals = []
+    for _ in range(10_000):
+        s = rng.choices(tasks, k=len(tasks))
+        rr = [x for a, _ in s for x in a]
+        rn = [x for _, b in s for x in b]
+        if rr and rn:
+            vals.append(statistics.mean(rr) - statistics.mean(rn))
+    return vals
+
+
+def table(path: str, arm: str, max_step: int) -> tuple[list[str], dict]:
+    cls = by_class(load(path), arm, max_step)
+    lines = [f"**`{path}`**, reward `{arm}`, steps ≤ {max_step}", "",
+             "| task class | readers | non-readers | reward, readers | reward, non-readers | g |", "|---|---|---|---|---|---|"]
+    for k in ("refund timeout", "refund UR", "refund phantom", "other (OK, F5, audit/close faults)"):
+        c = cls.get(k)
+        if not c:
+            lines.append(f"| {k} | 0 | 0 | – | – | insufficient data |")
+            continue
+        g = gap(c)
+        lines.append(f"| {k} | {len(c['rr'])} | {len(c['rn'])} | {statistics.mean(c['rr']) if c['rr'] else float('nan'):.2f} | "
+                     f"{statistics.mean(c['rn']) if c['rn'] else float('nan'):.2f} | "
+                     + ("insufficient data" if g is None else f"{g:+.3f}") + " |")
+    return lines + [""], cls
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("log")
+    ap.add_argument("--arm", required=True, choices=list(ARMS))
+    ap.add_argument("--max-step", type=int, default=50)
+    ap.add_argument("--contrast")
+    ap.add_argument("--contrast-arm", choices=list(ARMS))
+    a = ap.parse_args()
+    out = ["# Reader vs non-reader reward in training rollouts (Amendment 8 addendum, H-A8e)", "",
+           "Generated by `scripts/a8_rollout_class.py`. Mixed (step, task) groups only; g needs ≥ 20 episodes per side.", ""]
+    lines, cls = table(a.log, a.arm, a.max_step)
+    out += lines
+    if a.contrast:
+        lines2, cls2 = table(a.contrast, a.contrast_arm, a.max_step)
+        out += lines2
+        k = "refund timeout"
+        g1, g2 = (gap(cls[k]) if k in cls else None), (gap(cls2[k]) if k in cls2 else None)
+        if g1 is None or g2 is None:
+            out.append(f"Channel × class contrast on `{k}`: insufficient data.")
+        else:
+            rng = random.Random(0)
+            b1, b2 = boot_gap(cls[k], rng), boot_gap(cls2[k], rng)
+            d = sorted(x - y for x, y in zip(b1, b2))
+            out.append(f"Channel × class contrast on `{k}`: g({a.arm}) − g({a.contrast_arm}) = {g1 - g2:+.3f}, "
+                       f"task-cluster bootstrap 95% CI [{d[int(0.025 * len(d))]:+.3f}, {d[int(0.975 * len(d))]:+.3f}].")
+    print("\n".join(out))
+
+
+if __name__ == "__main__":
+    main()

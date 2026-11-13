@@ -1321,3 +1321,17 @@ If something fails:
     - §5 verification sentence; §5b.2 UR reward table; §5b.4 replay vs aliasing; §12 two limitations; §13 four rows.
     - Abstract: Finding 1 mechanism bullet; aliasing phrase; "Eight hashed pre-registrations" (500 words).
     - Demo Space: adapter chains (warm start merged before a GRPO adapter); README rewritten; `scripts/publish_hf.py` added.
+- **2026-11-13 13:53 · Amendment 8 addendum registered (placebo X1), after a Fable 5.2 triage of an external audit.**
+  - **Audit claims.**
+    - Correct, already disclosed: D-ENV-1 and timeout-always-commits.
+    - Correct, new: X1 has no pool-size control; the AuditKIT 36 / 36 bridge uses our own `vsc`, so it shows integration parity, not independence; the README still named A7 as latest (fixed in `586fe6b`).
+    - Correct, already disclosed in PREREGISTRATION_A7 §3: the A7 credit demonstrations carry the evaluation prompt.
+    - Partly correct: `refund-<order>` is the A6 demonstrator's own key; only `credit-<order>` is new.
+    - Outdated: fresh-clone check (done) and training logging (on in X1).
+  - **Added.**
+    - Placebo X1 (`414q`, `slurm/a8_x1p.sh`): ack reward, 60 random non-target tasks removed (`data/bench/a8/x1p_task_ids.jsonl`, sha256 `62513439…`), all target tasks kept.
+    - Decision rules H-A8d and joint readings; the interaction reported as a bound I ≥ PWV(X1).
+    - H-A8e, a descriptive rule on logged rollouts (`scripts/a8_rollout_class.py`, checked against the gate audit).
+  - **Not added** (no GPU before the freeze): the filtered-pool state arm (it cannot lower the interaction bound), three seeds, the controlled SFT intervention, a versioned environment.
+  - **Deviation.** Both pending copies of 415 gain `export AP_ROLLOUT_LOG=…`. This is additive; `a7_arm.sh` is unchanged.
+  - **Timing.** At registration no X1 run directory or summary existed; no worker had started.
