@@ -147,6 +147,14 @@ These are development-set numbers. **The pre-registered confirmatory test (H1) p
 - The remaining failures are still always reported as "completed".
 - The policy verifies payments (0.98) and order changes (0.39) but not ticket writes (0.00). That ordering matches the true fault rates, but our expert demos encoded it, so we do not claim it was learned. The swap test confirms the caution: with a verification cost (PCSTR-c), the agent makes 20% fewer verification calls at equal VSC. It checks payments 63% of the time on both the training-rate split and the swapped-rate split, where payments has become the most reliable service. **It learned a fixed service prior, not to estimate fault rates in context.**
 
+![Before and after: VSC on the untouched confirmatory splits](figures/f3_before_after.png)
+
+*Figure 3. Verified-success completion on the confirmatory splits (n = 400), one dot per training seed, Wilson 95% intervals. Rewards that read the database (blue) lift the warm start by about 20 pp; rewards that read acknowledgements or the transcript (orange) do not. Data: `results/confirmatory.json`; plotted values in `docs/figures/figures_data.json`.*
+
+![Post-write verification by reward channel](figures/f1_channel_verification.png)
+
+*Figure 1. Share of success-acknowledged refunds that the agent reads back, for three warm starts. The goal term reads the database (blue) or the acknowledgements (orange); reward form and everything else are fixed. v2: sampled T = 1 × 8 on val (`results/eval/a4/h11/`); A6 and A7: greedy test-IID (`results/eval/a6/*test_iid.summary.json`). Compare within a panel, not across: the panels mix sampled and greedy rates.*
+
 ## 5b. Selection, not discovery: what the reward can and cannot pick
 
 **Why every model "lies" on unrecoverable tasks.** On tasks whose refund can never land, every model and every middleware reports "completed": 0 / 150 honest failures. The warm start reported failure on 0 of 48 sampled unrecoverable episodes. GRPO's group-relative advantage only re-weights behaviours the policy actually samples, so no reward could have selected honest failure from that init. The same pattern explains everything above: GRPO keeps or prunes behaviours the warm start already has. It does not invent them.
