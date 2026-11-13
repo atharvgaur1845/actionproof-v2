@@ -29,7 +29,7 @@ The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as 
 | done | `413` | M2c `pcstr_d_noFunder` s0: H7-4 **inconclusive** (P(failed \| stop-mode) 0.42) | — |
 | done | `414` | Battery on the A7 arms and M2c | — |
 | pending | `415` | E7-5: A7 state arm seed 1 | queued on two pools with a run-once guard: h200 worker 445667 (~5 h) and a100 worker 446674 (`# minutes: 600`), both pending on priority at 11-13 07:00 |
-| pending | `416a` | Corrected battery (`",` close) + greedy action per prefix, 12 models (SPEC §27 2026-11-13 07:20) | ~2 h; short workers 446747 (h200 3 h), 446748 (a100 4 h) |
+| pending | `416a` | Corrected battery (`",` close) + greedy action per prefix, 12 models (SPEC §27 2026-11-13 07:30) | ~2 h; short workers 446747 (h200 3 h), 446748 (a100 4 h) |
 | pending | `416b` | Refund-UR rollouts in the training schema (9 A6 models); A7 init on test_iid, e_seen_refund | ~1.5 h |
 
 **On hold**
