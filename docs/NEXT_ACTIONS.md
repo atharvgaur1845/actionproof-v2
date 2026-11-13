@@ -62,4 +62,21 @@ The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as 
 - [x] Demo tab "Same task, three templates" (`scripts/build_credit_demo.py` → `demo/replays/credit_templates.json`; 6 fault-free `e_heldout` tasks: void credit / substituted refund / committed credit).
 - [x] AuditKIT bridge on the final files: 36/36 match VSC exactly (`results/auditkit/bridge_final.md`). The toolkit chain claim stands.
 - [x] Superseded strategy blueprint archived: `docs/audit/strategy_blueprint_2026-11-10_superseded.md`.
-- [ ] Reposition the paper around reward-channel selection among SFT templates. The channel ablation is the verified backbone; cite 2607.03478 as the nearest prior work.
+- [x] Reposition the paper around reward-channel selection among SFT templates. The channel ablation is the verified backbone; cite 2607.03478 as the nearest prior work.
+
+### Fable 5.2 next-steps review (2026-11-13), execution
+
+- [x] Abstract cut to 499 words (limit < 500), retitled; battery claims held back until rescored.
+- [x] Article / README text fixes: title, credit control-split counts, H7-1 as a necessary-condition test, H7-3 scope, README points to A7.
+- [x] Battery close-token bug found and confirmed. Corrected battery (416a) running on H200 worker 446747. The registered battery fails the greedy check exactly where the bug predicts.
+- [x] Step-0 selection differential (`results/a7/selection_differential.md`).
+- [x] Control-split credit calls (`results/a7/ctrl_credit.md`).
+- [x] H7-3 given a script (`scripts/a7_h7_3_markers.py`): 1586/1600 reproduced; 1786/1800 with M1 s1.
+- [x] Demo Leaderboard and Findings tabs built from results (`scripts/build_demo_assets.py`).
+- [x] Figures F1 (channel verification) and F3 (before/after) in the article (`scripts/make_figures.py`).
+- [x] Article §12 limitations and §13 claim → artifact → script table.
+- [ ] When 416a lands: rewrite §5c's battery table from `results/a7/battery_v2.md` (cite only unflagged cells), and the D-EVAL-1 sentence in §5b.2; check the predictions P1/P2 in SPEC.
+- [ ] When 416b lands: training-schema refund-UR rollouts (P3); A7 init test-IID (P4, F1 point).
+- [ ] **HF deliverables (mandatory, not done):** public ungated model collection (LoRA adapters), dataset collection (bench, traces, eval reports), Space for the demo. Needs the user's go-ahead (public publishing).
+- [ ] ROI list prices: user checks provider pages.
+- [ ] Fresh-clone check: `pytest`, `freeze_bench.py --check`.
