@@ -1271,3 +1271,12 @@ If something fails:
     - P3: under the training schema, refund-UR rollouts end with `failed` in ≥ 90% of stop-mode episodes for every A6 model (the v1 battery's ≥ 0.99). If any model is < 0.5, the "not robust to the schema shift" wording is withdrawn for that model, and the D-EVAL-1 statement is rewritten from the rollouts.
     - P4: A7 init `test_iid` VSC lies between the A6 init and the A7 state arm (0.845). PWV_refund is below the A7 state arm's 1.00.
   - **Workers.** Short-wall workers so the jobs can backfill: H200 3 h and A100 4 h. Both tasks are queued in both pools, with the same run-once guard as 415. The long workers 445667 and 446674 take 415 first (name order).
+- **2026-11-13 10:00 · Step-0 selection differential (CPU, exploratory, not registered; Fable review analysis 1).** `scripts/a7_selection_differential.py` → `results/a7/selection_differential.md`.
+  - **Method.** Gate samples of each warm start (T = 1 × 4, 100 pool-B tasks) are treated as 100 GRPO groups. Each episode is rescored under every arm's reward, and we take the within-group advantage difference between marked and unmarked episodes, with a task bootstrap.
+  - **Template marker** (demonstrator refund key). Every state reward gives a positive differential, on both warm starts:
+    - A6: M1 +0.26 [0.12, 0.42], M2c +0.26, M3 / M3′ +0.17; M2 and M2b +0.11, whose CIs include 0.
+    - A7: +0.22 to +0.42, all CIs above 0.
+    - The acknowledgement rewards give ≈ 0 or negative: A6 M4 −0.09, M5 −0.03; A7 −0.01 / +0.005.
+  - **Verification marker** (a ledger read after the refund ack). Same pattern: the state arms +0.07 to +0.40, while M4 is −0.17 [−0.37, −0.004] on A6.
+  - **Reading.** From step-0 data alone, the sign of the differential matches which template each arm kept (the A6 state arms adopted the demonstrator key; the ack arm kept the teacher's sequence). This supports "the reward's channel decides which template wins", as a prediction and not as a measurement of training dynamics.
+  - **Caveats.** The gate was sampled in the evaluation schema (D-EVAL-1), groups of 4 rather than 8, and 100 tasks. Zero-variance groups count as 0, so most groups contribute nothing (positive differential in 7–19 of 49–63 mixed groups).
