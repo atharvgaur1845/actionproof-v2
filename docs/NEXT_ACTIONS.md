@@ -85,4 +85,4 @@ The plan comes from the Fable 5.2 research reviews: Phase 0 → 3, registered as
   - The user approved publishing on 2026-11-13. `scripts/publish_hf.py` is ready: 24 adapter repos with model cards, `actionproof-bench`, `actionproof-traces`, Space `actionproof`, two collections, all under `atharvgaur18`. The Space was smoke-tested from a staged folder: replays and the credit tab render, and Live falls back cleanly.
   - The first upload was blocked by the Claude Code auto-mode classifier (public surface), so the user must allow it or run the commands.
 - [ ] ROI list prices: user checks provider pages.
-- [ ] Fresh-clone check: `pytest`, `freeze_bench.py --check`.
+- [x] Fresh-clone check (2026-11-13, `706af05`): 146 passed, 4 skipped. `freeze_bench`, `freeze_a4`, `freeze_a6`, `freeze_a7` and `freeze_a8` print OK; `freeze_a5` shows the logged D-A5-3 mismatch. Repeat on the final commit.
