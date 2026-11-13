@@ -1253,3 +1253,21 @@ If something fails:
     - The wrapper first counted the label `pass` instead of `success` (0/36). This was corrected before the result was recorded.
   - **Archive.** The superseded blueprint is at `docs/audit/strategy_blueprint_2026-11-10_superseded.md`.
   - **Worker.** A new H200 worker for `415` was refused (`QOSMaxSubmitJobPerUserLimit`: the shared account's queued jobs fill the per-user limit). A background loop retries every 5 min.
+- **2026-11-13 08:30 · Battery measurement bug found; task 416 (exploratory) registered with predictions before any run.**
+  - **Source.** The Fable 5.2 next-steps review (2026-11-13) compared the battery's argmax with the source model's own greedy action at the same prefix (`a6_pcstr_d_noreport_s0`). They agree on c 50/50, d 48/50 and a 45/50, but on the credit prefix e only **2/50**: the battery puts mean P(credit) 0.67 there, while the rollout issued a refund 48 times. Recomputed here from `results/raw/a6/…e_heldout.jsonl`; every prefix is an exact copy of the start of its source conversation.
+  - **Cause (verified on the tokenizer).** `forced_prefix.py` scores `stem + name + '"'`. In real outputs the name is followed by `", "parameters"`, and the tokenizer emits `",` as one token (`issue`·`_`·`refund`·`",`). The battery's last token, a lone `"`, is one the model almost never produces there. Its probability multiplies into every candidate by an amount that depends on the preceding name, so the renormalised readout is biased. The same close is used for the status readout (`"failed", "summary"` in real outputs).
+  - **Consequence.** Every battery number is suspect until rescored, including the cells behind the two registered decision rules: plain-schema P(failed) ≥ 0.989 ("not robust to the schema shift") and prefix d. `forced_prefix.py` is hashed in `results/a7_hashes.json` and stays unchanged. The correction is a new script.
+  - **Task 416a: corrected battery** (`scripts/battery_vllm.py`; report `scripts/battery_v2_report.py` → `results/a7/battery_v2.md`).
+    - Same prefixes and candidate sets. Each candidate is scored as log P(stem + name + `",`), from vLLM prompt logprobs on the merged bf16 weights the evaluation used.
+    - It also records the greedy next action on every prefix (`llm.chat`, temperature 0, as in `run_eval.run`).
+    - 12 final models: A6 init, M1 s0/s1, M2 s0/s1, M2b, M2c, M3, M4, A7 init, A7 state, A7 ack.
+    - A cell is citable only if the v2 argmax equals the greedy action on ≥ 90% of its prefixes.
+  - **Task 416b.**
+    - (1) Refund-UR rollouts (100 non-credit `e_unrecoverable` tasks, greedy, 18 turns) in the **training** schema: plain `EcomEnv`, training system prompt (`scripts/eval_plain_schema.py`; `run_eval_a4.main` unchanged except the env factory). Models: A6 init, M1 s0/s1, M2 s0/s1, M2b, M2c, M3, M4.
+    - (2) A7 init on `test_iid` and `e_seen_refund`.
+  - **Predictions (written before either task runs).**
+    - P1: on the credit prefix e, the v2 argmax agrees with greedy on ≥ 45/50 for `a6_pcstr_d_noreport_s0`, and the greedy action reproduces the rollout (`issue_refund`) on ≥ 48/50. If the greedy action does not reproduce the rollout, the eval backend is not deterministic on the prefix and the cause is elsewhere.
+    - P2: on cells where the v1 battery already agreed with the rollout (c, d), the v2 argmax agrees too, and v2 P(query_ledger) on d keeps the same order (state arms > init > ack arms).
+    - P3: under the training schema, refund-UR rollouts end with `failed` in ≥ 90% of stop-mode episodes for every A6 model (the v1 battery's ≥ 0.99). If any model is < 0.5, the "not robust to the schema shift" wording is withdrawn for that model, and the D-EVAL-1 statement is rewritten from the rollouts.
+    - P4: A7 init `test_iid` VSC lies between the A6 init and the A7 state arm (0.845). PWV_refund is below the A7 state arm's 1.00.
+  - **Workers.** Short-wall workers so the jobs can backfill: H200 3 h and A100 4 h. Both tasks are queued in both pools, with the same run-once guard as 415. The long workers 445667 and 446674 take 415 first (name order).
