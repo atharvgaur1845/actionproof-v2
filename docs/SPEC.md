@@ -1300,3 +1300,15 @@ If something fails:
   - **Not predicted.** In this schema, honest failure on refund-UR separates by channel, not by report term: 7 state arms 50 / 50, warm start 1 / 50, M4 0 / 50. Every honest episode uses the demonstrator key (50 / 50 per state arm; warm start 1 / 50; M4 0 / 50). Evaluation schema, same arms: 0 / 0 / 0 / 1 / 6 / 21 / 45 of 50 (M1 s0, M1 s1, M2b, M3, M2 s1, M2c, M2 s0). Audit/close-UR: 0 / 50 for every model in both schemas (no demonstration covered them).
   - **P4 holds.** A7 init `test_iid` VSC 0.75, between the A6 init (0.615) and the A7 state arm (0.845); PWV_refund 0.60 < 1.00. `e_seen_refund`: VSC 0.995, PWV_refund 1.00.
   - **Docs.** Abstract: Finding 3 gains the honest-failure bullet; the "not claimed" bullet now says report terms do not teach it and it is not robust (500 words). ARTICLE §5b.2 rewritten with the rollout table; F1 regenerated with the A7 warm-start point; §5c table filled; §13 rows added.
+- **2026-11-13 12:46 · Fable 5.2 research-director review (read-only) and Amendment 8 registration.** The user approved executing the review's plan.
+  - **Review verdict.** Keep the project; change the claimed mechanism. The step-0 samples show the acknowledgement reward paying *less* to episodes that read back a refund, in two task classes only (refund timeout; refund unrecoverable). The article's "zero advantage, drift / turn budget" wording is therefore not the best reading. Report-term "interference" (0/150 vs 45/150) is a seed-sensitive argmax near the boundary under D-EVAL-1, not a result. The credit "duplicates" are partly operation aliasing (the credit amount sent through `issue_refund` with key `credit-<order>`).
+  - **Recomputed before registering** (`scripts/a8_ack_class_audit.py` → `results/a8/ack_class_audit.md`).
+    - M4 reward, readers vs non-readers. Refund timeout: A6 0.08 vs 0.62, A7 0.00 vs 0.36. Refund unrecoverable: 0.25 vs 1.00 in both.
+    - Step-0 selection on reading, summed over groups. A6: full pool −6.90, X1 pool +3.85. A7: full pool −0.74, X1 pool +8.85.
+    - Under the state rewards (M2, M3) selection is positive on both pools, except M2 on refund-UR (−4.80).
+    - The A7 full-pool signal is small, yet the control went from 0.60 to 0.00. This caveat is registered.
+  - **Amendment 8 registered** (`PREREGISTRATION_A8.md`, `results/a8_hashes.json`).
+    - X1 is the A7 `ack_outcome` run with the 60 refund-timeout and refund-UR tasks removed (340 tasks). Everything else is identical to task 412.
+    - Primary: `test_iid` PWV_refund ≥ 0.30 supported, ≤ 0.10 rejected.
+    - Additive code change: `batched_vllm.py` logs training rollouts when `AP_ROLLOUT_LOG` is set.
+    - Run script `slurm/a8_x1.sh`, time-sliced so it can use 3 h H200 backfill workers. Queued as `414p` so it sorts ahead of 415.

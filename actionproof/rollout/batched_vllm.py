@@ -17,6 +17,7 @@ as in evaluation, so the policy is trained in the format it is evaluated in.
 from __future__ import annotations
 
 import json
+import os
 import uuid
 from typing import Any, Callable
 
@@ -113,6 +114,12 @@ def make_batched_rollout_func(tasks: list[Task], base_prompt: str, max_turns: in
         ids = [r["rollout_id"] for r in records]
         assert len(set(ids)) == len(prompts), "duplicate rollout ids"
         assert all(r["receipt_rollout_ids"] in ([], [r["rollout_id"]]) for r in records)
+        log = os.environ.get("AP_ROLLOUT_LOG")  # Amendment 8: keep training rollouts (additive; off by default)
+        if log:
+            step = getattr(getattr(trainer, "state", None), "global_step", None)
+            with open(log, "a") as f:
+                for r in records:
+                    f.write(json.dumps({"step": step, **r}, default=str) + "\n")
         return {
             "prompt_ids": [e["prompt_ids"] for e in eps],
             "completion_ids": [e["ids"] for e in eps],
