@@ -12,7 +12,7 @@ ActionProof is an environment, a set of rewards and a controlled training study 
 - **Write-up:** `docs/ARTICLE_DRAFT.md` (abstract: `docs/ABSTRACT.md`).
 - **Novelty and related work:** `docs/research/novelty_scouts_2026-11-11.md`.
 - **Live status and next actions:** `docs/NEXT_ACTIONS.md`.
-- **Latest amendment:** `PREREGISTRATION_A7.md` (results in `results/eval/a6/` and `results/eval/a7/`, trace analysis in `results/a6/evidence_use.md`; corrected forced-prefix battery `results/a7/battery_v2.md`, SPEC §27 2026-11-13).
+- **Latest amendment:** `PREREGISTRATION_A8.md` (X1: does the acknowledgement reward remove refund read-back only through refund-timeout and unrecoverable-refund tasks? Audit `results/a8/ack_class_audit.md`; run pending). Before it, `PREREGISTRATION_A7.md` (results in `results/eval/a6/` and `results/eval/a7/`, corrected forced-prefix battery `results/a7/battery_v2.md`). Every deviation is logged in `docs/SPEC.md` §27.
 - **Pre-registration:** `PREREGISTRATION.md`.
 - **Full spec and deviation log:** `docs/SPEC.md`.
 
@@ -47,7 +47,7 @@ This clones the toolkits at those SHAs, creates `.venv` with uv and installs eve
 
 ```bash
 .venv/bin/python -m pytest -q tests/
-.venv/bin/python scripts/freeze_bench.py --check
+for f in freeze_bench freeze_a4 freeze_a5 freeze_a6 freeze_a7 freeze_a8; do .venv/bin/python scripts/$f.py --check; done
 ```
 
 The tests cover:
@@ -58,7 +58,7 @@ The tests cover:
 - deterministic replay;
 - the banking domain and the language variants.
 
-`freeze_bench.py --check` must print `OK`.
+Every check must print `OK`, except `freeze_a5`, which reports `verifier_a5.py` and `a5_rewards.py`. That mismatch is the logged deviation D-A5-3 (a parsing fix after registration; SPEC §27, 2026-11-10). It was not re-registered on purpose. Checked from a fresh clone of `706af05` on 2026-11-13: 146 tests passed, 4 skipped.
 
 ### 3. Pipeline (each step is a queue task in `slurm/tasks/`)
 
