@@ -28,7 +28,7 @@ The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as 
 | done | `412` | A7 ack arm: **H7-2 holds** (credit 200/200); channel effect replicates (VSC 0.615 vs 0.845) | — |
 | done | `413` | M2c `pcstr_d_noFunder` s0: H7-4 **inconclusive** (P(failed \| stop-mode) 0.42) | — |
 | done | `414` | Battery on the A7 arms and M2c | — |
-| pending | `415` | E7-5: A7 state arm seed 1 | ~5 h incl. evals; worker 445667 still pending on priority at 11-13 06:40 (fairshare 20; ~17 co-user jobs ahead; h100/a100 workers were cancelled 11-12 03:35) |
+| pending | `415` | E7-5: A7 state arm seed 1 | queued on two pools with a run-once guard: h200 worker 445667 (~5 h) and a100 worker 446674 (`# minutes: 600`), both pending on priority at 11-13 07:00 |
 
 **On hold**
 - M2b seed 1: condition not met (M2 s1 did not replicate); stays held.
