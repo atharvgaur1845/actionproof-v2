@@ -12,7 +12,7 @@ ActionProof is an environment, a set of rewards and a controlled training study 
 - **Write-up:** `docs/ARTICLE_DRAFT.md` (abstract: `docs/ABSTRACT.md`).
 - **Novelty and related work:** `docs/research/novelty_scouts_2026-11-11.md`.
 - **Live status and next actions:** `docs/NEXT_ACTIONS.md`.
-- **Latest amendment:** `PREREGISTRATION_A7.md` (results in `results/eval/a6/` and `results/eval/a7/`, trace analysis in `results/a6/evidence_use.md`; forced-prefix battery `results/a7/`, being rescored, SPEC §27 2026-11-13).
+- **Latest amendment:** `PREREGISTRATION_A7.md` (results in `results/eval/a6/` and `results/eval/a7/`, trace analysis in `results/a6/evidence_use.md`; corrected forced-prefix battery `results/a7/battery_v2.md`, SPEC §27 2026-11-13).
 - **Pre-registration:** `PREREGISTRATION.md`.
 - **Full spec and deviation log:** `docs/SPEC.md`.
 

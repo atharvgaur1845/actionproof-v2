@@ -29,7 +29,7 @@ The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as 
 | done | `413` | M2c `pcstr_d_noFunder` s0: H7-4 **inconclusive** (P(failed \| stop-mode) 0.42) | — |
 | done | `414` | Battery on the A7 arms and M2c | — |
 | pending | `415` | E7-5: A7 state arm seed 1 | queued on two pools with a run-once guard: h200 worker 445667 (~5 h) and a100 worker 446674 (`# minutes: 600`), both pending on priority at 11-13 07:00 |
-| pending | `416a` | Corrected battery (`",` close) + greedy action per prefix, 12 models (SPEC §27 2026-11-13 07:30) | ~2 h; short workers 446747 (h200 3 h), 446748 (a100 4 h) |
+| done | `416a` | Corrected battery (`",` close) + greedy action per prefix, 12 models (SPEC §27 2026-11-13 07:30) | ~2 h; short workers 446747 (h200 3 h), 446748 (a100 4 h) |
 | pending | `416b` | Refund-UR rollouts in the training schema (9 A6 models); A7 init on test_iid, e_seen_refund | ~1.5 h |
 
 **On hold**
@@ -75,7 +75,7 @@ The plan comes from the Fable 5.2 research review: Phase 0 → 3, registered as 
 - [x] Demo Leaderboard and Findings tabs built from results (`scripts/build_demo_assets.py`).
 - [x] Figures F1 (channel verification) and F3 (before/after) in the article (`scripts/make_figures.py`).
 - [x] Article §12 limitations and §13 claim → artifact → script table.
-- [ ] When 416a lands: rewrite §5c's battery table from `results/a7/battery_v2.md` (cite only unflagged cells), and the D-EVAL-1 sentence in §5b.2; check the predictions P1/P2 in SPEC.
+- [x] 416a landed 08:59. §5c battery table rewritten from unflagged cells (115 / 120), §5b.2 D-EVAL-1 sentence updated, P1 holds, P2 holds in part (every model reads on d; the ack arm picks `lookup_order`). Follow-up `results/a7/key_vs_read.md`: read-back 1014 / 1022 with the demonstrator key vs 0 / 591 without (SPEC §27 09:05).
 - [ ] When 416b lands: training-schema refund-UR rollouts (P3); A7 init test-IID (P4, F1 point).
 - [ ] **HF deliverables (mandatory, not done):** public ungated model collection (LoRA adapters), dataset collection (bench, traces, eval reports), Space for the demo. Needs the user's go-ahead (public publishing).
 - [ ] ROI list prices: user checks provider pages.

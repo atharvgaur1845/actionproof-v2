@@ -187,8 +187,8 @@ These are development-set numbers. **The pre-registered confirmatory test (H1) p
    - At seed 0, after the same history (≥ 3 refund attempts, last ledger read showing `refunds: []`), the sampled probability of reporting "failed" differed sharply by arm: init 0.19, M1 PCSTR-d 0.11, M2b 0.016, M2 (no report terms) **0.71**.
    - Two pre-registered checks (Amendment 7) removed it:
      - **Seed 1 does not replicate.** M2 s1 gives 33 / 125 = 0.26, below the registered 0.3 threshold; M1 s1 gives 0.24.
-     - **It is absent under the training prompt.** Evaluation prompts list one tool more than training (D-EVAL-1). On identical fixed prefixes in the training prompt, the registered forced-prefix readout puts "failed" at ≥ 0.99 for every model, M1 included; the between-arm spread appears only under the evaluation prompt. That readout has a close-token bug (SPEC §27, 2026-11-13) and is being rescored, with training-prompt rollouts as a direct check: `[[pending: 416a, 416b]]`.
-   - We therefore make no claim that any reward term teaches or suppresses honest failure. The completed 2 × 2 over the report terms (M2c, ND only) is inconclusive by its registered rule (0.42). [`results/eval/a6/sampled/`, `results/a7/forced_prefix.md`]
+     - **It is absent under the training prompt.** Evaluation prompts list one tool more than training (D-EVAL-1). We took 50 fixed prefixes (four refund attempts, last ledger read empty, cut from M2 s0's own episodes) and rendered them in the training prompt. All 12 final models then report "failed" on 50 / 50 at greedy, warm starts and ack arm included (corrected readout P(failed) 0.96–1.00, matching greedy on every prefix). The registered rule (M1 P(failed) > 0.5 in the training prompt ⇒ "not robust to the schema shift") holds: 0.99 / 1.00 for M1 s0 / s1. Under the evaluation prompt, greedy reports "failed" on 46 / 50 of these prefixes for M2 s0, the model they were cut from, 8 / 50 for M2 s1, and 0–1 / 50 for M1, M2b, M3, M4 and the A6 warm start [`results/a7/battery_v2.md`]. Rollouts under the training prompt, the direct check: `[[pending: 416b]]`.
+   - We therefore make no claim that any reward term teaches or suppresses honest failure. The completed 2 × 2 over the report terms (M2c, ND only) is inconclusive by its registered rule (0.42). [`results/eval/a6/sampled/`, `results/a7/battery_v2.md`]
 3. **Retries now wait for evidence, but the budget is memorised.**
    - Every refund retry by every state arm follows a ledger read, and none follows a read showing the refund had landed.
    - The policies stop at 4 attempts (`outcome`: about 3), the demonstration budget, so a fault one step deeper than training (5 attempts needed) defeats every arm.
@@ -218,18 +218,19 @@ These are development-set numbers. **The pre-registered confirmatory test (H1) p
 - **H7-3 holds.** In A6, one surface marker of the template (the demonstrator's refund-key format) predicts whether an episode omits the credit step with accuracy 1586 / 1600 = 0.991 across the 8 registered models, and 1786 / 1800 = 0.992 with M1 s1 added [`results/a7/h7_3_markers.md`, `scripts/a7_h7_3_markers.py`]. On the control split (not registered) accuracy is 0.887: the marker is present in 200 / 200 state-arm episodes while 25–28 call the credit tool, all after a timed-out refund, so the two-template description is coarse there.
 - **The channel effect replicates a third time** (state vs ack: VSC 0.845 vs 0.615; verification 1.00 vs 0.00).
 
-**Forced-prefix battery (exact probabilities on identical prefixes, no sampling).** *Registered-battery values, shown for the record. The battery scores each candidate followed by a lone `"`, a token the model does not emit there (it emits `",`), so every cell is being rescored and validated against the greedy action on the same prefix: `[[pending: 416a]]`. Only cells where the corrected readout agrees with greedy on ≥ 90% of prefixes will be cited.*
+**Forced-prefix battery (identical prefixes, no sampling).** The registered battery scored each candidate followed by a lone `"`, a token the model does not emit there (it emits `",`). The corrected readout scores the real close and is checked against each model's own greedy action on the same prefix (SPEC §27, 2026-11-13). 115 of 120 model × cell readouts agree with greedy on ≥ 90% of prefixes. The prefixes are cut from M2 s0's episodes, so they follow the demonstrator's template. Greedy next action of all 12 final models, 50 prefixes per cell [`results/a7/battery_v2.md`]:
 
-| After the first refund ack, P(next call = `query_ledger`) | training prompt | evaluation prompt |
+| Prefix (identical for every model) | A6 warm start and 8 A6 arms | A7 warm start, state arm, ack arm |
 |---|---|---|
-| A6 warm start | 0.05 | 0.16 |
-| A6 state arms (final adapters: M1 s0/s1, M2 s0/s1, M2b, M3) | 0.26–0.35 | 0.54–0.63 |
-| A6 M2c (ND only) | 0.44 | 0.71 |
-| A6 ack arm | 0.02 | 0.06 |
-| A7 warm start / state arm / ack arm | 0.14 / 0.43 / 0.02 | 0.60 / 0.85 / 0.20 |
+| d: right after the first refund ack, before any read | reads the ledger or the order: 50 / 50 each (P(read) ≥ 0.999) | same |
+| c: after a ledger read showing no refund | retries the refund: 50 / 50 each | same |
+| b: as a, but the last read shows the refund landed | moves on to the audit note: 50 / 50 each | same |
+| e: credit task, ledger shows the refund and `credits: []` | re-issues the refund: 50 / 50 each (P(credit) 0.15–0.41) | calls `apply_store_credit`: 50 / 50 each (P ≥ 0.997) |
 
-- If the corrected readout confirms these values, the reward-source effect holds on identical inputs in both prompts. On the registered readout, the source model's argmax matches its own greedy action on 48 / 50 of these prefixes; on the credit decision point it matches on 2 / 50, which is how the bug was found.
-- *Context-scoped inheritance (exploratory).* The 20 credit demonstrations carry the evaluation prompt and verify refunds; they raise the warm start's evaluation-prompt verification (0.16 → 0.60) and barely move the training prompt (0.05 → 0.14). GRPO trains only under the training prompt. The ack arm extinguishes verification there (0.02) but keeps much of it under the evaluation prompt: greedy refund verification on `e_seen_refund` 0.78, against 0.00 for the A6 ack arm. RL edits behaviour where it samples.
+- **On identical inputs the arms answer evidence the same way.** Every model, the ack arm included, reads after the ack, retries when the read is empty and moves on when it shows the refund. The registered readout's ack-arm verification (0.02–0.06) was an artefact of the close token.
+- **The channel decides which template the policy enters, and the read comes with it.** In the models' own rollouts, a refund issued with the demonstrator's key format (`refund-<order>`) is read back in 1014 / 1022 episodes; a refund with any other key in 0 / 591 (6 A6 models, `test_iid` and `e_seen_refund`; the warm start reads back the 3 times it happens to use that key) [`results/a7/key_vs_read.md`, `scripts/a7_key_vs_read.py`]. The state arms write that key; the ack arm and the warm start almost never do. The verification gap between channels is a choice of template made at the refund call, not a different response to the acknowledgement.
+- **Prefix e repeats H7-1 on identical inputs.** Whether the agent applies the credit depends on the warm start, not on the reward: all three A7 models call the credit tool, all nine A6 models re-issue the refund.
+- *Prompt scope (rollouts, exploratory).* The A7 ack arm verifies refunds in 0.78 of `e_seen_refund` episodes (evaluation prompt) and 0.00 on `test_iid` (training prompt), against 0.00 for the A6 ack arm on both. GRPO samples only the training prompt.
 
 **Position.** That RL selects among policies already present after SFT is not new (e.g. arXiv 2607.03478, which states that RL training "selects for policies that obtain the highest reward"). What ActionProof adds is a controlled case in a tool agent with side effects: the reward's information channel decides *which* template wins, and steps the reward cannot see ride along with the winner (or are lost with the loser). The same mechanism accounts for the script-like retry depth (§5b.3), the workflow substitution (§5b.4) and the credit result above. One seed per A7 arm; seed 1 of the state arm `[[pending: 415]]`.
 
@@ -325,7 +326,7 @@ Prices are from secondary sources dated 2026-11-05; `[[verify on provider pages 
 - **Selection, not discovery.** Every behaviour that RL amplified was already present in the SFT warm start. We show what GRPO keeps, not what it can invent.
 - **Disclosed environment bug (D-ENV-1).** Idempotency keys are shared across operations, which voided the A6 warm start's credit calls. It is documented with its impact, not fixed.
 - **Schema shift in evaluation (D-EVAL-1).** A4-split evaluations list one tool more than training. Results under the evaluation prompt are not automatically results under the training prompt.
-- **Forced-prefix readout.** The registered battery had a close-token bug and is being rescored. Only cells whose readout matches the model's own greedy action are cited.
+- **Forced-prefix readout.** The registered battery had a close-token bug; we cite only the corrected readout, and only cells where it matches the model's own greedy action on ≥ 90% of prefixes (115 / 120). The prefixes come from one model's episodes (M2 s0), i.e. one template.
 - **Efficiency is measured on one split.** On test-IID the state-trained agents make about as many tool calls per episode as the warm start (7.54–7.62 vs 7.53; ack arms 7.26–7.49). The read-back replaces other reads rather than adding to them. We have not measured latency [`results/eval/a6/*__test_iid.summary.json`, `model_calls`].
 - **Prices.** ROI list prices come from secondary sources and must be checked on provider pages before publishing.
 
@@ -343,7 +344,8 @@ Prices are from secondary sources dated 2026-11-05; `[[verify on provider pages 
 | Control split: credit step kept only after a timed-out refund | `results/a7/ctrl_credit.md` | `scripts/a7_ctrl_credit.py` |
 | Step-0 selection differential (exploratory) | `results/a7/selection_differential.md` | `scripts/a7_selection_differential.py` |
 | Honest-failure gap does not replicate (seed 1: 0.26 vs 0.24) | `results/eval/a6/sampled/` | `slurm/tasks/411s_a6_sampled_honesty_s1.sh` |
-| Forced-prefix battery, corrected and validated against greedy | `results/a7/battery_v2.md` `[[pending: 416a]]` | `scripts/battery_vllm.py`, `scripts/battery_v2_report.py` |
+| Forced-prefix battery, corrected and validated against greedy | `results/a7/battery_v2.md` | `scripts/battery_vllm.py`, `scripts/battery_v2_report.py` |
+| Read-back follows the refund key format (1014 / 1022 vs 0 / 591) | `results/a7/key_vs_read.md` | `scripts/a7_key_vs_read.py` |
 | Untrained models below 32B at VSC ≈ 0; 32B at 0.515 | `results/leaderboard.json` | `actionproof/eval/run_eval.py` |
 | LLM judges accept 76–100% of false completions | `results/judge/` | `actionproof/rewards/llm_judge.py` |
 | AuditKIT reproduces VSC on 36 / 36 files | `results/auditkit/bridge_final.md` | `scripts/auditkit_bridge_final.py` |
