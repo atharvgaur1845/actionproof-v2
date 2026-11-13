@@ -1,4 +1,4 @@
-# Next actions (updated 2026-11-13 12:58 IST)
+# Next actions (updated 2026-11-13 14:05 IST)
 
 **Deadline:** 2026-11-15 midnight IST. **Experiment freeze:** 2026-11-15 18:00 IST (set by the user 2026-11-11), leaving 6 h for the numbers pass.
 
@@ -32,6 +32,7 @@ The plan comes from the Fable 5.2 research reviews: Phase 0 → 3, registered as
 | done | `413` | M2c `pcstr_d_noFunder` s0: H7-4 **inconclusive** (P(failed \| stop-mode) 0.42) | — |
 | done | `414` | Battery on the A7 arms and M2c | — |
 | pending | `414p` | **Amendment 8 X1**: A7 `ack_outcome` without refund-timeout and refund-UR tasks (340 / 400). Time-sliced: re-queues itself until done. Primary: test_iid PWV_refund ≥ 0.30 supported, ≤ 0.10 rejected | ~3 h (two 3 h slices) |
+| pending | `414q` | **A8 addendum placebo**: same as X1 but 60 random non-target tasks removed. Skips itself if X1 PWV ≤ 0.10. H-A8d: ≤ 0.10 means the control holds | ~3 h |
 | pending | `415` | E7-5: A7 state arm seed 1 | queued on two pools with a run-once guard: h200 worker 445667 (~5 h) and a100 worker 446674 (`# minutes: 600`), both pending on priority at 11-13 07:00 |
 | done | `416a` | Corrected battery (`",` close) + greedy action per prefix, 12 models (SPEC §27 2026-11-13 07:30) | ~2 h; short workers 446747 (h200 3 h), 446748 (a100 4 h) |
 | done | `416b` | Refund-UR rollouts in the training schema (9 A6 models); A7 init on test_iid, e_seen_refund | ~1.5 h |
@@ -86,3 +87,9 @@ The plan comes from the Fable 5.2 research reviews: Phase 0 → 3, registered as
   - The first upload was blocked by the Claude Code auto-mode classifier (public surface), so the user must allow it or run the commands.
 - [ ] ROI list prices: user checks provider pages.
 - [x] Fresh-clone check (2026-11-13, `706af05`): 146 passed, 4 skipped. `freeze_bench`, `freeze_a4`, `freeze_a6`, `freeze_a7` and `freeze_a8` print OK; `freeze_a5` shows the logged D-A5-3 mismatch. Repeat on the final commit.
+
+## Freeze-day rules (Amendment 8 addendum)
+- **Sat 2026-11-14 08:00:** if no H200 worker has started and an A100 worker is running, move `414p` to `queue/a100/pending` and log it as a deviation.
+- **Sun 18:00:** an arm with no `test_iid` summary is written up as "registered, not completed". No checkpoint reads.
+- **Results:** apply H-A8, H-A8d and the joint readings to replace `[[pending: X1]]`; run `scripts/a8_rollout_class.py` on the logs (H-A8e).
+- **User:** HF publishing (permission rule or run `scripts/publish_hf.py`), ROI price check, title decision.

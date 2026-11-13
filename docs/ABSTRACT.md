@@ -20,7 +20,7 @@ Real tools acknowledge writes that never committed. In ActionProof, a SQLite sup
 
 - In a held-out credit workflow, state-reward arms dropped the credit call (0/200, two seeds), re-issuing the refund, sometimes as the credit.
 - With 20 credit demonstrations added to SFT, the call survives under both rewards (**200/200**, 113 committed; one seed per arm).
-- Honest failure rides along: under the training prompt all seven state arms report "failed" on 50/50 unrecoverable refunds, report terms or not; warm start 1/50, acknowledgement arm 0/50.
+- Honest failure rides along (exploratory): under the training prompt all seven state arms report "failed" on 50/50 unrecoverable refunds, report terms or not; warm start 1/50, acknowledgement arm 0/50.
 - An instance of conditional-policy selection (arXiv 2607.03478) with side effects.
 - Disclosed bug: cross-operation keys voided earlier credit calls.
 
@@ -33,6 +33,6 @@ Real tools acknowledge writes that never committed. In ActionProof, a SQLite sup
 - That report terms teach honest failure, or that it is robust: with one extra tool in the prompt, the same arms report "failed" on 0–45/50.
 - That probes show the model "knows" it failed.
 
-**Rigour.** Eight hashed pre-registrations; a deviation log records our own bugs. The registered confirmatory test passed: PCSTR-d − outcome = +1.5 pp [0.6, 2.6], p = 0.025 (underclaim avoidance). AuditKIT reproduces our VSC on 36/36 final files.
+**Rigour.** Eight hashed pre-registrations; a deviation log records our bugs. The registered confirmatory test passed: PCSTR-d − outcome = +1.5 pp [0.6, 2.6], p = 0.025 (underclaim avoidance). AuditKIT integration matches our verifier on 36/36 files.
 
 **ROI.** One H200 serves ≈ 9,600 tickets/hour (≈ $52 per 100k tickets).
