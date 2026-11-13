@@ -1335,3 +1335,7 @@ If something fails:
   - **Not added** (no GPU before the freeze): the filtered-pool state arm (it cannot lower the interaction bound), three seeds, the controlled SFT intervention, a versioned environment.
   - **Deviation.** Both pending copies of 415 gain `export AP_ROLLOUT_LOG=…`. This is additive; `a7_arm.sh` is unchanged.
   - **Timing.** At registration no X1 run directory or summary existed; no worker had started.
+- **2026-11-13 14:10 · Metamorphic trace tests (CPU).** `tests/test_metamorphic_traces.py` takes 120 recorded v2 `test_iid` episodes (warm start, PCSTR-d s0, tool_trust s0; the first 40 of each file), re-executes them, and perturbs them. 360 / 360 pass:
+  - a summary replaced by unrelated text leaves G, P, V, I, D unchanged;
+  - each report status leaves them unchanged;
+  - reads inserted before every call leave every recorded observation, the final snapshot and the state terms unchanged. This is the ARTICLE §3 assumption that a read changes neither state nor later acknowledgements.
