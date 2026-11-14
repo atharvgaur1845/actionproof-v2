@@ -22,7 +22,7 @@ ActionProof is an environment, a set of rewards and a controlled training study 
 - **Toolkit chain:** AgentTune → AuditKIT, plus CuratorKIT.
 - **Models:** Cohere Tiny Aya Global (policy) and Aya Expanse 8B / 32B (teacher and judges).
 - **Novelty and related work:** `docs/research/novelty_scouts_2026-11-11.md`.
-- **Latest amendment:** `PREREGISTRATION_A8.md` and its addendum. X1 and the placebo are **completed** (`results/a8/x1_readback.md`); seed 1 of the A7 state arm (task 415) reproduces seed 0. Before it, `PREREGISTRATION_A7.md` (results in `results/eval/a6/`, `results/eval/a7/`, corrected forced-prefix battery `results/a7/battery_v2.md`). Every deviation is logged in `docs/SPEC.md` §27.
+- **Latest amendment:** `PREREGISTRATION_A8.md` and its addendum. X1 and the placebo are **completed** (`results/a8/x1_readback.md`); seed 1 of the A7 state arm (task 415) reproduces seed 0. Addendum 2 (`PREREGISTRATION_A8_ADDENDUM2.md`, registered 2026-11-14 before either run): task 417 (state reward on the X1 pool) and task 418 (A7 ack reward, seed 1); their results are added here only when finished, otherwise reported as not finished. Before it, `PREREGISTRATION_A7.md` (results in `results/eval/a6/`, `results/eval/a7/`, corrected forced-prefix battery `results/a7/battery_v2.md`). Every deviation is logged in `docs/SPEC.md` §27.
 - **Pre-registration:** `PREREGISTRATION.md`. **Full spec and deviation log:** `docs/SPEC.md`.
 
 ## Repository map
@@ -56,7 +56,7 @@ This clones the toolkits at those SHAs, creates `.venv` with uv and installs eve
 
 ```bash
 .venv/bin/python -m pytest -q tests/
-for f in freeze_bench freeze_a4 freeze_a5 freeze_a6 freeze_a7 freeze_a8 freeze_a8b; do .venv/bin/python scripts/$f.py --check; done
+for f in freeze_bench freeze_a4 freeze_a5 freeze_a6 freeze_a7 freeze_a8 freeze_a8b freeze_a8c; do .venv/bin/python scripts/$f.py --check; done
 ```
 
 The tests cover:
