@@ -4,17 +4,25 @@
 
 ActionProof is an environment, a set of rewards and a controlled training study for tool-using agents whose tool acknowledgements can lie: phantom, partial, stale, timed-out and ambiguous writes. Every number is checked against the environment's database and receipt log, never against the transcript.
 
-**Headline.** With the warm start and reward form held fixed, a reward whose goal term reads the database makes GRPO amplify post-write verification (sampled 0.25 → 0.72). The same reward computed from the tool's acknowledgements removes verification (→ 0.10). What gets selected is a script: on a tool outside training the agent reads the contradicting evidence and still reports "done". See `docs/ABSTRACT.md`.
+**PS9 in one paragraph.** Rewards that read a tool's acknowledgements or the transcript get gamed: a tool-trusting GRPO reward leaves verified success at 0.635–0.645, and AuditKIT's own TaskCompletion judge (Aya Expanse 32B) accepts 95.2% of false "completed" claims. A reward that reads the database (PCSTR-d) raises verified safe completion from 0.6425 to **0.8425** on 400 untouched pre-registered tasks, **+20.25 pp** [16.4, 24.3] over the tool-trusting reward, and the report text cannot move its state terms. The mechanism is traced to two task classes, where checking forfeits acknowledgement reward: removing them keeps refund read-back at 0.669 while a 60-random-task placebo stays at 0.000 (pre-registered, one seed per cell).
+
+## Deliverables
+
+| PS9 deliverable | Where |
+|---|---|
+| Interactive write-up (website) | https://atharvgaur18-actionproof.static.hf.space/index.html (Space: https://huggingface.co/spaces/atharvgaur18/actionproof) |
+| HF models collection (26 LoRA adapters) | https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04 |
+| HF datasets collection (benchmark, tool-call logs and traces) | https://huggingface.co/collections/atharvgaur18/actionproof-benchmark-traces-demo-6af7fb25037f3d7eaf294e22 |
+| Write-up: metrics, methods, results, limitations | `docs/ARTICLE_DRAFT.md` (abstract `docs/ABSTRACT.md`) |
+| Agentic trajectory metrics (task success, tool-call accuracy, average latency) | `results/agentic_metrics.md` (`scripts/agentic_metrics.py`) |
+| Reproduction | Section "Reproduce" below |
 
 - **Track:** 3, Agentic Fine-tuning.
 - **Toolkit chain:** AgentTune → AuditKIT, plus CuratorKIT.
 - **Models:** Cohere Tiny Aya Global (policy) and Aya Expanse 8B / 32B (teacher and judges).
-- **Write-up:** `docs/ARTICLE_DRAFT.md` (abstract: `docs/ABSTRACT.md`).
 - **Novelty and related work:** `docs/research/novelty_scouts_2026-11-11.md`.
-- **Live status and next actions:** `docs/NEXT_ACTIONS.md`.
-- **Latest amendment:** `PREREGISTRATION_A8.md` (X1: does the acknowledgement reward remove refund read-back only through refund-timeout and unrecoverable-refund tasks? Audit `results/a8/ack_class_audit.md`; run pending). Before it, `PREREGISTRATION_A7.md` (results in `results/eval/a6/` and `results/eval/a7/`, corrected forced-prefix battery `results/a7/battery_v2.md`). Every deviation is logged in `docs/SPEC.md` §27.
-- **Pre-registration:** `PREREGISTRATION.md`.
-- **Full spec and deviation log:** `docs/SPEC.md`.
+- **Latest amendment:** `PREREGISTRATION_A8.md` and its addendum. X1 and the placebo are **completed** (`results/a8/x1_readback.md`); seed 1 of the A7 state arm (task 415) reproduces seed 0. Before it, `PREREGISTRATION_A7.md` (results in `results/eval/a6/`, `results/eval/a7/`, corrected forced-prefix battery `results/a7/battery_v2.md`). Every deviation is logged in `docs/SPEC.md` §27.
+- **Pre-registration:** `PREREGISTRATION.md`. **Full spec and deviation log:** `docs/SPEC.md`.
 
 ## Repository map
 
@@ -47,7 +55,7 @@ This clones the toolkits at those SHAs, creates `.venv` with uv and installs eve
 
 ```bash
 .venv/bin/python -m pytest -q tests/
-for f in freeze_bench freeze_a4 freeze_a5 freeze_a6 freeze_a7 freeze_a8; do .venv/bin/python scripts/$f.py --check; done
+for f in freeze_bench freeze_a4 freeze_a5 freeze_a6 freeze_a7 freeze_a8 freeze_a8b; do .venv/bin/python scripts/$f.py --check; done
 ```
 
 The tests cover:

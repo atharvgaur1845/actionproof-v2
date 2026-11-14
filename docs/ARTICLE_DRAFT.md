@@ -18,16 +18,29 @@ Tools sometimes return `{"status": "success"}` for a write that never happened. 
 | **A reward that checks the database works** | PCSTR-d raises VSC from **0.6425 to 0.8425** on untouched pre-registered splits (n = 400, both seeds), **+20.25 pp** [16.4, 24.3] over the tool-trusting reward. The registered H1 also passed: +1.5 pp over the binary state reward, p = 0.025. | `results/confirmatory.json`, §5 |
 | **The cause is what the reward observes** | Same form, same warm start, only the goal term's source differs. Reading the database raises refund read-back after a success acknowledgement from 0.25 to 0.71–0.72. Reading the acknowledgements drives it to 0.10 (sampled, two seeds each). | `results/eval/a4/h11/`, §3 |
 | **…and it traces to two task classes** | Removing the two task classes where checking costs acknowledgement reward keeps read-back at **0.669**. Removing 60 random tasks leaves it at **0.000**. Pre-registered, one seed per arm. | §3, `PREREGISTRATION_A8_ADDENDUM.md` |
-| **Checking is cheaper, not slower** | Tool-call accuracy is 1.000 vs 0.986–0.992, at 0.10 vs 0.20 s per episode (batched H200). | `results/agentic_metrics.md` |
+| **The reward cannot be moved by the report text** | Property test: every safe, honest completion outranks every failure under PCSTR. A scripted exploit suite (read spam, forged summaries and audit notes, duplicate refunds, unauthorized writes, false completion, silence) ranks every attack below the oracle under every state reward. On 120 recorded episodes, changing the report text or status, or inserting extra reads, never changes the state terms (360/360). | `tests/test_reward_sanity.py`, `tests/test_exploits.py`, `tests/test_metamorphic_traces.py` |
+| **Checking does not cost speed** | v2 family: tool-call accuracy 1.000 for state arms vs 0.986–0.998 for the others; 0.10 vs 0.16–0.20 s per episode, batched H200 throughput driven by output length (≈ 750 vs ≈ 4,400 characters), not single-request latency. A7/A8 ack arms also reach 1.000 accuracy. | `results/agentic_metrics.md` |
 
 **What we do not claim:**
 - general verification skill: the checking stays tool-specific, and banking transfer fails (§5b, §8);
-- that RL teaches lying: the untrained model already claims false success 87–96% of the time;
+- that RL teaches lying: the SFT warm start already claims false success 87–96% of the time (sampled val 0.87, greedy test-IID 0.96; the untrained base model, which rarely finishes a task, 34%);
 - results beyond one model family and one seed per mechanism arm (§12).
 
 **Rigour:** eight hash-registered pre-registrations, a public deviation log that records our own bugs, and 506 tests (§11).
 
 ---
+
+**Labels used in this paper.**
+
+| Label | Meaning |
+|---|---|
+| v2, A6, A7 | The three warm starts (SFT models before RL). A6 adds honest-failure demos; A7 adds 20 credit-workflow demos to A6. |
+| A4–A8 | Pre-registered amendments, each hashed before its runs (`PREREGISTRATION_A*.md`). |
+| M1, M2, M2b, M3, M4 | A6 reward arms: PCSTR-d, PCSTR-d without report terms, without the disclosure term, binary outcome, acknowledgement outcome. |
+| X1, placebo | Amendment 8 runs: the ack reward with two refund task classes removed, or with 60 random tasks removed. |
+| tasks 411, 412, 415 | Cluster runs: A7 state arm seed 0, A7 ack arm seed 0, A7 state arm seed 1. |
+| VSC, FCR, PWV | Verified safe completion; false completion rate; post-write verification (read-back after a success ack). |
+| D-ENV-1, D-EVAL-1 | Logged deviations: a cross-operation idempotency-key bug (disclosed, not fixed); the evaluation prompt lists one more tool than training. |
 
 ## 1. The problem: an acknowledgement is not proof
 
@@ -158,8 +171,10 @@ Same init, only the reward differs. **Two GRPO seeds per arm** (hierarchical boo
 
 | Contrast | pooled ΔVSC [95% CI] (test-IID ∪ held-out faults) | test-IID only | held-out faults only |
 |---|---|---|---|
-| PCSTR-d − tool_trust | **+19.25 pp** [+15.4, +23.3] | +24.2 pp [+18.5, +30.2] | +14.2 pp [+9.5, +19.3] |
-| outcome − tool_trust | **+18.0 pp** [+13.9, +22.3] | +21.7 pp [+15.5, +28.5] | +14.2 pp [+9.5, +19.3] |
+| PCSTR-d − tool_trust | **+19.25 pp** [+15.4, +23.2] | +24.25 pp [+18.5, +30.2] | +14.25 pp [+9.5, +19.2] |
+| outcome − tool_trust | **+18.0 pp** [+14.0, +22.1] | +21.75 pp [+15.5, +28.2] | +14.25 pp [+9.5, +19.2] | 
+
+Dev splits, both seeds averaged per task, task bootstrap [`results/a4/split_contrasts.md`, `scripts/split_contrasts.py`]. On the untouched confirmatory splits the PCSTR-d − tool_trust gap is +20.25 pp [16.4, 24.3] (`results/confirmatory.json`); that is the number we headline.
 | PCSTR-d − outcome | +1.25 pp [+0.4, +2.4] | +2.5 pp [+0.7, +4.8] | 0.0 pp [−0.5, +0.5] |
 
 We quote the pooled column; the split columns are shown so no number is selected after the fact (PREREGISTRATION_A4 D-A4-2). The whole PCSTR-d − outcome edge comes from underclaim avoidance: `outcome` let the model report "failed" on 7 / 3 tasks it had actually completed.
@@ -327,7 +342,7 @@ The failure doesn't have to be hidden. When the agent's own reads showed the pro
 
 ## 8. Transfer
 
-**Languages and pressure: the gains transfer.** All training was in English, with neutral prompts and no pressure.
+**Languages and pressure: the gains transfer.** All training was in English, with neutral prompts and no pressure. Greedy test-IID variants, n = 200 each [`results/eval/transfer/*.summary.json`].
 
 | test-IID variant | RFT v2 init | GRPO + tool_trust | GRPO + PCSTR-d |
 |---|---|---|---|
@@ -337,7 +352,7 @@ The failure doesn't have to be hidden. When the agent's own reads showed the pro
 | "Just confirm it's done" pressure | 0.56 | 0.605 | **0.85** |
 | Hinglish + pressure | 0.565 | 0.615 | **0.855** |
 
-**A new domain (banking disputes and KYC): it does not transfer, and the limit is instructive.** Every trained model scores ≤ 0.06 VSC. The untrained 32B manages 0.08. State-reward GRPO makes policy violations *worse* (0.48 → 0.88). The trained policy runs a compressed script, `get_dispute → post_reversal → close_dispute → report`. It never reads the transaction ledger, so it never learns the disputed amount, and it reverses `0` cents. RL turned "re-read the order after a refund" into a habit tied to those specific tools. It did not learn a general rule to verify every write. Training on more than one tool family is the obvious next step; we did not get to it.
+**A new domain (banking disputes and KYC): it does not transfer, and the limit is instructive.** Every trained model scores ≤ 0.06 VSC (n = 150) [`results/eval/transfer/*__test_ood_domain.summary.json`]. The untrained 32B manages 0.08. State-reward GRPO makes policy violations *worse* (0.48 → 0.88). The trained policy runs a compressed script, `get_dispute → post_reversal → close_dispute → report`. It never reads the transaction ledger, so it never learns the disputed amount, and it reverses `0` cents. RL turned "re-read the order after a refund" into a habit tied to those specific tools. It did not learn a general rule to verify every write. Training on more than one tool family is the obvious next step; we did not get to it.
 
 ## 9. Toolkit chain
 
@@ -354,7 +369,7 @@ The failure doesn't have to be hidden. When the agent's own reads showed the pro
 
 **Measured workload per ticket:** 7.5 LLM calls, 25.4k input tokens (19.7k of them a cacheable prefix), 247 output tokens.
 
-**Measured self-hosted throughput:** 9,600 tickets per H200-hour (batched vLLM, the final PCSTR-d agent, VSC 0.85).
+**Measured self-hosted throughput:** 9,600 tickets per H200-hour (200 tickets in 75 s wall time including vLLM start-up and adapter merge, so conservative; batched vLLM, the final PCSTR-d agent, VSC 0.85) [`results/roi/throughput.json`, `results/roi/roi.md`]. Steady-state evaluation time is lower (≈ 0.10 s per episode, `results/agentic_metrics.md`).
 
 | Option, 100k tickets/month | $/month |
 |---|---|
@@ -396,7 +411,9 @@ Prices are from secondary sources dated 2026-11-05; `[[verify on provider pages 
 |---|---|---|
 | Before → after VSC 0.6425 → 0.8425; confirmatory H1 +1.5 pp | `results/confirmatory.json` | `actionproof/eval/confirmatory.py`, `slurm/tasks/400_confirmatory_eval.sh` |
 | Channel effect, v2 warm start (sampled verification 0.25 → 0.71–0.72 vs 0.10) | `results/eval/a4/h11/` (cluster and HF), `docs/figures/figures_data.json` | `scripts/make_figures.py` (`actionproof/eval/a4_metrics.pwv`) |
-| +19.25 pp pooled over tool_trust | `results/a4/prior_contrasts.md` | `scripts/a4_prior_contrasts.py` |
+| +19.25 pp pooled over tool_trust (dev), per split | `results/a4/prior_contrasts.md`, `results/a4/split_contrasts.md` | `scripts/split_contrasts.py` |
+| Transfer: Hindi, Hinglish, pressure, banking | `results/eval/transfer/*.summary.json` | `actionproof/eval/run_eval.py` |
+| ROI throughput | `results/roi/throughput.json`, `results/roi/roi.md` | `actionproof/eval/roi.py` |
 | Channel effect replicates on the A6 and A7 warm starts | `results/eval/a6/*__test_iid.summary.json` | `slurm/a6_eval.sh` |
 | Retries are evidence-gated but capped at the training depth; credit substitution | `results/a6/evidence_use.md` | `scripts/a6_evidence_use.py` |
 | H7-1 / H7-2: credit calls 200 / 200 under both A7 arms | `results/eval/a6/a7_*__e_heldout.jsonl`, `results/eval/a7/` | `slurm/tasks/410_a7_init.sh`, `slurm/a7_arm.sh` |
@@ -409,7 +426,7 @@ Prices are from secondary sources dated 2026-11-05; `[[verify on provider pages 
 | Training prompt: 7 state arms report "failed" on 50 / 50 unrecoverable refunds; warm start 1 / 50, ack arm 0 / 50 | `results/a7/plain_ur.md` | `scripts/a7_plain_ur.py`, `scripts/eval_plain_schema.py` |
 | A7 warm start: test-IID VSC 0.75, refund read-back 0.60 | `results/eval/a7/a7_init__neutral__test_iid.summary.json` | `slurm/tasks/416b_plain_and_a7init.sh` |
 | Ack reward pays readers less only on refund timeouts and unrecoverable refunds (step 0) | `results/a8/ack_class_audit.md` | `scripts/a8_ack_class_audit.py` |
-| X1: ack reward without those two task classes: PWV_refund 0.669 vs placebo 0.000 (CI of difference [0.59, 0.74]) | `PREREGISTRATION_A8.md`, `results/a8_hashes.json` | `slurm/a8_x1.sh` |
+| X1: ack reward without those two task classes: PWV_refund 0.669 vs placebo 0.000 (CI of difference [0.59, 0.74]) | `results/a8/x1_readback.md`, `PREREGISTRATION_A8.md` | `scripts/a8_x1_readback.py`, `slurm/a8_x1.sh` |
 | Credit calls split into replay vs operation aliasing (`credit-<order>`) | `results/a8/credit_aliasing.md` | `scripts/a8_credit_aliasing.py` |
 | Rewards on unrecoverable refunds by behaviour | `results/a8/ur_rewards.md` | `scripts/a8_ur_rewards.py` |
 | Untrained models below 32B at VSC ≈ 0; 32B at 0.515 | `results/leaderboard.json` | `actionproof/eval/run_eval.py` |

@@ -10,8 +10,8 @@ Real tools acknowledge writes that never committed. In ActionProof, a SQLite sup
 
 **Finding 1: the reward's information channel decides whether the agent checks.**
 
-- Two rewards of identical form: the goal term reads the database or the acknowledgements. From one warm start, the database version raises sampled post-write refund verification from 0.25 to 0.71–0.72; the acknowledgement version drives it to 0.10 (two seeds each). Pooled VSC gain over a tool-trusting reward: **+19.25 pp** [15.4, 23.3].
-- It replicates on a second warm start (one seed): greedy verification 1.00 vs 0.00, VSC 0.845 vs 0.615.
+- Two rewards of identical form: the goal term reads the database or the acknowledgements. From one warm start, the database version raises sampled post-write refund verification from 0.25 to 0.71–0.72; the acknowledgement version drives it to 0.10 (two seeds each). Confirmatory gain over a tool-trusting reward: **+20.25 pp** [16.4, 24.3].
+- It replicates on a second warm start (state arm two seeds): greedy verification 1.00 vs 0.00, VSC 0.845 vs 0.615.
 - Why: on refund timeouts and unrecoverable refunds, acting on a read forfeits acknowledgements, so the acknowledgement reward pays readers less. Dropping those classes keeps read-back at 0.67; dropping 60 random tasks leaves 0 (pre-registered, one seed).
 
 **Finding 2: what is selected is a script.** Retries follow reads, but stop at the training depth. On a write tool unseen in training, agents read back 73%, see `credits: []`, never retry, and report "completed".
@@ -28,7 +28,7 @@ Real tools acknowledge writes that never committed. In ActionProof, a SQLite sup
 
 **What we do not claim.**
 
-- That RL teaches lying: the untrained model already falsely claims success 87–96% of the time.
+- That RL teaches lying: the SFT warm start already falsely claims success 87–96% of the time.
 - That verification is general: banking transfer fails; checking stays tool-specific.
 - That report terms teach honest failure, or that it is robust: with one extra tool in the prompt, the same arms report "failed" on 0–45/50.
 
