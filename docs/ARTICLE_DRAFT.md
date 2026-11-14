@@ -6,6 +6,29 @@
 
 ---
 
+## Results at a glance
+
+![Before and after: VSC on the untouched confirmatory splits](figures/f3_before_after.png)
+
+Tools sometimes return `{"status": "success"}` for a write that never happened. We trained Tiny Aya Global (3.35B) with GRPO and changed only what the reward can see. All numbers below come from a deterministic verifier that reads the database, not the transcript.
+
+| | Result | Source |
+|---|---|---|
+| **Rewards that trust the tool get gamed** | A tool-trusting reward leaves the agent at VSC 0.635–0.645. AuditKIT's own `TaskCompletion` judge (Aya Expanse 32B) accepts **95%** of false "completed" claims. | `results/confirmatory.json`, §7 |
+| **A reward that checks the database works** | PCSTR-d raises VSC from **0.6425 to 0.8425** on untouched pre-registered splits (n = 400, both seeds), **+20.25 pp** [16.4, 24.3] over the tool-trusting reward. The registered H1 also passed: +1.5 pp over the binary state reward, p = 0.025. | `results/confirmatory.json`, §5 |
+| **The cause is what the reward observes** | Same form, same warm start, only the goal term's source differs. Reading the database raises refund read-back after a success acknowledgement from 0.25 to 0.71–0.72. Reading the acknowledgements drives it to 0.10 (sampled, two seeds each). | `results/eval/a4/h11/`, §3 |
+| **…and it traces to two task classes** | Removing the two task classes where checking costs acknowledgement reward keeps read-back at **0.669**. Removing 60 random tasks leaves it at **0.000**. Pre-registered, one seed per arm. | §3, `PREREGISTRATION_A8_ADDENDUM.md` |
+| **Checking is cheaper, not slower** | Tool-call accuracy is 1.000 vs 0.986–0.992, at 0.10 vs 0.20 s per episode (batched H200). | `results/agentic_metrics.md` |
+
+**What we do not claim:**
+- general verification skill: the checking stays tool-specific, and banking transfer fails (§5b, §8);
+- that RL teaches lying: the untrained model already claims false success 87–96% of the time;
+- results beyond one model family and one seed per mechanism arm (§12).
+
+**Rigour:** eight hash-registered pre-registrations, a public deviation log that records our own bugs, and 506 tests (§11).
+
+---
+
 ## 1. The problem: an acknowledgement is not proof
 
 A support agent calls `issue_refund`, the tool returns `{"status": "success"}`, and the agent tells the customer the refund is done. In production, that acknowledgement can be wrong in several ways:

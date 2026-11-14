@@ -164,7 +164,7 @@ with gr.Blocks(title="ActionProof") as demo:
             r_fault = gr.Dropdown(R_FAULTS, value=R_FAULTS[0] if R_FAULTS else None, label="Fault")
             r_k = gr.Slider(0, 5, value=0, step=1, label="Example #")
         with gr.Row():
-            r_left = gr.Dropdown(REPLAYS["models"], value=(REPLAYS["models"] or [None])[0], label="Left")
+            r_left = gr.Dropdown(REPLAYS["models"], value=(REPLAYS["models"][1] if len(REPLAYS["models"]) > 1 else None), label="Left")
             r_right = gr.Dropdown(REPLAYS["models"], value=(REPLAYS["models"] or [None])[-1], label="Right")
         r_go = gr.Button("Show", variant="primary")
         r_prompt = gr.Textbox(label="Task", interactive=False)
