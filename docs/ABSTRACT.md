@@ -19,7 +19,7 @@ Real tools acknowledge writes that never committed. In ActionProof, a SQLite sup
 **Finding 3: GRPO keeps the winning SFT template whole, including unpaid steps.**
 
 - In a held-out credit workflow, state-reward arms dropped the credit call (0/200, two seeds), re-issuing the refund, sometimes as the credit.
-- With 20 credit demonstrations added to SFT, the call survives under both rewards (**200/200**, 113 committed; one seed per arm).
+- With 20 credit demonstrations added to SFT, the call survives under both rewards (**200/200**, 113 committed; state arm two seeds).
 - Honest failure rides along (exploratory): under the training prompt all seven state arms report "failed" on 50/50 unrecoverable refunds, report terms or not; warm start 1/50, acknowledgement arm 0/50.
 - Conditional-policy selection (arXiv 2607.03478) with side effects.
 - Disclosed bug: cross-operation keys voided earlier credit calls.

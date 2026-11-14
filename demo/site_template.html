@@ -424,13 +424,13 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  <div class="counts rv">
   <div><div class="n">0<small>/200</small></div><p>A6 state-reward arm calls the credit tool. It re-issues the refund instead.</p></div>
   <div><div class="n">200<small>/200</small></div><p>A7 warm start calls <span class="mono">apply_store_credit</span> (113 committed).</p></div>
-  <div><div class="n">200<small>/200</small></div><p>A7 state reward: called, 113 committed.</p></div>
+  <div><div class="n">200<small>/200</small></div><p>A7 state reward: called, 113 committed. Same in both seeds.</p></div>
   <div><div class="n">200<small>/200</small></div><p>A7 acknowledgement reward: called, 113 committed.</p></div></div>
  <div class="tpl">
   <div class="tree rv"><svg id="tsvg" viewBox="0 0 600 490" role="img" aria-label="Three credit-workflow trajectories"></svg></div>
   <div class="insp" id="tinsp" aria-live="polite"></div>
  </div>
- <div class="disc"><div><div class="cap">What changed in A7</div>20 credit-workflow demonstrations, written in the A6 demonstrator's template with the credit's own key, added to SFT. One seed per reward arm.</div>
+ <div class="disc"><div><div class="cap">What changed in A7</div>20 credit-workflow demonstrations, written in the A6 demonstrator's template with the credit's own key, added to SFT. State arm: two seeds, identical results (seed 1, task 415). Warm start and acknowledgement arm: one seed each.</div>
   <div><div class="cap">Not isolated</div>Demonstration content, prompt context and key format were not varied independently. This is not proof that the demonstrations alone caused the behaviour.</div>
   <div><div class="cap">Void credit</div>The A6 warm start reuses the refund's idempotency key, and the environment replays the refund's reply (disclosed bug D-ENV-1). Its credit call changes nothing.</div></div>
  <div class="src" style="padding:0 56px 32px"><b>source</b> docs/ARTICLE_DRAFT.md §5b.4, §5c · results/a7/ctrl_credit.md · results/a8/credit_aliasing.md · episodes: demo/replays/credit_templates.json (scripts/build_credit_demo.py)</div>
@@ -465,7 +465,8 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
     <p style="font-size:14px;line-height:22px;margin:0">Pre-registered before the runs. X1 retrains the acknowledgement reward without the refund-timeout and unrecoverable-refund tasks. The placebo removes 60 random tasks instead, keeping the pool size equal.</p>
     <div class="src" style="color:#8C8F86">PREREGISTRATION_A8.md · PREREGISTRATION_A8_ADDENDUM.md · docs/ARTICLE_DRAFT.md §3</div></div>
    <div><div class="r3" id="x1bars"></div>
-    <p style="font-size:14px;line-height:22px;margin:16px 0 0">X1 − placebo = <b class="mono">+0.669</b>, paired task bootstrap 95% CI <b class="mono">[0.591, 0.740]</b>, 154 paired tasks. H-A8 supported; placebo control holds. <b>H-A8a not met:</b> X1 does not exceed the warm start's 0.60. One seed per cell; greedy test-IID.</p></div></div>
+    <p style="font-size:14px;line-height:22px;margin:16px 0 0">X1 − placebo = <b class="mono">+0.669</b>, paired task bootstrap 95% CI <b class="mono">[0.591, 0.740]</b>, 154 paired tasks. H-A8 supported; placebo control holds. <b>H-A8a not met:</b> X1 does not exceed the warm start's 0.60. One seed per cell; greedy test-IID.</p>
+    <p style="font-size:14px;line-height:22px;margin:12px 0 0">In training rollouts (steps ≤ 50) on refund timeouts, the acknowledgement reward pays readers less than non-readers (gap −0.281) while the state reward pays them more (+0.205). Difference between the two rewards: <b class="mono">−0.486</b>, 95% CI <b class="mono">[−0.712, −0.281]</b>. <span style="color:#8C8F86">results/a8/rollout_class_contrast.md</span></p></div></div>
   <div class="src" style="color:#8C8F86;margin-top:20px">step-0 values: results/a8/ack_class_audit.md (A7 gate, M4 ack_outcome, marker reads) · scripts/a8_ack_class_audit.py · the gate was sampled in the evaluation schema, groups of 4, 100 tasks</div>
  </div>
 </section>
