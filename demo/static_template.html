@@ -5,208 +5,265 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ActionProof</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
 <style>
-:root{color-scheme:light;--paper:#F6F7F4;--sheet:#FFFFFF;--rule:rgba(11,122,62,.22);--rule2:rgba(16,20,17,.08);--ink-1:#101411;--ink-2:#47524A;--ink-3:#7A857D;
- --ink:#0B7A3E;--pen:#D92D20;--ochre:#A86A00;--serif:"JetBrains Mono",ui-monospace,monospace;--sans:"IBM Plex Mono",ui-monospace,monospace;--mono:"JetBrains Mono",ui-monospace,monospace;
- --ease:cubic-bezier(.2,0,0,1);
- --ap-surface:var(--sheet);--ap-border:var(--rule2);--ap-text:var(--ink-1);--ap-2:var(--ink-2);--ap-muted:var(--ink-3);--ap-font:var(--sans);--ap-mono:var(--mono);
- --n-100:#ECEFEA;--n-200:#DCE1DA;--n-300:#BCC5BD;--n-400:#97A399;--n-500:#6F7C72;--c-state:var(--ink);--c-ack:var(--ochre);--c-warm:var(--n-400);--r-card:0}
-*{box-sizing:border-box}html{background:var(--paper)}
-body{margin:0;background:var(--paper);color:var(--ink-1);font:15px/25px var(--sans);-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration-color:var(--rule);text-underline-offset:3px}a:hover{text-decoration-color:currentColor}
-.wrap{max-width:1180px;margin:0 auto;padding:0 32px}
-nav{display:flex;justify-content:space-between;align-items:center;height:64px;border-bottom:1px solid var(--rule);font-size:14px}
-nav .brand{font-family:var(--mono);font-weight:800;font-size:18px}nav .brand::before{content:"■ ";color:var(--ink)}nav .links{display:flex;gap:24px;color:var(--ink-2)}
-header{padding:88px 0 56px;display:grid;grid-template-columns:1.4fr 1fr;gap:64px;align-items:end;border-bottom:1px solid var(--rule)}
-.kicker{font-family:var(--mono);font-size:12px;color:var(--ochre);margin-bottom:24px}
-h1{font-family:var(--mono);font-weight:800;font-size:56px;line-height:64px;letter-spacing:-.03em;margin:0;text-transform:none}
-h1 s{text-decoration-color:var(--pen);text-decoration-thickness:5px;color:var(--ink-3)}
-h1 .g{color:var(--ink)}
-.lede{font-size:18px;line-height:28px;color:var(--ink-2);margin:0}
-.lede b{font-weight:500;color:var(--ink-1)}
-h2::before{content:"## ";color:var(--ink-3)}
-h2{font-family:var(--mono);font-weight:700;font-size:32px;line-height:40px;letter-spacing:-.02em;margin:0 0 12px}
-.sec{padding:72px 0;border-bottom:1px solid var(--rule)}.sec p.intro{max-width:720px;color:var(--ink-2);margin:0 0 40px}
-/* figures */
-.figs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink)}
-.fig{padding:24px 32px 0 0}.fig+.fig{padding-left:32px;border-left:1px solid var(--rule)}
-.fig .n{font-family:var(--mono);font-weight:800;font-size:52px;line-height:60px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-.fig .n em{font-style:normal;color:var(--ink)}.fig:nth-child(3) .n{color:var(--pen)}.fig .d{color:var(--ink-2);font-size:15px;line-height:24px;margin-top:12px;max-width:300px}
-.fig .s{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:12px}
-/* player */
-.player{background:var(--sheet);border:1px solid var(--rule);border-radius:0}
-.ptop{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--rule)}
-.seg{display:flex;border:1px solid var(--rule);border-radius:0;overflow:hidden}
-.seg button{font:13px var(--sans);background:none;border:0;padding:6px 12px;color:var(--ink-2);cursor:pointer;transition:background-color .15s var(--ease),color .15s var(--ease)}
-.seg button+button{border-left:1px solid var(--rule)}.seg button[aria-pressed=true]{background:var(--ink);color:#FFFFFF;font-weight:500}
-.seg button:hover:not([aria-pressed=true]){background:var(--rule2)}
-select{font:13px var(--sans);color:var(--ink-1);background:var(--sheet);border:1px solid var(--rule);border-radius:0;padding:6px 8px}
-.task{padding:20px 24px;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:120px 1fr;gap:16px}
-.task .k{font-family:var(--mono);font-size:12px;color:var(--ink-3);padding-top:2px}.task .t{font-size:16px;line-height:26px}.task .t::before{content:"ticket> ";color:var(--ochre)}
-.ctrl{display:flex;align-items:center;gap:16px;padding:12px 24px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:12px;color:var(--ink-3)}
-.ctrl button{font:500 13px var(--sans);border:1px solid var(--ink);background:var(--ink);color:#FFFFFF;border-radius:0;padding:6px 14px;cursor:pointer;min-width:84px}
-.ctrl button.q{background:none;color:var(--ink-1);border-color:var(--rule);min-width:0}
-.ctrl input[type=range]{flex:1;accent-color:var(--ink-1)}
-.lanes{display:grid;grid-template-columns:1fr 1fr}.lane+.lane{border-left:1px solid var(--rule)}
-.lh{padding:16px 24px;border-bottom:1px solid var(--rule)}.lh .nm{font-weight:500}.lh .ch{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
-.lh .ch b{font-weight:700;color:var(--ink)}.lh .nm{color:var(--ochre)}
-.steps{list-style:none;margin:0;padding:0;min-height:120px}
-.st{display:grid;grid-template-columns:28px 1fr;gap:12px;padding:12px 24px;border-bottom:1px solid var(--rule2);opacity:0;transform:translateY(4px);
- transition:opacity .25s var(--ease),transform .25s var(--ease)}.st.on{opacity:1;transform:none}
-.st .i{font-family:var(--mono);font-size:12px;color:var(--ink-3);padding-top:1px}
-.st .tool{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--ink-1)}.st .tool::before{content:"$ ";color:var(--ink)}.st .a{font-family:var(--mono);font-size:12px;color:var(--ink-3);overflow-wrap:anywhere}
-.st .plan{font-size:12px;color:var(--ink-3)}
-.st .r{display:grid;grid-template-columns:92px 1fr;margin-top:6px;font-family:var(--mono);font-size:12.5px;line-height:20px}
-.st .r .k{font-family:var(--sans);color:var(--ink-3);font-size:12px}
-.claim{position:relative;display:inline}
-.claim.x::after{content:"";position:absolute;left:-2px;right:-2px;top:52%;height:2px;background:var(--pen);transform-origin:left;transform:scaleX(0);
- transition:transform .45s var(--ease) .25s}.st.on .claim.x::after{transform:scaleX(1)}
-.pen{color:var(--pen)}.inkc{color:var(--ink)}
-.note{font-size:12.5px;margin-top:4px}.st.verify .tool::after{content:"  [READ-BACK]";font:700 12px var(--mono);color:var(--ink)}
-.flag{font:700 12px var(--mono);margin-left:8px}.flag.ok{color:var(--ink)}.flag.bad{color:#FFFFFF;background:var(--pen);padding:0 6px}
-.end{padding:20px 24px;opacity:0;transition:opacity .3s var(--ease)}.end.on{opacity:1}
-.end .v{font-weight:700;font-size:16px;line-height:24px}.end .v.good{color:var(--ink)}.end .v.bad{color:var(--pen)}
-.end .rp{font-size:14px;color:var(--ink-2);margin-top:6px}.end .rw{display:grid;grid-template-columns:180px 1fr 48px;gap:8px;align-items:center;
- font-size:13px;color:var(--ink-2);margin-top:6px}.bar{height:4px;background:var(--n-100);border-radius:2px;overflow:hidden}.bar i{display:block;height:100%;background:var(--n-500)}
-.bar.lead i{background:var(--ink)}.rw em{font-style:normal;font-family:var(--mono);text-align:right}
-/* charts (svg from charts.py) */
-.chart{margin:0 0 32px;padding:0;border:0;background:none}.ctitle{font-family:var(--mono);font-weight:700;font-size:18px;line-height:26px;margin:0 0 16px}.ctitle::before{content:"> ";color:var(--ink)}
-.chart svg{width:100%;height:auto;font-family:var(--sans);overflow:visible}.chart text{fill:var(--ink-1)}.chart .grid{stroke:var(--rule2)}
-.chart .ref{stroke:var(--ink-3);stroke-dasharray:3 3}.chart .tick,.chart .tag,.chart .ann{fill:var(--ink-3);font:11px var(--mono)}
-.chart .lab{font-size:13px}.chart .axt{font:500 12px var(--mono);fill:var(--ochre)}.chart .val{font:12px var(--mono);fill:var(--ink-2)}
-.ccap{font-size:14px;line-height:22px;color:var(--ink-2);max-width:760px;margin-top:8px}.csrc{font:11px var(--mono);color:var(--ink-3);margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.stack .chart{margin-bottom:40px}.multi{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:32px}.multi .ctitle{font:500 14px var(--sans)}
-.legend{display:flex;gap:20px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);margin:0 0 12px}
-.legend i{display:inline-block;width:8px;height:8px;border-radius:1px;margin-right:8px}
-.tbl{border-collapse:collapse;width:100%;max-width:640px;font-size:14px}.tbl td,.tbl th{border-bottom:1px solid var(--rule);padding:8px 12px 8px 0;text-align:left;font-weight:400}
-.tbl th{font-size:12px;color:var(--ink-3)}.tbl td:not(:first-child){font-family:var(--mono)}.tbl td.neg{color:var(--pen)}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:56px}
-.limits{columns:2;column-gap:56px;color:var(--ink-2);font-size:15px}.limits p{margin:0 0 16px;break-inside:avoid}.limits b{color:var(--ink-1);font-weight:500}
-.ex{display:grid;grid-template-columns:240px 1fr;gap:48px;padding:56px 0;border-bottom:1px solid var(--rule)}
-.ex .h{font-family:var(--mono);font-size:22px;line-height:30px;font-weight:700}.ex .h small{display:block;font:500 12px var(--mono);color:var(--ochre);margin-bottom:12px}
-.ex .b{max-width:720px;font-size:17px;line-height:28px}.ex .b p{margin:0 0 16px}.ex .b b{font-weight:600}
-.steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:8px}.steps3 div{border-top:2px solid var(--ochre);padding-top:12px;font-size:15px;line-height:24px}
-.steps3 div b{display:block;font-family:var(--mono);font-size:16px;color:var(--ochre);margin-bottom:6px}
-.pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:8px 0 16px}.pair div{background:var(--sheet);border:1px solid var(--rule);border-radius:0;padding:16px;font-size:15px;line-height:24px}
-.pair .g{border-top:3px solid var(--ink)}.pair .r{border-top:3px solid var(--pen)}.pair .g b{color:var(--ink)}.pair .r b{color:var(--pen)}.pair b{display:block;margin-bottom:4px}
-dl.gl{display:grid;grid-template-columns:200px 1fr;gap:12px 24px;margin:0}dl.gl dt{font-family:var(--mono);font-size:14px;font-weight:500}dl.gl dd{margin:0;font-size:16px;line-height:26px;color:var(--ink-2)}
-@media (max-width:860px){.ex{grid-template-columns:1fr;gap:16px}.steps3,.pair{grid-template-columns:1fr}dl.gl{grid-template-columns:1fr;gap:4px}}
-footer{padding:40px 0 64px;font-size:13px;color:var(--ink-3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
-@media (max-width:860px){.wrap{padding:0 16px}header{grid-template-columns:1fr;gap:24px;padding:48px 0 32px}h1{font-size:44px;line-height:48px}
- .figs,.two{grid-template-columns:1fr}.fig+.fig{padding-left:0;border-left:0;border-top:1px solid var(--rule)}.lanes{grid-template-columns:1fr}
- .lane+.lane{border-left:0;border-top:1px solid var(--rule)}.limits{columns:1}.task{grid-template-columns:1fr;gap:4px}h2{font-size:30px;line-height:36px}}
-@media (prefers-reduced-motion:reduce){.st,.end,.claim.x::after{transition:none}}
+:root{color-scheme:dark;--bg:#0B0B0C;--card:rgba(255,255,255,.035);--card2:rgba(255,255,255,.06);--line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.05);
+ --t1:#EDEBE7;--t2:#A9A6A0;--t3:#6E6B66;--acc:#E8B86D;--acc-ink:#1A1408;--pen:#F07167;
+ --sans:"Geist",system-ui,sans-serif;--mono:"Geist Mono",ui-monospace,monospace;--serif:"Instrument Serif",Georgia,serif;--ease:cubic-bezier(.2,0,0,1);
+ --ap-surface:transparent;--ap-border:var(--line2);--ap-text:var(--t1);--ap-2:var(--t2);--ap-muted:var(--t3);--ap-font:var(--sans);--ap-mono:var(--mono);
+ --ink:var(--acc);--ochre:var(--t2);--n-100:#1C1C1E;--n-200:#2A2A2D;--n-300:#3A3A3E;--n-400:#56555A;--n-500:#7A7880;
+ --c-state:var(--acc);--c-ack:#77757C;--c-warm:#4A494E;--r-card:0}
+*{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--t1);font:16px/26px var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.glow{position:absolute;pointer-events:none;filter:blur(70px);opacity:.55;z-index:0}
+.wrap{max-width:1160px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+em.s{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:0}
+.meta{font:13px/20px var(--mono);color:var(--t3)}
+.pill{display:inline-flex;align-items:center;gap:8px;font:13px var(--mono);color:var(--t2);border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px}
+.pill i{width:6px;height:6px;border-radius:50%;background:var(--acc)}
+.btn{display:inline-flex;align-items:center;gap:8px;font:500 15px var(--sans);border-radius:999px;padding:12px 22px;border:1px solid var(--line);
+ background:var(--card2);color:var(--t1);cursor:pointer;transition:background-color .15s var(--ease),transform .1s var(--ease)}
+.btn:hover{background:rgba(255,255,255,.1)}.btn:active{transform:scale(.98)}.btn.p{background:var(--acc);color:var(--acc-ink);border-color:transparent}.btn.p:hover{background:#F0C47E}
+nav{position:sticky;top:0;z-index:5;backdrop-filter:blur(14px);background:rgba(11,11,12,.72);border-bottom:1px solid var(--line2)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:17px}
+.logo b{width:26px;height:26px;border-radius:7px;background:var(--acc);color:var(--acc-ink);display:grid;place-items:center;font:600 12px var(--mono)}
+.nl{display:flex;gap:32px;font-size:14px;color:var(--t2)}.nl a:hover{color:var(--t1)}
+.nr{display:flex;gap:12px;align-items:center}.nr .btn{padding:8px 16px;font-size:14px}
+.hero{position:relative;padding:96px 0 80px}.hero .grid{display:grid;grid-template-columns:1fr 1.05fr;gap:56px;align-items:center}
+h1{font-size:64px;line-height:68px;font-weight:600;letter-spacing:-.035em;margin:24px 0 20px}h1 em.s{font-size:72px;color:var(--acc)}
+.lead{font-size:18px;line-height:28px;color:var(--t2);max-width:500px;margin:0 0 32px}.ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.win{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));border:1px solid var(--line);border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.45);overflow:hidden}
+.win .bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line2);font:13px var(--mono);color:var(--t2)}
+.win .bar .st{color:var(--acc)}
+.cmp{display:grid;grid-template-columns:1fr 1fr}.cmp>div{padding:18px 20px;min-height:250px}.cmp>div+div{border-left:1px solid var(--line2)}
+.cmp h4{margin:0 0 12px;font:500 13px var(--sans);color:var(--t1)}
+.ln{font:12.5px/20px var(--mono);color:var(--t2);margin-bottom:4px;opacity:0;transform:translateY(4px);transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.ln.on{opacity:1;transform:none}.ln .c{color:var(--t1)}.ln .ok{color:var(--acc)}.ln .bad{color:var(--pen)}
+.verd{margin-top:12px;padding-top:12px;border-top:1px solid var(--line2);font:500 13px var(--sans);white-space:normal}.verd.ok{color:var(--acc)}.verd.bad{color:var(--pen)}
+.runs{border-top:1px solid var(--line2);padding:14px 20px}.runs .r{display:grid;grid-template-columns:12px 1fr auto;gap:10px;font:12.5px/26px var(--mono);color:var(--t2)}
+.runs .r i{width:6px;height:6px;border-radius:50%;margin-top:10px;background:var(--t3)}.runs .r i.a{background:var(--acc)}.runs .r i.p{background:var(--pen)}
+section{position:relative;padding:96px 0;border-top:1px solid var(--line2)}
+.kick{font:13px var(--mono);color:var(--t3);margin-bottom:16px}
+h2{font-size:44px;line-height:50px;font-weight:600;letter-spacing:-.03em;margin:0 0 16px}h2 em.s{font-size:50px;color:var(--acc)}
+.sub{color:var(--t2);font-size:17px;line-height:27px;max-width:620px;margin:0}
+.head{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:end;margin-bottom:48px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding:40px 0}.row+.row{border-top:1px solid var(--line2)}
+.row .n{font:13px var(--mono);color:var(--t3);margin-bottom:12px}.row h3{font-size:26px;line-height:34px;font-weight:500;letter-spacing:-.02em;margin:0 0 12px}
+.row p{color:var(--t2);margin:0 0 12px}.row p b{color:var(--t1);font-weight:500}
+code{font:14px var(--mono);color:var(--t1);background:var(--card2);border:1px solid var(--line2);border-radius:6px;padding:1px 6px}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:12px}.vs .card{padding:24px}.vs h5{margin:8px 0;font:500 17px var(--sans)}.vs p{font-size:15px;line-height:24px;margin:0;color:var(--t2)}
+.vs .b{border-color:rgba(232,184,109,.35)}.vs .b h5{color:var(--acc)}
+.mini{font:12.5px/22px var(--mono);color:var(--t2)}.mini .bad{color:var(--pen)}.mini .ok{color:var(--acc)}
+.stats{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:12px}
+.stat .l{font:13px var(--mono);color:var(--t3)}.stat .v{font-size:56px;line-height:60px;font-weight:600;letter-spacing:-.04em;margin:16px 0 10px;font-variant-numeric:tabular-nums}
+.stat .v small{font-size:22px;color:var(--t3);font-weight:500;letter-spacing:-.01em}.stat p{color:var(--t2);font-size:14px;line-height:22px;margin:0}
+.stat .s{font:11px var(--mono);color:var(--t3);margin-top:14px}.stat.pen .v{color:var(--pen)}
+.ringwrap{display:flex;gap:24px;align-items:center;margin-top:16px}.ring{width:140px;height:140px;flex:none}
+.ring circle{fill:none;stroke-width:10}.ring .bg{stroke:rgba(255,255,255,.07)}.ring .fg{stroke:var(--acc);stroke-linecap:round;transition:stroke-dashoffset 1.4s var(--ease)}
+.ring .was{stroke:#56555A;stroke-linecap:round}.ring text{fill:var(--t1);font:600 30px var(--sans);letter-spacing:-.03em}
+.ptop{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line2)}
+.seg{display:flex;flex-wrap:wrap;gap:6px}.seg button{font:13px var(--sans);color:var(--t2);background:transparent;border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer;transition:background-color .15s var(--ease),color .15s var(--ease)}
+.seg button:hover{color:var(--t1)}.seg button[aria-pressed=true]{background:var(--t1);color:var(--bg);border-color:var(--t1)}
+select{font:13px var(--sans);color:var(--t1);background:#161618;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.task{padding:18px 20px;border-bottom:1px solid var(--line2);display:grid;grid-template-columns:150px 1fr;gap:16px}
+.task .k{font:12px/20px var(--mono);color:var(--t3)}.task .t{font-size:16px;line-height:26px}
+.ctrl{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--line2);font:12px var(--mono);color:var(--t3)}
+.ctrl .btn{padding:7px 16px;font-size:13px}.ctrl input{flex:1;accent-color:var(--acc)}
+.lanes{display:grid;grid-template-columns:1fr 1fr}.lane+.lane{border-left:1px solid var(--line2)}
+.lh{padding:16px 20px;border-bottom:1px solid var(--line2)}.lh .nm{font-weight:500}.lh .ch{font:12px var(--mono);color:var(--t3);margin-top:2px}.lh .ch b{color:var(--acc);font-weight:500}
+.steps{list-style:none;margin:0;padding:0}
+.stp{display:grid;grid-template-columns:28px 1fr;gap:10px;padding:12px 20px;border-bottom:1px solid var(--line2);opacity:0;transform:translateY(4px);transition:opacity .25s var(--ease),transform .25s var(--ease)}
+.stp.on{opacity:1;transform:none}.stp .i{font:12px var(--mono);color:var(--t3);padding-top:2px}.stp .tool{font:500 14px var(--mono)}
+.stp .a{font:12px var(--mono);color:var(--t3);overflow-wrap:anywhere}.stp .plan{font:12px var(--mono);color:var(--t3)}
+.tg{font:500 11px var(--mono);margin-left:8px;padding:2px 8px;border-radius:999px;border:1px solid}
+.tg.ok{color:var(--acc);border-color:rgba(232,184,109,.4)}.tg.bad{color:var(--pen);border-color:rgba(240,113,103,.45)}
+.stp .r{display:grid;grid-template-columns:96px 1fr;margin-top:8px;font:12.5px/20px var(--mono)}.stp .r .k{color:var(--t3);font-family:var(--sans);font-size:12px}
+.claim{position:relative}.claim.x{color:var(--t3)}.claim.x::after{content:"";position:absolute;left:-2px;right:-2px;top:52%;height:1.5px;background:var(--pen);transform-origin:left;transform:scaleX(0);transition:transform .45s var(--ease) .25s}
+.stp.on .claim.x::after{transform:scaleX(1)}
+.pen{color:var(--pen)}.okc{color:var(--acc)}.note{font-size:12.5px;margin-top:4px;font-family:var(--mono)}
+.end{padding:20px;opacity:0;transition:opacity .3s var(--ease)}.end.on{opacity:1}.end .v{font-weight:600;font-size:16px}.end .v.good{color:var(--acc)}.end .v.bad{color:var(--pen)}
+.end .rp{font-size:14px;color:var(--t2);margin-top:6px}.end .rp b{color:var(--t1);font-weight:500}
+.rw{display:grid;grid-template-columns:180px 1fr 48px;gap:10px;align-items:center;font-size:13px;color:var(--t2);margin-top:6px}
+.bar{height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}.bar i{display:block;height:100%;background:#77757C}.bar.lead i{background:var(--acc)}
+.rw em{font-style:normal;font-family:var(--mono);text-align:right}
+.chart{margin:0 0 12px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px}
+.ctitle{font:500 18px var(--sans);letter-spacing:-.01em;margin:0 0 18px}
+.chart svg{width:100%;height:auto;font-family:var(--sans);overflow:visible}.chart text{fill:var(--t1)}.chart .grid{stroke:var(--line2)}
+.chart .ref{stroke:var(--t3);stroke-dasharray:3 3}.chart .tick,.chart .tag,.chart .ann{fill:var(--t3);font:11px var(--mono)}
+.chart .lab{font-size:13px;fill:var(--t2)}.chart .val{font:12px var(--mono);fill:var(--t2)}.chart .axt{font:12px var(--mono);fill:var(--t3)}
+.ccap{font-size:14px;line-height:22px;color:var(--t2);margin-top:10px}.csrc{font:11px var(--mono);color:var(--t3);margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.legend{display:flex;gap:20px;flex-wrap:wrap;font-size:13px;color:var(--t2);margin:0 0 12px}.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px}
+.tbl{border-collapse:collapse;width:100%;font-size:14px}.tbl td,.tbl th{border-bottom:1px solid var(--line2);padding:10px 12px 10px 0;text-align:left;font-weight:400}
+.tbl th{font:12px var(--mono);color:var(--t3)}.tbl td:not(:first-child){font-family:var(--mono)}.tbl td.neg{color:var(--pen)}
+.gl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0}.gl .card{padding:22px}.gl dt{font:500 14px var(--mono);color:var(--acc);margin-bottom:6px}
+.gl dd{margin:0;font-size:14px;line-height:22px;color:var(--t2)}
+.lim{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.lim .card h5{margin:0 0 8px;font:500 16px var(--sans)}.lim .card p{margin:0;color:var(--t2);font-size:14px;line-height:22px}
+.cta{display:grid;grid-template-columns:1fr 1.5fr;gap:12px}
+.cta .big{background:var(--acc);color:var(--acc-ink);border-radius:18px;padding:36px}.cta .big .meta{color:rgba(26,20,8,.6)}
+.cta .big h3{font-size:36px;line-height:42px;font-weight:600;letter-spacing:-.03em;margin:12px 0}.cta .big h3 em.s{font-size:42px}
+.cta .big p{color:rgba(26,20,8,.75);margin:0 0 24px}.cta .big .btn{background:var(--acc-ink);color:var(--acc);border-color:transparent}
+.cta .big .btn.o{background:transparent;color:var(--acc-ink);border-color:rgba(26,20,8,.25)}
+.cta .ab h4{margin:16px 0 0;font-size:18px;font-weight:500;line-height:28px}
+.ticks{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:28px 0;font:13px var(--mono);color:var(--t3);border-bottom:1px solid var(--line2)}
+.ticks span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--acc);margin-right:10px;vertical-align:1px}
+footer{padding:28px 0 56px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font:13px var(--mono);color:var(--t3)}
+.rv{opacity:0;transform:translateY(12px);transition:opacity .6s var(--ease),transform .6s var(--ease)}.rv.in{opacity:1;transform:none}
+@media (max-width:900px){.wrap{padding:0 16px}.hero .grid,.head,.row,.cta,.vs{grid-template-columns:1fr}.stats,.gl,.lim{grid-template-columns:1fr}
+ h1{font-size:42px;line-height:46px}h1 em.s{font-size:48px}h2{font-size:32px;line-height:38px}h2 em.s{font-size:36px}.nl,.nr .pill{display:none}
+ .lanes,.cmp{grid-template-columns:1fr}.lane+.lane,.cmp>div+div{border-left:0;border-top:1px solid var(--line2)}.task{grid-template-columns:1fr;gap:4px}.hero{padding:56px 0}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}.rv{opacity:1;transform:none}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<nav><span class="brand">ActionProof</span><span class="links">
- <a href="https://github.com/atharvgaur1845/actionproof-v2">Code and paper</a>
- <a href="https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04">Models</a>
- <a href="https://huggingface.co/collections/atharvgaur18/actionproof-benchmark-traces-demo-6af7fb25037f3d7eaf294e22">Benchmark and traces</a></span></nav>
+<nav><div class="wrap"><a class="logo" href="#"><b>AP</b>ActionProof</a>
+ <div class="nl"><a href="#problem">The problem</a><a href="#episode">Watch it</a><a href="#results">Results</a><a href="#why">Why it works</a><a href="#words">Glossary</a></div>
+ <div class="nr"><span class="pill"><i></i>pre-registered test passed</span><a class="btn p" href="https://github.com/atharvgaur1845/actionproof-v2">Read the paper</a></div></div></nav>
 
-<header>
- <div><div class="kicker">Lexsi hackathon · Track 3 · reward design for tool agents</div>
- <h1>The tool said the refund <s>went through</s>.<br>The ledger: <span style="color:var(--pen)">refunds: []</span></h1></div>
- <p class="lede">Software tools sometimes report success when the work did not happen. We trained a small AI agent two ways. When its training score came from <b>the tool's report</b>, it learned to trust the tool. When its score came from <b>the real database</b>, it learned to check its work.</p>
-</header>
+<div class="hero">
+ <div class="glow" style="width:620px;height:420px;right:-120px;top:-60px;background:radial-gradient(closest-side,rgba(232,184,109,.35),transparent)"></div>
+ <div class="glow" style="width:520px;height:360px;left:-160px;top:280px;background:radial-gradient(closest-side,rgba(240,113,103,.16),transparent)"></div>
+ <div class="wrap grid">
+  <div>
+   <span class="pill"><i></i>Lexsi hackathon · track 3 · reward design</span>
+   <h1>The agent said <em class="s">done</em>. The database disagreed.</h1>
+   <p class="lead">Software tools sometimes report success when nothing happened. We trained a small AI agent two ways. Trained on the tool's report, it learned to trust the tool. Trained on the real database, it learned to check its own work.</p>
+   <div class="ctas"><a class="btn p" href="#episode">Watch an episode</a><a class="btn" href="#problem">How it works, 2 minutes</a></div>
+   <div class="meta">3.35B model / reinforcement learning / 8 pre-registered tests</div>
+  </div>
+  <div class="win" id="herowin">
+   <div class="bar"><span>Refund task · the tool returns a false "success"</span><span class="st">replaying</span></div>
+   <div class="cmp"><div><h4>Trained to trust the tool</h4><div id="hwa"></div></div><div><h4>Trained on the database</h4><div id="hwb"></div></div></div>
+   <div class="runs"><div class="meta" style="margin-bottom:4px">verified success on 400 unseen test tasks</div>
+    <div class="r"><i></i><span>before training</span><span>64%</span></div>
+    <div class="r"><i class="p"></i><span>trained to trust the tool</span><span>64%</span></div>
+    <div class="r"><i class="a"></i><span>trained on the database</span><span>84%</span></div></div>
+  </div>
+ </div>
+</div>
 
+<section id="problem"><div class="wrap">
+ <div class="head rv"><div><div class="kick">01 / the problem</div><h2>A tool can say <em class="s">success</em> when nothing happened</h2></div>
+  <p class="sub">This page explains the project from the start. You do not need to know the field.</p></div>
+ <div class="row rv"><div><div class="n">01</div><h3>Agents work by calling tools</h3>
+  <p>An AI agent does a task by calling software tools. For example, a customer-support agent calls a tool to refund an order.</p>
+  <p>The tool sends back a message, for example <code>{"status": "success"}</code>. We call this message an <b>acknowledgement</b>.</p></div>
+  <div class="card mini"><div>$ issue_refund(order=O-6470, amount=30.00)</div><div class="ok">&gt; {"status": "success", "refund_id": "R-C53EDF"}</div>
+   <div style="margin-top:14px">$ query_ledger(order=O-6470)</div><div class="bad">&gt; {"refunds": []}   ← no refund in the database</div></div></div>
+ <div class="row rv"><div class="card mini"><div class="meta" style="margin-bottom:8px">what the agent tells the customer</div>
+   <div style="font:17px/26px var(--sans);color:var(--t1)">"Your refund is done."</div><div class="bad" style="margin-top:10px">The customer gets no money.</div></div>
+  <div><div class="n">02</div><h3>The acknowledgement can be wrong</h3>
+  <p>In real systems, a tool can say "success" but the refund is not in the database. Most agents believe the message and report the task as done.</p>
+  <p>A careful agent checks. After the refund, it reads the payment ledger again. If the refund is not there, it tries again or reports the problem.</p></div></div>
+</div></section>
 
-<section class="ex"><div class="h"><small>01 · The problem</small>A tool can say "done" when nothing happened</div><div class="b">
-<p>AI agents do work by calling software tools. For example, a customer-support agent calls a tool to refund an order.</p>
-<p>The tool sends back a message, for example <code>{"status": "success"}</code>. We call this message an <b>acknowledgement</b>.</p>
-<p>In real systems, an acknowledgement can be wrong. The tool can say "success" but the refund is not in the database. Most agents believe the message. They tell the customer "your refund is done". The customer gets no money.</p>
-<p>A careful agent checks. After the refund, it reads the payment ledger again. If the refund is not there, it tries again or reports the problem.</p></div></section>
+<section><div class="wrap">
+ <div class="head rv"><div><div class="kick">02 / the question</div><h2>Can training teach an agent to <em class="s">check</em>?</h2></div>
+  <p class="sub">We train agents with reinforcement learning. The agent tries a task many times. A reward gives each attempt a score. Training makes high-score behaviour more frequent. So the reward decides what the agent learns.</p></div>
+ <div class="vs rv"><div class="card"><div class="meta">reward A</div><h5>Trusts the tool</h5><p>Reads the tool's acknowledgements. If the tool said "success", the reward says the task is done.</p></div>
+  <div class="card b"><div class="meta">reward B</div><h5>Checks the database</h5><p>Reads the real database after the attempt. The task is done only if the refund is really there.</p></div></div>
+ <p class="sub rv" style="margin-top:20px">Everything else was the same: the same model, the same training tasks, the same settings. Only the reward was different.</p>
+</div></section>
 
-<section class="ex"><div class="h"><small>02 · The question</small>Can training teach an agent to check?</div><div class="b">
-<p>We train agents with <b>reinforcement learning</b>. The agent tries a task many times. A <b>reward</b> gives each attempt a score. Training makes high-score behaviour more frequent.</p>
-<p>So the reward decides what the agent learns. We compared two kinds of reward:</p>
-<div class="pair"><div class="r"><b>Reward A: trusts the tool</b>It reads the tool's acknowledgements. If the tool said "success", the reward says the task is done.</div>
-<div class="g"><b>Reward B: checks the database</b>It reads the real database after the episode. The task is done only if the refund is really there.</div></div>
-<p>Everything else was the same: the same model, the same training data, the same settings. Only the reward was different.</p></div></section>
+<section><div class="wrap">
+ <div class="head rv"><div><div class="kick">03 / what we built</div><h2>A test shop where tools <em class="s">sometimes lie</em></h2></div>
+  <p class="sub">The agent is Tiny Aya Global, a 3.35B open model by Cohere. We trained it with GRPO, a common reinforcement-learning method. We wrote and hashed our test plans before we ran the tests.</p></div>
+ <div class="lim rv">
+  <div class="card"><div class="meta">simulated shop</div><h5 style="margin-top:12px">A fresh database per attempt</h5><p>Orders, payments and support tickets. Each attempt starts from a clean copy.</p></div>
+  <div class="card"><div class="meta">faulty tools</div><h5 style="margin-top:12px">Injected faults</h5><p>"Phantom write": says success, writes nothing. "Partial write": writes half. "Timeout": says error, but the write happened.</p></div>
+  <div class="card"><div class="meta">strict checker</div><h5 style="margin-top:12px">Reads only the database</h5><p>After each attempt, a program reads the final database. It ignores what the agent said and decides if the task is really done.</p></div></div>
+</div></section>
 
-<section class="ex"><div class="h"><small>03 · What we built</small>A test world with tools that sometimes lie</div><div class="b">
-<div class="steps3"><div><b>A simulated shop</b>A small database with orders, payments and support tickets. Each attempt gets a fresh copy.</div>
-<div><b>Faulty tools</b>We inject faults. A "phantom write" says success but writes nothing. A "partial write" writes half. A "timeout" says error but the write happened.</div>
-<div><b>A strict checker</b>After each attempt, a program reads the final database. It does not read what the agent said. It decides if the task is really done.</div></div>
-<p style="margin-top:24px">The agent is a small open model, <b>Tiny Aya Global</b> (3.35 billion parameters, by Cohere). We trained it with <b>GRPO</b>, a common reinforcement-learning method. We wrote our test plans and hashed them before we ran the tests, so we could not change them after we saw the results.</p></div></section>
-
-<section class="ex"><div class="h"><small>04 · The answer</small>Yes, but only when the reward checks the database</div><div class="b">
-<p>With Reward B, the agent learned to read the ledger after a refund. Its verified success went from <b>64% to 84%</b> on 400 tasks that we kept unused until the final test.</p>
-<p>With Reward A, the agent stopped checking. Its verified success stayed near <b>64%</b>. It reported "done" on refunds that did not exist.</p>
-<p>AI judges that read the conversation also failed. One judge accepted <b>95%</b> of the false "done" reports.</p>
-<p>The player below shows real recorded attempts. Press <b>Play</b> to see the two agents do the same task step by step.</p></div></section>
-<section class="sec">
- <h2>Watch one episode</h2>
- <p class="intro">Each row is one tool call. "Tool said" is the acknowledgement. "Ledger holds" is the truth in the database. When the two do not agree, a red line crosses out what the tool said. A green "read-back" is the agent checking its own work. Use the buttons to choose a fault type and the two agents.</p>
- <div class="player">
+<section id="episode"><div class="wrap">
+ <div class="head rv"><div><div class="kick">04 / watch it</div><h2>Same task, two agents, <em class="s">step by step</em></h2></div>
+  <p class="sub">Real recorded attempts. Each row is one tool call. "Tool said" is the acknowledgement. "Ledger" is the truth in the database. When they do not agree, a red line crosses out the claim. Press Play.</p></div>
+ <div class="win rv">
   <div class="ptop"><div class="seg" id="faults"></div>
-   <div style="display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ink-3)">
-    <select id="ex" aria-label="Example"></select><select id="la" aria-label="Left agent"></select><span>vs</span>
-    <select id="lb" aria-label="Right agent"></select></div></div>
+   <div style="display:flex;gap:8px;align-items:center;font-size:13px;color:var(--t3)"><select id="ex" aria-label="Example"></select>
+    <select id="la" aria-label="Left agent"></select><span>vs</span><select id="lb" aria-label="Right agent"></select></div></div>
   <div class="task"><div class="k" id="tid"></div><div class="t" id="prompt"></div></div>
-  <div class="ctrl"><button id="play">Play</button><button class="q" id="next">Step</button><button class="q" id="all">Show all</button>
+  <div class="ctrl"><button class="btn p" id="play">Play</button><button class="btn" id="next">Step</button><button class="btn" id="all">Show all</button>
    <input type="range" id="scrub" min="0" value="0" aria-label="Step"><span id="pos"></span></div>
   <div class="lanes" id="lanes"></div>
  </div>
-</section>
+</div></section>
 
-<section class="sec">
- <h2>What changed</h2>
- <p class="intro">These are the results of the final test. We wrote the test plan before the test, and we used 400 tasks that training never saw. Each number shows the file it comes from.</p>
- <div class="figs">
-  <div class="fig"><div class="n">0.64 → <em>0.84</em></div><div class="d">Verified-success completion, warm start to the database reward (PCSTR-d), both training seeds</div><div class="s">results/confirmatory.json</div></div>
-  <div class="fig"><div class="n">+20 pp</div><div class="d">Over a reward that trusts the tool's acknowledgements, 95% CI 16.4 to 24.3</div><div class="s">results/confirmatory.json</div></div>
-  <div class="fig"><div class="n">95%</div><div class="d">Of false "completed" claims that AuditKIT's TaskCompletion judge (Aya Expanse 32B) accepts as done</div><div class="s">results/judge/aya32b__summary.json</div></div>
+<section id="results"><div class="wrap">
+ <div class="head rv"><div><div class="kick">05 / results</div><h2>Checking the database <em class="s">wins</em></h2></div>
+  <p class="sub">The final test used 400 tasks that training never saw. We wrote the test plan before the test. Each number names the file it comes from.</p></div>
+ <div class="stats rv">
+  <div class="card stat"><div class="l">tasks really done and reported correctly</div><div class="ringwrap">
+   <svg class="ring" viewBox="0 0 150 150"><circle class="bg" cx="75" cy="75" r="62"/><circle class="was" cx="75" cy="75" r="62" stroke-dasharray="389.6" stroke-dashoffset="139.3" transform="rotate(-90 75 75)" opacity=".5"/>
+   <circle class="fg" id="ringfg" cx="75" cy="75" r="62" stroke-dasharray="389.6" stroke-dashoffset="389.6" transform="rotate(-90 75 75)"/><text x="75" y="85" text-anchor="middle">84%</text></svg>
+   <p>Up from <b style="color:var(--t1)">64%</b> before training. Both training runs gave 84%.<br><span class="meta">results/confirmatory.json</span></p></div></div>
+  <div class="card stat"><div class="l">gain over the tool-trusting reward</div><div class="v">+20<small> points</small></div><p>95% confidence interval: 16.4 to 24.3 points.</p><div class="s">results/confirmatory.json</div></div>
+  <div class="card stat pen"><div class="l">false "done" reports an AI judge accepted</div><div class="v">95%</div><p>AuditKIT's TaskCompletion judge, on Aya Expanse 32B, read the conversation and believed the agent.</p><div class="s">results/judge/aya32b__summary.json</div></div>
  </div>
- <div style="height:56px"></div>
- {{C1}}
- {{C6}}
-</section>
+ <div style="height:12px"></div>
+ <div class="rv">{{C1}}</div>
+ <div class="rv">{{C6}}</div>
+</div></section>
 
-<section class="sec">
- <h2>Why it works</h2>
- <p class="intro">Checking costs a step. A reward that trusts the tool gives no points for checking, so training removes it. A reward that reads the database gives points only when the refund is really there, so training keeps the agents that check. The charts show how often each agent checked after a "success". The X1 test shows that two task types taught the tool-trusting agent to stop checking.</p>
- {{C2}}
- <div style="height:24px"></div>
- {{C3}}
-</section>
+<section id="why"><div class="wrap">
+ <div class="head rv"><div><div class="kick">06 / why it works</div><h2>Checking costs a step. <em class="s">Who pays for it?</em></h2></div>
+  <p class="sub">A reward that trusts the tool gives no points for checking, so training removes it. A reward that reads the database pays only when the refund is really there, so training keeps the agents that check.</p></div>
+ <div class="stack rv">{{C2}}</div>
+ <div class="rv">{{C3}}</div>
+</div></section>
 
-<section class="sec">
- <h2>Judges and cost</h2>
- <p class="intro">Some teams use another AI model as a judge. The judge reads the conversation and decides if the task is done. The judges we tested accepted most false "done" reports. Checking also did not make the agent slower. The agent that checks makes one call, reads the result, then decides. The agent that trusts the tool writes long plans in advance.</p>
- {{C4}}
- {{C5}}
-</section>
+<section><div class="wrap">
+ <div class="head rv"><div><div class="kick">07 / judges and cost</div><h2>AI judges are <em class="s">fooled</em>. Checking is cheap.</h2></div>
+  <p class="sub">Some teams use another AI model as a judge. The judges we tested accepted most false "done" reports. The agent that checks makes one call, reads the result, then decides. The agent that trusts the tool writes long plans in advance.</p></div>
+ <div class="rv">{{C4}}</div>
+ <div class="stack rv">{{C5}}</div>
+</div></section>
 
+<section id="words"><div class="wrap">
+ <div class="head rv"><div><div class="kick">08 / glossary</div><h2>Words on <em class="s">this page</em></h2></div><p class="sub">Every technical word, in one sentence.</p></div>
+ <dl class="gl rv">
+  <div class="card"><dt>Agent</dt><dd>An AI model that does a task by calling tools, one call at a time.</dd></div>
+  <div class="card"><dt>Acknowledgement</dt><dd>The message a tool sends back after a call, for example "success" or "error".</dd></div>
+  <div class="card"><dt>Ledger</dt><dd>The payments table in the database. It shows which refunds really exist.</dd></div>
+  <div class="card"><dt>Read-back</dt><dd>A call that reads the database after a write, to check that the write really happened.</dd></div>
+  <div class="card"><dt>Phantom write</dt><dd>A fault: the tool says "success" but writes nothing.</dd></div>
+  <div class="card"><dt>Reward</dt><dd>The score training gives each attempt. Training makes high-score behaviour more frequent.</dd></div>
+  <div class="card"><dt>Verified success</dt><dd>The share of tasks the database confirms as done, and the agent reported correctly.</dd></div>
+  <div class="card"><dt>PCSTR-d</dt><dd>Our reward that reads the database (reward B).</dd></div>
+  <div class="card"><dt>GRPO</dt><dd>Group Relative Policy Optimization, the reinforcement-learning method we used.</dd></div>
+  <div class="card"><dt>Warm start</dt><dd>The model before reinforcement learning, after a first round of example-based training.</dd></div>
+  <div class="card"><dt>Run</dt><dd>One training run. "Two runs" means we trained twice and got similar results.</dd></div>
+  <div class="card"><dt>X1 and placebo</dt><dd>A follow-up test: remove 2 task types (X1) or 60 random tasks (placebo) to find what taught the agent to stop checking.</dd></div>
+ </dl>
+</div></section>
 
-<section class="sec"><h2>Words on this page</h2><dl class="gl">
-<dt>Agent</dt><dd>An AI model that does a task by calling tools, one call at a time.</dd>
-<dt>Acknowledgement</dt><dd>The message a tool sends back after a call, for example "success" or "error".</dd>
-<dt>Ledger</dt><dd>The payments table in the database. It shows which refunds really exist.</dd>
-<dt>Read-back</dt><dd>A call that reads the database after a write, to check that the write really happened.</dd>
-<dt>Phantom write</dt><dd>A fault: the tool says "success" but writes nothing.</dd>
-<dt>Reward</dt><dd>The score that training gives to each attempt. Training makes high-score behaviour more frequent.</dd>
-<dt>VSC</dt><dd>Verified-success completion. The share of tasks that the database confirms as done, and that the agent reported correctly.</dd>
-<dt>PCSTR-d</dt><dd>Our reward that checks the database (Reward B).</dd>
-<dt>Tool-trusting reward</dt><dd>A reward that believes the tool's acknowledgements (Reward A).</dd>
-<dt>GRPO</dt><dd>Group Relative Policy Optimization, the reinforcement-learning method we used.</dd>
-<dt>Seed</dt><dd>One training run. "Two seeds" means we trained twice and got similar results.</dd>
-<dt>X1 and placebo</dt><dd>A follow-up test. We removed two kinds of training task (X1), or 60 random tasks (placebo), to find which tasks taught the agent to stop checking.</dd>
-<dt>pp</dt><dd>Percentage points. 64% to 84% is +20 pp.</dd></dl></section>
-<section class="sec">
- <h2>What we do not claim</h2>
- <div class="limits">
-  <p><b>That RL teaches lying.</b> The untrained model already claims false success 87–96% of the time.</p>
-  <p><b>That checking is general.</b> It stays tool-specific; transfer to a banking domain fails.</p>
-  <p><b>That report terms teach honest failure.</b> With one extra tool in the prompt, the same agents report "failed" on 0–45 of 50.</p>
-  <p><b>Breadth.</b> One model family, one simulator. The X1 and placebo cells are one seed each.</p>
-  <p><b>Rigour.</b> Eight hash-registered pre-registrations and a public deviation log that records our own bugs.</p>
+<section><div class="wrap">
+ <div class="head rv"><div><div class="kick">09 / limits</div><h2>What we <em class="s">do not</em> claim</h2></div></div>
+ <div class="lim rv">
+  <div class="card"><h5>That training teaches lying</h5><p>The untrained model already claims false success 87–96% of the time.</p></div>
+  <div class="card"><h5>That checking is general</h5><p>It stays tool-specific. Transfer to a banking domain fails.</p></div>
+  <div class="card"><h5>That report terms teach honesty</h5><p>With one extra tool in the prompt, the same agents report "failed" on 0–45 of 50.</p></div>
+  <div class="card"><h5>Breadth</h5><p>One model family and one simulator. The X1 and placebo results are one run each.</p></div>
+  <div class="card"><h5>Our own bugs</h5><p>A public deviation log records every bug we found, including one environment bug we disclose and do not fix.</p></div>
+  <div class="card"><h5>Rigour</h5><p>Eight hash-registered test plans, written before the tests ran.</p></div>
  </div>
-</section>
-<footer><span>ActionProof · Tiny Aya Global 3.35B · AgentTune → AuditKIT</span><span>built from commit {{GIT}}</span></footer>
-</div>
+</div></section>
+
+<section><div class="wrap">
+ <div class="cta rv">
+  <div class="card ab"><span class="logo"><b>AP</b>ActionProof</span><h4>Rewards that read the database, for tool agents that check their own work.</h4>
+   <div class="meta" style="margin-top:24px">Tiny Aya Global 3.35B · AgentTune → AuditKIT</div></div>
+  <div class="big"><div class="meta">try it yourself</div><h3>Run the agents. <em class="s">Read</em> the traces.</h3>
+   <p>All 26 trained models, the benchmark, every recorded episode and the full write-up are public.</p>
+   <div class="ctas" style="margin:0"><a class="btn" href="https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04">Models</a>
+    <a class="btn o" href="https://huggingface.co/collections/atharvgaur18/actionproof-benchmark-traces-demo-6af7fb25037f3d7eaf294e22">Benchmark and traces</a>
+    <a class="btn o" href="https://github.com/atharvgaur1845/actionproof-v2">Code and paper</a></div></div>
+ </div>
+ <div class="ticks"><span>400 unseen test tasks</span><span>8 pre-registered test plans</span><span>2 training runs per main reward</span></div>
+ <footer><span>2026 · Lexsi hackathon, track 3</span><span>built from commit {{GIT}}</span></footer>
+</div></section>
+
 <script>
 const D={{DATA}};
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -217,34 +274,33 @@ function opts(sel,vals,cur){sel.innerHTML=vals.map(v=>`<option${v===cur?" select
 function ep(){const l=D.episodes.filter(e=>e.fault===st.fault);return l[st.ex%l.length]}
 function args(a){return a&&typeof a==="object"?Object.entries(a).filter(([k])=>k!=="summary"&&k!=="text").map(([k,v])=>`${k}=${String(v).slice(0,40)}`).join(" · "):""}
 function stepHTML(s,i){
- let tag=s.retry?`<div class="note ${s.retry.after_evidence?"inkc":"pen"}">Retry ${s.retry.n}, ${s.retry.after_evidence?"after reading the ledger":"without checking"}</div>`:"";
- let plan=s.plan&&s.plan.n>1?`<div class="plan">Wrote ${s.plan.n} calls ahead, ${s.plan.executed} ran</div>`:"";
+ let tag=s.retry?`<div class="note ${s.retry.after_evidence?"okc":"pen"}">Retry ${s.retry.n}, ${s.retry.after_evidence?"after reading the ledger":"without checking"}</div>`:"";
+ let plan=s.plan&&s.plan.n>1?`<div class="plan">wrote ${s.plan.n} calls ahead, ${s.plan.executed} ran</div>`:"";
  let body="";
  if(s.db){const ok=s.ack.startsWith("success"),x=s.db!=="written"&&ok;
   const dbt={written:"written",partial:"half written: refund row only",not_written:"no row"}[s.db];
-  body=`<div class="r"><span class="k">&gt; tool said</span><span><span class="claim${x?" x":""}">${esc(s.ack)}</span>${ok?'<span class="flag ok">[ACK OK]</span>':""}</span>
-   <span class="k">&gt; ledger</span><span class="${s.db==="written"?"inkc":"pen"}">${dbt}${s.fault?` (${esc(s.fault)})`:""}${x?'<span class="flag bad">!! MISMATCH</span>':""}</span></div>`}
+  body=`<div class="r"><span class="k">Tool said</span><span><span class="claim${x?" x":""}">${esc(s.ack)}</span></span>
+   <span class="k">Ledger</span><span class="${s.db==="written"?"okc":"pen"}">${dbt}${x?'<span class="tg bad">mismatch</span>':""}</span></div>`}
  else body=`<div class="a" style="margin-top:2px">${esc(s.ack)}</div>`;
- const ev=s.evidence?`<div class="note inkc">${s.evidence}</div>`:"";
- return `<li class="st${s.kind==="verify"?" verify":""}" data-i="${i}"><span class="i">${String(i+1).padStart(2,"0")}</span><div>${plan}
-  <div><span class="tool">${esc(s.tool)}</span></div><div class="a">${esc(args(s.args))}</div>${body}${ev}${tag}</div></li>`}
+ const ev=s.evidence?`<div class="note okc">${s.evidence}</div>`:"";
+ const rb=s.kind==="verify"?'<span class="tg ok">read-back</span>':"";
+ return `<li class="stp" data-i="${i}"><span class="i">${String(i+1).padStart(2,"0")}</span><div>${plan}
+  <div><span class="tool">${esc(s.tool)}</span>${rb}</div><div class="a">${esc(args(s.args))}</div>${body}${ev}${tag}</div></li>`}
 function endHTML(L){const sm=L.summary,v=sm.verdict;
- const [c,t]=sm.vsc?["good","[VERIFIED] database matches the report"]:v.F_over?["bad","[FALSE CLAIM] reported done, database disagrees"]:["","[NOT COMPLETED]"];
+ const [c,t]=sm.vsc?["good","Verified: the database matches the report"]:v.F_over?["bad","False claim: reported done, the database disagrees"]:["","Not completed"];
  const rw=Object.entries(sm.rewards).map(([k,r])=>{const p=k.includes("PCSTR")?(r+1)/2.3:r;
   return `<div class="rw"><span>${esc(k)}</span><span class="bar${k.includes("PCSTR")?" lead":""}"><i style="width:${Math.max(0,Math.min(1,p))*100}%"></i></span><em>${r.toFixed(2)}</em></div>`}).join("");
  return `<div class="end"><div class="v ${c}">${t}</div><div class="rp">Agent reported <b>${esc(sm.report.status)}</b>${sm.report.summary?`: “${esc(sm.report.summary)}”`:""}</div>
-  <div style="margin-top:12px;font-size:12px;color:var(--ink-3)">What each reward paid for this episode</div>${rw}</div>`}
+  <div class="meta" style="margin-top:14px">what each reward paid for this attempt</div>${rw}</div>`}
 function render(){
  const e=ep();$("#tid").innerHTML=`${esc(e.task_id)}<br>${FN[e.fault]||e.fault}`;$("#prompt").textContent=e.prompt;
- const lanes=[st.a,st.b].map(n=>{const L=e.lanes[n],sm=L.summary,steps=L.steps.filter(s=>s.tool!=="submit_report");
+ $("#lanes").innerHTML=[st.a,st.b].map(n=>{const L=e.lanes[n],sm=L.summary,steps=L.steps.filter(s=>s.tool!=="submit_report");
   return `<div class="lane"><div class="lh"><div class="nm">${esc(n)}</div><div class="ch">${sm.calls} calls · <b>${sm.n_verify} read-backs</b> · ${sm.chars.toLocaleString()} characters written</div></div>
-  <ol class="steps">${steps.map(stepHTML).join("")}</ol>${endHTML(L)}</div>`});
- $("#lanes").innerHTML=lanes.join("");
+  <ol class="steps">${steps.map(stepHTML).join("")}</ol>${endHTML(L)}</div>`}).join("");
  const n=Math.max(...[st.a,st.b].map(x=>e.lanes[x].steps.filter(s=>s.tool!=="submit_report").length));
  $("#scrub").max=n+1;show(st.k=Math.min(st.k,n+1))}
 function show(k){st.k=k;const n=+$("#scrub").max;$("#scrub").value=k;$("#pos").textContent=k>n-1?"report":`step ${k} of ${n-1}`;
- document.querySelectorAll(".st").forEach(x=>x.classList.toggle("on",+x.dataset.i<k));
- document.querySelectorAll(".end").forEach(x=>x.classList.toggle("on",k>=n))}
+ document.querySelectorAll(".stp").forEach(x=>x.classList.toggle("on",+x.dataset.i<k));document.querySelectorAll(".end").forEach(x=>x.classList.toggle("on",k>=n))}
 function stop(){clearInterval(st.timer);st.timer=null;$("#play").textContent="Play"}
 $("#play").onclick=()=>{if(st.timer)return stop();if(st.k>=+$("#scrub").max)show(0);$("#play").textContent="Pause";
  st.timer=setInterval(()=>{if(st.k>=+$("#scrub").max)return stop();show(st.k+1)},900)};
@@ -258,6 +314,20 @@ $("#ex").onchange=ev=>{stop();st.ex=+ev.target.value;st.k=0;render()};
 opts($("#la"),D.models,st.a);opts($("#lb"),D.models,st.b);
 $("#la").onchange=ev=>{stop();st.a=ev.target.value;render()};$("#lb").onchange=ev=>{stop();st.b=ev.target.value;render()};
 fillEx();render();
+(function(){const e=D.episodes.find(x=>x.fault==="F1_phantom");if(!e)return;
+ const line=s=>{if(s.tool==="submit_report")return null;let t=`<span class="c">${esc(s.tool)}</span>`;
+  if(s.db){const x=s.db!=="written"&&s.ack.startsWith("success");t+=x?` <span class="bad">said success, wrote nothing</span>`:` <span class="ok">written</span>`}
+  else if(s.kind==="verify")t+=` <span class="ok">checks: ${esc((s.evidence||"").replace(/<[^>]+>/g,""))}</span>`;return t};
+ const fill=(id,L)=>{const ls=L.steps.map(line).filter(Boolean).slice(0,8);const v=L.summary.vsc;
+  $(id).innerHTML=ls.map(t=>`<div class="ln">${t}</div>`).join("")+`<div class="verd ${v?"ok":"bad"} ln">${v?"Verified: the refund is in the database":"Reported done. No refund exists."}</div>`};
+ fill("#hwa",e.lanes[D.models[1]]);fill("#hwb",e.lanes[D.models[3]]);
+ const A=[...document.querySelectorAll("#hwa .ln")],B=[...document.querySelectorAll("#hwb .ln")],n=Math.max(A.length,B.length);let i=0;
+ const tick=()=>{if(i<n){[A[i],B[i]].forEach(x=>x&&x.classList.add("on"));i++;setTimeout(tick,i<n?520:3200)}
+  else{[...A,...B].forEach(x=>x.classList.remove("on"));i=0;setTimeout(tick,500)}};
+ setTimeout(tick,600)})();
+const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add("in");io.unobserve(x.target);
+ if(x.target.querySelector("#ringfg"))$("#ringfg").style.strokeDashoffset=389.6*(1-.8425)}}),{threshold:.12});
+document.querySelectorAll(".rv").forEach(x=>io.observe(x));
 </script>
 </body>
 </html>
