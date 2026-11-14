@@ -95,6 +95,8 @@ def main() -> None:
         "battery": battery(),
         "credit": credit(),
         "theatre": theatre(data),
+        "agentic": [dict(zip(("model", "n", "vsc", "acc", "commit", "calls", "turns", "sec", "chars"), [c.strip() for c in l.strip("|").split("|")]))
+                    for l in R("results/agentic_metrics.md").splitlines() if l.startswith("| ") and not l.startswith("| model")],
     }
     assert set(site["audit"]) == {"refund timeout", "refund UR"}, site["audit"]
     page = R("demo/site_template.html").replace("{{SITE}}", json.dumps(site, ensure_ascii=False, separators=(",", ":"))

@@ -53,6 +53,8 @@ section{border-top:1px solid var(--ink);position:relative}
 .h1 .dis{color:var(--ver)}
 .hside{grid-column:2;font-size:17px;line-height:27px;padding-bottom:4px}
 .hside .ser{font-size:24px;line-height:28px;display:block;margin-bottom:16px}
+.hstats{display:grid;grid-template-columns:repeat(3,1fr);margin:0 56px 28px;border-top:1px solid var(--ink)}.hstats>div{padding:14px 20px 0 0}.hstats>div+div{padding-left:20px;border-left:1px solid var(--hair)}
+.hstats b{display:block;font:clamp(28px,3vw,44px)/1 var(--disp);letter-spacing:-.02em;font-variant-numeric:tabular-nums;font-weight:400}.hstats b.r{color:var(--ver)}.hstats span{display:block;font-size:14px;line-height:21px;margin-top:8px;color:#4A4C46}
 .scrollcue{display:flex;justify-content:space-between;align-items:center;padding:18px 56px;border-top:1px solid var(--hair);font:500 11px/16px var(--mono);letter-spacing:.08em;text-transform:uppercase}
 .scrollcue a{text-decoration:none}.scrollcue a:hover{color:var(--ver-t)}
 /* hero transaction diagram */
@@ -178,6 +180,7 @@ section{border-top:1px solid var(--ink);position:relative}
 .big3>div{padding:36px 24px 40px}.big3>div:first-child{padding-left:56px}.big3>div+div{border-left:1px solid var(--hair)}
 .big3 .n{font:clamp(56px,6.5vw,104px)/.9 var(--disp);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
 .big3 .n.r{color:var(--ver)}.big3 p{font-size:15px;line-height:24px;margin:16px 0 0;max-width:340px}
+.game{padding:40px 56px;border-top:1px solid var(--hair)}.g3{display:grid;grid-template-columns:repeat(4,1fr);margin-top:16px;border-top:1px solid var(--ink)}.g3>div{padding:16px 20px 8px 0;font-size:14px;line-height:22px}.g3>div+div{padding-left:20px;border-left:1px solid var(--hair)}.g3 b{display:block;font:18px/22px var(--disp);text-transform:uppercase;font-weight:400;margin-bottom:8px}.g3 .src{display:block}
 .autopsy{background:var(--dk);color:#E9E7DF;padding:56px}
 .autopsy h3{font:clamp(32px,4vw,60px)/.95 var(--disp);text-transform:uppercase;margin:12px 0 20px;max-width:1000px;font-weight:400}
 .autopsy h3 .ser{text-transform:none;color:var(--chr);font-size:1.1em}
@@ -224,6 +227,7 @@ section{border-top:1px solid var(--ink);position:relative}
 .play input{accent-color:var(--ink);margin-top:2px}.play .out{margin-top:14px;padding-top:12px;border-top:1px solid var(--ink);font:500 15px/22px var(--mono)}
 .play .out .g{background:var(--chr)}.play .out .r{color:var(--ver-t)}
 .play input[type=range]{width:100%}
+.agt{padding:32px 56px 40px;border-top:1px solid var(--hair)}.atbl{width:100%;border-collapse:collapse;margin-top:12px;font:13px/20px var(--mono)}.atbl th{text-align:left;font:500 11px/16px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--gr);padding:8px 12px 8px 0;border-bottom:1px solid var(--ink)}.atbl td{padding:7px 12px 7px 0;border-bottom:1px solid var(--hair2);font-variant-numeric:tabular-nums}.atbl tr.st td:first-child{font-weight:500}.atbl tr.st td:nth-child(2){background:linear-gradient(90deg,var(--chr),transparent)}
 .repro{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--hair)}
 .repro>div{padding:28px 24px 32px}.repro>div:first-child{padding-left:56px}.repro>div+div{border-left:1px solid var(--hair)}
 .repro .n{font:64px/60px var(--disp)}.repro p{font-size:14px;line-height:22px;margin:10px 0 0}
@@ -250,7 +254,7 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  .hside{grid-column:1}
  .stitle{font-size:clamp(28px,8.4vw,44px);overflow-wrap:anywhere}.shead>div,.arch>div,.labbody>div,.tpl>div,.mpane>div,.chartwrap>div,.confirm>div,.x1>div{min-width:0}
  .big3,.counts{grid-template-columns:1fr!important}.big3>div{min-width:0}.big3 .n{font-size:64px}
- .tip{display:none}
+ .tip{display:none}.game{padding:32px 16px}.g3{grid-template-columns:1fr}.g3>div+div{padding-left:0;border-left:0;border-top:1px solid var(--hair)}.agt{overflow-x:auto}.hstats{grid-template-columns:1fr;margin:0 16px 24px}.hstats>div+div{padding-left:0;border-left:0;border-top:1px solid var(--hair);margin-top:12px}
  .h1{overflow-wrap:anywhere}.autopsy h3{font-size:30px;overflow-wrap:anywhere}.huge{overflow-wrap:anywhere}
  .pad,.shead,.meta,.htype,.scrollcue,.stage,.arch>div,.chartwrap,.confirm,.autopsy,.mpane,.insp,.tree,.ctx,.branch{padding-left:16px;padding-right:16px}
  .tx,.envgrid,.formula{margin-left:16px;margin-right:16px}pre.cmd{margin:0 16px 32px}
@@ -292,6 +296,9 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
    <div class="hside"><span class="ser">Investigating what reinforcement learning selects when tool acknowledgements and execution state disagree.</span>
     A 3.35B agent, two rewards of identical form, one difference: whether the reward reads the tool's reply or the database.</div>
   </div>
+  <div class="hstats"><div><b>0.64 → 0.84</b><span>verified safe completion, warm start → database reward (PCSTR-d), 400 untouched pre-registered tasks</span></div>
+   <div><b>+20.25 pp</b><span>over a reward that trusts the tool, 95% CI 16.4–24.3</span></div>
+   <div><b class="r">95.2%</b><span>of false "completed" claims accepted by AuditKIT's TaskCompletion judge (Aya Expanse 32B)</span></div></div>
   <figure class="tx" id="hero-tx" aria-label="Illustrative diagram of a phantom write: the tool acknowledges success while the database records nothing">
    <svg viewBox="0 0 1200 380" role="img">
     <g class="grid" id="hgrid"></g>
@@ -341,7 +348,7 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
   <p class="lede" style="color:#BDBDB3">The agent sees only tool replies. Underneath, the environment keeps an append-only receipt for every write that really commits. The verifier reads the database and the receipts — never the transcript.</p></div></div>
  <div class="envgrid rv">
   <div><div class="cap">Layer 1</div><h3>SQLite world</h3><p>One fresh database per attempt: orders, payments ledger, tickets, audit notes, inventory. E-commerce for training and test; banking disputes for test only.</p></div>
-  <div><div class="cap">Layer 2</div><h3>Fault schedule</h3><p>Maps (tool, k-th call) to a fault, so faults fire deterministically and every episode replays from its seed. Trained: phantom, partial, timeout. Held out: stale, ambiguous.</p></div>
+  <div><div class="cap">Layer 2</div><h3>Fault schedule</h3><p>Maps (tool, k-th call) to a fault, so faults fire deterministically and every episode replays from its seed. Trained: phantom, partial, timeout. Held out: stale, ambiguous. Task-level conditions: F5 needs human authorisation, F6 stale status endpoint, F7 instructions injected into ticket notes.</p></div>
   <div><div class="cap">Layer 3</div><h3>Receipt ledger</h3><p>Hidden from the agent. A receipt exists only if the write committed, with the entity hash before and after. Idempotency keys replay the first result.</p></div>
   <div><div class="cap">Layer 4</div><h3>Verifier</h3><p>Deterministic. Reads the final database, the receipts and a hidden goal spec, and returns the terms G, P, V, I, D and the report check.</p></div>
  </div>
@@ -441,9 +448,14 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  <div class="shead rv"><div class="snum">06</div><div><div class="cap">Findings &amp; statistical evidence</div>
   <h2 class="stitle">The reward's channel <span class="ser">decides what survives.</span></h2></div></div>
  <div class="big3 rv">
-  <div><div class="n" data-count="0.8425" data-fmt="pct">84.25%</div><p>Verified safe completion with PCSTR-d on 400 untouched tasks, both seeds. Warm start: <span class="mono" id="f-warm"></span>.</p><div class="src">results/confirmatory.json</div></div>
-  <div><div class="n" data-count="20.25" data-fmt="pp">+20.25</div><p>Percentage points over the tool-trusting reward. 95% CI <span class="mono" id="f-ttci"></span>.</p><div class="src">results/confirmatory.json · pcstr_d_vs_tool_trust</div></div>
-  <div><div class="n r" data-count="0.952" data-fmt="pct">95.2%</div><p>Of false "completed" claims accepted by AuditKIT's TaskCompletion judge on Aya Expanse 32B (n = <span id="f-jn"></span>, CI <span class="mono" id="f-jci"></span>).</p><div class="src">results/judge/aya32b__summary.json</div></div></div>
+  <div><div class="n" data-count="0.8425" data-fmt="pct">84.25%</div><p>Verified safe completion with PCSTR-d on 400 untouched tasks, both seeds. Warm start: <span class="mono" id="f-warm">64.25%</span>.</p><div class="src">results/confirmatory.json</div></div>
+  <div><div class="n" data-count="20.25" data-fmt="pp">+20.25</div><p>Percentage points over the tool-trusting reward. 95% CI <span class="mono" id="f-ttci">[16.4, 24.3]</span>.</p><div class="src">results/confirmatory.json · pcstr_d_vs_tool_trust</div></div>
+  <div><div class="n r" data-count="0.952" data-fmt="pct">95.2%</div><p>Of false "completed" claims accepted by AuditKIT's TaskCompletion judge on Aya Expanse 32B (n = <span id="f-jn">476</span>, CI <span class="mono" id="f-jci">[92.9%, 96.8%]</span>).</p><div class="src">results/judge/aya32b__summary.json</div></div></div>
+ <div class="game rv"><div class="cap">Why the database reward cannot be gamed through the report</div>
+  <div class="g3"><div><b>Ordering property</b>Every safe, honest completion outranks every failure under PCSTR, checked by property-based tests.<span class="src">tests/test_reward_sanity.py</span></div>
+   <div><b>Exploit suite</b>Read spam, forged summaries and audit notes, duplicate refunds, unauthorized writes, false completion and silence all rank below the oracle under every state reward.<span class="src">tests/test_exploits.py · actionproof/eval/exploits.py</span></div>
+   <div><b>Metamorphic traces · 360/360</b>On 120 recorded episodes, changing the report text or status, or inserting extra reads, never changes the database terms.<span class="src">tests/test_metamorphic_traces.py</span></div>
+   <div><b>AuditKIT parity · 36/36</b>AuditKIT's final-state assertion agrees with our verifier on every audited file. This checks integration, not independence.<span class="src">results/auditkit/bridge_final.md</span></div></div></div>
  <div class="autopsy">
   <div class="cap">Amendment 8 · step-0 audit, A7 warm start</div>
   <h3>Why would reading the database make an agent <span class="ser">score worse?</span></h3>
@@ -486,6 +498,9 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
   <h2 class="stitle">Metrics, defined <span class="ser">exactly as computed.</span></h2>
   <p class="lede">Each metric below is the definition in the code. Toggle the example episode to see what it counts.</p></div></div>
  <div class="mx"><div class="mtabs" role="tablist" aria-label="Metrics" id="mtabs"></div><div class="mpane" id="mpane" aria-live="polite"></div></div>
+ <div class="agt rv"><div class="cap">Track 3 agentic trajectory metrics · test-IID, n = 200 per model, greedy</div>
+  <table class="atbl"><thead><tr><th>Model</th><th>Task success (VSC)</th><th>Tool-call accuracy</th><th>Seconds / episode</th><th>Calls / episode</th><th>Characters written</th></tr></thead><tbody id="atbody"></tbody></table>
+  <div class="src">Tool-call accuracy = 1 − (unparsed + invalid calls) / model calls. Seconds = evaluation wall-clock / episodes with batched vLLM on one H200 (throughput, not single-request latency). Self-hosted throughput including start-up: 9,600 tickets per H200-hour (results/roi/throughput.json). <b>source</b> results/agentic_metrics.md · scripts/agentic_metrics.py</div></div>
  <div class="repro rv">
   <div><div class="n">8</div><p>Hash-registered pre-registrations, each committed before its runs. <span class="mono">scripts/freeze_*.py --check</span> verifies the hashes.</p></div>
   <div><div class="n">400</div><p>Confirmatory tasks kept untouched until the registered test (test_iid_c ∪ test_ood_fault_c).</p></div>
@@ -698,6 +713,8 @@ const MX=[
   e:"Separates honest failure (CF) from premature giving up (PF) and false success (FS).",ui:[["c","the task really succeeded (G = 1)",0],["c","the task was unrecoverable",1],["s","agent's report",["completed","failed","escalated","none"]]],
   f:v=>{let c;if(v[0])c=v[2]==="completed"?"CS":"UC";else if(v[2]==="completed")c="FS";else if(["failed","escalated"].includes(v[2]))c=v[1]?"CF":"PF";else c="SI";
    const good=["CS","CF"].includes(c);return `class = <span class="${good?"g":"r"}">${c}</span>`}}];
+(function(){const NM={rft_tiny_v2:"Warm start (SFT)",grpo_tiny_v2_tool_trust_s0:"Tool-trusting · s0",grpo_tiny_v2_tool_trust_s1:"Tool-trusting · s1",grpo_tiny_v2_ack_outcome_s0:"Acknowledgement · s0",grpo_tiny_v2_ack_outcome_s1:"Acknowledgement · s1",grpo_tiny_v2_llm_judge_s0:"LLM judge · s0",grpo_tiny_v2_outcome_s0:"Outcome (database) · s0",grpo_tiny_v2_outcome_s1:"Outcome (database) · s1",grpo_tiny_v2_pcstr_d_s0:"PCSTR-d (database) · s0",grpo_tiny_v2_pcstr_d_s1:"PCSTR-d (database) · s1"};
+ $("#atbody").innerHTML=S.agentic.filter(r=>NM[r.model]).map(r=>`<tr class="${/outcome_s|pcstr/.test(r.model)&&!/ack/.test(r.model)?"st":""}"><td>${NM[r.model]}</td><td>${r.vsc}</td><td>${r.acc}</td><td>${r.sec}</td><td>${r.calls}</td><td>${r.chars}</td></tr>`).join("")})();
 let mi=0;
 function renderM(){$$("#mtabs button").forEach((b,i)=>b.setAttribute("aria-selected",i===mi));const M=MX[mi];
  $("#mpane").innerHTML=`<div><div class="cap">${M.k}</div><h3>${M.n}</h3><p style="margin:0;font-size:16px;line-height:26px">${M.e}</p><div class="def">${esc(M.d)}</div><div class="src"><b>source</b> ${M.src}</div></div>

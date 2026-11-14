@@ -66,7 +66,7 @@ The tests cover:
 - deterministic replay;
 - the banking domain and the language variants.
 
-Every check must print `OK`, except `freeze_a5`, which reports `verifier_a5.py` and `a5_rewards.py`. That mismatch is the logged deviation D-A5-3 (a parsing fix after registration; SPEC §27, 2026-11-10). It was not re-registered on purpose. Checked from a fresh clone of `706af05` on 2026-11-13: 146 tests passed, 4 skipped. The full suite on the current tree (with recorded episodes present) is 506 passed, 4 skipped.
+Every check must print `OK`, except `freeze_a5`, which reports `verifier_a5.py` and `a5_rewards.py`. That mismatch is the logged deviation D-A5-3 (a parsing fix after registration; SPEC §27, 2026-11-10). It was not re-registered on purpose. Checked from a fresh clone of `031ea7b` on 2026-11-14: 506 tests passed, 4 skipped; every freeze check OK except `freeze_a5` (D-A5-3). Results on the website and in the paper are the files in this commit.
 
 ### 3. Pipeline (each step is a queue task in `slurm/tasks/`)
 
