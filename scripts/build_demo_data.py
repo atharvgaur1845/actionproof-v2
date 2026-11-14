@@ -27,10 +27,10 @@ MODELS = {  # display name -> (channel, val episodes)
 }
 PER_FAULT = 6
 CONF = "results/confirmatory.json"
-ARM_LABEL = {"rft_v2": ("Warm start (SFT only)", "warm"), "tool_trust": ("tool-trusting reward", "ack"),
-             "llm_judge": ("LLM-judge reward", "ack"), "outcome": ("outcome (database, binary)", "state"),
-             "pcstr": ("PCSTR (database)", "state"), "pcstr_c": ("PCSTR-c (database)", "state"),
-             "pcstr_d": ("PCSTR-d (database, ours)", "state")}
+ARM_LABEL = {"rft_v2": ("Before RL (warm start)", "warm"), "tool_trust": ("Trusts the tool", "ack"),
+             "llm_judge": ("AI judge reads transcript", "ack"), "outcome": ("Reads database (pass/fail)", "state"),
+             "pcstr": ("Reads database (PCSTR)", "state"), "pcstr_c": ("Reads database (PCSTR-c)", "state"),
+             "pcstr_d": ("Reads database (PCSTR-d, ours)", "state")}
 
 
 def wilson(p: float, n: int) -> list[float]:
@@ -92,9 +92,9 @@ def charts() -> dict:
             c5.append({"model": name, "family": fam, "vsc": float(m.group(3)), "acc": float(m.group(4)),
                        "sec": float(m.group(8)), "chars": int(m.group(9).replace(",", "")), "source": "results/agentic_metrics.md"})
     c3 = [  # read-back after a refund ack, greedy test_iid; counts computed 2026-11-14 from the cluster eval files
-        {"cell": "full pool (control, task 412)", "reads": 0, "n": 169, "vsc": 0.615},
+        {"cell": "All training tasks (control)", "reads": 0, "n": 169, "vsc": 0.615},
         {"cell": "60 random tasks removed (placebo)", "reads": 0, "n": 163, "vsc": 0.615},
-        {"cell": "refund-timeout & unrecoverable classes removed (X1)", "reads": 103, "n": 154, "vsc": 0.755}]
+        {"cell": "2 refund task types removed (X1)", "reads": 103, "n": 154, "vsc": 0.755}]
     for r in c3:
         r.update(rate=round(r["reads"] / r["n"], 3), seeds=1,
                  source="results/eval/a6/{a7_ack_outcome,a8x1p_ack_outcome,a8x1_ack_outcome}_s0__neutral__test_iid.jsonl "

@@ -31,7 +31,7 @@ def main() -> None:
                      "Judges accept false completions",
                      "Share of 476 claimed-completed episodes, failed per the database, that each judge accepted. Thin line: "
                      "the subset where the failure is visible in the transcript. Whiskers: 95% CI.", color_key="_", ci_key="ci95",
-                     second_key="far_visible"),
+                     second_key="far_visible", xlabel="Share of false \"done\" reports the judge accepted as done"),
         "C5": C.c5_agentic(ch["c5"]),
         "GIT": d["meta"]["git"],
         "DATA": json.dumps({"models": models, "episodes": eps}, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"),

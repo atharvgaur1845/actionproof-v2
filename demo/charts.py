@@ -7,6 +7,34 @@ import html
 e = html.escape
 COL = {"state": "var(--c-state)", "ack": "var(--c-ack)", "warm": "var(--c-warm)", "warm start": "var(--c-warm)"}
 W = 1080
+FAULT_PLAIN = {"benign": "No fault", "F1_phantom": "Says success, wrote nothing", "F3_partial": "Wrote only half",
+               "F4_timeout": "Says error, but wrote it", "F5": "Must escalate to a human"}
+
+REWARD_PLAIN = [("pcstr_d_noreport", "Reads database, no report terms"), ("pcstr_d_noFunder", "Reads database, no underclaim term"),
+                ("pcstr_d_noND", "Reads database, no disclosure term"), ("noreport", "Reads database, no report terms"),
+                ("pcstr_d", "Reads database (PCSTR-d)"), ("PCSTR-d", "Reads database (PCSTR-d)"), ("ack_outcome", "Trusts acknowledgements"),
+                ("tool_trust", "Trusts the tool"), ("llm_judge", "AI judge reads transcript"), ("outcome", "Reads database (pass/fail)"),
+                ("rft_tiny_v2", "Before RL (warm start)"), ("warm start", "Before RL (warm start)")]
+
+
+def plain(code: str) -> str:
+    """Code name of a model or run -> words a reader without context understands."""
+    c = code.replace("grpo_tiny_v2_", "")
+    pre = ""
+    for k, v in (("a8x1p_", "Placebo: 60 random tasks removed · "), ("a8x1_", "X1: 2 task types removed · "), ("a7_", "2nd warm start · ")):
+        if c.startswith(k):
+            pre, c = v, c[len(k):]
+    run = ""
+    for suf, r in (("_s0", " · run 1"), (" s0", " · run 1"), ("_s1", " · run 2"), (" s1", " · run 2")):
+        if c.endswith(suf):
+            c, run = c[: -len(suf)], r
+    name = next((v for k, v in REWARD_PLAIN if c == k or c.startswith(k)), c)
+    return pre + name + run
+
+
+PANEL_PLAIN = {"v2 warm start, sampled, val": "Warm start 1 · many sampled attempts per task",
+               "A6 warm start, greedy, test-IID": "Warm start 2 · one attempt per task",
+               "A7 warm start, greedy, test-IID": "Warm start 3 · one attempt per task"}
 
 
 def _need_source(rows):
@@ -54,7 +82,9 @@ def c1_vsc(rows, contrasts) -> str:
             g.append(f'<circle cx="{_x(v, lo, hi, x0, x1):.1f}" cy="{y:.1f}" r="6" fill="{c}" stroke="var(--ap-surface)" stroke-width="2">'
                      f'<title>{e(r["label"])}: VSC {v} (n = {r["n"]})</title></circle>')
         g.append(f'<text class="val" x="{_x(max(b, max(r["vsc"])), lo, hi, x0, x1) + 8:.1f}" y="{y + 4:.1f}">{" / ".join(f"{v:.3f}" for v in r["vsc"])}</text>')
-    h = top + rh * len(rows) + 30
+    g.append(f'<text class="axt" x="{(x0 + x1) / 2:.1f}" y="{top + rh * len(rows) + 40}" text-anchor="middle">'
+             f'Verified-success completion: share of 400 test tasks the database confirms as done and correctly reported</text>')
+    h = top + rh * len(rows) + 56
     t, h1 = contrasts["vs_tool_trust"], contrasts["H1"]
     cap = (f'PCSTR-d − tool-trusting = <b>+{t["delta"] * 100:.2f} pp</b> [{t["lo"] * 100:.1f}, {t["hi"] * 100:.1f}]. '
            f'Registered H1, PCSTR-d − outcome = +{h1["delta"] * 100:.1f} pp [{h1["ci95"][0] * 100:.1f}, {h1["ci95"][1] * 100:.1f}], '
@@ -65,10 +95,10 @@ def c1_vsc(rows, contrasts) -> str:
 
 
 def bars(rows, key, label_key, title, caption, lo=0.0, hi=1.0, fmt="{:.2f}", color_key="channel", n_key="n",
-         ci_key=None, second_key=None, width=W) -> str:
+         ci_key=None, second_key=None, width=W, xlabel=None) -> str:
     """Horizontal bars, one row each."""
     _need_source(rows)
-    x0, x1, top, rh = (320, width - 200, 14, 32) if width >= 900 else (230, width - 90, 14, 30)
+    x0, x1, top, rh = (320, width - 200, 14, 32) if width >= 900 else (330, width - 70, 14, 30)
     g = []
     for t in (lo, (lo + hi) / 2, hi):
         x = _x(t, lo, hi, x0, x1)
@@ -79,7 +109,7 @@ def bars(rows, key, label_key, title, caption, lo=0.0, hi=1.0, fmt="{:.2f}", col
         c = COL.get(r.get(color_key), r.get("color", "var(--c-state)"))
         w = _x(r[key], lo, hi, x0, x1) - x0
         n = f' (n = {r[n_key]})' if n_key and r.get(n_key) else ""
-        g.append(f'<text class="lab" x="{x0 - 10}" y="{y + rh / 2 + 4:.1f}" text-anchor="end">{e(str(r[label_key]))[:44]}</text>'
+        g.append(f'<text class="lab" x="{x0 - 10}" y="{y + rh / 2 + 4:.1f}" text-anchor="end">{e(str(r[label_key]))[:64]}</text>'
                  f'<rect x="{x0}" y="{y + 6}" width="{max(w, 1.5):.1f}" height="{rh - 14}" rx="2" fill="{c}">'
                  f'<title>{e(str(r[label_key]))}: {fmt.format(r[key])}{n}</title></rect>')
         if second_key and r.get(second_key) is not None:
@@ -92,17 +122,22 @@ def bars(rows, key, label_key, title, caption, lo=0.0, hi=1.0, fmt="{:.2f}", col
                      f' y1="{y + rh / 2:.1f}" y2="{y + rh / 2:.1f}"/>')
         xe = max(x0 + max(w, 1.5), _x(r[ci_key][1], lo, hi, x0, x1) if ci_key and r.get(ci_key) else 0)
         g.append(f'<text class="val" x="{xe + 6:.1f}" y="{y + rh / 2 + 4:.1f}">{fmt.format(r[key])}{n}</text>')
-    return _wrap("".join(g), top + rh * len(rows) + 26, title, caption, {r["source"] for r in rows}, width=width)
+    h = top + rh * len(rows) + 26
+    if xlabel:
+        g.append(f'<text class="axt" x="{(x0 + x1) / 2:.1f}" y="{h + 14}" text-anchor="middle">{e(xlabel)}</text>')
+        h += 24
+    return _wrap("".join(g), h, title, caption, {r["source"] for r in rows}, width=width)
 
 
 def c2_channel(rows) -> str:
     """Small multiples: read-back after a success ack, one panel per warm start."""
     panels = []
     for p in dict.fromkeys(r["panel"] for r in rows):
-        rs = [dict(r, label=r["model"]) for r in rows if r["panel"] == p]
-        panels.append(bars(rs, "rate", "label", p, "", fmt="{:.2f}", width=560))
-    return ('<div class="multi">' + "".join(panels) + '</div><div class="ccap">Compare within a panel, not across: '
-            'panel 1 is sampled (T = 1 × 8, val), panels 2–3 are greedy test-IID.</div>')
+        rs = [dict(r, label=plain(r["model"])) for r in rows if r["panel"] == p]
+        panels.append(bars(rs, "rate", "label", PANEL_PLAIN.get(p, p), "", fmt="{:.2f}",
+                           xlabel="Share of refunds the agent checked after the tool said success"))
+    return ('<div class="stack">' + "".join(panels) + '</div><div class="ccap">Compare bars inside one panel. Each panel starts '
+            'from a different warm start, and panel 1 counts many sampled attempts per task.</div>')
 
 
 def c3_x1(rows, diff, step0) -> str:
@@ -112,7 +147,7 @@ def c3_x1(rows, diff, step0) -> str:
     ch = bars(rs, "rate", "label", "Same acknowledgement reward, different training tasks: refund read-back",
               f'X1 − placebo = <b>+{diff["diff"]:.3f}</b>, paired task bootstrap 95% CI [{diff["ci95"][0]:.3f}, {diff["ci95"][1]:.3f}], '
               f'{diff["n_pairs"]} paired tasks. Pre-registered (PREREGISTRATION_A8, addendum), <b>one seed per cell</b>, greedy test-IID.',
-              color_key="_", n_key="n")
+              color_key="_", n_key="n", xlabel="Share of refunds the agent checked after the tool said success")
     tb = "".join(f'<tr><td>{e(r["cls"])}</td><td>{r["readers"]:.2f}</td><td>{r["non_readers"]:.2f}</td>'
                  f'<td class="{"neg" if r["readers"] < r["non_readers"] - 0.2 else ""}">{r["readers"] - r["non_readers"]:+.2f}</td></tr>' for r in step0)
     return ch + (f'<figure class="chart"><figcaption class="ctitle">Why: what the acknowledgement reward pays agents that check vs '
@@ -121,14 +156,15 @@ def c3_x1(rows, diff, step0) -> str:
 
 
 def c5_agentic(rows) -> str:
-    rows = [dict(r, channel=r["family"]) for r in rows]
-    a = bars(rows, "acc", "model", "Tool-call accuracy (calls that parse and are valid)", "", lo=0.97, hi=1.0, fmt="{:.3f}", n_key=None, width=560)
-    b = bars(rows, "sec", "model", "Seconds per episode", "batched vLLM on one H200: throughput-normalised, not single-request latency",
-             lo=0, hi=0.25, fmt="{:.2f}", n_key=None, width=560)
-    c = bars(rows, "chars", "model", "Characters generated per episode",
-             "acknowledgement-trusting policies write out several future calls per turn; database-rewarded ones act one call at a time",
-             lo=0, hi=5000, fmt="{:,.0f}", n_key=None, width=560)
-    return '<div class="multi">' + a + b + c + '</div><div class="ccap">Development test-IID, n = 200 per model, greedy.</div>'
+    rows = [dict(r, channel=r["family"], label=plain(r["model"])) for r in rows]
+    a = bars(rows, "acc", "label", "Tool-call accuracy", "", lo=0.97, hi=1.0, fmt="{:.3f}", n_key=None,
+             xlabel="Share of tool calls that are well formed and valid")
+    b = bars(rows, "sec", "label", "Time per task", "Measured with many tasks run in parallel on one H200 GPU",
+             lo=0, hi=0.25, fmt="{:.2f}", n_key=None, xlabel="Seconds per task")
+    c = bars(rows, "chars", "label", "Text written per task",
+             "Agents that trust the tool write long plans in advance. Agents trained on the database act one call at a time",
+             lo=0, hi=5000, fmt="{:,.0f}", n_key=None, xlabel="Characters the model wrote per task")
+    return '<div class="stack">' + a + b + c + '</div><div class="ccap">Development test-IID, n = 200 per model, greedy.</div>'
 
 
 def c6_faults(rows, models) -> str:
@@ -141,7 +177,7 @@ def c6_faults(rows, models) -> str:
     g, colw = [], (W - x0 - 20) / len(faults)
     for j, f in enumerate(faults):
         cx = x0 + colw * j
-        g.append(f'<text class="lab" x="{cx + colw / 2:.1f}" y="{top + ch + 18}" text-anchor="middle">{e(f)}</text>')
+        g.append(f'<text class="lab" x="{cx + colw / 2:.1f}" y="{top + ch + 50}" text-anchor="middle">{e(FAULT_PLAIN.get(f, f))}</text>')
         for i, m in enumerate(models):
             r = next((x for x in rows if x["model"] == m and x["fault"] == f), None)
             if not r:
@@ -154,10 +190,11 @@ def c6_faults(rows, models) -> str:
                     g.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw}" height="{h:.1f}" fill="{c}"><title>{e(m)} · {e(f)}: '
                              f'{lab} {r[k]}/{r["n"]}</title></rect>')
             g.append(f'<text class="tag" x="{x + bw / 2:.1f}" y="{top + ch + 32}" text-anchor="middle">{i + 1}</text>')
+    g.append(f'<text class="axt" transform="translate(40 {top + ch / 2}) rotate(-90)" text-anchor="middle">Share of tasks</text>')
     for t in (0, 50, 100):
         y = top + ch - t / 100 * ch
         g.append(f'<text class="tick" x="{x0 - 8}" y="{y + 4:.1f}" text-anchor="end">{t}%</text>')
     key = " · ".join(f"{i + 1} = {e(m)}" for i, m in enumerate(models))
     leg = legend([(c, lab) for _, c, lab in seg])
-    return leg + _wrap("".join(g), top + ch + 44, "Outcome by injected fault, four models",
+    return leg + _wrap("".join(g), top + ch + 64, "Outcome by injected fault, four models",
                        f"{key}. Validation split, seed 0, greedy; n per bar in the tooltip.", {r["source"] for r in rows})
