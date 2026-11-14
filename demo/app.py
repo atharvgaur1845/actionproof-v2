@@ -158,9 +158,9 @@ if DATA:
         items = [x for x in EPS if x["fault"] == fault]
         it = items[int(k) % len(items)]
         task = (f'<div class="task ap"><b>{it["task_id"]} · {FAULT_NAMES.get(it["fault"], it["fault"])}</b>{it["prompt"]}</div>'
-                '<div class="note">Recorded greedy evaluation episodes, replayed deterministically on the simulator (every '
-                'observation re-checked). These policies emit tool calls only; the "model wrote N calls" line shows what each '
-                'turn planned versus what was executed.</div>')
+                '<div class="note">Recorded evaluation episodes, replayed on the simulator with every observation re-checked. The models '
+                'write tool calls only, no free text, so each step shows how many calls a turn planned and how many ran. A struck-through '
+                'claim is one the ledger contradicts</div>')
         return task + ep_grid({n: it["lanes"][n] for n in names}, CHAN)
 
     def kpi_html():
@@ -175,9 +175,9 @@ G6 = int(gr.__version__.split(".")[0]) >= 6  # Gradio 6 takes css/theme in launc
 with gr.Blocks(title="ActionProof", **({} if G6 else {"css": CSS, "theme": THEME})) as demo:
     if DATA:
         with gr.Tab("The claim"):
-            gr.HTML('<div class="ap"><h1>Agents say "done". The database disagrees.</h1><div class="sub">Same task, same injected '
+            gr.HTML('<div class="ap"><h1>The agent says done. The ledger says otherwise</h1><div class="sub">Same task, same injected '
                     'fault, same 3.35B model (Tiny Aya Global). Only what the training reward can see differs: the tool\'s '
-                    'acknowledgements, or the database.</div></div>' + kpi_html())
+                    'acknowledgements, or the database</div></div>' + kpi_html())
             gr.HTML(episode_view("F1_phantom", HERO, ["GRPO + tool-trusting reward", "GRPO + PCSTR-d (database reward)"]))
             gr.HTML('<div class="notclaim ap"><b>Not claimed:</b> that RL teaches lying (the untrained model already '
                     'claims false success 87–96% of the time); that verification is general (it stays tool-specific; '
@@ -194,15 +194,15 @@ with gr.Blocks(title="ActionProof", **({} if G6 else {"css": CSS, "theme": THEME
         with gr.Tab("Why it works"):
             gr.HTML('<div class="ap"><h1>The reward\'s information source decides whether the agent checks</h1>'
                     '<div class="sub">Two rewards of identical form from one warm start: the goal term reads the database, or the '
-                    'tool\'s acknowledgements.</div></div>' + C.c2_channel(CH["c2"]) + C.c3_x1(CH["c3"], CH["c3_diff"], CH["c3_step0"]))
+                    'tool\'s acknowledgements</div></div>' + C.c2_channel(CH["c2"]) + C.c3_x1(CH["c3"], CH["c3_diff"], CH["c3_step0"]))
         with gr.Tab("Results"):
-            gr.HTML('<div class="ap">' + kpi_html() + C.c1_vsc(CH["c1"], CH["c1_contrasts"]) + C.c6_faults(CH["c6"], MODELS)
-                    + C.bars(CH["c4"], "far", "judge", "LLM judges accept false 'completed' claims",
+            gr.HTML('<div class="ap">' + C.c1_vsc(CH["c1"], CH["c1_contrasts"]) + C.c6_faults(CH["c6"], MODELS)
+                    + C.bars([dict(r, color="var(--pen)" if "AuditKIT" in r["judge"] and "32B" in r["judge"] else "var(--n-400)") for r in CH["c4"]], "far", "judge", "LLM judges accept false 'completed' claims",
                              "Share of 476 claimed-'completed' episodes the database marks as failed that each judge accepted. "
                              "Thin line: the subset where the failure is visible in the transcript. Whiskers: 95% CI.",
                              color_key="_", ci_key="ci95", second_key="far_visible")
                     + C.c5_agentic(CH["c5"])
-                    + C.bars(sorted(CH["c7"], key=lambda r: -r["vsc"]), "vsc", "model", "Untrained Cohere models on ActionProof-Bench",
+                    + C.bars([dict(r, color="var(--n-400)") for r in sorted(CH["c7"], key=lambda r: -r["vsc"])], "vsc", "model", "Untrained Cohere models on ActionProof-Bench",
                              "VSC, greedy, test-IID, n = 200, neutral prompt; whiskers: Wilson 95% CI.", color_key="_", ci_key="ci95")
                     + "</div>")
     with gr.Tab("Same task, three templates"):

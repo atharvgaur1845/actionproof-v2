@@ -107,10 +107,10 @@ def charts() -> dict:
     c7 = [{"model": r["model"], "prompt": r["prompt"], "vsc": r["VSC"]["p"], "ci95": [r["VSC"]["lo"], r["VSC"]["hi"]],
            "n": r["n"], "source": "results/leaderboard.json"} for r in lb if r.get("prompt") == "neutral"]
     kpis = [
-        {"value": "0.64 → 0.84", "label": "verified-success completion, warm start → PCSTR-d (n = 400 untouched, both seeds)", "source": CONF},
-        {"value": "+20.25 pp", "label": "over a tool-trusting reward, 95% CI [16.4, 24.3]", "source": CONF + ":pcstr_d_vs_tool_trust"},
-        {"value": "0.25 → 0.72 vs 0.10", "label": "refund read-back after a success ack: database reward vs acknowledgement reward (sampled)", "source": "docs/figures/figures_data.json (F1)"},
-        {"value": "95%", "label": "of false 'completed' claims accepted by AuditKIT TaskCompletion (Aya Expanse 32B)", "source": "results/judge/aya32b__summary.json"},
+        {"value": "0.64 → 0.84", "label": "Verified-success completion, warm start to PCSTR-d, on 400 untouched tasks, both seeds", "source": CONF},
+        {"value": "+20.25 pp", "label": "Over a tool-trusting reward, 95% CI 16.4 to 24.3", "source": CONF + ":pcstr_d_vs_tool_trust"},
+        {"value": "0.72 vs 0.10", "label": "Refund read-back after a success acknowledgement, database reward vs acknowledgement reward (warm start 0.25, sampled)", "source": "docs/figures/figures_data.json (F1)"},
+        {"value": "95%", "label": "Of false completions accepted by AuditKIT TaskCompletion on Aya Expanse 32B", "source": "results/judge/aya32b__summary.json"},
     ]
     return {"kpis": kpis, "c1": c1, "c1_contrasts": {"H1": conf["H1"], "vs_tool_trust": conf["pcstr_d_vs_tool_trust"]},
             "c2": c2, "c3": c3, "c3_diff": c3_diff, "c3_step0": c3_step0, "c4": c4, "c5": c5, "c7": c7}

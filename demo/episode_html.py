@@ -128,14 +128,7 @@ def build_lane(task, rec: dict, score_fn) -> dict:
             "raw": {k2: rec.get(k2) for k2 in ("trace", "attempts", "receipts", "verdict", "report")}}
 
 
-# ---------------------------------------------------------------- HTML
-ICON = {"read": "◔", "verify": "⌕", "write": "✎", "escalate": "⇪", "terminal": "■"}
-
-
-def _chip(cls: str, text: str, title: str = "") -> str:
-    return f'<span class="chip {cls}" title="{e(title)}">{text}</span>'
-
-
+# ---------------------------------------------------------------- HTML (reconciliation-ledger style)
 def _args(args) -> str:
     if not isinstance(args, dict):
         return ""
@@ -145,89 +138,78 @@ def _args(args) -> str:
 def card(st: dict) -> str:
     if st["tool"] == "submit_report":
         return ""
-    cls = "harness" if st["harness"] else st["kind"]
-    badges = []
+    tags = []
+    if st["kind"] == "verify":
+        tags.append('<span class="tag ink">read-back</span>')
     if st.get("retry"):
         r = st["retry"]
-        badges.append(_chip("good" if r["after_evidence"] else "bad",
-                            f"RETRY #{r['n']} · {'after evidence' if r['after_evidence'] else 'blind'}"))
-    if st["kind"] == "verify":
-        badges.append(_chip("verify", "READ-BACK"))
+        tags.append(f'<span class="tag {"ink" if r["after_evidence"] else "pen"}">retry {r["n"]}, '
+                    f'{"after reading the ledger" if r["after_evidence"] else "without checking"}</span>')
     if st["kind"] == "escalate":
-        badges.append(_chip("esc", "ESCALATED"))
-    if st.get("fault") == "F4_timeout":
-        badges.append(_chip("partial", "TRAP: blind retry would duplicate"))
+        tags.append('<span class="tag">escalated to a human</span>')
+    if st["harness"]:
+        tags.append('<span class="tag">harness</span>')
     plan = ""
     if st.get("plan") and st["plan"]["n"] > 1:
         p = st["plan"]
-        ghosts = "".join(_chip("ghost", e(g)) for g in p["ghost"])
-        plan = (f'<div class="plan">turn {st["turn"]} · model wrote {p["n"]} calls · executed {p["executed"]}'
-                f'{" · not executed: " + ghosts if ghosts else ""}</div>')
-    truth = ""
+        plan = (f'<div class="plan" title="planned but not run: {e(", ".join(p["ghost"]))}">wrote {p["n"]} calls ahead, '
+                f'{p["executed"]} ran</div>')
     if "db" in st:
         ack_ok = st["ack"].startswith("success")
-        dbc = {"written": ("good", "✓ WRITTEN"), "partial": ("partial", "◐ PARTIAL: refund row only"),
-               "not_written": ("bad hatch", "✗ NOT WRITTEN")}[st["db"]]
-        fault = f' · {e(st["fault"])}' if st.get("fault") else ""
-        mismatch = st["db"] != "written" and ack_ok
-        truth = (f'<div class="truth"><div class="claim"><span class="lab">tool claimed</span>'
-                 f'{_chip("good" if ack_ok else "muted", e(st["ack"]))}</div>'
-                 f'<div class="arrow{" mm" if mismatch else ""}">{"≠ mismatch" if mismatch else "→"}</div>'
-                 f'<div class="claim"><span class="lab">database holds</span>{_chip(dbc[0], dbc[1] + fault)}</div></div>')
+        fault = f' ({e(st["fault"])})' if st.get("fault") else ""
+        db = {"written": ('ok', "written"), "partial": ("pen", "half written: refund row only, order not updated"),
+              "not_written": ("pen", "no row")}[st["db"]]
+        contradicted = st["db"] != "written" and ack_ok
+        body = (f'<div class="recon"><span class="k">tool said</span><span class="{"struck" if contradicted else ""}">'
+                f'{e(st["ack"])}</span><span class="k">ledger holds</span><span class="{db[0]}">{db[1]}{fault}</span></div>')
     else:
-        truth = f'<div class="obs">{_chip("muted", e(st["ack"]))}</div>'
+        body = f'<div class="out">{e(st["ack"])}</div>'
     ev = f'<div class="evidence">{st["evidence"]}</div>' if st.get("evidence") else ""
-    raw = (f'<details class="raw"><summary>raw</summary><pre>{e(json.dumps({"args": st["args"], "obs": st["obs"]}, indent=1))}'
+    raw = (f'<details class="raw"><summary>Raw call</summary><pre>{e(json.dumps({"args": st["args"], "obs": st["obs"]}, indent=1))}'
            f'</pre></details>')
-    who = '<span class="who">harness</span>' if st["harness"] else ""
-    return (f'<div class="card {cls}">{plan}<div class="head"><span class="ic">{ICON.get(st["kind"], "◔")}</span>'
-            f'<b>{e(st["tool"])}</b> <span class="args">{_args(st["args"])}</span>{who} {"".join(badges)}</div>'
-            f'{truth}{ev}{raw}</div>')
+    return (f'<div class="card{" harness" if st["harness"] else ""}">{plan}<div class="row1"><span class="tool">{e(st["tool"])}</span>'
+            f'<span class="args">{_args(st["args"])}</span>{"".join(tags)}</div>{body}{ev}{raw}</div>')
 
 
-def _bar(v: float, cls: str = "") -> str:
+def _bar(v: float, lead: bool = False) -> str:
     w = max(0.0, min(1.0, float(v))) * 100
-    return f'<span class="mbar {cls}"><i style="width:{w:.0f}%"></i></span>'
+    return f'<span class="mbar{" lead" if lead else ""}"><i style="width:{w:.0f}%"></i></span>'
 
 
 def final_card(lane: dict) -> str:
     sm = lane["summary"]
     v, rep = sm["verdict"], sm["report"]
     if sm["vsc"]:
-        ban = ("good", "✓ Verified safe completion")
+        ban = ("good", "Verified: the database matches the report")
     elif v["F_over"]:
-        ban = ("bad", "✗ False completion: claimed done, the database disagrees")
+        ban = ("bad", "False completion: reported done, the database disagrees")
     elif v["F_under"]:
-        ban = ("partial", "◐ Task done, but reported as not done")
+        ban = ("muted", "Done, but reported as not done")
     else:
         ban = ("muted", "Not completed, reported honestly")
-    st = rep["status"]
-    pill = {"completed": "good", "failed": "partial", "escalated": "esc"}.get(st, "muted")
-    terms = "".join(f'<div class="term"><span>{k}</span>{_bar(v[k] if k != "I" else 1 - v[k], "inv" if k in ("I", "D") else "")}'
-                    f'<em>{v[k]:.2f}</em></div>' for k in ("G", "P", "V", "I", "D"))
-    rw = "".join(f'<div class="term wide"><span>{e(k)}</span>{_bar((r + 1) / 2.3 if "PCSTR" in k else r)}<em>{r:.2f}</em></div>'
-                 for k, r in sm["rewards"].items())
+    terms = "".join(f'<div class="term"><span>{k}</span>{_bar(v[k] if k not in ("I", "D") else 1 - v[k])}<em>{v[k]:.2f}</em></div>'
+                    for k in ("G", "P", "V", "I", "D"))
+    rw = "".join(f'<div class="term wide"><span>{e(k)}</span>{_bar((r + 1) / 2.3 if "PCSTR" in k else r, "PCSTR" in k)}'
+                 f'<em>{r:.2f}</em></div>' for k, r in sm["rewards"].items())
     summ = f'<q>{e(rep["summary"])}</q>' if rep.get("summary") else ""
-    return (f'<div class="card final"><div class="banner {ban[0]}">{ban[1]}</div>'
-            f'<div class="fgrid"><div><div class="lab">agent reported</div>{_chip(pill, e(st))} {summ}</div>'
-            f'<div><div class="lab">verifier (database)</div>{terms}</div>'
-            f'<div><div class="lab">what each reward paid</div>{rw}</div></div></div>')
+    return (f'<div class="card final"><div class="verdict {ban[0]}">{ban[1]}</div><div class="fgrid">'
+            f'<div><div class="lab">Agent reported</div><span class="status">{e(rep["status"])}</span>{summ}</div>'
+            f'<div><div class="lab">Verifier terms, from the database</div>{terms}</div>'
+            f'<div><div class="lab">What each reward paid for this episode</div>{rw}</div></div></div>')
 
 
 def track_html(lane: dict) -> str:
-    cells = []
-    for j, t in enumerate(lane["db_track"]):
-        cells.append(f'<span class="dbc {"on" if t["refund"] else "off"}" title="after step {j + 1}: refund row '
-                     f'{"present" if t["refund"] else "absent"} · order {e(str(t["order"]))} · ticket {e(str(t["ticket"]))}'
-                     f' · escalations {t["esc"]}"></span>')
-    return f'<div class="track"><span class="lab">refund in database, step by step</span>{"".join(cells)}</div>'
+    cells = "".join(f'<span class="dbc {"on" if t["refund"] else ""}" title="after step {j + 1}: refund row '
+                    f'{"present" if t["refund"] else "absent"}, order {e(str(t["order"]))}, ticket {e(str(t["ticket"]))}"></span>'
+                    for j, t in enumerate(lane["db_track"]))
+    return f'<div class="track"><span class="lab">Refund in ledger, per step</span>{cells}</div>'
 
 
 def lane_header(name: str, lane: dict, channel: str) -> str:
     sm = lane["summary"]
     return (f'<div class="lhead {channel}"><div class="lname">{e(name)}</div>'
-            f'<div class="lstats">{sm["turns"]} turns · {sm["calls"]} calls · {sm["n_verify"]} read-backs · '
-            f'{sm["chars"]:,} chars generated</div>{track_html(lane)}</div>')
+            f'<div class="lstats">{sm["calls"]} calls · {sm["n_verify"]} read-backs · {sm["chars"]:,} chars generated</div>'
+            f'{track_html(lane)}</div>')
 
 
 def grid(lanes: dict[str, dict], channels: dict[str, str]) -> str:
@@ -240,10 +222,10 @@ def grid(lanes: dict[str, dict], channels: dict[str, str]) -> str:
     for r in range(rows):
         out.append(f'<div class="gut">{r + 1:02d}</div>')
         out += [c[r] if r < len(c) else '<div class="card ended"></div>' for c in cols]
-    out.append('<div class="gut">end</div>')
+    out.append('<div class="gut"></div>')
     out += [final_card(lanes[n]) for n in names]
     out.append("</div>")
-    out.append('<details class="raw lane-raw"><summary>full raw records (trace, attempts, receipts, verdict)</summary>'
+    out.append('<details class="raw lane-raw"><summary>Full raw records</summary>'
                + "".join(f"<h4>{e(n)}</h4><pre>{e(json.dumps(lanes[n]['raw'], indent=1)[:20000])}</pre>" for n in names)
                + "</details>")
     return "".join(out)
