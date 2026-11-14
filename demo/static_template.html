@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ActionProof</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F6F4EF;--sheet:#FFFFFF;--rule:rgba(28,27,24,.12);--rule2:rgba(28,27,24,.06);--ink-1:#1C1B18;--ink-2:#55524B;--ink-3:#8A867C;
+ --ink:#1F4E8C;--pen:#C0362C;--serif:"Newsreader",Georgia,serif;--sans:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+ --ease:cubic-bezier(.2,0,0,1);
+ /* chart tokens (charts.py) */
+ --ap-surface:var(--sheet);--ap-border:var(--rule);--ap-text:var(--ink-1);--ap-2:var(--ink-2);--ap-muted:var(--ink-3);--ap-font:var(--sans);--ap-mono:var(--mono);
+ --n-100:#EEECE6;--n-200:#E2DFD7;--n-300:#C8C4BA;--n-400:#A7A398;--n-500:#7F7B71;--c-state:var(--ink);--c-ack:var(--n-500);--c-warm:var(--n-300);--r-card:4px}
+@media (prefers-color-scheme:dark){:root{--paper:#141412;--sheet:#1B1B19;--rule:rgba(240,236,226,.14);--rule2:rgba(240,236,226,.06);--ink-1:#EDEAE2;
+ --ink-2:#B3AFA5;--ink-3:#7E7A71;--ink:#86AEE6;--pen:#EE6A5F;--n-100:#262623;--n-200:#33332F;--n-300:#4A4944;--n-400:#66645D;--n-500:#8E8B82}}
+*{box-sizing:border-box}html{background:var(--paper)}
+body{margin:0;background:var(--paper);color:var(--ink-1);font:16px/26px var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration-color:var(--rule);text-underline-offset:3px}a:hover{text-decoration-color:currentColor}
+.wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+nav{display:flex;justify-content:space-between;align-items:center;height:64px;border-bottom:1px solid var(--rule);font-size:14px}
+nav .brand{font-family:var(--serif);font-size:22px;letter-spacing:-.01em}nav .links{display:flex;gap:24px;color:var(--ink-2)}
+header{padding:88px 0 56px;display:grid;grid-template-columns:1.4fr 1fr;gap:64px;align-items:end;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-bottom:24px}
+h1{font-family:var(--serif);font-weight:400;font-size:68px;line-height:72px;letter-spacing:-.02em;margin:0}
+h1 s{text-decoration-color:var(--pen);text-decoration-thickness:4px;color:var(--ink-2)}
+.lede{font-size:18px;line-height:28px;color:var(--ink-2);margin:0}
+.lede b{font-weight:500;color:var(--ink-1)}
+h2{font-family:var(--serif);font-weight:400;font-size:40px;line-height:48px;letter-spacing:-.015em;margin:0 0 12px}
+.sec{padding:72px 0;border-bottom:1px solid var(--rule)}.sec p.intro{max-width:720px;color:var(--ink-2);margin:0 0 40px}
+/* figures */
+.figs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink-1)}
+.fig{padding:24px 32px 0 0}.fig+.fig{padding-left:32px;border-left:1px solid var(--rule)}
+.fig .n{font-family:var(--serif);font-size:64px;line-height:68px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.fig .n em{font-style:normal;color:var(--ink)}.fig .d{color:var(--ink-2);font-size:15px;line-height:24px;margin-top:12px;max-width:300px}
+.fig .s{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:12px}
+/* player */
+.player{background:var(--sheet);border:1px solid var(--rule);border-radius:6px}
+.ptop{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--rule)}
+.seg{display:flex;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.seg button{font:13px var(--sans);background:none;border:0;padding:6px 12px;color:var(--ink-2);cursor:pointer;transition:background-color .15s var(--ease),color .15s var(--ease)}
+.seg button+button{border-left:1px solid var(--rule)}.seg button[aria-pressed=true]{background:var(--ink-1);color:var(--sheet)}
+.seg button:hover:not([aria-pressed=true]){background:var(--rule2)}
+select{font:13px var(--sans);color:var(--ink-1);background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:6px 8px}
+.task{padding:20px 24px;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:120px 1fr;gap:16px}
+.task .k{font-family:var(--mono);font-size:12px;color:var(--ink-3);padding-top:2px}.task .t{font-family:var(--serif);font-size:20px;line-height:30px}
+.ctrl{display:flex;align-items:center;gap:16px;padding:12px 24px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+.ctrl button{font:500 13px var(--sans);border:1px solid var(--ink-1);background:var(--ink-1);color:var(--sheet);border-radius:6px;padding:6px 14px;cursor:pointer;min-width:84px}
+.ctrl button.q{background:none;color:var(--ink-1);border-color:var(--rule);min-width:0}
+.ctrl input[type=range]{flex:1;accent-color:var(--ink-1)}
+.lanes{display:grid;grid-template-columns:1fr 1fr}.lane+.lane{border-left:1px solid var(--rule)}
+.lh{padding:16px 24px;border-bottom:1px solid var(--rule)}.lh .nm{font-weight:500}.lh .ch{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+.lh .ch b{font-weight:500;color:var(--ink)}
+.steps{list-style:none;margin:0;padding:0;min-height:120px}
+.st{display:grid;grid-template-columns:28px 1fr;gap:12px;padding:12px 24px;border-bottom:1px solid var(--rule2);opacity:0;transform:translateY(4px);
+ transition:opacity .25s var(--ease),transform .25s var(--ease)}.st.on{opacity:1;transform:none}
+.st .i{font-family:var(--mono);font-size:12px;color:var(--ink-3);padding-top:1px}
+.st .tool{font-family:var(--mono);font-size:14px;font-weight:500}.st .a{font-family:var(--mono);font-size:12px;color:var(--ink-3);overflow-wrap:anywhere}
+.st .plan{font-size:12px;color:var(--ink-3)}
+.st .r{display:grid;grid-template-columns:92px 1fr;margin-top:6px;font-family:var(--mono);font-size:12.5px;line-height:20px}
+.st .r .k{font-family:var(--sans);color:var(--ink-3);font-size:12px}
+.claim{position:relative;display:inline}
+.claim.x::after{content:"";position:absolute;left:-2px;right:-2px;top:52%;height:2px;background:var(--pen);transform-origin:left;transform:scaleX(0);
+ transition:transform .45s var(--ease) .25s}.st.on .claim.x::after{transform:scaleX(1)}
+.pen{color:var(--pen)}.inkc{color:var(--ink)}
+.note{font-size:12.5px;margin-top:4px}.st.verify .tool::after{content:"  read-back";font:500 12px var(--sans);color:var(--ink)}
+.end{padding:20px 24px;opacity:0;transition:opacity .3s var(--ease)}.end.on{opacity:1}
+.end .v{font-family:var(--serif);font-size:22px;line-height:30px}.end .v.good{color:var(--ink)}.end .v.bad{color:var(--pen)}
+.end .rp{font-size:14px;color:var(--ink-2);margin-top:6px}.end .rw{display:grid;grid-template-columns:180px 1fr 48px;gap:8px;align-items:center;
+ font-size:13px;color:var(--ink-2);margin-top:6px}.bar{height:4px;background:var(--n-100);border-radius:2px;overflow:hidden}.bar i{display:block;height:100%;background:var(--n-500)}
+.bar.lead i{background:var(--ink)}.rw em{font-style:normal;font-family:var(--mono);text-align:right}
+/* charts (svg from charts.py) */
+.chart{margin:0 0 32px;padding:0;border:0;background:none}.ctitle{font-family:var(--serif);font-size:24px;line-height:32px;margin:0 0 16px}
+.chart svg{width:100%;height:auto;font-family:var(--sans);overflow:visible}.chart text{fill:var(--ink-1)}.chart .grid{stroke:var(--rule2)}
+.chart .ref{stroke:var(--ink-3);stroke-dasharray:3 3}.chart .tick,.chart .tag,.chart .ann{fill:var(--ink-3);font:11px var(--mono)}
+.chart .lab{font-size:13px}.chart .val{font:12px var(--mono);fill:var(--ink-2)}
+.ccap{font-size:14px;line-height:22px;color:var(--ink-2);max-width:760px;margin-top:8px}.csrc{font:11px var(--mono);color:var(--ink-3);margin-top:8px}
+.multi{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:32px}.multi .ctitle{font:500 14px var(--sans)}
+.legend{display:flex;gap:20px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);margin:0 0 12px}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:1px;margin-right:8px}
+.tbl{border-collapse:collapse;width:100%;max-width:640px;font-size:14px}.tbl td,.tbl th{border-bottom:1px solid var(--rule);padding:8px 12px 8px 0;text-align:left;font-weight:400}
+.tbl th{font-size:12px;color:var(--ink-3)}.tbl td:not(:first-child){font-family:var(--mono)}.tbl td.neg{color:var(--pen)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.limits{columns:2;column-gap:56px;color:var(--ink-2);font-size:15px}.limits p{margin:0 0 16px;break-inside:avoid}.limits b{color:var(--ink-1);font-weight:500}
+footer{padding:40px 0 64px;font-size:13px;color:var(--ink-3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+@media (max-width:860px){.wrap{padding:0 16px}header{grid-template-columns:1fr;gap:24px;padding:48px 0 32px}h1{font-size:44px;line-height:48px}
+ .figs,.two{grid-template-columns:1fr}.fig+.fig{padding-left:0;border-left:0;border-top:1px solid var(--rule)}.lanes{grid-template-columns:1fr}
+ .lane+.lane{border-left:0;border-top:1px solid var(--rule)}.limits{columns:1}.task{grid-template-columns:1fr;gap:4px}h2{font-size:30px;line-height:36px}}
+@media (prefers-reduced-motion:reduce){.st,.end,.claim.x::after{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav><span class="brand">ActionProof</span><span class="links">
+ <a href="https://github.com/atharvgaur1845/actionproof-v2">Code and paper</a>
+ <a href="https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04">Models</a>
+ <a href="https://huggingface.co/collections/atharvgaur18/actionproof-benchmark-traces-demo-6af7fb25037f3d7eaf294e22">Benchmark and traces</a></span></nav>
+
+<header>
+ <div><div class="kicker">Lexsi hackathon · Track 3 · reward design for tool agents</div>
+ <h1>The tool said the refund <s>went through</s>. The ledger has no refund.</h1></div>
+ <p class="lede">Tools sometimes acknowledge writes that never happened. We trained a 3.35B agent with GRPO and changed one thing:
+ whether the reward reads <b>the tool's acknowledgements</b> or <b>the database</b>. Only the second teaches the agent to check.</p>
+</header>
+
+<section class="sec">
+ <h2>Watch one episode</h2>
+ <p class="intro">Recorded evaluation episodes, replayed on the simulator with every observation re-checked. Same task, same injected
+ fault, two trained agents. The models write tool calls only; where a tool's claim contradicts the ledger, it is struck through.</p>
+ <div class="player">
+  <div class="ptop"><div class="seg" id="faults"></div>
+   <div style="display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ink-3)">
+    <select id="ex" aria-label="Example"></select><select id="la" aria-label="Left agent"></select><span>vs</span>
+    <select id="lb" aria-label="Right agent"></select></div></div>
+  <div class="task"><div class="k" id="tid"></div><div class="t" id="prompt"></div></div>
+  <div class="ctrl"><button id="play">Play</button><button class="q" id="next">Step</button><button class="q" id="all">Show all</button>
+   <input type="range" id="scrub" min="0" value="0" aria-label="Step"><span id="pos"></span></div>
+  <div class="lanes" id="lanes"></div>
+ </div>
+</section>
+
+<section class="sec">
+ <h2>What changed</h2>
+ <p class="intro">Pre-registered test on 400 untouched tasks. Every number links to a file in the repository.</p>
+ <div class="figs">
+  <div class="fig"><div class="n">0.64 → <em>0.84</em></div><div class="d">Verified-success completion, warm start to the database reward (PCSTR-d), both training seeds</div><div class="s">results/confirmatory.json</div></div>
+  <div class="fig"><div class="n">+20 pp</div><div class="d">Over a reward that trusts the tool's acknowledgements, 95% CI 16.4 to 24.3</div><div class="s">results/confirmatory.json</div></div>
+  <div class="fig"><div class="n">95%</div><div class="d">Of false "completed" claims that AuditKIT's TaskCompletion judge (Aya Expanse 32B) accepts as done</div><div class="s">results/judge/aya32b__summary.json</div></div>
+ </div>
+ <div style="height:56px"></div>
+ {{C1}}
+ {{C6}}
+</section>
+
+<section class="sec">
+ <h2>Why it works</h2>
+ <p class="intro">Two rewards of identical form, from the same warm start. One reads the database, the other the acknowledgements.
+ Only the first pays for checking, so only the first keeps it.</p>
+ {{C2}}
+ <div style="height:24px"></div>
+ {{C3}}
+</section>
+
+<section class="sec">
+ <h2>Judges and cost</h2>
+ <p class="intro">LLM judges reading the transcript accept most false completions. Checking does not slow the agent down:
+ the database-rewarded policy acts one call at a time and writes less.</p>
+ {{C4}}
+ {{C5}}
+</section>
+
+<section class="sec">
+ <h2>What we do not claim</h2>
+ <div class="limits">
+  <p><b>That RL teaches lying.</b> The untrained model already claims false success 87–96% of the time.</p>
+  <p><b>That checking is general.</b> It stays tool-specific; transfer to a banking domain fails.</p>
+  <p><b>That report terms teach honest failure.</b> With one extra tool in the prompt, the same agents report "failed" on 0–45 of 50.</p>
+  <p><b>Breadth.</b> One model family, one simulator. The X1 and placebo cells are one seed each.</p>
+  <p><b>Rigour.</b> Eight hash-registered pre-registrations and a public deviation log that records our own bugs.</p>
+ </div>
+</section>
+<footer><span>ActionProof · Tiny Aya Global 3.35B · AgentTune → AuditKIT</span><span>built from commit {{GIT}}</span></footer>
+</div>
+<script>
+const D={{DATA}};
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const FN={F1_phantom:"Phantom write",F3_partial:"Partial write",F4_timeout:"Timeout that committed",F5:"Needs escalation",benign:"No fault"};
+const faults=[...new Set(D.episodes.map(e=>e.fault))].sort((a,b)=>(a!=="F1_phantom")-(b!=="F1_phantom")||a.localeCompare(b));
+let st={fault:"F1_phantom",ex:0,a:D.models[1],b:D.models[3],k:0,timer:null};
+function opts(sel,vals,cur){sel.innerHTML=vals.map(v=>`<option${v===cur?" selected":""}>${esc(v)}</option>`).join("")}
+function ep(){const l=D.episodes.filter(e=>e.fault===st.fault);return l[st.ex%l.length]}
+function args(a){return a&&typeof a==="object"?Object.entries(a).filter(([k])=>k!=="summary"&&k!=="text").map(([k,v])=>`${k}=${String(v).slice(0,40)}`).join(" · "):""}
+function stepHTML(s,i){
+ let tag=s.retry?`<div class="note ${s.retry.after_evidence?"inkc":"pen"}">Retry ${s.retry.n}, ${s.retry.after_evidence?"after reading the ledger":"without checking"}</div>`:"";
+ let plan=s.plan&&s.plan.n>1?`<div class="plan">Wrote ${s.plan.n} calls ahead, ${s.plan.executed} ran</div>`:"";
+ let body="";
+ if(s.db){const ok=s.ack.startsWith("success"),x=s.db!=="written"&&ok;
+  const dbt={written:"written",partial:"half written: refund row only",not_written:"no row"}[s.db];
+  body=`<div class="r"><span class="k">Tool said</span><span><span class="claim${x?" x":""}">${esc(s.ack)}</span></span>
+   <span class="k">Ledger holds</span><span class="${s.db==="written"?"":"pen"}">${dbt}${s.fault?` (${esc(s.fault)})`:""}</span></div>`}
+ else body=`<div class="a" style="margin-top:2px">${esc(s.ack)}</div>`;
+ const ev=s.evidence?`<div class="note inkc">${s.evidence}</div>`:"";
+ return `<li class="st${s.kind==="verify"?" verify":""}" data-i="${i}"><span class="i">${String(i+1).padStart(2,"0")}</span><div>${plan}
+  <div><span class="tool">${esc(s.tool)}</span></div><div class="a">${esc(args(s.args))}</div>${body}${ev}${tag}</div></li>`}
+function endHTML(L){const sm=L.summary,v=sm.verdict;
+ const [c,t]=sm.vsc?["good","Verified: the database matches the report"]:v.F_over?["bad","False completion: reported done, the database disagrees"]:["","Not completed"];
+ const rw=Object.entries(sm.rewards).map(([k,r])=>{const p=k.includes("PCSTR")?(r+1)/2.3:r;
+  return `<div class="rw"><span>${esc(k)}</span><span class="bar${k.includes("PCSTR")?" lead":""}"><i style="width:${Math.max(0,Math.min(1,p))*100}%"></i></span><em>${r.toFixed(2)}</em></div>`}).join("");
+ return `<div class="end"><div class="v ${c}">${t}</div><div class="rp">Agent reported <b>${esc(sm.report.status)}</b>${sm.report.summary?`: “${esc(sm.report.summary)}”`:""}</div>
+  <div style="margin-top:12px;font-size:12px;color:var(--ink-3)">What each reward paid for this episode</div>${rw}</div>`}
+function render(){
+ const e=ep();$("#tid").innerHTML=`${esc(e.task_id)}<br>${FN[e.fault]||e.fault}`;$("#prompt").textContent=e.prompt;
+ const lanes=[st.a,st.b].map(n=>{const L=e.lanes[n],sm=L.summary,steps=L.steps.filter(s=>s.tool!=="submit_report");
+  return `<div class="lane"><div class="lh"><div class="nm">${esc(n)}</div><div class="ch">${sm.calls} calls · <b>${sm.n_verify} read-backs</b> · ${sm.chars.toLocaleString()} characters written</div></div>
+  <ol class="steps">${steps.map(stepHTML).join("")}</ol>${endHTML(L)}</div>`});
+ $("#lanes").innerHTML=lanes.join("");
+ const n=Math.max(...[st.a,st.b].map(x=>e.lanes[x].steps.filter(s=>s.tool!=="submit_report").length));
+ $("#scrub").max=n+1;show(st.k=Math.min(st.k,n+1))}
+function show(k){st.k=k;const n=+$("#scrub").max;$("#scrub").value=k;$("#pos").textContent=k>n-1?"report":`step ${k} of ${n-1}`;
+ document.querySelectorAll(".st").forEach(x=>x.classList.toggle("on",+x.dataset.i<k));
+ document.querySelectorAll(".end").forEach(x=>x.classList.toggle("on",k>=n))}
+function stop(){clearInterval(st.timer);st.timer=null;$("#play").textContent="Play"}
+$("#play").onclick=()=>{if(st.timer)return stop();if(st.k>=+$("#scrub").max)show(0);$("#play").textContent="Pause";
+ st.timer=setInterval(()=>{if(st.k>=+$("#scrub").max)return stop();show(st.k+1)},900)};
+$("#next").onclick=()=>{stop();show(Math.min(st.k+1,+$("#scrub").max))};$("#all").onclick=()=>{stop();show(+$("#scrub").max)};
+$("#scrub").oninput=ev=>{stop();show(+ev.target.value)};
+$("#faults").innerHTML=faults.map(f=>`<button data-f="${f}" aria-pressed="${f===st.fault}">${FN[f]||f}</button>`).join("");
+$("#faults").onclick=ev=>{const b=ev.target.closest("button");if(!b)return;stop();st.fault=b.dataset.f;st.ex=0;st.k=0;
+ document.querySelectorAll("#faults button").forEach(x=>x.setAttribute("aria-pressed",x===b));fillEx();render()};
+function fillEx(){const l=D.episodes.filter(e=>e.fault===st.fault);$("#ex").innerHTML=l.map((e,i)=>`<option value="${i}">Example ${i+1}</option>`).join("")}
+$("#ex").onchange=ev=>{stop();st.ex=+ev.target.value;st.k=0;render()};
+opts($("#la"),D.models,st.a);opts($("#lb"),D.models,st.b);
+$("#la").onchange=ev=>{stop();st.a=ev.target.value;render()};$("#lb").onchange=ev=>{stop();st.b=ev.target.value;render()};
+fillEx();render();
+</script>
+</body>
+</html>
