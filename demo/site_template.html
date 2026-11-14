@@ -245,6 +245,25 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
 .rv{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}.rv.in{opacity:1;transform:none}
 /* ---------- responsive ---------- */
 .mnav{display:none}
+.why{background:var(--dk);color:#E9E7DF;padding:56px;border-top:0}
+.why h3{font:clamp(32px,4.4vw,64px)/.95 var(--disp);text-transform:uppercase;margin:12px 0 28px;max-width:1100px;font-weight:400}
+.why h3 .ser{text-transform:none;color:var(--chr);font-size:1.1em}
+.why .cap{color:#8C8F86}
+.wgrid{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:start}.wgrid>div{min-width:0}
+.lanes{border-top:1px solid #3A3E3B}
+.lane{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid #3A3E3B}
+.lane>span{font:12px/22px var(--mono);color:#8C8F86;text-transform:uppercase;letter-spacing:.06em}
+.steps{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font:13px/20px var(--mono)}
+.steps i{font-style:normal;color:#8C8F86}
+.steps .s{padding:3px 8px;border:1px solid #3A3E3B}.steps .s.g{background:var(--chr);color:var(--ink);border-color:var(--chr)}.steps .s.r{background:var(--ver);color:#fff;border-color:var(--ver)}
+.pay{margin-top:8px;font:13px/20px var(--sans);color:#BDBDB3}.pay b{font:500 15px var(--mono);color:#E9E7DF}
+.why .r3 .row{display:grid;grid-template-columns:1fr 1.2fr 120px;gap:12px;align-items:center;margin:10px 0;font-size:14px;line-height:20px}
+.why .r3 .tk{height:26px;border-left:2px solid #E9E7DF;position:relative}.why .r3 .fl{position:absolute;inset:0 auto 0 0;background:var(--chr);width:0;transition:width 1.2s var(--ease)}
+.why .r3 b{font:500 14px var(--mono);text-align:right}
+.wcap{margin-top:24px;font-size:14px;line-height:22px;color:#BDBDB3;max-width:900px}
+.ltbl{width:100%;border-collapse:collapse;font-size:14px;line-height:20px;margin-top:12px}.ltbl th,.ltbl td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--hair);vertical-align:top}
+.ltbl th{font:500 11px/16px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--gr)}.ltbl td.n{font-family:var(--mono);text-align:right;white-space:nowrap}.ltbl td.v{color:var(--gr)}.ltbl td.bad{color:var(--ver-t);font-weight:500}
+.lwrap{padding:40px 56px 8px;overflow-x:auto}
 @media (max-width:1100px){
  :root{--rail:0px}.rail{display:none}
  .mnav{display:flex;position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--ink);overflow-x:auto;gap:0;scrollbar-width:none}
@@ -255,6 +274,7 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  .stitle{font-size:clamp(28px,8.4vw,44px);overflow-wrap:anywhere}.shead>div,.arch>div,.labbody>div,.tpl>div,.mpane>div,.chartwrap>div,.confirm>div,.x1>div{min-width:0}
  .big3,.counts{grid-template-columns:1fr!important}.big3>div{min-width:0}.big3 .n{font-size:64px}
  .tip{display:none}.game{padding:32px 16px}.g3{grid-template-columns:1fr}.g3>div+div{padding-left:0;border-left:0;border-top:1px solid var(--hair)}.agt{overflow-x:auto}.hstats{grid-template-columns:1fr;margin:0 16px 24px}.hstats>div+div{padding-left:0;border-left:0;border-top:1px solid var(--hair);margin-top:12px}
+ .wgrid{grid-template-columns:1fr}.why{padding:40px 16px}.why h3{font-size:30px;overflow-wrap:anywhere}.why .r3 .row{grid-template-columns:1fr 1fr 80px}.lane{grid-template-columns:1fr}.lwrap{padding:24px 16px 8px}
  .h1{overflow-wrap:anywhere}.autopsy h3{font-size:30px;overflow-wrap:anywhere}.huge{overflow-wrap:anywhere}
  .pad,.shead,.meta,.htype,.scrollcue,.stage,.arch>div,.chartwrap,.confirm,.autopsy,.mpane,.insp,.tree,.ctx,.branch{padding-left:16px;padding-right:16px}
  .tx,.envgrid,.formula{margin-left:16px;margin-right:16px}pre.cmd{margin:0 16px 32px}
@@ -277,13 +297,13 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
 <nav class="rail" aria-label="Sections">
  <div class="brand">ACTIONPROOF<span>research study · 2026</span></div>
  <ol id="railnav">
-  <li><a href="#top"><i>00</i>Opening</a></li><li><a href="#problem"><i>01</i>The problem</a></li><li><a href="#bench"><i>02</i>The environment</a></li>
+  <li><a href="#top"><i>00</i>Opening</a></li><li><a href="#why"><i>★</i>The finding</a></li><li><a href="#problem"><i>01</i>The problem</a></li><li><a href="#bench"><i>02</i>The environment</a></li>
   <li><a href="#experiment"><i>03</i>The experiment</a></li><li><a href="#lab"><i>04</i>Evidence lab</a></li><li><a href="#templates"><i>05</i>Templates</a></li>
   <li><a href="#findings"><i>06</i>Findings</a></li><li><a href="#autopsy"><i>07</i>What we got wrong</a></li><li><a href="#methods"><i>08</i>Methods</a></li>
   <li><a href="#artifacts"><i>09</i>Artifacts</a></li></ol>
  <div class="foot">Lexsi hackathon · track 3<a href="https://github.com/atharvgaur1845/actionproof-v2">GitHub ↗</a><a href="https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04">Models ↗</a></div>
 </nav>
-<nav class="mnav" aria-label="Sections"><a class="b" href="#top">ACTIONPROOF</a><a href="#problem">01 Problem</a><a href="#bench">02 Environment</a><a href="#experiment">03 Experiment</a>
+<nav class="mnav" aria-label="Sections"><a class="b" href="#top">ACTIONPROOF</a><a href="#why">★ Finding</a><a href="#problem">01 Problem</a><a href="#bench">02 Environment</a><a href="#experiment">03 Experiment</a>
  <a href="#lab">04 Evidence</a><a href="#templates">05 Templates</a><a href="#findings">06 Findings</a><a href="#autopsy">07 Wrong</a><a href="#methods">08 Methods</a><a href="#artifacts">09 Artifacts</a></nav>
 <main>
 
@@ -323,7 +343,26 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
    <div class="illu">Illustrative phantom-write diagram, modelled on recorded episode val_0011 — not a measured result</div>
   </figure>
  </div>
- <div class="scrollcue"><a href="#problem">Scroll to inspect the failure ↓</a><span>9 sections · every number cites its file</span></div>
+ <div class="scrollcue"><a href="#why">The finding in one picture ↓</a><span>10 sections · every number cites its file</span></div>
+</section>
+
+<!-- ============ THE FINDING ============ -->
+<section class="why" id="why">
+ <div class="cap">The finding in one picture · refund timeout, A7 warm start</div>
+ <h3>The acknowledgement reward pays the agent <span class="ser">less</span> for looking.</h3>
+ <div class="wgrid">
+  <div><div class="lanes">
+   <div class="lane"><span>Both agents</span><div><div class="steps"><span class="s">issue_refund</span><i>→</i><span class="s r">error: timeout</span><i>·</i><span>database: <b style="color:var(--chr)">refund committed</b></span></div></div></div>
+   <div class="lane"><span>Reader</span><div><div class="steps"><span class="s">query_ledger</span><i>→</i><span class="s g">refund is there</span><i>→</i><span class="s">does not refund twice</span></div>
+    <div class="pay">Correct. Last refund ack is still "error" → acknowledgement reward <b id="w-r"></b> <span id="w-rn"></span></div></div></div>
+   <div class="lane"><span>Non-reader</span><div><div class="steps"><span class="s">issue_refund again</span><i>→</i><span class="s">same key, ack "success"</span></div>
+    <div class="pay">Never looked. Last refund ack is "success" → acknowledgement reward <b id="w-n"></b> <span id="w-nn"></span></div></div></div></div>
+   <div class="src" style="color:#8C8F86;margin-top:10px">mean reward of warm-start samples at step 0 · results/a8/ack_class_audit.md · small groups, n shown</div></div>
+  <div><div class="cap" style="margin-bottom:6px">Remove refund timeouts and unrecoverable refunds from training (pre-registered X1) · refund read-back after a success ack, greedy test-IID</div>
+   <div class="r3" id="wbars"></div>
+   <div class="src" style="color:#8C8F86;margin-top:10px">results/a8/x1_readback.md · PREREGISTRATION_A8.md · X1 − placebo +0.669, 95% CI [0.591, 0.740]</div></div>
+ </div>
+ <p class="wcap">Trained on every task, the acknowledgement reward stops checking (0.000). Remove the two task classes where checking costs it reward and read-back returns (0.669); remove 60 random tasks instead and it does not (0.000). The database reward reads back on every refund. One seed per cell; this supports a class-specific cause, it does not prove a mechanism. <a href="#findings" style="color:var(--chr)">Full analysis in 06 →</a></p>
 </section>
 
 <!-- ============ 01 PROBLEM ============ -->
@@ -405,6 +444,9 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
    <p style="font-size:15px;line-height:24px;margin:0">Verified safe completion on 400 untouched tasks. Both rewards read the database; this tests PCSTR-d's dense and report terms. The difference is small and drawn to scale.</p>
    <div class="src"><b>source</b> results/confirmatory.json (H1) · actionproof/eval/confirmatory.py</div></div>
   <div class="rv" id="cpanel"></div>
+  <div class="lwrap rv"><div class="cap">Where the +20 pp comes from · confirmatory splits, 400 tasks, VSC by fault (seeds pooled)</div>
+   <table class="ltbl"><thead><tr><th>Fault</th><th>Tasks</th><th>Warm start</th><th>Trusts the tool</th><th>Database (outcome)</th><th>Database (PCSTR-d)</th><th>PCSTR-d − tool, pp</th></tr></thead><tbody id="bfbody"></tbody></table>
+   <div class="src" style="margin-top:10px">results/a4/confirmatory_by_fault.md · scripts/confirmatory_by_fault.py. The gain sits on phantom, stale and partial writes; benign tasks and timeouts are near ceiling for every model.</div></div>
  </div>
 </section>
 
@@ -456,6 +498,10 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
    <div><b>Exploit suite</b>Read spam, forged summaries and audit notes, duplicate refunds, unauthorized writes, false completion and silence all rank below the oracle under every state reward.<span class="src">tests/test_exploits.py · actionproof/eval/exploits.py</span></div>
    <div><b>Metamorphic traces · 360/360</b>On 120 recorded episodes, changing the report text or status, or inserting extra reads, never changes the database terms.<span class="src">tests/test_metamorphic_traces.py</span></div>
    <div><b>AuditKIT parity · 36/36</b>AuditKIT's final-state assertion agrees with our verifier on every audited file. This checks integration, not independence.<span class="src">results/auditkit/bridge_final.md</span></div></div></div>
+ <div class="lwrap rv"><div class="cap">Reward-hacking ledger · every scripted attack, scored by every reward (honest completion = 1.30 under PCSTR-d, giving up = 0.00)</div>
+  <table class="ltbl"><thead><tr><th>Attack</th><th>Task done</th><th>Trusts tool</th><th>Ack outcome</th><th>DB outcome</th><th>PCSTR-d</th><th>Verdict</th></tr></thead><tbody id="lgbody"></tbody></table>
+  <p style="font-size:15px;line-height:24px;max-width:860px;margin:16px 0 0"><b>The hole we found in our own reward.</b> On unrecoverable refunds the A7 state arm (no report terms) pays "keep writing, report completed" <b class="mono">+0.167</b> and "stop, report failed" <b class="mono">0.000</b>. PCSTR-d's report term reverses the order (<span class="mono">−0.133</span> vs <span class="mono">0.000</span>).</p>
+  <div class="src" style="margin:10px 0 32px">results/a4/hacking_ledger.md · scripts/hacking_ledger.py · results/a8/ur_rewards.md · tests/test_exploits.py</div></div>
  <div class="autopsy">
   <div class="cap">Amendment 8 · step-0 audit, A7 warm start</div>
   <h3>Why would reading the database make an agent <span class="ser">score worse?</span></h3>
@@ -502,13 +548,13 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
   <table class="atbl"><thead><tr><th>Model</th><th>Task success (VSC)</th><th>Tool-call accuracy</th><th>Seconds / episode</th><th>Calls / episode</th><th>Characters written</th></tr></thead><tbody id="atbody"></tbody></table>
   <div class="src">Tool-call accuracy = 1 − (unparsed + invalid calls) / model calls. Seconds = evaluation wall-clock / episodes with batched vLLM on one H200 (throughput, not single-request latency). Self-hosted throughput including start-up: 9,600 tickets per H200-hour (results/roi/throughput.json). <b>source</b> results/agentic_metrics.md · scripts/agentic_metrics.py</div></div>
  <div class="repro rv">
-  <div><div class="n">8</div><p>Hash-registered pre-registrations, each committed before its runs. <span class="mono">scripts/freeze_*.py --check</span> verifies the hashes.</p></div>
+  <div><div class="n">8</div><p>Hash-frozen registrations (one <span class="mono">results/*hashes.json</span> each), each committed before its runs. <span class="mono">scripts/freeze_*.py --check</span> verifies the hashes.</p></div>
   <div><div class="n">400</div><p>Confirmatory tasks kept untouched until the registered test (test_iid_c ∪ test_ood_fault_c).</p></div>
   <div><div class="n">506</div><p>Tests in the suite, including metamorphic tests on 120 recorded episodes.</p></div></div>
  <pre class="cmd">git clone https://github.com/atharvgaur1845/actionproof-v2 &amp;&amp; cd actionproof-v2
 bash slurm/setup_env.sh                                   # toolkits at pinned SHAs, .venv via uv
 .venv/bin/python -m pytest -q tests/                      # 506 passed, 4 skipped
-for f in freeze_bench freeze_a4 freeze_a5 freeze_a6 freeze_a7 freeze_a8 freeze_a8b; do .venv/bin/python scripts/$f.py --check; done
+for f in freeze_bench freeze_a4 freeze_a5 freeze_a6 freeze_a7 freeze_a8 freeze_a8b freeze_a8c; do .venv/bin/python scripts/$f.py --check; done
 .venv/bin/python scripts/build_demo_data.py &amp;&amp; .venv/bin/python scripts/build_site.py   # rebuild this page</pre>
 </section>
 
@@ -517,7 +563,7 @@ for f in freeze_bench freeze_a4 freeze_a5 freeze_a6 freeze_a7 freeze_a8 freeze_a
  <p class="huge">Check the <span class="ser">receipts.</span></p>
  <div class="art">
   <a href="https://github.com/atharvgaur1845/actionproof-v2"><div class="cap">Code · paper · prereg</div><b>GitHub</b><span>Environment, verifier, rewards, training and every analysis script.</span></a>
-  <a href="https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04"><div class="cap">26 LoRA adapters</div><b>Models</b><span>Warm starts and every GRPO arm, with model cards.</span></a>
+  <a href="https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04"><div class="cap">27 LoRA adapters</div><b>Models</b><span>Warm starts and every GRPO arm, with model cards.</span></a>
   <a href="https://huggingface.co/collections/atharvgaur18/actionproof-benchmark-traces-demo-6af7fb25037f3d7eaf294e22"><div class="cap">Benchmark + traces</div><b>Datasets</b><span>Frozen splits and every recorded evaluation episode.</span></a>
   <a href="https://github.com/atharvgaur1845/actionproof-v2/blob/main/docs/ARTICLE_DRAFT.md"><div class="cap">Full write-up</div><b>Article</b><span>Methods, results, limitations and the claim-to-file table.</span></a></div>
  <div class="endbar"><span>ActionProof · Tiny Aya Global 3.35B · AgentTune → AuditKIT · Lexsi hackathon track 3</span><span>built from commit {{GIT}}</span></div>
@@ -662,9 +708,17 @@ renderTpl();
  $("#divchart").innerHTML+=rows.map(([n,r])=>`<div class="cls">${n}</div>
   <div class="side2 l"><span>n=${r.n_reader}</span><b>${r.reader.toFixed(2)}</b><div class="bb" style="max-width:70%" data-w="${r.reader*70}"></div></div>
   <div class="side2"><div class="bb ver" style="max-width:70%" data-w="${r.non*70}"></div><b>${r.non.toFixed(2)}</b><span>n=${r.n_non}</span></div>`).join("");
- const X=[["All training tasks (control, 412)",0,169],["60 random tasks removed (placebo)",0,163],["2 refund task classes removed (X1)",103,154]];
+ const X=S.x1;
  $("#x1bars").innerHTML=`<div class="cap" style="margin-bottom:6px;color:#8C8F86">refund read-back after a success ack · acknowledgement reward</div>`+
   X.map(([n,k,N])=>`<div class="row"><span>${n}</span><div class="tk"><div class="fl" data-w="${k/N*100}"></div></div><b>${(k/N).toFixed(3)} · ${k}/${N}</b></div>`).join("")})();
+
+/* ---------- the finding ---------- */
+(function(){const r=S.audit["refund timeout"];$("#w-r").textContent=r.reader.toFixed(2);$("#w-rn").textContent=`(n = ${r.n_reader})`;
+ $("#w-n").textContent=r.non.toFixed(2);$("#w-nn").textContent=`(n = ${r.n_non})`;
+ $("#wbars").innerHTML=S.x1.map(([n,k,N])=>`<div class="row"><span>${n}</span><div class="tk"><div class="fl" data-w="${k/N*100}"></div></div><b>${(k/N).toFixed(3)} · ${k}/${N}</b></div>`).join("")})();
+/* ---------- ledger + by-fault ---------- */
+(function(){$("#bfbody").innerHTML=S.byfault.map(r=>`<tr>${r.map((c,i)=>`<td class="${i?"n":""}">${c}</td>`).join("")}</tr>`).join("");
+ $("#lgbody").innerHTML=S.ledger.map(r=>`<tr><td>${r[0]}</td>${r.slice(1,5).map(c=>`<td class="n">${c}</td>`).join("")}<td class="n">${r[5]}</td><td class="${/not penalised/.test(r[6])?"bad":"v"}">${r[6]}</td></tr>`).join("")})();
 
 /* ---------- research autopsy ---------- */
 const TL=[
@@ -731,7 +785,7 @@ function fill(root){$$("[data-w]",root).forEach(x=>x.style.width=x.dataset.w+"%"
 function count(el){const t=+el.dataset.count,f=el.dataset.fmt,fmt=v=>f==="pct"?(v*100).toFixed(t<0.9?2:1)+"%":"+"+v.toFixed(2);
  if(RM){el.textContent=fmt(t);return}const t0=performance.now(),D=1200;const step=n=>{const k=Math.min(1,(n-t0)/D),e=1-Math.pow(1-k,3);el.textContent=fmt(t*e);if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(!x.isIntersecting)return;const el=x.target;el.classList.add("in");fill(el);$$("[data-count]",el).forEach(count);io.unobserve(el)}),{threshold:.15});
-$$(".rv,#vchart,#cpanel,#divchart,#x1bars").forEach(x=>io.observe(x));
+$$(".rv,#vchart,#cpanel,#divchart,#x1bars,#wbars").forEach(x=>io.observe(x));
 const links=[...$$("#railnav a"),...$$(".mnav a")],secs=$$("main>section");
 const so=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){const id="#"+x.target.id;links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")===id))}}),{rootMargin:"-45% 0px -50% 0px"});
 secs.forEach(s=>so.observe(s));

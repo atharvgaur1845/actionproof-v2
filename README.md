@@ -11,10 +11,11 @@ ActionProof is an environment, a set of rewards and a controlled training study 
 | PS9 deliverable | Where |
 |---|---|
 | Interactive write-up (website) | https://atharvgaur18-actionproof.static.hf.space/index.html (Space: https://huggingface.co/spaces/atharvgaur18/actionproof) |
-| HF models collection (26 LoRA adapters) | https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04 |
+| Code (this repository) | https://github.com/atharvgaur1845/actionproof-v2 |
+| HF models collection (27 LoRA adapters) | https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04 |
 | HF datasets collection (benchmark, tool-call logs and traces) | https://huggingface.co/collections/atharvgaur18/actionproof-benchmark-traces-demo-6af7fb25037f3d7eaf294e22 |
 | Write-up: metrics, methods, results, limitations | `docs/ARTICLE_DRAFT.md` (abstract `docs/ABSTRACT.md`) |
-| Agentic trajectory metrics (task success, tool-call accuracy, average latency) | `results/agentic_metrics.md` (`scripts/agentic_metrics.py`) |
+| Agentic trajectory metrics (task success, tool-call accuracy, average latency) | `results/agentic_metrics.md` (`scripts/agentic_metrics.py`); latency there is batched seconds per episode, not single-request latency |
 | Reproduction | Section "Reproduce" below |
 
 - **Track:** 3, Agentic Fine-tuning.
@@ -66,7 +67,7 @@ The tests cover:
 - deterministic replay;
 - the banking domain and the language variants.
 
-Every check must print `OK`, except `freeze_a5`, which reports `verifier_a5.py` and `a5_rewards.py`. That mismatch is the logged deviation D-A5-3 (a parsing fix after registration; SPEC §27, 2026-11-10). It was not re-registered on purpose. Checked from a fresh clone of `031ea7b` on 2026-11-14: 506 tests passed, 4 skipped; every freeze check OK except `freeze_a5` (D-A5-3). Results on the website and in the paper are the files in this commit.
+Every check must print `OK`, except `freeze_a5`, which reports `verifier_a5.py` and `a5_rewards.py`. That mismatch is the logged deviation D-A5-3 (a parsing fix after registration; SPEC §27, 2026-11-10). It was not re-registered on purpose. Checked from a fresh clone of `031ea7b` (the code; later commits change documents, the site and result files only) on 2026-11-14: 506 tests passed, 4 skipped; every freeze check OK except `freeze_a5` (D-A5-3). Results on the website and in the paper are the files in this repository; the site footer names the commit it was built from.
 
 ### 3. Pipeline (each step is a queue task in `slurm/tasks/`)
 

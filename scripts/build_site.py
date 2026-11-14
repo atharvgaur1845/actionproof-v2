@@ -73,6 +73,27 @@ def theatre(data: dict) -> dict:
     return out
 
 
+def x1() -> list:
+    """Refund read-back bars from results/a8/x1_readback.md (and the addendum-2 state cell once it exists)."""
+    names = {"control (task 412)": "All training tasks (control, 412)", "placebo (414q)": "60 random tasks removed (placebo)",
+             "X1 (414p)": "2 refund task classes removed (X1)"}
+    rows = {m.group(1): (int(m.group(2)), int(m.group(3))) for m in
+            re.finditer(r"^\| (.+?) \| (\d+)/(\d+) = [\d.]+ \|$", R("results/a8/x1_readback.md"), re.M)}
+    out = [[label, *rows[k]] for k, label in names.items()]
+    f = ROOT / "results/a8/x1_interaction.md"
+    if f.exists():
+        m = re.search(r"^\| state, X1 pool \(417\) \| (\d+)/(\d+) = ", f.read_text(), re.M)
+        if m:
+            out.append(["Database reward, X1 pool (417)", int(m.group(1)), int(m.group(2))])
+    return out
+
+
+def md_rows(path: str, ncol: int) -> list:
+    """Data rows of the first markdown table with ncol columns."""
+    rows = [[c.strip() for c in l.strip().strip("|").split("|")] for l in R(path).splitlines() if l.startswith("| ")]
+    return [r for r in rows if len(r) == ncol and not set(r[0]) <= set("-") and r[0] not in ("fault", "attack")]
+
+
 def main() -> None:
     conf = json.loads(R("results/confirmatory.json"))
     f1 = [r for r in json.loads(R("docs/figures/figures_data.json")) if r.get("figure") == "F1" and "sampled" in r["panel"]]
@@ -95,6 +116,10 @@ def main() -> None:
         "battery": battery(),
         "credit": credit(),
         "theatre": theatre(data),
+        "x1": x1(),
+        "byfault": [[r[0].replace("_", " "), r[1], *[c.split(" ")[0] for c in r[2:6]], r[6]]
+                    for r in md_rows("results/a4/confirmatory_by_fault.md", 7)],
+        "ledger": md_rows("results/a4/hacking_ledger.md", 7),
         "agentic": [dict(zip(("model", "n", "vsc", "acc", "commit", "calls", "turns", "sec", "chars"), [c.strip() for c in l.strip("|").split("|")]))
                     for l in R("results/agentic_metrics.md").splitlines() if l.startswith("| ") and not l.startswith("| model")],
     }
