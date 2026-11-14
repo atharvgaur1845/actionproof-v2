@@ -55,7 +55,10 @@ GRPO = ([(f"grpo_tiny_v2_{a}_s{s}", "rft_tiny_v2", a, s, f"results/eval/r3/grpo_
            for a, ss in (("pcstr_d", (0, 1)), ("pcstr_d_noreport", (0, 1)), ("pcstr_d_noND", (0,)),
                          ("pcstr_d_noFunder", (0,)), ("outcome", (0,)), ("ack_outcome", (0,))) for s in ss]
         + [(f"grpo_tiny_a7_{a}_s{s}", "rft_tiny_a7", a, s, f"results/eval/a6/a7_{a}_s{s}__neutral__test_iid.summary.json")
-           for a, s in (("pcstr_d_noreport", 0), ("ack_outcome", 0))])
+           for a, s in (("pcstr_d_noreport", 0), ("ack_outcome", 0))]
+        # Amendment 8: X1 (target classes removed) and its placebo (60 random tasks removed); ack_outcome, seed 0
+        + [(f"grpo_tiny_{t}_ack_outcome_s0", "rft_tiny_a7", "ack_outcome", 0,
+            f"results/eval/a6/{t}_ack_outcome_s0__neutral__test_iid.summary.json") for t in ("a8x1", "a8x1p")])
 
 
 def repo_id(run: str) -> str:

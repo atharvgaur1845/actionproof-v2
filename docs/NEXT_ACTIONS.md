@@ -91,5 +91,5 @@ The plan comes from the Fable 5.2 research reviews: Phase 0 → 3, registered as
 ## Freeze-day rules (Amendment 8 addendum)
 - **Sat 2026-11-14 08:00:** if no H200 worker has started and an A100 worker is running, move `414p` to `queue/a100/pending` and log it as a deviation.
 - **Sun 18:00:** an arm with no `test_iid` summary is written up as "registered, not completed". No checkpoint reads.
-- **Results:** apply H-A8, H-A8d and the joint readings to replace `[[pending: X1]]`; run `scripts/a8_rollout_class.py` on the logs (H-A8e).
+- **Results:** X1 written up 2026-11-14 (H-A8 supported, H-A8d holds, joint reading 1; H-A8a not met). H-A8e pending.
 - **User:** HF publishing (permission rule or run `scripts/publish_hf.py`), ROI price check, title decision.

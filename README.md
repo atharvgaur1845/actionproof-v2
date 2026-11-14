@@ -58,7 +58,7 @@ The tests cover:
 - deterministic replay;
 - the banking domain and the language variants.
 
-Every check must print `OK`, except `freeze_a5`, which reports `verifier_a5.py` and `a5_rewards.py`. That mismatch is the logged deviation D-A5-3 (a parsing fix after registration; SPEC §27, 2026-11-10). It was not re-registered on purpose. Checked from a fresh clone of `706af05` on 2026-11-13: 146 tests passed, 4 skipped.
+Every check must print `OK`, except `freeze_a5`, which reports `verifier_a5.py` and `a5_rewards.py`. That mismatch is the logged deviation D-A5-3 (a parsing fix after registration; SPEC §27, 2026-11-10). It was not re-registered on purpose. Checked from a fresh clone of `706af05` on 2026-11-13: 146 tests passed, 4 skipped. The full suite on the current tree (with recorded episodes present) is 506 passed, 4 skipped.
 
 ### 3. Pipeline (each step is a queue task in `slurm/tasks/`)
 
@@ -92,5 +92,5 @@ If no cluster GPU is free, the same commands run on HF Jobs: `slurm/hfjob_rft_v2
 
 ## License
 
-- Code: Apache-2.0.
+- Code: Apache-2.0 (`LICENSE`).
 - Models and adapters derived from Cohere Aya are CC-BY-NC-4.0, with Cohere attribution.
