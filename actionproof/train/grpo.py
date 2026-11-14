@@ -130,13 +130,12 @@ def main() -> None:
         seed=a.seed,
         report_to=[],
         use_vllm=a.use_vllm,
+        # TrlAgenticGrpo builds .trainer inside .train(); resume goes through its kwargs (fix 2026-11-14, D-A8-1)
+        resume_from_checkpoint=resume,
         **({"vllm_mode": "colocate", "vllm_gpu_memory_utilization": a.vllm_mem,
             "vllm_enable_sleep_mode": False, "vllm_max_model_length": 8192} if a.use_vllm else {}),
     )
-    if resume:  # allocation ended mid-run: continue from the latest checkpoint
-        grpo.trainer.train(resume_from_checkpoint=True)
-    else:
-        grpo.train()
+    grpo.train()  # resumes from the latest checkpoint when one exists (allocation ended mid-run)
     (out / "log_history.json").write_text(json.dumps(grpo.trainer.state.log_history, indent=2))
     grpo.trainer.save_model(str(out / "final"))
 

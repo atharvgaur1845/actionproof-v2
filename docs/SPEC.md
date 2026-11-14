@@ -1339,3 +1339,5 @@ If something fails:
   - a summary replaced by unrelated text leaves G, P, V, I, D unchanged;
   - each report status leaves them unchanged;
   - reads inserted before every call leave every recorded observation, the final snapshot and the state terms unchanged. This is the ARTICLE §3 assumption that a read changes neither state nor later acknowledgements.
+
+- **2026-11-14 09:20 IST, deviation D-A8-1 (X1 resume bug).** X1 (`414p`) trained steps 0–198 in its first slice (worker 448287, wall time hit at 00:47; last checkpoint 175). The resume slice (worker 448293, 06:07) crashed at once: `grpo.py` called `grpo.trainer.train(resume_from_checkpoint=True)`, but `TrlAgenticGrpo` builds `.trainer` only inside `.train()`. This path had never run, since every earlier run fit in one slice. Fix: pass `resume_from_checkpoint` to the constructor and call `.train()`. Training settings are unchanged, `grpo.py` is not in any hash set, and the `freeze_a8`/`freeze_a8b` checks still print OK. The worker then started the placebo (`414q`) by name order. X1 is re-queued and resumes from checkpoint-175 after the placebo, ahead of 415.
