@@ -15,7 +15,7 @@ ActionProof is an environment, a set of rewards and a controlled training study 
 | HF models collection (29 LoRA adapters) | https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04 |
 | HF datasets collection (benchmark, tool-call logs and traces) | https://huggingface.co/collections/atharvgaur18/actionproof-benchmark-traces-demo-6af7fb25037f3d7eaf294e22 |
 | Write-up: metrics, methods, results, limitations | `docs/ARTICLE_DRAFT.md` (abstract `docs/ABSTRACT.md`) |
-| Agentic trajectory metrics (task success, tool-call accuracy, average latency) | `results/agentic_metrics.md` (`scripts/agentic_metrics.py`); latency there is batched seconds per episode, not single-request latency |
+| Agentic trajectory metrics (task success, tool-call accuracy, average latency) | `results/agentic_metrics.md` (`scripts/agentic_metrics.py`); latency there is batched seconds per episode; single-request p50 / p95 per episode in `results/latency_single.md` (A100, batch 1) |
 | Reproduction | Section "Reproduce" below |
 
 - **Track:** 3, Agentic Fine-tuning.
