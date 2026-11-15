@@ -228,6 +228,20 @@ Every state arm has SVC = VSC (no collateral write in any confirmatory episode).
 
 **Independent reference verifier.** A verifier written from the paper's definitions and the environment code, without opening our verifier or reward code, replays each recorded trace on the task's initial database and recomputes VSC. It agrees with ours on **4,000 / 4,000** confirmatory episodes and 2,400 / 2,400 v2 test-IID episodes, and recomputes 0.6425 → 0.8425 [`results/reference_verifier.md`, `scripts/reference_verifier.py`]. Limits: it trusts each attempt's recorded commit flag (independent of our verifier, not of the environment's record), and its allowed-entities rule never fired on these episodes, so that rule is untested by the comparison.
 
+### ActionProof-Bench v2: timeouts that did not commit (Amendment 10 addendum)
+
+The v1 environment always commits on a timeout. A versioned v2 environment (`actionproof/env/tools_ecom_v2.py`, v1 unchanged and hash-frozen) scopes idempotency keys to (operation, entity, key), fixing D-ENV-1, and adds timeouts **before** the commit with the same error message. We evaluated the existing v2-round policies, without retraining, on test-IID in v2 plus a copy of each of the 34 timeout tasks with the timeout before the commit [`results/a10/v2_env.md`, `scripts/v2_env_report.py`; registered before the runs]:
+
+| model | v1 VSC | v2, same 200 tasks | timeout after commit (34) | timeout before commit (34) |
+|---|---|---|---|---|
+| warm start | 0.555 | 0.560 | 0.676 | 0.088 |
+| tool_trust s0 | 0.610 | 0.615 | 1.000 | **0.706** |
+| ack_outcome s0 | 0.605 | 0.600 | 0.912 | 0.559 |
+| outcome s0 | 0.815 | 0.815 | 0.794 | 0.118 |
+| PCSTR-d s0 | 0.850 | 0.850 | 1.000 | **0.176** |
+
+The environment fix does not move any existing result (H-A10e holds: all within 0.5 pp). But **the state-reward policies fail on timeouts that did not commit** (H-A10f, predicted ≥ 0.75, fails), and the acknowledgement-reward policies do better there, because a blind keyed retry after an error now lands. On the 21 refund timeouts before the commit, PCSTR-d reads the order or ledger after the error in 21 / 21 episodes, retries in only 6, and reports "completed" in all 21. Training only ever showed timeouts that committed, so the state reward taught "a refund timeout means done". This is the same limit as elsewhere in the paper: the reward selects reads, and the action taken on the read follows the training distribution, not the evidence. A state-grounded reward is only as good as the fault distribution it is trained on; training on both timeout kinds is the obvious next experiment and was not run.
+
 ### Where the +20 pp comes from
 
 On the confirmatory splits (400 tasks; two seeds pooled for every GRPO arm) the gain over the tool-trusting reward sits almost entirely on the faults where the acknowledgement lies about a write that did not land [`results/a4/confirmatory_by_fault.md`, `scripts/confirmatory_by_fault.py`]:
@@ -359,7 +373,7 @@ These papers were read from abstracts and arXiv listing pages, not in full (2026
 - **PCSTR-d does not solve safe tool execution.** It does not penalise an extra, unrequested write (restock, ticket update, store credit) when the task goal is met [`results/a4/hacking_ledger.md`]. We report the collateral-modification rate (CMR) as a separate safety dimension next to VSC [`results/a6/collateral.md`, `scripts/collateral_table.py`]: every A6/A7 state arm has CMR ≤ 0.01 on test-IID and 0.00 on held-out faults; the A6 warm start and A6 ack arm have 0.12 on test-IID, and the A6 ack arm 0.80 on the held-out credit split (the credit call it aliases onto a refund). A scope-aware reward is not built.
 - **Prices.** ROI list prices come from secondary sources (dated 2026-11-05), not the providers' own pages.
 
-**Not done, and needed before a strong submission:** three to five training seeds for every Amendment 8 cell (each X1 cell has one); a versioned environment with operation-scoped idempotency keys (D-ENV-1) and timeouts before as well as after commit, with the key results re-run; training on the dependency-aware reward; a second model family and an independently implemented environment; the SFT content × schema factorial and a multi-source prefix crossover for the template claim; hand-adjudicated golden traces; a fresh-environment install and CI. **What would test the claim further (not done).** Three training seeds per main condition; a second model family; a corrected, versioned environment (operation-scoped idempotency keys for D-ENV-1, timeouts before and after commit); a reference verifier implemented independently of ours; a scope-aware reward with collateral-action tests.
+**Not done, and needed before a strong submission:** three to five training seeds for every Amendment 8 cell (each X1 cell has one); training in the v2 environment (both timeout kinds) and re-running the key results there (only evaluation of existing policies was done); training on the dependency-aware reward; a second model family and an independently implemented environment; the SFT content × schema factorial and a multi-source prefix crossover for the template claim; hand-adjudicated golden traces; a fresh-environment install and CI. **What would test the claim further (not done).** Three training seeds per main condition; a second model family; a corrected, versioned environment (operation-scoped idempotency keys for D-ENV-1, timeouts before and after commit); a reference verifier implemented independently of ours; a scope-aware reward with collateral-action tests.
 
 ## 13. Where every claim comes from
 
