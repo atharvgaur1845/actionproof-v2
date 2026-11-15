@@ -162,7 +162,7 @@ section{border-top:1px solid var(--ink);position:relative}
 .tree .br{cursor:pointer}.tree .br rect{transition:opacity .2s}.tree .br:hover rect.bx,.tree .br.sel rect.bx{stroke-width:3}
 .tree text{font:12px var(--mono);fill:var(--ink)}.tree .big{font:20px var(--disp)}
 .tree .e2{fill:none;stroke-width:2.5;stroke-dasharray:500;stroke-dashoffset:500;transition:stroke-dashoffset 1.4s var(--ease)}.tree.in .e2,.in .tree .e2{stroke-dashoffset:0}
-.insp{padding:32px 56px 32px 32px}
+.insp{padding:32px 56px 32px 32px;min-width:0;overflow-wrap:anywhere}.insp h3{overflow-wrap:anywhere}
 .insp ol{margin:16px 0 0;padding:0;list-style:none;counter-reset:s;border-top:1px solid var(--ink)}
 .insp li{counter-increment:s;display:grid;grid-template-columns:34px 1fr;padding:8px 0;border-bottom:1px solid var(--hair2);font:13px/20px var(--mono)}
 .insp li::before{content:counter(s,decimal-leading-zero);color:var(--gr)}
@@ -728,15 +728,15 @@ $("#ptabs").onclick=e=>{const b=e.target.closest("button");if(b){ps.p=b.dataset.
 
 /* ---------- templates ---------- */
 const wrapT=(s,n)=>{const o=[];let c="";for(const w of s.split(" ")){if((c+" "+w).trim().length>n){o.push(c);c=w}else c=(c+" "+w).trim()}if(c)o.push(c);return o.slice(0,3)};
-const TPL=[{m:"A6 warm start",name:"Credit that does nothing",col:"#777A72",line:"uses the store-credit tool with the refund's request number, so the tool repeats the refund's answer and makes no credit"},
- {m:"A6 state arm (pcstr_d_noreport)",name:"Refund again instead",col:"#F05236",line:"never uses the store-credit tool; asks for the refund again"},
- {m:"A7 state arm (same reward + 20 credit demos in SFT)",name:"Credit made",col:"#8CB21F",line:"uses the store-credit tool with its own request number; the credit is made"}];
-const TNAME={"A6 warm start":"Earlier model, before training","A6 state arm (pcstr_d_noreport)":"Earlier model, database reward","A7 state arm (same reward + 20 credit demos in SFT)":"Later model (with 20 store-credit examples), database reward"};
+const TPL=[{m:"A6 warm start",name:"No credit made",col:"#777A72",sub:"Earlier model, untrained",line:"uses the refund's request number, so no credit is made"},
+ {m:"A6 state arm (pcstr_d_noreport)",name:"Refund repeated",col:"#F05236",sub:"Earlier model, trained",line:"skips the credit tool and asks for the refund again"},
+ {m:"A7 state arm (same reward + 20 credit demos in SFT)",name:"Credit made",col:"#8CB21F",sub:"Later model, trained",line:"uses the credit tool with its own number; credit made"}];
+const TNAME={"A6 warm start":"Earlier model, before training","A6 state arm (pcstr_d_noreport)":"Earlier model, trained with the database reward","A7 state arm (same reward + 20 credit demos in SFT)":"Later model (with 20 store-credit examples), trained with the database reward"};
 let ts={b:2,ex:0};
 (function(){let h=`<rect x="10" y="215" width="150" height="60" fill="#171815"/><text x="85" y="240" text-anchor="middle" style="fill:#F1EFE7;font:500 12px var(--mono)">the task</text><text x="85" y="258" text-anchor="middle" style="fill:#A9AB9F;font:11px var(--mono)">refund + store credit</text>`;
  TPL.forEach((t,i)=>{const y=40+i*150;h+=`<path class="e2" d="M160 245 C 250 245, 250 ${y+30}, 330 ${y+30}" stroke="${t.col}"/>
   <g class="br" data-b="${i}" tabindex="0" role="button" aria-label="${t.name}"><rect class="bx" x="330" y="${y}" width="260" height="112" fill="${i===2?"#D5F36A":i===1?"rgba(240,82,54,.12)":"#E3E0D6"}" stroke="${t.col}" stroke-width="1.5"/>
-  <text class="big" x="346" y="${y+30}">${t.name.toUpperCase()}</text><text x="346" y="${y+52}">${esc(TNAME[t.m].split(",")[0])}</text>
+  <text class="big" x="346" y="${y+30}">${t.name.toUpperCase()}</text><text x="346" y="${y+52}">${esc(t.sub)}</text>
   ${wrapT(t.line,34).map((w,k)=>`<text x="346" y="${y+72+k*14}" style="fill:#777A72;font-size:11px">${esc(w)}</text>`).join("")}</g>`});
  $("#tsvg").innerHTML=h;$$("#tsvg .br").forEach(g=>{const f=()=>{ts.b=+g.dataset.b;renderTpl()};g.onclick=f;g.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();f()}}})})();
 function renderTpl(){
