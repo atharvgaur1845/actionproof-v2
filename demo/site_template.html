@@ -553,13 +553,13 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
   <table class="atbl"><thead><tr><th>Model</th><th>Task success (VSC)</th><th>Tool-call accuracy</th><th>Seconds / episode</th><th>Calls / episode</th><th>Characters written</th></tr></thead><tbody id="atbody"></tbody></table>
   <div class="src">Tool-call accuracy = 1 − (unparsed + invalid calls) / model calls. Seconds = evaluation wall-clock / episodes with batched vLLM on one H200 (throughput). Single request, batch 1, one A100, 100 tasks: p50 2.49 s per episode for PCSTR-d, 10.22 s for the tool-trusting arm, 7.73 s for the warm start (results/latency_single.md). Self-hosted throughput including start-up: 9,600 tickets per H200-hour (results/roi/throughput.json). <b>source</b> results/agentic_metrics.md · scripts/agentic_metrics.py</div></div>
  <div class="repro rv">
-  <div><div class="n">8</div><p>Hash-frozen registrations (one <span class="mono">results/*hashes.json</span> each), each committed before its runs. <span class="mono">scripts/freeze_*.py --check</span> verifies the hashes.</p></div>
+  <div><div class="n">11</div><p>Hash-frozen registrations (one <span class="mono">results/*hashes.json</span> each), each committed before its runs. <span class="mono">scripts/freeze_*.py --check</span> verifies the hashes.</p></div>
   <div><div class="n">400</div><p>Confirmatory tasks kept untouched until the registered test (test_iid_c ∪ test_ood_fault_c).</p></div>
-  <div><div class="n">506</div><p>Tests in the suite, including metamorphic tests on 120 recorded episodes.</p></div></div>
+  <div><div class="n">509</div><p>Tests in the suite, including metamorphic tests on 120 recorded episodes.</p></div></div>
  <pre class="cmd">git clone https://github.com/atharvgaur1845/actionproof-v2 &amp;&amp; cd actionproof-v2
 bash slurm/setup_env.sh                                   # toolkits at pinned SHAs, .venv via uv
-.venv/bin/python -m pytest -q tests/                      # 506 passed, 4 skipped
-for f in freeze_bench freeze_a4 freeze_a5 freeze_a6 freeze_a7 freeze_a8 freeze_a8b freeze_a8c freeze_a9 freeze_a10; do .venv/bin/python scripts/$f.py --check; done
+.venv/bin/python -m pytest -q tests/                      # 509 passed, 4 skipped
+for f in freeze_bench freeze_a4 freeze_a5 freeze_a6 freeze_a7 freeze_a8 freeze_a8b freeze_a8c freeze_a9 freeze_a10 freeze_a10b; do .venv/bin/python scripts/$f.py --check; done
 .venv/bin/python scripts/build_demo_data.py &amp;&amp; .venv/bin/python scripts/build_site.py   # rebuild this page</pre>
 </section>
 

@@ -42,7 +42,7 @@ The database arms' false-completion rate is 1.00 because the 15% of tasks they s
 - that RL teaches lying: the SFT warm start already claims false success 87–96% of the time (sampled val 0.87, greedy test-IID 0.96; the untrained base model, which rarely finishes a task, 34%);
 - results beyond one model family and one seed per mechanism arm (§12).
 
-**Rigour:** eight hash-frozen registrations (one `results/*hashes.json` file each), a public deviation log that records our own bugs, and 506 tests (§11).
+**Rigour:** eleven hash-frozen registrations (one `results/*hashes.json` file each), a public deviation log that records our own bugs, and 509 tests (§11).
 
 ---
 

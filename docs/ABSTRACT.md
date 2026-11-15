@@ -32,6 +32,6 @@ Real tools acknowledge writes that never committed. In ActionProof, a SQLite sup
 - That verification is general: banking transfer fails; checking stays tool-specific.
 - That report terms teach honest failure, or that it is robust: with one extra tool in the prompt, the same arms report "failed" on 0–45/50.
 
-**Rigour.** Ten hash-frozen registrations; an independent verifier agrees on 4,000/4,000 episodes; a deviation log records our bugs. The registered confirmatory test passed: PCSTR-d − outcome = +1.5 pp [0.6, 2.6], p = 0.025 (underclaim avoidance).
+**Rigour.** Eleven hash-frozen registrations; an independent verifier agrees on 4,000/4,000 episodes; a deviation log records our bugs. The registered confirmatory test passed: PCSTR-d − outcome = +1.5 pp [0.6, 2.6], p = 0.025 (underclaim avoidance).
 
 **ROI.** One H200 serves ≈ 9,600 tickets/hour (≈ $52 per 100k tickets).
