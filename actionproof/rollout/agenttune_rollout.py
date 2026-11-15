@@ -40,6 +40,11 @@ def make_env(task: Task, rollout_id: str, seed: int = 0) -> EcomEnv:
         from actionproof.env.tools_bank import BankEnv
         return BankEnv(task.initial_state, task.schedule, rollout_id=rollout_id, seed=seed,
                        stale_status=task.stale_status, ambiguous_text=task.ambiguous_text)
+    if task.meta.get("env_version") == 2:  # ActionProof-Bench v2: scoped idempotency, timeouts before commit
+        from actionproof.env.tools_ecom_v2 import EcomEnvV2
+        return EcomEnvV2(task.initial_state, task.schedule, rollout_id=rollout_id, seed=seed,
+                         stale_status=task.stale_status, ambiguous_text=task.ambiguous_text,
+                         precommit_timeouts=task.meta.get("precommit_timeouts"))
     return EcomEnv(task.initial_state, task.schedule, rollout_id=rollout_id, seed=seed,
                    stale_status=task.stale_status, ambiguous_text=task.ambiguous_text)
 
