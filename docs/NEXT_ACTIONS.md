@@ -1,3 +1,5 @@
+> **Historical (superseded 2026-11-15).** Task statuses below are as of 2026-11-13 and are stale. Current status: README.md and docs/SPEC.md §27.
+
 # Next actions (updated 2026-11-13 14:05 IST)
 
 **Deadline:** 2026-11-15 midnight IST. **Experiment freeze:** 2026-11-15 18:00 IST (set by the user 2026-11-11), leaving 6 h for the numbers pass.

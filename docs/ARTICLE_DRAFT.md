@@ -10,6 +10,8 @@
 
 ![Before and after: VSC on the untouched confirmatory splits](figures/f3_before_after.png)
 
+**Contribution.** We investigate how the information source used by a reinforcement-learning goal reward affects post-write evidence acquisition in tool-using agents when tool acknowledgements can contradict authoritative execution state. Using matched warm starts and reward formulations, changing the goal reward from acknowledgement-grounded to state-grounded substantially changes verification behaviour. A pre-registered task-composition intervention and a random-removal placebo identify the task classes in which evidence-guided action is negatively valued by the acknowledgement reward. Three findings carry the paper: (1) the reward's information source decides verification (§3, §5); (2) task composition explains the acknowledgement reward's failure (§3, Amendment 8); (3) execution evidence placed in an LLM judge's prompt is not reliably used (§7, Amendment 9). We do not claim a theory of RL policy selection, a general solution to reward hacking, or a general verification skill.
+
 Tools sometimes return `{"status": "success"}` for a write that never happened. We trained Tiny Aya Global (3.35B) with GRPO and changed only what the reward can see. All numbers below come from a deterministic verifier that reads the database, not the transcript.
 
 | | Result | Source |
@@ -211,6 +213,21 @@ These are development-set numbers. **The pre-registered confirmatory test (H1) p
 
 *Figure 1. Share of success-acknowledged refunds that the agent reads back, for three warm starts. The goal term reads the database (blue) or the acknowledgements (orange); reward form and everything else are fixed. v2: sampled T = 1 × 8 on val (`results/eval/a4/h11/`); A6 and A7: greedy test-IID (`results/eval/a6/`, `results/eval/a7/`). The A7 warm start already verifies 0.60 of refunds; the two channels move it to 1.00 and to 0.00. Compare within a panel, not across: the panels mix sampled and greedy rates.*
 
+### Is "verified safe completion" safe? A stricter metric and an independent verifier (Amendment 10)
+
+VSC requires every postcondition, no violation of three invariants (policy, amount, allowed entities), no duplicate irreversible receipt and an honest report. It does **not** penalise an unrequested write on an allowed entity. We therefore registered a stricter metric before computing it: **SVC** = VSC and no collateral write (any committed write the task did not require) [`PREREGISTRATION_A10.md`, `results/a10/strict_vsc.md`, `scripts/strict_vsc.py`]. On the 400 confirmatory tasks (both seeds):
+
+| arm | VSC | SVC |
+|---|---|---|
+| warm start | 0.6425 | 0.6300 |
+| tool_trust | 0.6400 | 0.4238 |
+| outcome | 0.8275 | 0.8275 |
+| PCSTR-d | 0.8425 | 0.8425 |
+
+Every state arm has SVC = VSC (no collateral write in any confirmatory episode). PCSTR-d − tool_trust is +20.25 pp on VSC and **+41.88 pp** [37.5, 46.4] on SVC; both registered predictions hold. Almost all of tool_trust's collateral writes are `update_ticket` on the task's own ticket (276 episodes), which is unrequested but mild, so the larger SVC gap should not be read as harm prevented. We keep VSC as the headline and report SVC beside it.
+
+**Independent reference verifier.** A verifier written from the paper's definitions and the environment code, without opening our verifier or reward code, replays each recorded trace on the task's initial database and recomputes VSC. It agrees with ours on **4,000 / 4,000** confirmatory episodes and 2,400 / 2,400 v2 test-IID episodes, and recomputes 0.6425 → 0.8425 [`results/reference_verifier.md`, `scripts/reference_verifier.py`]. Limits: it trusts each attempt's recorded commit flag (independent of our verifier, not of the environment's record), and its allowed-entities rule never fired on these episodes, so that rule is untested by the comparison.
+
 ### Where the +20 pp comes from
 
 On the confirmatory splits (400 tasks; two seeds pooled for every GRPO arm) the gain over the tool-trusting reward sits almost entirely on the faults where the acknowledgement lies about a write that did not land [`results/a4/confirmatory_by_fault.md`, `scripts/confirmatory_by_fault.py`]:
@@ -312,6 +329,16 @@ Every scripted attack in `tests/test_exploits.py`, scored by every reward [`resu
 - **No gain:** reading the ledger many times scores the same as reading it once.
 - **Not penalised by any reward:** an extra, unrequested write when the task is otherwise done (restock, ticket update, store credit). The collateral-modification metric catches these; the reward does not.
 - **A hole we found in our own reward.** On unrecoverable refunds the A7 state arm (`pcstr_d_noreport`, no report terms) pays "keep writing, report completed" +0.167 and "stop, report failed" 0.000, through partial credit for the steps that did land. PCSTR-d reverses the order (−0.133 vs 0.000) [`results/a8/ur_rewards.md`].
+- **A dependency-aware reward closes the hole, offline (Amendment 10 §2).** Setting P and V to 0 when the refund every later step depends on did not fully commit gives "stop, report failed" 0.000 against −0.300 for both "continue, report completed" (431 episodes) and "stop, report completed" (537); H-A10c holds [`results/a10/dep_reward.md`, `scripts/a10_dep_reward.py`]. The registered check that it changes nothing on successful episodes (H-A10d) **fails** on 44 of 3,615: a partially committed refund that `reconcile_order` then completed is treated as a failed prerequisite. No policy has been trained on this reward.
+
+## 11b. Related work
+
+- **False tool success and runtime evidence.** Gurram (arXiv:2604.16706, v3) validates tools, executed arguments, resulting state and answer grounding deterministically, and finds agents reporting tool results that never ran in up to 42.5% of traces. RECEIPT (Yang et al., arXiv:2611.01930) traces one cause to commands blocked on confirmation prompts and repairs it at runtime, cutting false success claims by 73.5%. Both work at evaluation or inference time; we ask what an agent *learns* when its RL reward reads acknowledgements versus authoritative state, and we do not treat false tool success itself as new.
+- **How task state reaches the agent.** Zhang, Kweon and Han (arXiv:2609.25686) compare transcripts, checklists, state-machine directives and enforcement gates, and find enforcement bounded by the correctness of its state. Our intervention is one level up: the information source of the training objective, not the state shown or enforced at inference time.
+- **Reward hacking in tool-using agents.** The Reward Hacking Benchmark (Thaman, ICML 2026, PMLR 306; arXiv:2605.02964) measures exploits including skipped verification and associates RL post-training with more exploitation through a correlational model comparison. AgentRobustBench (Zhou et al., arXiv:2605.11928) benchmarks tool perturbations and trains with domain-randomised RL. We manipulate one reward-channel variable under GRPO and measure its effect.
+- **RL selection among SFT policies.** Barzdukas et al. (arXiv:2607.03478) show RL selects among SFT-derived conditional policies rather than changing them. Our template results are an instance of this. It is also a ready alternative explanation for a class-specific removal effect, which is why X1 is compared against a same-size random-removal placebo.
+
+These papers were read from abstracts and arXiv listing pages, not in full (2026-11-15).
 
 ## 12. Limitations
 
@@ -332,7 +359,7 @@ Every scripted attack in `tests/test_exploits.py`, scored by every reward [`resu
 - **PCSTR-d does not solve safe tool execution.** It does not penalise an extra, unrequested write (restock, ticket update, store credit) when the task goal is met [`results/a4/hacking_ledger.md`]. We report the collateral-modification rate (CMR) as a separate safety dimension next to VSC [`results/a6/collateral.md`, `scripts/collateral_table.py`]: every A6/A7 state arm has CMR ≤ 0.01 on test-IID and 0.00 on held-out faults; the A6 warm start and A6 ack arm have 0.12 on test-IID, and the A6 ack arm 0.80 on the held-out credit split (the credit call it aliases onto a refund). A scope-aware reward is not built.
 - **Prices.** ROI list prices come from secondary sources (dated 2026-11-05), not the providers' own pages.
 
-**What would test the claim further (not done).** Three training seeds per main condition; a second model family; a corrected, versioned environment (operation-scoped idempotency keys for D-ENV-1, timeouts before and after commit); a reference verifier implemented independently of ours; a scope-aware reward with collateral-action tests.
+**Not done, and needed before a strong submission:** three to five training seeds for every Amendment 8 cell (each X1 cell has one); a versioned environment with operation-scoped idempotency keys (D-ENV-1) and timeouts before as well as after commit, with the key results re-run; training on the dependency-aware reward; a second model family and an independently implemented environment; the SFT content × schema factorial and a multi-source prefix crossover for the template claim; hand-adjudicated golden traces; a fresh-environment install and CI. **What would test the claim further (not done).** Three training seeds per main condition; a second model family; a corrected, versioned environment (operation-scoped idempotency keys for D-ENV-1, timeouts before and after commit); a reference verifier implemented independently of ours; a scope-aware reward with collateral-action tests.
 
 ## 13. Where every claim comes from
 
