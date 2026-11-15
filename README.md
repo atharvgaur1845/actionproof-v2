@@ -56,7 +56,7 @@ This clones the toolkits at those SHAs, creates `.venv` with uv and installs eve
 
 ```bash
 .venv/bin/python -m pytest -q tests/
-for f in freeze_bench freeze_a4 freeze_a5 freeze_a6 freeze_a7 freeze_a8 freeze_a8b freeze_a8c; do .venv/bin/python scripts/$f.py --check; done
+for f in freeze_bench freeze_a4 freeze_a5 freeze_a6 freeze_a7 freeze_a8 freeze_a8b freeze_a8c freeze_a9; do .venv/bin/python scripts/$f.py --check; done
 ```
 
 The tests cover:
@@ -67,7 +67,7 @@ The tests cover:
 - deterministic replay;
 - the banking domain and the language variants.
 
-Every check must print `OK`, except `freeze_a5`, which reports `verifier_a5.py` and `a5_rewards.py`. That mismatch is the logged deviation D-A5-3 (a parsing fix after registration; SPEC §27, 2026-11-10). It was not re-registered on purpose. Checked from a fresh GitHub clone of `c110d09` on 2026-11-14 22:10 IST (tests run with the project's existing `.venv`, not a fresh `setup_env.sh`): 506 tests passed, 4 skipped; all eight freeze checks OK except `freeze_a5` (D-A5-3). Commits after `c110d09` add documents, result files and the rebuilt site only; any later change to code or tests is re-checked the same way and this line updated. Results on the website and in the paper are the files in this repository; the site footer names the commit it was built from.
+Every check must print `OK`, except `freeze_a9` (D-A9-1, `judge_audit.py`) and `freeze_a5`, which reports `verifier_a5.py` and `a5_rewards.py`. That mismatch is the logged deviation D-A5-3 (a parsing fix after registration; SPEC §27, 2026-11-10). It was not re-registered on purpose. Checked from a fresh GitHub clone of `6bb67b4` on 2026-11-15 12:10 IST (tests run with the project's existing `.venv`, not a fresh `setup_env.sh`): 506 tests passed, 4 skipped; all nine freeze checks OK except `freeze_a5` (D-A5-3) and `freeze_a9`, which reports `judge_audit.py` (D-A9-1, a one-line FP8 fix after registration; SPEC §27). Later commits change documents, result files and the rebuilt site only. Results on the website and in the paper are the files in this repository; the site footer names the commit it was built from.
 
 ### 3. Pipeline (each step is a queue task in `slurm/tasks/`)
 
