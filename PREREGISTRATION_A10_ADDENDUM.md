@@ -6,7 +6,7 @@ Registered 2026-11-15 18:40 IST, before any evaluation in the v2 environment. Ha
 
 **Split** `data/bench/v2/test_iid_v2.jsonl` (`scripts/make_bench_v2.py`): the 200 test_iid tasks in the v2 environment, plus a second copy of each of the 34 timeout tasks with the timeout before the commit (234 tasks).
 
-**Models** (no retraining): v2 warm start, tool_trust s0, ack_outcome s0, outcome s0, PCSTR-d s0. Greedy, neutral prompt, 10 turns, `run_eval_a4 --tasks`.
+**Models** (no retraining): v2 warm start, tool_trust s0, ack_outcome s0, outcome s0, PCSTR-d s0. Greedy, neutral prompt, 12 turns (the `run_eval` default used for the v1 test_iid evaluations), `run_eval_a4 --tasks`. Corrected from 10 before any v2 evaluation ran.
 
 | ID | Prediction |
 |---|---|
