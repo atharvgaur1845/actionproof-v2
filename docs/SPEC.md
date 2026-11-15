@@ -1351,3 +1351,5 @@ If something fails:
   - 415 eval files copied into `results/eval/a6/`, its adapter published (27 adapters);
   - ABSTRACT "two seeds each" corrected to one seed per reward; §12 accuracy range; transfer English row on test_iid; step-0 n inline; registrations counted as the 8 `results/*hashes.json` files; ROI draft marker removed;
   - site: "the finding in one picture" section after the hero.
+
+- **2026-11-15 07:00 IST · Addendum 2 results.** Task 417 (`a8x1s_pcstr_d_noreport_s0`) and 418 (`a7_ack_outcome_s1`) finished overnight on worker 448293, all nine splits each. H-A8f met (417 refund read-back 152/152); H-A8g met (interaction +0.678, paired task bootstrap 95% CI [0.605, 0.750], 152 tasks, `results/a8/x1_interaction.md`); H-A8h met (418 read-back 0/162, VSC 0.615, as seed 0). Both adapters published (29). Exploratory 416z (latency) failed: vLLM kept GPU memory between models in one process. Fixed (one process per model) and re-run as 419 on the A100 worker 446674; numbers are A100, not H200.

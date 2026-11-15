@@ -12,7 +12,7 @@ ActionProof is an environment, a set of rewards and a controlled training study 
 |---|---|
 | Interactive write-up (website) | https://atharvgaur18-actionproof.static.hf.space/index.html (Space: https://huggingface.co/spaces/atharvgaur18/actionproof) |
 | Code (this repository) | https://github.com/atharvgaur1845/actionproof-v2 |
-| HF models collection (27 LoRA adapters) | https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04 |
+| HF models collection (29 LoRA adapters) | https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04 |
 | HF datasets collection (benchmark, tool-call logs and traces) | https://huggingface.co/collections/atharvgaur18/actionproof-benchmark-traces-demo-6af7fb25037f3d7eaf294e22 |
 | Write-up: metrics, methods, results, limitations | `docs/ARTICLE_DRAFT.md` (abstract `docs/ABSTRACT.md`) |
 | Agentic trajectory metrics (task success, tool-call accuracy, average latency) | `results/agentic_metrics.md` (`scripts/agentic_metrics.py`); latency there is batched seconds per episode, not single-request latency |
@@ -22,7 +22,7 @@ ActionProof is an environment, a set of rewards and a controlled training study 
 - **Toolkit chain:** AgentTune → AuditKIT, plus CuratorKIT.
 - **Models:** Cohere Tiny Aya Global (policy) and Aya Expanse 8B / 32B (teacher and judges).
 - **Novelty and related work:** `docs/research/novelty_scouts_2026-11-11.md`.
-- **Latest amendment:** `PREREGISTRATION_A8.md` and its addendum. X1 and the placebo are **completed** (`results/a8/x1_readback.md`); seed 1 of the A7 state arm (task 415) reproduces seed 0. Addendum 2 (`PREREGISTRATION_A8_ADDENDUM2.md`, registered 2026-11-14 before either run): task 417 (state reward on the X1 pool) and task 418 (A7 ack reward, seed 1); their results are added here only when finished, otherwise reported as not finished. Before it, `PREREGISTRATION_A7.md` (results in `results/eval/a6/`, `results/eval/a7/`, corrected forced-prefix battery `results/a7/battery_v2.md`). Every deviation is logged in `docs/SPEC.md` §27.
+- **Latest amendment:** `PREREGISTRATION_A8.md` and its addendum. X1 and the placebo are **completed** (`results/a8/x1_readback.md`); seed 1 of the A7 state arm (task 415) reproduces seed 0. Addendum 2 (`PREREGISTRATION_A8_ADDENDUM2.md`, registered 2026-11-14 before either run): task 417 (state reward on the X1 pool) and task 418 (A7 ack reward, seed 1); both finished: the state reward on the X1 pool reads back 152/152, interaction +0.678 [0.605, 0.750] (`results/a8/x1_interaction.md`); the ack arm's seed 1 reads back 0/162 like seed 0. All three registered predictions met. Before it, `PREREGISTRATION_A7.md` (results in `results/eval/a6/`, `results/eval/a7/`, corrected forced-prefix battery `results/a7/battery_v2.md`). Every deviation is logged in `docs/SPEC.md` §27.
 - **Pre-registration:** `PREREGISTRATION.md`. **Full spec and deviation log:** `docs/SPEC.md`.
 
 ## Repository map

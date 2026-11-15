@@ -11,7 +11,7 @@ Real tools acknowledge writes that never committed. In ActionProof, a SQLite sup
 **Finding 1: the reward's information channel decides whether the agent checks.**
 
 - Two rewards of identical form: the goal term reads the database or the acknowledgements. From one warm start, the database version raises sampled post-write refund verification from 0.25 to 0.71–0.72; the acknowledgement version drives it to 0.10 (one seed per reward; 0.71 is the outcome reward, 0.72 PCSTR-d). Confirmatory gain over a tool-trusting reward: **+20.25 pp** [16.4, 24.3].
-- It replicates on a later warm start, A7 (state arm two seeds, acknowledgement arm one): greedy verification 1.00 vs 0.00, VSC 0.845 vs 0.615.
+- It replicates on a later warm start, A7 (two seeds per arm, identical on these numbers): greedy verification 1.00 vs 0.00, VSC 0.845 vs 0.615.
 - Why: on refund timeouts and unrecoverable refunds, acting on a read forfeits acknowledgements, so the acknowledgement reward pays readers less. Dropping those classes keeps read-back at 0.67; dropping 60 random tasks leaves 0 (pre-registered, one seed).
 
 **Finding 2: what is selected is a script.** Retries follow reads, but stop at the training depth. On a write tool unseen in training, agents read back 73%, see `credits: []`, never retry, and report "completed".
