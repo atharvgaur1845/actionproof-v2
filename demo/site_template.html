@@ -317,30 +317,30 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
     A 3.35B agent, two rewards of identical form, one difference: whether the reward reads the tool's reply or the database.</div>
   </div>
   <div class="hstats"><div><b>0.64 → 0.84</b><span>verified safe completion, warm start → database reward (PCSTR-d), 400 untouched pre-registered tasks</span></div>
-   <div><b>+20.25 pp</b><span>over a reward that trusts the tool, 95% CI 16.4–24.3</span></div>
+   <div><b>0.605 → 0.825</b><span>test-IID VSC, mean of 2 seeds, same reward form, only the source changes: acknowledgements vs database ( +20.25 pp over tool-trusting on the 400 confirmatory tasks)</span></div>
    <div><b class="r">95.2%</b><span>of false "completed" claims accepted by AuditKIT's TaskCompletion judge (Aya Expanse 32B)</span></div></div>
-  <figure class="tx" id="hero-tx" aria-label="Illustrative diagram of a phantom write: the tool acknowledges success while the database records nothing">
+  <figure class="tx" id="hero-tx" aria-label="Recorded phantom write, episode val_0011: the tool acknowledges success while the database records nothing">
    <svg viewBox="0 0 1200 380" role="img">
     <g class="grid" id="hgrid"></g>
-    <text class="lbl" x="28" y="34">T+0.000 · AGENT CALL</text>
+    <text class="lbl" x="28" y="34">STEP 5 · AGENT CALL</text>
     <text class="lbl" x="420" y="92">CHANNEL A — WHAT THE AGENT SEES</text>
     <text class="lbl" x="420" y="262">CHANNEL B — WHAT ACTUALLY HAPPENED</text>
-    <text class="log" id="h0" x="28" y="62">issue_refund(order_id="O-6470", amount_cents=3000)</text>
+    <text class="log" id="h0" x="28" y="62">issue_refund(order_id="O-6470", amount_cents=3000, method="card")</text>
     <path class="path" d="M300 190 C 360 190, 360 120, 420 120 L 1180 120"/><path class="path" d="M300 190 C 360 190, 360 290, 420 290 L 1180 290"/>
     <path class="path live" id="pA" d="M28 190 L 300 190 C 360 190, 360 120, 420 120 L 760 120"/>
     <path class="path live r" id="pB" d="M300 190 C 360 190, 360 290, 420 290 L 760 290"/>
     <circle class="dot" cx="28" cy="190" r="5"/><circle class="dot" cx="300" cy="190" r="4"/>
-    <text class="log g" id="hA1" x="440" y="152">T+0.041  ← {"status": "success", "refund_id": "R-C53EDF"}</text>
-    <text class="log m" id="hA2" x="440" y="176">              agent marks the refund as done</text>
-    <text class="log r" id="hB1" x="440" y="322">T+0.041  ledger.refunds WHERE order = O-6470  →  []</text>
-    <text class="log r" id="hB2" x="440" y="346">         receipt: absent · rows changed: 0</text>
+    <text class="log g" id="hA1" x="440" y="152">← {"status": "success", "refund_id": "R-C53EDF"}</text>
+    <text class="log m" id="hA2" x="440" y="176">   agent moves on: audit note, ticket update, close, report</text>
+    <text class="log r" id="hB1" x="440" y="322">refunds for order O-6470  →  none written</text>
+    <text class="log r" id="hB2" x="440" y="346">receipt: absent · the agent never reads the ledger</text>
     <g class="x" id="hX"><line x1="790" y1="120" x2="790" y2="290" stroke="#F05236" stroke-width="2" stroke-dasharray="5 5"/>
      <rect x="740" y="190" width="100" height="24" fill="#F05236"/><text x="790" y="207" text-anchor="middle" style="font:500 12px var(--mono);fill:#fff">CONTRADICTION</text></g>
     <g class="bub" id="hR"><rect x="860" y="164" width="316" height="72" fill="#E9E7DF"/>
      <text x="876" y="188" style="font:500 11px var(--mono);fill:#777A72;letter-spacing:.08em">AGENT REPORT · status: completed</text>
-     <text x="876" y="216" style="font:italic 21px var(--ser);fill:#171815">"Your refund has been processed."</text></g>
+     <text x="876" y="216" style="font:italic 21px var(--ser);fill:#171815">"Successfully processed full refund…"</text></g>
    </svg>
-   <div class="illu">Illustrative phantom-write diagram, modelled on recorded episode val_0011 — not a measured result</div>
+   <div class="illu">Recorded episode val_0011 (agent trained on the tool-trusting reward): real call, acknowledgement, database state and report, shortened. Tool-trusting reward 1.0, PCSTR-d −0.133.</div>
   </figure>
  </div>
  <div class="scrollcue"><a href="#why">The finding in one picture ↓</a><span>10 sections · every number cites its file</span></div>
@@ -444,6 +444,9 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
    <p style="font-size:15px;line-height:24px;margin:0">Verified safe completion on 400 untouched tasks. Both rewards read the database; this tests PCSTR-d's dense and report terms. The difference is small and drawn to scale.</p>
    <div class="src"><b>source</b> results/confirmatory.json (H1) · actionproof/eval/confirmatory.py</div></div>
   <div class="rv" id="cpanel"></div>
+  <div class="lwrap rv"><div class="cap">If you only read one table · round v2, one warm start, only the reward differs · test-IID n = 200, greedy, one value per seed</div>
+   <table class="ltbl"><thead><tr><th>Reward</th><th>Reward reads</th><th>Test-IID VSC</th><th>False completion rate</th><th>Refund read-back (sampled)</th></tr></thead><tbody id="otbody"></tbody></table>
+   <div class="src" style="margin-top:10px">results/one_table.md · scripts/one_table.py. The database arms' false-completion rate is 1.00 because the 15% of tasks they still fail are all reported "completed".</div></div>
   <div class="lwrap rv"><div class="cap">Where the +20 pp comes from · confirmatory splits, 400 tasks, VSC by fault (seeds pooled)</div>
    <table class="ltbl"><thead><tr><th>Fault</th><th>Tasks</th><th>Warm start</th><th>Trusts the tool</th><th>Database (outcome)</th><th>Database (PCSTR-d)</th><th>PCSTR-d − tool, pp</th></tr></thead><tbody id="bfbody"></tbody></table>
    <div class="src" style="margin-top:10px">results/a4/confirmatory_by_fault.md · scripts/confirmatory_by_fault.py. The gain sits on phantom, stale and partial writes; benign tasks and timeouts are near ceiling for every model.</div></div>
@@ -482,7 +485,7 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  <div class="disc"><div><div class="cap">What changed in A7</div>20 credit-workflow demonstrations, written in the A6 demonstrator's template with the credit's own key, added to SFT. State arm: two seeds, identical results (seed 1, task 415). Acknowledgement arm: two seeds, identical read-back (0/169, 0/162; task 418).</div>
   <div><div class="cap">Not isolated</div>Demonstration content, prompt context and key format were not varied independently. This is not proof that the demonstrations alone caused the behaviour.</div>
   <div><div class="cap">Void credit</div>The A6 warm start reuses the refund's idempotency key, and the environment replays the refund's reply (disclosed bug D-ENV-1). Its credit call changes nothing.</div></div>
- <div class="src" style="padding:0 56px 32px"><b>source</b> docs/ARTICLE_DRAFT.md §5b.4, §5c · results/a7/ctrl_credit.md · results/a8/credit_aliasing.md · episodes: demo/replays/credit_templates.json (scripts/build_credit_demo.py)</div>
+ <div class="src" style="padding:0 56px 32px"><b>source</b> docs/ARTICLE_DRAFT.md Appendices A.4, B · results/a7/ctrl_credit.md · results/a8/credit_aliasing.md · episodes: demo/replays/credit_templates.json (scripts/build_credit_demo.py)</div>
 </section>
 
 <!-- ============ 06 FINDINGS ============ -->
@@ -535,7 +538,7 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
   <h2 class="stitle">We tested our own explanations. <span class="ser">Some did not survive.</span></h2>
   <p class="lede">Every entry is in the public deviation log. Open one to see what we assumed, what broke, what we changed, what held and what we withdrew.</p></div></div>
  <div class="tl" id="tl"></div>
- <div class="src" style="padding:16px 56px 32px"><b>source</b> docs/SPEC.md §27 (deviation log) · docs/ARTICLE_DRAFT.md §5b–§5c, §12</div>
+ <div class="src" style="padding:16px 56px 32px"><b>source</b> docs/SPEC.md §27 (deviation log) · docs/ARTICLE_DRAFT.md Appendices A–B, §12</div>
 </section>
 
 <!-- ============ 08 METHODS ============ -->
@@ -717,7 +720,8 @@ renderTpl();
  $("#w-n").textContent=r.non.toFixed(2);$("#w-nn").textContent=`(n = ${r.n_non})`;
  $("#wbars").innerHTML=S.x1.map(([n,k,N])=>`<div class="row"><span>${n}</span><div class="tk"><div class="fl" data-w="${k/N*100}"></div></div><b>${(k/N).toFixed(3)} · ${k}/${N}</b></div>`).join("")})();
 /* ---------- ledger + by-fault ---------- */
-(function(){$("#bfbody").innerHTML=S.byfault.map(r=>`<tr>${r.map((c,i)=>`<td class="${i?"n":""}">${c}</td>`).join("")}</tr>`).join("");
+(function(){$("#otbody").innerHTML=S.onetable.map(r=>`<tr>${r.map((c,i)=>`<td class="${i>1?"n":""}">${c}</td>`).join("")}</tr>`).join("");
+ $("#bfbody").innerHTML=S.byfault.map(r=>`<tr>${r.map((c,i)=>`<td class="${i?"n":""}">${c}</td>`).join("")}</tr>`).join("");
  $("#lgbody").innerHTML=S.ledger.map(r=>`<tr><td>${r[0]}</td>${r.slice(1,5).map(c=>`<td class="n">${c}</td>`).join("")}<td class="n">${r[5]}</td><td class="${/not penalised/.test(r[6])?"bad":"v"}">${r[6]}</td></tr>`).join("")})();
 
 /* ---------- research autopsy ---------- */

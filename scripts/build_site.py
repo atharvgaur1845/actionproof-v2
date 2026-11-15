@@ -120,6 +120,7 @@ def main() -> None:
         "byfault": [[r[0].replace("_", " "), r[1], *[c.split(" ")[0] for c in r[2:6]], r[6]]
                     for r in md_rows("results/a4/confirmatory_by_fault.md", 7)],
         "ledger": md_rows("results/a4/hacking_ledger.md", 7),
+        "onetable": md_rows("results/one_table.md", 5)[1:] if md_rows("results/one_table.md", 5)[0][0] == "reward" else md_rows("results/one_table.md", 5),
         "agentic": [dict(zip(("model", "n", "vsc", "acc", "commit", "calls", "turns", "sec", "chars"), [c.strip() for c in l.strip("|").split("|")]))
                     for l in R("results/agentic_metrics.md").splitlines() if l.startswith("| ") and not l.startswith("| model")],
     }
