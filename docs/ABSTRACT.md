@@ -4,34 +4,28 @@
 
 Real tools acknowledge writes that never committed. In ActionProof, a SQLite support environment, phantom writes return a **byte-identical** success acknowledgement; a deterministic verifier scores episodes from database state, not the transcript.
 
-**Question.** Holding everything else fixed, we change only what the reward's goal term observes. What does GRPO keep?
+**Question.** When acknowledgements can contradict the database, what does GRPO select if its goal reward reads the acknowledgement instead of the state?
 
-**Before → after.** On untouched confirmatory splits (n = 400), GRPO with the state-grounded PCSTR-d reward raises verified-success completion (VSC) from **0.6425** to **0.8425** (both seeds); a tool-trusting reward stays at 0.635–0.645.
+**Before → after.** On untouched pre-registered confirmatory splits (n = 400, both seeds), GRPO with the state-grounded PCSTR-d reward raises verified-success completion (VSC) from **0.6425** to **0.8425**, **+20.25 pp** [16.4, 24.3] over a tool-trusting reward. On a stricter metric that also forbids unrequested writes, the state arms are unchanged and the gap is +41.9 pp.
 
-**Finding 1: the reward's information channel decides whether the agent checks.**
+**Finding 1: the reward's information source decides whether the agent checks.** Two rewards of identical form from one warm start; only the goal term's source differs. Test-IID VSC 0.825 vs 0.605 (two seeds each); sampled refund read-back after a success acknowledgement 0.25 → 0.71–0.72 vs 0.10. On a later warm start, greedy read-back is 1.00 vs 0.00, two seeds per arm.
 
-- Two rewards of identical form: the goal term reads the database or the acknowledgements. From one warm start, the database version raises sampled post-write refund verification from 0.25 to 0.71–0.72; the acknowledgement version drives it to 0.10 (one seed per reward; 0.71 is the outcome reward, 0.72 PCSTR-d). Confirmatory gain over a tool-trusting reward: **+20.25 pp** [16.4, 24.3].
-- It replicates on a later warm start, A7 (two seeds per arm, identical on these numbers): greedy verification 1.00 vs 0.00, VSC 0.845 vs 0.615.
-- Why: on refund timeouts and unrecoverable refunds, acting on a read forfeits acknowledgements, so the acknowledgement reward pays readers less. Dropping those classes keeps read-back at 0.67; dropping 60 random tasks leaves 0 (pre-registered, one seed).
+**Finding 2: task composition explains why the acknowledgement reward stops checking.** On refund timeouts and unrecoverable refunds, acting on a read forfeits success acknowledgements, so the acknowledgement reward pays readers less. Pre-registered: removing those two classes restores read-back to **0.669**; removing 60 random tasks leaves **0.000**; the state reward reads back 1.000 on both pools. Channel × pool interaction **+0.678** [0.605, 0.750] (one seed per cell; task-level CI).
 
-**Finding 2: what is selected is a script.** Retries follow reads, but stop at the training depth. On a write tool unseen in training, agents read back 73%, see `credits: []`, never retry, and report "completed".
+**Finding 3: execution evidence in a judge's prompt is not reliably used.** AuditKIT TaskCompletion (Aya Expanse 32B) accepts **95%** of false completions. Given the database's own receipt ledger, it still accepts **72%** of the failures the ledger exposes (our prompt: 83% → 46%; Aya 8B: 96–100%). The deterministic verifier rejects all of them.
 
-**Finding 3: GRPO keeps the winning SFT template whole, including unpaid steps.**
+**Limits we found ourselves.**
 
-- In a held-out credit workflow, state-reward arms dropped the credit call (0/200, two seeds), re-issuing the refund, sometimes as the credit.
-- With 20 credit demonstrations added to SFT, the call survives under both rewards (**200/200**, 113 committed; state arm two seeds).
-- Honest failure rides along (exploratory): under the training prompt all seven state arms report "failed" on 50/50 unrecoverable refunds, report terms or not; warm start 1/50, acknowledgement arm 0/50.
-- Conditional-policy selection (arXiv 2607.03478) with side effects.
-- Disclosed bug: cross-operation keys voided earlier credit calls.
+- GRPO selects a script kept whole from SFT: retries stop at the training depth; on an unseen write tool agents read, see nothing, and report "completed".
+- In a corrected environment (v2) where timeouts can fail before the commit, the state-reward agents read the order, then report done without retrying (PCSTR-d 0.18 vs 0.71 for the tool-trusting agent). They learned the timeouts they were trained on.
+- Our report-blind state reward pays continuing after an unrecoverable refund (+0.167). A dependency-aware variant fixes the ordering offline; no policy was trained on it.
 
-**Measure.** Untrained Cohere models below 32B score VSC ≈ 0; Aya Expanse 32B scores 0.515. LLM judges, including AuditKIT TaskCompletion, accept 76–100% of false completions.
+**What we do not claim.** That RL teaches lying (the warm start already claims false success 87–96% of the time). That verification is general (banking transfer fails). That the result holds beyond one model family, one environment, or one seed per Amendment 8 cell.
 
-**What we do not claim.**
+**Rigour.**
 
-- That RL teaches lying: the SFT warm start already falsely claims success 87–96% of the time.
-- That verification is general: banking transfer fails; checking stays tool-specific.
-- That report terms teach honest failure, or that it is robust: with one extra tool in the prompt, the same arms report "failed" on 0–45/50.
+- Eleven hash-frozen registrations; a public deviation log.
+- A reference verifier written without our code agrees on 4,000 / 4,000 confirmatory episodes.
+- Registered confirmatory test passed: PCSTR-d − outcome +1.5 pp [0.6, 2.6], p = 0.025.
 
-**Rigour.** Eleven hash-frozen registrations; an independent verifier agrees on 4,000/4,000 episodes; a deviation log records our bugs. The registered confirmatory test passed: PCSTR-d − outcome = +1.5 pp [0.6, 2.6], p = 0.025 (underclaim avoidance).
-
-**ROI.** One H200 serves ≈ 9,600 tickets/hour (≈ $52 per 100k tickets).
+**ROI.** Single-request p50 is 2.5 s per episode for PCSTR-d vs 10.2 s for the tool-trusting agent (A100).
