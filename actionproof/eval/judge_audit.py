@@ -108,7 +108,8 @@ def judge(pool_path: str, model: str, tag: str, out_dir: str, max_tokens: int, t
     pool = [json.loads(l) for l in open(pool_path)]
     attach_attempts(pool)  # always: the ledger_fail flag splits the summary; only --grounded shows the ledger
     llm = LLM(model=model, max_model_len=8192, gpu_memory_utilization=0.9, tensor_parallel_size=tp,
-              quantization="fp8" if "32b" in model.lower() else None)
+              # FP8 only where the GPU has native FP8 (H100/H200, compute 8.9+); on A100 it produced garbage (D-A9-1)
+              quantization="fp8" if "32b" in model.lower() and __import__("torch").cuda.get_device_capability() >= (8, 9) else None)
     sp = SamplingParams(temperature=0.0, max_tokens=max_tokens)
     ak_prompts, tc = auditkit_prompts(pool, grounded)
     jobs = {"llm_judge": [judge_prompt(with_policy(p["task"]), p["trace"], p["report"], p.get("attempts") if grounded else None)
