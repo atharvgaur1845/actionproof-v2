@@ -26,7 +26,7 @@ from pathlib import Path
 
 from actionproof.env.tools_ecom import VERIFICATION_TOOLS
 from actionproof.eval.stats import wilson
-from actionproof.rewards.llm_judge import judge_prompt, parse_verdict, render_report, render_trajectory
+from actionproof.rewards.llm_judge import judge_prompt, parse_verdict, render_ledger, render_report, render_trajectory
 
 SOURCES = ["results/teacher/full_32b_verify_a.jsonl", "results/eval/r1/*.jsonl", "results/eval/r3/*.jsonl",
            "results/interp/kl/*/step*.jsonl", "results/eval/pilot_*.jsonl"]
@@ -77,25 +77,42 @@ def build(out: str, per_cell: int, seed: int) -> None:
     print(json.dumps({f"{k[0]}|G={k[1]}": min(len(v), per_cell) for k, v in sorted(cells.items())}))
 
 
-def auditkit_prompts(pool: list[dict]) -> tuple[list[str], object]:
+def attach_attempts(pool: list[dict]) -> None:
+    """Grounded audit: add each pooled episode's write attempts (with their true commit flags) from its source file.
+    The pool predates this field; episodes are matched by (source file, task_id, tool sequence)."""
+    cache = {}
+    for p in pool:
+        if p["source"] not in cache:
+            idx = {}
+            for line in open(p["source"]):
+                e = json.loads(line)
+                idx.setdefault((e["task_id"], json.dumps([s["tool"] for s in e["trace"]])), e.get("attempts", []))
+            cache[p["source"]] = idx
+        p["attempts"] = cache[p["source"]][(p["task_id"], json.dumps([s["tool"] for s in p["trace"]]))]
+
+
+def auditkit_prompts(pool: list[dict], grounded: bool = False) -> tuple[list[str], object]:
     from auditkit.metrics.agent import TaskCompletion
     from auditkit.sample import Sample
     tc = TaskCompletion(judge_model=object())  # model unused: we batch generation ourselves
     prompts = []
     for p in pool:
         user = tc._render(Sample(input=with_policy(p["task"])), render_report(p["report"]))
-        prompts.append(tc._assemble(user.replace("{trajectory}", render_trajectory(p["trace"]))))
+        traj = render_trajectory(p["trace"]) + (render_ledger(p["attempts"]) if grounded else "")
+        prompts.append(tc._assemble(user.replace("{trajectory}", traj)))
     return prompts, tc
 
 
-def judge(pool_path: str, model: str, tag: str, out_dir: str, max_tokens: int, tp: int) -> None:
+def judge(pool_path: str, model: str, tag: str, out_dir: str, max_tokens: int, tp: int, grounded: bool = False) -> None:
     from vllm import LLM, SamplingParams
     pool = [json.loads(l) for l in open(pool_path)]
+    attach_attempts(pool)  # always: the ledger_fail flag splits the summary; only --grounded shows the ledger
     llm = LLM(model=model, max_model_len=8192, gpu_memory_utilization=0.9, tensor_parallel_size=tp,
               quantization="fp8" if "32b" in model.lower() else None)
     sp = SamplingParams(temperature=0.0, max_tokens=max_tokens)
-    ak_prompts, tc = auditkit_prompts(pool)
-    jobs = {"llm_judge": [judge_prompt(with_policy(p["task"]), p["trace"], p["report"]) for p in pool],
+    ak_prompts, tc = auditkit_prompts(pool, grounded)
+    jobs = {"llm_judge": [judge_prompt(with_policy(p["task"]), p["trace"], p["report"], p.get("attempts") if grounded else None)
+                          for p in pool],
             "auditkit_tc": ak_prompts}
     parsers = {"llm_judge": parse_verdict,
                "auditkit_tc": lambda t: (None if (s := tc._parse(t)).metadata.get("unknown") else s.value)}
@@ -104,6 +121,7 @@ def judge(pool_path: str, model: str, tag: str, out_dir: str, max_tokens: int, t
         outs = llm.chat([[{"role": "user", "content": q}] for q in prompts], sp)
         res[name] = [parsers[name](o.outputs[0].text) for o in outs]
         rows = [{**{k: p[k] for k in ("source", "task_id", "fault", "G", "visible")}, "judge": name, "model": tag,
+                 "ledger_fail": any(not a["committed"] or a.get("fault") == "F3_partial" for a in p["attempts"]),
                  "score": s, "text": o.outputs[0].text[-600:]} for p, s, o in zip(pool, res[name], outs)]
         Path(out_dir).mkdir(parents=True, exist_ok=True)
         with open(f"{out_dir}/{tag}__{name}.jsonl", "w") as fh:
@@ -122,7 +140,10 @@ def summarize(out_dir: str, tag: str) -> dict:
                 by[("unparsed", "")][0] += 1
                 continue
             acc = r["score"] == 1.0
-            for key in ((r["fault"], r["G"]), ("ALL", r["G"]), (f"ALL|visible={r['visible']}", r["G"])):
+            keys = [(r["fault"], r["G"]), ("ALL", r["G"]), (f"ALL|visible={r['visible']}", r["G"])]
+            if "ledger_fail" in r:  # a write that did not (fully) commit: the ledger alone shows the failure
+                keys.append((f"ALL|ledger_fail={r['ledger_fail']}", r["G"]))
+            for key in keys:
                 by[key][0] += acc
                 by[key][1] += 1
         table = {}
@@ -151,11 +172,12 @@ def main() -> None:
     j.add_argument("--out-dir", default="results/judge")
     j.add_argument("--max-tokens", type=int, default=400)
     j.add_argument("--tp", type=int, default=1)
+    j.add_argument("--grounded", action="store_true", help="add the receipt ledger to both judges' input")
     a = ap.parse_args()
     if a.cmd == "build":
         build(a.out, a.per_cell, a.seed)
     else:
-        judge(a.pool, a.model, a.tag, a.out_dir, a.max_tokens, a.tp)
+        judge(a.pool, a.model, a.tag, a.out_dir, a.max_tokens, a.tp, a.grounded)
 
 
 if __name__ == "__main__":

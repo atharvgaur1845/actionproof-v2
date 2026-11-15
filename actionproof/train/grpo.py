@@ -17,7 +17,8 @@ from pathlib import Path
 ARMS = ("pcstr", "pcstr_d", "pcstr_c", "llm_judge", "tool_trust", "outcome", "ack_outcome",
         "a5_state", "a5_ack",  # ack_outcome: Amendment 4 H10; a5_*: Amendment 5 primary arms
         "pcstr_d_noreport", "pcstr_d_noND", "outcome_G",  # Amendment 6 matched ablations
-        "pcstr_d_noFunder")  # Amendment 7: ND only (completes the 2 x 2 over the report terms)
+        "pcstr_d_noFunder",  # Amendment 7: ND only (completes the 2 x 2 over the report terms)
+        "grounded_judge")  # Amendment 9: the llm_judge arm with the receipt ledger in the judge prompt
 
 
 def build_rewards(arm: str, tasks):
@@ -26,6 +27,9 @@ def build_rewards(arm: str, tasks):
     if arm == "llm_judge":  # transcript judge (Aya Expanse 8B, likelihood of COMPLETE), never sees the DB
         from actionproof.rewards.llm_judge import make_llm_judge_reward
         return [make_llm_judge_reward(), R.vsc_metric], [1.0, 0.0]
+    if arm == "grounded_judge":  # Amendment 9: same judge and prompt, plus the receipt ledger
+        from actionproof.rewards.llm_judge import make_llm_judge_reward
+        return [make_llm_judge_reward(grounded=True), R.vsc_metric], [1.0, 0.0]
     if arm in ("a5_state", "a5_ack"):  # Amendment 5: only the task-success information source differs
         return [R.make_a5_reward(arm.split("_")[1]), R.a5_proof_valid_metric], [1.0, 0.0]
     if arm in ("pcstr_d_noreport", "pcstr_d_noND", "outcome_G"):  # Amendment 6
