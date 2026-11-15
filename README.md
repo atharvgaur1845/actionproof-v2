@@ -77,8 +77,8 @@ Every check must print `OK`, except `freeze_a9` (D-A9-1, `judge_audit.py`) and `
 | Teacher trajectories (Aya 32B, verify prompt) | `070` | `actionproof.eval.run_eval --model CohereLabs/aya-expanse-32b --prompt verify_a --split train --samples 8` |
 | RFT v2 data + training | `087` | `actionproof.train.expert_demos` → `actionproof.train.rft_data --expert …` → `actionproof.train.rft` |
 | Learnable-band curriculum | `091` | `run_eval --samples 8 --temperature 1.0` → `actionproof.train.curriculum` |
-| GRPO arms (shared init, only the reward differs) | `150–157` | `slurm/grpo_arm.sh <arm> runs/rft_tiny_v2 data/curriculum/band_tiny_v2.jsonl v2` |
-| Leaderboard | `300–302` | `run_eval` over 7 Cohere models × prompts × splits → `actionproof.eval.leaderboard` |
+| GRPO arms (shared init, only the reward differs) | `150` to `157` | `slurm/grpo_arm.sh <arm> runs/rft_tiny_v2 data/curriculum/band_tiny_v2.jsonl v2` |
+| Leaderboard | `300` to `302` | `run_eval` over 7 Cohere models × prompts × splits → `actionproof.eval.leaderboard` |
 | Judge-fooling audit | `170` | `actionproof.eval.judge_audit build/judge` |
 | ROI | `175` | timed `run_eval` → `actionproof.eval.roi` |
 
