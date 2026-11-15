@@ -254,7 +254,7 @@ The failure doesn't have to be hidden. When the agent's own reads showed the pro
 
 Registered outcomes: H-A9a (≤ 0.20 where the ledger shows the failure) **fails** for both prompts; H-A9b (true acceptance ≥ 0.80) holds; H-A9c (overall TaskCompletion false acceptance < 0.60) fails at 0.742; H-A9d fails. Handed the database's own record that a write did not land, the 32B judge still calls the task done in 46–72% of those episodes; the verifier, reading the same ledger deterministically, rejects all of them. For PS9 this is the practical point: a groundedness check should be a deterministic read of state, not evidence placed in a judge's prompt.
 
-**The grounded judge as a reward (task 421) was not run to completion.** At step 1 its mean reward was 0.9999, the saturation the 8B audit predicts, and at 103 s per step it could not finish before the experiment freeze without blocking the 32B audit. It was stopped and re-queued (deviation D-A9-2). `[[pending: 421 if it finishes before 18:00 IST, else "not finished"]]`
+**The grounded judge as a reward (task 421) was not run to completion.** At step 1 its mean reward was 0.9999, the saturation the 8B audit predicts, and at 103 s per step it could not finish before the experiment freeze without blocking the 32B audit. It was stopped and re-queued (deviation D-A9-2). Its re-queued copy then failed its own freeze check (the one-line D-A9-1 fix changed a hashed file), and a full run could not finish before the freeze in any case, so **H-A9e and H-A9f are untested**.
 
 ## 8. Transfer
 
