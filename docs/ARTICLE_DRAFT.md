@@ -14,7 +14,7 @@ Tools sometimes return `{"status": "success"}` for a write that never happened. 
 
 | | Result | Source |
 |---|---|---|
-| **Rewards that trust the tool get gamed** | A tool-trusting reward leaves the agent at VSC 0.635–0.645. AuditKIT's own `TaskCompletion` judge (Aya Expanse 32B) accepts **95%** of false "completed" claims. | `results/confirmatory.json`, §7 |
+| **Rewards that trust the tool get gamed** | A tool-trusting reward leaves the agent at VSC 0.635–0.645. AuditKIT's own `TaskCompletion` judge (Aya Expanse 32B) accepts **95%** of false "completed" claims. Given the database's receipt ledger, it still accepts **72%** of the failures the ledger exposes (pre-registered, Amendment 9). | `results/confirmatory.json`, §7 |
 | **A reward that checks the database works** | PCSTR-d raises VSC from **0.6425 to 0.8425** on untouched pre-registered splits (n = 400, both seeds), **+20.25 pp** [16.4, 24.3] over the tool-trusting reward. The registered H1 also passed: +1.5 pp over the binary state reward, p = 0.025. | `results/confirmatory.json`, §5 |
 | **The cause is what the reward observes** | Same form, same warm start, only the goal term's source differs. Reading the database raises refund read-back after a success acknowledgement from 0.25 to 0.71–0.72. Reading the acknowledgements drives it to 0.10 (sampled; seed 0 for the database rewards, both seeds for the acknowledgement reward). | `results/eval/a4/h11/`, §3 |
 | **…and it traces to two task classes** | Removing the two task classes where checking costs acknowledgement reward keeps read-back at **0.669**. Removing 60 random tasks leaves it at **0.000**. The database reward reads back 1.000 on both pools: channel × pool interaction **+0.678** [0.605, 0.750]. Pre-registered, one seed per cell. | §3, `results/a8/x1_interaction.md` |
@@ -245,6 +245,17 @@ We gave two judges, at two sizes, the policy, the task, every tool call and resp
 
 The failure doesn't have to be hidden. When the agent's own reads showed the problem in the transcript, the 32B judges still accepted 83–93% of failures. "Request accepted, processing" acknowledgements fooled both 32B judges every time (100%). Refunds the policy forbade were accepted 100% of the time by TaskCompletion. A timeout with the error printed in plain sight was still accepted 72% of the time. As a training signal, the 8B judge gave GRPO almost nothing to learn from: its mean reward stayed at 0.99 throughout training, with a mean within-batch standard deviation of 0.027 and a median of 0.000. Groups were never exactly tied, but GRPO's per-group normalisation then amplifies differences of a few hundredths in the judge's confidence. The `llm_judge` arm's 0.61 is therefore not evidence of a policy the judge taught. A judge that accepts nearly every transcript cannot rank rollouts.
 
+**Giving the judge the database does not fix it, at 8B (Amendment 9, registered before the run).** We added one block to each judge's input: the database's receipt ledger, one line per write, `COMMITTED`, `PARTIALLY committed` or `NOT committed`, headed as authoritative. On the 298 false completions whose ledger shows a write that did not land, Aya Expanse 8B still accepted **95.5%** with our prompt (n = 289 parsed) and **100%** with AuditKIT TaskCompletion; true acceptance stayed at 0.99–1.00 [`results/judge/aya8b_grounded__summary.json`]. The registered prediction (≤ 0.50) fails. The 8B judge does not use evidence it is handed in plain text. The deterministic check that reads the same ledger (the verifier) rejects all of them. At 32B the ledger helps but does not close the gap. Paired on the same episodes (both runs in bf16; the transcript-only re-run reproduces the original 95.2% exactly) [`results/judge/grounded_audit.md`, `scripts/a9_audit_report.py`]:
+
+| Aya Expanse 32B | False completions the ledger exposes (n ≈ 296): accepted, without → with ledger | Other false completions (n = 178) | True completions accepted (n = 339) |
+|---|---|---|---|
+| AuditKIT TaskCompletion | 0.960 → **0.715** (−24.5 pp, exact McNemar p = 3e-19) | 0.938 → 0.787 | 0.912 → 0.909 |
+| Our judge prompt | 0.833 → **0.463** (−37.1 pp, p = 1e-30) | 0.635 → 0.438 | 0.956 → 0.938 |
+
+Registered outcomes: H-A9a (≤ 0.20 where the ledger shows the failure) **fails** for both prompts; H-A9b (true acceptance ≥ 0.80) holds; H-A9c (overall TaskCompletion false acceptance < 0.60) fails at 0.742; H-A9d fails. Handed the database's own record that a write did not land, the 32B judge still calls the task done in 46–72% of those episodes; the verifier, reading the same ledger deterministically, rejects all of them. For PS9 this is the practical point: a groundedness check should be a deterministic read of state, not evidence placed in a judge's prompt.
+
+**The grounded judge as a reward (task 421) was not run to completion.** At step 1 its mean reward was 0.9999, the saturation the 8B audit predicts, and at 103 s per step it could not finish before the experiment freeze without blocking the 32B audit. It was stopped and re-queued (deviation D-A9-2). `[[pending: 421 if it finishes before 18:00 IST, else "not finished"]]`
+
 ## 8. Transfer
 
 **Languages and pressure: the gains transfer.** All training was in English, with neutral prompts and no pressure. Greedy test-IID variants, n = 200 each [`results/eval/transfer/*.summary.json`].
@@ -353,6 +364,7 @@ Every scripted attack in `tests/test_exploits.py`, scored by every reward [`resu
 | Rewards on unrecoverable refunds by behaviour | `results/a8/ur_rewards.md` | `scripts/a8_ur_rewards.py` |
 | Untrained models below 32B at VSC ≈ 0; 32B at 0.515 | `results/leaderboard.json` | `actionproof/eval/run_eval.py` |
 | LLM judges accept 76–100% of false completions | `results/judge/` | `actionproof/rewards/llm_judge.py` |
+| With the receipt ledger, 32B judges still accept 46–72% of failures it exposes; 8B 96–100% (Amendment 9) | `results/judge/grounded_audit.md`, `results/judge/aya*_grounded__*` | `scripts/a9_audit_report.py`, `actionproof/eval/judge_audit.py --grounded` |
 | AuditKIT integration parity on 36 / 36 files (given our verifier's verdict) | `results/auditkit/bridge_final.md` | `scripts/auditkit_bridge_final.py` |
 | Demo tabs | `demo/assets/`, `demo/replays/credit_templates.json` | `scripts/build_demo_assets.py`, `scripts/build_credit_demo.py` |
 
