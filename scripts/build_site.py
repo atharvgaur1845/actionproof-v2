@@ -75,8 +75,8 @@ def theatre(data: dict) -> dict:
 
 def x1() -> list:
     """Refund read-back bars from results/a8/x1_readback.md (and the addendum-2 state cell once it exists)."""
-    names = {"control (task 412)": "All training tasks (control, 412)", "placebo (414q)": "60 random tasks removed (placebo)",
-             "X1 (414p)": "2 refund task classes removed (X1)"}
+    names = {"control (task 412)": "Reply reward, all training tasks", "placebo (414q)": "Reply reward, 60 random tasks removed",
+             "X1 (414p)": "Reply reward, 2 kinds of refund task removed"}
     rows = {m.group(1): (int(m.group(2)), int(m.group(3))) for m in
             re.finditer(r"^\| (.+?) \| (\d+)/(\d+) = [\d.]+ \|$", R("results/a8/x1_readback.md"), re.M)}
     out = [[label, *rows[k]] for k, label in names.items()]
@@ -84,7 +84,7 @@ def x1() -> list:
     if f.exists():
         m = re.search(r"^\| state, X1 pool \(417\) \| (\d+)/(\d+) = ", f.read_text(), re.M)
         if m:
-            out.append(["Database reward, X1 pool (417)", int(m.group(1)), int(m.group(2))])
+            out.append(["Database reward, same 2 kinds removed", int(m.group(1)), int(m.group(2))])
     return out
 
 
