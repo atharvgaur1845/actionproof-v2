@@ -17,7 +17,7 @@ Tools sometimes return `{"status": "success"}` for a write that never happened. 
 | | Result | Source |
 |---|---|---|
 | **Rewards that trust the tool get gamed** | A tool-trusting reward leaves the agent at VSC 0.635–0.645. AuditKIT's own `TaskCompletion` judge (Aya Expanse 32B) accepts **95%** of false "completed" claims. Given the database's receipt ledger, it still accepts **72%** of the failures the ledger exposes (pre-registered, Amendment 9). | `results/confirmatory.json`, §7 |
-| **A reward that checks the database works** | PCSTR-d raises VSC from **0.6425 to 0.8425** on untouched pre-registered splits (n = 400, both seeds), **+20.25 pp** [16.4, 24.3] over the tool-trusting reward. The registered H1 also passed: +1.5 pp over the binary state reward, p = 0.025. | `results/confirmatory.json`, §5 |
+| **A reward that checks the database works** | PCSTR-d raises VSC from **0.6425** (warm start) **to 0.8425** on 400 untouched pre-registered tasks (each of two seeds), **+20.25 pp** [16.4, 24.3] over the tool-trusting reward (0.640). The registered H1 also passed: +1.5 pp over the binary state reward, p = 0.025. | `results/confirmatory.json`, §5 |
 | **The cause is what the reward observes** | Same form, same warm start, only the goal term's source differs. Reading the database raises refund read-back after a success acknowledgement from 0.25 to 0.71–0.72. Reading the acknowledgements drives it to 0.10 (sampled; seed 0 for the database rewards, both seeds for the acknowledgement reward). | `results/eval/a4/h11/`, §3 |
 | **…and it traces to two task classes** | Removing the two task classes where checking costs acknowledgement reward keeps read-back at **0.669**. Removing 60 random tasks leaves it at **0.000**. The database reward reads back 1.000 on both pools: channel × pool interaction **+0.678** [0.605, 0.750]. Pre-registered, one seed per cell. | §3, `results/a8/x1_interaction.md` |
 | **The reward cannot be moved by the report text** | Property test: every safe, honest completion outranks every failure under PCSTR. A scripted exploit suite (read spam, forged summaries and audit notes, duplicate refunds, unauthorized writes, false completion, silence) ranks every attack below the oracle under every state reward. On 120 recorded episodes, changing the report text or status, or inserting extra reads, never changes the state terms (360/360). | `tests/test_reward_sanity.py`, `tests/test_exploits.py`, `tests/test_metamorphic_traces.py` |
@@ -39,7 +39,7 @@ The database arms' false-completion rate is 1.00 because the 15% of tasks they s
 
 **What we do not claim:**
 - general verification skill: the checking stays tool-specific, and banking transfer fails (Appendix A, §8);
-- that RL teaches lying: the SFT warm start already claims false success 87–96% of the time (sampled val 0.87, greedy test-IID 0.96; the untrained base model, which rarely finishes a task, 34%);
+- that RL teaches lying: the SFT warm start already reports success on 87–96% of the episodes it failed (sampled val 0.87, greedy test-IID 0.96; the untrained base model, which rarely finishes a task, 34%);
 - results beyond one model family and one seed per mechanism arm (§12).
 
 **Rigour:** eleven hash-frozen registrations (one `results/*hashes.json` file each), a public deviation log that records our own bugs, and 509 tests (§11).

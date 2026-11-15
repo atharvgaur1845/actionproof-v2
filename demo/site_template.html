@@ -380,25 +380,25 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
 <section class="keyr" id="key">
  <div class="cap">Key results · every number is a file in the repository</div>
  <h2 class="stitle">Three findings, <span class="ser">and the limits we found.</span></h2>
- <p class="lede">On 400 untouched, pre-registered tasks (two seeds), the database-grounded reward PCSTR-d raises verified success from <b>0.6425 to 0.8425</b>, <b>+20.25 pp</b> [16.4, 24.3] over a reward that trusts the tool. A stricter metric that also forbids unrequested writes leaves the database-trained agents unchanged and widens the gap to <b>+41.9 pp</b>.</p>
+ <p class="lede">On 400 untouched, pre-registered tasks, evaluated for each of two training seeds, the database-grounded reward PCSTR-d raises verified success (VSC) from <b>0.6425</b> (warm start) to <b>0.8425</b>. A tool-trusting reward reaches 0.640, so PCSTR-d leads it by <b>+20.25 pp</b> [16.4, 24.3]. On strict VSC (no unrequested write, registered before computing), PCSTR-d stays 0.8425 and the tool-trusting reward falls to 0.424: <b>+41.9 pp</b>.</p>
  <div class="kgrid">
   <div><h4>1 · The reward's source decides checking</h4><div class="kn">0.825 vs 0.605</div>
    <p>Test-IID success, same reward form, same warm start; only the goal term reads the database or the acknowledgements (two seeds each). Refund read-back on a later warm start: 1.00 vs 0.00.</p>
    <div class="src">results/one_table.md · results/eval/a6/</div></div>
-  <div><h4>2 · Two task classes explain the failure</h4><div class="kn">+0.678</div>
-   <p>Channel × pool interaction on read-back, 95% CI [0.605, 0.750]. Removing refund timeouts and unrecoverable refunds restores read-back to 0.669; removing 60 random tasks leaves 0.000; the database reward stays at 1.000. Pre-registered, one seed per cell.</p>
+  <div><h4>2 · Two task classes drive the failure</h4><div class="kn">+0.678</div>
+   <p>Channel × pool interaction on read-back, 95% CI [0.605, 0.750]. Removing refund timeouts and unrecoverable refunds restores read-back to 0.669; removing 60 random tasks leaves 0.000; the database reward stays at 1.000. Pre-registered; the CI is over tasks, one training seed per cell.</p>
    <div class="src">results/a8/x1_interaction.md · PREREGISTRATION_A8*.md</div></div>
   <div><h4>3 · Judges ignore evidence they are given</h4><div class="kn r">72%</div>
-   <p>False completions still accepted by AuditKIT TaskCompletion (Aya Expanse 32B) when handed the database's own ledger showing the write failed (95% without it). Our prompt: 83% → 46%; Aya 8B: 96–100%. The deterministic verifier rejects all of them.</p>
+   <p>False completions still accepted by AuditKIT TaskCompletion (Aya Expanse 32B) when handed the database's own ledger showing a write did not land (95% without it; n = 298 such episodes). Our judge prompt: 83% → 46%. Aya 8B with the ledger: 96% (our prompt) and 100% (TaskCompletion). Our verifier, reading the same ledger, rejects all of these episodes by construction.</p>
    <div class="src">results/judge/grounded_audit.md · PREREGISTRATION_A9.md</div></div>
  </div>
  <div class="klim">
   <div><b>Limit · timeouts before commit</b>In a corrected environment where a timeout can fail before the write lands, the database-trained agents read, then report done without retrying: PCSTR-d 0.18 vs 0.71 for the tool-trusting agent. They learned the timeouts they were trained on.<span class="src">results/a10/v2_env.md</span></div>
-  <div><b>Limit · a script, not a skill</b>GRPO keeps whole SFT templates: retries stop at the training depth, and on an unseen write tool the agent reads, sees nothing and still reports success. Banking transfer fails.<span class="src">docs/ARTICLE_DRAFT.md §6, Appendix A</span></div>
+  <div><b>Limit · a script, not a skill</b>RL appears to select among behaviours already present after SFT: retries stop at the training depth, and on an unseen write tool the agent reads, sees nothing and still reports success. Banking transfer fails.<span class="src">docs/ARTICLE_DRAFT.md §6, Appendix A</span></div>
   <div><b>Limit · our own reward</b>Without report terms, the state reward pays continuing after an unrecoverable refund (+0.167). A dependency-aware variant fixes the ordering offline; no policy was trained on it.<span class="src">results/a10/dep_reward.md</span></div>
  </div>
  <div class="klim ok">
-  <div><b>Independent verifier</b>Written from the definitions without our verifier's code: agrees on 4,000 / 4,000 confirmatory episodes.<span class="src">results/reference_verifier.md</span></div>
+  <div><b>Independent verifier</b>Written from the definitions without our verifier's code: reproduces our VSC on all 4,000 confirmatory episodes (400 tasks × 10 evaluated runs). It trusts the environment's commit record.<span class="src">scripts/reference_verifier.py · results/reference_verifier.md</span></div>
   <div><b>Eleven registrations</b>Every experiment hashed before it ran; failed predictions reported as failed; a public deviation log of our own bugs.<span class="src">results/*hashes.json · docs/SPEC.md §27</span></div>
   <div><b>Faster, not slower</b>Single request: 2.5 s per episode for PCSTR-d vs 10.2 s for the tool-trusting agent (median, A100), because it writes one call per turn.<span class="src">results/latency_single.md</span></div>
  </div>
