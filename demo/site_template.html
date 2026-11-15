@@ -264,6 +264,16 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
 .ltbl{width:100%;border-collapse:collapse;font-size:14px;line-height:20px;margin-top:12px}.ltbl th,.ltbl td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--hair);vertical-align:top}
 .ltbl th{font:500 11px/16px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--gr)}.ltbl td.n{font-family:var(--mono);text-align:right;white-space:nowrap}.ltbl td.v{color:var(--gr)}.ltbl td.bad{color:var(--ver-t);font-weight:500}
 .lwrap{padding:40px 56px 8px;overflow-x:auto}
+.keyr{padding:56px 56px 48px}
+.kgrid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink);margin-top:24px}
+.kgrid>div{padding:20px 24px 16px 0;min-width:0}.kgrid>div+div{padding-left:24px;border-left:1px solid var(--hair)}
+.kgrid .kn{font:44px/1 var(--disp);letter-spacing:-.02em;margin:10px 0 12px}.kgrid .kn.r{color:var(--ver-t)}
+.kgrid h4{font:16px/20px var(--disp);text-transform:uppercase;font-weight:400;margin:0}
+.kgrid p{font-size:15px;line-height:24px;margin:0 0 10px}
+.klim{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:32px;border-top:1px solid var(--ink)}
+.klim>div{padding:16px 24px 8px 0;font-size:14px;line-height:22px;min-width:0}.klim>div+div{padding-left:24px;border-left:1px solid var(--hair)}
+.klim b{display:block;font:14px/20px var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;color:var(--ver-t)}
+.klim.ok b{color:var(--ink)}.klim .src,.kgrid .src{display:block;margin-top:6px}
 @media (max-width:1100px){
  :root{--rail:0px}.rail{display:none}
  .mnav{display:flex;position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--ink);overflow-x:auto;gap:0;scrollbar-width:none}
@@ -274,6 +284,7 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  .stitle{font-size:clamp(28px,8.4vw,44px);overflow-wrap:anywhere}.shead>div,.arch>div,.labbody>div,.tpl>div,.mpane>div,.chartwrap>div,.confirm>div,.x1>div{min-width:0}
  .big3,.counts{grid-template-columns:1fr!important}.big3>div{min-width:0}.big3 .n{font-size:64px}
  .tip{display:none}.game{padding:32px 16px}.g3{grid-template-columns:1fr}.g3>div+div{padding-left:0;border-left:0;border-top:1px solid var(--hair)}.agt{overflow-x:auto}.hstats{grid-template-columns:1fr;margin:0 16px 24px}.hstats>div+div{padding-left:0;border-left:0;border-top:1px solid var(--hair);margin-top:12px}
+ .kgrid,.klim{grid-template-columns:1fr}.kgrid>div+div,.klim>div+div{padding-left:0;border-left:0;border-top:1px solid var(--hair)}.keyr{padding:40px 16px}
  .wgrid{grid-template-columns:1fr}.why{padding:40px 16px}.why h3{font-size:30px;overflow-wrap:anywhere}.why .r3 .row{grid-template-columns:1fr 1fr 80px}.lane{grid-template-columns:1fr}.lwrap{padding:24px 16px 8px}
  .h1{overflow-wrap:anywhere}.autopsy h3{font-size:30px;overflow-wrap:anywhere}.huge{overflow-wrap:anywhere}
  .pad,.shead,.meta,.htype,.scrollcue,.stage,.arch>div,.chartwrap,.confirm,.autopsy,.mpane,.insp,.tree,.ctx,.branch{padding-left:16px;padding-right:16px}
@@ -297,13 +308,13 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
 <nav class="rail" aria-label="Sections">
  <div class="brand">ACTIONPROOF<span>research study · 2026</span></div>
  <ol id="railnav">
-  <li><a href="#top"><i>00</i>Opening</a></li><li><a href="#why"><i>★</i>The finding</a></li><li><a href="#problem"><i>01</i>The problem</a></li><li><a href="#bench"><i>02</i>The environment</a></li>
+  <li><a href="#top"><i>00</i>Opening</a></li><li><a href="#why"><i>★</i>The finding</a></li><li><a href="#key"><i>★</i>Key results</a></li><li><a href="#problem"><i>01</i>The problem</a></li><li><a href="#bench"><i>02</i>The environment</a></li>
   <li><a href="#experiment"><i>03</i>The experiment</a></li><li><a href="#lab"><i>04</i>Evidence lab</a></li><li><a href="#templates"><i>05</i>Templates</a></li>
   <li><a href="#findings"><i>06</i>Findings</a></li><li><a href="#autopsy"><i>07</i>What we got wrong</a></li><li><a href="#methods"><i>08</i>Methods</a></li>
   <li><a href="#artifacts"><i>09</i>Artifacts</a></li></ol>
  <div class="foot">Lexsi hackathon · track 3<a href="https://github.com/atharvgaur1845/actionproof-v2">GitHub ↗</a><a href="https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04">Models ↗</a></div>
 </nav>
-<nav class="mnav" aria-label="Sections"><a class="b" href="#top">ACTIONPROOF</a><a href="#why">★ Finding</a><a href="#problem">01 Problem</a><a href="#bench">02 Environment</a><a href="#experiment">03 Experiment</a>
+<nav class="mnav" aria-label="Sections"><a class="b" href="#top">ACTIONPROOF</a><a href="#why">★ Finding</a><a href="#key">★ Results</a><a href="#problem">01 Problem</a><a href="#bench">02 Environment</a><a href="#experiment">03 Experiment</a>
  <a href="#lab">04 Evidence</a><a href="#templates">05 Templates</a><a href="#findings">06 Findings</a><a href="#autopsy">07 Wrong</a><a href="#methods">08 Methods</a><a href="#artifacts">09 Artifacts</a></nav>
 <main>
 
@@ -362,7 +373,35 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
    <div class="r3" id="wbars"></div>
    <div class="src" style="color:#8C8F86;margin-top:10px">results/a8/x1_readback.md · results/a8/x1_interaction.md · PREREGISTRATION_A8.md, _ADDENDUM2.md</div></div>
  </div>
- <p class="wcap">Trained on every task, the acknowledgement reward stops checking (0.000). Remove the two task classes where checking costs it reward and read-back returns (0.669); remove 60 random tasks instead and it does not (0.000). The database reward reads back on every refund, on the full pool and on the filtered one (152/152 each): interaction +0.678, 95% CI [0.605, 0.750]. One seed per cell; this supports a class-specific cause, it does not prove a mechanism. <a href="#findings" style="color:var(--chr)">Full analysis in 06 →</a></p>
+ <p class="wcap">Trained on every task, the acknowledgement reward stops checking (0.000). Remove the two task classes where checking costs it reward and read-back returns (0.669); remove 60 random tasks instead and it does not (0.000). The database reward reads back on every refund, on the full pool and on the filtered one (152/152 each): interaction +0.678, 95% CI [0.605, 0.750]. One seed per cell; this supports a class-specific cause, it does not prove a mechanism. <a href="#key" style="color:var(--chr)">Key results →</a> · <a href="#findings" style="color:var(--chr)">full analysis in 06 →</a></p>
+</section>
+
+<!-- ============ KEY RESULTS ============ -->
+<section class="keyr" id="key">
+ <div class="cap">Key results · every number is a file in the repository</div>
+ <h2 class="stitle">Three findings, <span class="ser">and the limits we found.</span></h2>
+ <p class="lede">On 400 untouched, pre-registered tasks (two seeds), the database-grounded reward PCSTR-d raises verified success from <b>0.6425 to 0.8425</b>, <b>+20.25 pp</b> [16.4, 24.3] over a reward that trusts the tool. A stricter metric that also forbids unrequested writes leaves the database-trained agents unchanged and widens the gap to <b>+41.9 pp</b>.</p>
+ <div class="kgrid">
+  <div><h4>1 · The reward's source decides checking</h4><div class="kn">0.825 vs 0.605</div>
+   <p>Test-IID success, same reward form, same warm start; only the goal term reads the database or the acknowledgements (two seeds each). Refund read-back on a later warm start: 1.00 vs 0.00.</p>
+   <div class="src">results/one_table.md · results/eval/a6/</div></div>
+  <div><h4>2 · Two task classes explain the failure</h4><div class="kn">+0.678</div>
+   <p>Channel × pool interaction on read-back, 95% CI [0.605, 0.750]. Removing refund timeouts and unrecoverable refunds restores read-back to 0.669; removing 60 random tasks leaves 0.000; the database reward stays at 1.000. Pre-registered, one seed per cell.</p>
+   <div class="src">results/a8/x1_interaction.md · PREREGISTRATION_A8*.md</div></div>
+  <div><h4>3 · Judges ignore evidence they are given</h4><div class="kn r">72%</div>
+   <p>False completions still accepted by AuditKIT TaskCompletion (Aya Expanse 32B) when handed the database's own ledger showing the write failed (95% without it). Our prompt: 83% → 46%; Aya 8B: 96–100%. The deterministic verifier rejects all of them.</p>
+   <div class="src">results/judge/grounded_audit.md · PREREGISTRATION_A9.md</div></div>
+ </div>
+ <div class="klim">
+  <div><b>Limit · timeouts before commit</b>In a corrected environment where a timeout can fail before the write lands, the database-trained agents read, then report done without retrying: PCSTR-d 0.18 vs 0.71 for the tool-trusting agent. They learned the timeouts they were trained on.<span class="src">results/a10/v2_env.md</span></div>
+  <div><b>Limit · a script, not a skill</b>GRPO keeps whole SFT templates: retries stop at the training depth, and on an unseen write tool the agent reads, sees nothing and still reports success. Banking transfer fails.<span class="src">docs/ARTICLE_DRAFT.md §6, Appendix A</span></div>
+  <div><b>Limit · our own reward</b>Without report terms, the state reward pays continuing after an unrecoverable refund (+0.167). A dependency-aware variant fixes the ordering offline; no policy was trained on it.<span class="src">results/a10/dep_reward.md</span></div>
+ </div>
+ <div class="klim ok">
+  <div><b>Independent verifier</b>Written from the definitions without our verifier's code: agrees on 4,000 / 4,000 confirmatory episodes.<span class="src">results/reference_verifier.md</span></div>
+  <div><b>Eleven registrations</b>Every experiment hashed before it ran; failed predictions reported as failed; a public deviation log of our own bugs.<span class="src">results/*hashes.json · docs/SPEC.md §27</span></div>
+  <div><b>Faster, not slower</b>Single request: 2.5 s per episode for PCSTR-d vs 10.2 s for the tool-trusting agent (median, A100), because it writes one call per turn.<span class="src">results/latency_single.md</span></div>
+ </div>
 </section>
 
 <!-- ============ 01 PROBLEM ============ -->
