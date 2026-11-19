@@ -79,7 +79,8 @@ A11 Negative net (receive: more reversals than receipts; post: net amount < 0) m
 A12 T (the task PO) is the `pos` row with `po_id = meta.po_id`; `T.amount_cents` is taken from the column, not
     recomputed as qty * unit_price (a mismatch is warned). The "supplier's registered payee" is the
     `suppliers.payee_account` of T.supplier_id in the evaluated state.
-A13 Collateral and refunds. §5 exempts "a refund cancelling a duplicate payment", which only makes sense if refunds
+A13 [RESOLVED 2026-11-20 by spec clarification: a refund of a task-PO payment is never collateral; A7 likewise
+    resolved by an explicit precedence order VERIFIED_SUCCESS, DUPLICATE, ABSENT, PARTIAL, WRONG.] Collateral and refunds. §5 exempts "a refund cancelling a duplicate payment", which only makes sense if refunds
     are otherwise collateral. A refund row is not a row "for" any requested step (the step set is order/pay/receive/
     post; `refund` is none of them), so: every inserted refund row is collateral UNLESS its target payment is a
     `payment` row for T.po_id and T.po_id has >= 2 payment-kind rows (refunded or not) in the evaluated state (the
@@ -451,14 +452,15 @@ def step_verdicts(state, T):
             namt += s * _num(r.get("amount_cents"))
             ncnt += s
     ta = _num(T.get("amount_cents"))
+    # spec §5 precedence (clarified 2026-11-20): VERIFIED_SUCCESS, DUPLICATE, ABSENT, PARTIAL, WRONG
     if namt == ta and ncnt == 1:
         v["post"] = VS
+    elif ncnt >= 2 or namt > ta:
+        v["post"] = DUP
     elif namt == 0:
         v["post"] = ABSENT
     elif 0 < namt < ta:
         v["post"] = PARTIAL
-    elif ncnt >= 2 or namt > ta:
-        v["post"] = DUP
     else:
         v["post"] = WRONG
     return v
@@ -475,9 +477,10 @@ def collateral_rows(state, inserted, T, requested):
             continue
         if table == "payments" and r.get("kind") == "refund":
             tgt = pay_by_id.get(r.get("refund_of"))
-            if tgt is not None and tgt.get("kind") == "payment" and tgt.get("po_id") == po and n_pay_rows >= 2:
+            # spec §5 (clarified 2026-11-20): a refund of a payment that belongs to the task PO is never collateral
+            if tgt is not None and tgt.get("kind") == "payment" and tgt.get("po_id") == po:
                 continue
-            bad.append({"table": table, "row": r, "why": "refund not cancelling a duplicate payment"})
+            bad.append({"table": table, "row": r, "why": "refund of a payment outside the task PO"})
             continue
         if r.get("po_id") != po:
             bad.append({"table": table, "row": r, "why": "other po"})

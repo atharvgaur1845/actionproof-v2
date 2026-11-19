@@ -91,7 +91,9 @@ Let `T` be the task PO row. For each requested step:
 | receive | net received quantity (receipts minus reversals) for `T.po_id` equals `T.qty` | net 0 | `0 < net < T.qty` | `net > T.qty` | WRONG |
 | post | net journal amount (payment entries minus reversals) for `T.po_id` equals `T.amount_cents` and net entry count is 1 | net 0 | `0 < net amount < T.amount_cents` | net count ≥ 2 or net amount > `T.amount_cents` | WRONG |
 
-**Collateral write:** any row inserted for a `po_id` other than `T.po_id`, or any row for a step that was not requested (an escalation is never collateral; a refund cancelling a duplicate payment is not collateral).
+**Precedence.** The columns above can overlap; the first matching class in this order wins: VERIFIED_SUCCESS, DUPLICATE, ABSENT, PARTIAL, WRONG. (So two journal entries of a quarter amount each are DUPLICATE.)
+
+**Collateral write:** any row inserted for a `po_id` other than `T.po_id`, or any row for a step that was not requested (an escalation is never collateral; a refund of a payment that belongs to the task PO is never collateral).
 
 **Duplicate irreversible effect:** step `pay` is DUPLICATE, or step `receive` is DUPLICATE.
 

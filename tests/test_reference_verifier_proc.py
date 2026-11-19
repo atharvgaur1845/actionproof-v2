@@ -150,9 +150,9 @@ def test_refund_cancels_duplicate_with_id_recovery():
 
 
 # 8 refund of the only payment: ABSENT and (A13) collateral
-def test_refund_only_payment_is_collateral():
+def test_refund_only_payment_is_not_collateral():  # spec clarified 2026-11-20
     r = V(ep(["pay"], [pay("PAY1"), refund("PAY1", "F1")]))
-    assert r["verdicts"]["pay"] == "ABSENT" and r["collateral"]
+    assert r["verdicts"]["pay"] == "ABSENT" and not r["collateral"]
 
 
 # 9 collateral: write on a distractor PO, and a write for an unrequested step
