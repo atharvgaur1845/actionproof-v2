@@ -22,6 +22,12 @@ FILES = [
     "scripts/make_splits_c2.py",
     "actionproof/integrity/adapters/ecom.py",
     "scripts/eval_gateway.py",
+    "scripts/h4_sample.py",
+    "scripts/h4_label.py",
+    "data/h4/items.jsonl",
+    "data/h4/key.jsonl",
+    "scripts/judge_instructed.py",
+    "scripts/h7_matrix.py",
 ]
 
 

@@ -4,6 +4,7 @@
 # run aborts on any replayed observation that differs from the recorded one. Then the scripted-agent reference runs.
 # Not executed when written (2026-11-20); runs after 500 to 506.
 set -uo pipefail
+source slurm/claim.sh || exit 0
 source slurm/env.sh
 .venv/bin/python scripts/freeze_a11.py --check || exit 1
 mkdir -p results/a11/eval results/a11/scripted logs

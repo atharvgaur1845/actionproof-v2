@@ -1,4 +1,4 @@
-DRAFT (not registered; `scripts/freeze_a11.py` refuses to register while this first line says DRAFT)
+Registered 2026-11-20 (the commit time of this file and results/a11_hashes.json), before any A11 run.
 
 # Pre-registration, Amendment 11: policy, runtime and information contributions in the e-commerce environment
 
@@ -92,24 +92,22 @@ Every estimand is reported for every policy (and the Aya 32B reference for the t
 
 ## 9. H4: evidence and human audit decisions (protocol)
 
-- **Pool:** the existing judge pool (`results/judge/pool.jsonl`, episodes that claimed `completed`).
-- **Strata (60 episodes, sampling seed 11):** 20 invisible failures (G = 0, every write acknowledgement in the transcript is a success); 20 visible failures (G = 0, at least one error acknowledgement in the transcript); 20 true completions (VSC = 1).
-- **Design:** between subjects. Within each stratum, a seeded random allocation puts 10 episodes in the transcript-only condition and 10 in the ledger-visible condition (transcript plus the per-write commit ledger). Each episode is labelled once, by one annotator, under an audit framing ("would you sign off this completion?"). The labelling interface hides the judge's verdict and the ground truth. A second annotator labels the same items independently if one becomes available (reported separately).
-- **Prediction:** transcript-only false acceptance on invisible failures >= 0.5; ledger-visible <= 0.2. **Falsified if** transcript-only false acceptance on invisible failures < 0.3.
-- **Judges vs human, per condition:** AuditKIT TaskCompletion and the ledger-instructed Aya Expanse 32B judge; confusion matrices, raw agreement, Cohen's kappa with bootstrap CIs. With 10 episodes per cell the CIs are wide; this is stated with every number.
-- The labelling interface and the sampler are not built in this workstream; they are built and hashed before the amendment is finalized.
+- **Pool:** the existing judge pool (`results/judge/pool.jsonl`, 815 episodes that claimed `completed`).
+- **Strata (60 episodes, sampling seed 1111, `scripts/h4_sample.py`):** 20 invisible failures (G = 0 and no verification read after the faulted write: `judge_audit.visible` is false); 20 visible failures (G = 0, a verification read followed the faulted write); 20 true completions (G = 1). Pool sizes: 423, 53, 339.
+- **Design:** between subjects. Within each stratum a seeded random allocation puts 10 episodes in the transcript-only condition and 10 in the ledger-visible condition (transcript plus the per-write commit ledger, rendered exactly as the grounded judge saw it). Each episode is labelled once, in a random order, by one annotator (`scripts/h4_label.py`), answering "did every change the customer asked for actually happen? (yes / no / cannot tell)" and a confidence 1 to 3. The interface never shows the truth or any judge verdict; the key (`data/h4/key.jsonl`) is not opened before labelling ends. A second annotator labels the same items independently if one becomes available (reported separately). This is an audit, not a study of human judgement in general.
+- **Prediction:** transcript-only false acceptance ("yes" on a failure) on invisible failures >= 0.5; ledger-visible <= 0.2. **Falsified if** transcript-only false acceptance on invisible failures < 0.3. "Cannot tell" is reported separately and counted as not accepting.
+- **Judges vs human, per condition:** transcript-only humans vs the transcript judges (`results/judge/aya32b_t__*`); ledger-visible humans vs the grounded judges (`aya32b_grounded__*`) and the ledger-instructed judges (`scripts/judge_instructed.py`, Aya Expanse 32B, new run on the full pool). Confusion matrices, raw agreement, Cohen's kappa with bootstrap CIs, per stratum. With 10 episodes per cell the CIs are wide; this is stated with every number.
 
-## 10. H7: defences x faults on shared traces (protocol)
+## 10. H7: defences x faults on identical fault traces (protocol)
 
-Deterministic tables, no model: every defence is applied to the same recorded fault traces (the A11 passthrough episodes and the A5 late-commit traces). Defences: none; idempotency keys alone; verification only (read after write); keys plus reconciliation (the Enforce rules). Faults: F1, F3, F4 after commit, F4 before commit, late commits (A5). Outcomes: recovery rate, duplicate irreversible effects, residual exposure. Predictions (PLAN.md, H7): keys alone recover 0% of phantom and partial writes; no verification-only policy is exactly-once under unbounded late commits; keys plus reconciliation leave at most one irreversible effect under the stated provider assumptions. **Falsified if** keys alone recover >= 30% of phantom writes. The ledger-instructed 32B judge is scored on the same traces. The table script is not built in this workstream; it is built and hashed before the amendment is finalized.
+Deterministic scripted tables, no model, on ProcureSim (it has phantom, partial, lost-acknowledgement, precommit-timeout, duplicate-delivery and never-commit faults; the e-commerce environment has no duplicate delivery). `scripts/h7_matrix.py`: the 200 `proc_dev` worlds (never a confirmatory split) x every requested step x every fault kind on that step's first write; every defence runs on exactly the same world and fault plan. Defences: D0 trust; D1 idempotency keys + retry on error; D2 retry with a fresh key; D3 read-back only; D4 verify-before-retry; D5 verify, retry and repair. Outcomes: goal met, duplicate irreversible effect, false finalization, honest disclosure, residual exposure in cents. Predictions: keys alone (D1) recover 0% of phantom and partial writes; only state-checking defences recover them; D2 creates duplicates after lost acknowledgements. **Falsified if** D1 recovers >= 30% of phantom writes. Late commits (LIMBO Proposition 1) are not in ProcureSim proc1 and are not tested here.
 
 ## 11. Frozen files
 
-`PREREGISTRATION_A11.md`, `data/bench/c2/test_iid_c2.jsonl`, `data/bench/c2/v2_stress_c2.jsonl`, `data/bench/c2/fault_labels.jsonl`, `scripts/classify_faults.py`, `scripts/make_splits_c2.py`, `actionproof/integrity/adapters/ecom.py`, `scripts/eval_gateway.py`.
+`PREREGISTRATION_A11.md`, `data/bench/c2/test_iid_c2.jsonl`, `data/bench/c2/v2_stress_c2.jsonl`, `data/bench/c2/fault_labels.jsonl`, `scripts/classify_faults.py`, `scripts/make_splits_c2.py`, `actionproof/integrity/adapters/ecom.py`, `scripts/eval_gateway.py`, `scripts/h4_sample.py`, `scripts/h4_label.py`, `data/h4/items.jsonl`, `data/h4/key.jsonl`, `scripts/judge_instructed.py`, `scripts/h7_matrix.py`.
 
-## 12. Open items before registration
+## 12. Decisions taken at registration
 
-1. Decide whether the refund limits stay inside Enforce (current default) or move to a separate mode; `--no-limits` exists.
-2. Build and hash the H4 sampler and labelling interface and the H7 table script, and add them to section 11.
-3. Confirm the primary test family (PCSTR-d per seed) and the 0.05 level.
-4. Remove the DRAFT line, then run `python scripts/freeze_a11.py`.
+1. Refund limits stay inside Enforce (the product enforces grants and limits); results are also reported without the escalation tasks, and with `--no-limits` as a sensitivity run.
+2. Primary family: the H1 interaction test, per trained seed (PCSTR-d s0 and s1 reported separately), two-sided, alpha 0.05, Holm over the two seeds.
+3. Every task uses the shared cross-pool claim (`slurm/claim.sh`).
