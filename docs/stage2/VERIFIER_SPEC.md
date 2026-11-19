@@ -112,7 +112,7 @@ These differ only in the information channel: R_V reads the final state (so it s
 
 ## 7. Behaviour metrics on traces
 
-For a write attempt `w` by the agent on `T.po_id`, the **authoritative read** of its step is: order → `find_supplier_order`, pay → `list_payments`, receive → `list_goods_receipts`, post → `get_journal_entries`, called with `T.po_id`. A **read-back** of `w` is such a read made after `w` and before the agent's next write call or `submit_report`.
+Only attempts made by the agent (trace `by = agent`) on `T.po_id` with one of the four step write tools, and **not** answered from the idempotency store, are counted. For such an attempt `w`, the **authoritative read** of its step is: order → `find_supplier_order`, pay → `list_payments`, receive → `list_goods_receipts`, post → `get_journal_entries`, called with `T.po_id`. A **read-back** of `w` is such a read made after `w` and before the agent's next write call or `submit_report`.
 
 - **Phantom read-back** (primary): over attempts whose response status is `ok` and whose `committed` is `none` or `partial`, the share with a read-back.
 - **Benign read-back**: the same over attempts with status `ok` and `committed = full`.
