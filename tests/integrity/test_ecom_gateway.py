@@ -248,6 +248,8 @@ def test_freeze_a11_register_and_check(tmp_path, monkeypatch):
         (tmp_path / f).parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(ROOT / f, tmp_path / f)
     (tmp_path / "results").mkdir()
+    pre = tmp_path / "PREREGISTRATION_A11.md"  # the real file is registered now; test the DRAFT guard on a copy
+    pre.write_text("DRAFT (test copy)\n" + pre.read_text())
     monkeypatch.setattr(FZ, "ROOT", tmp_path)
     monkeypatch.setattr(sys, "argv", ["freeze_a11.py"])
     with pytest.raises(SystemExit, match="DRAFT"):
