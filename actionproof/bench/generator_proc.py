@@ -12,7 +12,7 @@ Splits and seeds (Amendment 12). Prompts depend only on the purchase order, neve
 | proc_stress           | 100 | 107  | dup_delivery, or lost_ack followed by a lagging read replica           |
 | proc_heldout_service  | 100 | 108  | single faults on post_journal_entry (accounting is never faulted elsewhere) |
 
-Training mix: one fault on one requested step among order/pay/receive, by class:
+Training mix: one fault on one requested step among order/pay/receive (partial only on pay/receive), by class:
 clean 0.20, phantom 0.25, partial 0.10, lost_ack 0.15, precommit_timeout 0.15, never_commit 0.15.
 """
 from __future__ import annotations
@@ -141,7 +141,8 @@ def _faults(rng: random.Random, split: str, requested: tuple[str, ...]) -> tuple
     kind = _pick(rng, TRAIN_MIX)
     if kind == "clean":
         return [], None, "clean"
-    step = rng.choice(trainable)
+    # partial faults only where an agent tool can repair them (pay: refund and re-pay; receive: record the rest)
+    step = rng.choice([s for s in trainable if s in ("pay", "receive")] if kind == "partial" else trainable)
     if kind == "never_commit":
         return [], STEP_TOOL[step], "never_commit"
     return [{"tool": STEP_TOOL[step], "k": 0, "kind": kind}], None, kind

@@ -216,3 +216,19 @@ These are the places where the spec was unclear. Each entry gives the resolution
 19. **Precedence of error checks.** The spec does not order the error checks. Resolution: episode_finished, then
     unknown_tool, then invalid_arguments, then not_found, then the idempotency store, then the fault. No case relies
     on two of these conflicting.
+
+## Revisions after spec clarifications (2026-11-20, by the integrator, not the original author)
+
+Three spec ambiguities were resolved in docs/stage2/VERIFIER_SPEC.md after these cases were written: idempotency-store replies are excluded from the trace metrics (§7); verdict precedence is VERIFIED_SUCCESS, DUPLICATE, ABSENT, PARTIAL, WRONG (§5); calls rejected before the write path create no attempt (§8). Affected cases carry a `revised` field:
+
+- `order_lost_ack_same_key`: store replies excluded from phantom read-back (spec §7 clarified)
+- `pay_lost_ack_same_key`: store replies excluded from phantom read-back (spec §7 clarified)
+- `pay_invalid_counts_toward_k`: removed attempts for rejected calls (spec §8 clarified)
+- `pay_zero_amount_only`: removed attempts for rejected calls (spec §8 clarified)
+- `pay_not_found_other_po`: removed attempts for rejected calls (spec §8 clarified)
+- `post_lost_ack_same_key`: store replies excluded from phantom read-back (spec §7 clarified)
+- `post_two_small_overlap`: post precedence DUPLICATE before PARTIAL (spec §5 clarified)
+- `calls_after_submit`: removed attempts for rejected calls (spec §8 clarified)
+- `partial_same_key_stuck`: store reply excluded from phantom read-back (spec §7 clarified)
+- `refund_not_found`: removed attempts for rejected calls (spec §8 clarified)
+- `invalid_args_after_success`: removed attempts for rejected calls (spec §8 clarified)

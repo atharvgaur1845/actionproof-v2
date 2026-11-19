@@ -72,7 +72,8 @@ class ProcEnv:
 
     # ------------------------------------------------------------------ interface
     def adapt_prompt(self, base: str) -> str:
-        return PROC_SYSTEM
+        """Procurement prompts (which start with PROC_SYSTEM) pass through; any other domain's prompt is replaced."""
+        return base if base.startswith(PROC_SYSTEM) else PROC_SYSTEM
 
     @property
     def done(self) -> bool:
@@ -193,7 +194,9 @@ class ProcEnv:
         if po is None:
             return {"status": "error", "error": "not_found"}
         sup = next((r for r in view["suppliers"] if r["supplier_id"] == po["supplier_id"]), None)
-        return {"status": "ok", "po": dict(po), "supplier": dict(sup) if sup else None, "as_of": self.version["oms"]}
+        lag = view is not self.state and self.version["oms"] > 0
+        return {"status": "ok", "po": dict(po), "supplier": dict(sup) if sup else None,
+                "as_of": self.version["oms"] - lag}
 
     def _list(self, po_id: str, table: str, cols: tuple[str, ...], key: str) -> dict[str, Any]:
         _, tool, k, _ = self._ctx
@@ -201,8 +204,9 @@ class ProcEnv:
             return {"status": "error", "error": "not_found"}
         s = TABLE_SERVICE[table]
         view = self._view(s, k, tool)
+        lag = view is not self.state and self.version[s] > 0
         return {"status": "ok", key: [{c: r[c] for c in cols} for r in view[table] if r["po_id"] == po_id],
-                "as_of": self.version[s]}
+                "as_of": self.version[s] - lag}
 
     def find_supplier_order(self, po_id: str) -> dict[str, Any]:
         """List the supplier's orders for a purchase order (authoritative supplier portal data).
