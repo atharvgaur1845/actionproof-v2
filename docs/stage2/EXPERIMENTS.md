@@ -7,7 +7,7 @@ Every experiment is listed before it runs. Status values: planned, registered, r
 | Id | Covers | Registration file | Hashes | Status |
 |---|---|---|---|---|
 | A11 | H1 policy × gateway factorial (e-commerce v2), H4 judge–human audit, H7 recovery matrix, ledger-instructed judge | `PREREGISTRATION_A11.md` | `results/a11_hashes.json` | planned |
-| A12 | H2 reward observability in procurement (seeds ≥ 3, target 5), H3 predicted mechanism, reward-truth table | `PREREGISTRATION_A12.md` | `results/a12_hashes.json` | planned (gate Sat Nov 21 14:00) |
+| A12 | H2 reward observability in procurement (seeds ≥ 3, target 5), H3 predicted mechanism, reward-truth table | `PREREGISTRATION_A12.md` | `results/a12_hashes.json` | **registered 2026-11-20 02:28** (commit 0cf91d9) |
 | A13 | H5 contract-coverage generalization (G-rep, G-comb, G-adv) | `PREREGISTRATION_A13.md` | `results/a13_hashes.json` | planned (Mon Nov 23 09:00) |
 | — | H8 to H12 | none (exploratory, labelled as such) | — | planned |
 
@@ -15,7 +15,9 @@ Every experiment is listed before it runs. Status values: planned, registered, r
 
 | Task | Registration | What | Pool | Status | Result file |
 |---|---|---|---|---|---|
-| — | — | — | — | — | — |
+| 600_a12_warmstart | A12 | warm start (SFT on proc_demo) + sampled gate | HF h200 job 6aff6374 | running (02:30) | results/a12/gate.json |
+| 610–615 | A12 | GRPO seeds 2,1,0 × {R_V, R_A} (Slurm order); HF from seed 0 | all pools + HF | queued | runs/a12_* |
+| 616–619 | A12 | GRPO seeds 3,4 (registered time rule) | all pools | queued | |
 
 ## Worker jobs (our account only)
 

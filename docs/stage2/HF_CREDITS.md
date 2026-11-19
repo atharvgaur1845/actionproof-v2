@@ -6,4 +6,4 @@ Starting balance: **not yet confirmed** (the CLI cannot read billing; the user c
 
 | When (IST) | Job or endpoint id | Hardware | Reason | Est. $ | Actual $ | Cumulative $ |
 |---|---|---|---|---|---|---|
-| — | — | — | — | — | — | 0 |
+| 2026-11-20 02:30 | job 6aff6374efaf5e14f4b20eed (task 600_a12_warmstart) | h200 | A12 warm start + gate; no Slurm GPU started (workers pending since 01:55) and every seed depends on it | ~5–8 | | |
