@@ -1,1 +1,72 @@
-<!doctype html><html><head><meta charset="utf-8"><title>ActionProof</title></head><body>dashboard placeholder</body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ActionProof Gateway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/static/styles.css">
+<script>if (new URLSearchParams(location.search).get("present") === "1") document.documentElement.classList.add("present");</script>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="mark" aria-hidden="true"></span>ActionProof <span class="sub">gateway</span></div>
+  <nav class="nav" aria-label="Views">
+    <a href="#/transaction" data-view="transaction">Transaction</a>
+    <a href="#/compare" data-view="compare">Compare modes</a>
+    <a href="#/ledger" data-view="ledger">Live ledger</a>
+    <a href="#/evaluation" data-view="evaluation">Evaluation</a>
+  </nav>
+  <div class="top-status">
+    <span id="top-stream"><span class="dot"></span>Ledger stream connecting</span>
+    <span id="top-chain">Chain not checked yet</span>
+  </div>
+</header>
+
+<div class="page" id="page">
+  <aside class="side" id="side" aria-label="Run settings">
+    <form id="form" autocomplete="off">
+      <div class="fgroup">
+        <label class="flabel" for="f-scenario">Scenario</label>
+        <select id="f-scenario" disabled><option>Loading scenarios</option></select>
+        <p class="scen-prompt" id="f-prompt"></p>
+      </div>
+      <div class="fgroup">
+        <span class="flabel">Agent</span>
+        <div class="seg" role="radiogroup" aria-label="Agent">
+          <label><input type="radio" name="agent" value="naive" checked>Naive</label>
+          <label><input type="radio" name="agent" value="oracle">Oracle</label>
+        </div>
+        <p class="fhelp" id="f-agent-help"></p>
+      </div>
+      <div class="fgroup">
+        <span class="flabel">Gateway mode</span>
+        <div class="opts" role="radiogroup" aria-label="Gateway mode" id="f-modes"></div>
+      </div>
+      <div class="fgroup">
+        <span class="flabel">Injected fault</span>
+        <div class="opts" role="radiogroup" aria-label="Injected fault" id="f-faultsrc"></div>
+        <div class="fault-custom" id="f-custom" hidden>
+          <select id="f-tool" class="full" aria-label="Tool to fault"></select>
+          <select id="f-k" aria-label="Which call"></select>
+          <select id="f-kind" aria-label="Fault kind"></select>
+          <p class="fhelp full" id="f-kind-help"></p>
+        </div>
+      </div>
+      <button type="submit" class="btn primary block" id="f-submit" disabled>Run transaction</button>
+      <p class="fhelp" id="f-submit-help"></p>
+    </form>
+  </aside>
+
+  <main class="main" id="main">
+    <section id="view-transaction" data-view="transaction" aria-label="Transaction"></section>
+    <section id="view-compare" data-view="compare" aria-label="Compare modes" hidden></section>
+    <section id="view-ledger" data-view="ledger" aria-label="Live ledger" hidden></section>
+    <section id="view-evaluation" data-view="evaluation" aria-label="Evaluation" hidden></section>
+  </main>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>

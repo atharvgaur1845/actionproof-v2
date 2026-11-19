@@ -113,12 +113,26 @@ def _open(st: State, body: TxIn) -> str:
     return tx
 
 
+def _disposition(st: State, tx: str) -> dict[str, Any] | None:
+    """A finalized transaction's disposition as recorded at finalization. Recomputing it re-verifies every step and
+    appends evidence events, so a read (GET) would otherwise grow the append-only ledger."""
+    r = st.tx[tx]
+    if r["mode"] == "passthrough":
+        return None
+    if r.get("final") is None:
+        if r["status"] != "finalized" and not r["env"].done:
+            return r["gw"].disposition()
+        fin = [e.body for e in st.ledger.events(tx) if e.kind == "finalized"]
+        r["final"] = {k: v for k, v in fin[-1].items() if k != "ledger_head"} if fin else r["gw"].disposition()
+    return r["final"]
+
+
 def _detail(st: State, tx: str) -> dict[str, Any]:
     if tx not in st.tx:
         raise HTTPException(404, "unknown transaction")
     r = st.tx[tx]
     t, env, gw = r["task"], r["env"], r["gw"]
-    d = gw.disposition() if r["mode"] != "passthrough" else {"status": (env.final_report or {}).get("status")}
+    d = _disposition(st, tx) if r["mode"] != "passthrough" else {"status": (env.final_report or {}).get("status")}
     rec = episode_record_proc(t, env)
     sysrec = score({**rec, "report": {"status": d["status"], "summary": ""}})
     return {"tx_id": tx, "task_id": t.task_id, "prompt": t.prompt, "workflow": t.workflow, "mode": r["mode"],
@@ -177,16 +191,16 @@ def create_app(ledger_path: str | None = None, test_mode: bool = True) -> FastAP
             raise HTTPException(404)
         with st.lock:
             st.tx[tx]["status"] = "finalized"
-            return st.tx[tx]["gw"].finalize()
+            st.tx[tx]["final"] = st.tx[tx]["gw"].finalize()
+            return st.tx[tx]["final"]
 
     @app.get("/v1/transactions")
     def list_tx() -> list[dict[str, Any]]:
         out = []
         for tx, r in reversed(list(st.tx.items())):
-            gw = r["gw"]
             out.append({"tx_id": tx, "task_id": r["task"].task_id, "mode": r["mode"], "agent": r["agent"],
                         "status": r["status"], "fault_class": r["task"].meta["fault_class"],
-                        "disposition": gw.disposition()["status"] if r["mode"] != "passthrough" else None})
+                        "disposition": _disposition(st, tx)["status"] if r["mode"] != "passthrough" else None})
         return out
 
     @app.get("/v1/transactions/{tx}")
@@ -248,6 +262,7 @@ def create_app(ledger_path: str | None = None, test_mode: bool = True) -> FastAP
             if not r["env"].done:
                 r["gw"].finalize()
             r["status"] = "finalized"
+            _disposition(st, tx)  # record the finalized disposition now, before any tamper demonstration
         return tx
 
     @app.post("/v1/test/runs")
