@@ -23,3 +23,6 @@ Every experiment is listed before it runs. Status values: planned, registered, r
 |---|---|---|---|---|
 | 460633 | h200 (`worker2.sh`, two lanes) | 2 | 2026-11-20 01:55 | pending |
 | 460629 | a100 | 1 | 2026-11-20 01:53 | pending |
+| 460648 | a100 | 1 | 2026-11-20 02:28 | pending |
+| 460649 | h100 | 1 | 2026-11-20 02:28 | pending |
+| 460650 | h100 | 1 | 2026-11-20 02:28 | pending |
