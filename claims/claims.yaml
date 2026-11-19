@@ -1,0 +1,63 @@
+# Claim-to-evidence ledger (Stage 2).
+# Every number published in the video, slides, README, site or write-up must resolve to an entry here.
+# scripts/s2_numcheck.py reads this file. A claim with status "pending" may not be stated as a result.
+# Fields: id, statement, status (pending | supported | not_supported | not_run), prereg, runs, eval,
+# metric_code, stats, verifier, figures, numbers (name -> {value, file, key}), commit.
+
+claims:
+  - id: C1
+    statement: >-
+      On writes whose first acknowledgement is success but which did not commit, a verdict-grounded
+      reward selects authoritative read-back and an acknowledgement-grounded reward of identical
+      form does not, with the same sign in every paired seed.
+    status: pending
+    prereg: PREREGISTRATION_A12.md
+    runs: []
+    eval: []
+    metric_code: []
+    stats: scripts/s2_stats.py
+    verifier: scripts/reference_verifier_proc.py
+    figures: []
+    numbers: {}
+    commit: null
+
+  - id: C2
+    statement: >-
+      A transaction contract catches the violations it represents and combinations of them, misses
+      violations when clauses are removed or interact, and cannot express some independently
+      generated violations (the specification gap).
+    status: pending
+    prereg: PREREGISTRATION_A13.md
+    runs: []
+    eval: []
+    metric_code: []
+    stats: null
+    verifier: null
+    figures: []
+    numbers: {}
+    commit: null
+
+  - id: C3
+    statement: >-
+      Per gateway mode and fault cell: the learned policy's contribution (delta_policy), the
+      runtime's contribution (delta_runtime) and the value of exposing evidence (delta_information).
+    status: pending
+    prereg: PREREGISTRATION_A11.md
+    runs: []
+    eval: []
+    metric_code: []
+    stats: null
+    verifier: null
+    figures: []
+    numbers: {}
+    commit: null
+
+  # Stage-1 results quoted in Stage-2 materials (pre-Stage-2 work, Nov 1-15).
+  - id: S1-VSC
+    statement: "Confirmatory VSC: PCSTR-d 0.8425 vs warm start 0.6425 vs tool_trust 0.640 (400 tasks, 2 seeds)."
+    status: supported
+    prereg: PREREGISTRATION_A4.md
+    eval: [results/confirmatory.json]
+    numbers:
+      pcstr_d: {value: 0.8425, file: results/confirmatory.json, key: H1.means.pcstr_d}
+    commit: 2795c06

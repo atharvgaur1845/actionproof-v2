@@ -17,13 +17,14 @@ set -u
 POOL=${1:?pool}
 ROOT=/scratch/$USER/actionproof
 Q=$ROOT/queue/$POOL
+OWNER=$SLURM_JOB_ID${LANE:+.$LANE}  # LANE is set by worker2.sh when one job runs one worker per GPU
 mkdir -p "$Q"/{pending,running,done,failed,logs}
 export HF_HOME=/scratch/$USER/.cache/huggingface HF_HUB_OFFLINE=1
 END=$(( $(date +%s) + $(squeue -h -j "$SLURM_JOB_ID" -o %L | awk -F'[-:]' '{ if (NF==4) print ($1*86400+$2*3600+$3*60+$4); else if (NF==3) print ($1*3600+$2*60+$3); else print ($1*60+$2) }') ))
 STOP=0
 trap 'STOP=1; [ -n "${CHILD:-}" ] && kill -USR1 "$CHILD" 2>/dev/null' USR1
 
-echo "worker $SLURM_JOB_ID pool=$POOL node=$(hostname) gpu=$CUDA_VISIBLE_DEVICES until $(date -d @$END)"
+echo "worker $OWNER pool=$POOL node=$(hostname) gpu=$CUDA_VISIBLE_DEVICES until $(date -d @$END)"
 nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv,noheader
 
 # Recover tasks stranded in running/ by a preempted or requeued worker: the owner file names the job
@@ -31,7 +32,7 @@ nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv,noheader
 for f in "$Q"/running/*.sh; do
   [ -e "$f" ] || continue
   owner=$(cat "$f.owner" 2>/dev/null || echo none)
-  if [ "$owner" = "$SLURM_JOB_ID" ] || [ -z "$(squeue -h -j "$owner" -t R 2>/dev/null)" ]; then
+  if [ "$owner" = "$OWNER" ] || [ -z "$(squeue -h -j "${owner%%.*}" -t R 2>/dev/null)" ]; then
     echo "$(date +%T) recover $(basename "$f") (owner $owner gone)"; rm -f "$f.owner"; mv "$f" "$Q/pending/"
   fi
 done
@@ -51,7 +52,7 @@ while [ "$STOP" = 0 ]; do
   for f in $(ls -1 "$Q/pending/"*.sh 2>/dev/null | sort); do
     need=$(sed -n '1,5s/^# minutes: *\([0-9]\+\).*/\1/p' "$f" | head -1)
     if [ "${need:-60}" -le "$left_min" ] && deps_done "$f" && mv "$f" "$Q/running/" 2>/dev/null; then
-      task="$Q/running/$(basename "$f")"; echo "$SLURM_JOB_ID" > "$task.owner"; break
+      task="$Q/running/$(basename "$f")"; echo "$OWNER" > "$task.owner"; break
     fi
   done
   if [ -z "$task" ]; then sleep 60; continue; fi
@@ -61,7 +62,7 @@ while [ "$STOP" = 0 ]; do
   CHILD=$!; wait "$CHILD"; rc=$?; CHILD=""
   rm -f "$task.owner"
   if [ "$rc" = 0 ]; then mv "$task" "$Q/done/"; FAILS=0; else mv "$task" "$Q/failed/"; FAILS=$((FAILS + 1)); fi
-  if [ "$FAILS" -ge 2 ]; then echo "$(date -Is) paused by $SLURM_JOB_ID after $FAILS consecutive failures" > "$Q/PAUSED"; fi
+  if [ "$FAILS" -ge 2 ]; then echo "$(date -Is) paused by $OWNER after $FAILS consecutive failures" > "$Q/PAUSED"; fi
   echo "$(date +%T) end   $name rc=$rc"
 done
 echo "worker exiting $(date +%T)"
