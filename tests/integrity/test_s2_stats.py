@@ -10,10 +10,22 @@ from actionproof.integrity.sim.runtime import episode_record_proc, make_env_proc
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def test_s2_stats_end_to_end(tmp_path, monkeypatch):
+def _load():
     spec = importlib.util.spec_from_file_location("s2", ROOT / "scripts/s2_stats.py")
     s2 = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(s2)
+    return s2
+
+
+def test_sign_flip_floors():
+    s2 = _load()
+    assert s2.sign_flip([0.3, 0.2, 0.4]) == 1 / 8
+    assert s2.sign_flip([0.3, 0.2, 0.4], two_sided=True) == 2 / 8
+    assert s2.sign_flip([0.1] * 5, two_sided=True) == 2 / 32
+
+
+def test_s2_stats_end_to_end(tmp_path, monkeypatch):
+    s2 = _load()
     monkeypatch.setattr(s2, "ROOT", tmp_path)
     monkeypatch.setattr(s2, "B", 200)
     d = tmp_path / "results/eval/a12/conf"
@@ -33,4 +45,7 @@ def test_s2_stats_end_to_end(tmp_path, monkeypatch):
     pr = res["phantom_readback"]
     assert res["seeds"] == [0, 1, 2] and pr["same_sign_all_seeds"]
     assert pr["per_seed"]["0"]["diff"] > 0.5 and pr["sign_flip_p_one_sided"] == 1 / 8
+    assert pr["sign_flip_p_two_sided"] == 2 / 8
+    lo, hi = pr["hierarchical_ci95_descriptive"]
+    assert lo <= pr["per_seed"]["0"]["diff"] <= hi
     assert res["vsc"]["per_seed"]["0"]["mcnemar"]["rv_only"] > 0

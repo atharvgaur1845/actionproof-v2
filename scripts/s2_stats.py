@@ -16,7 +16,7 @@ import json
 import math
 import random
 from pathlib import Path
-from statistics import mean, pstdev
+from statistics import mean, stdev
 
 ROOT = Path(__file__).resolve().parents[1]
 B = 10_000
@@ -51,7 +51,8 @@ def mcnemar_exact(b: int, c: int) -> float:
 def per_seed(rv: dict, ra: dict, m: str, rng: random.Random) -> dict:
     tasks = sorted(set(rv) & set(ra))
     a, b = [rv[t] for t in tasks], [ra[t] for t in tasks]
-    diff = (metric(a, m) or 0) - (metric(b, m) or 0)
+    ma, mb = metric(a, m), metric(b, m)
+    diff = None if ma is None or mb is None else ma - mb  # a metric with no denominator is missing, never 0
     boots = []
     for _ in range(B):
         idx = [rng.randrange(len(tasks)) for _ in tasks]
@@ -72,9 +73,12 @@ def per_seed(rv: dict, ra: dict, m: str, rng: random.Random) -> dict:
             "mcnemar": {"rv_only": bb, "ra_only": cc, "p": mcnemar_exact(bb, cc)}}
 
 
-def sign_flip(ds: list[float]) -> float:
+def sign_flip(ds: list[float], two_sided: bool = False) -> float:
+    """Exact sign-flip test over seeds. Smallest attainable p: 1/2^k one-sided, 2/2^k two-sided (k seeds)."""
     obs = mean(ds)
     flips = [mean(s * d for s, d in zip(signs, ds)) for signs in itertools.product((1, -1), repeat=len(ds))]
+    if two_sided:
+        return sum(abs(f) >= abs(obs) - 1e-12 for f in flips) / len(flips)
     return sum(f >= obs - 1e-12 for f in flips) / len(flips)
 
 
@@ -82,11 +86,13 @@ def hierarchical(pairs: list[tuple[dict, dict]], m: str, rng: random.Random) -> 
     out = []
     for _ in range(B):
         seeds = [rng.randrange(len(pairs)) for _ in pairs]
+        # tasks are crossed with seeds (every seed is evaluated on the same tasks), so one task draw per replicate is
+        # shared by all resampled seeds; independent draws per seed would shrink the task variance by 1/S
+        common = sorted(set.intersection(*(set(rv) & set(ra) for rv, ra in pairs)))
+        idx = [common[rng.randrange(len(common))] for _ in common]
         ds = []
         for s in seeds:
             rv, ra = pairs[s]
-            tasks = sorted(set(rv) & set(ra))
-            idx = [tasks[rng.randrange(len(tasks))] for _ in tasks]
             x, y = metric([rv[t] for t in idx], m), metric([ra[t] for t in idx], m)
             if x is not None and y is not None:
                 ds.append(x - y)
@@ -113,17 +119,18 @@ def main() -> None:
     raw_p = {}
     for m in ("phantom_readback", "vsc"):
         ps = [per_seed(rv, ra, m, rng) for rv, ra in pairs]
-        ds = [p["diff"] for p in ps]
+        ds = [p["diff"] for p in ps if p["diff"] is not None]
         res[m] = {"per_seed": dict(zip(map(str, seeds), ps)),
-                  "between_seed_sd": pstdev(ds) if len(ds) > 1 else None,
+                  "between_seed_sd": stdev(ds) if len(ds) > 1 else None,
                   "same_sign_all_seeds": bool(ds) and (all(d > 0 for d in ds) or all(d < 0 for d in ds)),
                   "sign_flip_p_one_sided": sign_flip(ds) if ds else None,
+                  "sign_flip_p_two_sided": sign_flip(ds, two_sided=True) if ds else None,
                   "hierarchical_ci95_descriptive": hierarchical(pairs, m, rng) if pairs else None}
         raw_p[m] = res[m]["sign_flip_p_one_sided"]
     order = sorted((p, m) for m, p in raw_p.items() if p is not None)
     holm = {}
     for i, (p, m) in enumerate(order):
-        holm[m] = min(1.0, max([p * (len(order) - j) for j, (p2, _) in enumerate(order[: i + 1])] + [p]))
+        holm[m] = min(1.0, max(p2 * (len(order) - j) for j, (p2, _) in enumerate(order[: i + 1])))
     res["holm_sign_flip"] = holm
     out = ROOT / a.out
     out.parent.mkdir(parents=True, exist_ok=True)
