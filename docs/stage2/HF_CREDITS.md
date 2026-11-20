@@ -24,3 +24,5 @@ Starting balance: **not yet confirmed** (the CLI cannot read billing; the user c
 | 2026-11-20 11:56 | jobs 6affe7fdefaf5e14f4b2c766 (701 relaunch), 6affe8164fdc5ab3c55af50b (801 relaunch), 6affe8294fdc5ab3c55af515 (802 relaunch) | l40sx1 ×3 | first attempts stopped at their guards in ~2 min (bundle lacked A14 files; guard checked absent adapters) | ~5 | first attempts ≈ 0.2 | |
 | 2026-11-20 12:11 | job 6affeb804fdc5ab3c55af68e (590_a12_warm_dev) | l40sx1 | warm start on proc_dev, reference for the registered H3 test | ~0.2 | ~4 min ≈ 0.15 | |
 | 2026-11-20 12:29 | jobs 6affefefefaf5e14f4b2cb84 (803), 6afff00befaf5e14f4b2cbe4 (804) | l40sx1 ×2 | A12 confirmatory, seeds 3 and 4 | ~1 | | |
+| 2026-11-20 18:00 | cap change | | user decision: the unused $40 inference-endpoint reserve moves to the jobs cap (jobs cap $190; hard stop $195 unchanged) for K1 with 3 seeds per condition | | | |
+| 2026-11-20 18:08 | jobs 6b003f404fdc5ab3c55b6046 (631), 6b003f494fdc5ab3c55b605d (632), 6b003f534fdc5ab3c55b6081 (634), 6b003f5befaf5e14f4b3405c (635) | h200 ×4 | K1 R_A seeds 1–2 on both pools; seeds 0 (630, 633) run on the Slurm H200 worker 460633 at no HF cost | ~38 | | |
