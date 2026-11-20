@@ -1,5 +1,5 @@
 # minutes: 30
-# Exploratory before/after reference (DECISIONS 2026-11-20 13:25): the warm start once on each confirmatory split,
+# Exploratory before/after reference (DECISIONS 2026-11-20 13:09): the warm start once on each confirmatory split,
 # after every A12 model was frozen and evaluated. Not part of any registered test.
 set -uo pipefail
 source slurm/claim.sh || exit 0
