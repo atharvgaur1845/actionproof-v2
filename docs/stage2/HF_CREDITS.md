@@ -29,3 +29,5 @@ Starting balance: **not yet confirmed** (the CLI cannot read billing; the user c
 | 2026-11-21 00:45 | first K1 HF attempts (6b003f40…, 6b003f49…, 6b003f53…, 6b003f5b…) | h200 ×4 | failed in minutes (D-K1-1) | | ≈ 1 total | |
 | 2026-11-21 00:45 | jobs 6b009c584fdc5ab3c55bcc43 (632), 6b009c64efaf5e14f4b3ba24 (634), 6b009c70efaf5e14f4b3ba30 (635) | h200 ×3 | K1 relaunch with the warm-start input; 631 moved to Slurm | ~29 | | |
 | 2026-11-21 00:46 | job 6b009c7f4fdc5ab3c55bcc86 (709) | l40sx1 | A15/A16 pilot (dev split only) | ~0.5 | | |
+| 2026-11-21 01:01 | job 6b00a0194fdc5ab3c55bd114 (709 relaunch) | h200 | A15/A16 pilot; the L40S attempt (6b009c7f…) was cancelled while still scheduling | ~2 | | |
+| 2026-11-21 01:02 | job 6b00a0654fdc5ab3c55bd161 (729) | h200 | A17 GPU pilot (12 pilot tasks per domain, two models) | ~2 | | |
