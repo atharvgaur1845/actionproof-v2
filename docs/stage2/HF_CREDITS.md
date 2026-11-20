@@ -16,4 +16,4 @@ Starting balance: **not yet confirmed** (the CLI cannot read billing; the user c
 | 2026-11-20 07:06 | job 6affa418efaf5e14f4b25e9e (503, 504, 505) | l40sx1 | A11 batch B relaunch, same fix | ~9 | | |
 | 2026-11-20 08:39 | jobs 6affb9d6efaf5e14f4b28712 (612 R_V s1), 6affb9e24fdc5ab3c55abc04 (613 R_A s1), 6affb9eeefaf5e14f4b28736 (610 R_V s2), 6affb9fa4fdc5ab3c55abc4c (611 R_A s2) | h200 ×4 | A12 seeds 1–2 under addendum 2; no Slurm GPU since Nov 19 | ~40 | | |
 | 2026-11-20 08:40 | note | | seed 0 (614, 615) ran ~1 h 50 min each including dev evaluations; A11 batch A (6affa403) ran ~45 min | | 614/615 ≈ 9 each; 6affa403 ≈ 1.5 | |
-| 2026-11-20 08:57 | job (800_a12_conf_s0) | l40sx1 | A12 seed 0 confirmatory evaluation (2 models × 3 splits, once) | ~3 | | |
+| 2026-11-20 08:57 | job 6affbde9efaf5e14f4b28f54 (800_a12_conf_s0) | l40sx1 | A12 seed 0 confirmatory evaluation (2 models × 3 splits, once) | ~3 | ~11 min ≈ 0.35 | |
