@@ -1,5 +1,5 @@
 # minutes: 330
-# after: 600_a12_warmstart
+# after: 601_a12b_regate
 # A12 GRPO proc_rv seed 2 (PREREGISTRATION_A12 §5).
 set -uo pipefail
 source slurm/claim.sh || exit 0

@@ -13,7 +13,7 @@ mkdir -p queue/claims .cache/hfjob
 mkdir queue/claims/$TASK 2>/dev/null || { echo "already claimed: $(cat queue/claims/$TASK/owner 2>/dev/null)"; exit 1; }
 trap 'rm -rf queue/claims/$TASK; echo "launch failed; claim released"' ERR
 tar czf .cache/hfjob/code_$TASK.tar.gz actionproof scripts slurm data/bench/proc data/bench/c2 pyproject.toml \
-  PREREGISTRATION_A12.md docs/stage2/VERIFIER_SPEC.md results/a12_hashes.json results/a12 tests/golden \
+  PREREGISTRATION_A12.md PREREGISTRATION_A12_ADDENDUM1.md docs/stage2/VERIFIER_SPEC.md results/a12_hashes.json results/a12b_hashes.json results/a12 $( [ -d results/a12b ] && echo results/a12b ) tests/golden \
   $( [ -f PREREGISTRATION_A11.md ] && echo PREREGISTRATION_A11.md ) $( [ -f results/a11_hashes.json ] && echo results/a11_hashes.json )
 .venv/bin/hf upload $REPO .cache/hfjob/code_$TASK.tar.gz bundle/code_$TASK.tar.gz --repo-type dataset --quiet
 .venv/bin/hf upload $REPO slurm/hfjob_run.sh bundle/hfjob_run.sh --repo-type dataset --quiet
