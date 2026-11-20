@@ -54,7 +54,12 @@ def main() -> None:
     ap.add_argument("--split", required=True, choices=SPLITS)
     ap.add_argument("--model", default="runs/rft_proc/merged")
     a = ap.parse_args()
-    frozen = json.loads((ROOT / "results/a12/frozen_models.json").read_text())[a.tag]
+    frozen = {}
+    for name in ("frozen_models.json", "frozen_models_later.json"):  # the second holds models frozen after A14's freeze
+        f = ROOT / "results/a12" / name
+        if f.exists():
+            frozen.update(json.loads(f.read_text()))
+    frozen = frozen[a.tag]
     adapter = ROOT / frozen["adapter"]
     h = hashlib.sha256((adapter / "adapter_model.safetensors").read_bytes()).hexdigest()
     if h != frozen["sha256"]:

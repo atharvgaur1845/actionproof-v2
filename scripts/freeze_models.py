@@ -13,7 +13,16 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-REF = ROOT / "results/a12/frozen_models.json"
+REF = ROOT / "results/a12/frozen_models.json"  # frozen as part of the A14 freeze (results/a14b_hashes.json)
+LATER = ROOT / "results/a12/frozen_models_later.json"  # models frozen after the A14 freeze (seeds 3-4)
+
+
+def load_all() -> dict:
+    out = {}
+    for p in (REF, LATER):
+        if p.exists():
+            out.update(json.loads(p.read_text()))
+    return out
 PROTOCOL = {0: "original protocol; R_A stop rule fired, continued as deviation D-A12-1"}
 
 
@@ -26,7 +35,7 @@ def main() -> None:
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--tags", default=None, help="comma-separated: check only these (a job holds only its own adapters)")
     a = ap.parse_args()
-    frozen = json.loads(REF.read_text()) if REF.exists() else {}
+    frozen = load_all()
     if a.check:
         tags = a.tags.split(",") if a.tags else list(frozen)
         missing = [k for k in tags if k not in frozen]
@@ -34,6 +43,7 @@ def main() -> None:
                          sha(ROOT / frozen[k]["adapter"] / "adapter_model.safetensors") != frozen[k]["sha256"]]
         print("OK: frozen models match" if not bad else "MISMATCH: " + ", ".join(bad))
         sys.exit(1 if bad else 0)
+    later = json.loads(LATER.read_text()) if LATER.exists() else {}
     for run in sorted((ROOT / "runs").glob("a12_proc_r?_s*")):
         tag = run.name
         if tag in frozen or not (run / "final/adapter_model.safetensors").exists():
@@ -43,11 +53,11 @@ def main() -> None:
         if not c200.exists() or sha(c200) != h:
             sys.exit(f"{tag}: final differs from checkpoint-200 or checkpoint-200 missing; not frozen")
         seed = int(tag.rsplit("_s", 1)[1])
-        frozen[tag] = {"adapter": f"runs/{tag}/final", "sha256": h, "step": 200,
+        frozen[tag] = later[tag] = {"adapter": f"runs/{tag}/final", "sha256": h, "step": 200,
                        "protocol": PROTOCOL.get(seed, "addendum 2"),
                        "frozen": datetime.datetime.now().isoformat(timespec="minutes")}
         print("frozen", tag, h)
-    REF.write_text(json.dumps(frozen, indent=2))
+    LATER.write_text(json.dumps(later, indent=2))  # REF is never rewritten after the A14 freeze
 
 
 if __name__ == "__main__":
