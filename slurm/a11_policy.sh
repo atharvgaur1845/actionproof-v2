@@ -17,6 +17,6 @@ for sp in test_iid_c2 v2_stress_c2; do
       --mode $mode --split $sp --prompt neutral --max-turns 12 --seed 0 $EXTRA --out $o \
       > logs/a11_${TAG}_${mode}_${sp}.full.log 2>&1
     python3 -c "import json;d=json.load(open('${o%.jsonl}.summary.json'));print('$TAG $mode $sp', 'system_vsc', round(d['system']['vsc'],3), 'agent_vsc', round(d['agent']['vsc'],3), 'false_final', round(d['system']['false_finalization'],3))" \
-      || echo "$TAG $mode $sp FAILED (see logs/a11_${TAG}_${mode}_${sp}.full.log)"
+      || { echo "$TAG $mode $sp FAILED (see logs/a11_${TAG}_${mode}_${sp}.full.log)"; exit 1; }
   done
 done
