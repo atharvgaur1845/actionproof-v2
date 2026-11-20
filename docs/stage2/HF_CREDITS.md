@@ -7,6 +7,8 @@ Starting balance: **not yet confirmed** (the CLI cannot read billing; the user c
 | When (IST) | Job or endpoint id | Hardware | Reason | Est. $ | Actual $ | Cumulative $ |
 |---|---|---|---|---|---|---|
 | 2026-11-20 02:30 | job 6aff6374efaf5e14f4b20eed (task 600_a12_warmstart) | h200 | A12 warm start + gate; no Slurm GPU started (workers pending since 01:55) and every seed depends on it | ~5–8 | 16.5 min ≈ 1.4 | 1.4 |
-| 2026-11-20 06:39 | job 6aff9ddaefaf5e14f4b254de (601_a12b_regate) | h200 | A12 addendum 1 re-gate (8 samples per task) | ~2 | | |
+| 2026-11-20 06:39 | job 6aff9ddaefaf5e14f4b254de (601_a12b_regate) | h200 | A12 addendum 1 re-gate (8 samples per task) | ~2 | ~6 min ≈ 0.5 | 1.9 |
+| 2026-11-20 06:46 | job 6aff9f52efaf5e14f4b256f4 (614 R_V seed 0) | h200 | A12 GRPO seed 0; all Slurm workers pending > 4.5 h (user rule) | ~20 | | |
+| 2026-11-20 06:46 | job 6aff9f5fefaf5e14f4b256fe (615 R_A seed 0) | h200 | same | ~20 | | |
 | 2026-11-20 06:41 | job 6aff9e504fdc5ab3c55a8f47 (500, 501, 502) | l40sx1 | A11 H1 factorial batch A; Slurm pending > 4.5 h (user rule) | ~9 | | |
 | 2026-11-20 06:42 | job 6aff9e704fdc5ab3c55a8f73 (503, 504, 505) | l40sx1 | A11 H1 factorial batch B; same reason | ~9 | | |
