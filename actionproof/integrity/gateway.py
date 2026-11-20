@@ -185,7 +185,11 @@ class ProcGateway:
             verdict = self._recover(step, args, verdict)
             if verdict == "held":
                 self.verified_obs[step] = obs if obs.get("status") == "ok" else {"status": "ok", "verified": True}
-        return self._inform(step, obs) if self.mode == "enforce_inform" else obs
+        if self.mode == "enforce_inform":  # what the agent actually sees replaces the raw acknowledgement
+            shown = self._inform(step, obs)
+            self.agent_view[-1] = {**self.agent_view[-1], "obs": copy.deepcopy(shown), "raw_ack": self.agent_view[-1]["obs"]}
+            return shown
+        return obs
 
     def _verify(self, step: str, op: str | None, dispatch_v: int | None) -> str:
         ev = self.probe.read(step, self.contract.expected)
