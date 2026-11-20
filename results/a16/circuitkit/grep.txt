@@ -1,0 +1,80 @@
+/tmp/ck/CHANGELOG.md:36:  scores JSON is unchanged. EAP family at node level only; other algorithms and neuron level reject the key (neuron
+/tmp/ck/CHANGELOG.md:43:  `ta`, `ar` and `sw`. EAP family only. `data_params["chat_template_kwargs"]` goes to the
+/tmp/ck/CHANGELOG.md:58:  read are not checked (`ig_steps` is ignored by `eap`), and an unknown pillar name now fails before
+/tmp/ck/CHANGELOG.md:65:- `CohereLabs/aya-expanse-32b` registered alongside Aya Expanse 8B through the
+/tmp/ck/CHANGELOG.md:66:  same `cohere1` TransformerLens compatibility port (`_tl_compat/cohere.py`) —
+/tmp/ck/CHANGELOG.md:95:  of warning and continuing with the Gemma-4 / Sarvam-MoE / Cohere patches absent.
+/tmp/ck/CHANGELOG.md:97:  is not supported. Cohere config conversion is maintained in `_tl_compat/cohere.py`,
+/tmp/ck/CHANGELOG.md:98:  and Cohere/SmolLM3/Gemma-4 converters preserve the HF context limit because TL 3.8
+/tmp/ck/CHANGELOG.md:107:- The Cohere config converter is kept only in `_tl_compat/cohere.py`; the duplicate
+/tmp/ck/CHANGELOG.md:120:- **Defaults.** `discovery.ig_steps` now defaults to 3 (it was 5, and the EAP-IG backends
+/tmp/ck/CHANGELOG.md:121:  fell back to 30 when it was unset). It only affects the EAP-IG family, and the EAP-IG paper
+/tmp/ck/CHANGELOG.md:128:  `full_faithfulness_eval: true`. EAP-GP reads the same `ig_steps` key but keeps its paper
+/tmp/ck/CHANGELOG.md:136:  measured connections. Docstrings no longer imply that edges are attributions. Real edge attributions are not part
+/tmp/ck/CHANGELOG.md:156:- **Node-level EAP scores MLPs with the gradient at their own output** (#43). `make_hooks_and_matrices` in
+/tmp/ck/CHANGELOG.md:157:  `backends/eap/attribute_node.py` multiplied the MLP's activation difference at `hook_mlp_out` by the gradient at
+/tmp/ck/CHANGELOG.md:159:  attention heads and the input node, and as in the EAP-IG reference implementation. MLP scores change at node and
+/tmp/ck/CHANGELOG.md:160:  neuron level for `eap`, `eap-ig`, `eap-ig-activations`, `eap-clean-corrupted`, `relp`, `eap-gp`, `atp-gd` and
+/tmp/ck/CHANGELOG.md:161:  `peap` (neuron level; its node-level summary already used `hook_mlp_out`), so MLP rankings and the circuits built
+/tmp/ck/CHANGELOG.md:175:  `NormalizedTaskSpec(ds, templated=True)` marks prompts that already carry the model's chat template; the EAP,
+/tmp/ck/CHANGELOG.md:176:  CD-T and IBCircuit paths then tokenize without prepending BOS (the EAP backend already supported this through the
+/tmp/ck/CHANGELOG.md:178:  cached EAP and CD-T CSVs were named `{name}_{n_records}_...`, so data edited in place, or another model's token ids,
+/tmp/ck/CHANGELOG.md:182:- **`SafetyPromptAdapter` defaults to pairs EAP can use** (#46). The adapter's default `pairing_mode` was
+/tmp/ck/CHANGELOG.md:184:  record for EAP. That default is what `data: {type: auto}` uses on a harm-prompt file (the adapter fills the corrupt
+/tmp/ck/CHANGELOG.md:192:  Qwen3-0.6B and a 3.35B Tiny Aya-architecture model, patch on vs off, in fp32 and bf16: peak memory 11-37 % lower
+/tmp/ck/CHANGELOG.md:193:  (24-37 % on the Qwen and Cohere-architecture models); node scores correlate at 1.000 in fp32 and 0.987-0.999 in bf16
+/tmp/ck/CHANGELOG.md:219:- **EAP tokenization masks left-padded batches correctly**. `tokenize_plus` padded on `padding_side`
+/tmp/ck/CHANGELOG.md:227:- **`NormalizedTaskSpec` EAP loader honours `n_examples`**. The EAP / ACDC branch never read
+/tmp/ck/CHANGELOG.md:228:  `num_examples` (only the IBCircuit branch did), so every record was used. The EAP CSV is now capped
+/tmp/ck/CHANGELOG.md:255:  re-runs map an algorithm that is not in `_ALGO_METHOD_MAP` (`ibcircuit`, `acdc`) to plain EAP, so
+/tmp/ck/CHANGELOG.md:256:  its primary scores were compared with EAP scores. R1 now leaves the primary vector out in both
+/tmp/ck/CHANGELOG.md:279:  into the scores side-car, as the EAP and EAP-IG neuron branches already do. `neurons_scores` is unchanged.
+/tmp/ck/CHANGELOG.md:280:  The EAP, EAP-IG and IBCircuit neuron branches also write the task and model name into that side-car, and
+/tmp/ck/CHANGELOG.md:282:  `_scores.json`. Without this the graph of a neuron-level run was titled "Circuit (unknown / eap-ig)", whatever
+/tmp/ck/CHANGELOG.md:284:  with no algorithm set now shows "unknown" instead of `eap-ig`.
+/tmp/ck/CHANGELOG.md:285:- **Neuron-level circuit graphs mark only fully pruned components as pruned** (EAP, EAP-IG and IBCircuit).
+/tmp/ck/CHANGELOG.md:309:  `neuron_scores` (singular) as IBCircuit and sent the plural key to the EAP path, so every
+/tmp/ck/CHANGELOG.md:312:  value (a dict is IBCircuit, a 2-D tensor is EAP), and still reads the old singular key. IBCircuit
+/tmp/ck/CHANGELOG.md:344:- **`ioi` and `double_io` scored the wrong token on the paired-text path** (EAP family, CD-T, and
+/tmp/ck/CHANGELOG.md:363:    | docs quickstart (`eap-ig`, 30% pruned, default data): patching score | 0.9465 | 0.9432 |
+/tmp/ck/CHANGELOG.md:365:    | `ioi`, `eap`, 30% pruned: patching score | 0.9764 | 0.9309 |
+/tmp/ck/CHANGELOG.md:369:    | `ioi`, `eap`, 80% pruned: patching score | 1.0000 (raw 1.0419) | 0.8341 |
+/tmp/ck/CHANGELOG.md:377:  EAP family) and the stored outputs of notebooks 01, 02, 03 and 06 were produced before the fix
+/tmp/ck/CHANGELOG.md:387:- The EAP qkv activation-memory preflight now estimates activation storage from
+/tmp/ck/CHANGELOG.md:417:- The edge-level `attribute()` passed `steps=None` to the EAP-IG scorers when `ig_steps` was
+/tmp/ck/CHANGELOG.md:463:- The IOI EAP-IG visualization pages (`docs/assets/ioi_eap-ig.html` and its
+/tmp/ck/CHANGELOG.md:501:  libraries. The TransformerLens patch series (Gemma-4, Sarvam-MoE, Cohere) moved to
+/tmp/ck/CHANGELOG.md:513:  weights (TransformerLens -> HF conversion for GPT-2, Llama, Mistral, Qwen2, Cohere,
+/tmp/ck/CHANGELOG.md:514:  Cohere2), then apply the pruning mask. ROME / MEMIT edits and weight steering used
+/tmp/ck/CHANGELOG.md:547:- `arch_registry`: the `cohere` family's name lists Aya Expanse and Tiny Aya.
+/tmp/ck/CHANGELOG.md:555:- `circuitkit.backends._tl_compat` (Tiny Aya, Command R7B, Aya Expanse, SmolLM3)
+/tmp/ck/CHANGELOG.md:559:- TransformerLens patch `0006-cohere`: `HookedTransformer` support for Aya Expanse
+/tmp/ck/CHANGELOG.md:560:  (`CohereForCausalLM`) and Tiny Aya (`Cohere2ForCausalLM`), including local
+/tmp/ck/CHANGELOG.md:564:  `config.json`. Vision-language checkpoints (`aya_vision`, `cohere_compass`) are
+/tmp/ck/CHANGELOG.md:605:- **Interactive circuit visualization sample.** A rendered EAP-IG circuit for
+/tmp/ck/CHANGELOG.md:606:  GPT-2 on IOI ships at `examples/visualization/ioi_eap-ig.html` and is embedded
+/tmp/ck/CHANGELOG.md:638:- **Per-batch buffers and hook closures were never freed.** The EAP-family
+/tmp/ck/CHANGELOG.md:639:  scorers (`get_scores_eap`, `get_scores_eap_ig`, `get_scores_ig_activations`,
+/tmp/ck/CHANGELOG.md:648:  The EAP scorers additionally keep only the embedding weights differentiable
+/tmp/ck/CHANGELOG.md:697:- The MMLU EAP dataloader now honors `discovery.data_params.num_examples`
+/tmp/ck/CHANGELOG.md:707:Extends the TransformerLens compatibility port introduced for Tiny Aya
+/tmp/ck/CHANGELOG.md:708:(`circuitkit.backends._tl_compat`, `cohere2`) into a shared multi-architecture
+/tmp/ck/CHANGELOG.md:712:- **Command R7B** (`CohereLabs/c4ai-command-r7b-12-2024`, `cohere2`) — same
+/tmp/ck/CHANGELOG.md:713:  architecture as Tiny Aya; new is a genuine, non-no-op `logit_scale=0.25`
+/tmp/ck/CHANGELOG.md:716:- **Aya Expanse 8B** (`CohereLabs/aya-expanse-8b`, `cohere1`/`CohereForCausalLM`) —
+/tmp/ck/CHANGELOG.md:717:  a simplification of cohere2: no sliding window, rotary applies to every
+/tmp/ck/CHANGELOG.md:726:5 of the 6 stable algorithms (`eap`, `eap-ig`, `eap-gp`, `ibcircuit`, `cdt` —
+/tmp/ck/CHANGELOG.md:735:covers **Tiny Aya**, the pre-existing baseline model this work extends, for
+/tmp/ck/CHANGELOG.md:739:SmolLM3), cross-linked from `docs/advanced/tiny-aya.md`; updated
+/tmp/ck/CHANGELOG.md:740:`docs/advanced/architecture-registry.md` for the expanded `cohere` family
+/tmp/ck/CHANGELOG.md:806:- `src/circuitkit/tasks/builtins/ioi_legacy.py`: `_build_eap_dataloader` and
+/tmp/ck/CHANGELOG.md:874:  message (suggests EAP-IG as alternative) if estimated usage exceeds 90% of
+/tmp/ck/CHANGELOG.md:889:  to model setup so Pillar 3 (stability re-discovery via EAP-IG) no longer crashes.
+/tmp/ck/CHANGELOG.md:913:  EAP activation_difference is non-zero. All 5 algos + custom IOI now WORKING on Llama.
+/tmp/ck/CHANGELOG.md:928:  (same-prompt pairs produce zero EAP activation difference).
+/tmp/ck/CHANGELOG.md:977:  `SUPPORTED_ALGORITHMS` for method validation; `eap_ig` normalized to `eap-ig`.
+/tmp/ck/CHANGELOG.md:994:#### PEAP bfloat16 fix
+/tmp/ck/CHANGELOG.md:995:- `backends/eap/attribute_node.py`: Per-position grad * act_diff accumulation now
+/tmp/ck/CHANGELOG.md:1010:- `validation/algos/12_all_algos_llama.py`: Runs all 5 key algorithms (EAP, EAP-IG,
+/tmp/ck/CHANGELOG.md:1011:  AtP*, PEAP, RelP) end-to-end on `meta-llama/Llama-3.2-1B` with IOI task AND custom
+/tmp/ck/CHANGELOG.md:1133:- **bf16 / GQA correctness across the stack.** Discovery backends (PEAP, CD-T, ACDC)
