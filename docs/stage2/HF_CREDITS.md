@@ -31,3 +31,10 @@ Starting balance: **not yet confirmed** (the CLI cannot read billing; the user c
 | 2026-11-21 00:46 | job 6b009c7f4fdc5ab3c55bcc86 (709) | l40sx1 | A15/A16 pilot (dev split only) | ~0.5 | | |
 | 2026-11-21 01:01 | job 6b00a0194fdc5ab3c55bd114 (709 relaunch) | h200 | A15/A16 pilot; the L40S attempt (6b009c7f…) was cancelled while still scheduling | ~2 | | |
 | 2026-11-21 01:02 | job 6b00a0654fdc5ab3c55bd161 (729) | h200 | A17 GPU pilot (12 pilot tasks per domain, two models) | ~2 | | |
+| 2026-11-21 01:05 | job 6b00a0f4efaf5e14f4b3c059 (720) | h200 | CircuitKIT smoke test (install, import, layout) | ~1 | | |
+| 2026-11-21 01:12 | job 6b00a2b14fdc5ab3c55bd5e6 (730) | h200 | A17 registered run part 1 (scripted, warm start, R_V s0–4; both domains, main and forks); part 2 (731, R_A) queued on Slurm | ~13 | | |
+| 2026-11-21 01:14 | jobs 6b00a31e4fdc5ab3c55bd6e6 (710), 6b00a345efaf5e14f4b3c5f5 (711) | h200 ×2 | A15 registered run (R_V+warm, R_A) | ~10 | | |
+| 2026-11-21 01:17 | jobs 6b00a3d1efaf5e14f4b3c663 (712), 6b00a50e4fdc5ab3c55bd8c6 (713) | h200 ×2 | A16 trajectory (R_V, R_A; 13 checkpoints each) | ~10 | | |
+| 2026-11-21 01:24 | job 6b00a58defaf5e14f4b3c82b (714) | h200 | A16 layer choice on dev + causal tests R_V s0–2; 715 (remaining models) queued on Slurm | ~8 | | |
+| 2026-11-21 01:25 | job 6b00a5c84fdc5ab3c55bd978 (721) | h200 | A16 exploratory CircuitKIT EAP-IG | ~2 | | |
+| 2026-11-21 01:26 | projection | | ≈ $110 before tonight + ≈ $77 tonight (K1 ≈ $30, pilots ≈ $4, A15 ≈ $10, A16 ≈ $20, A17 ≈ $13) ≈ **$187**, under the $195 hard stop. R_A halves of A16 causal (715) and A17 (731) run on Slurm at no HF cost. No further HF launches without a fresh estimate. | | | |
