@@ -9,12 +9,17 @@ export HF_HOME=/scratch/pabitra/.cache/huggingface HF_HUB_OFFLINE=0
 rm -rf .cache/hfjob/dl_$TASK
 .venv/bin/hf download $REPO --repo-type dataset --include "outputs/$TASK/*" --local-dir .cache/hfjob/dl_$TASK --quiet
 RC=$(cat .cache/hfjob/dl_$TASK/outputs/$TASK/RC 2>/dev/null || echo missing)
-rsync -a --exclude RC .cache/hfjob/dl_$TASK/outputs/$TASK/ ./
+rsync -a --exclude 'RC*' .cache/hfjob/dl_$TASK/outputs/$TASK/ ./
 echo "fetched $TASK rc=$RC"
+for f in .cache/hfjob/dl_$TASK/outputs/$TASK/RC_*; do  # per-task exit codes of a multi-task job
+  [ -e "$f" ] || continue; t=${f##*/RC_}; r=$(cat $f)
+  if [ "$r" = 0 ]; then date -Is > queue/claims/$t/done; cp slurm/tasks/$t.sh queue/h200/done/$t.sh; rm -f queue/*/pending/$t.sh; fi
+  echo "  $t rc=$r"
+done
 if [ "$RC" = 0 ]; then
   date -Is > queue/claims/$TASK/done
   cp slurm/tasks/$TASK.sh queue/h200/done/$TASK.sh
   rm -f queue/*/pending/$TASK.sh
 else
-  echo "task did not finish on HF (rc=$RC); claim kept until reviewed"
+  echo "job rc=$RC; claims of tasks without rc=0 kept until reviewed"
 fi

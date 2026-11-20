@@ -6,6 +6,10 @@
 set -uo pipefail
 TAG=$1; MODEL=$2; AD=${3:-}; EXTRA=${4:-}
 mkdir -p results/a11/eval logs
+# On HF Jobs the merged Stage-1 warm start is rebuilt from its adapter (same merge as on the cluster).
+if [ "$MODEL" = runs/rft_tiny_v2/merged ] && [ ! -f runs/rft_tiny_v2/merged/config.json ]; then
+  .venv/bin/python -m actionproof.train.merge runs/rft_tiny_v2/final CohereLabs/tiny-aya-global > logs/a11_merge.log 2>&1 || exit 1
+fi
 for sp in test_iid_c2 v2_stress_c2; do
   for mode in passthrough enforce enforce_inform; do
     o=results/a11/eval/${TAG}__${mode}__${sp}.jsonl
