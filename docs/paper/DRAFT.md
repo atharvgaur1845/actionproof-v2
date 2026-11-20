@@ -48,12 +48,21 @@ The two are different properties. An agent can learn to issue a read after every
 
 **Protocol.** Pre-registrations A12 (+ addenda 1, 2) and A14, committed before the runs they cover; confirmatory splits evaluated once per frozen model (sha256), logged.
 
-## 4. Acquisition (A12) [PENDING results/s2/a12_summary.json]
+## 4. Acquisition (A12)
 
-- Per-seed phantom read-back on `proc_conf` (primary), with warm start; VSC; protocol label per seed (seed 0: stop rule fired for R_A, D-A12-1).
-- Task-level and per-step sensitivity analyses.
-- Reward-signal analysis by class (Figure 2): where each reward's informative groups come from, and the read-gap sign.
-- H3 as registered.
+**Primary result (registered H2).** On the untouched confirmatory split (`proc_conf`, 300 tasks; each frozen step-200 model evaluated once), phantom read-back is 1.00 under R_V and 0.00 under R_A in each of seeds 0, 1 and 2 (Table 2). At the task level, R_V reads back after the phantom write in all 153 tasks that contain one and R_A in none, in every seed, so the result does not depend on how many phantom attempts each arm makes. Verified completion rises by +0.313, +0.323 and +0.313. The direction is the same in every seed; with three seeds the exact sign-flip test cannot go below 1/8 (one-sided), and we claim no seed-level significance. Seeds 3 and 4 [PENDING results/s2/a12_summary.json, 5 seeds].
+
+**Read-back is not selective.** R_V reads back after real successes almost as often as after phantom ones (observation equivalence): it has learned to read after every write, which is the only policy available when the acknowledgements are identical. R_A has stopped reading altogether, after phantom and real writes alike.
+
+**Selection, not invention.** Decoded greedily, the warm start never reads back on the development split (0/96 phantom writes; VSC 0.495), although sampled at temperature 1 it reads back after 35% of phantom writes. GRPO under R_V turns a behaviour present only in the sampled repertoire into the greedy default; under R_A the greedy policy stays where the warm start was, and in sampled training rollouts reading falls from about 0.35 to about 0.05 within 50 steps.
+
+**Where each reward provides gradient (exploratory; Figure 2).** Under R_V, phantom-write tasks supply 54–64% of the informative GRPO groups in every seed, and within them samples that read back earn 0.91–0.97 more reward. Under R_A, phantom tasks supply 3–19%; 68–92% come from lost-acknowledgement and never-commit tasks, where samples that read back earn 0.88–1.00 less, because acting on the read (stopping, reporting failure, or not re-calling) costs a success acknowledgement. R_A's suppression of reading is therefore driven mostly by classes where evidence changes the agent's next action, not by the phantom writes it cannot see.
+
+**The registered mechanism test (H3) fails.** Sign agreement with the step-0 predictions is 0.6 for R_V and 0 for R_A, below the registered 0.8, so the registered composite claim C1 is not made. The test compares greedy read-back at step 200 with the greedy warm start, whose read-back is already zero, so a decrease under R_A cannot be observed; and R_V raises read-back in every class, including two predicted to fall, because it cannot tell the classes apart before reading. We report the test as registered.
+
+**Reading is not recovery (proc_stress).** On duplicate deliveries, a fault never seen in training, R_V reads the payments after every write, sees two payments, and leaves the duplicate in place as often as R_A (duplicate rate 0.58 in both arms, every seed).
+
+**Protocol notes.** Seed 0's R_A run fired the registered stop rule (zero-variance groups 0.864 > 0.80 at steps 40–50, reward saturated at 0.97) and was continued as a logged deviation; seeds 1–4 run under an addendum registered before they started, in which a saturated arm continues. R_V seed 2 crashed at step 199 (tokenizer error) and was resumed from its step-175 checkpoint.
 
 ## 5. Evidence-conditioned control (A14) [PENDING results/a14/a14_summary.json]
 
