@@ -1,0 +1,9 @@
+{
+  "rule": "PREREGISTRATION_A12 §5: stop if more than 80% of groups have zero reward variance averaged over steps 40-50",
+  "checked": "2026-11-20T07:31+05:30",
+  "source": "HF dataset atharvgaur18/actionproof-jobs outputs/<task>/logs/*.full.log, key frac_reward_zero_std",
+  "614_a12_proc_rv_s0": {"steps_40_50": [0.5, 0.5, 0.75, 0.5, 0.5, 0.5, 0.75, 0.25, 0.75, 0.25, 0.75], "mean": 0.5455, "fired": false},
+  "615_a12_proc_ra_s0": {"steps_40_50": [1.0, 1.0, 1.0, 0.5, 0.75, 1.0, 0.75, 1.0, 1.0, 1.0, 0.5], "mean": 0.8636, "fired": true,
+    "reward_mean_steps_35_46": "0.91-1.00",
+    "action": "continued to step 200 as a logged deviation (user decision 2026-11-20 07:33); every R_A seed-0 result is labelled as a deviation"}
+}
