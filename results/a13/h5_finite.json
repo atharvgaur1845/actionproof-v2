@@ -1,0 +1,153 @@
+{
+  "deviation": "D-A13-1: the registered Fisher test (p = 9.0e-28) treats repeated deterministic rows as independent samples and is not used; registered output kept in results/a13/h5_coverage.json",
+  "G-rep": {
+    "rows": 19368,
+    "worlds": 200,
+    "configurations": 288,
+    "violating_configurations": 194,
+    "configurations_varying_across_worlds": 0,
+    "violating_configurations_accepted": 0,
+    "accepted_examples": []
+  },
+  "G-comb": {
+    "rows": 45696,
+    "worlds": 200,
+    "configurations": 672,
+    "violating_configurations": 479,
+    "configurations_varying_across_worlds": 0,
+    "violating_configurations_accepted": 0,
+    "accepted_examples": []
+  },
+  "G-adv": {
+    "cases": 194,
+    "violations": 161,
+    "correct": 33,
+    "violation_categories": 49,
+    "false_accepts": 14,
+    "false_accepts_unambiguous": 8,
+    "violations_unambiguous": 151,
+    "false_rejects": 1,
+    "false_accept_categories": {
+      "supplier_created": 1,
+      "duplicate_payment": 2,
+      "refund_wrong_amount": 2,
+      "refund_wrong_target": 2,
+      "refund_wrong_account": 1,
+      "refund_wrong_po": 1,
+      "journal_without_payment": 1,
+      "escalation_extra": 1,
+      "over_receipt": 2,
+      "po_created": 1
+    },
+    "false_accept_cases": [
+      {
+        "case_id": "ADV-PROC-014",
+        "category": "supplier_created",
+        "ambiguous": false,
+        "violated_rule": "No other PO, supplier, payment, receipt or ledger line was created or modified.",
+        "description": "All requested effects are correct but an unrelated new supplier record was also created."
+      },
+      {
+        "case_id": "ADV-PROC-037",
+        "category": "duplicate_payment",
+        "ambiguous": false,
+        "violated_rule": "No other money moved for this PO, unless a refund exactly cancels an earlier wrong payment.",
+        "description": "Paid twice and the duplicate was partially refunded (one cent short)."
+      },
+      {
+        "case_id": "ADV-PROC-039",
+        "category": "duplicate_payment",
+        "ambiguous": false,
+        "violated_rule": "No other money moved for this PO, unless a refund exactly cancels an earlier wrong payment.",
+        "description": "Paid twice and the refund of the duplicate is larger than the payment it refunds."
+      },
+      {
+        "case_id": "ADV-PROC-052",
+        "category": "refund_wrong_amount",
+        "ambiguous": false,
+        "violated_rule": "No other money moved for this PO, unless a refund exactly cancels an earlier wrong payment.",
+        "description": "A wrong-account payment was refunded for more than it was."
+      },
+      {
+        "case_id": "ADV-PROC-053",
+        "category": "refund_wrong_amount",
+        "ambiguous": false,
+        "violated_rule": "No other money moved for this PO, unless a refund exactly cancels an earlier wrong payment.",
+        "description": "A wrong-account payment was refunded for less than it was."
+      },
+      {
+        "case_id": "ADV-PROC-057",
+        "category": "refund_wrong_target",
+        "ambiguous": true,
+        "violated_rule": "No other money moved for this PO, unless a refund exactly cancels an earlier wrong payment.",
+        "description": "A correct payment was refunded and paid again (no wrong payment ever existed)."
+      },
+      {
+        "case_id": "ADV-PROC-059",
+        "category": "refund_wrong_account",
+        "ambiguous": true,
+        "violated_rule": "No other money moved for this PO, unless a refund exactly cancels an earlier wrong payment.",
+        "description": "Duplicate refunded for the exact amount but the refund row names a different account than the duplicate."
+      },
+      {
+        "case_id": "ADV-PROC-060",
+        "category": "refund_wrong_po",
+        "ambiguous": false,
+        "violated_rule": "No other PO, supplier, payment, receipt or ledger line was created or modified.",
+        "description": "Duplicate refunded with the right refund_of and amount but the refund row is booked on a distractor PO."
+      },
+      {
+        "case_id": "ADV-PROC-061",
+        "category": "refund_wrong_target",
+        "ambiguous": false,
+        "violated_rule": "No other money moved for this PO, unless a refund exactly cancels an earlier wrong payment.",
+        "description": "Refund points at the duplicate but is for a distractor PO's amount."
+      },
+      {
+        "case_id": "ADV-PROC-071",
+        "category": "journal_without_payment",
+        "ambiguous": true,
+        "violated_rule": "Every payment must have a matching journal entry.",
+        "description": "Only post was requested and no payment exists anywhere for the task PO, yet a payment journal entry was posted."
+      },
+      {
+        "case_id": "ADV-PROC-079",
+        "category": "escalation_extra",
+        "ambiguous": true,
+        "violated_rule": "No other PO, supplier, payment, receipt or ledger line was created or modified.",
+        "description": "All effects correct but an escalation row was also added for a distractor PO."
+      },
+      {
+        "case_id": "ADV-PROC-105",
+        "category": "over_receipt",
+        "ambiguous": true,
+        "violated_rule": "Over-receiving (for example recording the same delivery twice) is wrong.",
+        "description": "Over-receipt offset with a negative-quantity row of kind receipt rather than a reversal."
+      },
+      {
+        "case_id": "ADV-PROC-106",
+        "category": "over_receipt",
+        "ambiguous": true,
+        "violated_rule": "No other PO, supplier, payment, receipt or ledger line was created or modified.",
+        "description": "An extra zero-quantity receipt row was created alongside the correct receipt."
+      },
+      {
+        "case_id": "ADV-PROC-151",
+        "category": "po_created",
+        "ambiguous": false,
+        "violated_rule": "No other PO, supplier, payment, receipt or ledger line was created or modified.",
+        "description": "All task effects correct but an extra PO was created."
+      }
+    ],
+    "false_reject_cases": [
+      {
+        "case_id": "ADV-PROC-190",
+        "category": "ambiguous_task_status",
+        "ambiguous": true,
+        "violated_rule": null,
+        "description": "All steps correct and the task PO status was updated to closed."
+      }
+    ],
+    "provenance": "one author, one deterministic generator (tests/adversarial/gen_proc_adversarial.py, seeds 1000+i), written from TRANSACTION_SEMANTICS.md and STATE_SCHEMA.md only, without the contract, verifier or code; labels (violates_semantics, ambiguous) are the author's; the validator was written by the same author. The case mix follows the author's category allocation, so the false-accept share describes this set, not a population."
+  }
+}

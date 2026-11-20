@@ -41,7 +41,7 @@ A platform engineer who puts an LLM agent in front of purchase-to-pay systems (o
 - No exactly-once execution. When a write may still commit later with no bound, verification alone cannot be exactly-once (LIMBO, Proposition 1); the gateway escalates.
 - No atomicity across services. Compensation (for example a refund) is a new operation that can fail; a failed compensation leaves the transaction unresolved, with its residual exposure, and is never shown as success.
 - It cannot detect a system of record that lies about itself unless another service corroborates; then the verdict is ambiguous and the case is escalated.
-- It is only as complete as its contract. On 161 independently written violations of the plain business rules, the full contract accepted 14 (8.7%), mostly around refunds and master data (`results/a13/h5_report.md`).
+- It is only as complete as its contract. On 161 independently written violations of the plain business rules, the full contract accepted 14 (8 of the 151 unambiguous ones), mostly around refunds and master data (`results/a13/h5_finite.json`). This describes one author's test set, not a rate for real violations.
 - The in-process research harness used for training is not a security boundary; the separate gateway process is the demonstrated boundary.
 - No real payments, real supplier APIs, signatures or multi-tenant operation.
 

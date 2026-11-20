@@ -7,12 +7,14 @@
 # stats, verifier, figures, numbers, commit.
 # numbers: name -> {value, file, key, agg?, shown}. `key` is a path into the JSON file: strings and integers index
 # dicts and lists, a mapping selects the list element whose fields match it. `agg` (mean | sum) reduces a list.
+# For a .md file, `key` is a regex whose first group is the number. A list of files averages the same key.
 # `value` is compared after rounding the file value to the decimals written in `value`. `shown` lists the exact
 # strings that may appear in published documents for this number.
 
 documents:   # scanned by s2_numcheck.py
   - docs/stage2/VIDEO_SCRIPT.md
   - docs/stage2/PRODUCT.md
+  - README.md
 
 claims:
   - id: C1
@@ -60,26 +62,25 @@ claims:
 
   - id: C2
     statement: >-
-      The full contract accepts none of the violations it represents or their combinations, but accepts
-      8.7% of independently written adversarial violations; one-sided Fisher test of G-adv > G-rep.
+      Finite-set coverage results (deviation D-A13-1 replaces the registered Fisher test, which treated repeated
+      deterministic rows as samples): the full contract accepts none of the 194 single-fault and 479 two-fault
+      violating configurations it was written for (exhaustive enumeration; no configuration varies across the 200
+      worlds), and 14 of 161 independently written violations (8 of 151 unambiguous). Describes this test set only.
     status: supported
     prereg: PREREGISTRATION_A13.md
-    runs: []
-    eval: [results/a13/h5_coverage.json, results/a13/h5_report.md]
-    metric_code: [actionproof/integrity/clauses.py, scripts/h5_coverage.py]
-    stats: scripts/h5_coverage.py
-    verifier: null
-    figures: []
+    deviations: ["D-A13-1: registered Fisher p = 9.0e-28 not used (pseudoreplication); results/a13/h5_coverage.json kept"]
+    eval: [results/a13/h5_finite.json, results/a13/h5_coverage.json]
+    metric_code: [actionproof/integrity/clauses.py, scripts/h5_finite.py]
     numbers:
-      g_rep_violations: {value: 13050, file: results/a13/h5_coverage.json, key: [G-rep, n_violations], shown: ["13,050"]}
-      g_comb_violations: {value: 32551, file: results/a13/h5_coverage.json, key: [G-comb, n_violations], shown: ["32,551"]}
-      g_rep_plus_comb_violations: {value: 45601, file: results/a13/h5_coverage.json, key: [[G-rep, n_violations], [G-comb, n_violations]], agg: sum, shown: ["45,601"]}
-      g_adv_violations: {value: 161, file: results/a13/h5_coverage.json, key: [G-adv, n_violations], shown: ["161"]}
-      g_adv_accepted: {value: 14, file: results/a13/h5_coverage.json, key: [G-adv, false_acceptance, k], shown: ["14"]}
-      g_adv_fa_rate: {value: 0.087, file: results/a13/h5_coverage.json, key: [G-adv, false_acceptance, rate], shown: ["8.7%"]}
-      g_adv_unamb_accepted: {value: 8, file: results/a13/h5_coverage.json, key: [G-adv (unambiguous only), false_acceptance, k], shown: []}
-      g_adv_unamb_rate: {value: 0.053, file: results/a13/h5_coverage.json, key: [G-adv (unambiguous only), false_acceptance, rate], shown: ["5.3%"]}
-      fisher_p: {value: 9.0e-28, file: results/a13/h5_coverage.json, key: [primary_test, fisher_one_sided_p], shown: ["9e-28"]}
+      g_rep_violating_configs: {value: 194, file: results/a13/h5_finite.json, key: [G-rep, violating_configurations], shown: ["194"]}
+      g_rep_accepted: {value: 0, file: results/a13/h5_finite.json, key: [G-rep, violating_configurations_accepted], shown: []}
+      g_comb_violating_configs: {value: 479, file: results/a13/h5_finite.json, key: [G-comb, violating_configurations], shown: ["479"]}
+      g_comb_accepted: {value: 0, file: results/a13/h5_finite.json, key: [G-comb, violating_configurations_accepted], shown: []}
+      varying_across_worlds: {value: 0, file: results/a13/h5_finite.json, key: [G-rep, configurations_varying_across_worlds], shown: []}
+      g_adv_violations: {value: 161, file: results/a13/h5_finite.json, key: [G-adv, violations], shown: ["161"]}
+      g_adv_accepted: {value: 14, file: results/a13/h5_finite.json, key: [G-adv, false_accepts], shown: ["14"]}
+      g_adv_unamb_violations: {value: 151, file: results/a13/h5_finite.json, key: [G-adv, violations_unambiguous], shown: ["151"]}
+      g_adv_unamb_accepted: {value: 8, file: results/a13/h5_finite.json, key: [G-adv, false_accepts_unambiguous], shown: ["8"]}
     commit: null
 
   - id: H7
@@ -108,24 +109,92 @@ claims:
     commit: null
 
   # Stage-1 results quoted in Stage-2 materials (pre-Stage-2 work, Nov 1-15).
-  - id: S1-VSC
-    statement: "Confirmatory verified completion: PCSTR-d 0.8425 vs tool_trust 0.640 (400 tasks, 2 seeds each)."
+  - id: S1-H1
+    statement: "Registered Stage 1 confirmatory test (PREREGISTRATION.md H1): PCSTR-d 0.8425 vs best baseline (outcome) 0.8275, +1.5 pp."
     status: supported
-    prereg: PREREGISTRATION_A4.md
+    prereg: PREREGISTRATION.md
     eval: [results/confirmatory.json]
     numbers:
       pcstr_d: {value: 0.8425, file: results/confirmatory.json, key: [H1, means, pcstr_d], shown: ["0.8425"]}
+      outcome: {value: 0.8275, file: results/confirmatory.json, key: [H1, means, outcome], shown: ["0.8275"]}
+      delta: {value: 0.015, file: results/confirmatory.json, key: [H1, delta], shown: ["1.5", "+1.5"]}
+      ci_lo: {value: 0.006, file: results/confirmatory.json, key: [H1, ci95, 0], shown: ["0.6"]}
+      ci_hi: {value: 0.026, file: results/confirmatory.json, key: [H1, ci95, 1], shown: ["2.6"]}
+    commit: null
+
+  - id: S1-VSC
+    statement: "Not registered, rewards of different form: warm start 0.6425, tool_trust 0.640 (2 seeds), PCSTR-d − tool_trust +20.25 pp; strict VSC tool_trust 0.424."
+    status: supported
+    prereg: null
+    eval: [results/confirmatory.json, results/a10/strict_vsc.md]
+    numbers:
+      warm_start: {value: 0.6425, file: results/confirmatory.json, key: [per_arm_vsc, rft_v2], agg: mean, shown: ["0.6425"]}
       tool_trust: {value: 0.640, file: results/confirmatory.json, key: [per_arm_vsc, tool_trust], agg: mean, shown: ["0.640"]}
-    commit: 2795c06
+      delta_tool_trust: {value: 0.2025, file: results/confirmatory.json, key: [pcstr_d_vs_tool_trust, delta], shown: ["20.25", "+20.25"]}
+      ci_lo: {value: 0.164, file: results/confirmatory.json, key: [pcstr_d_vs_tool_trust, lo], shown: ["16.4"]}
+      ci_hi: {value: 0.2425, file: results/confirmatory.json, key: [pcstr_d_vs_tool_trust, hi], shown: ["24.3"]}
+      strict_tool_trust: {value: 0.424, file: results/a10/strict_vsc.md, key: '\| tool_trust \| 2 \| [0-9.]+ \| ([0-9.]+) \|', shown: ["0.424"]}
+      strict_delta: {value: 41.9, file: results/a10/strict_vsc.md, key: 'on SVC: \+([0-9.]+) pp', shown: ["+41.9"]}
+    commit: null
 
   - id: S1-JUDGE
     statement: >-
-      AuditKIT TaskCompletion (Aya 32B), given the receipt ledger, still accepts 71.5% of the 298 false
-      completions the ledger shows (0.960 without the ledger, same episodes).
+      AuditKIT TaskCompletion (Aya Expanse 32B), given the receipt ledger, still accepts 213 of the 298 false
+      completions the ledger shows (71.5%; 0.960 without the ledger on the same episodes).
     status: supported
     prereg: PREREGISTRATION_A9.md
     eval: [results/judge/aya32b_grounded__summary.json, results/judge/grounded_audit.md]
     numbers:
-      grounded_far: {value: 0.715, file: results/judge/aya32b_grounded__summary.json, key: [aya32b_grounded__auditkit_tc, "ALL|ledger_fail=True|FAR", rate], shown: ["72%", "0.715"]}
+      grounded_far: {value: 0.715, file: results/judge/aya32b_grounded__summary.json, key: [aya32b_grounded__auditkit_tc, "ALL|ledger_fail=True|FAR", rate], shown: ["71%"]}
       grounded_n: {value: 298, file: results/judge/aya32b_grounded__summary.json, key: [aya32b_grounded__auditkit_tc, "ALL|ledger_fail=True|FAR", n], shown: ["298"]}
     commit: null
+
+  - id: S1-CHANNEL
+    statement: >-
+      Exploratory (development splits): with two rewards of identical form from one warm start, test-IID VSC 0.825
+      (outcome, 2 seeds) vs 0.605 (ack_outcome, 2 seeds); sampled refund read-back on val, warm start 0.25, outcome
+      0.71, PCSTR-d 0.72, ack_outcome 0.10 (seed 0).
+    status: supported
+    prereg: PREREGISTRATION_A4.md
+    eval: [results/eval/r3, docs/figures/figures_data.json]
+    numbers:
+      outcome_vsc: {value: 0.825, file: [results/eval/r3/grpo_tiny_v2_outcome_s0__neutral__test_iid.summary.json, results/eval/r3/grpo_tiny_v2_outcome_s1__neutral__test_iid.summary.json], key: [vsc], shown: ["0.825"]}
+      ack_vsc: {value: 0.605, file: [results/eval/r3/grpo_tiny_v2_ack_outcome_s0__neutral__test_iid.summary.json, results/eval/r3/grpo_tiny_v2_ack_outcome_s1__neutral__test_iid.summary.json], key: [vsc], shown: ["0.605"]}
+      rb_warm: {value: 0.25, file: docs/figures/figures_data.json, key: [{figure: F1, model: warm start, panel: "v2 warm start, sampled, val"}, rate], shown: ["0.25"]}
+      rb_outcome: {value: 0.71, file: docs/figures/figures_data.json, key: [{figure: F1, model: outcome s0}, rate], shown: ["0.71"]}
+      rb_pcstr_d: {value: 0.72, file: docs/figures/figures_data.json, key: [{figure: F1, model: PCSTR-d s0}, rate], shown: ["0.72"]}
+      rb_ack: {value: 0.10, file: docs/figures/figures_data.json, key: [{figure: F1, model: ack_outcome s0, panel: "v2 warm start, sampled, val"}, rate], shown: ["0.10"]}
+
+  - id: S1-A8
+    statement: "A8 intervention (registered, development split, one seed per cell): ack arm read-back 0.669 on the X1 pool vs 0.000 on the full pool; state arm 1.000 on both; interaction +0.678 [0.605, 0.750]."
+    status: supported
+    prereg: PREREGISTRATION_A8.md
+    eval: [results/a8/x1_interaction.md]
+    numbers:
+      x1_ack: {value: 0.669, file: results/a8/x1_interaction.md, key: 'ack, X1 pool \(414p\) \| [0-9/]+ = ([0-9.]+)', shown: ["0.669"]}
+      full_ack: {value: 0.000, file: results/a8/x1_interaction.md, key: 'ack, full pool \(412\) \| [0-9/]+ = ([0-9.]+)', shown: ["0.000"]}
+      state: {value: 1.000, file: results/a8/x1_interaction.md, key: 'state, X1 pool \(417\) \| [0-9/]+ = ([0-9.]+)', shown: ["1.000"]}
+      interaction: {value: 0.678, file: results/a8/x1_interaction.md, key: 'tasks: \+([0-9.]+)', shown: ["+0.678"]}
+      ci_lo: {value: 0.605, file: results/a8/x1_interaction.md, key: 'CI \[([0-9.]+),', shown: ["0.605"]}
+      ci_hi: {value: 0.750, file: results/a8/x1_interaction.md, key: 'CI \[[0-9.]+, ([0-9.]+)\]', shown: ["0.750"]}
+
+  - id: S1-STRESS
+    statement: "v2 stress test (34 tasks, timeouts before the commit, seed 0): PCSTR-d 0.176, outcome 0.118, tool_trust 0.706 VSC."
+    status: supported
+    prereg: PREREGISTRATION_A10_ADDENDUM.md
+    eval: [results/a10/v2_env.md]
+    numbers:
+      pcstr_d: {value: 0.176, file: results/a10/v2_env.md, key: '\| PCSTR-d s0 \| [0-9.]+ \| [0-9.]+ \| [0-9.]+ \| ([0-9.]+) \|', shown: ["0.176"]}
+      outcome: {value: 0.118, file: results/a10/v2_env.md, key: '\| outcome s0 \| [0-9.]+ \| [0-9.]+ \| [0-9.]+ \| ([0-9.]+) \|', shown: ["0.118"]}
+      tool_trust: {value: 0.71, file: results/a10/v2_env.md, key: '\| tool_trust s0 \| [0-9.]+ \| [0-9.]+ \| [0-9.]+ \| ([0-9.]+) \|', shown: ["0.71"]}
+
+  - id: S1-REFVER
+    statement: "Independently implemented reference verifier agrees with the VSC verdict on 4,000 of 4,000 confirmatory episodes."
+    status: supported
+    prereg: PREREGISTRATION.md
+    eval: [results/reference_verifier.md]
+    numbers:
+      agree: {value: 4000, file: results/reference_verifier.md, key: 'Agreement: \*\*([0-9]+)/', shown: ["4,000"]}
+
+# Non-result numbers that appear in scanned documents (software versions).
+allow: ["3.12", "2.11", "5.22", "1.7", "0.23", "0.21"]

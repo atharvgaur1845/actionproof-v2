@@ -35,8 +35,17 @@ def resolve(obj: Any, path: list) -> Any:
 
 
 def file_value(n: dict) -> float:
-    data = json.loads((ROOT / n["file"]).read_text())
+    if isinstance(n["file"], list):  # the same key in several files (e.g. one per training seed), averaged
+        vals = [file_value({**n, "file": f, "agg": None}) for f in n["file"]]
+        return sum(vals) / len(vals)
+    text = (ROOT / n["file"]).read_text()
     key = n["key"]
+    if n["file"].endswith(".md"):  # markdown result tables: `key` is a regex whose first group is the number
+        m = re.search(key, text)
+        if not m:
+            raise KeyError(f"pattern not found: {key}")
+        return float(m.group(1).replace(",", ""))
+    data = json.loads(text)
     if n.get("agg") == "sum" and key and isinstance(key[0], list):
         return float(sum(resolve(data, k) for k in key))
     v = resolve(data, key)
