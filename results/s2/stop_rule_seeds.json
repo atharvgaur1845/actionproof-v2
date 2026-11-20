@@ -1,7 +1,7 @@
 {
   "rule_original": "stop if zero-variance group share averaged over steps 40-50 > 0.80 (A12 \u00a75)",
   "rule_addendum2": "seeds 1-4: stop only if that share > 0.80 and mean reward over steps 40-50 < 0.9",
-  "source": "training rollout logs, groups of 8 rollouts per (step, task); steps 40-50 are 0-indexed 39-49",
+  "source": "complete training rollout logs (.jsonl.gz), last 32 records per step; groups of 8 rollouts per (step, task); steps 40-50 are 0-indexed 39-49",
   "a12_proc_ra_s0": {
     "zero_var_share_40_50": 0.8636,
     "mean_reward_40_50": 0.9744,
@@ -74,6 +74,44 @@
       0.75,
       0.75,
       0.5
+    ],
+    "original_rule_fires": false,
+    "addendum2_stops": false
+  },
+  "a12_proc_rv_s1": {
+    "zero_var_share_40_50": 0.5682,
+    "mean_reward_40_50": 0.6619,
+    "per_step_zero_var": [
+      0.75,
+      0.5,
+      0.0,
+      0.5,
+      0.5,
+      1.0,
+      0.75,
+      0.75,
+      0.5,
+      0.5,
+      0.5
+    ],
+    "original_rule_fires": false,
+    "addendum2_stops": false
+  },
+  "a12_proc_rv_s2": {
+    "zero_var_share_40_50": 0.5455,
+    "mean_reward_40_50": 0.733,
+    "per_step_zero_var": [
+      0.5,
+      0.5,
+      0.25,
+      0.5,
+      0.25,
+      0.75,
+      1.0,
+      0.75,
+      1.0,
+      0.25,
+      0.25
     ],
     "original_rule_fires": false,
     "addendum2_stops": false

@@ -20,13 +20,20 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 ARMS = {"proc_rv": "r_v", "proc_ra": "r_a"}
 BLOCK = 50
+PER_STEP = 32  # 4 tasks x 8 rollouts per GRPO step
 
 
 def load(arm: str, seed: int) -> list[dict]:
-    p = ROOT / f"results/a12/rollouts/a12_{arm}_s{seed}.jsonl"
-    f = p.open() if p.exists() else gzip.open(p.with_suffix(".jsonl.gz"), "rt")
+    # the .gz is the complete log written at the end of training; a plain .jsonl may be a partial periodic upload
+    gz = ROOT / f"results/a12/rollouts/a12_{arm}_s{seed}.jsonl.gz"
+    f = gzip.open(gz, "rt") if gz.exists() else (ROOT / f"results/a12/rollouts/a12_{arm}_s{seed}.jsonl").open()
     keep = ("step", "task_id", "fault_class", "n_verify", "score")
-    return [{k: r[k] for k in keep} for r in map(json.loads, f)]
+    recs = [{k: r[k] for k in keep} for r in map(json.loads, f)]
+    # a resumed run (D-A12-2) logs some steps twice: keep the last PER_STEP records of each step (the resumed ones)
+    by_step: dict[int, list] = defaultdict(list)
+    for r in recs:
+        by_step[r["step"]].append(r)
+    return [r for st in sorted(by_step) for r in by_step[st][-PER_STEP:]]
 
 
 def analyse(recs: list[dict], rkey: str) -> dict:
