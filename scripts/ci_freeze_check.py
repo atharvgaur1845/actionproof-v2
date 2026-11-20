@@ -17,7 +17,8 @@ ROOT = Path(__file__).resolve().parents[1]
 def main() -> int:
     known = json.loads((ROOT / "results/known_deviations.json").read_text())
     bad = []
-    for f in sorted((ROOT / "scripts").glob("freeze_*.py")):
+    # freeze_models.py checks trained adapters, which live on the cluster and HF, not in git; it runs inside each job
+    for f in sorted(x for x in (ROOT / "scripts").glob("freeze_*.py") if x.name != "freeze_models.py"):
         p = subprocess.run([sys.executable, str(f), "--check"], cwd=ROOT, capture_output=True, text=True)
         last = (p.stdout.strip().splitlines() or [""])[-1]
         if p.returncode == 0 and last.startswith("OK"):
