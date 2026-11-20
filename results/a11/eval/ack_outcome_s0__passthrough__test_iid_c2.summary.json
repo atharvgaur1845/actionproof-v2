@@ -1,0 +1,55 @@
+{
+  "n": 200,
+  "system": {
+    "vsc": 0.615,
+    "G": 0.615,
+    "false_finalization": 0.385,
+    "fcr": 1.0,
+    "duplicate_rate": 0.0,
+    "invariant_rate": 0.025,
+    "refused_rate": 0.0,
+    "no_report_rate": 0.0
+  },
+  "agent": {
+    "vsc": 0.615,
+    "false_claim": 0.385,
+    "calls": 7.35,
+    "verify_calls": 2.46,
+    "readbacks": 0.0,
+    "retries": 0.09
+  },
+  "gateway": {
+    "retries_per_ep": 0.0,
+    "blocked_per_ep": 0.0,
+    "observe_would_refuse": 0.0,
+    "write_verdicts": {},
+    "ack_mismatch": 0
+  },
+  "by_cell": {
+    "Full/Complete/Conditional": {
+      "n": 5,
+      "system_vsc": 0.0,
+      "agent_vsc": 0.0
+    },
+    "Full/Complete/Safe": {
+      "n": 195,
+      "system_vsc": 0.6307692307692307,
+      "agent_vsc": 0.6307692307692307
+    }
+  },
+  "mode": "passthrough",
+  "policy": {
+    "model": "runs/rft_tiny_v2/merged",
+    "adapter": "runs/grpo_tiny_v2_ack_outcome_s0/final",
+    "adapter_sha256": "feb6a8531b0e2d026032ff49fb2c7df3a60cab539121f585073361db8b337bc2",
+    "prompt": "neutral"
+  },
+  "split": "test_iid_c2",
+  "tasks": "/work/data/bench/c2/test_iid_c2.jsonl",
+  "tasks_sha256": "b6fab801ee033dd2926a3b8555d62e0c93ada1b37ae11098af48e450df61144b",
+  "limits": true,
+  "max_turns": 12,
+  "temperature": 0.0,
+  "seed": 0,
+  "seconds": 222
+}

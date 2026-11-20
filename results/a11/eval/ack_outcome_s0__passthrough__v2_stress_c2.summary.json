@@ -1,0 +1,50 @@
+{
+  "n": 100,
+  "system": {
+    "vsc": 0.76,
+    "G": 0.76,
+    "false_finalization": 0.23,
+    "fcr": 0.9583333333333334,
+    "duplicate_rate": 0.0,
+    "invariant_rate": 0.0,
+    "refused_rate": 0.0,
+    "no_report_rate": 0.01
+  },
+  "agent": {
+    "vsc": 0.76,
+    "false_claim": 0.23,
+    "calls": 8.61,
+    "verify_calls": 2.66,
+    "readbacks": 0.0,
+    "retries": 0.97
+  },
+  "gateway": {
+    "retries_per_ep": 0.0,
+    "blocked_per_ep": 0.0,
+    "observe_would_refuse": 0.0,
+    "write_verdicts": {},
+    "ack_mismatch": 0
+  },
+  "by_cell": {
+    "Full/Complete/Safe": {
+      "n": 100,
+      "system_vsc": 0.76,
+      "agent_vsc": 0.76
+    }
+  },
+  "mode": "passthrough",
+  "policy": {
+    "model": "runs/rft_tiny_v2/merged",
+    "adapter": "runs/grpo_tiny_v2_ack_outcome_s0/final",
+    "adapter_sha256": "feb6a8531b0e2d026032ff49fb2c7df3a60cab539121f585073361db8b337bc2",
+    "prompt": "neutral"
+  },
+  "split": "v2_stress_c2",
+  "tasks": "/work/data/bench/c2/v2_stress_c2.jsonl",
+  "tasks_sha256": "6551ff3c98ab11024073030490f83b977d7fecba82985937d07b01adaa997056",
+  "limits": true,
+  "max_turns": 12,
+  "temperature": 0.0,
+  "seed": 0,
+  "seconds": 133
+}

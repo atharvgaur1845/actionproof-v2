@@ -1,0 +1,53 @@
+{
+  "n": 100,
+  "system": {
+    "vsc": 0.93,
+    "G": 0.93,
+    "false_finalization": 0.0,
+    "fcr": 0.0,
+    "duplicate_rate": 0.0,
+    "invariant_rate": 0.0,
+    "refused_rate": 0.35,
+    "no_report_rate": 0.06
+  },
+  "agent": {
+    "vsc": 0.93,
+    "false_claim": 0.07,
+    "calls": 9.54,
+    "verify_calls": 2.67,
+    "readbacks": 0.05,
+    "retries": 1.18
+  },
+  "gateway": {
+    "retries_per_ep": 0.57,
+    "blocked_per_ep": 0.0,
+    "observe_would_refuse": 0.0,
+    "write_verdicts": {
+      "committed": 415,
+      "absent": 43
+    },
+    "ack_mismatch": 0
+  },
+  "by_cell": {
+    "Full/Complete/Safe": {
+      "n": 100,
+      "system_vsc": 0.93,
+      "agent_vsc": 0.93
+    }
+  },
+  "mode": "enforce_inform",
+  "policy": {
+    "model": "runs/rft_tiny_v2/merged",
+    "adapter": null,
+    "adapter_sha256": null,
+    "prompt": "neutral"
+  },
+  "split": "v2_stress_c2",
+  "tasks": "/work/data/bench/c2/v2_stress_c2.jsonl",
+  "tasks_sha256": "6551ff3c98ab11024073030490f83b977d7fecba82985937d07b01adaa997056",
+  "limits": true,
+  "max_turns": 12,
+  "temperature": 0.0,
+  "seed": 0,
+  "seconds": 118
+}

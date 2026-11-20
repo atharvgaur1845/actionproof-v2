@@ -1,0 +1,59 @@
+{
+  "n": 200,
+  "system": {
+    "vsc": 0.83,
+    "G": 0.83,
+    "false_finalization": 0.0,
+    "fcr": 0.0,
+    "duplicate_rate": 0.0,
+    "invariant_rate": 0.0,
+    "refused_rate": 0.07,
+    "no_report_rate": 0.165
+  },
+  "agent": {
+    "vsc": 0.83,
+    "false_claim": 0.06,
+    "calls": 8.47,
+    "verify_calls": 2.315,
+    "readbacks": 0.005,
+    "retries": 1.195
+  },
+  "gateway": {
+    "retries_per_ep": 0.205,
+    "blocked_per_ep": 0.015,
+    "observe_would_refuse": 0.0,
+    "write_verdicts": {
+      "committed": 610,
+      "partial": 224,
+      "absent": 4
+    },
+    "ack_mismatch": 295
+  },
+  "by_cell": {
+    "Full/Complete/Conditional": {
+      "n": 5,
+      "system_vsc": 0.0,
+      "agent_vsc": 0.0
+    },
+    "Full/Complete/Safe": {
+      "n": 195,
+      "system_vsc": 0.8512820512820513,
+      "agent_vsc": 0.8512820512820513
+    }
+  },
+  "mode": "enforce_inform",
+  "policy": {
+    "model": "runs/rft_tiny_v2/merged",
+    "adapter": "runs/grpo_tiny_v2_ack_outcome_s1/final",
+    "adapter_sha256": "6fdf67979e97166d1f2b6e3db477805fe1dbf03f04d21500f6c4977797544d7d",
+    "prompt": "neutral"
+  },
+  "split": "test_iid_c2",
+  "tasks": "/work/data/bench/c2/test_iid_c2.jsonl",
+  "tasks_sha256": "b6fab801ee033dd2926a3b8555d62e0c93ada1b37ae11098af48e450df61144b",
+  "limits": true,
+  "max_turns": 12,
+  "temperature": 0.0,
+  "seed": 0,
+  "seconds": 204
+}

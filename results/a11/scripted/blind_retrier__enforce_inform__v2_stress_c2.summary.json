@@ -1,0 +1,50 @@
+{
+  "n": 100,
+  "system": {
+    "vsc": 0.58,
+    "G": 0.58,
+    "false_finalization": 0.0,
+    "fcr": 0.0,
+    "duplicate_rate": 0.0,
+    "invariant_rate": 0.0,
+    "refused_rate": 0.42,
+    "no_report_rate": 0.42
+  },
+  "agent": {
+    "vsc": 0.58,
+    "false_claim": 0.42,
+    "calls": 6.0,
+    "verify_calls": 0.0,
+    "readbacks": 0.0,
+    "retries": 2.0
+  },
+  "gateway": {
+    "retries_per_ep": 0.11,
+    "blocked_per_ep": 1.89,
+    "observe_would_refuse": 0.0,
+    "write_verdicts": {
+      "absent": 57,
+      "committed": 254
+    },
+    "ack_mismatch": 0
+  },
+  "by_cell": {
+    "Full/Complete/Safe": {
+      "n": 100,
+      "system_vsc": 0.58,
+      "agent_vsc": 0.58
+    }
+  },
+  "mode": "enforce_inform",
+  "policy": {
+    "agent": "blind_retrier"
+  },
+  "split": "v2_stress_c2",
+  "tasks": "/scratch/pabitra/actionproof/data/bench/c2/v2_stress_c2.jsonl",
+  "tasks_sha256": "6551ff3c98ab11024073030490f83b977d7fecba82985937d07b01adaa997056",
+  "limits": true,
+  "max_turns": 12,
+  "temperature": 0.0,
+  "seed": 0,
+  "seconds": 0
+}

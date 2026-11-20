@@ -1,0 +1,56 @@
+{
+  "n": 200,
+  "system": {
+    "vsc": 1.0,
+    "G": 1.0,
+    "false_finalization": 0.0,
+    "fcr": 0.0,
+    "duplicate_rate": 0.0,
+    "invariant_rate": 0.0,
+    "refused_rate": 0.0,
+    "no_report_rate": 0.0
+  },
+  "agent": {
+    "vsc": 1.0,
+    "false_claim": 0.0,
+    "calls": 13.3,
+    "verify_calls": 7.945,
+    "readbacks": 5.295,
+    "retries": 0.02
+  },
+  "gateway": {
+    "retries_per_ep": 0.205,
+    "blocked_per_ep": 0.0,
+    "observe_would_refuse": 0.0,
+    "write_verdicts": {
+      "committed": 635,
+      "partial": 32,
+      "absent": 4
+    },
+    "ack_mismatch": 103
+  },
+  "by_cell": {
+    "Full/Complete/Conditional": {
+      "n": 5,
+      "system_vsc": 1.0,
+      "agent_vsc": 1.0
+    },
+    "Full/Complete/Safe": {
+      "n": 195,
+      "system_vsc": 1.0,
+      "agent_vsc": 1.0
+    }
+  },
+  "mode": "enforce",
+  "policy": {
+    "agent": "task_oracle"
+  },
+  "split": "test_iid_c2",
+  "tasks": "/scratch/pabitra/actionproof/data/bench/c2/test_iid_c2.jsonl",
+  "tasks_sha256": "b6fab801ee033dd2926a3b8555d62e0c93ada1b37ae11098af48e450df61144b",
+  "limits": true,
+  "max_turns": 12,
+  "temperature": 0.0,
+  "seed": 0,
+  "seconds": 1
+}
