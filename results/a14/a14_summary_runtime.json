@@ -1,0 +1,917 @@
+{
+  "rep": "runtime",
+  "delta": 0.1,
+  "missing": [],
+  "policies": {
+    "warm_start": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 0.99,
+        "ci95": [
+          0.98,
+          0.998
+        ],
+        "category": "evidence-conditioned"
+      },
+      "signed_S": {
+        "est": 0.98,
+        "ci95": [
+          0.96,
+          0.996
+        ]
+      },
+      "bca_timeout": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 0.98,
+          "goal_met": 0.98,
+          "duplicate": 0.0,
+          "report_accurate": 0.98,
+          "first_actions": {
+            "repay_same_key": 245,
+            "next_step": 5
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.092,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "next_step": 227,
+            "refund": 23
+          }
+        }
+      }
+    },
+    "oracle": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "category": "evidence-conditioned"
+      },
+      "signed_S": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "bca_timeout": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "refund": 250
+          }
+        }
+      }
+    },
+    "naive": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 0.5,
+        "ci95": [
+          0.5,
+          0.5
+        ],
+        "category": "evidence-insensitive"
+      },
+      "signed_S": {
+        "est": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "bca_timeout": {
+        "est": 0.5,
+        "ci95": [
+          0.5,
+          0.5
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        }
+      }
+    },
+    "fixed_retry": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 0.5,
+        "ci95": [
+          0.5,
+          0.5
+        ],
+        "category": "evidence-insensitive"
+      },
+      "signed_S": {
+        "est": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "bca_timeout": {
+        "est": 0.5,
+        "ci95": [
+          0.5,
+          0.5
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        }
+      }
+    },
+    "a12_proc_rv_s0": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "category": "evidence-conditioned"
+      },
+      "signed_S": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "bca_timeout": {
+        "est": 0.998,
+        "ci95": [
+          0.994,
+          1.0
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 0.996,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 249,
+            "refund": 1
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.04,
+          "goal_met": 0.04,
+          "duplicate": 0.0,
+          "report_accurate": 0.04,
+          "first_actions": {
+            "next_step": 240,
+            "refund": 10
+          }
+        }
+      }
+    },
+    "a12_proc_ra_s0": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 0.83,
+        "ci95": [
+          0.8,
+          0.858
+        ],
+        "category": "evidence-conditioned"
+      },
+      "signed_S": {
+        "est": 0.66,
+        "ci95": [
+          0.6,
+          0.72
+        ]
+      },
+      "bca_timeout": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 0.66,
+          "goal_met": 0.66,
+          "duplicate": 0.0,
+          "report_accurate": 0.66,
+          "first_actions": {
+            "next_step": 85,
+            "repay_same_key": 165
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        }
+      }
+    },
+    "a12_proc_rv_s1": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 0.992,
+        "ci95": [
+          0.984,
+          0.998
+        ],
+        "category": "evidence-conditioned"
+      },
+      "signed_S": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "bca_timeout": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 0.984,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 246,
+            "refund": 4
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.136,
+          "goal_met": 0.136,
+          "duplicate": 0.0,
+          "report_accurate": 0.136,
+          "first_actions": {
+            "next_step": 216,
+            "refund": 34
+          }
+        }
+      }
+    },
+    "a12_proc_ra_s1": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 0.83,
+        "ci95": [
+          0.8,
+          0.86
+        ],
+        "category": "evidence-conditioned"
+      },
+      "signed_S": {
+        "est": 0.66,
+        "ci95": [
+          0.6,
+          0.72
+        ]
+      },
+      "bca_timeout": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 0.66,
+          "goal_met": 0.66,
+          "duplicate": 0.0,
+          "report_accurate": 0.66,
+          "first_actions": {
+            "next_step": 85,
+            "repay_same_key": 165
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        }
+      }
+    },
+    "a12_proc_rv_s2": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "category": "evidence-conditioned"
+      },
+      "signed_S": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "bca_timeout": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.012,
+          "goal_met": 0.004,
+          "duplicate": 0.0,
+          "report_accurate": 0.004,
+          "first_actions": {
+            "next_step": 247,
+            "refund": 3
+          }
+        }
+      }
+    },
+    "a12_proc_ra_s2": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 0.83,
+        "ci95": [
+          0.8,
+          0.858
+        ],
+        "category": "evidence-conditioned"
+      },
+      "signed_S": {
+        "est": 0.66,
+        "ci95": [
+          0.6,
+          0.716
+        ]
+      },
+      "bca_timeout": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 0.66,
+          "goal_met": 0.66,
+          "duplicate": 0.0,
+          "report_accurate": 0.66,
+          "first_actions": {
+            "next_step": 85,
+            "repay_same_key": 165
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        }
+      }
+    }
+  },
+  "contrasts": {
+    "rv_minus_warm[s0]": {
+      "est": 0.01,
+      "ci95": [
+        0.002,
+        0.02
+      ],
+      "ci90": [
+        0.004,
+        0.018
+      ],
+      "category": "different but smaller than delta",
+      "mcnemar": {
+        "first_only": 5,
+        "second_only": 0,
+        "p": 0.0625
+      }
+    },
+    "rv_minus_ra[s0]": {
+      "est": 0.17,
+      "ci95": [
+        0.142,
+        0.2
+      ],
+      "ci90": [
+        0.146,
+        0.194
+      ],
+      "category": "different",
+      "mcnemar": {
+        "first_only": 85,
+        "second_only": 0,
+        "p": 5.169878828456423e-26
+      }
+    },
+    "rv_minus_warm[s1]": {
+      "est": 0.002,
+      "ci95": [
+        -0.01,
+        0.014
+      ],
+      "ci90": [
+        -0.008,
+        0.012
+      ],
+      "category": "equivalent",
+      "mcnemar": {
+        "first_only": 5,
+        "second_only": 4,
+        "p": 1.0
+      }
+    },
+    "rv_minus_ra[s1]": {
+      "est": 0.162,
+      "ci95": [
+        0.132,
+        0.194
+      ],
+      "ci90": [
+        0.136,
+        0.188
+      ],
+      "category": "different",
+      "mcnemar": {
+        "first_only": 85,
+        "second_only": 4,
+        "p": 8.269208261418977e-21
+      }
+    },
+    "rv_minus_warm[s2]": {
+      "est": 0.01,
+      "ci95": [
+        0.002,
+        0.02
+      ],
+      "ci90": [
+        0.004,
+        0.018
+      ],
+      "category": "different but smaller than delta",
+      "mcnemar": {
+        "first_only": 5,
+        "second_only": 0,
+        "p": 0.0625
+      }
+    },
+    "rv_minus_ra[s2]": {
+      "est": 0.17,
+      "ci95": [
+        0.14,
+        0.2
+      ],
+      "ci90": [
+        0.146,
+        0.194
+      ],
+      "category": "different",
+      "mcnemar": {
+        "first_only": 85,
+        "second_only": 0,
+        "p": 5.169878828456423e-26
+      }
+    }
+  },
+  "across_seeds": {
+    "rv_minus_warm": {
+      "per_seed": [
+        0.01,
+        0.002,
+        0.01
+      ],
+      "same_sign": true,
+      "sign_flip_p_one_sided": 0.125,
+      "sign_flip_p_two_sided": 0.25
+    },
+    "rv_minus_ra": {
+      "per_seed": [
+        0.17,
+        0.162,
+        0.17
+      ],
+      "same_sign": true,
+      "sign_flip_p_one_sided": 0.125,
+      "sign_flip_p_two_sided": 0.25
+    }
+  },
+  "thesis_check": {
+    "abandon_seeing_is_not_knowing": false,
+    "rule": "abandon if every trained policy has BCA lower bound >= 0.85 and signed S lower bound >= 0.70"
+  }
+}

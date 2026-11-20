@@ -1,8 +1,7 @@
 # Draft: hackathon paper (6 main pages + up to 6 appendix pages)
 
-Working title, chosen by the registered A14 outcome (PREREGISTRATION_A14 §4), not by preference:
-- if acquisition and control dissociate: *Seeing Is Not Knowing: Reward Observability and Evidence-Conditioned Control in Tool-Using Language Models*
-- otherwise: *What the Reward Sees Decides What the Agent Checks*
+Title, fixed by the registered A14 outcome (PREREGISTRATION_A14 §4: the thesis check was met, so "seeing is not knowing" is abandoned):
+*What the Reward Sees Decides What the Agent Checks: Reward Observability and Evidence Use in Tool-Using Language Models*
 
 Status markers: [PENDING file] means the number does not exist yet and may not be written until the file does. Every number in the final text resolves through `claims/claims.yaml` (`scripts/s2_numcheck.py`).
 

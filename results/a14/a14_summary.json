@@ -1,0 +1,911 @@
+{
+  "rep": "agent",
+  "delta": 0.1,
+  "missing": [],
+  "policies": {
+    "warm_start": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "category": "evidence-conditioned"
+      },
+      "signed_S": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "bca_timeout": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.028,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "next_step": 243,
+            "refund": 7
+          }
+        }
+      }
+    },
+    "oracle": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "category": "evidence-conditioned"
+      },
+      "signed_S": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "bca_timeout": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "refund": 250
+          }
+        }
+      }
+    },
+    "naive": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 0.5,
+        "ci95": [
+          0.5,
+          0.5
+        ],
+        "category": "evidence-insensitive"
+      },
+      "signed_S": {
+        "est": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "bca_timeout": {
+        "est": 0.5,
+        "ci95": [
+          0.5,
+          0.5
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        }
+      }
+    },
+    "fixed_retry": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 0.5,
+        "ci95": [
+          0.5,
+          0.5
+        ],
+        "category": "evidence-insensitive"
+      },
+      "signed_S": {
+        "est": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "bca_timeout": {
+        "est": 0.5,
+        "ci95": [
+          0.5,
+          0.5
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        }
+      }
+    },
+    "a12_proc_rv_s0": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "category": "evidence-conditioned"
+      },
+      "signed_S": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "bca_timeout": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.356,
+          "goal_met": 0.356,
+          "duplicate": 0.0,
+          "report_accurate": 0.356,
+          "first_actions": {
+            "refund": 89,
+            "next_step": 161
+          }
+        }
+      }
+    },
+    "a12_proc_ra_s0": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "category": "evidence-conditioned"
+      },
+      "signed_S": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "bca_timeout": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        }
+      }
+    },
+    "a12_proc_rv_s1": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "category": "evidence-conditioned"
+      },
+      "signed_S": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "bca_timeout": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.476,
+          "goal_met": 0.476,
+          "duplicate": 0.0,
+          "report_accurate": 0.476,
+          "first_actions": {
+            "refund": 119,
+            "next_step": 131
+          }
+        }
+      }
+    },
+    "a12_proc_ra_s1": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "category": "evidence-conditioned"
+      },
+      "signed_S": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "bca_timeout": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        }
+      }
+    },
+    "a12_proc_rv_s2": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "category": "evidence-conditioned"
+      },
+      "signed_S": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "bca_timeout": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.348,
+          "goal_met": 0.348,
+          "duplicate": 0.0,
+          "report_accurate": 0.348,
+          "first_actions": {
+            "refund": 87,
+            "next_step": 163
+          }
+        }
+      }
+    },
+    "a12_proc_ra_s2": {
+      "n_tasks": 250,
+      "bca": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "category": "evidence-conditioned"
+      },
+      "signed_S": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "bca_timeout": {
+        "est": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "by_branch": {
+        "C": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "L": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        },
+        "A": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "T": {
+          "n": 250,
+          "correct": 1.0,
+          "goal_met": 1.0,
+          "duplicate": 0.0,
+          "report_accurate": 1.0,
+          "first_actions": {
+            "repay_same_key": 250
+          }
+        },
+        "P": {
+          "n": 250,
+          "correct": 0.0,
+          "goal_met": 0.0,
+          "duplicate": 0.0,
+          "report_accurate": 0.0,
+          "first_actions": {
+            "next_step": 250
+          }
+        }
+      }
+    }
+  },
+  "contrasts": {
+    "rv_minus_warm[s0]": {
+      "est": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "ci90": [
+        0.0,
+        0.0
+      ],
+      "category": "equivalent",
+      "mcnemar": {
+        "first_only": 0,
+        "second_only": 0,
+        "p": 1.0
+      }
+    },
+    "rv_minus_ra[s0]": {
+      "est": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "ci90": [
+        0.0,
+        0.0
+      ],
+      "category": "equivalent",
+      "mcnemar": {
+        "first_only": 0,
+        "second_only": 0,
+        "p": 1.0
+      }
+    },
+    "rv_minus_warm[s1]": {
+      "est": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "ci90": [
+        0.0,
+        0.0
+      ],
+      "category": "equivalent",
+      "mcnemar": {
+        "first_only": 0,
+        "second_only": 0,
+        "p": 1.0
+      }
+    },
+    "rv_minus_ra[s1]": {
+      "est": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "ci90": [
+        0.0,
+        0.0
+      ],
+      "category": "equivalent",
+      "mcnemar": {
+        "first_only": 0,
+        "second_only": 0,
+        "p": 1.0
+      }
+    },
+    "rv_minus_warm[s2]": {
+      "est": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "ci90": [
+        0.0,
+        0.0
+      ],
+      "category": "equivalent",
+      "mcnemar": {
+        "first_only": 0,
+        "second_only": 0,
+        "p": 1.0
+      }
+    },
+    "rv_minus_ra[s2]": {
+      "est": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "ci90": [
+        0.0,
+        0.0
+      ],
+      "category": "equivalent",
+      "mcnemar": {
+        "first_only": 0,
+        "second_only": 0,
+        "p": 1.0
+      }
+    }
+  },
+  "across_seeds": {
+    "rv_minus_warm": {
+      "per_seed": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "same_sign": false,
+      "sign_flip_p_one_sided": 1.0,
+      "sign_flip_p_two_sided": 1.0
+    },
+    "rv_minus_ra": {
+      "per_seed": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "same_sign": false,
+      "sign_flip_p_one_sided": 1.0,
+      "sign_flip_p_two_sided": 1.0
+    }
+  },
+  "thesis_check": {
+    "abandon_seeing_is_not_knowing": true,
+    "rule": "abandon if every trained policy has BCA lower bound >= 0.85 and signed S lower bound >= 0.70"
+  }
+}
