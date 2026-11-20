@@ -308,5 +308,22 @@ claims:
       rt_p_rv_s2: {value: 0.012, file: results/a14/a14_summary_runtime.json, key: [policies, a12_proc_rv_s2, by_branch, P, correct], shown: ["0.01"]}
       rt_p_rv_s1: {value: 0.136, file: results/a14/a14_summary_runtime.json, key: [policies, a12_proc_rv_s1, by_branch, P, correct], shown: ["0.14"]}
 
+  - id: TRACK3
+    statement: "Track 3 metrics (A12 models): proc_conf claimed success R_A 1.000 vs verified 0.470; R_V claimed 0.843 vs verified 0.743-0.793; tool-call validity 1.000; batch-1 latency per episode warm start 2.44 s, R_V 3.82 s, R_A 2.44 s; gateway overhead about 0.2 ms per call (in-process)."
+    status: supported
+    prereg: null
+    eval: [results/s2/track3_metrics.json]
+    numbers:
+      ra_claimed: {value: 1.000, file: results/s2/track3_metrics.json, key: [by_model_split, {model: ra_s0, split: proc_conf}, claimed_success], shown: ["100%"]}
+      ra_verified: {value: 0.470, file: results/s2/track3_metrics.json, key: [by_model_split, {model: ra_s0, split: proc_conf}, verified_completion], shown: ["0.470", "0.47"]}
+      rv_claimed: {value: 0.843, file: results/s2/track3_metrics.json, key: [by_model_split, {model: rv_s0, split: proc_conf}, claimed_success], shown: ["0.843", "84%"]}
+      rv_calls: {value: 7.32, file: results/s2/track3_metrics.json, key: [by_model_split, {model: rv_s0, split: proc_conf}, mean_calls], shown: ["7.3"]}
+      ra_calls: {value: 3.88, file: results/s2/track3_metrics.json, key: [by_model_split, {model: ra_s0, split: proc_conf}, mean_calls], shown: ["3.9"]}
+      validity: {value: 1.000, file: results/s2/track3_metrics.json, key: [by_model_split, {model: rv_s0, split: proc_conf}, tool_call_validity], shown: ["1.000"]}
+      lat_warm: {value: 2.44, file: results/s2/track3_metrics.json, key: [latency_batch1_proc_dev, warm_start, mean], shown: ["2.44"]}
+      lat_rv: {value: 3.82, file: results/s2/track3_metrics.json, key: [latency_batch1_proc_dev, rv_s0, mean], shown: ["3.82"]}
+      lat_rv_p95: {value: 4.68, file: results/s2/track3_metrics.json, key: [latency_batch1_proc_dev, rv_s0, p95], shown: ["4.68"]}
+      gw_enforce: {value: 0.219, file: results/s2/track3_metrics.json, key: [gateway_overhead_ms_per_call, enforce, mean], shown: ["0.2"]}
+
 # Non-result numbers that appear in scanned documents (software versions).
 allow: ["3.12", "2.11", "5.22", "1.7", "0.23", "0.21"]
