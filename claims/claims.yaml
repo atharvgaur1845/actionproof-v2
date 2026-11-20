@@ -200,8 +200,8 @@ claims:
   - id: C1-H2
     statement: >-
       Registered primary (A12 H2, proc_conf, step-200 models, each run once): phantom read-back R_V 1.00 vs R_A 0.00
-      in seeds 0, 1 and 2 (task level 153/153 vs 0/153 in each); VSC difference +0.313, +0.323, +0.313. Exact
-      sign-flip p over 3 seeds is 1/8 one-sided (its minimum); no seed-level significance is claimed.
+      in each of seeds 0-4 (task level 153/153 vs 0/153 in each); VSC difference +0.313, +0.323, +0.313, +0.277,
+      +0.273. Exact sign-flip p over 5 seeds is 1/32 one-sided, 2/32 two-sided (the floors).
     status: supported
     prereg: PREREGISTRATION_A12.md
     deviations: ["D-A12-1 (seed 0 R_A stop rule fired, continued)", "D-A12-2 (seed 2 R_V resumed from checkpoint-175)"]
@@ -219,7 +219,12 @@ claims:
       vsc_diff_s0: {value: 0.313, file: results/s2/a12_summary.json, key: [vsc, per_seed, "0", diff], shown: ["+0.313", "0.313"]}
       vsc_diff_s1: {value: 0.323, file: results/s2/a12_summary.json, key: [vsc, per_seed, "1", diff], shown: ["+0.323", "0.323"]}
       vsc_diff_s2: {value: 0.313, file: results/s2/a12_summary.json, key: [vsc, per_seed, "2", diff], shown: []}
-      signflip: {value: 0.125, file: results/s2/a12_summary.json, key: [phantom_readback, sign_flip_p_one_sided], shown: ["1/8"]}
+      vsc_diff_s3: {value: 0.277, file: results/s2/a12_summary.json, key: [vsc, per_seed, "3", diff], shown: ["+0.277"]}
+      vsc_diff_s4: {value: 0.273, file: results/s2/a12_summary.json, key: [vsc, per_seed, "4", diff], shown: ["+0.273"]}
+      signflip: {value: 0.03125, file: results/s2/a12_summary.json, key: [phantom_readback, sign_flip_p_one_sided], shown: ["1/32"]}
+      signflip2: {value: 0.0625, file: results/s2/a12_summary.json, key: [phantom_readback, sign_flip_p_two_sided], shown: ["2/32"]}
+      hier_lo: {value: 0.247, file: results/s2/a12_summary.json, key: [vsc, hierarchical_ci95_descriptive, 0], shown: ["0.247"]}
+      hier_hi: {value: 0.355, file: results/s2/a12_summary.json, key: [vsc, hierarchical_ci95_descriptive, 1], shown: ["0.355"]}
 
   - id: C1-H3
     statement: "Registered H3 (A12 §7) fails: sign agreement R_V 3 of 5 classes (0.6), R_A 0 of 5, against >= 0.8, in each of seeds 0-2. The warm start decoded greedily never reads back on proc_dev (0/96)."
