@@ -277,5 +277,31 @@ claims:
       ra_rr_last_lo: {value: 0.04, file: results/s2/reward_signal_summary.json, key: [proc_ra, read_rate_last_block, 0], shown: ["0.04"]}
       ra_rr_last_hi: {value: 0.06, file: results/s2/reward_signal_summary.json, key: [proc_ra, read_rate_last_block, 1], shown: ["0.06"]}
 
+  - id: A14
+    statement: >-
+      A14 (registered): given forced authoritative evidence, every policy (warm start, R_V and R_A seeds 0-2) has BCA
+      1.00 and signed S +1.00 on the success-acknowledgement family; thesis check met. Partial branch correct action:
+      R_V 0.36/0.48/0.35, R_A 0.00, warm start 0.03. Exploratory runtime-attributed ablation: R_A BCA 0.83, S +0.66.
+    status: supported
+    prereg: PREREGISTRATION_A14.md
+    eval: [results/a14/a14_summary.json, results/a14/a14_summary_runtime.json]
+    stats: scripts/a14_stats.py
+    numbers:
+      bca_rv_s0: {value: 1.00, file: results/a14/a14_summary.json, key: [policies, a12_proc_rv_s0, bca, est], shown: ["1.00"]}
+      bca_ra_s0: {value: 1.00, file: results/a14/a14_summary.json, key: [policies, a12_proc_ra_s0, bca, est], shown: []}
+      bca_warm: {value: 1.00, file: results/a14/a14_summary.json, key: [policies, warm_start, bca, est], shown: []}
+      s_ra_s0: {value: 1.00, file: results/a14/a14_summary.json, key: [policies, a12_proc_ra_s0, signed_S, est], shown: ["+1.00"]}
+      naive_bca: {value: 0.50, file: results/a14/a14_summary.json, key: [policies, naive, bca, est], shown: ["0.50"]}
+      p_rv_s0: {value: 0.356, file: results/a14/a14_summary.json, key: [policies, a12_proc_rv_s0, by_branch, P, correct], shown: ["0.36"]}
+      p_rv_s1: {value: 0.476, file: results/a14/a14_summary.json, key: [policies, a12_proc_rv_s1, by_branch, P, correct], shown: ["0.48"]}
+      p_rv_s2: {value: 0.348, file: results/a14/a14_summary.json, key: [policies, a12_proc_rv_s2, by_branch, P, correct], shown: ["0.35"]}
+      p_ra_s0: {value: 0.0, file: results/a14/a14_summary.json, key: [policies, a12_proc_ra_s0, by_branch, P, correct], shown: []}
+      p_warm: {value: 0.028, file: results/a14/a14_summary.json, key: [policies, warm_start, by_branch, P, correct], shown: ["0.03"]}
+      rt_bca_ra_s0: {value: 0.83, file: results/a14/a14_summary_runtime.json, key: [policies, a12_proc_ra_s0, bca, est], shown: ["0.83"]}
+      rt_s_ra_s0: {value: 0.66, file: results/a14/a14_summary_runtime.json, key: [policies, a12_proc_ra_s0, signed_S, est], shown: ["+0.66"]}
+      rt_bca_rv_s1: {value: 0.992, file: results/a14/a14_summary_runtime.json, key: [policies, a12_proc_rv_s1, bca, est], shown: ["0.99"]}
+      rt_p_rv_s2: {value: 0.012, file: results/a14/a14_summary_runtime.json, key: [policies, a12_proc_rv_s2, by_branch, P, correct], shown: ["0.01"]}
+      rt_p_rv_s1: {value: 0.136, file: results/a14/a14_summary_runtime.json, key: [policies, a12_proc_rv_s1, by_branch, P, correct], shown: ["0.14"]}
+
 # Non-result numbers that appear in scanned documents (software versions).
 allow: ["3.12", "2.11", "5.22", "1.7", "0.23", "0.21"]
