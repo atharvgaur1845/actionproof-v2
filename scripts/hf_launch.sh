@@ -17,9 +17,11 @@ for t in ${TASKS//,/ }; do
   if mkdir queue/claims/$t 2>/dev/null; then CLAIMED="$CLAIMED $t"; else echo "already claimed: $t $(cat queue/claims/$t/owner 2>/dev/null)"; release; exit 1; fi
 done
 trap release ERR
-tar czf .cache/hfjob/code_$TASK.tar.gz actionproof scripts slurm data/bench/proc data/bench/c2 pyproject.toml \
-  PREREGISTRATION_A12.md PREREGISTRATION_A12_ADDENDUM1.md docs/stage2/VERIFIER_SPEC.md results/a12_hashes.json results/a12b_hashes.json results/a12 $( [ -d results/a12b ] && echo results/a12b ) tests/golden \
-  $( [ -f PREREGISTRATION_A11.md ] && echo PREREGISTRATION_A11.md data/h4 ) $( [ -f results/a11_hashes.json ] && echo results/a11_hashes.json )
+# every registration, hash manifest and test a task's guard may check travels with the code (701 failed without A14's)
+tar czf .cache/hfjob/code_$TASK.tar.gz --exclude=results/a12/rollouts actionproof scripts slurm data/bench/proc data/bench/c2 pyproject.toml \
+  PREREGISTRATION_A1*.md docs/stage2/VERIFIER_SPEC.md results/a1*_hashes.json results/a12 $( [ -d results/a12b ] && echo results/a12b ) \
+  $( [ -d results/a14 ] && echo results/a14 ) $( [ -d results/s2 ] && echo results/s2 ) tests/golden tests/integrity \
+  $( [ -f PREREGISTRATION_A11.md ] && echo data/h4 )
 .venv/bin/hf upload $REPO .cache/hfjob/code_$TASK.tar.gz bundle/code_$TASK.tar.gz --repo-type dataset --quiet
 .venv/bin/hf upload $REPO slurm/hfjob_run.sh bundle/hfjob_run.sh --repo-type dataset --quiet
 for p in "$@"; do .venv/bin/hf upload $REPO "$p" "inputs/$TASK/$p" --repo-type dataset --quiet; done

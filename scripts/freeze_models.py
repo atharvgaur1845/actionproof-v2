@@ -24,10 +24,14 @@ def sha(p: Path) -> str:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--tags", default=None, help="comma-separated: check only these (a job holds only its own adapters)")
     a = ap.parse_args()
     frozen = json.loads(REF.read_text()) if REF.exists() else {}
     if a.check:
-        bad = [k for k, v in frozen.items() if sha(ROOT / v["adapter"] / "adapter_model.safetensors") != v["sha256"]]
+        tags = a.tags.split(",") if a.tags else list(frozen)
+        missing = [k for k in tags if k not in frozen]
+        bad = missing + [k for k in tags if k in frozen and
+                         sha(ROOT / frozen[k]["adapter"] / "adapter_model.safetensors") != frozen[k]["sha256"]]
         print("OK: frozen models match" if not bad else "MISMATCH: " + ", ".join(bad))
         sys.exit(1 if bad else 0)
     for run in sorted((ROOT / "runs").glob("a12_proc_r?_s*")):

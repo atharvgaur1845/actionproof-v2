@@ -4,7 +4,7 @@
 set -uo pipefail
 source slurm/claim.sh || exit 0
 source slurm/env.sh
-.venv/bin/python scripts/freeze_models.py --check || exit 1
+.venv/bin/python scripts/freeze_models.py --check --tags a12_proc_rv_s0,a12_proc_ra_s0 || exit 1
 [ -f runs/rft_proc/merged/config.json ] || .venv/bin/python -m actionproof.train.merge runs/rft_proc/final \
   CohereLabs/tiny-aya-global > logs/conf_merge.log 2>&1 || exit 1
 mkdir -p logs
