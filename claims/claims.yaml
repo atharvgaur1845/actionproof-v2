@@ -1,8 +1,18 @@
 # Claim-to-evidence ledger (Stage 2).
 # Every number published in the video, slides, README, site or write-up must resolve to an entry here.
-# scripts/s2_numcheck.py reads this file. A claim with status "pending" may not be stated as a result.
-# Fields: id, statement, status (pending | supported | not_supported | not_run), prereg, runs, eval,
-# metric_code, stats, verifier, figures, numbers (name -> {value, file, key}), commit.
+# scripts/s2_numcheck.py reads this file: it re-reads every number from its file, and it fails if a published
+# document contains a result number that no entry lists under `shown`. A claim with status "pending" may not be
+# stated as a result.
+# Fields: id, statement, status (pending | supported | not_supported | not_run), prereg, runs, eval, metric_code,
+# stats, verifier, figures, numbers, commit.
+# numbers: name -> {value, file, key, agg?, shown}. `key` is a path into the JSON file: strings and integers index
+# dicts and lists, a mapping selects the list element whose fields match it. `agg` (mean | sum) reduces a list.
+# `value` is compared after rounding the file value to the decimals written in `value`. `shown` lists the exact
+# strings that may appear in published documents for this number.
+
+documents:   # scanned by s2_numcheck.py
+  - docs/stage2/VIDEO_SCRIPT.md
+  - docs/stage2/PRODUCT.md
 
 claims:
   - id: C1
@@ -14,28 +24,71 @@ claims:
     prereg: PREREGISTRATION_A12.md
     runs: []
     eval: []
-    metric_code: []
+    metric_code: [actionproof/integrity/sim/truth.py, actionproof/rewards/proc_rewards.py]
     stats: scripts/s2_stats.py
     verifier: scripts/reference_verifier_proc.py
     figures: []
     numbers: {}
     commit: null
 
+  - id: C1-H3-PRED
+    statement: >-
+      Step-0 prediction (committed before GRPO step 1): mean group-relative advantage of reading back
+      minus not reading back, per fault class and reward, on the warm start's gate samples.
+    status: supported   # the prediction exists; whether it is confirmed is part of C1 (pending)
+    prereg: PREREGISTRATION_A12_ADDENDUM1.md
+    eval: [results/a12b/h3_predictions.json]
+    metric_code: [scripts/a12_gate.py]
+    numbers:
+      r_a_lost_ack: {value: -0.72, file: results/a12b/h3_predictions.json, key: [selection, r_a, lost_ack, advantage_read_minus_noread], shown: ["-0.72"]}
+      r_a_never_commit: {value: -0.84, file: results/a12b/h3_predictions.json, key: [selection, r_a, never_commit, advantage_read_minus_noread], shown: ["-0.84"]}
+      r_v_phantom: {value: 0.78, file: results/a12b/h3_predictions.json, key: [selection, r_v, phantom, advantage_read_minus_noread], shown: ["0.78", "+0.78"]}
+    commit: null
+
+  - id: A12-GATE
+    statement: "Warm-start gate (Addendum 1): passed on proc_train_b at group size 8."
+    status: supported
+    prereg: PREREGISTRATION_A12_ADDENDUM1.md
+    eval: [results/a12b/gate.json]
+    numbers:
+      phantom_readback: {value: 0.35, file: results/a12b/gate.json, key: [phantom_readback], shown: ["0.35"]}
+      vsc: {value: 0.38, file: results/a12b/gate.json, key: [vsc], shown: ["0.38"]}
+      informative_r_v: {value: 0.48, file: results/a12b/gate.json, key: [nonzero_variance_share, r_v], shown: ["0.48"]}
+      informative_r_a: {value: 0.44, file: results/a12b/gate.json, key: [nonzero_variance_share, r_a], shown: ["0.44"]}
+
   - id: C2
     statement: >-
-      A transaction contract catches the violations it represents and combinations of them, misses
-      violations when clauses are removed or interact, and cannot express some independently
-      generated violations (the specification gap).
-    status: pending
+      The full contract accepts none of the violations it represents or their combinations, but accepts
+      8.7% of independently written adversarial violations; one-sided Fisher test of G-adv > G-rep.
+    status: supported
     prereg: PREREGISTRATION_A13.md
     runs: []
-    eval: []
-    metric_code: []
-    stats: null
+    eval: [results/a13/h5_coverage.json, results/a13/h5_report.md]
+    metric_code: [actionproof/integrity/clauses.py, scripts/h5_coverage.py]
+    stats: scripts/h5_coverage.py
     verifier: null
     figures: []
-    numbers: {}
+    numbers:
+      g_rep_violations: {value: 13050, file: results/a13/h5_coverage.json, key: [G-rep, n_violations], shown: ["13,050"]}
+      g_comb_violations: {value: 32551, file: results/a13/h5_coverage.json, key: [G-comb, n_violations], shown: ["32,551"]}
+      g_rep_plus_comb_violations: {value: 45601, file: results/a13/h5_coverage.json, key: [[G-rep, n_violations], [G-comb, n_violations]], agg: sum, shown: ["45,601"]}
+      g_adv_violations: {value: 161, file: results/a13/h5_coverage.json, key: [G-adv, n_violations], shown: ["161"]}
+      g_adv_accepted: {value: 14, file: results/a13/h5_coverage.json, key: [G-adv, false_acceptance, k], shown: ["14"]}
+      g_adv_fa_rate: {value: 0.087, file: results/a13/h5_coverage.json, key: [G-adv, false_acceptance, rate], shown: ["8.7%"]}
+      g_adv_unamb_accepted: {value: 8, file: results/a13/h5_coverage.json, key: [G-adv (unambiguous only), false_acceptance, k], shown: []}
+      g_adv_unamb_rate: {value: 0.053, file: results/a13/h5_coverage.json, key: [G-adv (unambiguous only), false_acceptance, rate], shown: ["5.3%"]}
+      fisher_p: {value: 9.0e-28, file: results/a13/h5_coverage.json, key: [primary_test, fisher_one_sided_p], shown: ["9e-28"]}
     commit: null
+
+  - id: H7
+    statement: "Defences on identical fault traces (scripted policies): keys alone recover no phantom write; verify-before-retry recovers all."
+    status: supported
+    prereg: PREREGISTRATION_A11.md
+    eval: [results/a11/h7_matrix.json]
+    metric_code: [scripts/h7_matrix.py]
+    numbers:
+      keys_phantom_goal: {value: 0.0, file: results/a11/h7_matrix.json, key: [{defence: D1 keys+retry, fault: phantom}, goal], shown: ["0%"]}
+      verify_retry_phantom_goal: {value: 1.0, file: results/a11/h7_matrix.json, key: [{defence: D4 verify-retry, fault: phantom}, goal], shown: ["100%"]}
 
   - id: C3
     statement: >-
@@ -45,8 +98,8 @@ claims:
     prereg: PREREGISTRATION_A11.md
     runs: []
     eval: []
-    metric_code: []
-    stats: null
+    metric_code: [scripts/a11_estimands.py]
+    stats: scripts/a11_estimands.py
     verifier: null
     figures: []
     numbers: {}
@@ -54,10 +107,23 @@ claims:
 
   # Stage-1 results quoted in Stage-2 materials (pre-Stage-2 work, Nov 1-15).
   - id: S1-VSC
-    statement: "Confirmatory VSC: PCSTR-d 0.8425 vs warm start 0.6425 vs tool_trust 0.640 (400 tasks, 2 seeds)."
+    statement: "Confirmatory verified completion: PCSTR-d 0.8425 vs tool_trust 0.640 (400 tasks, 2 seeds each)."
     status: supported
     prereg: PREREGISTRATION_A4.md
     eval: [results/confirmatory.json]
     numbers:
-      pcstr_d: {value: 0.8425, file: results/confirmatory.json, key: H1.means.pcstr_d}
+      pcstr_d: {value: 0.8425, file: results/confirmatory.json, key: [H1, means, pcstr_d], shown: ["0.8425"]}
+      tool_trust: {value: 0.640, file: results/confirmatory.json, key: [per_arm_vsc, tool_trust], agg: mean, shown: ["0.640"]}
     commit: 2795c06
+
+  - id: S1-JUDGE
+    statement: >-
+      AuditKIT TaskCompletion (Aya 32B), given the receipt ledger, still accepts 71.5% of the 298 false
+      completions the ledger shows (0.960 without the ledger, same episodes).
+    status: supported
+    prereg: PREREGISTRATION_A9.md
+    eval: [results/judge/aya32b_grounded__summary.json, results/judge/grounded_audit.md]
+    numbers:
+      grounded_far: {value: 0.715, file: results/judge/aya32b_grounded__summary.json, key: [aya32b_grounded__auditkit_tc, "ALL|ledger_fail=True|FAR", rate], shown: ["72%", "0.715"]}
+      grounded_n: {value: 298, file: results/judge/aya32b_grounded__summary.json, key: [aya32b_grounded__auditkit_tc, "ALL|ledger_fail=True|FAR", n], shown: ["298"]}
+    commit: null

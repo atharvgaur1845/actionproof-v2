@@ -9,11 +9,13 @@ jobs:
       - name: Clean install
         run: uv venv --python 3.12 && uv pip install ".[integrity,dev]"
       - name: Lint (gateway, simulator, Stage 2 analysis)
-        run: .venv/bin/ruff check actionproof/integrity scripts/s2_stats.py scripts/a11_estimands.py scripts/eval_proc_gateway.py scripts/ci_freeze_check.py
+        run: .venv/bin/ruff check actionproof/integrity scripts/s2_stats.py scripts/a11_estimands.py scripts/eval_proc_gateway.py scripts/ci_freeze_check.py scripts/s2_numcheck.py
       - name: Type check (gateway)
         run: .venv/bin/mypy actionproof/integrity
       - name: Frozen-file guard
         run: .venv/bin/python scripts/ci_freeze_check.py
+      - name: Every published number traces to a file
+        run: .venv/bin/python scripts/s2_numcheck.py
       - name: Tests (CPU)
         run: .venv/bin/python -m pytest -q
       - name: CLI smoke run
