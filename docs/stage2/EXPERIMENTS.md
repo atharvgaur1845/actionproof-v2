@@ -11,7 +11,7 @@ Every experiment is listed before it runs. Status values: planned, registered, r
 | A12 addendum 1 | rebalanced training split `proc_train_b`, gate at group size 8 | `PREREGISTRATION_A12_ADDENDUM1.md` | `results/a12b_hashes.json` | registered 2026-11-20 06:38 (f1ad004) |
 | A12 addendum 2 | seeds 1–4 protocol (stop rule as diagnostic under saturation), confirmatory machinery, reporting rules, reward-signal analysis | `PREREGISTRATION_A12_ADDENDUM2.md` | `results/a12c_hashes.json` | registered 2026-11-20 08:37 (d31c75c), before seeds 1–2 |
 | A13 | H5 contract coverage (G-rep, G-comb, G-adv) | `PREREGISTRATION_A13.md` | `results/a13_hashes.json` | registered and run 2026-11-20 06:43; registered test invalid (D-A13-1); finite-set results `results/a13/h5_finite.json` |
-| A14 | forced-evidence forks: evidence-conditioned control after a write | `PREREGISTRATION_A14.md` | `results/a14_hashes.json`; code/split/adapters `results/a14b_hashes.json` (at freeze) | registered 2026-11-20 08:41 (0d8a955); pilot (a) and (b) passed; freeze after seeds 1–2 |
+| A14 | forced-evidence forks: evidence-conditioned control after a write | `PREREGISTRATION_A14.md` | `results/a14_hashes.json`; `results/a14b_hashes.json` | registered 08:41 (0d8a955); frozen 10:44 (3a691f0); run done; thesis check met |
 | — | H8 to H12 | none | — | not run (descoped in the strategy review) |
 
 ## Runs
@@ -23,10 +23,12 @@ Every experiment is listed before it runs. Status values: planned, registered, r
 | 614 / 615 | A12 | GRPO seed 0, R_V / R_A | HF h200 6aff9f52 / 6aff9f5f | done; R_A stop rule fired (D-A12-1) | runs/a12_proc_r?_s0, results/eval/a12/dev, results/a12/rollouts |
 | 612 / 613 | A12 add. 2 | GRPO seed 1, R_V / R_A | HF h200 6affb9d6 / 6affb9e2 | done; R_A stop-rule diagnostic 0.818 (saturated, continues) | runs/a12_proc_r?_s1 |
 | 610 / 611 | A12 add. 2 | GRPO seed 2, R_V / R_A | HF h200 6affb9ee (crashed at step 199) + 6affd008 (resume, D-A12-2) / 6affb9fa | done | runs/a12_proc_r?_s2 |
-| 616–619 | A12 add. 2 | GRPO seeds 3–4 (registered time rule met) | HF h200 ×4 | running (10:47) | runs/a12_proc_r?_s{3,4} |
+| 616–619 | A12 add. 2 | GRPO seeds 3–4 (registered time rule met) | HF h200 ×4 | done; frozen in results/a12/frozen_models_later.json | runs/a12_proc_r?_s{3,4} |
 | reward signal s0 | A12 add. 2 §3 | per-class reward signal from rollouts (exploratory) | cluster CPU | done | results/a12/reward_signal_s0.json |
 | 800 | A12 add. 2 §2 | confirmatory, seed 0 (2 models × 3 splits, once) | HF l40s 6affbde9 | done | results/eval/a12/conf/ |
-| 801 / 802 | A12 add. 2 §2 | confirmatory, seeds 1 / 2 | HF l40s 6affd7be / 6affd7d4 | running (10:46) | results/eval/a12/conf/ |
+| 801 / 802 | A12 add. 2 §2 | confirmatory, seeds 1 / 2 | HF l40s 6affe816 / 6affe829 (first attempts stopped at guards) | done | results/eval/a12/conf/ |
+| 803 / 804 | A12 add. 2 §2 | confirmatory, seeds 3 / 4 | HF l40s 6affefef / 6afff00b | 803 done; 804 running | results/eval/a12/conf/ |
+| 590 | A12 §7 | warm start on proc_dev (H3 reference) | HF l40s 6affeb80 | done | results/eval/a12/dev/warm_start__neutral__proc_dev.jsonl |
 | 500–502 | A11 | H1: warm start, PCSTR-d s0, s1 | HF l40s 6affa403 | done | results/a11/eval/ |
 | 503–505 | A11 | H1: ack_outcome s0, s1, tool_trust s0 | HF l40s 6affa418 | done | results/a11/eval/ |
 | 509 | A11 | offline Observe and scripted agents (CPU) | cluster login node | done | results/a11/eval, results/a11/scripted, results/s2/a11_summary.json |
@@ -35,7 +37,7 @@ Every experiment is listed before it runs. Status values: planned, registered, r
 | h5 | A13 | contract coverage (CPU) | local | done | results/a13/h5_coverage.json, h5_finite.json |
 | a14 pilot (a) | A14 §6 | scripted references, proc_dev | cluster CPU | passed | results/a14/pilot/README.md |
 | 700 | A14 §6 | pilot (b), R_V s0 step 50, proc_dev | HF l40s 6affbc0f | passed (validity and timing only) | results/a14/pilot/ |
-| 701 | A14 | registered run on proc_cf (warm start, 6 frozen adapters) | HF l40s 6affd7a6 | running (10:46; a14b frozen 10:44) | results/eval/a14/, results/a14/a14_summary.json |
+| 701 | A14 | registered run on proc_cf (warm start, 6 frozen adapters) | HF l40s 6affe7fd (first attempt 6affd7a6 stopped at its guard) | done | results/eval/a14/, results/a14/a14_summary.json |
 
 ## Worker jobs (our account only)
 
