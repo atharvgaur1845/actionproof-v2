@@ -17,3 +17,7 @@ Starting balance: **not yet confirmed** (the CLI cannot read billing; the user c
 | 2026-11-20 08:39 | jobs 6affb9d6efaf5e14f4b28712 (612 R_V s1), 6affb9e24fdc5ab3c55abc04 (613 R_A s1), 6affb9eeefaf5e14f4b28736 (610 R_V s2), 6affb9fa4fdc5ab3c55abc4c (611 R_A s2) | h200 ×4 | A12 seeds 1–2 under addendum 2; no Slurm GPU since Nov 19 | ~40 | | |
 | 2026-11-20 08:40 | note | | seed 0 (614, 615) ran ~1 h 50 min each including dev evaluations; A11 batch A (6affa403) ran ~45 min | | 614/615 ≈ 9 each; 6affa403 ≈ 1.5 | |
 | 2026-11-20 08:57 | job 6affbde9efaf5e14f4b28f54 (800_a12_conf_s0) | l40sx1 | A12 seed 0 confirmatory evaluation (2 models × 3 splits, once) | ~3 | ~11 min ≈ 0.35 | |
+| 2026-11-20 10:13 | job 6affd008efaf5e14f4b2aeee (610 resume) | h200 | R_V seed 2 resumed from checkpoint-175 (D-A12-2) | ~2 | ~25 min ≈ 2 | |
+| 2026-11-20 10:46 | job 6affd7a6efaf5e14f4b2b9d8 (701_a14_main) | l40sx1 | A14 registered run: warm start + 6 frozen adapters, 2 representations | ~4 | | |
+| 2026-11-20 10:46 | jobs 6affd7be4fdc5ab3c55ae9bb (801), 6affd7d44fdc5ab3c55ae9d2 (802) | l40sx1 ×2 | A12 confirmatory, seeds 1 and 2 | ~1 | | |
+| 2026-11-20 10:47 | jobs 6affd7f1efaf5e14f4b2ba4a (616), 6affd8004fdc5ab3c55aea07 (617), 6affd80eefaf5e14f4b2ba68 (618), 6affd81cefaf5e14f4b2ba74 (619) | h200 ×4 | A12 seeds 3–4 under addendum 2 (registered time rule met; projected total ≈ $103 of the $150 jobs cap) | ~36 | | |
