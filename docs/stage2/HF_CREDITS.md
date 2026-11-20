@@ -26,3 +26,6 @@ Starting balance: **not yet confirmed** (the CLI cannot read billing; the user c
 | 2026-11-20 12:29 | jobs 6affefefefaf5e14f4b2cb84 (803), 6afff00befaf5e14f4b2cbe4 (804) | l40sx1 ×2 | A12 confirmatory, seeds 3 and 4 | ~1 | | |
 | 2026-11-20 18:00 | cap change | | user decision: the unused $40 inference-endpoint reserve moves to the jobs cap (jobs cap $190; hard stop $195 unchanged) for K1 with 3 seeds per condition | | | |
 | 2026-11-20 18:08 | jobs 6b003f404fdc5ab3c55b6046 (631), 6b003f494fdc5ab3c55b605d (632), 6b003f534fdc5ab3c55b6081 (634), 6b003f5befaf5e14f4b3405c (635) | h200 ×4 | K1 R_A seeds 1–2 on both pools; seeds 0 (630, 633) run on the Slurm H200 worker 460633 at no HF cost | ~38 | | |
+| 2026-11-21 00:45 | first K1 HF attempts (6b003f40…, 6b003f49…, 6b003f53…, 6b003f5b…) | h200 ×4 | failed in minutes (D-K1-1) | | ≈ 1 total | |
+| 2026-11-21 00:45 | jobs 6b009c584fdc5ab3c55bcc43 (632), 6b009c64efaf5e14f4b3ba24 (634), 6b009c70efaf5e14f4b3ba30 (635) | h200 ×3 | K1 relaunch with the warm-start input; 631 moved to Slurm | ~29 | | |
+| 2026-11-21 00:46 | job 6b009c7f4fdc5ab3c55bcc86 (709) | l40sx1 | A15/A16 pilot (dev split only) | ~0.5 | | |
