@@ -6,7 +6,10 @@ set -uo pipefail
 W=/work; mkdir -p $W && cd $W
 export AP_TASKS=${AP_TASKS:-$AP_TASK} AP_HF=1 AP_ROOT=$W AP_HF_HOME=$W/.cache/huggingface AP_HF_OFFLINE=0 UV_CACHE_DIR=$W/.cache/uv
 uvx hf download "$AP_REPO" bundle/actionproof.tar.gz "bundle/code_$AP_TASK.tar.gz" --repo-type dataset --local-dir /tmp/b
-tar xzf /tmp/b/bundle/actionproof.tar.gz -C $W && tar xzf "/tmp/b/bundle/code_$AP_TASK.tar.gz" -C $W
+# --no-same-owner: as root, tar otherwise tries to restore cluster uids and exits non-zero (A11 batches, 2026-11-20)
+tar --no-same-owner -xzf /tmp/b/bundle/actionproof.tar.gz -C $W
+tar --no-same-owner -xzf "/tmp/b/bundle/code_$AP_TASK.tar.gz" -C $W
+test -f "slurm/tasks/$AP_TASK.sh" || { echo "bundle missing task script"; echo 2 > /tmp/rc; uvx hf upload "$AP_REPO" /tmp/rc "outputs/$AP_TASK/RC" --repo-type dataset --quiet 2>/dev/null; exit 2; }
 uvx hf download "$AP_REPO" --repo-type dataset --include "inputs/$AP_TASK/*" --local-dir /tmp/in >/dev/null 2>&1 \
   && [ -d "/tmp/in/inputs/$AP_TASK" ] && cp -r "/tmp/in/inputs/$AP_TASK/." $W/
 uv venv -q --python 3.12 .venv
