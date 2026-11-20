@@ -53,10 +53,12 @@ def main() -> None:
     ap.add_argument("--tag", required=True)
     ap.add_argument("--split", required=True, choices=SPLITS)
     ap.add_argument("--model", default="runs/rft_proc/merged")
+    ap.add_argument("--frozen-dir", default="results/a12", help="where frozen_models*.json live (K1: results/k1)")
+    ap.add_argument("--out-dir", default="results/eval/a12/conf")
     a = ap.parse_args()
     frozen = {}
     for name in ("frozen_models.json", "frozen_models_later.json"):  # the second holds models frozen after A14's freeze
-        f = ROOT / "results/a12" / name
+        f = ROOT / a.frozen_dir / name
         if f.exists():
             frozen.update(json.loads(f.read_text()))
     frozen = frozen[a.tag]
@@ -70,7 +72,7 @@ def main() -> None:
     mine = [e for e in log if e["sha256"] == h and e["split"] == a.split]
     if any(e["event"] == "completed" for e in mine):
         raise SystemExit(f"{a.tag} {a.split}: already completed; re-runs are forbidden")
-    out = ROOT / f"results/eval/a12/conf/{a.tag}__neutral__{a.split}.jsonl"
+    out = ROOT / a.out_dir / f"{a.tag}__neutral__{a.split}.jsonl"
     out.parent.mkdir(parents=True, exist_ok=True)
     done = {json.loads(line)["task_id"] for line in out.open()} if out.exists() else set()
     if mine and not done:

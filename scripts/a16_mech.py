@@ -1,4 +1,4 @@
-"""A16: representation and causal action selection at the post-evidence decision point (PREREGISTRATION_A15_A17).
+"""A16: representation and causal action selection at the post-evidence decision point (PREREGISTRATION_A15).
 
 Decision points come from A15's forks (`scripts/a15_eval.py`): the forced `list_payments` result shows the stored
 payment, q = 0, 1/4, 1/2, 3/4 or 1 of the purchase-order amount. For each model:
@@ -288,7 +288,7 @@ def cmd_causal(models: list[tuple[str, str]], n_test: int) -> None:
         key = lambda e: (e["task_id"], e["branch"])
         res = {"tag": tag, "layer": L, "patch": [], "controls": [], "ablation": {}}
         ps = pairs(test)
-        for i, (a, b) in enumerate(ps):
+        for a, b in ps:
             fin_a, fin_b = [len(m.prompt_ids(a["conv"])) - 1], [len(m.prompt_ids(b["conv"])) - 1]
             span = diff_span(m, a, b)
             row = {"task_id": a["task_id"], "branch": a["branch"], "M_partial": M[key(a)], "M_complete": M[key(b)],
@@ -299,7 +299,7 @@ def cmd_causal(models: list[tuple[str, str]], n_test: int) -> None:
                 row["span_c2p"] = patch_effect(m, a, b, L, span, M[key(a)], M[key(b)])
                 row["span_p2c"] = patch_effect(m, b, a, L, span, M[key(b)], M[key(a)])
             res["patch"].append(row)
-            if i < N_CONTROL_PAIRS and abs(M[key(b)] - M[key(a)]) >= MIN_GAP:
+            if len(res["controls"]) < N_CONTROL_PAIRS and abs(M[key(b)] - M[key(a)]) >= MIN_GAP:
                 own = m.states(a["conv"], L, fin_a)
                 don = m.states(b["conv"], L, fin_b)
                 norm = (don - own).norm()

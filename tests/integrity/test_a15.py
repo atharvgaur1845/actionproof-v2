@@ -1,4 +1,4 @@
-"""A15 harness checks (PREREGISTRATION_A15_A17): the ratio environment equals ProcEnv at q = 1/2, branch states match
+"""A15 harness checks (PREREGISTRATION_A15): the ratio environment equals ProcEnv at q = 1/2, branch states match
 q, prefixes are identical across branches until the forced read's result, scripted references score as predicted,
 splits are disjoint. Needs `transformers` for the system prompt; skipped without it."""
 import importlib.util

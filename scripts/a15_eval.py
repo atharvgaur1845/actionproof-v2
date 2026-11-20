@@ -1,4 +1,4 @@
-"""A15: amount-ratio forced-evidence forks (PREREGISTRATION_A15_A17). Extends A14's design (`scripts/cef_eval.py`,
+"""A15: amount-ratio forced-evidence forks (PREREGISTRATION_A15). Extends A14's design (`scripts/cef_eval.py`,
 frozen, imported unchanged) from one partial ratio (1/2, the only one ProcureSim produces) to q = 0, 1/4, 1/2, 3/4, 1.
 The partial ratio is applied by `RatioProcEnv`, a subclass that rescales the committed payment; at q = 1/2 it equals
 ProcEnv exactly (tested). Branches share the prefix and the acknowledgement; only the stored payment and the forced
