@@ -34,15 +34,16 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
-from actionproof.bench.generator_proc import SPLITS, load_tasks
+from actionproof.bench.generator_proc import load_tasks
 from actionproof.integrity.contracts import Contract
 from actionproof.integrity.gateway import MODES, ProcGateway
 from actionproof.integrity.ledger import EvidenceLedger
+from actionproof.integrity.paths import repo_root
 from actionproof.integrity.sim.agents import POLICIES
 from actionproof.integrity.sim.runtime import episode_record_proc, make_env_proc
 from actionproof.integrity.sim.truth import score
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = repo_root()
 DASH = Path(__file__).resolve().parent / "dashboard"
 PUBLIC_SPLITS = ("proc_dev", "proc_val", "proc_heldout_service")  # never serve confirmatory splits in the playground
 EVAL_FILES = {
@@ -132,7 +133,7 @@ def _detail(st: State, tx: str) -> dict[str, Any]:
         raise HTTPException(404, "unknown transaction")
     r = st.tx[tx]
     t, env, gw = r["task"], r["env"], r["gw"]
-    d = _disposition(st, tx) if r["mode"] != "passthrough" else {"status": (env.final_report or {}).get("status")}
+    d = _disposition(st, tx) or {"status": (env.final_report or {}).get("status")}  # None only in passthrough
     rec = episode_record_proc(t, env)
     sysrec = score({**rec, "report": {"status": d["status"], "summary": ""}})
     return {"tx_id": tx, "task_id": t.task_id, "prompt": t.prompt, "workflow": t.workflow, "mode": r["mode"],
@@ -200,7 +201,7 @@ def create_app(ledger_path: str | None = None, test_mode: bool = True) -> FastAP
         for tx, r in reversed(list(st.tx.items())):
             out.append({"tx_id": tx, "task_id": r["task"].task_id, "mode": r["mode"], "agent": r["agent"],
                         "status": r["status"], "fault_class": r["task"].meta["fault_class"],
-                        "disposition": _disposition(st, tx)["status"] if r["mode"] != "passthrough" else None})
+                        "disposition": (_disposition(st, tx) or {}).get("status")})
         return out
 
     @app.get("/v1/transactions/{tx}")

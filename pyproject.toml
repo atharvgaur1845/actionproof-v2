@@ -30,3 +30,19 @@ include = ["actionproof*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+# hash-frozen by A11 (results/a11_hashes.json); not edited after registration
+"actionproof/integrity/adapters/ecom.py" = ["F401"]
+
+[tool.mypy]
+ignore_missing_imports = true
+follow_imports = "silent"
+exclude = ["actionproof/integrity/adapters/ecom\\.py"]

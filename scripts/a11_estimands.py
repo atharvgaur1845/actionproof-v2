@@ -55,7 +55,7 @@ def main() -> None:
     for tid, lab in labels.items():
         cells[lab["cell"]].append(tid)
     cells["ALL"] = sorted(labels)
-    cells["ALL_excl_F5"] = sorted(t for t, l in labels.items() if "F5" not in l.get("faults", []))
+    cells["ALL_excl_F5"] = sorted(t for t, lb in labels.items() if "F5" not in lb.get("faults", []))
     res: dict = {"missing": missing, "cells": {c: len(v) for c, v in cells.items()}, "estimands": {}, "interaction": {}}
     for c, ts in cells.items():
         rng = random.Random(0)
@@ -77,7 +77,7 @@ def main() -> None:
             for m in MODES:
                 if data[(pol, m)]:
                     e[f"vsc[{pol},{m}]"] = mean(data[(pol, m)], ts)
-    full = [t for t, l in labels.items() if l["state_observability"] == "Full"]
+    full = [t for t, lb in labels.items() if lb["state_observability"] == "Full"]
     rng = random.Random(0)
     for pol in TRAINED:
         p_e, w_e, p_p, w_p = (data[(pol, "enforce")], data[(WARM, "enforce")],

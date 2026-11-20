@@ -88,8 +88,8 @@ def main(argv: list[str] | None = None) -> None:
             print(json.dumps(json_schema(), indent=2))
         else:
             from actionproof.bench.generator_proc import load_tasks
-            from pathlib import Path
-            root = Path(__file__).resolve().parents[2]
+            from actionproof.integrity.paths import repo_root
+            root = repo_root()
             t = {x.task_id: x for x in load_tasks(root / f"data/bench/proc/{a.split}.jsonl")}[a.task]
             k = Contract.for_task(t)
             print(json.dumps({"contract": k.model_dump(mode="json"), "content_hash": k.content_hash()}, indent=2))
