@@ -21,3 +21,6 @@ Starting balance: **not yet confirmed** (the CLI cannot read billing; the user c
 | 2026-11-20 10:46 | job 6affd7a6efaf5e14f4b2b9d8 (701_a14_main) | l40sx1 | A14 registered run: warm start + 6 frozen adapters, 2 representations | ~4 | | |
 | 2026-11-20 10:46 | jobs 6affd7be4fdc5ab3c55ae9bb (801), 6affd7d44fdc5ab3c55ae9d2 (802) | l40sx1 ×2 | A12 confirmatory, seeds 1 and 2 | ~1 | | |
 | 2026-11-20 10:47 | jobs 6affd7f1efaf5e14f4b2ba4a (616), 6affd8004fdc5ab3c55aea07 (617), 6affd80eefaf5e14f4b2ba68 (618), 6affd81cefaf5e14f4b2ba74 (619) | h200 ×4 | A12 seeds 3–4 under addendum 2 (registered time rule met; projected total ≈ $103 of the $150 jobs cap) | ~36 | | |
+| 2026-11-20 11:56 | jobs 6affe7fdefaf5e14f4b2c766 (701 relaunch), 6affe8164fdc5ab3c55af50b (801 relaunch), 6affe8294fdc5ab3c55af515 (802 relaunch) | l40sx1 ×3 | first attempts stopped at their guards in ~2 min (bundle lacked A14 files; guard checked absent adapters) | ~5 | first attempts ≈ 0.2 | |
+| 2026-11-20 12:11 | job 6affeb804fdc5ab3c55af68e (590_a12_warm_dev) | l40sx1 | warm start on proc_dev, reference for the registered H3 test | ~0.2 | ~4 min ≈ 0.15 | |
+| 2026-11-20 12:29 | jobs 6affefefefaf5e14f4b2cb84 (803), 6afff00befaf5e14f4b2cbe4 (804) | l40sx1 ×2 | A12 confirmatory, seeds 3 and 4 | ~1 | | |
