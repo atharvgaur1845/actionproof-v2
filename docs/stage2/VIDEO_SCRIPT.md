@@ -21,9 +21,9 @@ Each segment shows a small label: **LIVE** (run during recording) or **RECORDED 
 - Three lanes: agent said / gateway did / system of record shows; the contradicted reply struck through.
 
 ## 3:00 to 3:45: the hard cases (LIVE)
-- Never-commit payment: escalation with the money at risk.
+- Never-commit payment: two safe retries with the same key, then escalation; nothing is paid.
 - Duplicate delivery: the extra payment refunded, the refund itself verified.
-- Edit one ledger event: "Chain broken at event N".
+- Edit one ledger event: "Chain broken at event #N".
 
 ## 3:45 to 5:30: the research results (RECORDED RESULT)
 - C1 reward observability, per seed: phantom read-back R_V vs R_A. PENDING `results/s2/a12_summary.json`.
