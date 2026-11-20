@@ -12,7 +12,7 @@ Each segment shows a small label: **LIVE** (run during recording) or **RECORDED 
   - But what the agent learned was a fragile script. `results/a10/v2_env.md`
 
 ## 0:45 to 1:30: what ActionProof is now (LIVE dashboard, empty state, then architecture slide)
-- Research question: does what the reward can see decide whether an agent checks its own work, in a second environment?
+- Research question: does what the reward can see decide whether an agent checks its own work, and once the evidence is in front of it, does the agent act on it?
 - Product: a gateway that verifies every write against the system that owns it. The agent can act but cannot declare success.
 
 ## 1:30 to 3:00: the hero run (LIVE)
@@ -26,14 +26,15 @@ Each segment shows a small label: **LIVE** (run during recording) or **RECORDED 
 - Edit one ledger event: "Chain broken at event #N".
 
 ## 3:45 to 5:30: the research results (RECORDED RESULT)
-- C1 reward observability, per seed: phantom read-back R_V vs R_A. PENDING `results/s2/a12_summary.json`.
-- Mechanism predicted before training: under the acknowledgement reward, reading is penalised exactly where acting on what you read costs a success reply (lost ack -0.72, never commits -0.84, step 0). `results/a12b/h3_predictions.json`; observed: PENDING.
-- C2 contract coverage: the contract accepts none of the 194 single-fault and 479 two-fault violating configurations it was written for (an exhaustive enumeration, not a sample), and 14 of 161 independently written violations (8 of 151 unambiguous), mostly refunds and master data. `results/a13/h5_finite.json`
-- Defences on identical fault traces: idempotency keys alone recover 0% of phantom writes; verify-before-retry 100%. `results/a11/h7_matrix.md`
-- C3 policy vs runtime vs information: PENDING `results/s2/a11_summary.json`.
+- **What the reward sees decides what the agent checks.** Same warm start, same tasks, two rewards of the same form: one reads the database, one reads only the replies the agent got. On untouched tasks, after a payment that said "ok" but stored nothing, the database-reward agent read the records 1.00 of the time, the reply-reward agent 0.00, in every seed (153 of 153 tasks vs none). `results/s2/a12_summary.json`
+- **Selection, not invention.** The warm start already read back when sampled; the reward decided whether that habit was kept. Under the reply reward, reading was punished in exactly the cases where acting on what you read costs an "ok" reply (lost ack -0.72, never commits -0.84, predicted before training). `results/a12b/h3_predictions.json`; the registered per-class test of this mechanism failed, and we show it as failed. `results/s2/h3_test.json`
+- **Once the evidence is in front of it, the agent acts on it, up to a point.** We forced the read into the context of every model: all of them, even the one that never reads, re-pay when the record is empty and move on when it is there (correct-action accuracy 1.00). But when the record shows a payment for the wrong amount, only the database-reward agent refunds, in 0.35 to 0.48 of tasks depending on the seed; on duplicate payments both leave the extra one in place (0.58). `results/a14/a14_summary.json`, `results/s2/a12_secondary.json`
+- **So put the evidence in front of the agent.** Showing the warm start the verified state through the gateway adds +0.25 verified completion. `results/s2/a11_summary.json`
+- Contract coverage: the contract accepts none of the 194 single-fault and 479 two-fault violating configurations it was written for (an exhaustive enumeration, not a sample), and 14 of 161 independently written violations (8 of 151 unambiguous), mostly refunds and master data. `results/a13/h5_finite.json`
+- Defences on identical fault traces: idempotency keys alone recover 0% of phantom writes; verify-before-retry 100% (deterministic; true by construction). `results/a11/h7_matrix.md`
 - Track 3 metrics: task success, tool-call validity, latency, judge-human agreement. PENDING.
 
 ## 5:30 to 6:30: what it guarantees and what it does not (slide from `docs/stage2/PRODUCT.md`)
 
 ## 6:30 to 7:00: reproducibility and close
-- Four pre-registrations this stage (A11, A12 + addendum, A13), each hashed before its runs; independent verifier and golden traces; every number traced.
+- Five pre-registrations this stage (A11, A12 with two addenda, A13, A14), each hashed before its runs; failed tests and deviations shown as such; independent verifier and golden traces; every number traced.
