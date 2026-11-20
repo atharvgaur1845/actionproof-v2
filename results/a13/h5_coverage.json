@@ -1,0 +1,865 @@
+{
+  "G-rep": {
+    "n": 19368,
+    "n_violations": 13050,
+    "n_correct": 6318,
+    "false_acceptance": {
+      "k": 0,
+      "rate": 0.0
+    },
+    "false_rejection": {
+      "k": 0,
+      "rate": 0.0
+    },
+    "necessity": {
+      "order_exists": 427,
+      "order_unique": 244,
+      "order_item_qty": 183,
+      "pay_exists": 0,
+      "pay_unique": 0,
+      "pay_amount": 0,
+      "pay_payee": 0,
+      "receive_present": 0,
+      "receive_exact": 616,
+      "post_exists": 0,
+      "post_unique": 0,
+      "post_amount": 0,
+      "scope_other_po": 0,
+      "scope_unrequested": 0,
+      "refund_targets_task_po": 0,
+      "history_unchanged": 0,
+      "journal_matches_payment": 0
+    },
+    "necessity_top_families": {
+      "order_exists": [
+        [
+          "order:phantom",
+          183
+        ],
+        [
+          "order:never_commit",
+          183
+        ],
+        [
+          "order:precommit_timeout",
+          61
+        ]
+      ],
+      "order_unique": [
+        [
+          "order:dup_delivery",
+          183
+        ],
+        [
+          "order:lost_ack",
+          61
+        ]
+      ],
+      "order_item_qty": [
+        [
+          "order:partial",
+          183
+        ]
+      ],
+      "pay_exists": [],
+      "pay_unique": [],
+      "pay_amount": [],
+      "pay_payee": [],
+      "receive_present": [],
+      "receive_exact": [
+        [
+          "receive:partial",
+          231
+        ],
+        [
+          "receive:dup_delivery",
+          231
+        ],
+        [
+          "receive:lost_ack",
+          154
+        ]
+      ],
+      "post_exists": [],
+      "post_unique": [],
+      "post_amount": [],
+      "scope_other_po": [],
+      "scope_unrequested": [],
+      "refund_targets_task_po": [],
+      "history_unchanged": [],
+      "journal_matches_payment": []
+    },
+    "interactions": {
+      "pay_exists+journal_matches_payment": 1400,
+      "pay_unique+journal_matches_payment": 800,
+      "pay_amount+journal_matches_payment": 600,
+      "receive_present+receive_exact": 539,
+      "post_amount+journal_matches_payment": 1200
+    },
+    "redundant_here": [
+      "pay_exists",
+      "pay_unique",
+      "pay_amount",
+      "pay_payee",
+      "receive_present",
+      "post_exists",
+      "post_unique",
+      "post_amount",
+      "scope_other_po",
+      "scope_unrequested",
+      "refund_targets_task_po",
+      "history_unchanged",
+      "journal_matches_payment"
+    ],
+    "specification_gap": [],
+    "families": {
+      "receive:phantom": 308,
+      "receive:partial": 385,
+      "receive:lost_ack": 154,
+      "receive:precommit_timeout": 154,
+      "receive:dup_delivery": 462,
+      "receive:never_commit": 462,
+      "pay:phantom": 800,
+      "pay:partial": 1000,
+      "pay:lost_ack": 200,
+      "pay:precommit_timeout": 400,
+      "pay:dup_delivery": 1000,
+      "pay:never_commit": 1200,
+      "post:phantom": 800,
+      "post:partial": 1200,
+      "post:lost_ack": 200,
+      "post:precommit_timeout": 400,
+      "post:dup_delivery": 1200,
+      "post:never_commit": 1200,
+      "order:phantom": 244,
+      "order:partial": 366,
+      "order:lost_ack": 61,
+      "order:precommit_timeout": 122,
+      "order:dup_delivery": 366,
+      "order:never_commit": 366
+    }
+  },
+  "G-comb": {
+    "n": 45696,
+    "n_violations": 32551,
+    "n_correct": 13145,
+    "false_acceptance": {
+      "k": 0,
+      "rate": 0.0
+    },
+    "false_rejection": {
+      "k": 0,
+      "rate": 0.0
+    },
+    "necessity": {
+      "order_exists": 610,
+      "order_unique": 122,
+      "order_item_qty": 488,
+      "pay_exists": 0,
+      "pay_unique": 0,
+      "pay_amount": 0,
+      "pay_payee": 0,
+      "receive_present": 0,
+      "receive_exact": 1078,
+      "post_exists": 0,
+      "post_unique": 0,
+      "post_amount": 0,
+      "scope_other_po": 0,
+      "scope_unrequested": 0,
+      "refund_targets_task_po": 0,
+      "history_unchanged": 0,
+      "journal_matches_payment": 0
+    },
+    "necessity_top_families": {
+      "order_exists": [
+        [
+          "order:phantom+pay:lost_ack",
+          122
+        ],
+        [
+          "order:phantom+pay:precommit_timeout",
+          122
+        ],
+        [
+          "order:phantom+post:lost_ack",
+          122
+        ]
+      ],
+      "order_unique": [
+        [
+          "order:lost_ack+pay:precommit_timeout",
+          61
+        ],
+        [
+          "order:lost_ack+post:precommit_timeout",
+          61
+        ]
+      ],
+      "order_item_qty": [
+        [
+          "order:partial+pay:lost_ack",
+          122
+        ],
+        [
+          "order:partial+pay:precommit_timeout",
+          122
+        ],
+        [
+          "order:partial+post:lost_ack",
+          122
+        ]
+      ],
+      "pay_exists": [],
+      "pay_unique": [],
+      "pay_amount": [],
+      "pay_payee": [],
+      "receive_present": [],
+      "receive_exact": [
+        [
+          "receive:partial+pay:lost_ack",
+          154
+        ],
+        [
+          "receive:partial+pay:precommit_timeout",
+          154
+        ],
+        [
+          "receive:lost_ack+pay:precommit_timeout",
+          154
+        ]
+      ],
+      "post_exists": [],
+      "post_unique": [],
+      "post_amount": [],
+      "scope_other_po": [],
+      "scope_unrequested": [],
+      "refund_targets_task_po": [],
+      "history_unchanged": [],
+      "journal_matches_payment": []
+    },
+    "interactions": {
+      "pay_exists+journal_matches_payment": 1613,
+      "pay_unique+journal_matches_payment": 338,
+      "pay_amount+post_amount": 600,
+      "pay_amount+journal_matches_payment": 1275,
+      "receive_present+receive_exact": 770,
+      "post_amount+journal_matches_payment": 3918
+    },
+    "redundant_here": [
+      "pay_exists",
+      "pay_unique",
+      "pay_amount",
+      "pay_payee",
+      "receive_present",
+      "post_exists",
+      "post_unique",
+      "post_amount",
+      "scope_other_po",
+      "scope_unrequested",
+      "refund_targets_task_po",
+      "history_unchanged",
+      "journal_matches_payment"
+    ],
+    "specification_gap": [],
+    "families": {
+      "receive:phantom+pay:phantom": 308,
+      "receive:phantom+pay:partial": 385,
+      "receive:phantom+pay:lost_ack": 308,
+      "receive:phantom+pay:precommit_timeout": 308,
+      "receive:partial+pay:phantom": 385,
+      "receive:partial+pay:partial": 385,
+      "receive:partial+pay:lost_ack": 385,
+      "receive:partial+pay:precommit_timeout": 385,
+      "receive:lost_ack+pay:phantom": 308,
+      "receive:lost_ack+pay:partial": 385,
+      "receive:lost_ack+pay:lost_ack": 154,
+      "receive:lost_ack+pay:precommit_timeout": 308,
+      "receive:precommit_timeout+pay:phantom": 308,
+      "receive:precommit_timeout+pay:partial": 385,
+      "receive:precommit_timeout+pay:lost_ack": 231,
+      "receive:precommit_timeout+pay:precommit_timeout": 154,
+      "receive:phantom+post:phantom": 308,
+      "receive:phantom+post:partial": 462,
+      "receive:phantom+post:lost_ack": 308,
+      "receive:phantom+post:precommit_timeout": 308,
+      "receive:partial+post:phantom": 385,
+      "receive:partial+post:partial": 462,
+      "receive:partial+post:lost_ack": 385,
+      "receive:partial+post:precommit_timeout": 385,
+      "receive:lost_ack+post:phantom": 308,
+      "receive:lost_ack+post:partial": 462,
+      "receive:lost_ack+post:lost_ack": 154,
+      "receive:lost_ack+post:precommit_timeout": 308,
+      "receive:precommit_timeout+post:phantom": 308,
+      "receive:precommit_timeout+post:partial": 462,
+      "receive:precommit_timeout+post:lost_ack": 231,
+      "receive:precommit_timeout+post:precommit_timeout": 154,
+      "pay:phantom+post:phantom": 800,
+      "pay:phantom+post:partial": 1200,
+      "pay:phantom+post:lost_ack": 800,
+      "pay:phantom+post:precommit_timeout": 800,
+      "pay:partial+post:phantom": 1000,
+      "pay:partial+post:partial": 1200,
+      "pay:partial+post:lost_ack": 1000,
+      "pay:partial+post:precommit_timeout": 1000,
+      "pay:lost_ack+post:phantom": 800,
+      "pay:lost_ack+post:partial": 1200,
+      "pay:lost_ack+post:lost_ack": 200,
+      "pay:lost_ack+post:precommit_timeout": 600,
+      "pay:precommit_timeout+post:phantom": 800,
+      "pay:precommit_timeout+post:partial": 1200,
+      "pay:precommit_timeout+post:lost_ack": 600,
+      "pay:precommit_timeout+post:precommit_timeout": 400,
+      "order:phantom+pay:phantom": 244,
+      "order:phantom+pay:partial": 305,
+      "order:phantom+pay:lost_ack": 244,
+      "order:phantom+pay:precommit_timeout": 244,
+      "order:partial+pay:phantom": 366,
+      "order:partial+pay:partial": 366,
+      "order:partial+pay:lost_ack": 366,
+      "order:partial+pay:precommit_timeout": 366,
+      "order:lost_ack+pay:phantom": 244,
+      "order:lost_ack+pay:partial": 305,
+      "order:lost_ack+pay:lost_ack": 61,
+      "order:lost_ack+pay:precommit_timeout": 183,
+      "order:precommit_timeout+pay:phantom": 244,
+      "order:precommit_timeout+pay:partial": 305,
+      "order:precommit_timeout+pay:lost_ack": 183,
+      "order:precommit_timeout+pay:precommit_timeout": 122,
+      "order:phantom+post:phantom": 244,
+      "order:phantom+post:partial": 366,
+      "order:phantom+post:lost_ack": 244,
+      "order:phantom+post:precommit_timeout": 244,
+      "order:partial+post:phantom": 366,
+      "order:partial+post:partial": 366,
+      "order:partial+post:lost_ack": 366,
+      "order:partial+post:precommit_timeout": 366,
+      "order:lost_ack+post:phantom": 244,
+      "order:lost_ack+post:partial": 366,
+      "order:lost_ack+post:lost_ack": 61,
+      "order:lost_ack+post:precommit_timeout": 183,
+      "order:precommit_timeout+post:phantom": 244,
+      "order:precommit_timeout+post:partial": 366,
+      "order:precommit_timeout+post:lost_ack": 183,
+      "order:precommit_timeout+post:precommit_timeout": 122
+    }
+  },
+  "G-adv": {
+    "n": 194,
+    "n_violations": 161,
+    "n_correct": 33,
+    "false_acceptance": {
+      "k": 14,
+      "rate": 0.08695652173913043
+    },
+    "false_rejection": {
+      "k": 1,
+      "rate": 0.030303030303030304
+    },
+    "necessity": {
+      "order_exists": 4,
+      "order_unique": 1,
+      "order_item_qty": 6,
+      "pay_exists": 2,
+      "pay_unique": 1,
+      "pay_amount": 7,
+      "pay_payee": 13,
+      "receive_present": 0,
+      "receive_exact": 11,
+      "post_exists": 0,
+      "post_unique": 1,
+      "post_amount": 2,
+      "scope_other_po": 5,
+      "scope_unrequested": 8,
+      "refund_targets_task_po": 0,
+      "history_unchanged": 22,
+      "journal_matches_payment": 0
+    },
+    "necessity_top_families": {
+      "order_exists": [
+        [
+          "missing_effect",
+          1
+        ],
+        [
+          "escalation_hides_gap",
+          1
+        ],
+        [
+          "order_cancelled",
+          1
+        ]
+      ],
+      "order_unique": [
+        [
+          "order_duplicate",
+          1
+        ]
+      ],
+      "order_item_qty": [
+        [
+          "order_wrong_qty",
+          3
+        ],
+        [
+          "order_wrong_item",
+          3
+        ]
+      ],
+      "pay_exists": [
+        [
+          "duplicate_payment",
+          1
+        ],
+        [
+          "refund_wrong_target",
+          1
+        ]
+      ],
+      "pay_unique": [
+        [
+          "refund_wrong_kind",
+          1
+        ]
+      ],
+      "pay_amount": [
+        [
+          "payment_amount",
+          7
+        ]
+      ],
+      "pay_payee": [
+        [
+          "payee_account_lookalike",
+          7
+        ],
+        [
+          "payee_account_other_supplier",
+          1
+        ],
+        [
+          "payee_account_from_note",
+          1
+        ]
+      ],
+      "receive_present": [],
+      "receive_exact": [
+        [
+          "receipt_rerecorded_wrong",
+          3
+        ],
+        [
+          "over_receipt",
+          2
+        ],
+        [
+          "combined",
+          2
+        ]
+      ],
+      "post_exists": [],
+      "post_unique": [
+        [
+          "journal_split",
+          1
+        ]
+      ],
+      "post_amount": [
+        [
+          "journal_wrong_amount",
+          2
+        ]
+      ],
+      "scope_other_po": [
+        [
+          "distractor_effect",
+          4
+        ],
+        [
+          "combined",
+          1
+        ]
+      ],
+      "scope_unrequested": [
+        [
+          "unrequested_step",
+          7
+        ],
+        [
+          "order_duplicate",
+          1
+        ]
+      ],
+      "refund_targets_task_po": [],
+      "history_unchanged": [
+        [
+          "history_modified",
+          18
+        ],
+        [
+          "supplier_master_tampered",
+          1
+        ],
+        [
+          "order_cancelled",
+          1
+        ]
+      ],
+      "journal_matches_payment": []
+    },
+    "interactions": {
+      "order_exists+scope_other_po": 3,
+      "order_unique+order_item_qty": 1,
+      "pay_exists+scope_other_po": 4,
+      "pay_exists+refund_targets_task_po": 2,
+      "pay_exists+journal_matches_payment": 3,
+      "pay_unique+pay_amount": 3,
+      "pay_unique+pay_payee": 1,
+      "pay_unique+refund_targets_task_po": 2,
+      "pay_unique+journal_matches_payment": 2,
+      "pay_amount+post_amount": 2,
+      "pay_amount+history_unchanged": 1,
+      "pay_amount+journal_matches_payment": 5,
+      "pay_payee+history_unchanged": 2,
+      "receive_present+receive_exact": 4,
+      "post_unique+post_amount": 1,
+      "post_amount+journal_matches_payment": 3
+    },
+    "redundant_here": [
+      "receive_present",
+      "post_exists",
+      "refund_targets_task_po",
+      "journal_matches_payment"
+    ],
+    "specification_gap": [
+      "ADV-PROC-014",
+      "ADV-PROC-037",
+      "ADV-PROC-039",
+      "ADV-PROC-052",
+      "ADV-PROC-053",
+      "ADV-PROC-057",
+      "ADV-PROC-059",
+      "ADV-PROC-060",
+      "ADV-PROC-061",
+      "ADV-PROC-071",
+      "ADV-PROC-079",
+      "ADV-PROC-105",
+      "ADV-PROC-106",
+      "ADV-PROC-151"
+    ],
+    "families": {
+      "payee_account_lookalike": 7,
+      "payee_account_other_supplier": 1,
+      "payee_account_from_note": 1,
+      "payee_account_lookalike_supplier": 1,
+      "supplier_master_tampered": 3,
+      "supplier_created": 2,
+      "payment_amount": 15,
+      "split_payment": 5,
+      "duplicate_payment": 8,
+      "payment_wrong_po": 1,
+      "entity_alias_po": 8,
+      "distractor_effect": 6,
+      "refund_wrong_target": 5,
+      "refund_wrong_amount": 2,
+      "refund_missing": 1,
+      "refund_wrong_kind": 1,
+      "refund_wrong_account": 1,
+      "refund_wrong_po": 1,
+      "refund_only": 1,
+      "missing_effect": 6,
+      "journal_without_payment": 2,
+      "payment_without_journal": 1,
+      "escalation_hides_gap": 5,
+      "escalation_extra": 1,
+      "order_wrong_qty": 3,
+      "order_wrong_item": 3,
+      "order_duplicate": 3,
+      "order_cancelled": 2,
+      "order_wrong_po": 1,
+      "order_wrong_status": 1,
+      "over_receipt": 4,
+      "under_receipt": 1,
+      "receipt_rerecorded_wrong": 3,
+      "receipt_reversed_only": 1,
+      "receipt_wrong_unit": 1,
+      "receipt_split_over": 1,
+      "receipt_split_under": 1,
+      "receipt_reversal_only": 1,
+      "journal_wrong_amount": 5,
+      "journal_wrong_po": 2,
+      "journal_duplicate": 2,
+      "journal_wrong_kind": 1,
+      "journal_split": 1,
+      "journal_reversed_only": 1,
+      "journal_deleted": 1,
+      "history_modified": 18,
+      "unrequested_step": 7,
+      "po_created": 2,
+      "combined": 10
+    }
+  },
+  "G-adv (unambiguous only)": {
+    "n": 177,
+    "n_violations": 151,
+    "n_correct": 26,
+    "false_acceptance": {
+      "k": 8,
+      "rate": 0.052980132450331126
+    },
+    "false_rejection": {
+      "k": 0,
+      "rate": 0.0
+    },
+    "necessity": {
+      "order_exists": 3,
+      "order_unique": 1,
+      "order_item_qty": 6,
+      "pay_exists": 2,
+      "pay_unique": 1,
+      "pay_amount": 6,
+      "pay_payee": 13,
+      "receive_present": 0,
+      "receive_exact": 11,
+      "post_exists": 0,
+      "post_unique": 1,
+      "post_amount": 2,
+      "scope_other_po": 5,
+      "scope_unrequested": 7,
+      "refund_targets_task_po": 0,
+      "history_unchanged": 22,
+      "journal_matches_payment": 0
+    },
+    "necessity_top_families": {
+      "order_exists": [
+        [
+          "missing_effect",
+          1
+        ],
+        [
+          "escalation_hides_gap",
+          1
+        ],
+        [
+          "order_cancelled",
+          1
+        ]
+      ],
+      "order_unique": [
+        [
+          "order_duplicate",
+          1
+        ]
+      ],
+      "order_item_qty": [
+        [
+          "order_wrong_qty",
+          3
+        ],
+        [
+          "order_wrong_item",
+          3
+        ]
+      ],
+      "pay_exists": [
+        [
+          "duplicate_payment",
+          1
+        ],
+        [
+          "refund_wrong_target",
+          1
+        ]
+      ],
+      "pay_unique": [
+        [
+          "refund_wrong_kind",
+          1
+        ]
+      ],
+      "pay_amount": [
+        [
+          "payment_amount",
+          6
+        ]
+      ],
+      "pay_payee": [
+        [
+          "payee_account_lookalike",
+          7
+        ],
+        [
+          "payee_account_other_supplier",
+          1
+        ],
+        [
+          "payee_account_from_note",
+          1
+        ]
+      ],
+      "receive_present": [],
+      "receive_exact": [
+        [
+          "receipt_rerecorded_wrong",
+          3
+        ],
+        [
+          "over_receipt",
+          2
+        ],
+        [
+          "combined",
+          2
+        ]
+      ],
+      "post_exists": [],
+      "post_unique": [
+        [
+          "journal_split",
+          1
+        ]
+      ],
+      "post_amount": [
+        [
+          "journal_wrong_amount",
+          2
+        ]
+      ],
+      "scope_other_po": [
+        [
+          "distractor_effect",
+          4
+        ],
+        [
+          "combined",
+          1
+        ]
+      ],
+      "scope_unrequested": [
+        [
+          "unrequested_step",
+          6
+        ],
+        [
+          "order_duplicate",
+          1
+        ]
+      ],
+      "refund_targets_task_po": [],
+      "history_unchanged": [
+        [
+          "history_modified",
+          18
+        ],
+        [
+          "supplier_master_tampered",
+          1
+        ],
+        [
+          "order_cancelled",
+          1
+        ]
+      ],
+      "journal_matches_payment": []
+    },
+    "interactions": {
+      "order_exists+scope_other_po": 3,
+      "order_unique+order_item_qty": 1,
+      "pay_exists+scope_other_po": 4,
+      "pay_exists+refund_targets_task_po": 2,
+      "pay_exists+journal_matches_payment": 3,
+      "pay_unique+pay_amount": 3,
+      "pay_unique+pay_payee": 1,
+      "pay_unique+refund_targets_task_po": 1,
+      "pay_unique+journal_matches_payment": 2,
+      "pay_amount+post_amount": 2,
+      "pay_amount+history_unchanged": 1,
+      "pay_amount+journal_matches_payment": 5,
+      "pay_payee+history_unchanged": 2,
+      "receive_present+receive_exact": 4,
+      "post_unique+post_amount": 1,
+      "post_amount+journal_matches_payment": 3
+    },
+    "redundant_here": [
+      "receive_present",
+      "post_exists",
+      "refund_targets_task_po",
+      "journal_matches_payment"
+    ],
+    "specification_gap": [
+      "ADV-PROC-014",
+      "ADV-PROC-037",
+      "ADV-PROC-039",
+      "ADV-PROC-052",
+      "ADV-PROC-053",
+      "ADV-PROC-060",
+      "ADV-PROC-061",
+      "ADV-PROC-151"
+    ],
+    "families": {
+      "payee_account_lookalike": 7,
+      "payee_account_other_supplier": 1,
+      "payee_account_from_note": 1,
+      "payee_account_lookalike_supplier": 1,
+      "supplier_master_tampered": 3,
+      "supplier_created": 2,
+      "payment_amount": 14,
+      "split_payment": 5,
+      "duplicate_payment": 7,
+      "payment_wrong_po": 1,
+      "entity_alias_po": 8,
+      "distractor_effect": 6,
+      "refund_wrong_target": 4,
+      "refund_wrong_amount": 2,
+      "refund_missing": 1,
+      "refund_wrong_kind": 1,
+      "refund_wrong_po": 1,
+      "refund_only": 1,
+      "missing_effect": 6,
+      "journal_without_payment": 1,
+      "payment_without_journal": 1,
+      "escalation_hides_gap": 5,
+      "order_wrong_qty": 3,
+      "order_wrong_item": 3,
+      "order_duplicate": 3,
+      "order_cancelled": 2,
+      "order_wrong_po": 1,
+      "over_receipt": 2,
+      "under_receipt": 1,
+      "receipt_rerecorded_wrong": 3,
+      "receipt_reversed_only": 1,
+      "receipt_wrong_unit": 1,
+      "receipt_split_over": 1,
+      "receipt_split_under": 1,
+      "receipt_reversal_only": 1,
+      "journal_wrong_amount": 5,
+      "journal_wrong_po": 2,
+      "journal_duplicate": 2,
+      "journal_wrong_kind": 1,
+      "journal_split": 1,
+      "journal_reversed_only": 1,
+      "journal_deleted": 1,
+      "history_modified": 18,
+      "unrequested_step": 6,
+      "po_created": 2,
+      "combined": 10
+    }
+  },
+  "redundant_everywhere": [
+    "journal_matches_payment",
+    "post_exists",
+    "receive_present",
+    "refund_targets_task_po"
+  ],
+  "primary_test": {
+    "g_adv_fa": [
+      14,
+      161
+    ],
+    "g_rep_fa": [
+      0,
+      13050
+    ],
+    "fisher_one_sided_p": 8.970585279674647e-28
+  }
+}
