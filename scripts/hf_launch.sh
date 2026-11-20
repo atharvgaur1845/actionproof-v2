@@ -19,7 +19,7 @@ done
 trap release ERR
 # every registration, hash manifest and test a task's guard may check travels with the code (701 failed without A14's)
 tar czf .cache/hfjob/code_$TASK.tar.gz --exclude=results/a12/rollouts actionproof scripts slurm data/bench/proc data/bench/c2 pyproject.toml \
-  PREREGISTRATION_*.md docs/stage2/VERIFIER_SPEC.md results/*_hashes.json results/a12 \
+  PREREGISTRATION_*.md docs/stage2/VERIFIER_SPEC.md docs/stage2/OPSIM_SPEC.md results/*_hashes.json results/a12 \
   $( [ -d data/bench/opsim ] && echo data/bench/opsim ) $( [ -d results/k1 ] && echo results/k1 ) $( [ -d results/a12b ] && echo results/a12b ) \
   $( [ -d results/a14 ] && echo results/a14 ) $( [ -d results/s2 ] && echo results/s2 ) tests/golden tests/integrity \
   $( [ -f PREREGISTRATION_A11.md ] && echo data/h4 )
