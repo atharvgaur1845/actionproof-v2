@@ -355,6 +355,69 @@ claims:
       sens_tr_k: {value: 7, file: results/h4/h4_summary.json, key: [sensitivity_excluding_benign_invisible, transcript, invisible_failure, false_acceptance, k], shown: []}
       sens_led_k: {value: 1, file: results/h4/h4_summary.json, key: [sensitivity_excluding_benign_invisible, ledger, invisible_failure, false_acceptance, k], shown: []}
 
+  - id: A15
+    statement: "Registered: with forced evidence of a partial payment, R_V refunds or escalates at unseen ratios (1/4, 3/4) as often as at the trained 1/2 in seeds 0-3 (0.25-0.58; generalises, not pattern-specific); seed 4 never does; R_A 0.00 in all seeds; warm start 0.035."
+    status: supported
+    prereg: PREREGISTRATION_A15.md
+    eval: [results/a15/a15_summary.json]
+    stats: scripts/a15_stats.py
+    numbers:
+      unseen_rv_s0: {value: 0.405, file: results/a15/a15_summary.json, key: [policies, rv_s0, unseen, est], shown: []}
+      unseen_rv_s1: {value: 0.58, file: results/a15/a15_summary.json, key: [policies, rv_s1, unseen, est], shown: []}
+      unseen_rv_s2: {value: 0.385, file: results/a15/a15_summary.json, key: [policies, rv_s2, unseen, est], shown: []}
+      unseen_rv_s3: {value: 0.247, file: results/a15/a15_summary.json, key: [policies, rv_s3, unseen, est], shown: []}
+      unseen_rv_s4: {value: 0.0, file: results/a15/a15_summary.json, key: [policies, rv_s4, unseen, est], shown: []}
+      unseen_ra_s0: {value: 0.0, file: results/a15/a15_summary.json, key: [policies, ra_s0, unseen, est], shown: []}
+      unseen_warm_start: {value: 0.035, file: results/a15/a15_summary.json, key: [policies, warm_start, unseen, est], shown: []}
+
+  - id: A16
+    statement: "Registered: every model encodes partial vs complete (probe AUROC 1.00, refit and frozen warm-start probe, all checkpoints); R_V's evidence-dependent action margin grows with training (step 200: +2.9/+3.9/+5.1 nats) while R_A's stays near the warm start (+2.0 vs +2.4); ablating the dev-fitted partial-minus-complete direction at layer 18 lowers R_V's partial-branch margin beyond every random direction in 5/5 seeds (causal rule met); single-position final-token patching does not exceed random controls in any seed."
+    status: supported
+    prereg: PREREGISTRATION_A15.md
+    eval: [results/a16/a16_summary.json]
+    stats: scripts/a16_analyze.py
+    numbers:
+      layer: {value: 18, file: results/a16/a16_summary.json, key: [chosen_layer], shown: []}
+      gap_rv_s0_200: {value: 2.91, file: results/a16/a16_summary.json, key: [trajectory, rv_s0_200, M_partial_minus_complete], shown: []}
+      gap_rv_s1_200: {value: 3.91, file: results/a16/a16_summary.json, key: [trajectory, rv_s1_200, M_partial_minus_complete], shown: []}
+      gap_rv_s2_200: {value: 5.09, file: results/a16/a16_summary.json, key: [trajectory, rv_s2_200, M_partial_minus_complete], shown: []}
+      gap_ra_s0_200: {value: 2.12, file: results/a16/a16_summary.json, key: [trajectory, ra_s0_200, M_partial_minus_complete], shown: []}
+      gap_warm: {value: 2.38, file: results/a16/a16_summary.json, key: [trajectory, warm, M_partial_minus_complete], shown: []}
+      ablate_rv_s0: {value: -0.49, file: results/a16/a16_summary.json, key: [causal, rv_s0, ablation, dM_partial], shown: []}
+      ablate_rv_s1: {value: -0.73, file: results/a16/a16_summary.json, key: [causal, rv_s1, ablation, dM_partial], shown: []}
+      ablate_rv_s2: {value: -1.14, file: results/a16/a16_summary.json, key: [causal, rv_s2, ablation, dM_partial], shown: []}
+      ablate_rv_s3: {value: -0.59, file: results/a16/a16_summary.json, key: [causal, rv_s3, ablation, dM_partial], shown: []}
+      ablate_rv_s4: {value: -0.52, file: results/a16/a16_summary.json, key: [causal, rv_s4, ablation, dM_partial], shown: []}
+      ablation_seeds: {value: 5, file: results/a16/a16_summary.json, key: [registered, ablation_rule_seeds], shown: []}
+      patch_seeds: {value: 0, file: results/a16/a16_summary.json, key: [registered, patch_rule_seeds], shown: []}
+
+  - id: A17
+    statement: "Registered: in healthcare administration, R_V phantom read-back exceeds R_A's in 5/5 seeds, seed-averaged +0.37 [0.18, 0.58] (positive criterion met; D-A17-1); R_V vs warm start +0.15 [-0.06, 0.39] (not established); in IT operations no difference (-0.03 [-0.07, 0.01]; warm start already reads back). Forced-evidence forks: no model meets the credit rule in either domain."
+    status: supported
+    prereg: PREREGISTRATION_A17.md
+    eval: [results/a17/a17_summary.json, results/a17/a17_seedavg.json]
+    stats: scripts/a17_stats.py
+    numbers:
+      care_rv_ra: {value: 0.37, file: results/a17/a17_seedavg.json, key: [care_admin, rv_minus_ra, est], shown: []}
+      care_rv_warm: {value: 0.15, file: results/a17/a17_seedavg.json, key: [care_admin, rv_minus_warm, est], shown: []}
+      it_rv_ra: {value: -0.03, file: results/a17/a17_seedavg.json, key: [it_ops, rv_minus_ra, est], shown: []}
+
+  - id: K1
+    statement: "Registered: R_A trained without the lost-acknowledgement and never-commit classes (targeted) or on a random pool of the same size (placebo), seeds 0-2: greedy phantom read-back 0/153 on proc_conf in all six, VSC 0.47 and false success 0.53 as the warm start; sampled read rate declines under placebo (about 0.13 to 0.06) but not under targeted (about 0.21 to 0.16). Composition explains the drift away from reading, not the absence of read-back."
+    status: supported
+    prereg: PREREGISTRATION_K1.md
+    eval: [results/eval/k1/conf, results/k1/k1_reward_signal.json]
+    numbers:
+      rb_k1t_ra_s0: {value: 0, file: results/eval/k1/conf/k1_k1t_ra_s0__neutral__proc_conf.summary.json, key: [phantom_readback, num], shown: []}
+      rb_k1t_ra_s1: {value: 0, file: results/eval/k1/conf/k1_k1t_ra_s1__neutral__proc_conf.summary.json, key: [phantom_readback, num], shown: []}
+      rb_k1t_ra_s2: {value: 0, file: results/eval/k1/conf/k1_k1t_ra_s2__neutral__proc_conf.summary.json, key: [phantom_readback, num], shown: []}
+      rb_k1p_ra_s0: {value: 0, file: results/eval/k1/conf/k1_k1p_ra_s0__neutral__proc_conf.summary.json, key: [phantom_readback, num], shown: []}
+      rb_k1p_ra_s1: {value: 0, file: results/eval/k1/conf/k1_k1p_ra_s1__neutral__proc_conf.summary.json, key: [phantom_readback, num], shown: []}
+      rb_k1p_ra_s2: {value: 0, file: results/eval/k1/conf/k1_k1p_ra_s2__neutral__proc_conf.summary.json, key: [phantom_readback, num], shown: []}
+      vsc_k1t_s0: {value: 0.47, file: results/eval/k1/conf/k1_k1t_ra_s0__neutral__proc_conf.summary.json, key: [vsc], shown: []}
+      rr_k1p_s0_last: {value: 0.0619, file: results/k1/k1_reward_signal.json, key: [runs, k1_k1p_ra_s0, read_rate_by_block, 150-199], shown: []}
+      rr_k1t_s0_last: {value: 0.1725, file: results/k1/k1_reward_signal.json, key: [runs, k1_k1t_ra_s0, read_rate_by_block, 150-199], shown: []}
+
   - id: PAPER-RANGES
     statement: "Values quoted in the paper as ranges or single figures, each read from its file."
     status: supported
