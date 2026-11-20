@@ -15,6 +15,8 @@ documents:   # scanned by s2_numcheck.py
   - docs/stage2/VIDEO_SCRIPT.md
   - docs/stage2/PRODUCT.md
   - README.md
+  - paper/main.tex
+  - paper/appendix.tex
 
 claims:
   - id: C1
@@ -338,5 +340,32 @@ claims:
       warm_vsc: {value: 0.47, file: results/eval/a12/conf_reference/warm_start__neutral__proc_conf.summary.json, key: [vsc], shown: ["0.47"]}
       warm_fs: {value: 0.53, file: results/eval/a12/conf_reference/warm_start__neutral__proc_conf.summary.json, key: [false_success], shown: ["0.53"]}
 
-# Non-result numbers that appear in scanned documents (software versions).
-allow: ["3.12", "2.11", "5.22", "1.7", "0.23", "0.21"]
+  - id: H4
+    statement: "Registered (A11 section 9; one annotator, 60 episodes, between-subjects): on failures invisible in the transcript, the annotator accepted 8 of 10 as completed from the transcript alone and 1 of 10 with the receipt ledger; prediction met (>= 0.5 and <= 0.2), falsification (< 0.3) not triggered. Descriptive: visible failures accepted 10 of 10 from the transcript, 0 of 10 with the ledger."
+    status: supported
+    prereg: PREREGISTRATION_A11.md
+    eval: [results/h4/h4_summary.json, results/h4/labels_A1.jsonl]
+    numbers:
+      tr_inv_k: {value: 8, file: results/h4/h4_summary.json, key: [registered, transcript, invisible_failure, false_acceptance, k], shown: []}
+      tr_inv_rate: {value: 0.8, file: results/h4/h4_summary.json, key: [registered, transcript, invisible_failure, false_acceptance, rate], shown: []}
+      led_inv_k: {value: 1, file: results/h4/h4_summary.json, key: [registered, ledger, invisible_failure, false_acceptance, k], shown: []}
+      led_inv_rate: {value: 0.1, file: results/h4/h4_summary.json, key: [registered, ledger, invisible_failure, false_acceptance, rate], shown: []}
+      tr_vis_k: {value: 10, file: results/h4/h4_summary.json, key: [registered, transcript, visible_failure, false_acceptance, k], shown: []}
+      led_vis_k: {value: 0, file: results/h4/h4_summary.json, key: [registered, ledger, visible_failure, false_acceptance, k], shown: []}
+      sens_tr_k: {value: 7, file: results/h4/h4_summary.json, key: [sensitivity_excluding_benign_invisible, transcript, invisible_failure, false_acceptance, k], shown: []}
+      sens_led_k: {value: 1, file: results/h4/h4_summary.json, key: [sensitivity_excluding_benign_invisible, ledger, invisible_failure, false_acceptance, k], shown: []}
+
+  - id: PAPER-RANGES
+    statement: "Values quoted in the paper as ranges or single figures, each read from its file."
+    status: supported
+    prereg: null
+    eval: [results/s2/a12_summary.json, results/s2/a11_summary.json, results/s2/stop_rule_seeds.json]
+    numbers:
+      vsc_gap_min: {value: 0.27, file: results/s2/a12_summary.json, key: [vsc, per_seed, "4", diff], shown: ["+0.27"]}
+      vsc_gap_max: {value: 0.32, file: results/s2/a12_summary.json, key: [vsc, per_seed, "1", diff], shown: ["+0.32"]}
+      a11_pass_min: {value: 0.62, file: results/s2/a11_summary.json, key: [estimands, ALL, "vsc[ack_outcome_s1,passthrough]"], shown: ["0.62"]}
+      stop_s0: {value: 0.864, file: results/s2/stop_rule_seeds.json, key: [a12_proc_ra_s0, zero_var_share_40_50], shown: ["0.864"]}
+
+# Non-result numbers that appear in scanned documents: software versions, and registered design constants
+# (H3 agreement threshold 0.8, stop-rule threshold 0.80, demonstrator share 0.30, KL coefficient 0.02).
+allow: ["3.12", "2.11", "5.22", "1.7", "0.23", "0.21", "0.8", "0.80", "0.30", "0.02"]

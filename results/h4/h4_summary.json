@@ -1,0 +1,221 @@
+{
+  "annotator": "A1",
+  "n_items": 60,
+  "registered": {
+    "transcript": {
+      "invisible_failure": {
+        "false_acceptance": {
+          "k": 8,
+          "n": 10,
+          "rate": 0.8,
+          "ci95": [
+            0.4439045376923585,
+            0.9747892736731666
+          ]
+        },
+        "cannot_tell": 0
+      },
+      "true_completion": {
+        "true_acceptance": {
+          "k": 9,
+          "n": 10,
+          "rate": 0.9,
+          "ci95": [
+            0.5549838829718047,
+            0.9974714214555382
+          ]
+        },
+        "cannot_tell": 0
+      },
+      "visible_failure": {
+        "false_acceptance": {
+          "k": 10,
+          "n": 10,
+          "rate": 1.0,
+          "ci95": [
+            0.6915028921812392,
+            1.0
+          ]
+        },
+        "cannot_tell": 0
+      }
+    },
+    "ledger": {
+      "invisible_failure": {
+        "false_acceptance": {
+          "k": 1,
+          "n": 10,
+          "rate": 0.1,
+          "ci95": [
+            0.0025285785444617848,
+            0.4450161170281954
+          ]
+        },
+        "cannot_tell": 1
+      },
+      "true_completion": {
+        "true_acceptance": {
+          "k": 9,
+          "n": 10,
+          "rate": 0.9,
+          "ci95": [
+            0.5549838829718047,
+            0.9974714214555382
+          ]
+        },
+        "cannot_tell": 0
+      },
+      "visible_failure": {
+        "false_acceptance": {
+          "k": 0,
+          "n": 10,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.3084971078187607
+          ]
+        },
+        "cannot_tell": 1
+      }
+    }
+  },
+  "sensitivity_excluding_benign_invisible": {
+    "excluded_items": [
+      0,
+      6
+    ],
+    "transcript": {
+      "invisible_failure": {
+        "false_acceptance": {
+          "k": 7,
+          "n": 9,
+          "rate": 0.7777777777777778,
+          "ci95": [
+            0.39990642628368783,
+            0.9718550265221018
+          ]
+        },
+        "cannot_tell": 0
+      },
+      "true_completion": {
+        "true_acceptance": {
+          "k": 9,
+          "n": 10,
+          "rate": 0.9,
+          "ci95": [
+            0.5549838829718047,
+            0.9974714214555382
+          ]
+        },
+        "cannot_tell": 0
+      },
+      "visible_failure": {
+        "false_acceptance": {
+          "k": 10,
+          "n": 10,
+          "rate": 1.0,
+          "ci95": [
+            0.6915028921812392,
+            1.0
+          ]
+        },
+        "cannot_tell": 0
+      }
+    },
+    "ledger": {
+      "invisible_failure": {
+        "false_acceptance": {
+          "k": 1,
+          "n": 9,
+          "rate": 0.1111111111111111,
+          "ci95": [
+            0.002809136746599214,
+            0.48249651491733697
+          ]
+        },
+        "cannot_tell": 1
+      },
+      "true_completion": {
+        "true_acceptance": {
+          "k": 9,
+          "n": 10,
+          "rate": 0.9,
+          "ci95": [
+            0.5549838829718047,
+            0.9974714214555382
+          ]
+        },
+        "cannot_tell": 0
+      },
+      "visible_failure": {
+        "false_acceptance": {
+          "k": 0,
+          "n": 10,
+          "rate": 0.0,
+          "ci95": [
+            0.0,
+            0.3084971078187607
+          ]
+        },
+        "cannot_tell": 1
+      }
+    }
+  },
+  "prediction": {
+    "transcript_invisible_fa_ge_0.5": true,
+    "ledger_invisible_fa_le_0.2": true,
+    "falsified_transcript_invisible_fa_lt_0.3": false
+  },
+  "judges": {
+    "transcript:aya32b_t__auditkit_tc": {
+      "n": 30,
+      "raw_agreement_with_annotator": 0.8,
+      "kappa_with_annotator": -0.11111111111111124,
+      "confusion_annotator_x_judge": {
+        "human=1,judge=1": 24,
+        "human=0,judge=1": 3,
+        "human=1,judge=0": 3
+      },
+      "judge_accuracy_vs_truth": 0.36666666666666664,
+      "annotator_accuracy_vs_truth": 0.36666666666666664
+    },
+    "transcript:aya32b_t__llm_judge": {
+      "n": 30,
+      "raw_agreement_with_annotator": 0.8666666666666667,
+      "kappa_with_annotator": 0.4285714285714288,
+      "confusion_annotator_x_judge": {
+        "human=1,judge=0": 3,
+        "human=1,judge=1": 24,
+        "human=0,judge=0": 2,
+        "human=0,judge=1": 1
+      },
+      "judge_accuracy_vs_truth": 0.5,
+      "annotator_accuracy_vs_truth": 0.36666666666666664
+    },
+    "ledger:aya32b_grounded__auditkit_tc": {
+      "n": 28,
+      "raw_agreement_with_annotator": 0.4642857142857143,
+      "kappa_with_annotator": 0.09482758620689656,
+      "confusion_annotator_x_judge": {
+        "human=1,judge=1": 9,
+        "human=0,judge=0": 4,
+        "human=0,judge=1": 14,
+        "human=1,judge=0": 1
+      },
+      "judge_accuracy_vs_truth": 0.4642857142857143,
+      "annotator_accuracy_vs_truth": 0.9285714285714286
+    },
+    "ledger:aya32b_grounded__llm_judge": {
+      "n": 28,
+      "raw_agreement_with_annotator": 0.7142857142857143,
+      "kappa_with_annotator": 0.47169811320754723,
+      "confusion_annotator_x_judge": {
+        "human=1,judge=1": 10,
+        "human=0,judge=1": 8,
+        "human=0,judge=0": 10
+      },
+      "judge_accuracy_vs_truth": 0.7142857142857143,
+      "annotator_accuracy_vs_truth": 0.9285714285714286
+    }
+  }
+}
