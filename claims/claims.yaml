@@ -325,5 +325,18 @@ claims:
       lat_rv_p95: {value: 4.68, file: results/s2/track3_metrics.json, key: [latency_batch1_proc_dev, rv_s0, p95], shown: ["4.68"]}
       gw_enforce: {value: 0.219, file: results/s2/track3_metrics.json, key: [gateway_overhead_ms_per_call, enforce, mean], shown: ["0.2"]}
 
+  - id: A12-IDENTITY
+    statement: "Exploratory: ignoring report wording, R_A's greedy tool calls equal the warm start's on 500 of 500 confirmatory tasks in each of 5 seeds; R_V's on 7-12 per split. Warm start reference (evaluated once after all models were frozen): proc_conf VSC 0.47, false success 0.53."
+    status: supported
+    prereg: null
+    eval: [results/s2/a12_identity.json, results/eval/a12/conf_reference/warm_start__neutral__proc_conf.summary.json]
+    numbers:
+      ra_conf_s0: {value: 300, file: results/s2/a12_identity.json, key: [proc_conf, ra, 0], shown: []}
+      ra_combo_s0: {value: 100, file: results/s2/a12_identity.json, key: [proc_combo, ra, 0], shown: []}
+      ra_stress_s0: {value: 100, file: results/s2/a12_identity.json, key: [proc_stress, ra, 0], shown: []}
+      rv_conf_s0: {value: 7, file: results/s2/a12_identity.json, key: [proc_conf, rv, 0], shown: []}
+      warm_vsc: {value: 0.47, file: results/eval/a12/conf_reference/warm_start__neutral__proc_conf.summary.json, key: [vsc], shown: ["0.47"]}
+      warm_fs: {value: 0.53, file: results/eval/a12/conf_reference/warm_start__neutral__proc_conf.summary.json, key: [false_success], shown: ["0.53"]}
+
 # Non-result numbers that appear in scanned documents (software versions).
 allow: ["3.12", "2.11", "5.22", "1.7", "0.23", "0.21"]
