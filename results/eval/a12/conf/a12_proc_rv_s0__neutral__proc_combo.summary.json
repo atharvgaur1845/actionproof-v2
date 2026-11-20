@@ -1,0 +1,520 @@
+{
+  "n": 100,
+  "vsc": 0.6,
+  "goal_met": 0.62,
+  "r_v": 0.62,
+  "r_a": 0.62,
+  "false_success": 0.37,
+  "duplicate": 0.0,
+  "collateral": 0.0,
+  "phantom_readback": {
+    "num": 103,
+    "den": 105,
+    "rate": 0.9809523809523809
+  },
+  "benign_readback": {
+    "num": 151,
+    "den": 171,
+    "rate": 0.8830409356725146
+  },
+  "lost_ack_readback": {
+    "num": 40,
+    "den": 51,
+    "rate": 0.7843137254901961
+  },
+  "precommit_recovery": {
+    "num": 43,
+    "den": 44,
+    "rate": 0.9772727272727273
+  },
+  "report_rate": 1.0,
+  "tool_call_validity": 0.9988221436984688,
+  "mean_calls": 8.49,
+  "mean_turns": 8.49,
+  "by_fault_class": {
+    "combo:lost_ack+lost_ack": {
+      "n": 8,
+      "vsc": 1.0,
+      "goal_met": 1.0,
+      "r_v": 1.0,
+      "r_a": 0.375,
+      "false_success": 0.0,
+      "duplicate": 0.0,
+      "collateral": 0.0,
+      "phantom_readback": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "benign_readback": {
+        "num": 1,
+        "den": 4,
+        "rate": 0.25
+      },
+      "lost_ack_readback": {
+        "num": 10,
+        "den": 16,
+        "rate": 0.625
+      },
+      "precommit_recovery": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      }
+    },
+    "combo:lost_ack+partial": {
+      "n": 8,
+      "vsc": 0.125,
+      "goal_met": 0.25,
+      "r_v": 0.25,
+      "r_a": 0.0,
+      "false_success": 0.75,
+      "duplicate": 0.0,
+      "collateral": 0.0,
+      "phantom_readback": {
+        "num": 8,
+        "den": 8,
+        "rate": 1.0
+      },
+      "benign_readback": {
+        "num": 7,
+        "den": 7,
+        "rate": 1.0
+      },
+      "lost_ack_readback": {
+        "num": 7,
+        "den": 8,
+        "rate": 0.875
+      },
+      "precommit_recovery": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      }
+    },
+    "combo:lost_ack+phantom": {
+      "n": 5,
+      "vsc": 1.0,
+      "goal_met": 1.0,
+      "r_v": 1.0,
+      "r_a": 0.2,
+      "false_success": 0.0,
+      "duplicate": 0.0,
+      "collateral": 0.0,
+      "phantom_readback": {
+        "num": 5,
+        "den": 5,
+        "rate": 1.0
+      },
+      "benign_readback": {
+        "num": 7,
+        "den": 7,
+        "rate": 1.0
+      },
+      "lost_ack_readback": {
+        "num": 4,
+        "den": 5,
+        "rate": 0.8
+      },
+      "precommit_recovery": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      }
+    },
+    "combo:lost_ack+precommit_timeout": {
+      "n": 5,
+      "vsc": 1.0,
+      "goal_met": 1.0,
+      "r_v": 1.0,
+      "r_a": 0.2,
+      "false_success": 0.0,
+      "duplicate": 0.0,
+      "collateral": 0.0,
+      "phantom_readback": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "benign_readback": {
+        "num": 5,
+        "den": 7,
+        "rate": 0.7142857142857143
+      },
+      "lost_ack_readback": {
+        "num": 4,
+        "den": 5,
+        "rate": 0.8
+      },
+      "precommit_recovery": {
+        "num": 5,
+        "den": 5,
+        "rate": 1.0
+      }
+    },
+    "combo:partial+lost_ack": {
+      "n": 9,
+      "vsc": 0.1111111111111111,
+      "goal_met": 0.2222222222222222,
+      "r_v": 0.2222222222222222,
+      "r_a": 0.0,
+      "false_success": 0.7777777777777778,
+      "duplicate": 0.0,
+      "collateral": 0.0,
+      "phantom_readback": {
+        "num": 9,
+        "den": 9,
+        "rate": 1.0
+      },
+      "benign_readback": {
+        "num": 8,
+        "den": 8,
+        "rate": 1.0
+      },
+      "lost_ack_readback": {
+        "num": 8,
+        "den": 9,
+        "rate": 0.8888888888888888
+      },
+      "precommit_recovery": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      }
+    },
+    "combo:partial+partial": {
+      "n": 9,
+      "vsc": 0.0,
+      "goal_met": 0.0,
+      "r_v": 0.0,
+      "r_a": 1.0,
+      "false_success": 1.0,
+      "duplicate": 0.0,
+      "collateral": 0.0,
+      "phantom_readback": {
+        "num": 18,
+        "den": 18,
+        "rate": 1.0
+      },
+      "benign_readback": {
+        "num": 13,
+        "den": 13,
+        "rate": 1.0
+      },
+      "lost_ack_readback": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "precommit_recovery": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      }
+    },
+    "combo:partial+phantom": {
+      "n": 8,
+      "vsc": 0.25,
+      "goal_met": 0.25,
+      "r_v": 0.25,
+      "r_a": 1.0,
+      "false_success": 0.75,
+      "duplicate": 0.0,
+      "collateral": 0.0,
+      "phantom_readback": {
+        "num": 16,
+        "den": 16,
+        "rate": 1.0
+      },
+      "benign_readback": {
+        "num": 15,
+        "den": 15,
+        "rate": 1.0
+      },
+      "lost_ack_readback": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "precommit_recovery": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      }
+    },
+    "combo:partial+precommit_timeout": {
+      "n": 4,
+      "vsc": 0.5,
+      "goal_met": 0.5,
+      "r_v": 0.5,
+      "r_a": 1.0,
+      "false_success": 0.5,
+      "duplicate": 0.0,
+      "collateral": 0.0,
+      "phantom_readback": {
+        "num": 4,
+        "den": 4,
+        "rate": 1.0
+      },
+      "benign_readback": {
+        "num": 8,
+        "den": 8,
+        "rate": 1.0
+      },
+      "lost_ack_readback": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "precommit_recovery": {
+        "num": 4,
+        "den": 4,
+        "rate": 1.0
+      }
+    },
+    "combo:phantom+lost_ack": {
+      "n": 3,
+      "vsc": 1.0,
+      "goal_met": 1.0,
+      "r_v": 1.0,
+      "r_a": 0.0,
+      "false_success": 0.0,
+      "duplicate": 0.0,
+      "collateral": 0.0,
+      "phantom_readback": {
+        "num": 3,
+        "den": 3,
+        "rate": 1.0
+      },
+      "benign_readback": {
+        "num": 6,
+        "den": 6,
+        "rate": 1.0
+      },
+      "lost_ack_readback": {
+        "num": 3,
+        "den": 3,
+        "rate": 1.0
+      },
+      "precommit_recovery": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      }
+    },
+    "combo:phantom+partial": {
+      "n": 5,
+      "vsc": 0.6,
+      "goal_met": 0.6,
+      "r_v": 0.6,
+      "r_a": 1.0,
+      "false_success": 0.4,
+      "duplicate": 0.0,
+      "collateral": 0.0,
+      "phantom_readback": {
+        "num": 10,
+        "den": 10,
+        "rate": 1.0
+      },
+      "benign_readback": {
+        "num": 12,
+        "den": 12,
+        "rate": 1.0
+      },
+      "lost_ack_readback": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "precommit_recovery": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      }
+    },
+    "combo:phantom+phantom": {
+      "n": 7,
+      "vsc": 1.0,
+      "goal_met": 1.0,
+      "r_v": 1.0,
+      "r_a": 1.0,
+      "false_success": 0.0,
+      "duplicate": 0.0,
+      "collateral": 0.0,
+      "phantom_readback": {
+        "num": 14,
+        "den": 14,
+        "rate": 1.0
+      },
+      "benign_readback": {
+        "num": 19,
+        "den": 19,
+        "rate": 1.0
+      },
+      "lost_ack_readback": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "precommit_recovery": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      }
+    },
+    "combo:phantom+precommit_timeout": {
+      "n": 8,
+      "vsc": 0.875,
+      "goal_met": 0.875,
+      "r_v": 0.875,
+      "r_a": 1.0,
+      "false_success": 0.125,
+      "duplicate": 0.0,
+      "collateral": 0.0,
+      "phantom_readback": {
+        "num": 7,
+        "den": 8,
+        "rate": 0.875
+      },
+      "benign_readback": {
+        "num": 17,
+        "den": 19,
+        "rate": 0.8947368421052632
+      },
+      "lost_ack_readback": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "precommit_recovery": {
+        "num": 8,
+        "den": 8,
+        "rate": 1.0
+      }
+    },
+    "combo:precommit_timeout+lost_ack": {
+      "n": 5,
+      "vsc": 1.0,
+      "goal_met": 1.0,
+      "r_v": 1.0,
+      "r_a": 0.2,
+      "false_success": 0.0,
+      "duplicate": 0.0,
+      "collateral": 0.0,
+      "phantom_readback": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "benign_readback": {
+        "num": 5,
+        "den": 7,
+        "rate": 0.7142857142857143
+      },
+      "lost_ack_readback": {
+        "num": 4,
+        "den": 5,
+        "rate": 0.8
+      },
+      "precommit_recovery": {
+        "num": 5,
+        "den": 5,
+        "rate": 1.0
+      }
+    },
+    "combo:precommit_timeout+partial": {
+      "n": 7,
+      "vsc": 0.2857142857142857,
+      "goal_met": 0.2857142857142857,
+      "r_v": 0.2857142857142857,
+      "r_a": 0.8571428571428571,
+      "false_success": 0.5714285714285714,
+      "duplicate": 0.0,
+      "collateral": 0.0,
+      "phantom_readback": {
+        "num": 6,
+        "den": 7,
+        "rate": 0.8571428571428571
+      },
+      "benign_readback": {
+        "num": 12,
+        "den": 14,
+        "rate": 0.8571428571428571
+      },
+      "lost_ack_readback": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "precommit_recovery": {
+        "num": 6,
+        "den": 7,
+        "rate": 0.8571428571428571
+      }
+    },
+    "combo:precommit_timeout+phantom": {
+      "n": 3,
+      "vsc": 1.0,
+      "goal_met": 1.0,
+      "r_v": 1.0,
+      "r_a": 1.0,
+      "false_success": 0.0,
+      "duplicate": 0.0,
+      "collateral": 0.0,
+      "phantom_readback": {
+        "num": 3,
+        "den": 3,
+        "rate": 1.0
+      },
+      "benign_readback": {
+        "num": 8,
+        "den": 8,
+        "rate": 1.0
+      },
+      "lost_ack_readback": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "precommit_recovery": {
+        "num": 3,
+        "den": 3,
+        "rate": 1.0
+      }
+    },
+    "combo:precommit_timeout+precommit_timeout": {
+      "n": 6,
+      "vsc": 1.0,
+      "goal_met": 1.0,
+      "r_v": 1.0,
+      "r_a": 1.0,
+      "false_success": 0.0,
+      "duplicate": 0.0,
+      "collateral": 0.0,
+      "phantom_readback": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "benign_readback": {
+        "num": 8,
+        "den": 17,
+        "rate": 0.47058823529411764
+      },
+      "lost_ack_readback": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "precommit_recovery": {
+        "num": 12,
+        "den": 12,
+        "rate": 1.0
+      }
+    }
+  },
+  "tag": "a12_proc_rv_s0",
+  "adapter_sha256": "77c1d6ed807f24eebfdd571bf35bc509e76cf868819273c6ee9d67d33c63220d",
+  "split": "proc_combo",
+  "seconds": 40
+}
