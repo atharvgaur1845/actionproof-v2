@@ -252,5 +252,30 @@ claims:
       dinfo_warm: {value: 0.25, file: results/s2/a11_summary.json, key: [estimands, ALL, "delta_information[warm_start]", est], shown: ["+0.25"]}
       druntime_warm: {value: 0.187, file: results/s2/a11_summary.json, key: [estimands, ALL, "delta_runtime[warm_start]", est], shown: []}
 
+  - id: A12-SIGNAL
+    statement: "Exploratory reward-signal ranges over five seeds and four 50-step blocks (results/s2/reward_signal_summary.json)."
+    status: supported
+    prereg: PREREGISTRATION_A12_ADDENDUM2.md
+    eval: [results/s2/reward_signal_summary.json]
+    numbers:
+      rv_ph_share_lo: {value: 0.46, file: results/s2/reward_signal_summary.json, key: [proc_rv, phantom_informative_share, 0], shown: ["46"]}
+      rv_ph_share_hi: {value: 0.75, file: results/s2/reward_signal_summary.json, key: [proc_rv, phantom_informative_share, 1], shown: ["75%"]}
+      rv_gap_lo: {value: 0.91, file: results/s2/reward_signal_summary.json, key: [proc_rv, phantom_read_gap, 0], shown: ["0.91"]}
+      rv_gap_hi: {value: 0.97, file: results/s2/reward_signal_summary.json, key: [proc_rv, phantom_read_gap, 1], shown: ["0.97"]}
+      rv_rr_first_lo: {value: 0.59, file: results/s2/reward_signal_summary.json, key: [proc_rv, read_rate_first_block, 0], shown: ["0.59"]}
+      rv_rr_first_hi: {value: 0.66, file: results/s2/reward_signal_summary.json, key: [proc_rv, read_rate_first_block, 1], shown: ["0.66"]}
+      rv_rr_last_lo: {value: 0.81, file: results/s2/reward_signal_summary.json, key: [proc_rv, read_rate_last_block, 0], shown: ["0.81"]}
+      rv_rr_last_hi: {value: 0.87, file: results/s2/reward_signal_summary.json, key: [proc_rv, read_rate_last_block, 1], shown: ["0.87"]}
+      ra_ph_share_lo: {value: 0.03, file: results/s2/reward_signal_summary.json, key: [proc_ra, phantom_informative_share, 0], shown: ["3"]}
+      ra_ph_share_hi: {value: 0.23, file: results/s2/reward_signal_summary.json, key: [proc_ra, phantom_informative_share, 1], shown: ["23%"]}
+      ra_lanc_lo: {value: 0.60, file: results/s2/reward_signal_summary.json, key: [proc_ra, lost_ack_never_commit_informative_share, 0], shown: ["60"]}
+      ra_lanc_hi: {value: 0.92, file: results/s2/reward_signal_summary.json, key: [proc_ra, lost_ack_never_commit_informative_share, 1], shown: ["92%"]}
+      ra_gap_lo: {value: -1.00, file: results/s2/reward_signal_summary.json, key: [proc_ra, lost_ack_never_commit_read_gap, 0], shown: ["1.00"]}
+      ra_gap_hi: {value: -0.86, file: results/s2/reward_signal_summary.json, key: [proc_ra, lost_ack_never_commit_read_gap, 1], shown: ["0.86"]}
+      ra_rr_first_lo: {value: 0.12, file: results/s2/reward_signal_summary.json, key: [proc_ra, read_rate_first_block, 0], shown: ["0.12"]}
+      ra_rr_first_hi: {value: 0.13, file: results/s2/reward_signal_summary.json, key: [proc_ra, read_rate_first_block, 1], shown: ["0.13"]}
+      ra_rr_last_lo: {value: 0.04, file: results/s2/reward_signal_summary.json, key: [proc_ra, read_rate_last_block, 0], shown: ["0.04"]}
+      ra_rr_last_hi: {value: 0.06, file: results/s2/reward_signal_summary.json, key: [proc_ra, read_rate_last_block, 1], shown: ["0.06"]}
+
 # Non-result numbers that appear in scanned documents (software versions).
 allow: ["3.12", "2.11", "5.22", "1.7", "0.23", "0.21"]
