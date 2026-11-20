@@ -7,7 +7,10 @@ Status markers: [PENDING file] means the number does not exist yet and may not b
 
 ---
 
-## Abstract (write last)
+## Abstract
+
+Tool-using agents are trained with rewards computed from something: the final state of the systems they change, or the replies the tools gave them. When a write can report success without committing, the two differ. We train a 3.35B Aya agent with GRPO under two rewards of identical binary form that differ only in this information channel, in a procurement environment whose success replies are byte-identical whether or not the write committed, and pre-register the comparison. On untouched tasks, the state reward yields an agent that reads the payment records after every phantom write and the acknowledgement reward one that never does, in each of five paired seeds (phantom read-back 1.00 vs 0.00; verified completion +0.27 to +0.32). Read-back was already in the warm start's sampled repertoire; the reward decides whether it is kept, and the acknowledgement reward suppresses it mainly through cases where acting on a read costs a success reply. Our pre-registered mechanism test fails, and we report it. A second pre-registered experiment forces the authoritative read into the agent's context under five real execution states: every policy, including those that never read on their own, acts correctly on whether a payment exists, so the hypothesis that reading does not produce evidence-conditioned control is rejected in this setting. Control stops where the evidence must be compared with the order: only the state-trained agents refund a partial payment, in 35–48% of tasks, and no agent removes a duplicate delivery. What the reward sees decides what the agent checks; what the agent does with evidence is largely inherited from its demonstrations.
+
 
 ## 1. Introduction
 
@@ -77,10 +80,19 @@ The two are different properties. An agent can learn to issue a read after every
 
 ## 6. Discussion and limitations
 
-One 3.35B model family; one environment built by the same team as the verifier; three (possibly five) training seeds, so seed-level significance is not attainable and we report direction and per-seed intervals; the acknowledgement reward is not a pure information ablation (retry payment; class mix); synthetic faults on simulated services; one annotator for the human audit.
+**What the evidence supports.** A reward's information channel selects evidence acquisition in a controlled comparison, consistently over five training seeds; the effect is selection from the warm start's repertoire, not invention, and it is not selective (R_V reads after every write). Given evidence, agents act on simple presence or absence regardless of how they were trained; acting on evidence that must be compared is rare and improves only under the state reward. A practical reading: a runtime that verifies writes and shows the verified state to the agent (A11) does more for reliability than training the agent to look.
+
+**What it does not support.** Generality beyond one 3.35B model family, one environment built by the same team as the verifier, synthetic faults and five training seeds. The acknowledgement reward is not a pure information ablation: it pays a blind same-key retry after a lost acknowledgement, and most of its gradient comes from classes where acting on a read costs a reply; the phantom-write effect is partly true by construction (R_A cannot see a phantom). The registered mechanism test compared greedy policies against a greedy warm start that never reads, so it could not observe suppression. The forced-evidence result may depend on the evidence resembling the verifying demonstrations (the runtime-attributed ablation lowers R_A to 0.83). The human audit (H4) has one annotator.
+
+**With more credits.** (1) A second model family and an environment not built by us (an existing tool benchmark with injected phantom acknowledgements), same registered design; expected: the channel effect on acquisition replicates where the warm start samples read-back at all. (2) A reward contrast without the retry-payment confound (an acknowledgement reward that ignores idempotency-store replies), to isolate information from incentive. (3) Training that targets content-conditioned control (partial and duplicate payments in the training mix with the state reward); expected: partial-branch accuracy above the 0.35–0.48 reached here.
 
 ---
 
 ## Appendix plan (≤ 6 pages)
 
 A. Environment, tools and schemas. B. Fault taxonomy and splits (hashes). C. Full reward-truth table. D. Training configuration. E. Prompts. F. Per-seed and per-class tables. G. Statistical procedures. H. Stage 1 results (registered H1 first; unregistered contrasts labelled). I. Supporting measurements: A11 gateway factorial, H7 defences (deterministic), A13 contract coverage as finite-set results (D-A13-1). J. H4 single-annotator audit. K. Example trajectories (one per A14 branch). L. Reproduction commands, compute and HF spend. M. Deviations (D-A12-1, D-A13-1, others).
+
+
+## Declaration of prior work
+
+ActionProof Stage 1 (Nov 1–15, 2026; submitted Nov 15) built the e-commerce environment, the PCSTR rewards, the Stage 1 GRPO runs and the judge audit; those results are reported as Stage 1 and are not part of this paper's claims except where labelled. Stage 2 (Nov 20–25) built ProcureSim, the R_V/R_A rewards, the gateway, the A11–A14 pre-registrations, all Stage 2 training and evaluation, and this paper. The Aya models are Cohere's; the toolkits used (AgentTune for GRPO rollouts, AuditKIT for the judge) are the hackathon's. Claude (Anthropic) was used as a coding and writing assistant throughout; every number was produced by code in the repository and checked against its file.
