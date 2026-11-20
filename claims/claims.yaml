@@ -196,5 +196,61 @@ claims:
     numbers:
       agree: {value: 4000, file: results/reference_verifier.md, key: 'Agreement: \*\*([0-9]+)/', shown: ["4,000"]}
 
+
+  - id: C1-H2
+    statement: >-
+      Registered primary (A12 H2, proc_conf, step-200 models, each run once): phantom read-back R_V 1.00 vs R_A 0.00
+      in seeds 0, 1 and 2 (task level 153/153 vs 0/153 in each); VSC difference +0.313, +0.323, +0.313. Exact
+      sign-flip p over 3 seeds is 1/8 one-sided (its minimum); no seed-level significance is claimed.
+    status: supported
+    prereg: PREREGISTRATION_A12.md
+    deviations: ["D-A12-1 (seed 0 R_A stop rule fired, continued)", "D-A12-2 (seed 2 R_V resumed from checkpoint-175)"]
+    eval: [results/s2/a12_summary.json, results/s2/a12_secondary.json]
+    stats: scripts/s2_stats.py
+    numbers:
+      rb_rv_s0: {value: 1.0, file: results/s2/a12_summary.json, key: [phantom_readback, per_seed, "0", rv], shown: ["1.00"]}
+      rb_ra_s0: {value: 0.0, file: results/s2/a12_summary.json, key: [phantom_readback, per_seed, "0", ra], shown: ["0.00"]}
+      rb_rv_s1: {value: 1.0, file: results/s2/a12_summary.json, key: [phantom_readback, per_seed, "1", rv], shown: []}
+      rb_ra_s1: {value: 0.0, file: results/s2/a12_summary.json, key: [phantom_readback, per_seed, "1", ra], shown: []}
+      rb_rv_s2: {value: 1.0, file: results/s2/a12_summary.json, key: [phantom_readback, per_seed, "2", rv], shown: []}
+      rb_ra_s2: {value: 0.0, file: results/s2/a12_summary.json, key: [phantom_readback, per_seed, "2", ra], shown: []}
+      task_level_rv_s0: {value: 153, file: results/s2/a12_secondary.json, key: [proc_conf, rv_s0, task_level_phantom_readback, num], shown: ["153"]}
+      task_level_ra_s0: {value: 0, file: results/s2/a12_secondary.json, key: [proc_conf, ra_s0, task_level_phantom_readback, num], shown: []}
+      vsc_diff_s0: {value: 0.313, file: results/s2/a12_summary.json, key: [vsc, per_seed, "0", diff], shown: ["+0.313", "0.313"]}
+      vsc_diff_s1: {value: 0.323, file: results/s2/a12_summary.json, key: [vsc, per_seed, "1", diff], shown: ["+0.323", "0.323"]}
+      vsc_diff_s2: {value: 0.313, file: results/s2/a12_summary.json, key: [vsc, per_seed, "2", diff], shown: []}
+      signflip: {value: 0.125, file: results/s2/a12_summary.json, key: [phantom_readback, sign_flip_p_one_sided], shown: ["1/8"]}
+
+  - id: C1-H3
+    statement: "Registered H3 (A12 §7) fails: sign agreement R_V 3 of 5 classes (0.6), R_A 0 of 5, against >= 0.8, in each of seeds 0-2. The warm start decoded greedily never reads back on proc_dev (0/96)."
+    status: not_supported
+    prereg: PREREGISTRATION_A12.md
+    eval: [results/s2/h3_test.json, results/eval/a12/dev/warm_start__neutral__proc_dev.summary.json]
+    numbers:
+      rv_agree: {value: 0.6, file: results/s2/h3_test.json, key: [predictions, "a12b (registered under addendum 1)", proc_rv_s0, agreement], shown: ["0.6"]}
+      ra_agree: {value: 0.0, file: results/s2/h3_test.json, key: [predictions, "a12b (registered under addendum 1)", proc_ra_s0, agreement], shown: []}
+      warm_rb_den: {value: 96, file: results/eval/a12/dev/warm_start__neutral__proc_dev.summary.json, key: [phantom_readback, den], shown: ["0/96"]}
+
+  - id: STRESS-DUP
+    statement: "proc_stress (duplicate delivery, not seen in training): R_V reads back after every write (benign read-back 1.0) yet the duplicate rate equals R_A's (0.58) in every seed."
+    status: supported
+    prereg: PREREGISTRATION_A12_ADDENDUM2.md
+    eval: [results/s2/a12_secondary.json]
+    numbers:
+      rv_benign: {value: 1.0, file: results/s2/a12_secondary.json, key: [proc_stress, rv_s0, observation_equivalence, benign, rate], shown: []}
+      rv_dup: {value: 0.58, file: results/s2/a12_secondary.json, key: [proc_stress, rv_s0, case_b, duplicate], shown: ["0.58"]}
+      ra_dup: {value: 0.58, file: results/s2/a12_secondary.json, key: [proc_stress, ra_s0, case_b, duplicate], shown: []}
+
+  - id: A11-H1
+    statement: "A11 H1 (registered): runtime engineering check passes (Delta_runtime > 0 for every policy); registered interaction test rejects for PCSTR-d seed 0 but not seed 1, so the primary claim is not made; Delta_information +0.25 for the warm start, about 0 for PCSTR-d."
+    status: supported
+    prereg: PREREGISTRATION_A11.md
+    eval: [results/s2/a11_summary.json]
+    numbers:
+      i_s0: {value: 0.107, file: results/s2/a11_summary.json, key: [interaction, pcstr_d_s0, I], shown: ["+0.107"]}
+      i_s1: {value: 0.027, file: results/s2/a11_summary.json, key: [interaction, pcstr_d_s1, I], shown: ["+0.027"]}
+      dinfo_warm: {value: 0.25, file: results/s2/a11_summary.json, key: [estimands, ALL, "delta_information[warm_start]", est], shown: ["+0.25"]}
+      druntime_warm: {value: 0.187, file: results/s2/a11_summary.json, key: [estimands, ALL, "delta_runtime[warm_start]", est], shown: []}
+
 # Non-result numbers that appear in scanned documents (software versions).
 allow: ["3.12", "2.11", "5.22", "1.7", "0.23", "0.21"]
