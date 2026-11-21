@@ -21,7 +21,7 @@ trap release ERR
 tar czf .cache/hfjob/code_$TASK.tar.gz --exclude=results/a12/rollouts actionproof scripts slurm data/bench/proc data/bench/c2 pyproject.toml \
   PREREGISTRATION_*.md docs/stage2/VERIFIER_SPEC.md docs/stage2/OPSIM_SPEC.md results/*_hashes.json results/a12 \
   $( [ -d data/bench/opsim ] && echo data/bench/opsim ) $( [ -d results/k1 ] && echo results/k1 ) $( [ -d results/a12b ] && echo results/a12b ) \
-  $( [ -d results/a14 ] && echo results/a14 ) $( [ -d results/s2 ] && echo results/s2 ) tests/golden tests/integrity \
+  $( [ -d results/a14 ] && echo results/a14 ) $( [ -d results/s2 ] && echo results/s2 ) $( [ -f results/s3/scripted_conf_calibration.json ] && echo results/s3/scripted_conf_calibration.json ) tests/golden tests/integrity \
   $( [ -f PREREGISTRATION_A11.md ] && echo data/h4 )
 .venv/bin/hf upload $REPO .cache/hfjob/code_$TASK.tar.gz bundle/code_$TASK.tar.gz --repo-type dataset --quiet
 .venv/bin/hf upload $REPO slurm/hfjob_run.sh bundle/hfjob_run.sh --repo-type dataset --quiet
