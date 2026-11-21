@@ -1,6 +1,6 @@
 # Final review: simulated judging panel
 
-2026-11-22 01:40 IST, branch `stage4`.
+2026-11-22 01:34 IST, branch `stage4`.
 
 **Inputs:**
 - the new website build (`demo/static/index.html`, not yet deployed);
