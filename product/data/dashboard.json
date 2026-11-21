@@ -416,6 +416,138 @@
    "n_seeds": 3,
    "registration": "PREREGISTRATION_S3_ADDENDUM1.md",
    "status": "secondary"
+  },
+  {
+   "comparison": "RSC vs A12 R_V under shift (S4-EVAL), G2: supported",
+   "split": "Shift: Hindi request",
+   "metric": "vsc",
+   "per_seed": [
+    0.12666666666666668,
+    0.10666666666666667,
+    0.11333333333333333,
+    0.15333333333333332,
+    0.13333333333333333
+   ],
+   "est": 0.12666666666666648,
+   "ci95": [
+    0.08000000000000007,
+    0.17599999999999993
+   ],
+   "p_one_sided": 0.003968253968253968,
+   "p_label": "unpaired seed permutation",
+   "n_seeds": 5,
+   "registration": "PREREGISTRATION_S4_EVAL(_ADDENDUM1).md",
+   "status": "confirmatory"
+  },
+  {
+   "comparison": "RSC vs A12 R_V under shift (S4-EVAL), G2: supported",
+   "split": "Shift: Hinglish request",
+   "metric": "vsc",
+   "per_seed": [
+    0.06666666666666667,
+    0.03333333333333333,
+    0.08,
+    0.12,
+    0.06
+   ],
+   "est": 0.07200000000000006,
+   "ci95": [
+    0.040000000000000036,
+    0.10933333333333328
+   ],
+   "p_one_sided": 0.003968253968253968,
+   "p_label": "unpaired seed permutation",
+   "n_seeds": 5,
+   "registration": "PREREGISTRATION_S4_EVAL(_ADDENDUM1).md",
+   "status": "confirmatory"
+  },
+  {
+   "comparison": "RSC vs A12 R_V under shift (S4-EVAL)",
+   "split": "Shift: reworded English",
+   "metric": "vsc",
+   "per_seed": [
+    0.08,
+    0.08,
+    0.10666666666666667,
+    0.18,
+    0.15333333333333332
+   ],
+   "est": 0.12,
+   "ci95": [
+    0.07866666666666666,
+    0.16533333333333333
+   ],
+   "p_one_sided": 0.003968253968253968,
+   "p_label": "unpaired seed permutation",
+   "n_seeds": 5,
+   "registration": "PREREGISTRATION_S4_EVAL(_ADDENDUM1).md",
+   "status": "secondary"
+  },
+  {
+   "comparison": "RSC vs A12 R_V under shift (S4-EVAL), G1: not supported",
+   "split": "Shift: renamed tools and acks",
+   "metric": "vsc",
+   "per_seed": [
+    -0.14666666666666667,
+    -0.05333333333333334,
+    0.06,
+    0.006666666666666667,
+    0.05333333333333334
+   ],
+   "est": -0.016000000000000014,
+   "ci95": [
+    -0.043999999999999984,
+    0.010666666666666713
+   ],
+   "p_one_sided": 0.6507936507936508,
+   "p_label": "unpaired seed permutation",
+   "n_seeds": 5,
+   "registration": "PREREGISTRATION_S4_EVAL(_ADDENDUM1).md",
+   "status": "confirmatory"
+  },
+  {
+   "comparison": "RSC vs A12 R_V under shift (S4-EVAL), G3: not supported",
+   "split": "Shift: unseen four-step workflow",
+   "metric": "vsc",
+   "per_seed": [
+    -0.01,
+    0.03,
+    -0.04,
+    0.0,
+    0.1
+   ],
+   "est": 0.016,
+   "ci95": [
+    0.003999999999999997,
+    0.03
+   ],
+   "p_one_sided": 0.4087301587301587,
+   "p_label": "unpaired seed permutation",
+   "n_seeds": 5,
+   "registration": "PREREGISTRATION_S4_EVAL(_ADDENDUM1).md",
+   "status": "confirmatory"
+  },
+  {
+   "comparison": "RSC vs A12 R_V under shift (S4-EVAL), G4: supported",
+   "split": "Shift: two faults per episode",
+   "metric": "vsc",
+   "per_seed": [
+    0.07,
+    0.03,
+    0.08,
+    0.1,
+    0.08
+   ],
+   "est": 0.07200000000000006,
+   "ci95": [
+    0.03200000000000003,
+    0.118
+   ],
+   "p_one_sided": 0.003968253968253968,
+   "p_label": "unpaired seed permutation",
+   "n_seeds": 5,
+   "registration": "PREREGISTRATION_S4_EVAL(_ADDENDUM1).md",
+   "status": "confirmatory"
   }
  ],
  "models": {
@@ -1054,14 +1186,18 @@
  },
  "limits": [
   "RSC vs A12 R_V compares recipes (start states and fault coverage); the start-state comparison is RSC vs the class-matched control, 3 seeds (exact sign-flip resolution 1/8).",
-  "Against the class-matched control RSC has more violations (+0.027 on the partial and duplicate subset) and no gain on duplicate stress.",
-  "No positive transfer to the OpsSim domains (IT operations, healthcare administration).",
+  "Against the class-matched control RSC leaves more duplicate payments unrefunded (+0.027 on the partial and duplicate subset) and has no gain on duplicate stress.",
+  "Transfer is negative in healthcare administration: VSC 0.158 (warm start), 0.080 (A12 R_V), 0.047 (RSC).",
+  "Forked counterfactual credit (FCA) was dropped by its pre-set development criterion: -0.097 VSC vs recovery-start GRPO (needed +0.03).",
   "One model family (Tiny Aya Global 3.35B, LoRA) and one authored simulator."
  ],
  "sources": {
   "S3": "results/s3/s3_summary.json",
   "S3 addendum": "results/s3/s3_addendum.json",
   "S3 addendum subset": "results/s3/s3_addendum_full_pd.json",
-  "A12": "results/s2/a12_summary.json"
+  "A12": "results/s2/a12_summary.json",
+  "S4": "results/s4/s4_summary.json",
+  "FCA": "results/s4/fca_dev_summary.json",
+  "review numbers": "results/s3/s3_review_numbers.json"
  }
 }

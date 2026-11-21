@@ -102,16 +102,16 @@ def dashboard_html(d: dict) -> str:
         rows.append(f"<tr><td>{esc(r['comparison'])}<br>{tag}</td><td>{esc(r['split'])}</td><td>{esc(r['metric'])}</td>"
                     f"<td class='num'>{r['est']:+.3f}<br><small>[{r['ci95'][0]:+.3f}, {r['ci95'][1]:+.3f}]</small>{_ci_bar(r['est'], *r['ci95'])}</td>"
                     f"<td class='num'>{' '.join(f'{x:+.2f}' for x in r['per_seed'])}</td>"
-                    f"<td class='num'>{r['n_seeds']} seeds<br>p₁={r['p_one_sided']:.3g}</td><td><code>{esc(r['registration'])}</code></td></tr>")
+                    f"<td class='num'>{r['n_seeds']} seeds<br>p₁={r['p_one_sided']:.3g}<br><small>{esc(r.get('p_label', 'sign-flip'))}</small></td><td><code>{esc(r['registration'])}</code></td></tr>")
     wf = d["by_workflow"]
     wrows = "".join(f"<tr><td>{esc(k.split('__')[0])}</td><td>{esc(k.split('__')[1])}</td>"
                     + "".join(f"<td class='num'>{v[w]['k']}/{v[w]['n']} = {v[w]['rate']:.2f}</td>" for w in ("order_prepay", "receive_pay", "pay_post"))
                     + "</tr>" for k, v in wf.items())
     limits = "".join(f"<li>{esc(x)}</li>" for x in d["limits"])
     return (f'<div class="ap"><h2>Registered results</h2><p class="lede">Differences in verified safe completion (VSC), false '
-            f'completion and irreversible violations. Intervals are paired task bootstraps with one task draw shared across '
-            f'seeds; seed-level evidence is the per-seed column and the exact sign-flip p (smallest attainable: 1/32 at five '
-            f'seeds, 1/8 at three).</p><table><tr><th>Comparison</th><th>Split</th><th>Metric</th><th>Seed-avg Δ [95% CI]</th>'
+            f'completion and violations (in ProcureSim, almost all are duplicate payments left unrefunded). Intervals are paired task bootstraps with one task draw shared across '
+            f'seeds; seed-level evidence is the per-seed column and the p under it (exact sign-flip: smallest 1/32 at five '
+            f'seeds, 1/8 at three; unpaired seed permutation: smallest 1/252).</p><table><tr><th>Comparison</th><th>Split</th><th>Metric</th><th>Seed-avg Δ [95% CI]</th>'
             f'<th>Per seed</th><th>Seeds</th><th>Source</th></tr>{"".join(rows)}</table>'
             f'<h2 style="margin-top:1.5rem">Partial and duplicate recovery by workflow</h2><table><tr><th>Model</th><th>Split</th>'
             f'<th>Order → pay</th><th>Receive → pay</th><th>Pay first</th></tr>{wrows}</table>'

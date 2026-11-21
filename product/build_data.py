@@ -44,6 +44,22 @@ def dashboard() -> dict:
         rows.append({"comparison": "RSC vs class-matched control (start states only)",
                      "split": "Full episodes: partial + duplicate classes", "metric": k, **across(a1pd, "s3_conf_full", k),
                      "registration": "PREREGISTRATION_S3_ADDENDUM1.md", "status": "confirmatory" if k == "vsc" else "secondary"})
+    s4 = j("results/s4/s4_summary.json")
+    fam = {sp: g for g, v in s4["family"].items() for sp in v["splits"]}
+    for sp, name in (("s4_lang_hi", "Shift: Hindi request"), ("s4_lang_hinglish", "Shift: Hinglish request"),
+                     ("s4_lang_para", "Shift: reworded English"), ("s4_api", "Shift: renamed tools and acks"),
+                     ("s4_wf4", "Shift: unseen four-step workflow"), ("s4_combo", "Shift: two faults per episode")):
+        c = s4["splits"][sp]["rsc_minus_rv"]["vsc"]
+        g = fam.get(sp)
+        rows.append({"comparison": "RSC vs A12 R_V under shift (S4-EVAL)" + (f", {g}: "
+                     + ("supported" if s4["family"][g]["supported"] else "not supported") if g else ""),
+                     "split": name, "metric": "vsc", "per_seed": c["per_seed"], "est": c["seed_avg"]["est"],
+                     "ci95": c["seed_avg"]["ci95"], "p_one_sided": c["unpaired_perm_p_one_sided"],
+                     "p_label": "unpaired seed permutation", "n_seeds": len(c["per_seed"]),
+                     "registration": "PREREGISTRATION_S4_EVAL(_ADDENDUM1).md",
+                     "status": "confirmatory" if g else "secondary"})
+    fca = j("results/s4/fca_dev_summary.json")
+    rv = j("results/s3/s3_review_numbers.json")["transfer"]["care_admin"]
     models = {}
     for sp in ("s3_conf_rec", "s3_conf_full", "s3_conf_stress"):
         for t, m in s3["splits"][sp]["models"].items():
@@ -55,12 +71,19 @@ def dashboard() -> dict:
                     "vsc_per_seed": {k: v["diff"] for k, v in a12["vsc"]["per_seed"].items()}},
             "limits": ["RSC vs A12 R_V compares recipes (start states and fault coverage); the start-state comparison is "
                        "RSC vs the class-matched control, 3 seeds (exact sign-flip resolution 1/8).",
-                       "Against the class-matched control RSC has more violations (+0.027 on the partial and duplicate "
-                       "subset) and no gain on duplicate stress.",
-                       "No positive transfer to the OpsSim domains (IT operations, healthcare administration).",
+                       "Against the class-matched control RSC leaves more duplicate payments unrefunded "
+                       f"({a1pd['splits']['s3_conf_full']['across']['violation']['seed_avg']['est']:+.3f} on the partial and "
+                       "duplicate subset) and has no gain on duplicate stress.",
+                       "Transfer is negative in healthcare administration: VSC "
+                       f"{rv['warm_start']['vsc_mean']:.3f} (warm start), {rv['a12_rv']['vsc_mean']:.3f} (A12 R_V), "
+                       f"{rv['rsc']['vsc_mean']:.3f} (RSC).",
+                       "Forked counterfactual credit (FCA) was dropped by its pre-set development criterion: "
+                       f"{fca['criteria']['s3_rec_dev_diff']:+.3f} VSC vs recovery-start GRPO (needed +0.03).",
                        "One model family (Tiny Aya Global 3.35B, LoRA) and one authored simulator."],
             "sources": {"S3": "results/s3/s3_summary.json", "S3 addendum": "results/s3/s3_addendum.json",
-                        "S3 addendum subset": "results/s3/s3_addendum_full_pd.json", "A12": "results/s2/a12_summary.json"}}
+                        "S3 addendum subset": "results/s3/s3_addendum_full_pd.json", "A12": "results/s2/a12_summary.json",
+                        "S4": "results/s4/s4_summary.json", "FCA": "results/s4/fca_dev_summary.json",
+                        "review numbers": "results/s3/s3_review_numbers.json"}}
 
 
 def replays(n_per_class: int = 2) -> dict:
