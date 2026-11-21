@@ -26,7 +26,7 @@ The model is Cohere Tiny Aya Global (3.35B) with LoRA. Training is GRPO through 
 3. **Training from the broken state helps, narrowly.** Recovery-start training is a known curriculum: the same GRPO and reward, with episodes that begin from a faulted write.
    - Against the state-reward agent: +0.21 verified completion in five of five seeds, and every run beats every run.
    - About half of that comes from one added fault type.
-   - Against a control trained on the same faults, the gain is partial-payment repair only (three control seeds). It costs slightly more duplicate payments left unrefunded.
+   - Against a control trained on the same faults, five runs per arm: completion from faulted states improves across training runs (p = 0.012). A partial-payment-specific gain is not established, and the three-seed safety cost reversed.
    - The gain survives Hindi and Hinglish requests and two-fault episodes. It vanishes under renamed tools and an unseen workflow, where agents replay the trained step sequence. Published work reports the same surface binding.
 
 ## What we do not claim

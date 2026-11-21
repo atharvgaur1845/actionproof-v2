@@ -136,6 +136,13 @@ def s3() -> str:
         v, n = cell(d, sp, "vsc")
         w, _ = cell(d, sp, "violation")
         out.append(f"{lab} & {name} & {v} & {w} & {n}" + r" \\")
+    A2 = j("results/s3/s3_addendum2.json")["part_a"]["tests"]
+    for h, name in (("H3'", "recovery starts"), ("H4'p", "partial (full episodes)"), ("H4'd", "duplicate (full episodes)")):
+        f = A2[h]["five_seeds"]
+        lo, hi = f["seed_avg"]["ci95"]
+        npos = sum(x > y for x, y in zip(f["cand_per_seed"], f["base_per_seed"]))
+        out.append(f"RSC $-$ matched, 5 seeds (Holm $p$={A2[h]['p_holm']:.3f}) & {name} & "
+                   f"{f['seed_avg']['est']:+.2f} [{lo:+.2f}, {hi:+.2f}] & -- & {npos}/5" + r" \\")
     out += [r"\bottomrule", r"\end{tabular}"]
     return "\n".join(out)
 

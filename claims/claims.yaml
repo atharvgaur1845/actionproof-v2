@@ -458,6 +458,24 @@ claims:
       viol_stress: {value: 0.04, file: results/s3/s3_addendum.json, key: [splits, s3_conf_stress, across, violation, seed_avg, est], shown: []}
       fs_subset: {value: -0.224, file: results/s3/s3_addendum_full_pd.json, key: [splits, s3_conf_full, across, false_success, seed_avg, est], shown: []}
 
+  - id: S3-A2
+    statement: "Registered (PREREGISTRATION_S3_ADDENDUM2 Part A, before control seeds 3-4 were trained; seeds 0-2 were already known): RSC (5 runs) vs the class-matched control (5 runs), one-sided unpaired seed permutation, Holm over three. H3' recovery starts, all classes: +0.107 [0.085, 0.131], p 0.012, Holm 0.036, SUPPORTED. H4'p full episodes, partial class: +0.384 [0.322, 0.447] over tasks but p 0.056, Holm 0.111, NOT supported (control seeds 0 and 3 learned partial repair; 5/5 RSC vs 2/5 control learners). H4'd duplicate class: +0.130, p 0.337, NOT supported (control seed 4 never repaired a duplicate). Secondary: with five control seeds RSC has FEWER violations than the control on all full episodes (-0.021 [-0.030, -0.013]) and is better on duplicate stress (VSC +0.068 [0.040, 0.096]), reversing the three-seed trade-off of S3-A1; both are reported."
+    status: supported
+    prereg: PREREGISTRATION_S3_ADDENDUM2.md
+    eval: [results/s3/s3_addendum2.json]
+    stats: scripts/s3_stats_a2.py
+    numbers:
+      h3p: {value: 0.107, file: results/s3/s3_addendum2.json, key: [part_a, tests, "H3'", five_seeds, seed_avg, est], shown: ["+0.107", "+0.11"]}
+      h3p_p: {value: 0.012, file: results/s3/s3_addendum2.json, key: [part_a, tests, "H3'", five_seeds, unpaired_perm_p_one_sided], shown: ["0.012"]}
+      h3p_holm: {value: 0.036, file: results/s3/s3_addendum2.json, key: [part_a, tests, "H3'", p_holm], shown: ["0.036"]}
+      h3p_lo: {value: 0.085, file: results/s3/s3_addendum2.json, key: [part_a, tests, "H3'", five_seeds, seed_avg, ci95, 0], shown: ["0.085"]}
+      h3p_hi: {value: 0.131, file: results/s3/s3_addendum2.json, key: [part_a, tests, "H3'", five_seeds, seed_avg, ci95, 1], shown: ["0.131"]}
+      h4pp_holm: {value: 0.111, file: results/s3/s3_addendum2.json, key: [part_a, tests, "H4'p", p_holm], shown: ["0.111"]}
+      h4pp_p: {value: 0.056, file: results/s3/s3_addendum2.json, key: [part_a, tests, "H4'p", five_seeds, unpaired_perm_p_one_sided], shown: ["0.056"]}
+      learners_ctl: {value: 2, file: results/s3/s3_addendum2.json, key: [part_a, learns_partial_repair, s3_matched], shown: []}
+      viol5: {value: -0.021, file: results/s3/s3_addendum2.json, key: [part_a, violation_s3_conf_full, seed_avg, est], shown: ["-0.021"]}
+      stress5: {value: 0.068, file: results/s3/s3_addendum2.json, key: [part_a, vsc_s3_conf_stress, seed_avg, est], shown: ["+0.068"]}
+
   - id: S3-R
     statement: "Descriptive, from the post-results review and recomputed by scripts/s3_review_numbers.py and scripts/s4_stats.py on the S3 files (not registered). Seed level: every RSC run beats every A12 R_V run on s3_conf_rec and s3_conf_full (unpaired permutation p = 1/252 = 0.004); RSC vs control, 3 seeds per arm, p = 0.05 (the smallest possible). Per class on s3_conf_full, the RSC - A12 R_V gain is 0.116 duplicate delivery (0.12) and 0.093 partial payment, every other class 0. Partial repair (partial-class VSC >= 0.40) learned in 5/5 RSC runs, 1/3 control runs, 3/5 A12 R_V runs; control seed 0 and RSC seed 0 make identical tool calls on 283/300 tasks. Receive-then-pay partial payments repaired: RSC 5/60 full episodes, A12 R_V 0/60, control 0/36. Clean episodes: 6.40 calls and 2.70 reads per episode for every R_V-family arm, 3.70 and 0.00 for the warm start. Transfer: care_admin VSC 0.158 warm, 0.080 A12 R_V, 0.047 RSC (below A12 R_V in 5/5 seed pairs); collateral 0.18, 0.27, 0.33; it_ops VSC 0.14-0.20."
     status: supported

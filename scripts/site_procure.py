@@ -88,6 +88,7 @@ def results() -> dict:
     s4, d4 = j("results/s4/s4_summary.json"), j("results/s4/s4_diagnostics.json")
     fca = j("results/s4/fca_dev_summary.json")
     wf = j("results/s2/partial_by_workflow.json")["a15"]
+    A2 = j("results/s3/s3_addendum2.json")["part_a"]
 
     def across(d, sp):
         a = d["splits"][sp]["across"]["vsc"]
@@ -120,6 +121,10 @@ def results() -> dict:
                "learned": {k: [v["runs_ge_040"], v["runs"]] for k, v in rv["learned"].items()},
                "rp_cell": {k: [v["repaired"], v["n"]] for k, v in rv["rp_cell"]["s3_conf_full"].items()},
                "src": "results/s3/s3_summary.json; s3_addendum.json; s3_seedlevel.json; s3_review_numbers.json"},
+        "a2": {k: v for k, v in {"h3": A2["tests"]["H3'"]["five_seeds"]["seed_avg"], "h3_p": A2["tests"]["H3'"]["five_seeds"]["unpaired_perm_p_one_sided"],
+                                  "h3_holm": A2["tests"]["H3'"]["p_holm"], "h4p_holm": A2["tests"]["H4'p"]["p_holm"],
+                                  "learners": A2["learns_partial_repair"], "viol": A2["violation_s3_conf_full"]["seed_avg"],
+                                  "stress": A2["vsc_s3_conf_stress"]["seed_avg"]}.items()},
         "shifts": shifts, "family": fam, "diag": d4["per_arm"],
         "transfer": {a: {"vsc": v["vsc_mean"], "col": v["collateral_mean"]}
                      for a, v in rv["transfer"]["care_admin"].items() if isinstance(v, dict)},

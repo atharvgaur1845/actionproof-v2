@@ -19,7 +19,7 @@ Stage 2 results (finalist round):
 
 Stage 3 (`PREREGISTRATION_S3.md`; corrected by `PREREGISTRATION_S3_ADDENDUM1.md`, because the pool also added fault types):
 - **Against A12 R_V (a recipe comparison).** The recovery-start training recipe (RSC) raises VSC by +0.21 on fresh recovery and full-episode splits. Every one of its 5 runs beats every A12 R_V run. Of the full-episode gain, 0.12 is duplicate delivery, a fault type A12 never trained on.
-- **Against a class-matched control (the start-state comparison, 3 seeds).** Recovery starts helped only partial-payment repair: it was learned in 5 of 5 RSC runs and 1 of 3 control runs. On duplicates the control is equal or better. This is suggestive, not established. Two more control seeds are registered and running (`PREREGISTRATION_S3_ADDENDUM2.md`).
+- **Against a class-matched control (the start-state comparison).** With five runs per arm (two control seeds added by a registered extension, `PREREGISTRATION_S3_ADDENDUM2.md`), recovery starts improve completion from faulted states across training runs (+0.107, unpaired seed permutation p 0.012). The partial-payment gain on full episodes does not reach the registered rule (p 0.056): partial repair was learned in 5 of 5 RSC runs and 2 of 5 control runs. The three-seed safety trade-off reversed with five control seeds (violations -0.021).
 - **Still unsolved.** Partial payments after a goods receipt are repaired by no arm (RSC 5 of 60 episodes).
 - **Transfer is negative.** In healthcare administration, VSC falls from 0.158 (warm start) to 0.080 (A12 R_V) to 0.047 (RSC).
 
