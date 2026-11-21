@@ -1,0 +1,66 @@
+\section{Environment and tools}
+\label{app:env}
+
+ProcureSim (\texttt{actionproof/integrity/sim/}) exposes twelve tools. Reads: \texttt{get\_purchase\_order}, \texttt{find\_supplier\_order}, \texttt{list\_payments}, \texttt{list\_goods\_receipts}, \texttt{get\_journal\_entries}. Writes: \texttt{place\_supplier\_order}, \texttt{pay\_supplier}, \texttt{record\_goods\_receipt}, \texttt{post\_journal\_entry}, \texttt{refund\_payment}, \texttt{escalate\_to\_human}; and \texttt{submit\_report} (status and summary). Every write passes one chokepoint that applies the task's fault plan to its attempt index and records whether the write committed nothing, part, all, or twice. The verifier (\texttt{truth.py}) reads only the final state; an independently written reference verifier and 91 independently written golden traces agree with it (\texttt{tests/golden/}). The specification is \texttt{docs/stage2/VERIFIER\_SPEC.md}.
+
+\section{Splits}
+\label{app:splits}
+
+All splits are generated from fixed seeds by \texttt{actionproof/bench/generator\_proc.py}; task and purchase-order ids are disjoint across splits (tested), and the prompt never depends on the fault plan (tested). Training: \texttt{proc\_train\_b} (400 tasks, rebalanced towards classes where the rewards disagree; registered addendum 1). Development: \texttt{proc\_dev} (200), \texttt{proc\_val} (100). Confirmatory, each frozen model run once: \texttt{proc\_conf} (300; clean 20\%, phantom 25\%, partial 10\%, lost acknowledgement 15\%, timeout before commit 15\%, never commits 15\%), \texttt{proc\_combo} (100 unseen fault pairs), \texttt{proc\_stress} (100: duplicate delivery; lost acknowledgement followed by a lagging read). A14: \texttt{proc\_cf} (250, generated after its registration). Hashes: \texttt{results/a12*\_hashes.json}, \texttt{results/a14b\_hashes.json}; card: \texttt{docs/stage2/BENCHMARK\_CARD.md}.
+
+\section{Training configuration}
+\label{app:train}
+
+Warm start: supervised fine-tuning (2 epochs, lr $10^{-4}$, LoRA rank 16) on 240 scripted episodes, each from the verifying oracle with probability 0.30 or the acknowledgement-trusting policy otherwise. GRPO (TRL with AgentTune's batched rollouts): 200 steps, 4 tasks $\times$ 8 rollouts per step, lr $2\times10^{-5}$, KL coefficient 0.02, temperature 1, at most 16 turns and 256 generated tokens per turn, LoRA rank 16; one H200 per run (about 1 h 50 min including development evaluations). Seeds 0--4 per reward; seed 0 under the original registration, seeds 1--4 under addendum 2, registered before they started.
+
+\section{Statistics}
+\label{app:stats}
+
+Unit: task. Per seed: paired task bootstrap (10{,}000 resamples) and exact McNemar test. Across seeds: per-seed estimates, direction consistency and the exact sign-flip test (smallest attainable $p$: 1/32 one-sided and 2/32 two-sided at five seeds); a two-level bootstrap that resamples seeds and shares task draws across seeds is reported as descriptive. Primary family (phantom read-back, VSC): Holm. A14: task bootstrap; categories with a smallest effect of 0.10 (evidence-conditioned, insensitive, inverted, inconclusive); contrasts are \emph{different} if the 95\% interval excludes 0 and \emph{equivalent} if the 90\% interval lies within $\pm$0.10. Code: \texttt{scripts/s2\_stats.py}, \texttt{scripts/a14\_stats.py}.
+
+\section{Track 3 metrics}
+\label{app:track3}
+
+\begin{table}[h]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/track3.tex}}
+\caption{\texttt{proc\_conf}: verified completion next to claimed success (share of episodes reported \texttt{completed}); latency is batch-1 seconds per episode on 40 \texttt{proc\_dev} tasks (L40S). The gateway adds about 0.2\,ms per tool call (in process).}
+\end{table}
+
+\section{Gateway factorial (A11, e-commerce)}
+\label{app:a11}
+
+\begin{table}[h]
+\centering
+\resizebox{\columnwidth}{!}{\input{tables/a11.tex}}
+\caption{A11 (registered; Stage 1 e-commerce environment, 300 tasks): system-level verified completion per gateway mode. $I$: registered interaction (policy effect under Enforce minus under Passthrough); it excludes zero for PCSTR-d seed 0 only, so the registered claim, which required both seeds, is not made. The runtime check ($\Delta_\text{runtime}>0$ for every policy) passes.}
+\end{table}
+
+\section{Contract coverage (A13) and defences (H7)}
+\label{app:a13}
+
+The registered A13 test (one-sided Fisher, adversarial vs represented violations) treated repeated deterministic rows as independent samples; we do not use its $p$-value (deviation D-A13-1). As finite-set results: the contract accepts none of the 194 single-fault and 479 two-fault violating configurations it was written for (an exhaustive enumeration; no configuration varies across the 200 worlds), and 14 of 161 independently written violations (8 of 151 unambiguous), mostly refunds and master data; every false accept is listed in \texttt{results/a13/h5\_finite.json}. On identical fault traces, idempotency keys alone recover no phantom write and verify-before-retry recovers all; this table is deterministic and true by construction (\texttt{results/a11/h7\_matrix.md}).
+
+\section{Stage 1 results}
+\label{app:stage1}
+
+Stage 1 (Nov 1--15, 2026, e-commerce environment) is prior work. Its registered confirmatory result: PCSTR-d (a state-grounded reward with report terms) reached VSC 0.8425 against 0.8275 for the best baseline, +1.5 points [0.6, 2.6] on 400 tasks; both PCSTR-d seeds give identical outcomes. Not registered, and between rewards of different form: a tool-trusting reward reached 0.640. With rewards of identical form on a development split, sampled refund read-back was 0.25 for the warm start, 0.71--0.72 under state rewards and 0.10 under the acknowledgement reward. An LLM judge (Aya Expanse 32B, AuditKIT prompt) given the receipt ledger still accepted 71\% of false completions.
+
+\section{Human audit (H4)}
+\label{app:h4}
+
+Registered as a between-subjects audit of 60 episodes by one annotator. [To be completed from \texttt{results/h4/h4\_summary.json}; if the labels are not collected before the freeze, this section states that H4 was not run.]
+
+\section{Deviations}
+\label{app:dev}
+
+D-A12-1: the registered stop rule (zero-variance groups $>$0.80 at steps 40--50) fired for \RA{} seed 0 (0.864, reward 0.97); the run was continued and is labelled. Addendum 2 (registered before seeds 1--4) keeps the rule as a diagnostic for a saturated arm. D-A12-2: \RV{} seed 2 crashed at step 199 (tokenizer error in the rollout loop) and was resumed from its step-175 checkpoint. D-A13-1: see Appendix~\ref{app:a13}. Every decision, with its time, is in \texttt{docs/stage2/DECISIONS.md}.
+
+\section{Compute, reproduction and declarations}
+\label{app:repro}
+
+Compute: Hugging Face Jobs (H200 for training, L40S for evaluation); every job and its cost is logged in \texttt{docs/stage2/HF\_CREDITS.md}. Code, pre-registrations, results and the claim ledger that resolves every number in this paper are in the repository (\url{https://github.com/atharvgaur1845/actionproof-v2}); \texttt{scripts/s2\_numcheck.py} re-reads each number from its file.
+
+\textbf{Prior work.} ActionProof Stage 1 (Nov 1--15) built the e-commerce environment, its rewards and runs, and the judge audit. Stage 2 (Nov 20--25) built ProcureSim, the two rewards studied here, the gateway, the A11--A14 registrations, all Stage 2 training and evaluation, and this paper. The models are Cohere's; AgentTune and AuditKIT are the hackathon's toolkits.
+
+\textbf{LLM use.} Claude (Anthropic) was used as a coding and writing assistant. Every number in this paper was produced by code in the repository and is checked against its result file.
