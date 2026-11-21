@@ -418,6 +418,35 @@ claims:
       rr_k1p_s0_last: {value: 0.0619, file: results/k1/k1_reward_signal.json, key: [runs, k1_k1p_ra_s0, read_rate_by_block, 150-199], shown: []}
       rr_k1t_s0_last: {value: 0.1725, file: results/k1/k1_reward_signal.json, key: [runs, k1_k1t_ra_s0, read_rate_by_block, 150-199], shown: []}
 
+  - id: S3
+    statement: "Registered (PREREGISTRATION_S3): recovery-start GRPO (R_V reward, half the episodes started from scripted fault states) vs A12 R_V, 5 seeds: VSC on fresh recovery starts +0.21 [0.17, 0.25] (5/5 seeds, H1 supported) and on fresh full episodes +0.21 [0.17, 0.25] (H2 non-inferiority supported; also superior); duplicate-delivery stress +0.39; false completion and violations reduced; honest failure unchanged. No gain on OpsSim transfer."
+    status: supported
+    prereg: PREREGISTRATION_S3.md
+    eval: [results/s3/s3_summary.json]
+    stats: scripts/s3_stats.py
+    numbers:
+      h1_avg: {value: 0.21, file: results/s3/s3_summary.json, key: [splits, s3_conf_rec, across, vsc, seed_avg, est], shown: []}
+      h1_lo: {value: 0.17, file: results/s3/s3_summary.json, key: [splits, s3_conf_rec, across, vsc, seed_avg, ci95, 0], shown: []}
+      h1_npos: {value: 5, file: results/s3/s3_summary.json, key: [splits, s3_conf_rec, across, vsc, n_positive], shown: []}
+      h2_avg: {value: 0.21, file: results/s3/s3_summary.json, key: [splits, s3_conf_full, across, vsc, seed_avg, est], shown: []}
+      h2_lo: {value: 0.17, file: results/s3/s3_summary.json, key: [splits, s3_conf_full, across, vsc, seed_avg, ci95, 0], shown: []}
+      stress_avg: {value: 0.39, file: results/s3/s3_summary.json, key: [splits, s3_conf_stress, across, vsc, seed_avg, est], shown: []}
+      viol_full: {value: -0.12, file: results/s3/s3_summary.json, key: [splits, s3_conf_full, across, violation, seed_avg, est], shown: []}
+      fs_full: {value: -0.21, file: results/s3/s3_summary.json, key: [splits, s3_conf_full, across, false_success, seed_avg, est], shown: []}
+
+  - id: S3-A1
+    statement: "Registered (PREREGISTRATION_S3_ADDENDUM1, before S3 outputs were read): against a class-matched full-episode R_V control (same faults, prompts and worlds; seeds 0-2), recovery starts add +0.09 [0.06, 0.11] VSC on recovery starts (H3 supported, 3/3) and +0.22 [0.16, 0.29] on full-episode partial and duplicate tasks (H4 supported, 3/3); on duplicate stress the control is slightly better (-0.04). Fault coverage and start states contribute about equally on recovery starts."
+    status: supported
+    prereg: PREREGISTRATION_S3_ADDENDUM1.md
+    eval: [results/s3/s3_addendum.json, results/s3/s3_addendum_full_pd.json]
+    stats: scripts/s3_stats_addendum.py
+    numbers:
+      h3_avg: {value: 0.09, file: results/s3/s3_addendum.json, key: [splits, s3_conf_rec, across, vsc, seed_avg, est], shown: []}
+      h3_npos: {value: 3, file: results/s3/s3_addendum.json, key: [splits, s3_conf_rec, across, vsc, n_positive], shown: []}
+      h4_avg: {value: 0.22, file: results/s3/s3_addendum_full_pd.json, key: [splits, s3_conf_full, across, vsc, seed_avg, est], shown: []}
+      h4_npos: {value: 3, file: results/s3/s3_addendum_full_pd.json, key: [splits, s3_conf_full, across, vsc, n_positive], shown: []}
+      stress_vs_matched: {value: -0.04, file: results/s3/s3_addendum.json, key: [splits, s3_conf_stress, across, vsc, seed_avg, est], shown: []}
+
   - id: PAPER-RANGES
     statement: "Values quoted in the paper as ranges or single figures, each read from its file."
     status: supported

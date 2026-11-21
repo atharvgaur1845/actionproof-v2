@@ -150,3 +150,30 @@ Ties go to the simpler arm. The selected configuration is then frozen, registere
   - Not-acting should be an explicit option (E1, D8, E3).
   - F includes "complete" and "done" starts for this reason.
 - **Shaping.** Ng et al. (C1) give the invariance condition used in §4.C to show that invariant shaping cancels under sequence-level GRPO.
+
+## 8. Results (registered; `PREREGISTRATION_S3.md`, `PREREGISTRATION_S3_ADDENDUM1.md`)
+
+| Test | Comparison | Seed-averaged difference [95% CI] | Seeds | Verdict |
+|---|---|---|---|---|
+| H1 recovery-start VSC | RS-GRPO − A12 R_V | +0.21 [0.17, 0.25] | 5/5 | supported |
+| H2 full-episode VSC (non-inferiority, −0.05) | RS-GRPO − A12 R_V | +0.21 [0.17, 0.25] | 5/5 | supported (and superior) |
+| H3 recovery-start VSC | RS-GRPO − class-matched control | +0.09 [0.06, 0.11] | 3/3 | supported |
+| H4 full-episode partial + duplicate VSC | RS-GRPO − class-matched control | +0.22 [0.16, 0.29] | 3/3 | supported |
+
+Secondary results:
+- **Duplicate-delivery stress:**
+  - +0.39 over R_V, which left every duplicate in place (VSC 0.50);
+  - −0.04 against the class-matched control, so fault coverage explains this gain.
+- **Full episodes:** false completion −0.21 and violations −0.12 against R_V. Honest failure is unchanged, so there is no collapse to refusing.
+- **Cost:** about 0.6 more tool calls per episode.
+- **Workflow:** on full-episode partial and duplicate tasks, RS-GRPO reaches 0.98 / 0.60 / 0.70 for order-pay / receive-pay / pay-first workflows, against R_V's 0.15 / 0.16 / 0.54. This removes most of the workflow dependence the review found in R_V.
+- **OpsSim transfer:** no gain. In care_admin, both trained models are below the warm start on VSC and above it on collateral writes.
+
+**Interpretation.**
+- The gain over A12 R_V has two roughly equal parts on recovery starts (seeds 0–2: R_V 0.655 → class-matched 0.739 → RS-GRPO 0.824):
+  - training on the fault types that were missing (coverage);
+  - starting episodes at the recovery state (start-state curriculum).
+- On duplicate delivery, coverage alone accounts for the gain.
+- The method is a start-state curriculum applied to GRPO, not a new optimiser.
+- The safety-first and Lagrangian rewards did not help in development (exploratory, §6).
+- Nothing here transfers to the two new domains without training in them.
