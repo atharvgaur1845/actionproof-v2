@@ -106,6 +106,8 @@ Matched budget: the mix is 200 `proc_train_b` tasks plus 200 recovery starts, ag
 
 **Recommended algorithm: F + A.** It is called RS-GRPO below: recovery-start, safety-first GRPO. F supplies gradient where recovery is rare; A makes the gradient point the right way (truthful failure over false success, no harm for gain).
 
+> **Correction (2026-11-21, superseded by the pilots).** This pre-pilot recommendation was not carried forward. The development pilots (§6, `results/s3/dev`) showed no benefit from A, so the registered method is **F alone with the unchanged R_V reward** (`PREREGISTRATION_S3.md` §2). The name "RS-GRPO" below and elsewhere means only this: GRPO with the A12 update rule and reward, trained on a recovery-start curriculum. It is not a new optimiser and not "safety-first". Current wording: *recovery-start curriculum (RSC) for GRPO*.
+
 ## 5. Expected failure modes and pilot diagnostics
 
 | Risk | Diagnostic (dev only) |
@@ -177,3 +179,20 @@ Secondary results:
 - The method is a start-state curriculum applied to GRPO, not a new optimiser.
 - The safety-first and Lagrangian rewards did not help in development (exploratory, §6).
 - Nothing here transfers to the two new domains without training in them.
+
+
+## 9. Corrections and caveats to §8 (2026-11-21, consistency audit `docs/CONSISTENCY_AUDIT.md`)
+
+- **Two different comparisons.**
+  - Against A12 R_V (H1, H2): this compares recipes. It includes fault coverage and the start states (`PREREGISTRATION_S3_ADDENDUM1.md` §1).
+  - Against the class-matched control (H3, H4): this is the start-state comparison.
+- **Three seeds.** H3 and H4 use 3 seeds. The intervals are task bootstraps conditional on the trained models, and the exact sign-flip resolution is 1/8 one-sided. **No seed-level significance is claimed.** Seed 0 of the control is almost as good as RSC (+0.02 and +0.01).
+- **Safety trade-off against the control** (seed-averaged, `results/s3/s3_addendum*.json`). RSC has *more* violations:
+  - full-episode partial and duplicate subset: +0.027 [0.003, 0.052] (2 of 3 seeds);
+  - all full episodes: +0.010 [0.001, 0.019];
+  - duplicate stress: +0.040 [0.013, 0.070].
+  
+  It also has less false completion: −0.22 on the subset and −0.08 on full episodes.
+- **Stress.** The gain on duplicate stress over A12 R_V is explained by fault coverage. The class-matched control is better than RSC there (VSC −0.04 [−0.07, −0.01]). This gain is not attributed to the curriculum.
+- **Transfer.** No positive transfer to the OpsSim domains was established.
+- **Workflow labels.** Checked against task metadata (`task.workflow`): `order_prepay` = order, then pay; `receive_pay` = receive, then pay; `pay_post` = pay first. On full-episode partial and duplicate tasks, seeds 0–2 pooled (`results/s3/s3_by_workflow.json`), RSC scores 109/111 = 0.98, 61/102 = 0.60 and 82/117 = 0.70. receive_pay remains the weakest workflow.

@@ -1,7 +1,9 @@
 # Mock EMNLP main-track review: ActionProof
 
 Reviewer role: senior reviewer, area LLM agents, RL for language models, reliability and safety of tool use.
-Date: 2026-11-21. Review type: strict, pre-submission.
+Date: 2026-11-21 (about 12:45 IST). Review type: strict, pre-submission.
+
+> **Historical, pre-results review.** Written before any S3 confirmatory output existed. It saw only the S3 design, registration and development numbers. It is not edited. The post-results review is `docs/stage3/ACADEMIC_REVIEW_POST.md`.
 
 **What was read.** `paper/main.tex`, `paper/appendix.tex`, `paper/tables/*.tex`, `paper/refs.bib`; `PREREGISTRATION_A12.md` with addenda 1 and 2, `PREREGISTRATION_A14.md`, `_A15.md`, `_A17.md`, `_K1.md`, `_S3.md`; `docs/stage2/DECISIONS.md`; `claims/claims.yaml`; `docs/stage3/RESEARCH_REPORT.md`, `docs/stage3/LITERATURE.md`; `results/s2/a12_summary.json`, `results/a14/a14_summary.json`, `results/a15/a15_summary.json`, `results/a16/a16_summary.json`, `results/a17/a17_summary.json`, `results/a17/a17_seedavg.json`, `results/eval/k1/conf/*proc_conf.summary.json`, `results/s3/dev/*.summary.json`. Supporting files consulted: `results/s2/stop_rule_seeds.json`, `results/s2/reward_signal_summary.json`, `results/k1/k1_reward_signal.json`, `results/s3/scripted_conf_calibration.json`, `docs/stage2/HF_CREDITS.md`, the split files in `data/bench/proc/`, and `actionproof/stage3/tasks.py`.
 

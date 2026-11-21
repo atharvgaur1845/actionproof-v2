@@ -1,3 +1,5 @@
+> **Historical draft (Stage 2, written before A15–A17, K1 and Stage 3).** Superseded by the current paper sources; kept unchanged below for the record. See `docs/CONSISTENCY_AUDIT.md`.
+
 # Draft: hackathon paper (6 main pages + up to 6 appendix pages)
 
 Title, fixed by the registered A14 outcome (PREREGISTRATION_A14 §4: the thesis check was met, so "seeing is not knowing" is abandoned):

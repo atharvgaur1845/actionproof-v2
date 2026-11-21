@@ -419,7 +419,7 @@ claims:
       rr_k1t_s0_last: {value: 0.1725, file: results/k1/k1_reward_signal.json, key: [runs, k1_k1t_ra_s0, read_rate_by_block, 150-199], shown: []}
 
   - id: S3
-    statement: "Registered (PREREGISTRATION_S3): recovery-start GRPO (R_V reward, half the episodes started from scripted fault states) vs A12 R_V, 5 seeds: VSC on fresh recovery starts +0.21 [0.17, 0.25] (5/5 seeds, H1 supported) and on fresh full episodes +0.21 [0.17, 0.25] (H2 non-inferiority supported; also superior); duplicate-delivery stress +0.39; false completion and violations reduced; honest failure unchanged. No gain on OpsSim transfer."
+    statement: "Registered (PREREGISTRATION_S3; corrected by ADDENDUM1 §1): GRPO with the A12 update rule and R_V reward, trained on a recovery-start curriculum (RSC; half the episodes start from scripted fault states, and the pool also adds fault types A12 never trained on), vs A12 R_V, 5 seeds, paired tasks. This compares training RECIPES (start states plus fault coverage), not start states alone. VSC on fresh recovery starts +0.21 [0.17, 0.25] (5/5 seeds, exact sign-flip 1/32; H1 supported) and on fresh full episodes +0.21 [0.17, 0.25] (H2 non-inferiority supported); duplicate stress +0.39 (explained by coverage, see S3-A1); false completion -0.21 and violations -0.12 on full episodes; honest failure unchanged. No gain on OpsSim transfer. Intervals: task bootstrap with one draw shared across seeds."
     status: supported
     prereg: PREREGISTRATION_S3.md
     eval: [results/s3/s3_summary.json]
@@ -435,7 +435,7 @@ claims:
       fs_full: {value: -0.21, file: results/s3/s3_summary.json, key: [splits, s3_conf_full, across, false_success, seed_avg, est], shown: []}
 
   - id: S3-A1
-    statement: "Registered (PREREGISTRATION_S3_ADDENDUM1, before S3 outputs were read): against a class-matched full-episode R_V control (same faults, prompts and worlds; seeds 0-2), recovery starts add +0.09 [0.06, 0.11] VSC on recovery starts (H3 supported, 3/3) and +0.22 [0.16, 0.29] on full-episode partial and duplicate tasks (H4 supported, 3/3); on duplicate stress the control is slightly better (-0.04). Fault coverage and start states contribute about equally on recovery starts."
+    statement: "Registered (PREREGISTRATION_S3_ADDENDUM1, before S3 outputs were read): the start-state comparison, RSC vs a class-matched full-episode R_V control (same faults, prompts and worlds), 3 seeds (exact sign-flip resolution 1/8; intervals are task bootstraps conditional on the trained models, not seed-level inference). VSC +0.09 [0.06, 0.11] on recovery starts (H3, 3/3 seeds positive, seed 0 only +0.02) and +0.22 [0.16, 0.29] on full-episode partial and duplicate tasks (H4, 3/3, seed 0 only +0.01). Trade-off: RSC has MORE violations than the control (+0.027 [0.003, 0.052] on that subset, +0.010 on all full episodes, +0.04 on duplicate stress) and less false completion (-0.22 on the subset). On duplicate stress the control is better (VSC -0.04 [-0.07, -0.01]); that gain is due to fault coverage, not the curriculum."
     status: supported
     prereg: PREREGISTRATION_S3_ADDENDUM1.md
     eval: [results/s3/s3_addendum.json, results/s3/s3_addendum_full_pd.json]
@@ -446,6 +446,10 @@ claims:
       h4_avg: {value: 0.22, file: results/s3/s3_addendum_full_pd.json, key: [splits, s3_conf_full, across, vsc, seed_avg, est], shown: []}
       h4_npos: {value: 3, file: results/s3/s3_addendum_full_pd.json, key: [splits, s3_conf_full, across, vsc, n_positive], shown: []}
       stress_vs_matched: {value: -0.04, file: results/s3/s3_addendum.json, key: [splits, s3_conf_stress, across, vsc, seed_avg, est], shown: []}
+      viol_subset: {value: 0.027, file: results/s3/s3_addendum_full_pd.json, key: [splits, s3_conf_full, across, violation, seed_avg, est], shown: []}
+      viol_full: {value: 0.01, file: results/s3/s3_addendum.json, key: [splits, s3_conf_full, across, violation, seed_avg, est], shown: []}
+      viol_stress: {value: 0.04, file: results/s3/s3_addendum.json, key: [splits, s3_conf_stress, across, violation, seed_avg, est], shown: []}
+      fs_subset: {value: -0.224, file: results/s3/s3_addendum_full_pd.json, key: [splits, s3_conf_full, across, false_success, seed_avg, est], shown: []}
 
   - id: PAPER-RANGES
     statement: "Values quoted in the paper as ranges or single figures, each read from its file."

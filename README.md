@@ -4,7 +4,26 @@
 
 ActionProof is an environment, a set of rewards and a controlled training study for tool-using agents whose tool acknowledgements can lie: phantom, partial, stale, timed-out and ambiguous writes. Every number is checked against the environment's database and receipt log, never against the transcript.
 
-**Stage 2 (Nov 20–25, in progress).** Research plan, pre-registrations A11–A14 and current status: `docs/stage2/STATUS.md`, `PREREGISTRATION_A12*.md`, `PREREGISTRATION_A14.md`. Every Stage 2 number resolves through `claims/claims.yaml`.
+**Status (2026-11-21).** How the labels map:
+- **Hackathon rounds.** "Stage 1" (Nov 1–15) is the preliminary round and "Stage 2" (Nov 20–25) the finalist round.
+- **Internal research phases.** "Stage 3" (`docs/stage3/`, `actionproof/stage3/`) and "Stage 4" (`docs/research/`, `actionproof/stage4/`, branch `stage4`) are internal phases run inside the Stage 2 window. They are not hackathon rounds.
+
+Every number resolves through `claims/claims.yaml` (`python scripts/s2_numcheck.py`). Contradictions found and fixed: `docs/CONSISTENCY_AUDIT.md`.
+
+Stage 2 results (finalist round):
+- **A12.** A state reward (R_V) produces read-back after phantom writes, and an acknowledgement reward (R_A) does not: 1.00 vs 0.00 in 5 of 5 seeds. R_A's greedy behaviour equals the untrained warm start.
+- **A14, A15.** Given forced evidence, every model handles present and absent payments. Partial-payment recovery appears only under R_V, and it is workflow-specific (pay-first workflows only).
+- **A16.** All models encode partial vs complete. Training changes the action margin, not the representation.
+- **A17.** Read-back transfer to healthcare administration; none to IT operations.
+- **K1.** Training-pool composition does not explain R_A's zero read-back.
+
+Stage 3 (`PREREGISTRATION_S3.md`):
+- **Corrected by `PREREGISTRATION_S3_ADDENDUM1.md`.** The S3 registration said only the start states changed; the training pool also added fault types.
+- **Against A12 R_V.** A recovery-start curriculum for unchanged GRPO raises VSC by +0.21 on fresh recovery and full-episode splits (5 of 5 seeds). This compares training recipes.
+- **Against a class-matched control** (the start-state comparison, 3 seeds): +0.09 on recovery starts and +0.22 on partial and duplicate tasks, with **slightly more violations**.
+- **Not established.** No gain on duplicate stress beyond fault coverage, and no transfer to the OpsSim domains.
+
+Stage 4 (in progress): `docs/research/`.
 
 **In one paragraph (Stage 1, Nov 1–15).** When tool acknowledgements can contradict execution state, does the information source of a reinforcement-learning reward change whether an agent checks its own writes? **Registered confirmatory result** (400 untouched tasks, `PREREGISTRATION.md` H1): PCSTR-d (state-grounded, two training seeds) reaches verified-success completion (VSC) 0.8425 against 0.8275 for the best baseline, a state reward without report terms (+1.5 pp [0.6, 2.6]; the effect rests on a few tasks, and both PCSTR-d seeds give identical outcomes on all 400). Not registered, and between rewards of different form: the warm start scores 0.6425 and a tool-trusting reward 0.640 (PCSTR-d − tool-trusting +20.25 pp [16.4, 24.3]); on strict VSC, which also forbids unrequested writes, the tool-trusting reward falls to 0.424. With two rewards of identical form from one warm start (exploratory, development split), test-IID VSC is 0.825 against 0.605, and sampled refund read-back rises from 0.25 to 0.71 (state reward) and 0.72 (PCSTR-d) but falls to 0.10 under the acknowledgement reward. In a pre-registered intervention, removing refund timeouts and unrecoverable refunds restores read-back to 0.669, removing 60 random tasks leaves it at 0.000, and the state reward reads back 1.000 on both pools (interaction +0.678 [0.605, 0.750]; interval over tasks, one training seed per cell). An LLM judge (Aya Expanse 32B with the AuditKIT TaskCompletion prompt) given the database's receipt ledger still accepts 71% (213 of 298) of the false completions the ledger exposes. The behaviour is fragile: when a timeout can fail before the commit, PCSTR-d scores 0.176 and the state reward 0.118 VSC against 0.71 for the tool-trusting agent (stress test, 34 tasks, seed 0). Read-back was present in the supervised demonstrations, so these results show GRPO selecting or suppressing an existing behaviour; we do not claim that GRPO learns verification.
 
