@@ -41,8 +41,12 @@ ignore = ["E501"]
 [tool.ruff.lint.per-file-ignores]
 # hash-frozen by A11 (results/a11_hashes.json); not edited after registration
 "actionproof/integrity/adapters/ecom.py" = ["F401"]
+# hash-frozen by A17 (results/a17_hashes.json): `l` loop variables (E741)
+"actionproof/integrity/opsim/__init__.py" = ["E741"]
+"actionproof/integrity/opsim/care_admin.py" = ["E741"]
 
 [tool.mypy]
 ignore_missing_imports = true
 follow_imports = "silent"
-exclude = ["actionproof/integrity/adapters/ecom\\.py"]
+# hash-frozen files (A11: ecom.py; A17: opsim it_ops.py, care_admin.py) are not edited to satisfy the type checker
+exclude = ["actionproof/integrity/adapters/ecom\\.py", "actionproof/integrity/opsim/it_ops\\.py", "actionproof/integrity/opsim/care_admin\\.py"]
