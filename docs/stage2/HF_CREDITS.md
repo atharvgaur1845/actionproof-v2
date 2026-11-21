@@ -38,3 +38,5 @@ Starting balance: **not yet confirmed** (the CLI cannot read billing; the user c
 | 2026-11-21 01:24 | job 6b00a58defaf5e14f4b3c82b (714) | h200 | A16 layer choice on dev + causal tests R_V s0–2; 715 (remaining models) queued on Slurm | ~8 | | |
 | 2026-11-21 01:25 | job 6b00a5c84fdc5ab3c55bd978 (721) | h200 | A16 exploratory CircuitKIT EAP-IG | ~2 | | |
 | 2026-11-21 01:26 | projection | | ≈ $110 before tonight + ≈ $77 tonight (K1 ≈ $30, pilots ≈ $4, A15 ≈ $10, A16 ≈ $20, A17 ≈ $13) ≈ **$187**, under the $195 hard stop. R_A halves of A16 causal (715) and A17 (731) run on Slurm at no HF cost. No further HF launches without a fresh estimate. | | | |
+| 2026-11-21 09:12 | balance | | user reports $65 of HF credit left; Stage 3 runs go to the Slurm H200x2 lease first, HF only for parallel pilots and the confirmatory evaluation | | | |
+| 2026-11-21 09:12 | jobs 6b0113134fdc5ab3c55c5756 (901), 6b01132d4fdc5ab3c55c5773 (904), 6b011343efaf5e14f4b45288 (900) | h200 ×3 | Stage 3 pilots (safe reward on the original pool; Lagrangian on the recovery mix; development baselines); 902 and 903 on Slurm | ~12 | | |
