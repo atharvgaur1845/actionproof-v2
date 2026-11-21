@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import re
 import subprocess
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -124,6 +125,9 @@ def main() -> None:
         "agentic": [dict(zip(("model", "n", "vsc", "acc", "commit", "calls", "turns", "sec", "chars"), [c.strip() for c in l.strip("|").split("|")]))
                     for l in R("results/agentic_metrics.md").splitlines() if l.startswith("| ") and not l.startswith("| model")],
     }
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import site_procure
+    site["procure"] = site_procure.build()
     assert set(site["audit"]) == {"refund timeout", "refund UR"}, site["audit"]
     page = R("demo/site_template.html").replace("{{SITE}}", json.dumps(site, ensure_ascii=False, separators=(",", ":"))
                                                 .replace("</", "<\\/")).replace("{{GIT}}", site["git"])

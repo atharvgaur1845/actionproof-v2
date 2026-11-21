@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ActionProof — the tool said success, the database disagreed</title>
-<meta name="description" content="A controlled study of what GRPO selects when a tool's acknowledgement and the database disagree.">
+<title>ActionProof — the tool said success, the world disagreed</title>
+<meta name="description" content="A registered study of what reinforcement learning teaches tool agents when an acknowledgement cannot prove that a write happened.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
@@ -302,19 +302,98 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  .mtabs button{padding-left:16px}.huge{padding:32px 16px 16px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}.rv,.tr{opacity:1;transform:none}
  .h1 .l>span{transform:none}}
+/* ---------- study 2: procurement chapter ---------- */
+.pctl{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:end;padding:0 56px 24px}
+.pctl label{display:grid;gap:4px;font:500 11px/16px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--gr)}
+.pctl select{font:14px/20px var(--mono);color:var(--ink);background:var(--paper);border:1px solid var(--ink);padding:7px 28px 7px 10px;border-radius:0;appearance:none;
+ background-image:linear-gradient(45deg,transparent 50%,var(--ink) 50%),linear-gradient(135deg,var(--ink) 50%,transparent 50%);background-position:calc(100% - 14px) 50%,calc(100% - 9px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+.pctl select:focus-visible{outline:2px solid var(--ver);outline-offset:2px}
+.truth{margin:0 56px;border-top:1px solid var(--ink)}
+.truth .hd,.truth .row{display:grid;grid-template-columns:36px 1.05fr 1fr 1.15fr;gap:0}
+.truth .hd>div{font:500 11px/16px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:12px 16px 10px 0;color:var(--gr)}
+.truth .hd>div.ev{color:var(--ver-t)}
+.truth .row{border-top:1px solid var(--hair);opacity:0;transform:translateX(-6px);transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.truth .row.on{opacity:1;transform:none}
+.truth .row>div{padding:14px 16px 14px 0;font:13px/20px var(--mono);overflow-wrap:anywhere;min-width:0}
+.truth .row>div.i{color:var(--gr);padding-right:0;white-space:nowrap}
+.truth .row>div.db{background:repeating-linear-gradient(135deg,transparent 0 7px,rgba(23,24,21,.035) 7px 8px);padding-left:14px;border-left:1px dashed var(--ink)}
+.truth .row.mis>div.db{box-shadow:inset 3px 0 0 var(--ver)}
+.truth .t{font:13px/20px var(--disp);text-transform:uppercase;display:block;letter-spacing:.01em}
+.truth small{display:block;font:12px/18px var(--sans);color:var(--gr);margin-top:2px}
+.verd{display:grid;grid-template-columns:repeat(4,1fr);margin:0 56px 48px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.verd>div{padding:14px 16px 16px 0}.verd>div+div{padding-left:16px;border-left:1px solid var(--hair)}
+.verd b{display:block;font:28px/1 var(--disp);font-weight:400;margin-top:6px}.verd b.r{color:var(--ver-t)}
+.legend3{display:flex;gap:20px;flex-wrap:wrap;padding:0 56px 14px;font:12px/18px var(--mono);color:var(--gr)}
+.legend3 i{display:inline-block;width:12px;height:12px;vertical-align:-1px;margin-right:6px;border:1px solid var(--ink)}
+.legend3 i.ev{background:repeating-linear-gradient(135deg,var(--paper) 0 3px,rgba(23,24,21,.25) 3px 4px);border-style:dashed}
+/* seed strip */
+.seeds{display:grid;grid-template-columns:150px repeat(5,1fr);gap:6px;align-items:center;margin-top:10px}
+.seeds .c{height:44px;display:grid;place-items:center;font:500 15px var(--mono)}
+.seeds .c.y{background:var(--chr)}.seeds .c.n{background:var(--ver);color:#fff}
+.seeds .lb{font-size:14px;line-height:18px}.seeds .lb small{display:block;font:11px/16px var(--mono);color:var(--gr)}
+.seeds .h{font:11px/16px var(--mono);color:var(--gr);text-align:center}
+/* replay columns */
+.rp{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--ink);margin:0 56px}
+.rp>div{padding:20px 20px 24px 0;min-width:0}.rp>div+div{padding-left:20px;border-left:1px solid var(--hair)}
+.rp h4{font:18px/22px var(--disp);text-transform:uppercase;margin:6px 0 10px;font-weight:400}
+.calls{list-style:none;margin:0;padding:0;font:12.5px/19px var(--mono)}
+.calls li{display:grid;grid-template-columns:22px 1fr;gap:6px;padding:6px 0;border-bottom:1px solid var(--hair2)}
+.calls li .n{color:var(--gr)}.calls li.read b{background:var(--chr)}.calls li.fix b{background:var(--ink);color:var(--paper)}
+.calls li b{font-weight:500;padding:0 3px}.calls li span.r{display:block;color:var(--gr);overflow-wrap:anywhere}
+.outc{margin-top:12px;font:13px/20px var(--mono)}.outc .pill{margin-right:8px}
+.mpick{display:flex;flex-wrap:wrap;border:1px solid var(--ink);margin:0 56px 20px;width:max-content;max-width:calc(100% - 112px)}
+.mpick button{font:12px/16px var(--mono);padding:9px 12px}.mpick button+button{border-left:1px solid var(--ink)}
+.mpick button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+/* workflow table */
+.wft{width:calc(100% - 112px);margin:24px 56px 0;border-collapse:collapse;font:13px/18px var(--mono)}
+.wft th{font:500 11px/16px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--gr);text-align:left;padding:8px 8px 8px 0;border-bottom:1px solid var(--ink)}
+.wft td{padding:8px;border-bottom:1px solid var(--hair);text-align:center}.wft td:first-child{text-align:left;padding-left:0}
+.wft td.v{font-weight:500}
+/* training (dark) */
+.dark .kgrid{border-top-color:#3A3E3B}.dark .kgrid>div+div{border-left-color:#3A3E3B}.dark .kgrid p{color:#BDBDB3}
+.dark .kgrid .kn{color:var(--chr)}.dark .kgrid .kn.r{color:var(--ver)}
+.dpad{padding:0 56px 48px}
+.dec{display:flex;height:34px;margin:10px 0 6px;border-left:2px solid #E9E7DF}
+.dec>div{height:100%;display:flex;align-items:center;padding-left:8px;font:500 12px var(--mono);white-space:nowrap;overflow:hidden}
+.forest{width:100%;height:auto;display:block}
+.forest text{font:12px var(--mono);fill:#E9E7DF}.forest .g{stroke:#3A3E3B}.forest .z{stroke:#E9E7DF;stroke-width:1.5}
+.forest .lab{font:13px var(--sans);fill:#E9E7DF}.forest .ok{fill:var(--chr)}.forest .no{fill:var(--ver)}
+.status{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid #3A3E3B;margin-top:28px}
+.status>div{padding:16px 16px 16px 0;border-bottom:1px solid #3A3E3B;font-size:14px;line-height:21px;color:#BDBDB3}
+.status>div:nth-child(even){padding-left:16px;border-left:1px solid #3A3E3B}
+.status b{display:block;font:500 11px/16px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--chr);margin-bottom:4px}
+.status b.run{color:#E9E7DF}.status b.no{color:var(--ver)}
+/* reproduction */
+.repgrid{display:grid;grid-template-columns:repeat(3,1fr);margin:0 56px 48px;border-top:1px solid var(--ink)}
+.repgrid>div{padding:16px 16px 18px 0;border-bottom:1px solid var(--hair);font-size:14px;line-height:21px;min-width:0}
+.repgrid>div:not(:nth-child(3n+1)){padding-left:16px;border-left:1px solid var(--hair)}
+.repgrid code{font:12px/18px var(--mono);overflow-wrap:anywhere}
+.supp{padding:48px 56px;background:var(--min);border-top:1px solid var(--ink)}
+.supp h2{font:clamp(28px,3.4vw,52px)/.95 var(--disp);text-transform:uppercase;margin:6px 0 10px;letter-spacing:-.02em}
+@media (max-width:860px){
+ .pctl,.legend3{padding-left:16px;padding-right:16px}.pctl label{width:100%;min-width:0}.pctl select{width:100%;max-width:100%}.truth,.verd,.rp,.repgrid{margin-left:16px;margin-right:16px}
+ .truth .hd{display:none}.truth .row{grid-template-columns:28px 1fr}.truth .row>div:not(.i){grid-column:2}
+ .truth .row>div.db{border-left:0;border-top:1px dashed var(--ink);padding-left:0}
+ .truth .row>div::before{content:attr(data-h);display:block;font:500 10px/14px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--gr)}
+ .verd{grid-template-columns:1fr 1fr}.verd>div:nth-child(3){padding-left:0;border-left:0}
+ .rp,.repgrid,.status{grid-template-columns:1fr}.rp>div+div,.repgrid>div:not(:nth-child(3n+1)),.status>div:nth-child(even){padding-left:0;border-left:0}
+ .seeds{grid-template-columns:96px repeat(5,1fr)}.mpick{margin-left:16px;margin-right:16px;max-width:calc(100% - 32px)}
+ .wft{width:calc(100% - 32px);margin-left:16px;margin-right:16px;font-size:12px}.dpad,.supp{padding-left:16px;padding-right:16px}}
 </style>
 </head>
 <body>
 <nav class="rail" aria-label="Sections">
  <div class="brand">ACTIONPROOF<span>a research study, 2026</span></div>
  <ol id="railnav">
-  <li><a href="#top"><i>·</i>Start</a></li><li><a href="#why"><i>★</i>Main finding</a></li><li><a href="#key"><i>★</i>What we found</a></li>
+  <li><a href="#top"><i>00</i>The incident</a></li><li><a href="#truths"><i>01</i>Three truths</a></li><li><a href="#reward"><i>02</i>What the reward sees</a></li>
+  <li><a href="#recovery"><i>03</i>Reading is not recovery</a></li><li><a href="#training"><i>04</i>Training recovery</a></li><li><a href="#repro"><i>05</i>Reproduction</a></li>
+  <li style="margin-top:14px"><a href="#study1"><i>+</i>Study 1: refunds</a></li><li><a href="#why"><i>·</i>Main finding</a></li><li><a href="#key"><i>·</i>What we found</a></li>
   <li><a href="#problem"><i>1</i>The problem</a></li><li><a href="#bench"><i>2</i>The test world</a></li><li><a href="#experiment"><i>3</i>The experiment</a></li>
   <li><a href="#lab"><i>4</i>Same situation test</a></li><li><a href="#templates"><i>5</i>Copied workflows</a></li><li><a href="#findings"><i>6</i>Results and checks</a></li>
   <li><a href="#autopsy"><i>7</i>Mistakes we fixed</a></li><li><a href="#methods"><i>8</i>How we measure</a></li><li><a href="#artifacts"><i>9</i>Code and data</a></li></ol>
  <div class="foot">Lexsi hackathon, track 3<a href="https://github.com/atharvgaur1845/actionproof-v2">GitHub ↗</a><a href="https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04">Models ↗</a></div>
 </nav>
-<nav class="mnav" aria-label="Sections"><a class="b" href="#top">ACTIONPROOF</a><a href="#why">Main finding</a><a href="#key">What we found</a><a href="#problem">1 Problem</a><a href="#bench">2 Test world</a><a href="#experiment">3 Experiment</a>
+<nav class="mnav" aria-label="Sections"><a class="b" href="#top">ACTIONPROOF</a><a href="#truths">01 Truths</a><a href="#reward">02 Reward</a><a href="#recovery">03 Recovery</a><a href="#training">04 Training</a><a href="#repro">05 Reproduce</a><a href="#study1">Study 1</a><a href="#why">Main finding</a><a href="#key">What we found</a><a href="#problem">1 Problem</a><a href="#bench">2 Test world</a><a href="#experiment">3 Experiment</a>
  <a href="#lab">4 Same situation</a><a href="#templates">5 Workflows</a><a href="#findings">6 Results</a><a href="#autopsy">7 Mistakes</a><a href="#methods">8 Measures</a><a href="#artifacts">9 Code and data</a></nav>
 <main>
 
@@ -323,17 +402,16 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  <div class="meta"><span>ActionProof</span><span>A research study</span><span>Training AI agents that use tools</span><span>2026</span></div>
  <div>
   <div class="htype">
-   <h1 class="h1"><span class="l"><span>The tool said</span></span><span class="l"><span class="succ">success.</span></span><span class="l"><span>The database</span></span><span class="l"><span class="dis">disagreed.</span></span></h1>
-   <div class="hside"><span class="ser">An AI agent asked a tool to refund a customer. The tool replied "success". The refund never happened.</span>
-    We trained small AI agents to do customer-support work. We changed one thing: what the training reward looks at. This page shows what changed in the agents' behaviour.</div>
+   <h1 class="h1"><span class="l"><span>The tool said</span></span><span class="l"><span class="succ">success.</span></span><span class="l"><span>The world</span></span><span class="l"><span class="dis">disagreed.</span></span></h1>
+   <div class="hside"><span class="ser">A tool acknowledgement is not proof that a write happened.</span>ActionProof measures whether a trained agent notices, acts correctly and reports honestly. We trained small Cohere agents with reinforcement learning in a procurement world where every success reply can hide a missing, partial or duplicated payment.</div>
   </div>
-  <div class="hstats"><div><b>64% → 84%</b><span>Tasks done correctly, before training and after training with a reward that checks the database. Measured on 400 tasks that we kept hidden until the final test.</span></div>
-   <div><b>+20 points</b><span>More tasks done correctly than with a reward that believes the tool's reply. The likely range is 16 to 24 points.</span></div>
-   <div><b class="r">95%</b><span>Of the false "task done" claims that an AI judge accepted as true. The judge reads the conversation, not the database.</span></div></div>
-  <figure class="tx" id="hero-tx" aria-label="A real recorded example: the tool says the refund succeeded, but the database has no refund">
+  <div class="hstats"><div><b id="hs1"></b><span>Read the payment record after a phantom payment: agents trained on a database-reading reward vs a reply-reading reward, in every one of five seeds.</span></div>
+   <div><b id="hs2"></b><span>Verified completion gained by training from faulted states, five of five seeds. About half comes from seeing one more kind of fault.</span></div>
+   <div><b class="r" id="hs3"></b><span>Trained models that repair a partial payment made after a goods receipt. Every one of them read the record first.</span></div></div>
+  <figure class="tx" id="hero-tx" aria-label="A real recorded example: the tool says the payment succeeded, but the database holds no payment">
    <svg viewBox="0 0 1200 380" role="img">
     <g class="grid" id="hgrid"></g>
-    <text class="lbl" x="28" y="34">STEP 5 · THE AGENT ASKS FOR A REFUND</text>
+    <text class="lbl" id="hlab" x="28" y="34">STEP 5 · THE AGENT ASKS FOR A REFUND</text>
     <text class="lbl" x="420" y="92">WHAT THE AGENT IS TOLD</text>
     <text class="lbl" x="420" y="262">WHAT REALLY HAPPENED IN THE DATABASE</text>
     <text class="log" id="h0" x="28" y="62">issue_refund(order_id="O-6470", amount_cents=3000, method="card")</text>
@@ -349,13 +427,84 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
      <rect x="740" y="190" width="100" height="24" fill="#F05236"/><text x="790" y="207" text-anchor="middle" style="font:500 12px var(--mono);fill:#fff">MISMATCH</text></g>
     <g class="bub" id="hR"><rect x="860" y="164" width="316" height="72" fill="#E9E7DF"/>
      <text x="876" y="188" style="font:500 11px var(--mono);fill:#777A72;letter-spacing:.08em">THE AGENT'S FINAL REPORT</text>
-     <text x="876" y="216" style="font:italic 21px var(--ser);fill:#171815">"Successfully processed full refund…"</text></g>
+     <text id="hRt" x="876" y="216" style="font:italic 21px var(--ser);fill:#171815">"Successfully processed full refund…"</text></g>
    </svg>
-   <div class="illu">A real recorded example (task val_0011). The agent was trained with a reward that believes the tool. That reward gave this attempt full marks. Our database reward gave it a penalty.</div>
+   <div class="illu" id="hillu">A real recorded example (task val_0011). The agent was trained with a reward that believes the tool. That reward gave this attempt full marks. Our database reward gave it a penalty.</div>
   </figure>
  </div>
- <div class="scrollcue"><a href="#why">See the main finding ↓</a><span>Every number on this page comes from a file in the project</span></div>
+ <div class="scrollcue"><a href="#truths">See the three truths ↓</a><span>Every number on this page comes from a file in the project</span></div>
 </section>
+
+<!-- ============ 01 THREE TRUTHS (study 2) ============ -->
+<section id="truths">
+ <div class="shead rv"><div class="snum">01</div><div><div class="cap">Three truths · procurement simulator</div>
+  <h2 class="stitle">What the agent did, what the tool said, <span class="ser">what the world holds.</span></h2>
+  <p class="lede">A procurement agent orders goods, records receipts, pays suppliers and posts journal entries. Each write goes through one checkpoint where we can make it fail: store nothing, store part, store twice, or lose the reply. <b>The acknowledgement is byte-identical either way.</b> Only the database knows. Pick a workflow and a fault. The left two columns are all the agent ever sees. The hatched column is the evaluator's view, which no agent sees.</p></div></div>
+ <div class="pctl" id="pctl">
+  <label>Workflow<select id="p-wf"></select></label><label>Fault<select id="p-fault"></select></label>
+  <label>Faulted step<select id="p-step"></select></label><label>Share actually stored<select id="p-ratio"></select></label>
+  <div class="agents" id="p-agent" role="group" aria-label="Which scripted agent"><button aria-pressed="true" data-a="trusting">trusts the reply</button><button aria-pressed="false" data-a="verifying">reads the record</button></div>
+ </div>
+ <div class="legend3"><span><span class="tag rec" style="margin-right:8px">Real simulator</span>ProcureSim and its verifier, run for every option when this page was built. The two agents are scripts, not models.</span></div>
+ <div class="legend3"><span><i></i>seen by the agent</span><span><i class="ev"></i>evaluator only</span><span><i style="background:var(--ver);border-color:var(--ver)"></i>reply and database disagree</span></div>
+ <div class="truth" id="p-truth" aria-live="polite"></div>
+ <div class="verd" id="p-verd"></div>
+</section>
+
+<!-- ============ 02 WHAT THE REWARD SEES ============ -->
+<section id="reward">
+ <div class="shead rv"><div class="snum">02</div><div><div class="cap">What the reward sees · registered experiment A12</div>
+  <h2 class="stitle">What the reward sees <span class="ser">changes what the agent checks.</span></h2>
+  <p class="lede">Same model (Cohere Tiny Aya Global, 3.35 billion parameters), same warm start, same GRPO training through AgentTune. One change: the reward reads either the <b>database</b> (state reward) or the <b>last acknowledgement</b> of each write (acknowledgement reward). Both pay 1 for success and 0 otherwise. Five paired training seeds, one evaluation each on 300 confirmatory tasks kept untouched until then.</p></div></div>
+ <div class="arch rv">
+  <div><div class="cap">After a phantom payment (reply ok, nothing stored): does the agent read the payment record?</div>
+   <div class="seeds" id="p-seeds"></div>
+   <div class="src" id="p-seeds-src"></div>
+   <p class="note v" style="margin-top:22px" id="p-caveat"></p></div>
+  <div><div class="cap">The same recorded task, two trained agents (seed 0)</div>
+   <div class="rp" id="p-phantom" style="margin:10px 0 0;grid-template-columns:1fr 1fr"></div>
+   <div class="src" id="p-phantom-src"></div></div>
+ </div>
+</section>
+
+<!-- ============ 03 READING IS NOT RECOVERY ============ -->
+<section id="recovery">
+ <div class="shead rv"><div class="snum">03</div><div><div class="cap">Reading is not recovery · A14, A15</div>
+  <h2 class="stitle">The agent read the record. <span class="ser">Then it did the wrong thing.</span></h2>
+  <p class="lede">A payment is acknowledged in full, but only a quarter is stored. A read reveals it. The right recovery is to refund the partial payment and pay again. Below are two real recorded tasks with the same fault and the same ratio. They differ only in the workflow. <b>The same trained agents repair the first and not the second.</b></p></div></div>
+ <div class="mpick" id="p-mpick" role="group" aria-label="Which model"></div>
+ <div class="rp" id="p-partial"></div>
+ <div class="src" style="padding:0 56px" id="p-partial-src"></div>
+ <table class="wft rv" id="p-wft"></table>
+ <div class="src" style="padding:0 56px 48px">Forced-evidence test (registered A15): the authoritative read is placed in the context after a partial payment; share of episodes whose next decisive action is a refund or an escalation. Source: results/s2/partial_by_workflow.json. Simple present-or-absent evidence is handled by every model (branch-balanced accuracy 1.00, A14); quantitative repair is not.</div>
+</section>
+
+<!-- ============ 04 TRAINING THE RECOVERY DECISION ============ -->
+<section class="dark" id="training">
+ <div class="shead rv"><div class="snum">04</div><div><div class="cap">Training the recovery decision · Stage 3</div>
+  <h2 class="stitle">Practise from the broken state. <span class="ser">It helps, narrowly.</span></h2>
+  <p class="lede" style="color:#BDBDB3">Recovery-start training keeps the GRPO trainer and the state reward. It changes where episodes begin: half start from a scripted history that ends in a faulted write, replayed into the database and the conversation; the model is trained only on what it writes next. This is a known curriculum (Fission-GRPO and reverse-curriculum methods restart from failures), not a new optimiser. The recovery-start pool also adds a fault type (duplicate delivery), so we compare it twice.</p></div></div>
+ <div class="dpad">
+  <div class="kgrid rv" id="p-kgrid"></div>
+  <div class="cap" style="margin-top:36px">Where the recipe's gain comes from (full episodes, share of all tasks)</div>
+  <div class="dec" id="p-dec"></div><div class="src" id="p-dec-src"></div>
+  <div class="cap" style="margin-top:36px">Does the gain survive a change of surface? Recovery-start minus state reward, VSC, 5 seeds each, 95% interval</div>
+  <svg class="forest rv" id="p-forest" viewBox="0 0 900 290" role="img" aria-label="Interval plot of the gain under seven evaluation shifts"></svg>
+  <div class="src" id="p-forest-src"></div>
+  <div class="status" id="p-status"></div>
+ </div>
+</section>
+
+<!-- ============ 05 RESEARCH AND REPRODUCTION ============ -->
+<section id="repro">
+ <div class="shead rv"><div class="snum">05</div><div><div class="cap">Research and reproduction</div>
+  <h2 class="stitle">Every number <span class="ser">has a file.</span></h2>
+  <p class="lede">Each experiment was written down with its predictions and locked with a hash before it ran. Mistakes are corrected in dated notes, never by editing a registration. A checker re-reads every number in the paper and README from its result file.</p></div></div>
+ <div class="repgrid rv" id="p-repgrid"></div>
+</section>
+
+<div class="supp" id="study1"><div class="cap">Supplement</div><h2>Study 1: the refund shop</h2>
+ <p class="lede" style="margin-top:8px">The first round of this project ran the same question in a customer-support world with refunds. Its results are below, unchanged. They agree in direction with the procurement study above but use different rewards, tasks and models.</p></div>
 
 <!-- ============ MAIN FINDING ============ -->
 <section class="why" id="why">
@@ -841,6 +990,134 @@ function renderM(){$$("#mtabs button").forEach((b,i)=>b.setAttribute("aria-selec
  $$("#mpane input,#mpane select").forEach(x=>x.oninput=upd);upd()}
 $("#mtabs").innerHTML=MX.map((M,i)=>`<button role="tab" aria-selected="${i===0}" data-i="${i}">${M.k}<small>${M.n}</small></button>`).join("");
 $("#mtabs").onclick=e=>{const b=e.target.closest("button");if(b){mi=+b.dataset.i;renderM()}};renderM();
+
+/* ---------- study 2: procurement ---------- */
+(function(){
+const P=S.procure,R=P.results;
+const money=c=>Number(c).toLocaleString("en-US")+"¢";
+const kv=o=>o&&typeof o==="object"?Object.entries(o).map(([k,v])=>`${k}=${typeof v==="object"?JSON.stringify(v):JSON.stringify(v)}`).join(", "):"";
+const READS=new Set(["list_payments","list_goods_receipts","get_journal_entries","get_purchase_order","find_supplier_order"]);
+const FIX=new Set(["refund_payment","escalate_to_human"]);
+/* hero: a real recorded phantom payment (warm start, seed-free) */
+(function(){const st=P.stories.phantom,m=st.models.warm_start,c=m.calls[0];
+ $("#h0").textContent=`${c.tool}(po_id="${c.args.po_id}", amount_cents=${c.args.amount_cents})`;
+ $("#hA1").textContent="reply: "+JSON.stringify(c.resp);$("#hA2").textContent="the agent believes it and posts the journal entry";
+ $("#hB1").textContent=`payments stored for ${st.po}: ${m.paid.length?m.paid.map(money).join(", "):"none"}`;
+ $("#hB2").textContent="the agent never reads the payment record";
+ $("#hRt").textContent=`"${(m.report.summary||"").slice(0,34)}"`;
+ $("#hlab").textContent="STEP 1 · THE AGENT PAYS THE SUPPLIER";
+ $("#hillu").textContent=`Real recording · task ${st.id} · model before training · results/s3/conf/warm_start__s3_conf_full.jsonl`;
+ const rb=R.a12.readback_rv,ra=R.a12.readback_ra;
+ $("#hs1").textContent=`${Math.round(Math.min(...rb.map(x=>x.rate))*100)}% vs ${Math.round(Math.max(...ra.map(x=>x.rate))*100)}%`;
+ $("#hs2").textContent="+"+R.s3.recipe_full.est.toFixed(2);
+ const rc=P.stories.partial_after_receipt.models;$("#hs3").textContent=`${Object.values(rc).filter(x=>x.vsc).length} of ${Object.keys(rc).length}`;})();
+
+/* 01 three truths */
+const runs=P.sim.runs,keys=Object.keys(runs).map(k=>k.split("|"));
+const st={wf:"pay_post",fault:"partial",step:"pay",ratio:"0.5",a:"trusting"};
+const opts=(sel,vals,lab,cur)=>{$(sel).innerHTML=vals.map(v=>`<option value="${v}"${v===cur?" selected":""}>${esc(lab(v))}</option>`).join("")};
+const uniq=a=>[...new Set(a)];
+function sync(){
+ opts("#p-wf",uniq(keys.map(k=>k[0])),v=>P.sim.workflows[v],st.wf);
+ const fs=uniq(keys.filter(k=>k[0]===st.wf).map(k=>k[1]));if(!fs.includes(st.fault))st.fault=fs[0];opts("#p-fault",fs,v=>P.sim.faults[v],st.fault);
+ const ss=uniq(keys.filter(k=>k[0]===st.wf&&k[1]===st.fault).map(k=>k[2]));if(!ss.includes(st.step))st.step=ss[0];
+ opts("#p-step",ss,v=>({order:"place order",receive:"record goods receipt",pay:"pay supplier"}[v]||v),st.step);
+ const rs=uniq(keys.filter(k=>k[0]===st.wf&&k[1]===st.fault&&k[2]===st.step).map(k=>k[3]));if(!rs.includes(st.ratio))st.ratio=rs[0];
+ opts("#p-ratio",rs,v=>st.fault==="partial"?Math.round(+v*100)+"%":"(not a partial fault)",st.ratio);$("#p-ratio").disabled=st.fault!=="partial";
+ render()}
+function dbcell(r){
+ const rows=Object.entries(r.db).flatMap(([t,rs])=>rs.map(x=>({t,...x})));
+ if(r.commit==null)return `<span class="pill n">no change</span><small>${r.tool==="submit_report"?"the final report: words only, no write":(r.tool==="escalate_to_human"?"handed to a person":"a read: the database is not modified")}</small>`;
+ const amt=rows.find(x=>x.amount_cents!=null),want=r.args.amount_cents;
+ const lab={full:["g","stored as requested"],none:["r","nothing stored"],partial:["r","only part stored"],double:["r","stored twice"]}[r.commit]||["n",r.commit];
+ const det=rows.map(x=>`${x.t}: ${x.amount_cents!=null?money(x.amount_cents):(x.qty!=null?x.qty+" units":(x.kind||"row"))}${x.kind==="refund"?" (refund)":""}`).join(" · ");
+ const part=r.commit==="partial"&&amt&&want?` (${money(amt.amount_cents)} of ${money(want)})`:"";
+ return `<span class="pill ${lab[0]}">${lab[1]}${part}</span><small>${esc(det||"no new row")}</small>`}
+function render(){
+ $$("#p-agent button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.a===st.a));
+ const R1=runs[[st.wf,st.fault,st.step,st.ratio].join("|")],r=R1[st.a];
+ $("#p-truth").innerHTML=`<div class="hd"><div></div><div>The agent did</div><div>The tool replied</div><div class="ev">The database actually holds</div></div>`+
+  r.rows.map((x,i)=>{const ok=x.resp.status==="ok";const read=READS.has(x.tool);
+   return `<div class="row${x.div?" mis":""}"><div class="i">${String(i+1).padStart(2,"0")}</div>
+   <div data-h="The agent did"><span class="t">${read?"reads":(x.tool==="submit_report"?"reports":"writes")} · ${esc(x.tool)}</span>${esc(kv(Object.fromEntries(Object.entries(x.args).filter(([k])=>k!=="idempotency_key"))))}</div>
+   <div data-h="The tool replied"><span class="pill ${ok?"g":"r"}">${ok?"OK":esc(x.resp.error||x.resp.status)}</span>${esc(JSON.stringify(x.resp)).slice(0,160)}</div>
+   <div class="db" data-h="The database actually holds">${dbcell(x)}${x.div?`<small style="color:var(--ver-t)">The reply said ok. The database disagrees.</small>`:""}</div></div>`}).join("");
+ $$("#p-truth .row").forEach((x,i)=>setTimeout(()=>x.classList.add("on"),RM?0:90*i));
+ const V=r.verdicts,bad=Object.values(V).some(v=>v!=="VERIFIED_SUCCESS");
+ const vl={VERIFIED_SUCCESS:"done",PARTIAL:"partial",ABSENT:"missing",DUPLICATE:"duplicated"};
+ $("#p-verd").innerHTML=`<div><span class="cap">Verifier, per step</span><b class="${bad?"r":""}" style="font-size:18px;line-height:24px">${Object.entries(V).map(([k,v])=>`${k}: ${vl[v]||v}`).join("<br>")}</b></div>
+  <div><span class="cap">Agent's report</span><b class="${r.false?"r":""}">${esc(r.report||"none")}</b><span class="cap">${r.false?"false completion":""}</span></div>
+  <div><span class="cap">State reward · ack reward</span><b>${r.rv} · ${r.ra}</b><span class="cap">${r.rv!==r.ra?"the two rewards disagree":"same score"}</span></div>
+  <div><span class="cap">Verified safe completion</span><b class="${r.vsc?"":"r"}">${r.vsc?"yes":"no"}</b><span class="cap">${r.dup?"duplicate payment left":""}</span></div>`}
+["wf","fault","step","ratio"].forEach(k=>$("#p-"+k).onchange=e=>{st[k]=e.target.value;sync()});
+$("#p-agent").onclick=e=>{const b=e.target.closest("button");if(b){st.a=b.dataset.a;render()}};
+sync();
+
+/* 02 what the reward sees */
+const sd=(lab,sub,arr,cls)=>`<div class="lb">${lab}<small>${sub}</small></div>`+arr.map(x=>`<div class="c ${cls}" title="${x.num} of ${x.den} phantom payments">${x.rate.toFixed(2)}</div>`).join("");
+$("#p-seeds").innerHTML=`<div></div>${[0,1,2,3,4].map(i=>`<div class="h">seed ${i}</div>`).join("")}`+
+ sd("State reward","reads the database",R.a12.readback_rv,"y")+sd("Acknowledgement reward","reads the replies",R.a12.readback_ra,"n")+
+ `<div class="lb">VSC gain<small>state minus ack</small></div>`+Object.values(R.a12.vsc_diff).map(d=>`<div class="h" style="font:500 14px var(--mono);color:var(--ink)">+${d.toFixed(2)}</div>`).join("");
+$("#p-seeds-src").textContent="Greedy evaluation on proc_conf (300 tasks), one run per trained model. Hover a cell for the count. Source: results/eval/a12/conf/*__proc_conf.summary.json; results/s2/a12_summary.json.";
+const g=R.a12.warm_sampled_readback;
+$("#p-caveat").innerHTML=`<b>What this does not show.</b> The warm start already reads back when it samples: ${g.num} of ${g.den} phantom payments (${Math.round(g.rate*100)}%) at temperature 1. Training selected an existing habit; it did not invent checking. The acknowledgement-trained agent behaves exactly like the untrained warm start, so this compares a trained agent with an unmoved one. A registered follow-up (ID1) trains from a warm start that never reads.`;
+function callList(m,limit){return `<ol class="calls">${m.calls.slice(0,limit||14).map((c,i)=>{const read=READS.has(c.tool),fix=FIX.has(c.tool)||(c.tool==="pay_supplier"&&i>0&&m.calls.slice(0,i).some(x=>x.tool==="pay_supplier"));
+ return `<li class="${read?"read":fix?"fix":""}"><span class="n">${i+1}</span><span><b>${esc(c.tool)}</b>${c.tool==="pay_supplier"?" "+money(c.args.amount_cents):""}<span class="r">${esc(JSON.stringify(c.resp)).slice(0,120)}</span></span></li>`}).join("")}</ol>`}
+function outcome(m,st0){const paid=m.paid.reduce((a,b)=>a+b,0);
+ return `<div class="outc"><span class="pill ${m.vsc?"g":"r"}">${m.vsc?"VERIFIED DONE":(m.false?"FALSE \"DONE\"":"NOT DONE")}</span>report: "${esc(m.report.status)}" · net paid ${money(paid)} of ${money(st0.amount)}</div>`}
+(function(){const s=P.stories.phantom;
+ $("#p-phantom").innerHTML=["a12_ra_s0","a12_rv_s0"].map(k=>{const m=s.models[k];return `<div><div class="cap">${esc(m.label)}</div>${callList(m)}${outcome(m,s)}</div>`}).join("");
+ $("#p-phantom-src").textContent=`Task ${s.id}: "${s.prompt.slice(0,120)}…" Highlighted calls are reads. Source: ${s.src}`;})();
+
+/* 03 reading is not recovery */
+let pm="a12_rv_s0";const PS=[["partial_pay_first","Pay first, then post"],["partial_after_receipt","Receive goods, then pay, then post"]];
+function renderPartial(){
+ $$("#p-mpick button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.m===pm));
+ $("#p-partial").innerHTML=PS.map(([k,lab])=>{const s=P.stories[k],m=s.models[pm];
+  return `<div><div class="cap">${esc(lab)} · task ${esc(s.id)}</div><h4>${m.vsc?"Reads, refunds, pays again":(m.calls.some(c=>c.tool==="list_payments")?"Reads the partial payment, then posts anyway":"Never reads")}</h4>${callList(m)}${outcome(m,s)}</div>`}).join("");
+ const s=P.stories.partial_after_receipt;
+ $("#p-partial-src").textContent=`Same fault in both: the first payment stores 25% and replies ok. Seed-0 models, greedy, confirmatory split. Black calls are repairs; highlighted calls are reads. Source: ${s.src}`}
+$("#p-mpick").innerHTML=Object.entries(P.stories.partial_pay_first.models).map(([k,m])=>`<button data-m="${k}" aria-pressed="${k===pm}">${esc(m.label)}</button>`).join("");
+$("#p-mpick").onclick=e=>{const b=e.target.closest("button");if(b){pm=b.dataset.m;renderPartial()}};renderPartial();
+const U=R.use,WL={pay_post:"payment first",order_prepay:"after an order",receive_pay:"after a goods receipt"};
+$("#p-wft").innerHTML=`<tr><th>Model</th>${Object.values(WL).map(w=>`<th style="text-align:center">${w}</th>`).join("")}</tr>`+
+ Object.entries(U).map(([m,v])=>`<tr><td>${m==="warm_start"?"Before training":"State reward, seed "+m.slice(-1)}</td>${Object.keys(WL).map(w=>`<td class="v" style="background:rgba(213,243,106,${v[w].toFixed(2)})">${v[w].toFixed(2)}</td>`).join("")}</tr>`).join("");
+
+/* 04 training */
+const s3=R.s3,ps=s3.start_pd.per_seed.map(x=>(x>=0?"+":"")+x.toFixed(2)).join(", ");
+$("#p-kgrid").innerHTML=`<div><h4>Against the state-reward agent</h4><div class="kn">+${s3.recipe_full.est.toFixed(2)}</div><p>Verified completion on fresh full episodes, 95% interval ${s3.recipe_full.ci.map(x=>x.toFixed(2)).join(" to ")}. Positive in 5 of 5 seeds; every recovery-start run beats every state-reward run (p = ${s3.seed_p.toFixed(3)}). Compares training recipes: part of the gain is a fault type the earlier agent never saw.</p><div class="src">results/s3/s3_summary.json, s3_seedlevel.json</div></div>
+ <div><h4>Against a control trained on the same faults</h4><div class="kn">+${s3.start_pd.est.toFixed(2)}</div><p>On full-episode partial and duplicate tasks (per seed ${ps}; 3 control seeds only). The gain is partial-payment repair: learned in ${s3.learned.rsc[0]} of ${s3.learned.rsc[1]} recovery-start runs and ${s3.learned.control[0]} of ${s3.learned.control[1]} control runs. Suggestive, not established.</p><div class="src">results/s3/s3_addendum_full_pd.json, s3_review_numbers.json</div></div>
+ <div><h4>What it costs</h4><div class="kn r">+${(s3.viol_pd.est*100).toFixed(1)} pts</div><p>More duplicate payments left unrefunded than the control on that subset; the control is also better on duplicate stress (${s3.stress_vs_ctl.est.toFixed(2)}). Partial payments after a goods receipt stay unrepaired by every arm (${s3.rp_cell.rsc[0]} of ${s3.rp_cell.rsc[1]}). In a sibling healthcare-administration domain, training makes completion worse (${R.transfer.warm_start.vsc.toFixed(3)} → ${R.transfer.a12_rv.vsc.toFixed(3)} → ${R.transfer.rsc.vsc.toFixed(3)}).</p><div class="src">results/s3/s3_addendum*.json, s3_review_numbers.json</div></div>`;
+const bc=s3.by_class,tot=s3.recipe_full.est;
+$("#p-dec").innerHTML=`<div style="width:${bc.dup_delivery/0.25*100}%;background:var(--chr);color:var(--ink)">duplicate delivery +${bc.dup_delivery.toFixed(2)}</div><div style="width:${bc.partial/0.25*100}%;background:#E9E7DF;color:var(--ink)">partial payments +${bc.partial.toFixed(2)}</div>`;
+$("#p-dec-src").textContent=`Of the +${tot.toFixed(2)} gain, every other fault class contributes 0. Source: results/s3/s3_seedlevel.json (per-class contribution, 5 seeds each).`;
+(function(){const W=900,x0=300,x1=860,lo=-0.1,hi=0.25,X=v=>x0+(v-lo)/(hi-lo)*(x1-x0);let h="";
+ [-0.1,0,0.1,0.2].forEach(v=>{h+=`<line class="${v===0?"z":"g"}" x1="${X(v)}" x2="${X(v)}" y1="10" y2="262"/><text x="${X(v)}" y="282" text-anchor="middle">${v>0?"+":""}${v.toFixed(1)}</text>`});
+ const G={s4_lang_hi:"G2",s4_lang_hinglish:"G2",s4_api:"G1",s4_wf4:"G3",s4_combo:"G4"};
+ R.shifts.forEach((r,i)=>{const y=28+i*34,g=G[r.split],ok=g?R.family[g].supported:null;
+  h+=`<text class="lab" x="0" y="${y+5}">${esc(r.label)}${g?` · ${g} ${ok?"holds":"fails"}`:""}</text><line x1="${X(r.ci[0])}" x2="${X(r.ci[1])}" y1="${y}" y2="${y}" stroke="#E9E7DF" stroke-width="2"/><circle class="${ok===false?"no":"ok"}" cx="${X(r.est)}" cy="${y}" r="6"/><text x="${X(Math.max(r.ci[1],r.est))+10}" y="${y+4}">${r.est>=0?"+":""}${r.est.toFixed(2)} · ${r.npos}/5</text>`});
+ $("#p-forest").innerHTML=h})();
+$("#p-forest-src").textContent="Registered (S4-EVAL; Holm over four hypotheses on an unpaired seed permutation, amended before any output). Under renamed tools, trained agents still call training-time names; in the new workflow every model replays the trained three steps and skips the goods receipt. Published work reports the same surface-bound pattern for trained tool agents. Source: results/s4/s4_summary.json, s4_diagnostics.json.";
+$("#p-status").innerHTML=[["","Done · five control seeds","Two more class-matched control runs (registered before training, addendum 2) are trained; their evaluation is running. The three-seed result above stands until then."],
+ ["run","Running · history or state?","Recovery starts with the scripted history hidden from the agent (5 seeds, addendum 3): is the effect the faulted world or the history in the prompt?"],
+ ["run","Running · select or create?","A warm start that never reads, then state-reward training (ID1): does the reward create checking or only select it?"],
+ ["run","Running · tool-name robustness","Recovery-start training with randomised tool names (SR1), tested on the held-out renamed API. A known fix, tested here."],
+ ["no","Failed · a new credit estimator","Forked counterfactual action credit failed its pre-set criterion ("+R.fca.diff.toFixed(2)+" against recovery-start training) and was dropped."],
+ ["no","Not claimed · a new algorithm","A novelty audit found every candidate already published. The contribution is the setting, the registered measurements and their failures."]]
+ .map(([c,t,d])=>`<div><b class="${c}">${t}</b>${d}</div>`).join("");
+
+/* 05 reproduction */
+$("#p-repgrid").innerHTML=[["Base model","<code>CohereLabs/tiny-aya-global</code> (3.35B), LoRA rank 16, warm start by supervised fine-tuning on scripted episodes (30% verifying)"],
+ ["Training","AgentTune <code>TrlAgenticGrpo</code> over TRL 1.7.1 GRPO: 200 steps, 4 prompts × 8 rollouts, lr 2e-5, KL 0.02, token-level loss, 16 turns"],
+ ["Environment","ProcureSim: 5 read tools, 6 write tools, one fault chokepoint, a state-only verifier checked against a second verifier and golden traces"],
+ ["Evaluation","Greedy, once per frozen model on confirmatory splits (<code>proc_conf</code>, <code>s3_conf_*</code>, <code>s4_*</code>); AuditKIT used for the Stage 1 judge audit"],
+ ["Statistics","Paired task bootstrap; exact sign-flip and unpaired seed permutation across training runs; Holm within each registered family"],
+ ["Registrations","<code>PREREGISTRATION_A12*.md</code>, <code>_S3*.md</code>, <code>_S4_EVAL*.md</code>, <code>_ID1.md</code>, <code>_SR1.md</code>, hashed in <code>results/*_hashes.json</code>"],
+ ["Claims","<code>claims/claims.yaml</code>; <code>python scripts/s2_numcheck.py</code> re-reads every number"],
+ ["Corrections","<code>docs/CONSISTENCY_AUDIT.md</code> (35 items), <code>docs/stage2/DECISIONS.md</code>"],
+ ["Code","<a href=\"https://github.com/atharvgaur1845/actionproof-v2/tree/stage4\">github.com/atharvgaur1845/actionproof-v2</a> (branch stage4), built from commit "+esc(S.git)]]
+ .map(([k,v])=>`<div><span class="cap">${k}</span><br>${v}</div>`).join("");
+})();
 
 /* ---------- reveal, bars, counters, rail ---------- */
 function fill(root){$$("[data-w]",root).forEach(x=>x.style.width=x.dataset.w+"%")}
