@@ -1,0 +1,41 @@
+# Experiment status
+
+As of 2026-11-22 01:31 IST.
+
+**Compute:**
+- Slurm lease 460633: 2 H200 GPUs until Nov 25 10:27.
+- A100 worker 460629.
+- A 200-step GRPO run takes about 1 h 55 min on an H200 (`logs/*_s*.full.log`) and about 2 h 30 min on the A100.
+
+**Submission:** Nov 25 17:29 IST (project memory; no official page was found online to confirm it). Paper freeze: Tue Nov 24 12:00 IST.
+
+**Labels:**
+- **Completed and verified:** the result file exists and is in the claims ledger.
+- **Running:** registered, with jobs in progress.
+- **Withdrawn / failed:** stated as such.
+
+| Experiment | Registration | Seeds | Status | Result file | Expected |
+|---|---|---|---|---|---|
+| A12 reward observability | `PREREGISTRATION_A12*.md` | 5 + 5 | Completed and verified | `results/s2/a12_summary.json` | — |
+| A14/A15 forced evidence | `PREREGISTRATION_A14.md`, `_A15.md` | 5 per arm | Completed and verified | `results/a15/`, `results/s2/partial_by_workflow.json` | — |
+| S3 recovery-start vs state reward | `PREREGISTRATION_S3.md` | 5 + 5 | Completed and verified | `results/s3/s3_summary.json` | — |
+| S3 addendum 1: vs class-matched control | `PREREGISTRATION_S3_ADDENDUM1.md` | 3 + 3 | Completed and verified | `results/s3/s3_addendum*.json` | — |
+| S4-EVAL shifts | `PREREGISTRATION_S4_EVAL.md` + addendum 1 | 5 + 5 (+3 control) | Completed and verified | `results/s4/s4_summary.json` | — |
+| FCA (forked counterfactual credit) | `docs/research/algorithm/FCA_GRPO.md` §7 | 2 (development) | **Failed** its kill criterion; dropped | `results/s4/fca_dev_summary.json` | — |
+| S3 addendum 2, Part A: control seeds 3–4 (prospective) | `PREREGISTRATION_S3_ADDENDUM2.md` | +2 control | **Running.** Both trained; evaluation queued (task 966) | `results/s3/conf/s3_matched_s{3,4}__*` | about 04:30 Sun |
+| S3 addendum 2, Part B: workflow-rebalanced pools | same | 2 + 2 | **Running.** Recovery-start runs trained; control runs training (964–965) | `results/s3/pp/`, `results/s3/s3_addendum2.json` | about 06:00 Sun |
+| S3 addendum 3: state-only starts | `PREREGISTRATION_S3_ADDENDUM3.md` | — | **Withdrawn before training** (degenerate design) | `docs/research/ADDENDUM3_WITHDRAWN.md` | — |
+| S3 addendum 4: acknowledgement-only starts (is it the handed evidence?) | `PREREGISTRATION_S3_ADDENDUM4.md` | 5 | **Running.** Queued after addendum 2 on the H200s | `results/s3/s3_addendum4.json` | about 14:00 Sun |
+| ID1: warm start that never reads, then R_V | `PREREGISTRATION_ID1.md` (deviation D-ID1-1) | 2 | **Running.** Warm start done (read-back 0/153); seed 0 training on the A100; seed 1 next | `results/id1/id1_summary.json` | about 06:30 Sun |
+| SR1: tool-name randomisation (a known fix, tested here) | `PREREGISTRATION_SR1.md` | 3 | **Running.** Starts on the A100 after ID1 | `results/s4/sr1_summary.json` | about 15:00 Sun |
+| Mechanistic causal test (CircuitKIT) | — | — | **Not run.** CircuitKIT failed to install in Stage 2 (D-A16-1); A16's ablation is not specific | — | Future work |
+
+**Not attempted, by decision:**
+- the own-history recovery-start arm (needs new two-phase rollout code that is risky this late);
+- a second model family;
+- prompted or larger-model baselines on ProcureSim;
+- sampled (T > 0) evaluation.
+
+All are listed as future work in `docs/final/FINAL_REVIEW.md`.
+
+**Rule for the final days:** results are reported as they land, whatever the sign. Nothing is stopped early or extended because of an interim number.
