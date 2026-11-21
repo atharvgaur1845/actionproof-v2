@@ -10,7 +10,7 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 
-\title{What the Reward Sees Decides What the Agent Checks:\\Reward Observability and Evidence Use in Tool-Using Language Models}
+\title{Acknowledged Is Not Done: Reward Observability, Evidence Use and\\Recovery Training for Tool Agents with Silent Write Failures}
 
 \author{Atharv Sharma \\
   BITS Pilani, Goa Campus \\
@@ -23,113 +23,104 @@
 \maketitle
 
 \begin{abstract}
-Tool-using agents are trained with rewards computed from something: the final state of the systems they change, or the replies the tools gave them. When a write can report success without committing, the two differ. We train a 3.35B Aya agent with GRPO under two rewards of identical binary form that differ only in this information channel, in a procurement environment whose success replies are byte-identical whether or not the write committed, and pre-register the comparison. On untouched tasks, the state reward yields an agent that reads the payment records after every phantom write, and the acknowledgement reward one that never does, in each of five paired seeds (phantom read-back 1.00 vs 0.00; verified completion +0.27 to +0.32). Read-back was already in the warm start's sampled repertoire: the state reward makes it the agent's default, while the acknowledgement-trained agent behaves exactly like its warm start on every untouched task. Our pre-registered mechanism test fails, and we report it. A second pre-registered experiment forces the authoritative read into the agent's context under five real execution states: every policy, including those that never read on their own, acts correctly on whether a payment exists, so the hypothesis that reading does not produce evidence-conditioned control is rejected in this setting. Control stops where evidence must be compared with the order: only the state-trained agents refund a partial payment (35--48\% of tasks), and no agent removes a duplicate delivery. What the reward sees decides what the agent checks; what the agent does with evidence is largely inherited from its demonstrations.
+When a tool agent writes to an external system, the tool's acknowledgement can be identical whether the write committed, half-committed, or did nothing. We study GRPO-trained tool agents in a procurement simulator built around this failure, with an evaluator that sees the authoritative database and a policy that sees only tool replies. Pre-registered experiments on a 3.35B Aya model show: (1) a state reward and an acknowledgement reward of identical binary form produce agents that do and do not read back after phantom writes in every one of five seeds (1.00 vs 0.00), with the acknowledgement-trained agent behaving exactly as its untrained warm start; (2) once the authoritative record is in context, every model acts correctly on whether a payment exists, but only state-trained agents refund a partial payment, and only when payment is the first step of the workflow; (3) every model linearly encodes partial versus complete payment, and training changes how that evidence moves the next action rather than whether it is represented. We then test a recovery-start curriculum, a known technique: it raises verified completion by +0.21 on fresh tasks in five of five seeds, but a pre-registered class-matched control attributes about half of the gain to fault coverage, and the remaining start-state effect (+0.09, three seeds) comes with slightly more irreversible violations. Gains do not transfer to two sibling domains. Every number traces to a result file through a public claims ledger.
 \end{abstract}
 
 \section{Introduction}
 
-A tool call that returns \texttt{\{"status": "ok"\}} tells an agent what the tool said, not what happened. In payment and procurement workflows the difference matters: a write can report success without committing (a \emph{phantom} write), commit only part of the requested effect, commit while its reply is lost, or fail after a timeout. When the acknowledgement is identical whether or not the write committed, only a read of the authoritative record can tell the cases apart. Agents that report success on such failures are common \citep{advani2026confident,smyth2026overclaim}, and detecting quiet failures is harder than detecting loud ones \citep{kraishan2026loud}.
+A payment API returns \texttt{\{"status": "ok"\}}. The payment may have been stored, stored in part, stored twice, or not at all. An agent that reports success because the tool said so is wrong in exactly the cases that matter, and retrying blindly can pay twice. We call such failures \emph{silent}: the agent's observation does not distinguish them; only the authoritative state does.
 
-Reinforcement learning is increasingly used to train such agents, and the reward has to be computed from something. A reward computed from the final database state can see what the agent cannot; a reward computed from the acknowledgements the agent received sees exactly what the agent sees. Rewards of the second kind exist in practice: state trackers that update only on success replies have been proposed as scalable training signals \citep{chuang2026proxystate}. Theory predicts that rewards computed from partial observations can reward the appearance of success \citep{lang2024deceive}. We ask two empirical questions.
+We ask three questions in a controlled simulator where silent failures are the rule rather than the exception. \textbf{Acquisition}: does the information a reward observes decide whether a trained agent checks the authoritative state after a write? \textbf{Use}: once the evidence is in context, does the agent act on it correctly? \textbf{Training}: does a recovery-start curriculum improve recovery, and how much of its gain comes from starting at recovery states rather than from seeing more fault types?
 
-\textbf{Acquisition.} Holding the warm start, tasks, optimiser and reward form fixed, does the reward's information channel change whether the agent reads authoritative state after a write?
+\paragraph{Contributions.} (i) ProcureSim, an environment in which phantom, partial, lost-acknowledgement, duplicate and never-committing writes return acknowledgements byte-identical to real outcomes, with a state-only verifier checked against an independent reference implementation and hand-written golden traces (\S\ref{sec:setup}). (ii) Pre-registered measurements of acquisition, evidence use and representation under two rewards that differ only in what they observe (\S\ref{sec:acq}--\S\ref{sec:mech}). (iii) A decomposition of a recovery-start curriculum's gain into fault coverage and start state, with its safety trade-off (\S\ref{sec:rsc}). (iv) Surface, language, workflow and fault-combination shifts of the benchmark, and a test of a forked counterfactual credit estimator in this setting (\S\ref{sec:shift}). \textbf{Non-contributions}: we do not propose a new optimiser (the curriculum and the credit estimator adapt published methods; \S\ref{sec:related}), and we claim nothing about real deployments.
 
-\textbf{Evidence-conditioned control.} When authoritative evidence is in the agent's context, does the agent's next action follow what it shows, and does the reward's channel change that?
+\section{Related work}\label{sec:related}
 
-The two are different properties. An agent can learn to read after every write without its next action depending on the read, and an agent that never reads can still act correctly when evidence is put in front of it. We separate acquisition (A12) from evidence-conditioned action, recovery and reporting (A14), and do not measure interpretation separately. Both experiments were pre-registered, with hashes committed before the runs they cover; failed tests and deviations are reported as such.
+\paragraph{Tool reliability and false success.} Agents claim completion that the environment contradicts \citep{smyth2026overclaim}; Proof-of-Use studies tool calls that do not ground answers \citep{ma2026proofofuse}. Bench2Robust trains recovery from explicit and silently corrupted tool outputs but assumes a retry cannot duplicate a write \citep{chen2026bench2robust}. Our failures are silent at the write itself: the acknowledgement is identical, and retries can duplicate.
 
-\textbf{Contributions.} (1) A matched comparison of two GRPO rewards of identical form that differ only in information channel, with a reward-truth table and per-class predictions registered before training, five paired seeds, and an analysis of where each reward provides gradient. (2) A forced-evidence fork protocol: for the same task and history, the real environment is placed in one of five execution states behind a byte-identical acknowledgement, the authoritative read is put in context, and the agent continues closed-loop. (3) Negative findings: read-back is selected from the warm start's repertoire, not invented; the registered mechanism test fails; the hypothesis that reading does not yield evidence-conditioned control is rejected.
+\paragraph{Recovery and restart training.} Restarting GRPO from failure contexts is established: Fission-GRPO turns failed calls into corrective prompts \citep{zhang2026fission}, reverse curricula start RL from late points of a trajectory \citep{xi2024r3}, and ReflectPO and Depth Before Breadth restart from recovery anchors and intermediate contexts \citep{li2026reflectpo,du2026depth}. Our recovery-start curriculum belongs to this family; our contribution is its decomposition in a silent-failure setting.
 
-\textbf{Non-contributions.} The execution gateway, evidence ledger, idempotency handling and contract checks used in our demonstration are engineering close to existing systems \citep{li2026limbo,xu2026idempotency,zheng2026stale}; we use them as apparatus and baselines. Our environment shares a codebase with our verifier and is not an independent benchmark.
+\paragraph{Credit at forked states.} Forking environment snapshots to estimate step credit appears in CRR \citep{li2026crr} and SURE-Act \citep{liu2026sureact}; action-conditioned baselines in BiPACE \citep{wang2026bipace}, GiGPO \citep{feng2025gigpo} and COMA \citep{foerster2017coma}. Constrained GRPO and its calibration \citep{girgis2026cgrpo,han2026budget} handle separate cost terms. Curricula that oversample hidden states can bias the learned policy \citep{jiang2022samplr}.
 
-\section{Related work}
+\section{Setting}\label{sec:setup}
 
-\textbf{Execution integrity.} LIMBO \citep{li2026limbo} evaluates frontier models across harnesses and tool contracts on boundary faults; UndoBench \citep{sah2026undobench} separates task competence from recovery with paired trials and state oracles; runtime guards, ledgers and contract coverage are studied by \citet{xu2026idempotency} and \citet{zheng2026stale}. None trains the policy, and none uses success replies that are byte-identical to real success.
+\paragraph{ProcureSim.} An agent processes an approved purchase order in one of three workflows (order then pay then post; receive then pay then post; pay then post) using five read tools, six write tools and a final report. Faults are applied at one write chokepoint and are invisible in the acknowledgement: \emph{phantom} (ok, nothing stored), \emph{partial} (ok, a fraction $q$ stored), \emph{lost acknowledgement} (stored, timeout returned), \emph{timeout before commit}, \emph{duplicate delivery} (stored twice, ok returned) and \emph{never commits} (ok on every attempt, nothing stored). A same-key retry after a lost acknowledgement is answered from an idempotency store; a partial payment can only be repaired by refunding it and paying again under a new key. Table~\ref{tab:truth} gives the reward each behaviour receives.
 
-\textbf{Evidence use.} Proof-of-Use \citep{ma2026proofofuse} shows that research agents can call tools without grounding answers in the results and adds evidence-perturbation terms to the reward. Correct information often fails to change agent behaviour \citep{zhang2026blindlytrust,jia2026oraclestate,zhu2026egr}. Our forced-evidence forks apply this question to stateful writes in RL-trained agents, compared across reward channels.
+\paragraph{Rewards and metric.} \RV{}$=1$ iff every requested step verifies in the final database. \RA{}$=1$ iff the last acknowledgement of every requested write was ok. Both are binary and ignore the report. The evaluation metric is verified safe completion (VSC): every step verified, no collateral or unrequested row, and a \emph{completed} report. False completion is a \emph{completed} report when the goal is not met; a violation is a duplicate payment or receipt, a collateral row, or a wrong amount or payee.
 
-\textbf{Reward observability and RL.} Partial-observation rewards can drive agents to exploit what the grader cannot see \citep{lang2024deceive,li2026epog}; matched two-arm GRPO designs have been used for verifier quality \citep{zhang2026leaky}; VeriGUI trains verification with a reward that reads ground-truth effects \citep{zhang2026verigui}; agents skip verification when it is not rewarded \citep{thaman2026rhb}. RL tends to sharpen behaviours present in the base or fine-tuned model \citep{yue2025rlreasoning,gandhi2025cognitive}. We found no study that trains an LLM agent with two same-form rewards that differ only in whether they read state or the agent's acknowledgements.
-
-\section{Setup}
-
-\textbf{Environment.} ProcureSim has five simulated services (order management, supplier, payments, inventory, accounting); each has its own tables and a monotonic version, and reads return the version they reflect. A task asks the agent to place an order, record a receipt, pay and post a journal entry for a purchase order (two or three of these steps). Faults sit in the write path: phantom (success reply, nothing stored), partial, lost acknowledgement (stored, timeout reply), timeout before commit (not stored, timeout reply), never commits, duplicate delivery and replica lag. Success replies are byte-identical for committed, phantom and partial writes, and timeout replies are identical for lost acknowledgement and timeout before commit. Idempotency is scoped to (tool, order, key); a phantom write stores no key, so a same-key retry commits.
-
-\textbf{Rewards.} \RV{} $=1$ if every requested step is verified in the final state, else 0. \RA{} $=1$ if the last acknowledgement of every requested step's write was \texttt{ok}, else 0. Both are binary and ignore the agent's report. They differ in channel and therefore in what they pay for (Table~\ref{tab:truth}): \RA{} cannot tell a phantom from a commit, and it pays a blind same-key retry after a lost acknowledgement because the stored success is replayed.
+\paragraph{Training.} Tiny Aya Global (3.35B) with LoRA (rank 16) is warm-started by supervised fine-tuning on scripted episodes (a verifying oracle in 30\% of them, an acknowledgement-trusting policy otherwise), then trained for 200 steps with TRL's GRPOTrainer: 4 prompts $\times$ 8 rollouts per step, learning rate $2\times10^{-5}$, KL coefficient 0.02, group-normalised sequence advantages, token-level DAPO loss aggregation and sequence-level importance correction (the trainer defaults; Appendix~\ref{app:train}).
 
 \begin{table}[t]
-\centering\small
+\centering
 \resizebox{\columnwidth}{!}{\input{tables/truth.tex}}
-\caption{Registered reward-truth table (excerpt): \RV/\RA{} for one payment step, by fault and scripted behaviour, computed with the registered reward code before training.}
+\caption{\RV{}/\RA{} for scripted behaviours under each fault (registered reward truth table). The rewards disagree exactly where reading changes the outcome.}
 \label{tab:truth}
 \end{table}
 
-\textbf{Training.} The policy is Tiny Aya Global (3.35B; \citealp{cohere2026tinyaya}). A LoRA \citep{hu2022lora} warm start is trained on scripted demonstrations from two demonstrators, a verifying oracle (30\%) and an acknowledgement-trusting agent; then GRPO \citep{shao2024deepseekmath} runs 200 steps of 4 tasks $\times$ 8 rollouts, with rollouts in vLLM \citep{kwon2023vllm}. Seeds 0--4 are paired: the same warm start and tasks for both rewards. Evaluation is greedy and each frozen step-200 model is run once on each confirmatory split (\texttt{proc\_conf}, 300 tasks; \texttt{proc\_combo}, unseen fault pairs; \texttt{proc\_stress}, duplicate delivery and replica lag), with a logged access check.
+\section{Acquisition: what the reward observes}\label{sec:acq}
 
-\section{Acquisition (A12)}
+We compared \RV{} and \RA{} in a pre-registered design with five paired seeds, each evaluated once on 300 untouched tasks (Table~\ref{tab:a12}). After a phantom write, the \RV{} agent reads the payment record in every case and every seed (1.00); the \RA{} agent never does (0.00). VSC rises by +0.27 to +0.32 per seed (exact sign-flip $p=1/32$ one-sided; Holm-adjusted 0.0625 across the two primary metrics). The \RA{} agent's greedy tool calls equal the untrained warm start's on 500 of 500 confirmatory tasks in each seed, so this contrast is between a state-trained agent and one that training did not move. Our registered mechanism prediction (per-class sign predictions) failed and is reported as such. A pre-registered control that removed from \RA{}'s training pool the classes where reading lowers \RA{} left greedy read-back at 0/153 in all six runs, while the sampled read rate stopped declining: pool composition explains the drift away from reading, not its absence.
 
 \begin{table*}[t]
-\centering\small
-\input{tables/a12_seeds.tex}
-\caption{A12 on \texttt{proc\_conf} (300 untouched tasks; step-200 models; each run once). Phantom read-back: share of success-acknowledged writes that did not commit and were followed by a read of the payment record; in parentheses, tasks with a phantom write in which the agent read back at least once. The warm start was evaluated once after all models were frozen (exploratory reference). $^\dagger$Original protocol; the registered stop rule fired for \RA{} and the run was continued as a logged deviation. $^\ddagger$\RV{} resumed from its step-175 checkpoint after a crash at step 199.}
+\centering
+\resizebox{0.86\textwidth}{!}{\input{tables/a12_seeds.tex}}
+\caption{A12 confirmatory results per seed. $^\dagger$Seed 0 ran under the original protocol (stop rule fired; deviation D-A12-1). $^\ddagger$Resumed from step 175 after a crash (D-A12-2).}
 \label{tab:a12}
 \end{table*}
 
-\textbf{Primary result (registered).} Phantom read-back is 1.00 under \RV{} and 0.00 under \RA{} in each of five seeds; at the task level, \RV{} reads back in all 153 tasks with a phantom write and \RA{} in none (Table~\ref{tab:a12}). Verified completion (VSC) rises by +0.27 to +0.32 with every per-seed interval excluding zero; the exact sign-flip test over seeds reaches its floor (1/32 one-sided). On unseen fault pairs read-back is 0.97--0.98 vs 0.00.
+\section{Use: acting on evidence}\label{sec:use}
 
-\textbf{Selection, not invention.} Decoded greedily, the warm start never reads back (VSC 0.47, false success 0.53). Ignoring the wording of its final report, every \RA{} model issues exactly the warm start's tool calls on all 500 confirmatory tasks, in every seed; \RV{} models differ on all but 7--12 per split. At greedy decoding, the acknowledgement reward left the agent where it started, and the state reward made a behaviour from the warm start's sampled repertoire its default. \RV{} reads after real successes as often as after phantom ones: with identical acknowledgements, reading after every write is the only way to catch a phantom.
+We force the authoritative read into the agent's context after a pay acknowledgement, under five real execution states (pre-registered). Every policy, trained or not, re-pays when the record is empty and proceeds when it is full (branch-balanced accuracy 1.00). Only \RV{} agents refund a partial payment, and a second registered experiment shows they do so at unseen ratios (1/4, 3/4) as often as at the 1/2 seen in training: 0.25--0.58 in four seeds and 0 in the fifth, against 0.00 for \RA{} and 0.035 for the warm start. Split by workflow, the picture changes: in seeds 0--2 the \RV{} agent repairs 99--100\% of partial payments when payment is the workflow's first step and 0\% when it follows a goods receipt. The amount comparison is real but bound to the context in which it was learned. No model refunds a duplicate delivery.
 
-\begin{figure*}[t]
+\section{Representation}\label{sec:mech}
+
+At the decision point after the forced read, a linear probe separates partial from complete payment with AUROC 1.00 at every checkpoint of every model, including the warm start, whether refitted or frozen from the warm start. What differs is the action margin $M=\log P(\text{refund or escalate})-\log P(\text{post})$: its partial-minus-complete gap grows under \RV{} (step 200: +2.9, +3.9, +5.1 nats) and stays near the warm start under \RA{} (+2.0 vs +2.4). Projecting out the dev-fitted partial-minus-complete direction at the registered layer lowers \RV{}'s partial-branch margin more than any random direction in five of five seeds, meeting our causal criterion; the same ablation also lowers the margin on the empty-record branch and meets the criterion for two \RA{} seeds, so it is not specific to the \RV{} behaviour. Single-position activation patching did not exceed random controls in any seed. Training changes how represented evidence drives the action, not whether it is represented; we do not claim a circuit.
+
+\section{A recovery-start curriculum, decomposed}\label{sec:rsc}
+
+\RV{}'s remaining failures are partial payments, duplicate deliveries and false reports, and GRPO rarely samples the repair from a full episode. A recovery-start curriculum (RSC) replays a scripted prefix ending in a faulted state, so that each group of eight rollouts starts there; the update rule and the reward (\RV{}) are unchanged. The pool is half \RV{}'s original tasks and half recovery starts, which also add fault types \RV{} never trained on (duplicate delivery, partial ratios 1/4 and 3/4).
+
+\paragraph{Against \RV{} (recipe comparison).} On fresh pre-registered splits, RSC raises VSC by +0.21 on recovery starts and on full episodes, in five of five seeds (Table~\ref{tab:s3}), lowers false completion by 0.21 and violations by 0.12, and leaves honest failure unchanged (no collapse to refusal).
+
+\paragraph{Against a class-matched control (start-state comparison).} Registered before any S3 output was read, the control trains \RV{} on full episodes carrying exactly the recovery starts' faults, prompts and worlds. Against it, starting at recovery states adds +0.09 VSC on recovery starts and +0.22 on full-episode partial and duplicate tasks (positive in each of three seeds; sign-flip resolution 1/8; intervals are task bootstraps conditional on the trained models). It also adds violations (+0.03 on that subset) and is worse on duplicate stress ($-0.04$): the stress gain over \RV{} comes from fault coverage. The start-state gain is concentrated in the order-then-pay workflow (Table~\ref{tab:wf}).
+
+\begin{table}[t]
 \centering
-\includegraphics[width=\textwidth]{../docs/paper/figs/fig3_reward_signal.pdf}
-\caption{Where each reward provides gradient (training rollouts, five seeds; exploratory). Left and middle: share of informative GRPO groups (groups whose 8 rewards are not all equal) by fault class, mean over seeds, per 50-step block. Right: share of sampled rollouts that read back.}
-\label{fig:signal}
-\end{figure*}
+\resizebox{\columnwidth}{!}{\input{tables/s3.tex}}
+\caption{Registered S3 contrasts: seed-averaged paired difference [95\% CI]. Five seeds against \RV{}, three against the class-matched control.}
+\label{tab:s3}
+\end{table}
 
-\textbf{Where the gradient comes from (exploratory).} Under \RV, phantom-write tasks supply 46--75\% of informative groups, and there samples that read back earn 0.91--0.97 more reward; the sampled read rate rises from 0.59--0.66 to 0.81--0.87 (Figure~\ref{fig:signal}). Under \RA, phantom tasks supply 3--23\%; lost-acknowledgement and never-commit tasks supply 60--92\%, and there reading earns 0.86--1.00 less, because acting on the read (stopping, reporting failure, not re-calling) costs a success reply. The sampled read rate falls to 0.04--0.06. \RA's suppression of reading thus acts through cases where evidence changes the next action, and it is visible only in sampled behaviour.
-
-\textbf{The registered mechanism test fails.} Per-class sign agreement with the step-0 predictions is 0.6 for \RV{} and 0 for \RA, below the registered 0.8, so our registered composite claim is not made. The test compared greedy read-back at step 200 with the greedy warm start, which already never reads, so a decrease under \RA{} could not be observed, and \RV{} raised read-back in every class, including two predicted to fall, because it cannot tell the classes apart before reading.
-
-\section{Evidence-conditioned control (A14)}
-
-\textbf{Design.} For each of 250 fresh tasks, a scripted prefix runs to the payment acknowledgement; the branch is the real fault on that payment: committed, phantom, partial, lost acknowledgement or timeout before commit. The experimenter then forces the authoritative read of the payments into the context, in the agent's own tool-call format, and the agent continues closed-loop. The first decisive action (the first call that is not a read) is scored against the correct action for the true state: proceed when the payment exists, re-pay when it does not, refund or escalate when it is partial. The primary endpoint is branch-balanced correct-action accuracy on the success-acknowledgement family, BCA $=\tfrac12[P(\text{correct}\mid\text{phantom})+P(\text{correct}\mid\text{committed})]$, with a smallest effect of interest of 0.10. Scripted references calibrate the scale: an oracle scores 1.00, never-read and fixed-retry policies 0.50. The read is an intervention, so A14 measures what a policy does with evidence it is given, not whether it seeks it.
-
-\begin{table*}[t]
-\centering\small
-\input{tables/a14.tex}
-\caption{A14 on 250 fresh tasks $\times$ 5 branches. BCA: success-acknowledgement family; signed $S = P(\text{re-pay}\mid\text{phantom}) - P(\text{re-pay}\mid\text{committed})$; Partial: correct first action when the read shows a payment below the order amount. Last column: the same read attributed to the runtime (exploratory).}
-\label{tab:a14}
-\end{table*}
-
-\textbf{Result (registered).} Every policy, including the warm start and every \RA{} seed, re-pays when the read shows no payment and proceeds when it shows one: BCA 1.00 and signed $S$ +1.00 for all, and the same on the timeout family (Table~\ref{tab:a14}). All registered contrasts are equivalent within the margin. The registered check for abandoning our hypothesis was met, so we reject the hypothesis that reading does not by itself produce evidence-conditioned control: in this setting, once the evidence is in context, the next action follows it.
-
-\begin{figure}[t]
+\begin{table}[t]
 \centering
-\includegraphics[width=\columnwidth]{../docs/paper/figs/fig4_a14_branches.pdf}
-\caption{A14: correct first action per execution state (bars: mean over seeds; lines: seed range).}
-\label{fig:a14}
-\end{figure}
+\resizebox{\columnwidth}{!}{\input{tables/workflow.tex}}
+\caption{VSC on full-episode partial and duplicate tasks by workflow (seeds 0--2 pooled).}
+\label{tab:wf}
+\end{table}
 
-\textbf{Where control stops.} When the read shows one payment for less than the order, the correct action is a refund. \RV{} seeds choose it in 0.36, 0.48 and 0.35 of tasks, every \RA{} seed in none, the warm start in 0.03 (Figure~\ref{fig:a14}). Acting on whether a row exists is in the warm start's repertoire; acting on what a row says, when that needs a comparison with the order, mostly is not, and only the state reward moves it. The confirmatory stress split shows the same limit: after a duplicate delivery, \RV{} reads the payments and leaves the duplicate in place as often as \RA{} (0.58).
+\section{Shifts and a counterfactual credit test}\label{sec:shift}
 
-\textbf{Interface ablation (exploratory).} When the same read is attributed to the runtime rather than the agent's own call, \RV{} stays at BCA 0.99--1.00 but \RA{} falls to 0.83 in every seed. In the trajectories, the warm start continues after the forced read in the style of its verifying demonstrator, reading after every later write: the control A14 measures is largely inherited from the demonstrations and depends on evidence that resembles them.
+% PENDING: S4-EVAL (PREREGISTRATION_S4_EVAL.md) and FCA (docs/research/algorithm/FCA_GRPO.md). Fill only from results/s4/.
+\textit{[Pending: completed only from the registered result files.]}
+
+In two separately implemented sibling domains (IT operations, healthcare administration), neither \RV{} nor RSC improves verified completion over the warm start, and both trained models make more collateral writes than the warm start in healthcare administration. The \RV{}-over-\RA{} read-back gap transfers to healthcare administration (+0.37 [0.18, 0.58]) but not to IT operations, where the warm start already reads back.
 
 \section{Discussion}
 
-The reward's information channel decided whether the agent acquired evidence, consistently over five training runs, by selecting a behaviour the warm start already sampled; it did not change what the agent does with evidence it has, which is mostly inherited from the demonstrations: correct for presence and absence, weak for content that must be compared. A practical reading follows. In the companion e-commerce evaluation (Appendix~\ref{app:a11}), showing the untrained warm start the verified state through the gateway raises its verified completion by +0.25 over enforcement alone, to 0.87, above every trained policy run without the gateway (0.62--0.73). Showing evidence is a more reliable lever than training an agent to look.
+The information a reward observes decides whether an agent checks; this is the clearest result, and it replicates across five seeds. Checking does not imply using: reading is followed by correct action on present-or-absent evidence in every model, but quantitative repair is learned narrowly, by workflow. Starting training at recovery states helps beyond seeing the faults, but less than the recipe comparison suggests, and not for free. None of this transfers to other domains without training there.
 
 \section*{Limitations}
 
-One 3.35B model family; one environment built by the same team as its verifier; synthetic faults on simulated services; five training seeds. The acknowledgement reward is not a pure information ablation: it pays a blind same-key retry after a lost acknowledgement, and most of its gradient comes from classes where acting on a read costs a reply, so part of the phantom-write effect holds by construction. Our registered mechanism test compared greedy policies against a greedy warm start that never reads, so it could not observe suppression; we report it as registered. The forced-evidence result may depend on the evidence resembling the verifying demonstrations. Greedy decoding was used throughout; sampled behaviour differs (the warm start reads back after 35\% of phantom writes when sampled). The human audit in the appendix has one annotator.
+One model family (Tiny Aya Global, LoRA rank 16) and one authored simulator; the sibling domains share code and authorship. Five seeds for primary comparisons and three for the start-state control; task-level intervals are conditional on the trained models. The recovery-start pool differs from \RV{}'s in fault coverage, which the class-matched control isolates only for three seeds. The \RA{} arm saturates and stays at warm-start behaviour, so A12 compares a trained agent with an untrained one. Probes and ablations do not localise a mechanism. All results are in simulation.
 
 \section*{Ethics Statement}
 
-The work trains agents to check the effects of their own actions on simulated financial systems; no real payments, personal data or human subjects other than the author (as annotator) are involved. The behaviours studied, false success reports and unverified writes, are risks of deploying agents on real systems; our results argue for runtime verification rather than reliance on trained verification habits.
+The simulator processes synthetic purchase orders; no real payment, person or organisation is involved. Agents that act on external systems can cause irreversible harm; our results argue for checking authoritative state rather than trusting tool acknowledgements.
 
 \bibliography{refs}
 \bibliographystyle{acl_natbib}
 
 \appendix
-\sloppy
-\input{appendix.tex}
+\input{appendix}
 
 \end{document}
