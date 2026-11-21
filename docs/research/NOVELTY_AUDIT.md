@@ -539,3 +539,12 @@ Fetched and excluded as not relevant: Agentic Monte Carlo (arXiv 2606.05296, ICM
 - LITERATURE.md entries re-fetched in this session for method detail: 6 (Constrained GRPO, GiGPO, VinePPO, COMA, R3L, LIMBO).
 - LITERATURE.md entries cited without re-fetch: 26.
 - Unverified (not usable): 18 papers, 1 withdrawn paper, and venue claims for 9 otherwise verified papers (plus one transcription note for Fission-GRPO, whose venue is verified).
+
+## Update 2026-11-22 00:10: the unverified item 1 ("Did It Happen?")
+
+- **Status: partly verified.** The title and abstract come from a web-search index entry for Research Square rs-10730245. The page itself still does not render its metadata, so the authors and date are not known and no BibTeX entry is written. TwinCheck (NeurIPS 2026 Agents in the Wild workshop) turned up in the same search: it is an inference-time verifier with no training and no silent commits, so it is not a neighbour of the setting.
+- **What the abstract says.** It is an evaluation benchmark in which every unit pairs two hidden commit states behind an identical agent-visible timeout. Recovery without an informative affordance has a balanced success ceiling of 0.5. A status affordance makes the hidden state observable, and a stable idempotency key makes retry safe. Information alone does not guarantee correct use. No training is mentioned.
+- **Consequences:**
+  - The **observation-equivalent paired evaluation** (our lost-acknowledgement and timeout-before-commit pair, and A14's forced-evidence forks) **is not novel.** The paper cites this preprint by URL and claims no novelty for that design.
+  - Its finding that information does not guarantee correct use matches A14/A15 (acquisition without use). We report ours as consistent with it, not as a discovery.
+  - The setting-level claim stays narrow: among the papers checked, no **training** study combines silent write commits with duplicate risk.
