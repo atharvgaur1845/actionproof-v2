@@ -20,7 +20,9 @@ from typing import Any
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-TOKEN = re.compile(r"(?<![\w./:-])[-+]?(?:\d{1,3}(?:,\d{3})+|\d+\.\d+|\d+)(?:e-?\d+)?%?(?![\w/:])")
+# a token never sits inside a dotted version string such as "peft 0.21.2" (no ".<digit>" may follow it), so version
+# numbers need no allow-list entry that would also excuse an equal-looking result
+TOKEN = re.compile(r"(?<![\w./:-])[-+]?(?:\d{1,3}(?:,\d{3})+|\d+\.\d+|\d+)(?:e-?\d+)?%?(?![\w/:]|\.\d)")
 
 
 def resolve(obj: Any, path: list) -> Any:

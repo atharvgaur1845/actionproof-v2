@@ -357,12 +357,14 @@ claims:
       sens_led_k: {value: 1, file: results/h4/h4_summary.json, key: [sensitivity_excluding_benign_invisible, ledger, invisible_failure, false_acceptance, k], shown: []}
 
   - id: A15
-    statement: "Registered: with forced evidence of a partial payment, R_V refunds or escalates at unseen ratios (1/4, 3/4) as often as at the trained 1/2 in seeds 0-3 (0.25-0.58; generalises, not pattern-specific); seed 4 never does; R_A 0.00 in all seeds; warm start 0.035."
+    statement: "Registered: with forced evidence of a partial payment, R_V refunds or escalates at unseen ratios (1/4, 3/4) as often as at the trained 1/2 in seeds 0-3 (0.25-0.58; generalises across ratios, not pattern-specific); seed 4 never does; R_A 0.00 in all seeds; warm start 0.035. By workflow (results/s2/partial_by_workflow.json, seeds 0-2): 0.99-1.00 when payment is the first step, 0.00 after a goods receipt, 0.05-0.55 after an order, so the repair generalises across ratios within the pay-first workflow, not across workflows."
     status: supported
     prereg: PREREGISTRATION_A15.md
     eval: [results/a15/a15_summary.json]
     stats: scripts/a15_stats.py
     numbers:
+      op_max: {value: 0.548, file: results/s2/partial_by_workflow.json, key: [a15, rv_s1, order_prepay, rate], shown: ["55%"]}
+      op_min: {value: 0.048, file: results/s2/partial_by_workflow.json, key: [a15, rv_s2, order_prepay, rate], shown: []}
       unseen_rv_s0: {value: 0.405, file: results/a15/a15_summary.json, key: [policies, rv_s0, unseen, est], shown: []}
       unseen_rv_s1: {value: 0.58, file: results/a15/a15_summary.json, key: [policies, rv_s1, unseen, est], shown: []}
       unseen_rv_s2: {value: 0.385, file: results/a15/a15_summary.json, key: [policies, rv_s2, unseen, est], shown: []}
@@ -406,7 +408,7 @@ claims:
       it_rv_ra: {value: -0.03, file: results/a17/a17_seedavg.json, key: [it_ops, rv_minus_ra, est], shown: []}
 
   - id: K1
-    statement: "Registered: R_A trained without the lost-acknowledgement and never-commit classes (targeted) or on a random pool of the same size (placebo), seeds 0-2: greedy phantom read-back 0/153 on proc_conf in all six, VSC 0.47 and false success 0.53 as the warm start; sampled read rate declines under placebo (about 0.13 to 0.06) but not under targeted (about 0.21 to 0.16). Composition explains the drift away from reading, not the absence of read-back."
+    statement: "Registered: R_A trained without the lost-acknowledgement and never-commit classes (targeted) or on a random pool of the same size (placebo), seeds 0-2: greedy phantom read-back 0/153 on proc_conf in all six, VSC 0.47 and false success 0.53 as the warm start; sampled read rate declines more under placebo (about 0.13 to 0.06) than under targeted (about 0.21 to 0.16). Composition explains part of the drift away from reading, not the absence of read-back."
     status: supported
     prereg: PREREGISTRATION_K1.md
     eval: [results/eval/k1/conf, results/k1/k1_reward_signal.json]
@@ -422,7 +424,7 @@ claims:
       rr_k1t_s0_last: {value: 0.1725, file: results/k1/k1_reward_signal.json, key: [runs, k1_k1t_ra_s0, read_rate_by_block, 150-199], shown: []}
 
   - id: S3
-    statement: "Registered (PREREGISTRATION_S3; corrected by ADDENDUM1 §1): GRPO with the A12 update rule and R_V reward, trained on a recovery-start curriculum (RSC; half the episodes start from scripted fault states, and the pool also adds fault types A12 never trained on), vs A12 R_V, 5 seeds, paired tasks. This compares training RECIPES (start states plus fault coverage), not start states alone. VSC on fresh recovery starts +0.21 [0.17, 0.25] (5/5 seeds, exact sign-flip 1/32; H1 supported) and on fresh full episodes +0.21 [0.17, 0.25] (H2 non-inferiority supported); duplicate stress +0.39 (explained by coverage, see S3-A1); false completion -0.21 and violations -0.12 on full episodes; honest failure unchanged. No gain on OpsSim transfer. Intervals: task bootstrap with one draw shared across seeds."
+    statement: "Registered (PREREGISTRATION_S3; corrected by ADDENDUM1 §1): GRPO with the A12 update rule and R_V reward, trained on a recovery-start curriculum (RSC; half the episodes start from scripted fault states, and the pool also adds fault types A12 never trained on), vs A12 R_V, 5 seeds, paired tasks. This compares training RECIPES (start states plus fault coverage), not start states alone. VSC on fresh recovery starts +0.21 [0.17, 0.25] (5/5 seeds, exact sign-flip 1/32; H1 supported) and on fresh full episodes +0.21 [0.17, 0.25] (H2 non-inferiority supported); duplicate stress +0.39 (explained by coverage, see S3-A1); false completion -0.21 and violations -0.12 on full episodes; honest failure unchanged. OpsSim transfer is negative in care_admin (see S3-R). Intervals: task bootstrap with one draw shared across seeds."
     status: supported
     prereg: PREREGISTRATION_S3.md
     eval: [results/s3/s3_summary.json]
@@ -434,11 +436,11 @@ claims:
       h2_avg: {value: 0.21, file: results/s3/s3_summary.json, key: [splits, s3_conf_full, across, vsc, seed_avg, est], shown: []}
       h2_lo: {value: 0.17, file: results/s3/s3_summary.json, key: [splits, s3_conf_full, across, vsc, seed_avg, ci95, 0], shown: []}
       stress_avg: {value: 0.39, file: results/s3/s3_summary.json, key: [splits, s3_conf_stress, across, vsc, seed_avg, est], shown: []}
-      viol_full: {value: -0.12, file: results/s3/s3_summary.json, key: [splits, s3_conf_full, across, violation, seed_avg, est], shown: []}
+      viol_full: {value: -0.12, file: results/s3/s3_summary.json, key: [splits, s3_conf_full, across, violation, seed_avg, est], shown: ["-0.12"]}
       fs_full: {value: -0.21, file: results/s3/s3_summary.json, key: [splits, s3_conf_full, across, false_success, seed_avg, est], shown: []}
 
   - id: S3-A1
-    statement: "Registered (PREREGISTRATION_S3_ADDENDUM1, before S3 outputs were read): the start-state comparison, RSC vs a class-matched full-episode R_V control (same faults, prompts and worlds), 3 seeds (exact sign-flip resolution 1/8; intervals are task bootstraps conditional on the trained models, not seed-level inference). VSC +0.09 [0.06, 0.11] on recovery starts (H3, 3/3 seeds positive, seed 0 only +0.02) and +0.22 [0.16, 0.29] on full-episode partial and duplicate tasks (H4, 3/3, seed 0 only +0.01). Trade-off: RSC has MORE violations than the control (+0.027 [0.003, 0.052] on that subset, +0.010 on all full episodes, +0.04 on duplicate stress) and less false completion (-0.22 on the subset). On duplicate stress the control is better (VSC -0.04 [-0.07, -0.01]); that gain is due to fault coverage, not the curriculum."
+    statement: "Registered (PREREGISTRATION_S3_ADDENDUM1, before S3 outputs were read): the start-state comparison, RSC vs a class-matched full-episode R_V control (same faults, prompts and worlds), 3 seeds (exact sign-flip resolution 1/8; intervals are task bootstraps conditional on the trained models, not seed-level inference). VSC +0.09 [0.06, 0.11] on recovery starts (H3, 3/3 seeds positive, seed 0 only +0.02) and +0.22 [0.15, 0.29] on full-episode partial and duplicate tasks (H4, 3/3, seed 0 only +0.01; bound corrected 2026-11-21 from a mis-rounded 0.16). Trade-off: RSC has MORE violations than the control (+0.027 [0.003, 0.052] on that subset, +0.010 on all full episodes, +0.04 on duplicate stress) and less false completion (-0.22 on the subset). On duplicate stress the control is better (VSC -0.04 [-0.07, -0.01]); that gain is due to fault coverage, not the curriculum."
     status: supported
     prereg: PREREGISTRATION_S3_ADDENDUM1.md
     eval: [results/s3/s3_addendum.json, results/s3/s3_addendum_full_pd.json]
@@ -447,12 +449,95 @@ claims:
       h3_avg: {value: 0.09, file: results/s3/s3_addendum.json, key: [splits, s3_conf_rec, across, vsc, seed_avg, est], shown: ["+0.09"]}
       h3_npos: {value: 3, file: results/s3/s3_addendum.json, key: [splits, s3_conf_rec, across, vsc, n_positive], shown: []}
       h4_avg: {value: 0.22, file: results/s3/s3_addendum_full_pd.json, key: [splits, s3_conf_full, across, vsc, seed_avg, est], shown: ["+0.22"]}
+      h4_lo: {value: 0.15, file: results/s3/s3_addendum_full_pd.json, key: [splits, s3_conf_full, across, vsc, seed_avg, ci95, 0], shown: ["0.15"]}
+      h4_hi: {value: 0.29, file: results/s3/s3_addendum_full_pd.json, key: [splits, s3_conf_full, across, vsc, seed_avg, ci95, 1], shown: ["0.29"]}
       h4_npos: {value: 3, file: results/s3/s3_addendum_full_pd.json, key: [splits, s3_conf_full, across, vsc, n_positive], shown: []}
       stress_vs_matched: {value: -0.04, file: results/s3/s3_addendum.json, key: [splits, s3_conf_stress, across, vsc, seed_avg, est], shown: ["-0.04"]}
       viol_subset: {value: 0.027, file: results/s3/s3_addendum_full_pd.json, key: [splits, s3_conf_full, across, violation, seed_avg, est], shown: ["+0.03"]}
       viol_full: {value: 0.01, file: results/s3/s3_addendum.json, key: [splits, s3_conf_full, across, violation, seed_avg, est], shown: []}
       viol_stress: {value: 0.04, file: results/s3/s3_addendum.json, key: [splits, s3_conf_stress, across, violation, seed_avg, est], shown: []}
       fs_subset: {value: -0.224, file: results/s3/s3_addendum_full_pd.json, key: [splits, s3_conf_full, across, false_success, seed_avg, est], shown: []}
+
+  - id: S3-R
+    statement: "Descriptive, from the post-results review and recomputed by scripts/s3_review_numbers.py and scripts/s4_stats.py on the S3 files (not registered). Seed level: every RSC run beats every A12 R_V run on s3_conf_rec and s3_conf_full (unpaired permutation p = 1/252 = 0.004); RSC vs control, 3 seeds per arm, p = 0.05 (the smallest possible). Per class on s3_conf_full, the RSC - A12 R_V gain is 0.116 duplicate delivery (0.12) and 0.093 partial payment, every other class 0. Partial repair (partial-class VSC >= 0.40) learned in 5/5 RSC runs, 1/3 control runs, 3/5 A12 R_V runs; control seed 0 and RSC seed 0 make identical tool calls on 283/300 tasks. Receive-then-pay partial payments repaired: RSC 5/60 full episodes, A12 R_V 0/60, control 0/36. Clean episodes: 6.40 calls and 2.70 reads per episode for every R_V-family arm, 3.70 and 0.00 for the warm start. Transfer: care_admin VSC 0.158 warm, 0.080 A12 R_V, 0.047 RSC (below A12 R_V in 5/5 seed pairs); collateral 0.18, 0.27, 0.33; it_ops VSC 0.14-0.20."
+    status: supported
+    prereg: null
+    eval: [results/s3/s3_seedlevel.json, results/s3/s3_review_numbers.json]
+    stats: scripts/s3_review_numbers.py
+    numbers:
+      seed_p_rv: {value: 0.004, file: results/s3/s3_seedlevel.json, key: [splits, s3_conf_rec, rsc_minus_rv, vsc, unpaired_perm_p_one_sided], shown: ["0.004"]}
+      seed_p_ctl: {value: 0.05, file: results/s3/s3_seedlevel.json, key: [splits, s3_conf_rec, rsc_minus_matched, vsc, unpaired_perm_p_one_sided], shown: ["0.05"]}
+      cls_dup: {value: 0.12, file: results/s3/s3_seedlevel.json, key: [splits, s3_conf_full, rsc_minus_rv_by_class, dup_delivery, contribution], shown: ["0.12"]}
+      cls_partial: {value: 0.09, file: results/s3/s3_seedlevel.json, key: [splits, s3_conf_full, rsc_minus_rv_by_class, partial, contribution], shown: ["0.09"]}
+      same_calls: {value: 283, file: results/s3/s3_review_numbers.json, key: [same_calls, rsc_s0_vs_control_s0], shown: []}
+      rp_rsc: {value: 5, file: results/s3/s3_review_numbers.json, key: [rp_cell, s3_conf_full, rsc, repaired], shown: []}
+      learned_ctl: {value: 1, file: results/s3/s3_review_numbers.json, key: [learned, control, runs_ge_040], shown: []}
+      clean_calls: {value: 6.40, file: results/s3/s3_review_numbers.json, key: [clean, rsc, calls], shown: ["6.40"]}
+      clean_reads: {value: 2.70, file: results/s3/s3_review_numbers.json, key: [clean, rsc, reads], shown: ["2.70"]}
+      clean_calls_warm: {value: 3.70, file: results/s3/s3_review_numbers.json, key: [clean, warm_start, calls], shown: ["3.70"]}
+      care_warm: {value: 0.158, file: results/s3/s3_review_numbers.json, key: [transfer, care_admin, warm_start, vsc_mean], shown: ["0.158"]}
+      care_rv: {value: 0.080, file: results/s3/s3_review_numbers.json, key: [transfer, care_admin, a12_rv, vsc_mean], shown: ["0.080"]}
+      care_rsc: {value: 0.047, file: results/s3/s3_review_numbers.json, key: [transfer, care_admin, rsc, vsc_mean], shown: ["0.047"]}
+      care_col_warm: {value: 0.18, file: results/s3/s3_review_numbers.json, key: [transfer, care_admin, warm_start, collateral_mean], shown: ["0.18"]}
+      care_col_rv: {value: 0.27, file: results/s3/s3_review_numbers.json, key: [transfer, care_admin, a12_rv, collateral_mean], shown: ["0.27"]}
+      care_col_rsc: {value: 0.33, file: results/s3/s3_review_numbers.json, key: [transfer, care_admin, rsc, collateral_mean], shown: ["0.33"]}
+      it_lo: {value: 0.14, file: results/s3/s3_review_numbers.json, key: [transfer, it_ops, control, vsc_mean], shown: ["0.14"]}
+      it_hi: {value: 0.20, file: results/s3/s3_review_numbers.json, key: [transfer, it_ops, warm_start, vsc_mean], shown: ["0.20"]}
+
+  - id: S4-EVAL
+    statement: "Registered (PREREGISTRATION_S4_EVAL as amended by ADDENDUM1 before any output; scripts/s4_stats.py via the D-S4E-2 wrapper). RSC - A12 R_V VSC, 5 runs each, seed-averaged [95% task CI], seeds positive, Holm over the unpaired seed permutation: G1 renamed API -0.016 [-0.044, 0.011], 3/5, not supported; G2 Hindi +0.127 [0.080, 0.176] and Hinglish +0.072 [0.040, 0.109], 5/5, Holm p 0.016, supported; G3 unseen four-step workflow +0.016 [0.004, 0.030], 2/5, not supported; G4 two-fault episodes +0.072 [0.032, 0.118], 5/5, Holm p 0.016, supported. Secondary: Hinglish costs RSC 0.091 VSC against English on the same tasks, A12 R_V 0.040; Hindi about 0.02 for both."
+    status: supported
+    prereg: [PREREGISTRATION_S4_EVAL.md, PREREGISTRATION_S4_EVAL_ADDENDUM1.md]
+    eval: [results/s4/s4_summary.json]
+    stats: scripts/s4_stats_d2.py
+    numbers:
+      g2_hi: {value: 0.13, file: results/s4/s4_summary.json, key: [splits, s4_lang_hi, rsc_minus_rv, vsc, seed_avg, est], shown: ["+0.13"]}
+      g2_hi_lo: {value: 0.08, file: results/s4/s4_summary.json, key: [splits, s4_lang_hi, rsc_minus_rv, vsc, seed_avg, ci95, 0], shown: ["0.08"]}
+      g2_hi_hi: {value: 0.18, file: results/s4/s4_summary.json, key: [splits, s4_lang_hi, rsc_minus_rv, vsc, seed_avg, ci95, 1], shown: ["0.18"]}
+      g2_hg: {value: 0.07, file: results/s4/s4_summary.json, key: [splits, s4_lang_hinglish, rsc_minus_rv, vsc, seed_avg, est], shown: ["+0.07"]}
+      g2_hg_lo: {value: 0.04, file: results/s4/s4_summary.json, key: [splits, s4_lang_hinglish, rsc_minus_rv, vsc, seed_avg, ci95, 0], shown: ["0.04"]}
+      g2_hg_hi: {value: 0.11, file: results/s4/s4_summary.json, key: [splits, s4_lang_hinglish, rsc_minus_rv, vsc, seed_avg, ci95, 1], shown: ["0.11"]}
+      g4: {value: 0.07, file: results/s4/s4_summary.json, key: [splits, s4_combo, rsc_minus_rv, vsc, seed_avg, est], shown: ["+0.07"]}
+      g4_lo: {value: 0.03, file: results/s4/s4_summary.json, key: [splits, s4_combo, rsc_minus_rv, vsc, seed_avg, ci95, 0], shown: ["0.03"]}
+      g4_hi: {value: 0.12, file: results/s4/s4_summary.json, key: [splits, s4_combo, rsc_minus_rv, vsc, seed_avg, ci95, 1], shown: ["0.12"]}
+      holm: {value: 0.016, file: results/s4/s4_summary.json, key: [family, G2, p_holm], shown: ["0.016"]}
+      g1: {value: -0.02, file: results/s4/s4_summary.json, key: [splits, s4_api, rsc_minus_rv, vsc, seed_avg, est], shown: ["-0.02"]}
+      g1_lo: {value: -0.04, file: results/s4/s4_summary.json, key: [splits, s4_api, rsc_minus_rv, vsc, seed_avg, ci95, 0], shown: ["-0.04"]}
+      g1_hi: {value: 0.01, file: results/s4/s4_summary.json, key: [splits, s4_api, rsc_minus_rv, vsc, seed_avg, ci95, 1], shown: ["0.01"]}
+      g3_npos: {value: 2, file: results/s4/s4_summary.json, key: [splits, s4_wf4, rsc_minus_rv, vsc, n_positive], shown: []}
+      cost_hg_rsc: {value: 0.09, file: results/s4/s4_diagnostics.json, key: [language_cost_per_arm, s4_lang_hinglish, rsc], shown: ["0.09"]}
+      cost_hg_rv: {value: 0.04, file: results/s4/s4_diagnostics.json, key: [language_cost_per_arm, s4_lang_hinglish, a12_rv], shown: ["0.04"]}
+
+  - id: S4-DIAG
+    statement: "Descriptive (scripts/s4_diagnose.py; not registered). Renamed API: share of episodes with at least one call to a training-time tool name (rejected) is 0.62 for the warm start, 0.31 A12 R_V, 0.35 RSC, 0.13 control. Unseen four-step workflow: goods receipt absent at the end in 0.84 (warm start), 0.96 (A12 R_V), 0.95 (RSC), 0.88 (control) of episodes; mean VSC 0.12, 0.03, 0.05, 0.11; scripted oracle 0.91 (PREREGISTRATION_S4_EVAL)."
+    status: supported
+    prereg: null
+    eval: [results/s4/s4_diagnostics.json]
+    stats: scripts/s4_diagnose.py
+    numbers:
+      api_warm: {value: 0.62, file: results/s4/s4_diagnostics.json, key: [per_arm, warm_start, api_episodes_with_canonical_call], shown: []}
+      api_ctl: {value: 0.13, file: results/s4/s4_diagnostics.json, key: [per_arm, control, api_episodes_with_canonical_call], shown: []}
+      api_rsc: {value: 0.35, file: results/s4/s4_diagnostics.json, key: [per_arm, rsc, api_episodes_with_canonical_call], shown: []}
+      wf_warm: {value: 0.84, file: results/s4/s4_diagnostics.json, key: [per_arm, warm_start, wf4_receive_absent], shown: []}
+      wf_rv: {value: 0.96, file: results/s4/s4_diagnostics.json, key: [per_arm, a12_rv, wf4_receive_absent], shown: []}
+      wf_vsc_rv: {value: 0.03, file: results/s4/s4_diagnostics.json, key: [vsc_per_arm, s4_wf4, a12_rv], shown: ["0.03"]}
+      wf_vsc_ctl: {value: 0.11, file: results/s4/s4_diagnostics.json, key: [vsc_per_arm, s4_wf4, control], shown: ["0.11"]}
+      wf_vsc_warm: {value: 0.12, file: results/s4/s4_diagnostics.json, key: [vsc_per_arm, s4_wf4, warm_start], shown: ["0.12"]}
+      wf_oracle: {value: 0.91, file: PREREGISTRATION_S4_EVAL.md, key: "`s4_wf4` \\| (0\\.91)", shown: ["0.91"]}
+
+  - id: FCA
+    statement: "Dropped by its kill criterion fixed before training (docs/research/algorithm/FCA_GRPO.md §7): s3_rec_dev VSC FCA - recovery-start GRPO = -0.097 averaged over development seeds 0-1 (0.640 vs 0.807; 0.780 vs 0.807), where at least +0.03 was required; proc_dev -0.017 and KL ratio 1.08 within bounds. Forced branches differed from the on-policy mean in 66-72% of fork groups. Never evaluated on test data."
+    status: refuted
+    prereg: docs/research/algorithm/FCA_GRPO.md
+    eval: [results/s4/fca_dev_summary.json]
+    stats: scripts/s4_fca_dev.py
+    numbers:
+      d_rec: {value: -0.10, file: results/s4/fca_dev_summary.json, key: [criteria, s3_rec_dev_diff], shown: ["-0.10"]}
+      d_proc: {value: -0.017, file: results/s4/fca_dev_summary.json, key: [criteria, proc_dev_diff], shown: []}
+      fca_s0: {value: 0.640, file: results/s4/fca_dev_summary.json, key: [per_seed, "0", s3_rec_dev, fca], shown: ["0.640"]}
+      fca_s1: {value: 0.780, file: results/s4/fca_dev_summary.json, key: [per_seed, "1", s3_rec_dev, fca], shown: ["0.780"]}
+      rsc_s0: {value: 0.807, file: results/s4/fca_dev_summary.json, key: [per_seed, "0", s3_rec_dev, rsc], shown: ["0.807"]}
+      kl_ratio: {value: 1.08, file: results/s4/fca_dev_summary.json, key: [criteria, kl_ratio_step100_max], shown: ["1.08"]}
 
   - id: PAPER-RANGES
     statement: "Values quoted in the paper as ranges or single figures, each read from its file."
@@ -467,4 +552,4 @@ claims:
 
 # Non-result numbers that appear in scanned documents: software versions, and registered design constants
 # (H3 agreement threshold 0.8, stop-rule threshold 0.80, demonstrator share 0.30, KL coefficient 0.02).
-allow: ["3.12", "2.11", "5.22", "1.7", "0.23", "0.21", "0.8", "0.80", "0.30", "0.02", "0.5", "0.3"]  # 0.5, 0.3: registered H4 thresholds (PREREGISTRATION_A11 §9)
+allow: ["3.12", "2.11", "5.22", "1.7", "0.23", "0.8", "0.80", "0.30", "0.02", "0.5", "0.3"]  # 0.5, 0.3: registered H4 thresholds (PREREGISTRATION_A11 §9)

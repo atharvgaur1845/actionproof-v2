@@ -160,7 +160,7 @@ Ties go to the simpler arm. The selected configuration is then frozen, registere
 | H1 recovery-start VSC | RS-GRPO − A12 R_V | +0.21 [0.17, 0.25] | 5/5 | supported |
 | H2 full-episode VSC (non-inferiority, −0.05) | RS-GRPO − A12 R_V | +0.21 [0.17, 0.25] | 5/5 | supported (and superior) |
 | H3 recovery-start VSC | RS-GRPO − class-matched control | +0.09 [0.06, 0.11] | 3/3 | supported |
-| H4 full-episode partial + duplicate VSC | RS-GRPO − class-matched control | +0.22 [0.16, 0.29] | 3/3 | supported |
+| H4 full-episode partial + duplicate VSC | RS-GRPO − class-matched control | +0.22 [0.15, 0.29] (corrected from 0.16, see §10) | 3/3 | supported |
 
 Secondary results:
 - **Duplicate-delivery stress:**
@@ -196,3 +196,17 @@ Secondary results:
 - **Stress.** The gain on duplicate stress over A12 R_V is explained by fault coverage. The class-matched control is better than RSC there (VSC −0.04 [−0.07, −0.01]). This gain is not attributed to the curriculum.
 - **Transfer.** No positive transfer to the OpsSim domains was established.
 - **Workflow labels.** Checked against task metadata (`task.workflow`): `order_prepay` = order, then pay; `receive_pay` = receive, then pay; `pay_post` = pay first. On full-episode partial and duplicate tasks, seeds 0–2 pooled (`results/s3/s3_by_workflow.json`), RSC scores 109/111 = 0.98, 61/102 = 0.60 and 82/117 = 0.70. receive_pay remains the weakest workflow.
+
+## 10. Corrections after the post-results review (2026-11-22 00:08; `docs/stage3/ACADEMIC_REVIEW_POST.md`)
+
+Earlier sections are kept as written; these notes correct them.
+- **§8, H4 interval.** The table printed [0.16, 0.29]. The file gives [0.1545, 0.2879], which rounds to [0.15, 0.29]. The table now shows the corrected value.
+- **§8, "This removes most of the workflow dependence".** This is wrong in absolute terms. The best-to-worst workflow spread is 0.38 for both A12 R_V and RSC. Partial payments after a goods receipt stay unrepaired by every arm: RSC 5 of 60 full episodes, every other arm 0 (`results/s3/s3_review_numbers.json`). The RSC pool held 6 such tasks out of 400. `PREREGISTRATION_S3_ADDENDUM2.md` Part B tests whether that frequency explains it.
+- **§4.F, "covers failure 4 and repairs the A17 fork failure mode in-domain".** The warm start already scores 1.00 on complete and done starts, so no in-domain failure existed. The effect of recovery starts on stopping was not tested in ProcureSim.
+- **§8, start-state result (H3, H4).** It holds under the registered 3-of-3 rule. Two caveats:
+  - The effect is entirely on partial payments. On duplicates the control is equal or better.
+  - Seed-level p is 0.05 (three runs per arm), the smallest possible.
+
+  Control seeds 3–4 are registered in addendum 2.
+- **§8, "violations".** Every S3 violation is a duplicate payment left unrefunded at the end of the episode. ProcureSim allows refunding it, so "irreversible" was wrong.
+- **§8, transfer.** "No gain" understated the result. In care_admin, VSC falls from 0.158 (warm start) to 0.080 (A12 R_V) to 0.047 (RSC), and RSC is below A12 R_V in 5 of 5 seed pairs.

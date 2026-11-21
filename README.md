@@ -11,19 +11,22 @@ ActionProof is an environment, a set of rewards and a controlled training study 
 Every number resolves through `claims/claims.yaml` (`python scripts/s2_numcheck.py`). Contradictions found and fixed: `docs/CONSISTENCY_AUDIT.md`.
 
 Stage 2 results (finalist round):
-- **A12.** A state reward (R_V) produces read-back after phantom writes, and an acknowledgement reward (R_A) does not: 1.00 vs 0.00 in 5 of 5 seeds. R_A's greedy behaviour equals the untrained warm start.
-- **A14, A15.** Given forced evidence, every model handles present and absent payments. Partial-payment recovery appears only under R_V, and it is workflow-specific (pay-first workflows only).
-- **A16.** All models encode partial vs complete. Training changes the action margin, not the representation.
-- **A17.** Read-back transfer to healthcare administration; none to IT operations.
-- **K1.** Training-pool composition does not explain R_A's zero read-back.
+- **A12.** Training with a state reward (R_V) made read-back after phantom writes the default (1.00), while an acknowledgement reward (R_A) of identical form left the warm start's behaviour unchanged (0.00), in 5 of 5 seeds from one warm start. R_A's greedy behaviour equals the untrained warm start's.
+- **A14, A15.** Given forced evidence, every model handles present and absent payments. Partial-payment repair appears almost only under R_V. It generalises across ratios, but only within the pay-first workflow: about 0% after a goods receipt, and 5–55% after an order (seeds 0–2).
+- **A16.** All models encode partial vs complete. Training changes the action margin. The ablation that lowers it is not specific to R_V.
+- **A17.** In healthcare administration, R_V reads back more than R_A, mainly because R_A reads less than the warm start. R_V vs warm start is not established, and IT operations shows no difference.
+- **K1.** Training-pool composition explains part of R_A's drift away from reading, not its zero read-back.
 
-Stage 3 (`PREREGISTRATION_S3.md`):
-- **Corrected by `PREREGISTRATION_S3_ADDENDUM1.md`.** The S3 registration said only the start states changed; the training pool also added fault types.
-- **Against A12 R_V.** A recovery-start curriculum for unchanged GRPO raises VSC by +0.21 on fresh recovery and full-episode splits (5 of 5 seeds). This compares training recipes.
-- **Against a class-matched control** (the start-state comparison, 3 seeds): +0.09 on recovery starts and +0.22 on partial and duplicate tasks, with **slightly more violations**.
-- **Not established.** No gain on duplicate stress beyond fault coverage, and no transfer to the OpsSim domains.
+Stage 3 (`PREREGISTRATION_S3.md`; corrected by `PREREGISTRATION_S3_ADDENDUM1.md`, because the pool also added fault types):
+- **Against A12 R_V (a recipe comparison).** The recovery-start training recipe (RSC) raises VSC by +0.21 on fresh recovery and full-episode splits. Every one of its 5 runs beats every A12 R_V run. Of the full-episode gain, 0.12 is duplicate delivery, a fault type A12 never trained on.
+- **Against a class-matched control (the start-state comparison, 3 seeds).** Recovery starts helped only partial-payment repair: it was learned in 5 of 5 RSC runs and 1 of 3 control runs. On duplicates the control is equal or better. This is suggestive, not established. Two more control seeds are registered and running (`PREREGISTRATION_S3_ADDENDUM2.md`).
+- **Still unsolved.** Partial payments after a goods receipt are repaired by no arm (RSC 5 of 60 episodes).
+- **Transfer is negative.** In healthcare administration, VSC falls from 0.158 (warm start) to 0.080 (A12 R_V) to 0.047 (RSC).
 
-Stage 4 (in progress): `docs/research/`.
+Stage 4 (`docs/research/`):
+- **Shifts** (`PREREGISTRATION_S4_EVAL.md` and its addendum). The RSC gain survives Hindi (+0.13), Hinglish (+0.07) and two-fault episodes (+0.07), each in 5 of 5 seeds. It vanishes under renamed tools and in an unseen four-step workflow, where every model runs the trained three-step sequence and skips the new step.
+- **No new algorithm.** The novelty audit found every candidate published. FCA, a forked counterfactual credit estimator, failed its pre-set development criterion and was dropped (`docs/research/algorithm/FCA_RESULT.md`).
+- **Running:** ID1 (does R_V create read-back or select it?) and S3 addendum 2.
 
 **Product (`product/`, branch `stage4`).** Run it locally with `python -m product.app` (port 7860). It has not been deployed.
 - **Live, deterministic and CPU-only** (the real ProcureSim simulator and verifier; no model calls):
