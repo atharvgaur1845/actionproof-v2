@@ -507,6 +507,22 @@ claims:
       learners_ctl: {value: 2, file: results/s3/s3_addendum4.json, key: [learners, CONTROL], shown: []}
       learners_rsc: {value: 5, file: results/s3/s3_addendum4.json, key: [learners, RSC], shown: []}
 
+  - id: SR1
+    statement: "Registered (PREREGISTRATION_SR1, before training): recovery-start training with per-episode randomised tool names (SR, 3 runs) vs RSC seeds 0-2, paired tasks. SR-H1 (renamed API s4_api VSC higher): not supported, +0.00 [-0.04, 0.04], per seed +0.03, -0.01, -0.02. SR-H2 (non-inferiority on s3_conf_full, lower bound above -0.05): not supported, -0.248 [-0.296, -0.201]. Descriptive: SR is lower on every language split and on two-fault episodes; on the unseen four-step workflow it is +0.11, carried by one run (0.29; others 0.02, 0.07), with more violations (+0.07)."
+    status: not_supported
+    prereg: PREREGISTRATION_SR1.md
+    eval: [results/s4/sr1_summary.json]
+    stats: scripts/sr1_stats.py
+    numbers:
+      h1: {value: 0.00, file: results/s4/sr1_summary.json, key: [SR-H1, seed_avg, est], shown: ["+0.00"]}
+      h1_lo: {value: -0.04, file: results/s4/sr1_summary.json, key: [SR-H1, seed_avg, ci95, 0], shown: ["-0.04", "−0.04"]}
+      h1_hi: {value: 0.04, file: results/s4/sr1_summary.json, key: [SR-H1, seed_avg, ci95, 1], shown: ["0.04"]}
+      h2: {value: -0.248, file: results/s4/sr1_summary.json, key: [SR-H2, seed_avg, est], shown: ["-0.248", "−0.248", "−0.25", "0.248"]}
+      h2_lo: {value: -0.296, file: results/s4/sr1_summary.json, key: [SR-H2, seed_avg, ci95, 0], shown: ["-0.296", "−0.296", "0.296"]}
+      h2_hi: {value: -0.201, file: results/s4/sr1_summary.json, key: [SR-H2, seed_avg, ci95, 1], shown: ["-0.201", "−0.201", "0.201"]}
+      wf4: {value: 0.11, file: results/s4/sr1_summary.json, key: [splits, s4_wf4, vsc, seed_avg, est], shown: ["+0.11"]}
+      wf4_s0: {value: 0.29, file: results/s4/sr1_summary.json, key: [splits, s4_wf4, vsc, cand_per_seed, 0], shown: ["0.29"]}
+
   - id: ID1
     statement: "Registered (PREREGISTRATION_ID1; deviation D-ID1-1): a warm start trained with no verifying demonstrations reads back after 0 of 164 phantom payments when sampled (T=1); R_V training from it (2 seeds, A12 settings) never samples a read in 200 steps (training read rate 0.00 in every block) and reaches phantom read-back 0/153 on proc_conf in both seeds, with VSC 0.47 as the warm start. Registered reading: selection. R_V selects read-back from the warm start's repertoire; it does not create it from exploration here."
     status: supported

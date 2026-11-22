@@ -29,7 +29,7 @@
 1. **"The A12 result is close to true by construction."** Under R_A, reading never earns reward, and the arm is saturated. *Answer:* yes. We present it as what the reward's information *selects*, not as a mechanism. ID1, which is running, tests whether read-back appears without demonstrations.
 2. **"The start-state effect is three seeds and may be template noise."** *Answer:* yes. Two more control seeds were registered before training (addendum 2): the effect on recovery starts held across five runs per arm, the partial-payment effect did not reach the rule. Addendum 4 (the handed-evidence explanation) is inconclusive (Holm 0.206 and 0.262).
 3. **"No new method."** *Answer:* correct, and stated. FCA failed its pre-set test and is reported.
-4. **"Surface binding is already known."** *Answer:* yes. S4 is presented as a replication in a new setting (NOVELTY_MATRIX: "Can Agents Generalize to the Open World?"), and SR1 tests the known fix here.
+4. **"Surface binding is already known."** *Answer:* yes. S4 is presented as a replication in a new setting (NOVELTY_MATRIX: "Can Agents Generalize to the Open World?"), and SR1 tested the known fix here: randomised tool names did not help on the renamed API (+0.00) and cost −0.25 on the canonical tools.
 5. **"Toolkit use is thin in Stage 2."** *Answer:* AgentTune trains every model. AuditKIT and CuratorKIT were used in Stage 1. CircuitKIT did not install. The deck says exactly this.
 
 ## Before submission (owner actions)
@@ -46,7 +46,7 @@
 |---|---|
 | Website procurement chapter, deck, claims ledger | Completed and verified locally (tests, number check, browser at 1440 px and 375 px) |
 | S3 addendum 2, addendum 4, ID1 | Completed and verified (addendum 4 inconclusive) |
-| SR1 | Evaluation running |
+| SR1 | Completed and verified (not supported) |
 | Addendum 3 | Withdrawn before training |
 | FCA | Failed |
 | Mechanistic causal test, own-history recovery starts, second model family | Proposed future work |

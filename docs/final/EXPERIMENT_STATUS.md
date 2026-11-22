@@ -27,7 +27,7 @@ As of 2026-11-22 22:47 IST.
 | S3 addendum 3: state-only starts | `PREREGISTRATION_S3_ADDENDUM3.md` | — | **Withdrawn before training** (degenerate design) | `docs/research/ADDENDUM3_WITHDRAWN.md` | — |
 | S3 addendum 4: acknowledgement-only starts (is it the handed evidence?) | `PREREGISTRATION_S3_ADDENDUM4.md` | 5 | **Completed and verified.** Reading "inconclusive": RSC − ACK +0.203 [0.169, 0.238], Holm 0.206; ACK − control +0.181 [0.137, 0.225], Holm 0.262. Runs that learn partial repair: control 2/5, ACK 4/5, RSC 5/5 | `results/s3/s3_addendum4.json` | — |
 | ID1: warm start that never reads, then R_V | `PREREGISTRATION_ID1.md` (deviation D-ID1-1) | 2 | **Completed and verified.** Reading "selection": 0/153 read-back in both seeds, no read sampled in training | `results/id1/id1_summary.json` | — |
-| SR1: tool-name randomisation (a known fix, tested here) | `PREREGISTRATION_SR1.md` | 3 | **Running.** Training done (seeds 0–2); evaluation running on the A100 | `results/s4/sr1_summary.json` | Sun night |
+| SR1: tool-name randomisation (a known fix, tested here) | `PREREGISTRATION_SR1.md` | 3 | **Completed and verified. Not supported.** Renamed API +0.00 [−0.04, 0.04]; on the canonical tools −0.248 [−0.296, −0.201] (non-inferiority fails) | `results/s4/sr1_summary.json` | — |
 | Mechanistic causal test (CircuitKIT) | — | — | **Not run.** CircuitKIT failed to install in Stage 2 (D-A16-1); A16's ablation is not specific | — | Future work |
 
 **Not attempted, by decision:**
