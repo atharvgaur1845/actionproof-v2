@@ -7,7 +7,7 @@ As of 2026-11-22 01:31 IST.
 - A100 worker 460629.
 - A 200-step GRPO run takes about 1 h 55 min on an H200 (`logs/*_s*.full.log`) and about 2 h 30 min on the A100.
 
-**Submission:** Nov 25 17:29 IST (project memory; no official page was found online to confirm it). Paper freeze: Tue Nov 24 12:00 IST.
+**Submission:** Nov 24, midnight IST (confirmed by the author on 2026-11-22). Paper freeze: Tue Nov 24 12:00 IST.
 
 **Labels:**
 - **Completed and verified:** the result file exists and is in the claims ledger.

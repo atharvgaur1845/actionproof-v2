@@ -21,7 +21,7 @@
 | 6 | Are the statistics justified? | Mostly. Seed-level tests are reported, and task intervals are labelled as task-level. **Weak point:** the start-state effect has 3 control seeds, and the red-team's template-cluster interval includes 0 (+0.081 [−0.023, 0.209]) | FINAL_CLAIMS C9; red-team review §2 |
 | 7 | Can you see what the model did differently? | Yes: recorded traces of five models on the same task (site 02–03, slide 4) | site, slides |
 | 8 | Can you reproduce a result? | Yes for the numbers (`s2_numcheck.py`, result files, registrations). Training needs the cluster; the Stage 2–3 adapters are **not publicly released yet** | site 05 |
-| 9 | Does the public product show the actual research? | **Not yet.** The deployed Space is still the Stage 1 build. The new build is local and needs a deploy (owner's approval) | — |
+| 9 | Does the public product show the actual research? | Yes: the deployed Space shows the procurement study (real simulator, recorded replays, registered results, inside-the-model) | public site |
 | 10 | The remaining limitation | Yes: surface binding (renamed tools, a new workflow step), negative transfer, three control seeds, and selection rather than invention | slide 5, site 04 |
 
 ## What a hostile judge will still say (and our answer)
@@ -34,9 +34,9 @@
 
 ## Before submission (owner actions)
 
-- **Deploy the new site** to the Hugging Face Space. It is public, so it needs your approval.
-- **Release the A12 and Stage 3 adapters and the evaluation data** publicly, or say "on request". Also needs approval.
-- **Confirm the deadline** on the official Lexsi page (we use Nov 25 17:29 IST).
+- **Site deployed** (approved 2026-11-22): https://atharvgaur18-actionproof.static.hf.space/index.html
+- **Adapters, splits and traces publishing** (approved 2026-11-22): `atharvgaur18/actionproof-proc-*` and the collection "ActionProof: procurement study".
+- Deadline: Nov 24, midnight IST (confirmed by the author).
 - **Share the deck** from its Share menu if anyone else should see it.
 - **Record the video** with `docs/final/DEMO_RUN_OF_SHOW.md`.
 
