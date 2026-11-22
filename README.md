@@ -27,7 +27,8 @@ Stage 3 (`PREREGISTRATION_S3.md`; corrected by `PREREGISTRATION_S3_ADDENDUM1.md`
 Stage 4 (`docs/research/`):
 - **Shifts** (`PREREGISTRATION_S4_EVAL.md` and its addendum). The RSC gain survives Hindi (+0.13), Hinglish (+0.07) and two-fault episodes (+0.07), each in 5 of 5 seeds. It vanishes under renamed tools and in an unseen four-step workflow, where every model runs the trained three-step sequence and skips the new step.
 - **No new algorithm.** The novelty audit found every candidate published. FCA, a forked counterfactual credit estimator, failed its pre-set development criterion and was dropped (`docs/research/algorithm/FCA_RESULT.md`).
-- **Running:** S3 addendum 4 (is the effect the evidence handed over in read starts?) and SR1 (tool-name randomisation).
+- **Addendum 4 (registered): inconclusive.** Recovery starts that end at the acknowledgement, without the handed read, learn partial repair in 4 of 5 runs (control 2 of 5, recovery starts 5 of 5). Neither contrast meets the registered rule (Holm 0.206 and 0.262), so whether the handed evidence matters is not settled.
+- **Running:** SR1 (tool-name randomisation), evaluation in progress.
 
 **Product (`product/`, branch `stage4`).** Run it locally with `python -m product.app` (port 7860). It has not been deployed.
 - **Live, deterministic and CPU-only** (the real ProcureSim simulator and verifier; no model calls):
@@ -45,6 +46,7 @@ Stage 4 (`docs/research/`):
 |---|---|
 | Interactive write-up (website) | https://atharvgaur18-actionproof.static.hf.space/index.html (Space: https://huggingface.co/spaces/atharvgaur18/actionproof) |
 | Code (this repository) | https://github.com/atharvgaur1845/actionproof-v2 |
+| HF procurement-study collection (30 LoRA adapters, ProcureSim splits, evaluation traces) | https://huggingface.co/collections/atharvgaur18/actionproof-procurement-study-6b0321cd11bad297aead6e81 |
 | HF models collection (29 LoRA adapters) | https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04 |
 | HF datasets collection (benchmark, tool-call logs and traces) | https://huggingface.co/collections/atharvgaur18/actionproof-benchmark-traces-demo-6af7fb25037f3d7eaf294e22 |
 | Write-up: metrics, methods, results, limitations | `docs/ARTICLE_DRAFT.md` (abstract `docs/ABSTRACT.md`) |

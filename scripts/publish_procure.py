@@ -214,8 +214,8 @@ def upload(only: list[str], dry: bool) -> None:
     title = "ActionProof: procurement study"
     hit = [c for c in api.list_collections(owner=USER) if c.title == title]
     c = hit[0] if hit else api.create_collection(
-        title=title, description="Tiny Aya Global adapters, ProcureSim splits and evaluation traces of the registered "
-        "procurement study (A12, S3, ID1, addenda), and the ActionProof Space.", private=False)
+        title=title, description="Tiny Aya Global adapters, ProcureSim splits and evaluation traces from the registered "
+        "ActionProof procurement study.", private=False)  # Hub limit: 150 characters
     for rid in list(models.values()):
         if api.repo_exists(rid):
             api.add_collection_item(c.slug, item_id=rid, item_type="model", exists_ok=True)
