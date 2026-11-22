@@ -159,6 +159,25 @@ def story(tid: str) -> dict:
     return out
 
 
+def mech() -> dict:
+    """A16 (registered): probe decodability, the evidence-dependent action margin over training, and the causal tests,
+    from results/a16/a16_summary.json. No circuit is claimed."""
+    d = j("results/a16/a16_summary.json")
+    T, C = d["trajectory"], d["causal"]
+    traj = {}
+    for arm in ("rv", "ra"):
+        for s in (0, 1, 2):
+            traj[f"{arm}_s{s}"] = [T["warm"]["M_partial_minus_complete"]] + [
+                T[f"{arm}_s{s}_{st}"]["M_partial_minus_complete"] for st in (50, 100, 150, 200)]
+    probes = [v["probe_refit_at_layer"] for v in T.values()] + [v["probe_frozen_at_layer"] for v in T.values()]
+    causal = {k: {"ablate_partial": v["ablation"]["dM_partial"], "ablate_empty": v["ablation"]["dM_Q0"],
+                  "ablate_complete": v["ablation"]["dM_Q4"], "random_max": v["ablation"]["max_random_abs_dM_partial"],
+                  "ablation_rule": v["ablation_rule_met"], "patch_final": v["median_final_c2p"],
+                  "patch_wrong_task": v["wrong_task_median"], "patch_rule": v["patch_rule_met"]} for k, v in C.items()}
+    return {"layer": d["chosen_layer"], "traj": traj, "probe_min": min(probes), "causal": causal,
+            "src": "results/a16/a16_summary.json"}
+
+
 def build() -> dict:
     gate = j("results/eval/a12/init__neutral__proc_train_T1x4.summary.json")["phantom_readback"]
     res = results()
@@ -167,7 +186,7 @@ def build() -> dict:
     res["id1"] = {"gate": id1["warm_v0"]["gate_T1x4"]["phantom_readback"], "reading": id1["reading"],
                   "conf": [id1[f"id1_rv_s{s}"]["proc_conf"]["phantom_readback"] for s in (0, 1)]}
     res["a2b"] = j("results/s3/s3_addendum2.json")["part_b"]["W"]["s3_rb_mix"]["W"]
-    return {"sim": sim(), "stories": {k: story(t) for t, k in STORIES.items()}, "results": res}
+    return {"sim": sim(), "stories": {k: story(t) for t, k in STORIES.items()}, "results": res, "mech": mech()}
 
 
 if __name__ == "__main__":

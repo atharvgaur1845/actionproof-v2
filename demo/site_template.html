@@ -302,6 +302,13 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  .mtabs button{padding-left:16px}.huge{padding:32px 16px 16px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}.rv,.tr{opacity:1;transform:none}
  .h1 .l>span{transform:none}}
+.ladder{display:grid;grid-template-columns:repeat(5,1fr);margin:0 56px 32px;border-top:1px solid var(--ink)}
+.ladder>div{padding:16px 16px 18px 0;font-size:14px;line-height:21px}.ladder>div+div{padding-left:16px;border-left:1px solid var(--hair)}
+.ladder b{display:block;font:500 11px/16px var(--mono);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.ladder .y b{color:var(--ink)}.ladder .p b{color:var(--ver-t)}.ladder .n b{color:var(--gr)}
+.ladder .lv{font:28px/1 var(--disp);display:block;margin-bottom:8px}.ladder .n .lv{color:var(--gr)}
+.mchart{width:100%;height:auto;display:block;margin-top:10px}.mchart text{font:11px var(--mono);fill:var(--gr)}.mchart .ax{stroke:var(--hair)}
+@media (max-width:860px){.ladder{grid-template-columns:1fr;margin-left:16px;margin-right:16px}.ladder>div+div{padding-left:0;border-left:0;border-top:1px solid var(--hair)}}
 /* ---------- study 2: procurement chapter ---------- */
 .pctl{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:end;padding:0 56px 24px}
 .pctl label{display:grid;gap:4px;font:500 11px/16px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--gr)}
@@ -386,14 +393,14 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  <div class="brand">ACTIONPROOF<span>a research study, 2026</span></div>
  <ol id="railnav">
   <li><a href="#top"><i>00</i>The incident</a></li><li><a href="#truths"><i>01</i>Three truths</a></li><li><a href="#reward"><i>02</i>What the reward sees</a></li>
-  <li><a href="#recovery"><i>03</i>Reading is not recovery</a></li><li><a href="#training"><i>04</i>Training recovery</a></li><li><a href="#repro"><i>05</i>Reproduction</a></li>
+  <li><a href="#recovery"><i>03</i>Reading is not recovery</a></li><li><a href="#training"><i>04</i>Training recovery</a></li><li><a href="#inside"><i>05</i>Inside the model</a></li><li><a href="#repro"><i>06</i>Reproduction</a></li>
   <li style="margin-top:14px"><a href="#study1"><i>+</i>Study 1: refunds</a></li><li><a href="#why"><i>·</i>Main finding</a></li><li><a href="#key"><i>·</i>What we found</a></li>
   <li><a href="#problem"><i>1</i>The problem</a></li><li><a href="#bench"><i>2</i>The test world</a></li><li><a href="#experiment"><i>3</i>The experiment</a></li>
   <li><a href="#lab"><i>4</i>Same situation test</a></li><li><a href="#templates"><i>5</i>Copied workflows</a></li><li><a href="#findings"><i>6</i>Results and checks</a></li>
   <li><a href="#autopsy"><i>7</i>Mistakes we fixed</a></li><li><a href="#methods"><i>8</i>How we measure</a></li><li><a href="#artifacts"><i>9</i>Code and data</a></li></ol>
  <div class="foot">Lexsi hackathon, track 3<a href="https://github.com/atharvgaur1845/actionproof-v2">GitHub ↗</a><a href="https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04">Models ↗</a></div>
 </nav>
-<nav class="mnav" aria-label="Sections"><a class="b" href="#top">ACTIONPROOF</a><a href="#truths">01 Truths</a><a href="#reward">02 Reward</a><a href="#recovery">03 Recovery</a><a href="#training">04 Training</a><a href="#repro">05 Reproduce</a><a href="#study1">Study 1</a><a href="#why">Main finding</a><a href="#key">What we found</a><a href="#problem">1 Problem</a><a href="#bench">2 Test world</a><a href="#experiment">3 Experiment</a>
+<nav class="mnav" aria-label="Sections"><a class="b" href="#top">ACTIONPROOF</a><a href="#truths">01 Truths</a><a href="#reward">02 Reward</a><a href="#recovery">03 Recovery</a><a href="#training">04 Training</a><a href="#inside">05 Inside</a><a href="#repro">06 Reproduce</a><a href="#study1">Study 1</a><a href="#why">Main finding</a><a href="#key">What we found</a><a href="#problem">1 Problem</a><a href="#bench">2 Test world</a><a href="#experiment">3 Experiment</a>
  <a href="#lab">4 Same situation</a><a href="#templates">5 Workflows</a><a href="#findings">6 Results</a><a href="#autopsy">7 Mistakes</a><a href="#methods">8 Measures</a><a href="#artifacts">9 Code and data</a></nav>
 <main>
 
@@ -495,9 +502,25 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  </div>
 </section>
 
-<!-- ============ 05 RESEARCH AND REPRODUCTION ============ -->
+<!-- ============ 05 INSIDE THE MODEL ============ -->
+<section id="inside">
+ <div class="shead rv"><div class="snum">05</div><div><div class="cap">Inside the model · registered experiment A16</div>
+  <h2 class="stitle">The evidence is there. <span class="ser">Training changes what it does.</span></h2>
+  <p class="lede">After the forced read of a partial or a complete payment, we looked inside Tiny Aya at the moment it picks its next action. We report each rung of evidence separately and stop where the evidence stops. <b>We do not claim a circuit.</b></p></div></div>
+ <div class="ladder rv" id="m-ladder"></div>
+ <div class="arch rv">
+  <div><div class="cap">Action margin gap: log P(refund or escalate) − log P(post), partial minus complete payment (nats), over training</div>
+   <svg class="mchart" id="m-chart" viewBox="0 0 560 300" role="img" aria-label="Margin gap over training steps for six models"></svg>
+   <div class="src" id="m-chart-src"></div></div>
+  <div><div class="cap">Causal tests at layer <span id="m-layer"></span>, per model</div>
+   <table class="wft" id="m-table" style="width:100%;margin:10px 0 0"></table>
+   <div class="src" id="m-table-src"></div></div>
+ </div>
+</section>
+
+<!-- ============ 06 RESEARCH AND REPRODUCTION ============ -->
 <section id="repro">
- <div class="shead rv"><div class="snum">05</div><div><div class="cap">Research and reproduction</div>
+ <div class="shead rv"><div class="snum">06</div><div><div class="cap">Research and reproduction</div>
   <h2 class="stitle">Every number <span class="ser">has a file.</span></h2>
   <p class="lede">Each experiment was written down with its predictions and locked with a hash before it ran. Mistakes are corrected in dated notes, never by editing a registration. A checker re-reads every number in the paper and README from its result file.</p></div></div>
  <div class="repgrid rv" id="p-repgrid"></div>
@@ -1119,6 +1142,31 @@ $("#p-repgrid").innerHTML=[["Base model","<code>CohereLabs/tiny-aya-global</code
  .map(([k,v])=>`<div><span class="cap">${k}</span><br>${v}</div>`).join("");
 })();
 
+
+/* 05 inside the model */
+(function(){const M=S.procure.mech,C=M.causal;
+ const rv=Object.keys(C).filter(k=>k.startsWith("rv")),ra=Object.keys(C).filter(k=>k.startsWith("ra"));
+ const rvA=rv.filter(k=>C[k].ablation_rule).length,raA=ra.filter(k=>C[k].ablation_rule).length,pt=Object.values(C).filter(v=>v.patch_rule).length;
+ $("#m-ladder").innerHTML=[["y","1","Decodable","Every model, including the untrained warm start, linearly separates partial from complete payment (probe AUROC ≥ "+M.probe_min.toFixed(2)+"). The text shows it; this says nothing about use."],
+  ["y","2","Linked to the action","Under the state reward, the partial-minus-complete action margin grows with training; under the acknowledgement reward it stays at or below the warm start."],
+  ["p","3","Causal, but not specific","Removing the partial-minus-complete direction lowers the partial-payment margin beyond 20 random directions in "+rvA+" of "+rv.length+" state-reward seeds, but also in "+raA+" of "+ra.length+" acknowledgement-reward seeds, and it moves the empty-record margin too."],
+  ["n","4","A pathway","Not shown. Patching the final position never beat patching from an unrelated task ("+pt+" of "+Object.keys(C).length+" models met the rule)."],
+  ["n","5","Explains training","Not shown. CircuitKIT did not run (dependency error); an earlier sparse autoencoder failed its reconstruction check and is not used."]]
+  .map(([c,l,t,d])=>`<div class="${c}"><span class="lv">${l}</span><b>${t}</b>${d}</div>`).join("");
+ $("#m-layer").textContent=M.layer;
+ const W=560,H=300,x0=44,x1=440,y0=260,y1=16,lo=1.5,hi=5.5,X=i=>x0+i*(x1-x0)/4,Y=v=>y0-(v-lo)/(hi-lo)*(y0-y1);
+ let h="";[2,3,4,5].forEach(v=>{h+=`<line class="ax" x1="${x0}" x2="${x1}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${x0-8}" y="${Y(v)+4}" text-anchor="end">${v}</text>`});
+ ["0","50","100","150","200"].forEach((t,i)=>{h+=`<text x="${X(i)}" y="${H-18}" text-anchor="middle">${t}</text>`});
+ h+=`<text x="${(x0+x1)/2}" y="${H-2}" text-anchor="middle">training step (0 = warm start)</text>`;
+ Object.entries(M.traj).forEach(([k,v])=>{const c=k.startsWith("rv")?"#171815":"#F05236",d=k.startsWith("ra")?' stroke-dasharray="5 4"':"";
+  h+=`<polyline fill="none" stroke="${c}" stroke-width="2"${d} points="${v.map((y,i)=>X(i)+","+Y(y)).join(" ")}"/><circle cx="${X(4)}" cy="${Y(v[4])}" r="3.5" fill="${c}"/>${k==="rv_s2"||k==="ra_s1"?`<text x="${X(4)+10}" y="${Y(v[4])+(k==="ra_s1"?14:4)}" style="fill:${c};font-size:12px">${k==="rv_s2"?"state reward":"ack reward"}</text>`:""}`});
+ $("#m-chart").innerHTML=h;
+ $("#m-chart-src").textContent="Solid: state reward, seeds 0–2. Dashed vermilion: acknowledgement reward, seeds 0–2. Teacher-forced margins on matched contexts that differ only in the paid amount. Source: "+M.src;
+ const lab=k=>k==="warm"?"Warm start":(k.startsWith("rv")?"State reward s":"Ack reward s")+k.slice(-1);
+ $("#m-table").innerHTML=`<tr><th>Model</th><th style="text-align:center">ablate: partial margin</th><th style="text-align:center">random max</th><th style="text-align:center">ablate: empty-record margin</th><th style="text-align:center">patch vs wrong task</th></tr>`+
+  ["warm",...rv,...ra].map(k=>{const v=C[k];return `<tr><td>${lab(k)}</td><td class="v"${v.ablation_rule?' style="background:rgba(213,243,106,.6)"':""}>${v.ablate_partial.toFixed(2)}</td><td>±${v.random_max.toFixed(2)}</td><td>${v.ablate_empty.toFixed(2)}</td><td>${v.patch_final.toFixed(3)} vs ${v.patch_wrong_task.toFixed(3)}</td></tr>`}).join("");
+ $("#m-table-src").textContent="Highlighted: the registered ablation rule is met (change larger than every one of 20 random directions). An effect specific to the state-reward behaviour would leave the acknowledgement-reward seeds and the empty-record branch unchanged; it does not. Source: "+M.src;
+})();
 /* ---------- reveal, bars, counters, rail ---------- */
 function fill(root){$$("[data-w]",root).forEach(x=>x.style.width=x.dataset.w+"%")}
 function count(el){const t=+el.dataset.count,f=el.dataset.fmt,fmt=v=>f==="pct"?(v*100).toFixed(t<0.9?2:1)+"%":"+"+v.toFixed(2);
