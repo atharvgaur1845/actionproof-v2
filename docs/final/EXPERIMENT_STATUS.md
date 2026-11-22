@@ -23,10 +23,10 @@ As of 2026-11-22 01:31 IST.
 | S4-EVAL shifts | `PREREGISTRATION_S4_EVAL.md` + addendum 1 | 5 + 5 (+3 control) | Completed and verified | `results/s4/s4_summary.json` | — |
 | FCA (forked counterfactual credit) | `docs/research/algorithm/FCA_GRPO.md` §7 | 2 (development) | **Failed** its kill criterion; dropped | `results/s4/fca_dev_summary.json` | — |
 | S3 addendum 2, Part A: control seeds 3–4 (prospective) | `PREREGISTRATION_S3_ADDENDUM2.md` | +2 control | **Completed and verified.** H3′ supported (p 0.012, Holm 0.036); H4′p and H4′d not supported; safety trade-off reversed | `results/s3/s3_addendum2.json` | — |
-| S3 addendum 2, Part B: workflow-rebalanced pools | same | 2 + 2 | **Running.** Recovery-start runs trained; control runs training (964–965) | `results/s3/pp/`, `results/s3/s3_addendum2.json` | about 06:00 Sun |
+| S3 addendum 2, Part B: workflow-rebalanced pools | same | 2 + 2 | **Completed and verified.** Reading "not frequency" (W = 0.005) | `results/s3/s3_addendum2.json` | — |
 | S3 addendum 3: state-only starts | `PREREGISTRATION_S3_ADDENDUM3.md` | — | **Withdrawn before training** (degenerate design) | `docs/research/ADDENDUM3_WITHDRAWN.md` | — |
 | S3 addendum 4: acknowledgement-only starts (is it the handed evidence?) | `PREREGISTRATION_S3_ADDENDUM4.md` | 5 | **Running.** Queued after addendum 2 on the H200s | `results/s3/s3_addendum4.json` | about 14:00 Sun |
-| ID1: warm start that never reads, then R_V | `PREREGISTRATION_ID1.md` (deviation D-ID1-1) | 2 | **Running.** Warm start done (read-back 0/153); seed 0 training on the A100; seed 1 next | `results/id1/id1_summary.json` | about 06:30 Sun |
+| ID1: warm start that never reads, then R_V | `PREREGISTRATION_ID1.md` (deviation D-ID1-1) | 2 | **Completed and verified.** Reading "selection": 0/153 read-back in both seeds, no read sampled in training | `results/id1/id1_summary.json` | — |
 | SR1: tool-name randomisation (a known fix, tested here) | `PREREGISTRATION_SR1.md` | 3 | **Running.** Starts on the A100 after ID1 | `results/s4/sr1_summary.json` | about 15:00 Sun |
 | Mechanistic causal test (CircuitKIT) | — | — | **Not run.** CircuitKIT failed to install in Stage 2 (D-A16-1); A16's ablation is not specific | — | Future work |
 

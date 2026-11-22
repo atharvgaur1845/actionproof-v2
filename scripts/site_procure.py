@@ -163,6 +163,10 @@ def build() -> dict:
     gate = j("results/eval/a12/init__neutral__proc_train_T1x4.summary.json")["phantom_readback"]
     res = results()
     res["a12"]["warm_sampled_readback"] = gate
+    id1 = j("results/id1/id1_summary.json")
+    res["id1"] = {"gate": id1["warm_v0"]["gate_T1x4"]["phantom_readback"], "reading": id1["reading"],
+                  "conf": [id1[f"id1_rv_s{s}"]["proc_conf"]["phantom_readback"] for s in (0, 1)]}
+    res["a2b"] = j("results/s3/s3_addendum2.json")["part_b"]["W"]["s3_rb_mix"]["W"]
     return {"sim": sim(), "stories": {k: story(t) for t, k in STORIES.items()}, "results": res}
 
 

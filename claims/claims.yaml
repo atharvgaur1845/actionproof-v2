@@ -476,6 +476,29 @@ claims:
       viol5: {value: -0.021, file: results/s3/s3_addendum2.json, key: [part_a, violation_s3_conf_full, seed_avg, est], shown: ["-0.021"]}
       stress5: {value: 0.068, file: results/s3/s3_addendum2.json, key: [part_a, vsc_s3_conf_stress, seed_avg, est], shown: ["+0.068"]}
 
+  - id: S3-A2B
+    statement: "Registered (PREREGISTRATION_S3_ADDENDUM2 Part B): with partial-payment tasks spread evenly across workflows in the training pool (receive-then-pay 6 -> 21 of 400), rebalanced RSC (2 runs) repairs receive-then-pay partial payments on 0.005 of the 100 targeted tasks (s3_pp_full + s3_pp_rec): reading 'not explained by pool frequency' (W <= 0.15). Rebalanced control: 0.000. Descriptive: rebalancing lowered repair in the other workflows (order then pay -0.51, pay first -0.48 vs RSC seeds 0-1). On the targeted splits (50 tasks per workflow) every model repairs about 0 after a goods receipt except RSC seed 3 (0.26)."
+    status: supported
+    prereg: PREREGISTRATION_S3_ADDENDUM2.md
+    eval: [results/s3/s3_addendum2.json]
+    stats: scripts/s3_stats_a2.py
+    numbers:
+      W: {value: 0.005, file: results/s3/s3_addendum2.json, key: [part_b, W, s3_rb_mix, W], shown: ["0.005"]}
+      d_order: {value: -0.51, file: results/s3/s3_addendum2.json, key: [part_b, W, "s3_rb_mix:order_prepay", seed_avg, est], shown: ["-0.51"]}
+      d_payfirst: {value: -0.48, file: results/s3/s3_addendum2.json, key: [part_b, W, "s3_rb_mix:pay_post", seed_avg, est], shown: ["-0.48"]}
+
+  - id: ID1
+    statement: "Registered (PREREGISTRATION_ID1; deviation D-ID1-1): a warm start trained with no verifying demonstrations reads back after 0 of 164 phantom payments when sampled (T=1); R_V training from it (2 seeds, A12 settings) never samples a read in 200 steps (training read rate 0.00 in every block) and reaches phantom read-back 0/153 on proc_conf in both seeds, with VSC 0.47 as the warm start. Registered reading: selection. R_V selects read-back from the warm start's repertoire; it does not create it from exploration here."
+    status: supported
+    prereg: PREREGISTRATION_ID1.md
+    eval: [results/id1/id1_summary.json]
+    stats: scripts/id1_stats.py
+    numbers:
+      gate_num: {value: 0, file: results/id1/id1_summary.json, key: [warm_v0, gate_T1x4, phantom_readback, num], shown: []}
+      rb_s0: {value: 0.0, file: results/id1/id1_summary.json, key: [id1_rv_s0, proc_conf, phantom_readback, rate], shown: []}
+      rb_s1: {value: 0.0, file: results/id1/id1_summary.json, key: [id1_rv_s1, proc_conf, phantom_readback, rate], shown: []}
+      vsc_s1: {value: 0.47, file: results/id1/id1_summary.json, key: [id1_rv_s1, proc_conf, vsc], shown: []}
+
   - id: S3-R
     statement: "Descriptive, from the post-results review and recomputed by scripts/s3_review_numbers.py and scripts/s4_stats.py on the S3 files (not registered). Seed level: every RSC run beats every A12 R_V run on s3_conf_rec and s3_conf_full (unpaired permutation p = 1/252 = 0.004); RSC vs control, 3 seeds per arm, p = 0.05 (the smallest possible). Per class on s3_conf_full, the RSC - A12 R_V gain is 0.116 duplicate delivery (0.12) and 0.093 partial payment, every other class 0. Partial repair (partial-class VSC >= 0.40) learned in 5/5 RSC runs, 1/3 control runs, 3/5 A12 R_V runs; control seed 0 and RSC seed 0 make identical tool calls on 283/300 tasks. Receive-then-pay partial payments repaired: RSC 5/60 full episodes, A12 R_V 0/60, control 0/36. Clean episodes: 6.40 calls and 2.70 reads per episode for every R_V-family arm, 3.70 and 0.00 for the warm start. Transfer: care_admin VSC 0.158 warm, 0.080 A12 R_V, 0.047 RSC (below A12 R_V in 5/5 seed pairs); collateral 0.18, 0.27, 0.33; it_ops VSC 0.14-0.20."
     status: supported

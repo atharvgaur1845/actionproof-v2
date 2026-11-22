@@ -12,6 +12,7 @@ Every number resolves through `claims/claims.yaml` (`python scripts/s2_numcheck.
 
 Stage 2 results (finalist round):
 - **A12.** Training with a state reward (R_V) made read-back after phantom writes the default (1.00), while an acknowledgement reward (R_A) of identical form left the warm start's behaviour unchanged (0.00), in 5 of 5 seeds from one warm start. R_A's greedy behaviour equals the untrained warm start's.
+- **ID1 (registered, 2 seeds).** From a warm start whose demonstrations never read, R_V never samples a read in 200 steps and read-back stays 0/153: the reward selects checking from the starting model's repertoire; it does not create it.
 - **A14, A15.** Given forced evidence, every model handles present and absent payments. Partial-payment repair appears almost only under R_V. It generalises across ratios, but only within the pay-first workflow: about 0% after a goods receipt, and 5–55% after an order (seeds 0–2).
 - **A16.** All models encode partial vs complete. Training changes the action margin. The ablation that lowers it is not specific to R_V.
 - **A17.** In healthcare administration, R_V reads back more than R_A, mainly because R_A reads less than the warm start. R_V vs warm start is not established, and IT operations shows no difference.
@@ -20,13 +21,13 @@ Stage 2 results (finalist round):
 Stage 3 (`PREREGISTRATION_S3.md`; corrected by `PREREGISTRATION_S3_ADDENDUM1.md`, because the pool also added fault types):
 - **Against A12 R_V (a recipe comparison).** The recovery-start training recipe (RSC) raises VSC by +0.21 on fresh recovery and full-episode splits. Every one of its 5 runs beats every A12 R_V run. Of the full-episode gain, 0.12 is duplicate delivery, a fault type A12 never trained on.
 - **Against a class-matched control (the start-state comparison).** With five runs per arm (two control seeds added by a registered extension, `PREREGISTRATION_S3_ADDENDUM2.md`), recovery starts improve completion from faulted states across training runs (+0.107, unpaired seed permutation p 0.012). The partial-payment gain on full episodes does not reach the registered rule (p 0.056): partial repair was learned in 5 of 5 RSC runs and 2 of 5 control runs. The three-seed safety trade-off reversed with five control seeds (violations -0.021).
-- **Still unsolved.** Partial payments after a goods receipt are repaired by no arm (RSC 5 of 60 episodes).
+- **Still unsolved.** Partial payments after a goods receipt are repaired by no arm (RSC 5 of 60 episodes). Raising them from 6 to 21 of 400 training tasks did not help (0.005 on 100 targeted tasks; registered, 2 runs), so pool frequency is not the explanation.
 - **Transfer is negative.** In healthcare administration, VSC falls from 0.158 (warm start) to 0.080 (A12 R_V) to 0.047 (RSC).
 
 Stage 4 (`docs/research/`):
 - **Shifts** (`PREREGISTRATION_S4_EVAL.md` and its addendum). The RSC gain survives Hindi (+0.13), Hinglish (+0.07) and two-fault episodes (+0.07), each in 5 of 5 seeds. It vanishes under renamed tools and in an unseen four-step workflow, where every model runs the trained three-step sequence and skips the new step.
 - **No new algorithm.** The novelty audit found every candidate published. FCA, a forked counterfactual credit estimator, failed its pre-set development criterion and was dropped (`docs/research/algorithm/FCA_RESULT.md`).
-- **Running:** ID1 (does R_V create read-back or select it?) and S3 addendum 2.
+- **Running:** S3 addendum 4 (is the effect the evidence handed over in read starts?) and SR1 (tool-name randomisation).
 
 **Product (`product/`, branch `stage4`).** Run it locally with `python -m product.app` (port 7860). It has not been deployed.
 - **Live, deterministic and CPU-only** (the real ProcureSim simulator and verifier; no model calls):
