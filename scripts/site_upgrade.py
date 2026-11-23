@@ -84,8 +84,102 @@ def roi() -> dict:
             "episodes_per_gpu_hour": s["episodes_per_gpu_hour"]}
 
 
+P1_ARMS = {"A": "Recovery-start GRPO (reference)", "B": "A + reconciliation line at inference",
+           "C": "A + recovery SFT", "D": "Recovery SFT warm start + the same GRPO"}
+P1_TEST = ("p1_test_full", "p1_test_pp", "p1_test_rec", "p1_test_wf4", "p1_test_combo")
+P1_SHOW = ("p1_test_pp", "p1_test_wf4")  # browsable same-task episodes: unseen pay ratios and the unseen workflow
+P1_WRITES = ("place_supplier_order", "pay_supplier", "record_goods_receipt", "post_journal_entry", "refund_payment")
+
+
+def _usd(c):
+    return None if c is None else f"${c / 100:,.2f}"
+
+
+def _args(tool: str, a: dict) -> str:
+    bits = []
+    if "amount_cents" in a:
+        bits.append(_usd(a["amount_cents"]))
+    if "qty" in a:
+        bits.append(f"qty {a['qty']}")
+    if "payment_id" in a:
+        bits.append(a["payment_id"])
+    if "idempotency_key" in a:
+        bits.append(f"key {a['idempotency_key']}")
+    if tool == "submit_report":
+        bits.append(str(a.get("status")))
+    return ", ".join(bits)
+
+
+def _ack(tool: str, o: dict) -> str:
+    if o.get("status") != "ok":
+        return f"{o.get('status')}: {o.get('error', '')}".strip(": ")
+    if tool == "list_payments":
+        ps = o.get("payments", [])
+        refunded = {p["refund_of"] for p in ps if p.get("kind") == "refund"}
+        live = [p for p in ps if p.get("kind") == "payment" and p["payment_id"] not in refunded]
+        return f"{len(live)} live payment(s), {_usd(sum(p['amount_cents'] for p in live))}" + \
+            (f"; {len(refunded)} refunded" if refunded else "")
+    if tool == "list_goods_receipts":
+        return f"received qty {sum(r.get('qty', 0) for r in o.get('receipts', []))}"
+    for k in ("payment_id", "refund_id", "receipt_id", "entry_id", "order_ref"):
+        if k in o:
+            return f"ok, {o[k]}"
+    return "ok"
+
+
+def _episode(r: dict, n_prefix: int) -> dict:
+    att = {x["idx"]: x for x in r.get("attempts", [])}
+    steps = []
+    for s in r["trace"]:
+        a = att.get(s["idx"])
+        db = None
+        if s["tool"] in P1_WRITES and a:
+            db = a["committed"] + (" (deduplicated: same key)" if a.get("from_idempotency_store") else "")
+        steps.append([s["tool"], _args(s["tool"], s["args"]), _ack(s["tool"], s["obs"]), db, s["idx"] < n_prefix])
+    sc = r["score"]
+    return {"steps": steps, "vsc": r["vsc"], "false_success": sc["false_success"], "verdicts": sc["steps"],
+            "violation": bool(r["violation"]), "report": (r.get("report") or {}).get("status"), "ended_by": r["ended_by"]}
+
+
+def p1() -> dict:
+    s = _j("results/p1/p1_summary.json")
+    src = "results/p1/p1_summary.json"
+    if not s or not s.get("test"):
+        return {"status": "running", "source": src, "dev": (s or {}).get("dev") or None}
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("p1_eval", Path(__file__).with_name("p1_eval.py"))
+    pe = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(pe)
+    union, splits = {}, {}
+    for arm in P1_ARMS:
+        rows = []
+        for sp in P1_TEST:
+            for k in (0, 1, 2):
+                rows += [json.loads(l) for l in (ROOT / f"results/p1/test/{arm}_s{k}__{sp}.jsonl").read_text().splitlines()]
+        keep = ("vsc", "false_success", "duplicate_unrefunded", "partial_pay_repaired", "new_key_share_on_repay",
+                "redundant_reads_per_episode", "reads_per_episode", "calls_per_success", "context_ended")
+        sm = pe.summarise(rows)
+        union[arm] = {m: {mode: _r(sm[mode][m]) for mode in ("greedy", "sampled")} for m in keep}
+        union[arm]["by_workflow"] = {w: _r(v["vsc"]) for w, v in sm["by_workflow_sampled"].items()}
+        splits[arm] = {sp: _r(s["descriptive"][arm]["test"].get(sp, {}).get("sampled", {}).get("vsc")) for sp in P1_TEST}
+    tasks = {}
+    for sp in P1_SHOW:
+        meta = {t["task_id"]: t for t in map(json.loads, (ROOT / f"data/bench/proc/{sp}.jsonl").read_text().splitlines())}
+        for arm in P1_ARMS:
+            for r in map(json.loads, (ROOT / f"results/p1/test/{arm}_s0__{sp}.jsonl").read_text().splitlines()):
+                if r["sample"] != -1:
+                    continue
+                t = meta[r["task_id"]]
+                d = tasks.setdefault(r["task_id"], {"split": sp, "workflow": t["workflow"], "prompt": t["prompt"],
+                                                    "faults": [f"{f['kind']} on {f['tool']}" + (f" (ratio {f['ratio']})" if "ratio" in f else "")
+                                                               for f in t["meta"]["faults"]], "arms": {}})
+                d["arms"][arm] = _episode(r, len(t["meta"].get("start_prefix") or []))
+    return {"status": "done", "source": src, "arms": P1_ARMS, "test": s["test"], "dev": s["dev"], "union": union,
+            "splits": splits, "tasks": dict(sorted(tasks.items())), "show": P1_SHOW}
+
+
 def build() -> dict:
-    return {"r1": r1(), "r1t": r1t(), "j1": j1(), "roi": roi()}
+    return {"r1": r1(), "r1t": r1t(), "j1": j1(), "roi": roi(), "p1": p1()}
 
 
 if __name__ == "__main__":

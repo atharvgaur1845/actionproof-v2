@@ -112,6 +112,16 @@ section{border-top:1px solid var(--ink);position:relative}
 .pill.g{background:var(--chr);color:var(--ink)}.pill.r{background:var(--ver);color:#fff}.pill.n{background:var(--min)}
 .tr .v small{display:block;font:13px/20px var(--sans);color:var(--gr);margin-top:4px}
 .next{margin-top:20px;font:13px/22px var(--mono);color:var(--gr)}.next b{color:var(--ink);font-weight:500}.next .rb{background:var(--chr);color:var(--ink);padding:0 4px}
+/* ---------- P1 same-task viewer ---------- */
+.p1top{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:16px}.p1top select{font:13px/18px var(--mono);padding:6px 8px;border:1px solid var(--ink);background:var(--paper);max-width:100%}
+.p1task{font-size:14px;line-height:22px;margin:0 0 16px;max-width:880px}.p1task small{display:block;color:var(--gr);font:12px/18px var(--mono)}
+.p1grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--ink)}
+.p1col{padding:12px 12px 16px 0}.p1col+.p1col{padding-left:12px;border-left:1px solid var(--hair)}
+.p1col h4{font:500 12px/18px var(--mono);margin:0 0 8px;text-transform:uppercase;letter-spacing:.06em}
+.p1s{font:12px/17px var(--mono);padding:6px 0;border-bottom:1px solid var(--hair2);overflow-wrap:anywhere}.p1s.pre{color:var(--gr)}
+.p1s b{font-weight:500}.p1s .ak{display:block;color:var(--gr)}.p1s .db{display:block}.p1s .db.bad{color:var(--ver-t);font-weight:500}
+.p1v{margin-top:10px;font:500 12px/18px var(--mono);padding:6px 8px}.p1v.ok{background:var(--chr)}.p1v.no{background:var(--ver);color:#fff}
+@media (max-width:900px){.p1grid{grid-template-columns:1fr}.p1col+.p1col{padding-left:0;border-left:0;border-top:1px solid var(--ink)}}
 /* ---------- env (dark) ---------- */
 .dark{background:var(--dk);color:#E9E7DF;border-top-color:var(--dk)}
 .dark .snum,.dark .stitle{color:#E9E7DF}.dark .cap,.dark .src{color:#8C8F86}.dark .src b{color:#E9E7DF}
@@ -411,14 +421,14 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  <div class="brand">ACTIONPROOF<span>a research study, 2026</span></div>
  <ol id="railnav">
   <li><a href="#top"><i>00</i>The incident</a></li><li><a href="#truths"><i>01</i>Three truths</a></li><li><a href="#reward"><i>02</i>What the reward sees</a></li>
-  <li><a href="#recovery"><i>03</i>Reading is not recovery</a></li><li><a href="#training"><i>04</i>Training recovery</a></li><li><a href="#inside"><i>05</i>Inside the model</a></li><li><a href="#retain"><i>06</i>General ability</a></li><li><a href="#judges"><i>07</i>Can a judge see it?</a></li><li><a href="#worth"><i>08</i>What it is worth</a></li><li><a href="#repro"><i>09</i>Reproduction</a></li>
+  <li><a href="#recovery"><i>03</i>Reading is not recovery</a></li><li><a href="#training"><i>04</i>Training recovery</a></li><li><a href="#inside"><i>05</i>Inside the model</a></li><li><a href="#retain"><i>06</i>General ability</a></li><li><a href="#judges"><i>07</i>Can a judge see it?</a></li><li><a href="#worth"><i>08</i>What it is worth</a></li><li><a href="#agent"><i>09</i>A practical agent</a></li><li><a href="#repro"><i>10</i>Reproduction</a></li>
   <li style="margin-top:14px"><a href="#study1"><i>+</i>Study 1: refunds</a></li><li><a href="#why"><i>·</i>Main finding</a></li><li><a href="#key"><i>·</i>What we found</a></li>
   <li><a href="#problem"><i>1</i>The problem</a></li><li><a href="#bench"><i>2</i>The test world</a></li><li><a href="#experiment"><i>3</i>The experiment</a></li>
   <li><a href="#lab"><i>4</i>Same situation test</a></li><li><a href="#templates"><i>5</i>Copied workflows</a></li><li><a href="#findings"><i>6</i>Results and checks</a></li>
   <li><a href="#autopsy"><i>7</i>Mistakes we fixed</a></li><li><a href="#methods"><i>8</i>How we measure</a></li><li><a href="#artifacts"><i>9</i>Code and data</a></li></ol>
  <div class="foot">Lexsi hackathon, track 3<a href="https://github.com/atharvgaur1845/actionproof-v2">GitHub ↗</a><a href="https://huggingface.co/collections/atharvgaur18/actionproof-procurement-study-6b0321cd11bad297aead6e81">Models ↗</a></div>
 </nav>
-<nav class="mnav" aria-label="Sections"><a class="b" href="#top">ACTIONPROOF</a><a href="#truths">01 Truths</a><a href="#reward">02 Reward</a><a href="#recovery">03 Recovery</a><a href="#training">04 Training</a><a href="#inside">05 Inside</a><a href="#retain">06 Ability</a><a href="#judges">07 Judges</a><a href="#worth">08 Worth</a><a href="#repro">09 Reproduce</a><a href="#study1">Study 1</a><a href="#why">Main finding</a><a href="#key">What we found</a><a href="#problem">1 Problem</a><a href="#bench">2 Test world</a><a href="#experiment">3 Experiment</a>
+<nav class="mnav" aria-label="Sections"><a class="b" href="#top">ACTIONPROOF</a><a href="#truths">01 Truths</a><a href="#reward">02 Reward</a><a href="#recovery">03 Recovery</a><a href="#training">04 Training</a><a href="#inside">05 Inside</a><a href="#retain">06 Ability</a><a href="#judges">07 Judges</a><a href="#worth">08 Worth</a><a href="#agent">09 Agent</a><a href="#repro">10 Reproduce</a><a href="#study1">Study 1</a><a href="#why">Main finding</a><a href="#key">What we found</a><a href="#problem">1 Problem</a><a href="#bench">2 Test world</a><a href="#experiment">3 Experiment</a>
  <a href="#lab">4 Same situation</a><a href="#templates">5 Workflows</a><a href="#findings">6 Results</a><a href="#autopsy">7 Mistakes</a><a href="#methods">8 Measures</a><a href="#artifacts">9 Code and data</a></nav>
 <main>
 
@@ -571,9 +581,21 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  <p class="note v rv" style="margin:28px 56px 56px">In this simulator, a short hand-written layer that reads back every write and repairs with fixed rules beats every trained agent. ActionProof's value is the fault-injection harness and verifier that show which checks are missing and prove they work. Training reduces losses when checks are incomplete; it does not replace them, and it did not transfer to new workflows.</p>
 </section>
 
-<!-- ============ 09 RESEARCH AND REPRODUCTION ============ -->
+<!-- ============ 09 A PRACTICAL AGENT (P1) ============ -->
+<section id="agent">
+ <div class="shead rv"><div class="snum">09</div><div><div class="cap">Practical agent · registered experiment P1</div>
+  <h2 class="stitle">Can it learn <span class="ser">to repair?</span></h2>
+  <p class="lede">The best trained agent reads the payment record after a write, but often does not act on what it sees. Four versions of it were tested on 450 new tasks, including payment fractions and a workflow never seen in training. <b>A</b> is the existing agent. <b>B</b> adds one line at run time that adds up the payments the agent can already see. <b>C</b> adds supervised training on verified repairs. <b>D</b> trains from those repairs, then repeats the same RL. The correct repair for a short payment is fixed in advance: refund it, then pay the full amount again with a new key.</p></div></div>
+ <div class="kind pad rv"><span class="kb m">Measured</span><span>Registered before any output (<span class="mono">PREREGISTRATION_P1.md</span>). Three seeds per arm; four sampled runs per task. The database verifier decides every outcome.</span></div>
+ <table class="wft rv" id="u-p1"></table>
+ <div class="src pad" id="u-p1-src"></div>
+ <table class="wft rv" id="u-p1b"></table>
+ <div class="stage rv" id="u-p1x"></div>
+</section>
+
+<!-- ============ 10 RESEARCH AND REPRODUCTION ============ -->
 <section id="repro">
- <div class="shead rv"><div class="snum">09</div><div><div class="cap">Research and reproduction</div>
+ <div class="shead rv"><div class="snum">10</div><div><div class="cap">Research and reproduction</div>
   <h2 class="stitle">Every number <span class="ser">has a file.</span></h2>
   <p class="lede">Each experiment was written down with its predictions and locked with a hash before it ran. Mistakes are corrected in dated notes, never by editing a registration. A checker re-reads every number in the paper and README from its result file.</p></div></div>
  <div class="repgrid rv" id="p-repgrid"></div>

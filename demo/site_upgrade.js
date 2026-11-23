@@ -49,3 +49,42 @@
  sync();draw();
  $("#u-roi-src").innerHTML=`Measured rates: <b>${esc(A.source)}</b> (s3_conf_full, every seed pooled; scripted rows on the same tasks). Formula: <span class="mono">demo/roi.js</span>, identical to scripts/roi_model.py (tested). Inference priced at the measured ${A.episodes_per_gpu_hour.toLocaleString("en-US")} policy calls per GPU-hour.`;
 })();
+/* ---------- 09: practical agent (data: S.upgrade.p1, scripts/site_upgrade.py::p1) ---------- */
+(function(){const P=S.upgrade&&S.upgrade.p1;if(!P)return;
+ const pp=x=>x==null?"—":(x>=0?"+":"−")+Math.abs(x*100).toFixed(1);
+ const pc=x=>x==null?"—":(x*100).toFixed(1)+"%",nm=x=>x==null?"—":x.toFixed(2);
+ const SPL=[["p1_test_full","Full workflows"],["p1_test_pp","Short payment, unseen fractions"],["p1_test_rec","Mid-task recovery"],["p1_test_wf4","Unseen workflow"],["p1_test_combo","Two faults"]];
+ if(P.status!=="done"){
+  const d=P.dev&&P.dev.mean_sampled_vsc;
+  $("#u-p1").innerHTML=`<tr><td>Running: arms C and D are training (3 seeds each); then every arm runs the 450 frozen test tasks once. Fills from <span class="mono">${esc(P.source)}</span>.${d?` Development (not the test): ${Object.entries(d).map(([a,v])=>`${a} ${pc(v)}`).join(" · ")}.`:""}</td></tr>`;
+  $("#u-p1-src").textContent="";return;}
+ const T=P.test,U=P.union;
+ $("#u-p1").innerHTML=`<tr><th>Arm (3 seeds each)</th><th>Verified success, sampled</th><th>Change vs A</th><th>Holm p</th><th>Registered test</th>${SPL.map(s=>`<th>${s[1]}</th>`).join("")}</tr>`+
+  Object.entries(P.arms).map(([a,lab])=>{const t=T[a];const cls=t?(t.ci95[0]>0?"up":(t.ci95[1]<0?"dn":"")):"";
+   return `<tr><td><b>${a}</b> ${esc(lab)}</td><td>${pc(U[a].vsc.sampled)}<small>greedy ${pc(U[a].vsc.greedy)}</small></td>`+
+   `<td class="${cls}">${t?`${pp(t.delta)}<small>[${pp(t.ci95[0])}, ${pp(t.ci95[1])}] · seeds ${t.seed_deltas.map(pp).join(" ")}</small>`:"reference"}</td>`+
+   `<td>${t?t.holm_p.toFixed(4):"—"}</td><td>${t?(t.supported?"<b>supported</b>":"not supported"):"—"}</td>`+
+   SPL.map(s=>`<td>${pc(P.splits[a][s[0]])}</td>`).join("")+`</tr>`}).join("");
+ $("#u-p1-src").innerHTML=`Source: <b>${esc(P.source)}</b> · scripts/p1_stats.py. Change: paired task bootstrap on seed-averaged task scores, one-sided, Holm over B, C and D. Supported only if Holm p &lt; 0.05 <i>and</i> all three seed pairs improve. Development winner (labels the demo agent only): <b>${P.dev&&P.dev.winner?esc(P.dev.winner):"none beat A by 3 points"}</b>.`;
+ const M=[["false_success","Reported done, but not done"],["duplicate_unrefunded","Duplicate left unrefunded"],["partial_pay_repaired","Short payments repaired"],["new_key_share_on_repay","Re-pays with a new key"],["redundant_reads_per_episode","Repeated reads per task"],["calls_per_success","Tool calls per success"],["context_ended","Ran out of context"]];
+ $("#u-p1b").innerHTML=`<tr><th>Behaviour, sampled, all 450 tasks</th>${Object.keys(P.arms).map(a=>`<th>${a}</th>`).join("")}</tr>`+
+  M.map(([k,l])=>`<tr><td>${l}</td>${Object.keys(P.arms).map(a=>{const v=U[a][k].sampled;return `<td>${k.endsWith("_episode")||k==="calls_per_success"?nm(v):pc(v)}</td>`}).join("")}</tr>`).join("");
+ // same-task viewer: every task of the shown splits, in id order; no selection by outcome
+ const ids=Object.keys(P.tasks),box=$("#u-p1x");
+ const dis=id=>{const v=Object.values(P.tasks[id].arms).map(e=>e.vsc);return v.some(x=>x)&&v.some(x=>!x)};
+ box.innerHTML=`<div class="top"><span class="tag rec">Recorded episodes · frozen test · seed 0 · greedy</span><span class="cap">No live model runs on this page</span></div>`+
+  `<div class="p1top"><label class="cap" for="p1sel">Task</label><select id="p1sel"></select><div class="agents" role="group" aria-label="Filter"><button data-f="all" aria-pressed="true">All ${ids.length}</button><button data-f="dis" aria-pressed="false">Arms disagree (${ids.filter(dis).length})</button></div></div>`+
+  `<div id="p1task" class="p1task"></div><div class="p1grid" id="p1grid"></div>`+
+  `<p class="src" style="margin-top:12px">Each column is one arm on the same task. <b>Tool said</b> is what the agent saw. <b>Database</b> is the simulator's commit record, which the agent never sees. The verdict comes from the SQLite verifier. Tasks: ${P.show.map(esc).join(", ")}, every task listed, in id order.</p>`;
+ const sel=$("#p1sel",box);let filt="all";
+ const show=id=>{if(!id){$("#p1grid",box).innerHTML="";return}const t=P.tasks[id];
+  $("#p1task",box).innerHTML=`${esc(t.prompt)}<small>${esc(t.workflow)} · injected fault (hidden from the agent): ${esc(t.faults.join(" + "))}</small>`;
+  $("#p1grid",box).innerHTML=Object.keys(P.arms).map(a=>{const e=t.arms[a];if(!e)return `<div class="p1col"><h4>${a}</h4>—</div>`;
+   const steps=e.steps.map(([tool,args,ack,db,pre])=>`<div class="p1s${pre?" pre":""}"><b>${esc(tool)}</b>${args?" "+esc(args):""}${pre?" · scripted start":""}<span class="ak">tool said: ${esc(ack)}</span>${db?`<span class="db${db.startsWith("full")?"":" bad"}">database: ${esc(db)}</span>`:""}</div>`).join("");
+   const v=Object.entries(e.verdicts).map(([k,x])=>`${k} ${String(x).replace("VERIFIED_","").toLowerCase().replace(/_/g," ")}`).join(" · ");
+   return `<div class="p1col"><h4>${a} · ${esc(P.arms[a])}</h4>${steps}<div class="p1v ${e.vsc?"ok":"no"}">Verifier: ${e.vsc?"verified success":"not done"}${e.false_success?" · reported done falsely":""}${e.violation?" · duplicate left":""}<br><small>${esc(v)} · report ${esc(e.report||"none")} · ended by ${esc(e.ended_by)}</small></div></div>`}).join("")};
+ const fill=()=>{const list=filt==="dis"?ids.filter(dis):ids;sel.innerHTML=list.map(id=>`<option value="${id}">${id} · ${esc(P.tasks[id].faults.join(" + "))}${dis(id)?" · arms disagree":""}</option>`).join("");show(list[0])};
+ sel.addEventListener("change",()=>show(sel.value));
+ $$(".agents button",box).forEach(b=>b.addEventListener("click",()=>{filt=b.dataset.f;$$(".agents button",box).forEach(x=>x.setAttribute("aria-pressed",x===b));fill()}));
+ fill();
+})();
