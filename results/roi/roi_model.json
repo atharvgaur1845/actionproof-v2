@@ -1,0 +1,898 @@
+{
+  "note": "Simulator frequencies are measured; every money figure is a projection from the assumptions.",
+  "assumptions": {
+    "conservative": {
+      "fault_rate": 0.005,
+      "value": 2000,
+      "exception_cost": 25,
+      "late_multiplier": 2,
+      "dup_recovery": 0.7,
+      "gpu_hour": 2.5
+    },
+    "moderate": {
+      "fault_rate": 0.02,
+      "value": 5000,
+      "exception_cost": 60,
+      "late_multiplier": 3,
+      "dup_recovery": 0.6,
+      "gpu_hour": 5.0
+    },
+    "optimistic": {
+      "fault_rate": 0.05,
+      "value": 10000,
+      "exception_cost": 175,
+      "late_multiplier": 5,
+      "dup_recovery": 0.5,
+      "gpu_hour": 5.0
+    }
+  },
+  "episodes_per_gpu_hour": 72000.0,
+  "arms": {
+    "SFT agent (warm start)": {
+      "runs": [
+        "warm_start"
+      ],
+      "rates": {
+        "phantom": {
+          "false_success": 1.0
+        },
+        "partial": {
+          "false_success": 1.0
+        },
+        "clean": {
+          "verified": 1.0
+        },
+        "precommit_timeout": {
+          "verified": 1.0
+        },
+        "dup_delivery": {
+          "unrefunded_duplicate": 0.9782608695652174,
+          "flagged": 0.021739130434782608
+        },
+        "lost_ack": {
+          "verified": 0.9166666666666666,
+          "unrefunded_duplicate": 0.08333333333333333
+        },
+        "never_commit": {
+          "false_success": 1.0
+        }
+      },
+      "calls": {
+        "phantom": 3.5925925925925926,
+        "partial": 3.65625,
+        "clean": 3.7,
+        "precommit_timeout": 4.648648648648648,
+        "dup_delivery": 3.891304347826087,
+        "lost_ack": 4.708333333333333,
+        "never_commit": 3.56
+      },
+      "n": {
+        "phantom": 54,
+        "partial": 64,
+        "clean": 50,
+        "precommit_timeout": 37,
+        "dup_delivery": 46,
+        "lost_ack": 24,
+        "never_commit": 25
+      }
+    },
+    "Acknowledgement-reward GRPO (R_A)": {
+      "runs": [
+        "a12_ra_s0",
+        "a12_ra_s1",
+        "a12_ra_s2"
+      ],
+      "rates": {
+        "phantom": {
+          "false_success": 1.0
+        },
+        "partial": {
+          "false_success": 1.0
+        },
+        "clean": {
+          "verified": 1.0
+        },
+        "precommit_timeout": {
+          "verified": 1.0
+        },
+        "dup_delivery": {
+          "unrefunded_duplicate": 0.9855072463768116,
+          "flagged": 0.014492753623188406
+        },
+        "lost_ack": {
+          "verified": 0.9166666666666666,
+          "unrefunded_duplicate": 0.08333333333333333
+        },
+        "never_commit": {
+          "false_success": 1.0
+        }
+      },
+      "calls": {
+        "phantom": 3.5925925925925926,
+        "partial": 3.65625,
+        "clean": 3.7,
+        "precommit_timeout": 4.648648648648648,
+        "dup_delivery": 3.7681159420289854,
+        "lost_ack": 4.708333333333333,
+        "never_commit": 3.56
+      },
+      "n": {
+        "phantom": 162,
+        "partial": 192,
+        "clean": 150,
+        "precommit_timeout": 111,
+        "dup_delivery": 138,
+        "lost_ack": 72,
+        "never_commit": 75
+      }
+    },
+    "State-reward GRPO (R_V)": {
+      "runs": [
+        "a12_rv_s0",
+        "a12_rv_s1",
+        "a12_rv_s2",
+        "a12_rv_s3",
+        "a12_rv_s4"
+      ],
+      "rates": {
+        "phantom": {
+          "verified": 1.0
+        },
+        "partial": {
+          "verified": 0.34375,
+          "false_success": 0.65625
+        },
+        "clean": {
+          "verified": 1.0
+        },
+        "precommit_timeout": {
+          "verified": 1.0
+        },
+        "dup_delivery": {
+          "unrefunded_duplicate": 0.991304347826087,
+          "flagged": 0.008695652173913044
+        },
+        "lost_ack": {
+          "verified": 1.0
+        },
+        "never_commit": {
+          "flagged": 0.992,
+          "false_success": 0.008
+        }
+      },
+      "calls": {
+        "phantom": 8.185185185185185,
+        "partial": 7.728125,
+        "clean": 6.4,
+        "precommit_timeout": 7.864864864864865,
+        "dup_delivery": 6.291304347826087,
+        "lost_ack": 6.1,
+        "never_commit": 7.896
+      },
+      "n": {
+        "phantom": 270,
+        "partial": 320,
+        "clean": 250,
+        "precommit_timeout": 185,
+        "dup_delivery": 230,
+        "lost_ack": 120,
+        "never_commit": 125
+      }
+    },
+    "Class-matched control GRPO": {
+      "runs": [
+        "s3_matched_s0",
+        "s3_matched_s1",
+        "s3_matched_s2",
+        "s3_matched_s3",
+        "s3_matched_s4"
+      ],
+      "rates": {
+        "phantom": {
+          "verified": 1.0
+        },
+        "partial": {
+          "verified": 0.396875,
+          "false_success": 0.603125
+        },
+        "clean": {
+          "verified": 1.0
+        },
+        "precommit_timeout": {
+          "verified": 1.0
+        },
+        "dup_delivery": {
+          "verified": 0.6260869565217392,
+          "unrefunded_duplicate": 0.3565217391304348,
+          "flagged": 0.017391304347826087
+        },
+        "lost_ack": {
+          "verified": 1.0
+        },
+        "never_commit": {
+          "flagged": 1.0
+        }
+      },
+      "calls": {
+        "phantom": 8.214814814814815,
+        "partial": 8.253125,
+        "clean": 6.4,
+        "precommit_timeout": 7.92972972972973,
+        "dup_delivery": 7.8478260869565215,
+        "lost_ack": 6.116666666666666,
+        "never_commit": 7.912
+      },
+      "n": {
+        "phantom": 270,
+        "partial": 320,
+        "clean": 250,
+        "precommit_timeout": 185,
+        "dup_delivery": 230,
+        "lost_ack": 120,
+        "never_commit": 125
+      }
+    },
+    "Recovery-start GRPO (RSC)": {
+      "runs": [
+        "s3_rv_mix_s0",
+        "s3_rv_mix_s1",
+        "s3_rv_mix_s2",
+        "s3_rv_mix_s3",
+        "s3_rv_mix_s4"
+      ],
+      "rates": {
+        "phantom": {
+          "verified": 1.0
+        },
+        "partial": {
+          "verified": 0.78125,
+          "false_success": 0.21875
+        },
+        "clean": {
+          "verified": 1.0
+        },
+        "precommit_timeout": {
+          "verified": 1.0
+        },
+        "dup_delivery": {
+          "verified": 0.7565217391304347,
+          "unrefunded_duplicate": 0.2217391304347826,
+          "flagged": 0.021739130434782608
+        },
+        "lost_ack": {
+          "verified": 1.0
+        },
+        "never_commit": {
+          "flagged": 1.0
+        }
+      },
+      "calls": {
+        "phantom": 8.185185185185185,
+        "partial": 9.34375,
+        "clean": 6.4,
+        "precommit_timeout": 7.864864864864865,
+        "dup_delivery": 8.043478260869565,
+        "lost_ack": 6.083333333333333,
+        "never_commit": 7.96
+      },
+      "n": {
+        "phantom": 270,
+        "partial": 320,
+        "clean": 250,
+        "precommit_timeout": 185,
+        "dup_delivery": 230,
+        "lost_ack": 120,
+        "never_commit": 125
+      }
+    },
+    "No verification (scripted, trusts every acknowledgement)": {
+      "runs": [
+        "naive"
+      ],
+      "rates": {
+        "phantom": {
+          "false_success": 1.0
+        },
+        "partial": {
+          "false_success": 1.0
+        },
+        "clean": {
+          "verified": 1.0
+        },
+        "precommit_timeout": {
+          "verified": 1.0
+        },
+        "dup_delivery": {
+          "unrefunded_duplicate": 1.0
+        },
+        "lost_ack": {
+          "verified": 0.9166666666666666,
+          "unrefunded_duplicate": 0.08333333333333333
+        },
+        "never_commit": {
+          "false_success": 1.0
+        }
+      },
+      "calls": {
+        "phantom": 3.5925925925925926,
+        "partial": 3.65625,
+        "clean": 3.7,
+        "precommit_timeout": 4.648648648648648,
+        "dup_delivery": 3.630434782608696,
+        "lost_ack": 4.708333333333333,
+        "never_commit": 3.56
+      },
+      "n": {
+        "phantom": 54,
+        "partial": 64,
+        "clean": 50,
+        "precommit_timeout": 37,
+        "dup_delivery": 46,
+        "lost_ack": 24,
+        "never_commit": 25
+      }
+    },
+    "Hand-written database checks + fixed repair rules (scripted)": {
+      "runs": [
+        "oracle"
+      ],
+      "rates": {
+        "phantom": {
+          "verified": 1.0
+        },
+        "partial": {
+          "verified": 1.0
+        },
+        "clean": {
+          "verified": 1.0
+        },
+        "precommit_timeout": {
+          "verified": 1.0
+        },
+        "dup_delivery": {
+          "verified": 1.0
+        },
+        "lost_ack": {
+          "verified": 1.0
+        },
+        "never_commit": {
+          "flagged": 1.0
+        }
+      },
+      "calls": {
+        "phantom": 8.185185185185185,
+        "partial": 10.21875,
+        "clean": 6.4,
+        "precommit_timeout": 8.297297297297296,
+        "dup_delivery": 9.26086956521739,
+        "lost_ack": 6.416666666666667,
+        "never_commit": 7.8
+      },
+      "n": {
+        "phantom": 54,
+        "partial": 64,
+        "clean": 50,
+        "precommit_timeout": 37,
+        "dup_delivery": 46,
+        "lost_ack": 24,
+        "never_commit": 25
+      }
+    }
+  },
+  "projections": {
+    "SFT agent (warm start)": {
+      "conservative": {
+        "per_1000_ops": {
+          "verified": 996.18,
+          "false_success": 2.8600000000000008,
+          "unrefunded_duplicate": 0.94,
+          "flagged": 0.02
+        },
+        "calls_per_op": 3.7011200000000004,
+        "cost_per_1000_ops": {
+          "false_success_usd": 143.00000000000003,
+          "duplicate_usd": 611.0000000000001,
+          "flagged_usd": 0.5,
+          "inference_usd": 0.12851111111111113,
+          "total_usd": 754.6285111111113
+        },
+        "cost_per_1000_completed_usd": 757.5222460911796,
+        "saving_vs_sft_agent_per_1000_usd": 0.0
+      },
+      "moderate": {
+        "per_1000_ops": {
+          "verified": 984.7199999999999,
+          "false_success": 11.440000000000003,
+          "unrefunded_duplicate": 3.76,
+          "flagged": 0.08
+        },
+        "calls_per_op": 3.7044799999999998,
+        "cost_per_1000_ops": {
+          "false_success_usd": 2059.2000000000007,
+          "duplicate_usd": 8196.8,
+          "flagged_usd": 4.8,
+          "inference_usd": 0.2572555555555555,
+          "total_usd": 10261.057255555555
+        },
+        "cost_per_1000_completed_usd": 10420.279120517056,
+        "saving_vs_sft_agent_per_1000_usd": 0.0
+      },
+      "optimistic": {
+        "per_1000_ops": {
+          "verified": 961.8,
+          "false_success": 28.600000000000005,
+          "unrefunded_duplicate": 9.4,
+          "flagged": 0.2
+        },
+        "calls_per_op": 3.7112000000000003,
+        "cost_per_1000_ops": {
+          "false_success_usd": 25025.000000000004,
+          "duplicate_usd": 55225.0,
+          "flagged_usd": 35.0,
+          "inference_usd": 0.25772222222222224,
+          "total_usd": 80285.25772222223
+        },
+        "cost_per_1000_completed_usd": 83473.96311314435,
+        "saving_vs_sft_agent_per_1000_usd": 0.0
+      }
+    },
+    "Acknowledgement-reward GRPO (R_A)": {
+      "conservative": {
+        "per_1000_ops": {
+          "verified": 996.18,
+          "false_success": 2.8600000000000008,
+          "unrefunded_duplicate": 0.9466666666666669,
+          "flagged": 0.013333333333333332
+        },
+        "calls_per_op": 3.7010066666666668,
+        "cost_per_1000_ops": {
+          "false_success_usd": 143.00000000000003,
+          "duplicate_usd": 615.3333333333336,
+          "flagged_usd": 0.3333333333333333,
+          "inference_usd": 0.12850717592592592,
+          "total_usd": 758.7951738425929
+        },
+        "cost_per_1000_completed_usd": 761.7048865090576,
+        "saving_vs_sft_agent_per_1000_usd": -4.166662731481665
+      },
+      "moderate": {
+        "per_1000_ops": {
+          "verified": 984.7199999999999,
+          "false_success": 11.440000000000003,
+          "unrefunded_duplicate": 3.7866666666666675,
+          "flagged": 0.05333333333333333
+        },
+        "calls_per_op": 3.7040266666666666,
+        "cost_per_1000_ops": {
+          "false_success_usd": 2059.2000000000007,
+          "duplicate_usd": 8254.933333333334,
+          "flagged_usd": 3.1999999999999997,
+          "inference_usd": 0.25722407407407405,
+          "total_usd": 10317.59055740741
+        },
+        "cost_per_1000_completed_usd": 10477.68965534102,
+        "saving_vs_sft_agent_per_1000_usd": -56.53330185185405
+      },
+      "optimistic": {
+        "per_1000_ops": {
+          "verified": 961.8,
+          "false_success": 28.600000000000005,
+          "unrefunded_duplicate": 9.466666666666669,
+          "flagged": 0.13333333333333333
+        },
+        "calls_per_op": 3.7100666666666666,
+        "cost_per_1000_ops": {
+          "false_success_usd": 25025.000000000004,
+          "duplicate_usd": 55616.66666666668,
+          "flagged_usd": 23.333333333333332,
+          "inference_usd": 0.2576435185185185,
+          "total_usd": 80665.25764351853
+        },
+        "cost_per_1000_completed_usd": 83869.0555661453,
+        "saving_vs_sft_agent_per_1000_usd": -379.9999212963012
+      }
+    },
+    "State-reward GRPO (R_V)": {
+      "conservative": {
+        "per_1000_ops": {
+          "verified": 997.74,
+          "false_success": 0.844,
+          "unrefunded_duplicate": 0.912,
+          "flagged": 0.5040000000000001
+        },
+        "calls_per_op": 6.405216,
+        "cost_per_1000_ops": {
+          "false_success_usd": 42.199999999999996,
+          "duplicate_usd": 592.8000000000001,
+          "flagged_usd": 12.600000000000003,
+          "inference_usd": 0.22240333333333334,
+          "total_usd": 647.8224033333335
+        },
+        "cost_per_1000_completed_usd": 649.2897982774405,
+        "saving_vs_sft_agent_per_1000_usd": 106.80610777777781
+      },
+      "moderate": {
+        "per_1000_ops": {
+          "verified": 990.9599999999999,
+          "false_success": 3.376,
+          "unrefunded_duplicate": 3.648,
+          "flagged": 2.0160000000000005
+        },
+        "calls_per_op": 6.420864,
+        "cost_per_1000_ops": {
+          "false_success_usd": 607.6800000000001,
+          "duplicate_usd": 7952.64,
+          "flagged_usd": 120.96000000000002,
+          "inference_usd": 0.44589333333333325,
+          "total_usd": 8681.725893333334
+        },
+        "cost_per_1000_completed_usd": 8760.924652189125,
+        "saving_vs_sft_agent_per_1000_usd": 1579.3313622222213
+      },
+      "optimistic": {
+        "per_1000_ops": {
+          "verified": 977.4,
+          "false_success": 8.440000000000001,
+          "unrefunded_duplicate": 9.120000000000001,
+          "flagged": 5.040000000000001
+        },
+        "calls_per_op": 6.45216,
+        "cost_per_1000_ops": {
+          "false_success_usd": 7385.000000000001,
+          "duplicate_usd": 53580.00000000001,
+          "flagged_usd": 882.0000000000001,
+          "inference_usd": 0.44806666666666667,
+          "total_usd": 61847.44806666667
+        },
+        "cost_per_1000_completed_usd": 63277.520019098294,
+        "saving_vs_sft_agent_per_1000_usd": 18437.80965555556
+      }
+    },
+    "Class-matched control GRPO": {
+      "conservative": {
+        "per_1000_ops": {
+          "verified": 998.384,
+          "false_success": 0.7720000000000001,
+          "unrefunded_duplicate": 0.32799999999999996,
+          "flagged": 0.516
+        },
+        "calls_per_op": 6.4074160000000004,
+        "cost_per_1000_ops": {
+          "false_success_usd": 38.60000000000001,
+          "duplicate_usd": 213.20000000000002,
+          "flagged_usd": 12.9,
+          "inference_usd": 0.22247972222222223,
+          "total_usd": 264.92247972222225
+        },
+        "cost_per_1000_completed_usd": 265.3512874026649,
+        "saving_vs_sft_agent_per_1000_usd": 489.706031388889
+      },
+      "moderate": {
+        "per_1000_ops": {
+          "verified": 993.536,
+          "false_success": 3.0880000000000005,
+          "unrefunded_duplicate": 1.3119999999999998,
+          "flagged": 2.064
+        },
+        "calls_per_op": 6.429664,
+        "cost_per_1000_ops": {
+          "false_success_usd": 555.8400000000001,
+          "duplicate_usd": 2860.16,
+          "flagged_usd": 123.84,
+          "inference_usd": 0.4465044444444444,
+          "total_usd": 3540.2865044444443
+        },
+        "cost_per_1000_completed_usd": 3563.319803655272,
+        "saving_vs_sft_agent_per_1000_usd": 6720.770751111111
+      },
+      "optimistic": {
+        "per_1000_ops": {
+          "verified": 983.8399999999999,
+          "false_success": 7.7200000000000015,
+          "unrefunded_duplicate": 3.28,
+          "flagged": 5.16
+        },
+        "calls_per_op": 6.47416,
+        "cost_per_1000_ops": {
+          "false_success_usd": 6755.000000000001,
+          "duplicate_usd": 19270.0,
+          "flagged_usd": 903.0,
+          "inference_usd": 0.44959444444444446,
+          "total_usd": 26928.449594444446
+        },
+        "cost_per_1000_completed_usd": 27370.761093718946,
+        "saving_vs_sft_agent_per_1000_usd": 53356.80812777778
+      }
+    },
+    "Recovery-start GRPO (RSC)": {
+      "conservative": {
+        "per_1000_ops": {
+          "verified": 998.996,
+          "false_success": 0.28,
+          "unrefunded_duplicate": 0.20399999999999996,
+          "flagged": 0.52
+        },
+        "calls_per_op": 6.40892,
+        "cost_per_1000_ops": {
+          "false_success_usd": 14.000000000000002,
+          "duplicate_usd": 132.6,
+          "flagged_usd": 13.0,
+          "inference_usd": 0.22253194444444444,
+          "total_usd": 159.82253194444445
+        },
+        "cost_per_1000_completed_usd": 159.98315503209668,
+        "saving_vs_sft_agent_per_1000_usd": 594.8059791666668
+      },
+      "moderate": {
+        "per_1000_ops": {
+          "verified": 995.9839999999999,
+          "false_success": 1.12,
+          "unrefunded_duplicate": 0.8159999999999998,
+          "flagged": 2.08
+        },
+        "calls_per_op": 6.4356800000000005,
+        "cost_per_1000_ops": {
+          "false_success_usd": 201.60000000000002,
+          "duplicate_usd": 1778.8799999999997,
+          "flagged_usd": 124.80000000000001,
+          "inference_usd": 0.4469222222222222,
+          "total_usd": 2105.726922222222
+        },
+        "cost_per_1000_completed_usd": 2114.2176201848847,
+        "saving_vs_sft_agent_per_1000_usd": 8155.330333333333
+      },
+      "optimistic": {
+        "per_1000_ops": {
+          "verified": 989.9599999999999,
+          "false_success": 2.8000000000000003,
+          "unrefunded_duplicate": 2.0399999999999996,
+          "flagged": 5.200000000000001
+        },
+        "calls_per_op": 6.4892,
+        "cost_per_1000_ops": {
+          "false_success_usd": 2450.0000000000005,
+          "duplicate_usd": 11984.999999999998,
+          "flagged_usd": 910.0000000000002,
+          "inference_usd": 0.450638888888889,
+          "total_usd": 15345.450638888888
+        },
+        "cost_per_1000_completed_usd": 15501.081497119972,
+        "saving_vs_sft_agent_per_1000_usd": 64939.80708333335
+      }
+    },
+    "No verification (scripted, trusts every acknowledgement)": {
+      "conservative": {
+        "per_1000_ops": {
+          "verified": 996.18,
+          "false_success": 2.8600000000000008,
+          "unrefunded_duplicate": 0.9600000000000001,
+          "flagged": 0.0
+        },
+        "calls_per_op": 3.70088,
+        "cost_per_1000_ops": {
+          "false_success_usd": 143.00000000000003,
+          "duplicate_usd": 624.0000000000001,
+          "flagged_usd": 0.0,
+          "inference_usd": 0.0,
+          "total_usd": 767.0000000000001
+        },
+        "cost_per_1000_completed_usd": 769.9411752896065,
+        "saving_vs_sft_agent_per_1000_usd": -12.371488888888848
+      },
+      "moderate": {
+        "per_1000_ops": {
+          "verified": 984.7199999999999,
+          "false_success": 11.440000000000003,
+          "unrefunded_duplicate": 3.8400000000000003,
+          "flagged": 0.0
+        },
+        "calls_per_op": 3.7035199999999997,
+        "cost_per_1000_ops": {
+          "false_success_usd": 2059.2000000000007,
+          "duplicate_usd": 8371.2,
+          "flagged_usd": 0.0,
+          "inference_usd": 0.0,
+          "total_usd": 10430.400000000001
+        },
+        "cost_per_1000_completed_usd": 10592.249573482819,
+        "saving_vs_sft_agent_per_1000_usd": -169.342744444446
+      },
+      "optimistic": {
+        "per_1000_ops": {
+          "verified": 961.8,
+          "false_success": 28.600000000000005,
+          "unrefunded_duplicate": 9.600000000000001,
+          "flagged": 0.0
+        },
+        "calls_per_op": 3.7088,
+        "cost_per_1000_ops": {
+          "false_success_usd": 25025.000000000004,
+          "duplicate_usd": 56400.00000000001,
+          "flagged_usd": 0.0,
+          "inference_usd": 0.0,
+          "total_usd": 81425.00000000001
+        },
+        "cost_per_1000_completed_usd": 84658.97275940946,
+        "saving_vs_sft_agent_per_1000_usd": -1139.7422777777829
+      }
+    },
+    "Hand-written database checks + fixed repair rules (scripted)": {
+      "conservative": {
+        "per_1000_ops": {
+          "verified": 999.5,
+          "false_success": 0.0,
+          "unrefunded_duplicate": 0.0,
+          "flagged": 0.5
+        },
+        "calls_per_op": 6.411560000000001,
+        "cost_per_1000_ops": {
+          "false_success_usd": 0.0,
+          "duplicate_usd": 0.0,
+          "flagged_usd": 12.5,
+          "inference_usd": 0.0,
+          "total_usd": 12.5
+        },
+        "cost_per_1000_completed_usd": 12.506253126563282,
+        "saving_vs_sft_agent_per_1000_usd": 742.1285111111113
+      },
+      "moderate": {
+        "per_1000_ops": {
+          "verified": 998.0,
+          "false_success": 0.0,
+          "unrefunded_duplicate": 0.0,
+          "flagged": 2.0
+        },
+        "calls_per_op": 6.44624,
+        "cost_per_1000_ops": {
+          "false_success_usd": 0.0,
+          "duplicate_usd": 0.0,
+          "flagged_usd": 120.0,
+          "inference_usd": 0.0,
+          "total_usd": 120.0
+        },
+        "cost_per_1000_completed_usd": 120.24048096192384,
+        "saving_vs_sft_agent_per_1000_usd": 10141.057255555555
+      },
+      "optimistic": {
+        "per_1000_ops": {
+          "verified": 995.0,
+          "false_success": 0.0,
+          "unrefunded_duplicate": 0.0,
+          "flagged": 5.000000000000001
+        },
+        "calls_per_op": 6.5156,
+        "cost_per_1000_ops": {
+          "false_success_usd": 0.0,
+          "duplicate_usd": 0.0,
+          "flagged_usd": 875.0000000000001,
+          "inference_usd": 0.0,
+          "total_usd": 875.0000000000001
+        },
+        "cost_per_1000_completed_usd": 879.3969849246232,
+        "saving_vs_sft_agent_per_1000_usd": 79410.25772222223
+      }
+    }
+  },
+  "sensitivity_moderate": {
+    "fault_rate": {
+      "conservative": {
+        "SFT agent (warm start)": 2565.4570222222223,
+        "Acknowledgement-reward GRPO (R_A)": 2579.5903476851854,
+        "State-reward GRPO (R_V)": 2170.7648066666666,
+        "Class-matched control GRPO": 885.4049594444444,
+        "Recovery-start GRPO (RSC)": 526.7650638888888,
+        "No verification (scripted, trusts every acknowledgement)": 2607.6000000000004,
+        "Hand-written database checks + fixed repair rules (scripted)": 30.0
+      },
+      "optimistic": {
+        "SFT agent (warm start)": 25652.257722222224,
+        "Acknowledgement-reward GRPO (R_A)": 25793.590976851854,
+        "State-reward GRPO (R_V)": 21703.64806666667,
+        "Class-matched control GRPO": 8850.049594444445,
+        "Recovery-start GRPO (RSC)": 5263.650638888888,
+        "No verification (scripted, trusts every acknowledgement)": 26076.000000000004,
+        "Hand-written database checks + fixed repair rules (scripted)": 300.00000000000006
+      }
+    },
+    "value": {
+      "conservative": {
+        "SFT agent (warm start)": 5749.057255555556,
+        "Acknowledgement-reward GRPO (R_A)": 5773.5905574074095,
+        "State-reward GRPO (R_V)": 4304.125893333334,
+        "Class-matched control GRPO": 1965.8865044444444,
+        "Recovery-start GRPO (RSC)": 1126.526922222222,
+        "No verification (scripted, trusts every acknowledgement)": 5822.4000000000015,
+        "Hand-written database checks + fixed repair rules (scripted)": 120.0
+      },
+      "optimistic": {
+        "SFT agent (warm start)": 17781.057255555555,
+        "Acknowledgement-reward GRPO (R_A)": 17890.923890740745,
+        "State-reward GRPO (R_V)": 15977.725893333334,
+        "Class-matched control GRPO": 6164.286504444443,
+        "Recovery-start GRPO (RSC)": 3737.7269222222217,
+        "No verification (scripted, trusts every acknowledgement)": 18110.4,
+        "Hand-written database checks + fixed repair rules (scripted)": 120.0
+      }
+    },
+    "exception_cost": {
+      "conservative": {
+        "SFT agent (warm start)": 8662.257255555556,
+        "Acknowledgement-reward GRPO (R_A)": 8716.923890740742,
+        "State-reward GRPO (R_V)": 7873.645893333333,
+        "Class-matched control GRPO": 3006.046504444444,
+        "Recovery-start GRPO (RSC)": 1829.6469222222217,
+        "No verification (scripted, trusts every acknowledgement)": 8826.000000000002,
+        "Hand-written database checks + fixed repair rules (scripted)": 50.0
+      },
+      "optimistic": {
+        "SFT agent (warm start)": 15514.257255555558,
+        "Acknowledgement-reward GRPO (R_A)": 15576.923890740745,
+        "State-reward GRPO (R_V)": 11336.845893333333,
+        "Class-matched control GRPO": 5295.646504444445,
+        "Recovery-start GRPO (RSC)": 3012.846922222222,
+        "No verification (scripted, trusts every acknowledgement)": 15702.000000000002,
+        "Hand-written database checks + fixed repair rules (scripted)": 350.0
+      }
+    },
+    "late_multiplier": {
+      "conservative": {
+        "SFT agent (warm start)": 9349.057255555555,
+        "Acknowledgement-reward GRPO (R_A)": 9403.99055740741,
+        "State-reward GRPO (R_V)": 8260.285893333334,
+        "Class-matched control GRPO": 3276.2865044444443,
+        "Recovery-start GRPO (RSC)": 1989.5669222222218,
+        "No verification (scripted, trusts every acknowledgement)": 9513.600000000002,
+        "Hand-written database checks + fixed repair rules (scripted)": 120.0
+      },
+      "optimistic": {
+        "SFT agent (warm start)": 12085.057255555557,
+        "Acknowledgement-reward GRPO (R_A)": 12144.79055740741,
+        "State-reward GRPO (R_V)": 9524.605893333333,
+        "Class-matched control GRPO": 4068.286504444444,
+        "Recovery-start GRPO (RSC)": 2338.046922222222,
+        "No verification (scripted, trusts every acknowledgement)": 12264.0,
+        "Hand-written database checks + fixed repair rules (scripted)": 120.0
+      }
+    },
+    "dup_recovery": {
+      "conservative": {
+        "SFT agent (warm start)": 8381.057255555557,
+        "Acknowledgement-reward GRPO (R_A)": 8424.257224074077,
+        "State-reward GRPO (R_V)": 6857.725893333335,
+        "Class-matched control GRPO": 2884.2865044444443,
+        "Recovery-start GRPO (RSC)": 1697.7269222222221,
+        "No verification (scripted, trusts every acknowledgement)": 8510.400000000001,
+        "Hand-written database checks + fixed repair rules (scripted)": 120.0
+      },
+      "optimistic": {
+        "SFT agent (warm start)": 12141.057255555555,
+        "Acknowledgement-reward GRPO (R_A)": 12210.923890740743,
+        "State-reward GRPO (R_V)": 10505.725893333334,
+        "Class-matched control GRPO": 4196.286504444444,
+        "Recovery-start GRPO (RSC)": 2513.726922222222,
+        "No verification (scripted, trusts every acknowledgement)": 12350.400000000001,
+        "Hand-written database checks + fixed repair rules (scripted)": 120.0
+      }
+    },
+    "gpu_hour": {
+      "conservative": {
+        "SFT agent (warm start)": 10260.928627777777,
+        "Acknowledgement-reward GRPO (R_A)": 10317.461945370373,
+        "State-reward GRPO (R_V)": 8681.502946666667,
+        "Class-matched control GRPO": 3540.063252222222,
+        "Recovery-start GRPO (RSC)": 2105.503461111111,
+        "No verification (scripted, trusts every acknowledgement)": 10430.400000000001,
+        "Hand-written database checks + fixed repair rules (scripted)": 120.0
+      },
+      "optimistic": {
+        "SFT agent (warm start)": 10261.057255555555,
+        "Acknowledgement-reward GRPO (R_A)": 10317.59055740741,
+        "State-reward GRPO (R_V)": 8681.725893333334,
+        "Class-matched control GRPO": 3540.2865044444443,
+        "Recovery-start GRPO (RSC)": 2105.726922222222,
+        "No verification (scripted, trusts every acknowledgement)": 10430.400000000001,
+        "Hand-written database checks + fixed repair rules (scripted)": 120.0
+      }
+    }
+  }
+}
