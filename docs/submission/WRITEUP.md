@@ -81,6 +81,7 @@ Source: `results/s2/a12_summary.json` and `results/eval/a12/conf/*`. The two-met
 | **R1 (new)** | H1: SFT costs capability. H2: GRPO is non-inferior within 3 points (primary). H3: GRPO lowers abstention | H2 **supported** (non-inferior on both benchmarks, both arms); H1 and H3 not supported |
 | **J1 (new)** | J-H1: transcript-only judges are fooled on unverifiable failures. J-H2: a snapshot gives ≥ 0.90 accuracy | J-H1 **not supported** (≤ 1 of 120 accepted: judges abstain); J-H2 **not supported** (0.886–0.989) |
 | **C5/G (new, development)** | Verified-progress turn credit; hint-guided sampling; kill criterion +0.03 over RSC | C5 **dropped** (−0.32 and −0.37; it penalises reads by construction, `docs/research/algorithm/C5_RESULT.md`); G pending (seed 1 re-run after an HF bundle failure) |
+| **AD (algorithm discovery, development)** | GRPO's group-std scaling makes verification cost-blind when rollouts share a hidden world; AWRB (aliased-world return baseline) passes development gates | Development only (2 seeds): GRPO stops reading in 2 of 2 seeds at read cost 0.05 (cw_dev VSC 0.707 = warm start); AWRB 0.867 in both seeds; no-std GRPO 0.833. Confirmatory AD-C1 (`PREREGISTRATION_AD_C1.md`) is running, so **no confirmed algorithm** |
 
 ## 7. Threat model
 
@@ -263,6 +264,7 @@ Five independent training seeds per arm (0–4) for A12 R_V and R_A, RSC, the cl
 5. **Warned judges abstain; snapshot judges are not verifier-grade** (J1, `docs/upgrade/JUDGES.md`).
 6. **No capability cost** (R1, `docs/upgrade/CAPABILITY_RETENTION.md`).
 7. **Progress credit penalises evidence** (C5 diagnosis).
+8. **Group-std GRPO is cost-blind to verification** when a group shares one hidden world. The mechanism is published (Bereket & Leskovec, arXiv 2508.11800); its consequence for costly verification is ours. Shown in tabular theory and in the LLM (development: collapse in 2 of 2 seeds; advantage decomposition `results/ad/advantage_decomposition_steps0-40.json`). `docs/research/algorithm_discovery/FINAL_ALGORITHM.md`.
 
 ## 22. Negative results (kept and reported)
 

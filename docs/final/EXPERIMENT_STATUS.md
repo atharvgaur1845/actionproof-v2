@@ -33,7 +33,8 @@ As of 2026-11-23 11:47 IST (branch actionproof-research-upgrade).
 | R1 capability retention: IFEval + BFCL v4 single-turn, 30 procurement models + Stage 1 chain | `PREREGISTRATION_R1.md` (deviation D-R1-1, before output) | 5 per arm (SR1 3) | **Running** (cluster, tasks 1100–1103) | `results/r1/r1_summary.json` | Mon 23 Nov |
 | R1-T τ-bench retail (descriptive), with a feasibility pilot and an overflow cancellation rule | `PREREGISTRATION_R1_TAU.md` | 3 per arm | **Queued** (H200 pool, tasks 1104–1106) | `results/r1_tau/r1_tau_summary.json` | Mon 23 Nov |
 | J1 judge committee: 4 families × 736 cases × 2 views + prompt variant; human calibration | `PREREGISTRATION_J1.md` | — | **Running** (HF router; calibration views done, $0.19); human labels pending | `results/j1/j1_summary.json` | Mon 23 Nov |
-| Algorithm discovery programme (separate research agent, own worktree) | its own registrations under `docs/research/algorithm_discovery/` | — | **Running** | — | — |
+| AD-D1/D2/D3 development (costed-verification testbed cw; GRPO, no-std, AWRB, AWRB-no-std; EMA scale; per-read cost) | `docs/research/algorithm_discovery/EXPERIMENT_PROTOCOL*.md` | 2 per arm | D1 seed 0 and part of seed 1 done (GRPO collapses verification 2/2; AWRB passes gates); D1 seed 1, cost-0.30 interventions, D2, D3 **running** | `results/ad/dev/`, `results/ad/d*_summary.json` | D3 about 00:30 Nov 24 |
+| AD-C1 confirmatory (GRPO vs AWRB, seeds 0–4, cw_conf once, Holm) | `PREREGISTRATION_AD_C1.md` + addendum 1 | 5 + 5 | **Queued / running overnight** | `results/ad/c1_summary.json` (`scripts/ad/c1_stats.py`) | about 06:00 Nov 24 |
 | Mechanistic causal test (CircuitKIT) | — | — | **Not run.** CircuitKIT failed to install in Stage 2 (D-A16-1); A16's ablation is not specific | — | Future work |
 
 **Not attempted, by decision:**
