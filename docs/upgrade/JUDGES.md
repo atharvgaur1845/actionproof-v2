@@ -33,6 +33,17 @@ Inter-judge Fleiss κ on Q1: 0.662. Cases where all four judges contradict the v
 
 Inter-judge Fleiss κ on Q1: 0.834. Cases where all four judges contradict the verifier: 4.
 
+## Addendum 1 (exploratory): the same prompt without the sentence "an ok reply does not prove a write"
+
+| Judge | Says 'it happened' on unverifiable failures: without (v0) | with (v1) | Coverage v0 / v1 | Accuracy v0 / v1 |
+|---|---|---|---|---|
+| Gemma 4 31B | 120/120 | 0/120 | 0.977 / 0.576 | 0.708 / 0.576 |
+| Qwen3 235B-A22B | 115/120 | 1/120 | 0.935 / 0.592 | 0.497 / 0.373 |
+| gpt-oss-120b | 120/120 | 0/120 | 0.955 / 0.564 | 0.630 / 0.514 |
+| DeepSeek V3.2 | 9/120 | 0/120 | 0.488 / 0.429 | 0.321 / 0.300 |
+
+One sentence decides it: without the warning, three of four judges accept essentially every unverifiable failure; with it, none do. A judge's apparent caution here is a property of the prompt, not of the model. Registered after the J1 results were read (exploratory).
+
 ## Prompt sensitivity (v1 vs paraphrased v2, transcript view)
 
 | Judge | Cases | Q1 agreement | κ |

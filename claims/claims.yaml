@@ -717,4 +717,16 @@ claims:
       d_proc: {value: -0.37, file: results/s5/s5_dev_summary.json, key: [c5, criteria, proc_dev_diff], shown: ["-0.37", "−0.37", "0.37"]}
     commit: null
 
+  - id: J1-A1
+    statement: "J1 addendum 1 (exploratory; registered after J1 results, before any v0 output): removing the single rubric sentence that an ok reply does not prove a write turns abstention into acceptance. Transcript-only judges then answer 'it happened' on unverifiable failures in 120 of 120 (Gemma 4 31B), 120 of 120 (gpt-oss-120b), 115 of 120 (Qwen3 235B) and 9 of 120 (DeepSeek V3.2) episodes, against 0, 0, 1 and 0 with the sentence."
+    status: supported
+    prereg: PREREGISTRATION_J1_ADDENDUM1.md
+    eval: [results/j1/j1_addendum1.json]
+    stats: evaluation/llm_judge_committee/analyze_a1.py
+    numbers:
+      gemma: {value: 120, file: results/j1/j1_addendum1.json, key: [gemma, v0, fooled], shown: ["120 of 120"]}
+      qwen: {value: 115, file: results/j1/j1_addendum1.json, key: [qwen, v0, fooled], shown: ["115 of 120", "115"]}
+      deepseek: {value: 9, file: results/j1/j1_addendum1.json, key: [deepseek, v0, fooled], shown: ["9 of 120"]}
+    commit: null
+
 allow: ["3.12", "2.11", "5.22", "1.7", "0.23", "0.8", "0.80", "0.30", "0.02", "0.5", "0.3"]  # 0.5, 0.3: registered H4 thresholds (PREREGISTRATION_A11 §9)

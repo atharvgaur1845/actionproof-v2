@@ -45,6 +45,7 @@ Stage 4 (`docs/research/`):
 - **Capability retention** (R1, registered; `docs/upgrade/CAPABILITY_RETENTION.md`): on IFEval and BFCL v4, GRPO is non-inferior to its warm start within 0.03 for both registered arms. Changes: state reward 0.000 (IFEval) and −0.002 (BFCL); recovery-start −0.004 and +0.001. The base model itself abstains on only 7.9% of BFCL irrelevance items.
 - **LLM judges** (J1, registered; `docs/upgrade/JUDGES.md`): four families, 660 blinded episodes.
   - Told that "ok" is not proof, judges abstain rather than accept unverifiable failures (Qwen 1 of 120; others none).
+  - Without that one sentence (exploratory addendum), the same judges accept 120 of 120, 120 of 120, 115 of 120 and 9 of 120.
   - With a database snapshot, accuracy is 0.989 (Gemma), 0.933 (gpt-oss), 0.889 (Qwen) and 0.886 (DeepSeek). A majority committee reaches 0.897, so the verifier stays authoritative.
 - **Stage 5 C5** (verified-progress turn credit) was dropped by its kill criteria (−0.32, −0.37). State-progress credit penalises read turns by construction (`docs/research/algorithm/C5_RESULT.md`).
 - **Operational model** (`docs/upgrade/ROI.md`): projections, not savings. Hand-written read-back-and-repair checks beat every trained agent in ProcureSim.

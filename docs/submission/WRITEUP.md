@@ -28,7 +28,7 @@ Tool-using agents increasingly write to systems of record: payments, goods recei
 
 **New in this round:**
 1. Capability retention on BFCL and IFEval, registered before any output (R1): across 35 models, no trained arm loses measurable general ability. GRPO is non-inferior to its warm start within 0.03 on both benchmarks (all four Holm p < 0.001).
-2. A four-family LLM judge committee measured against the database (J1). Told that "ok" is not proof, judges abstain rather than accept unverifiable failures, so they cannot certify outcomes. With a database snapshot, two of four families stay near 0.89 accuracy, and majority voting (0.897) does not beat the best single judge (0.989).
+2. A four-family LLM judge committee measured against the database (J1). Told that "ok" is not proof, judges abstain rather than accept unverifiable failures, so they cannot certify outcomes. Without that one sentence, three of four judges accept nearly all of them (exploratory). With a database snapshot, two of four families stay near 0.89 accuracy, and majority voting (0.897) does not beat the best single judge (0.989).
 3. A cost model built from measured per-fault outcome rates. Recovery-start GRPO cuts projected losses by about 80% against the untrained agent, but hand-written read-back-and-repair checks beat every trained agent. So we present ActionProof as fault-injection testing plus runtime verification, with training as a second line.
 
 Every experiment was registered and hashed before it ran. A checker re-reads every reported number from its result file.
@@ -187,7 +187,7 @@ Accuracy counts an abstention as wrong.
 - **Not fooled, but abstaining.** No judge accepted more than 1 of 120 unverifiable failures; judges confirmed only 29–67% of genuinely completed episodes.
 - **One systematic bias.** In 4 snapshot cases all four judges contradict the verifier, and the verifier is right: a refunded duplicate nets to one payment.
 - **Human calibration labels:** pending (one annotator).
-- **Exploratory addendum 1:** the same prompt without the "ok is not proof" sentence; reported in `results/j1/j1_addendum1.json`.
+- **Exploratory addendum 1** (registered after J1 was read; `results/j1/j1_addendum1.json`). Remove that one rubric sentence, and transcript-only judges accept unverifiable failures in 120 of 120 (Gemma), 120 of 120 (gpt-oss), 115 of 120 (Qwen) and 9 of 120 (DeepSeek) episodes. **A judge's caution is a property of the prompt, not of the model.**
 
 Design (`PREREGISTRATION_J1.md`):
 - four families, temperature 0, seeded option order;

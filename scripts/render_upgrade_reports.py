@@ -103,6 +103,19 @@ def judges() -> str:
                      f"{fmt(v['accuracy_abstain_wrong'])} | {fmt(v['fpr'])} | {fmt(v['kappa'])} | | | | | |")
         L.append(f"\nInter-judge Fleiss κ on Q1: {b['fleiss_kappa_q1']:.3f}. Cases where all four judges contradict the verifier: "
                  f"{len(b['all_four_contradict_verifier'])}.")
+    a1p = ROOT / "results/j1/j1_addendum1.json"
+    if a1p.exists():
+        a1 = json.loads(a1p.read_text())
+        L += ["", "## Addendum 1 (exploratory): the same prompt without the sentence \"an ok reply does not prove a write\"", "",
+              "| Judge | Says 'it happened' on unverifiable failures: without (v0) | with (v1) | Coverage v0 / v1 | Accuracy v0 / v1 |",
+              "|---|---|---|---|---|"]
+        for j, v in a1.items():
+            L.append(f"| {names[j]} | {v['v0']['fooled']}/{v['v0']['n_unverifiable']} | {v['v1']['fooled']}/{v['v1']['n_unverifiable']} | "
+                     f"{v['v0']['q1']['coverage']:.3f} / {v['v1']['q1']['coverage']:.3f} | "
+                     f"{v['v0']['q1']['accuracy_abstain_wrong']:.3f} / {v['v1']['q1']['accuracy_abstain_wrong']:.3f} |")
+        L.append("\nOne sentence decides it: without the warning, three of four judges accept essentially every unverifiable failure; "
+                 "with it, none do. A judge's apparent caution here is a property of the prompt, not of the model. "
+                 "Registered after the J1 results were read (exploratory).")
     s = d["prompt_sensitivity"]
     L += ["", "## Prompt sensitivity (v1 vs paraphrased v2, transcript view)", "",
           "| Judge | Cases | Q1 agreement | κ |", "|---|---|---|---|"]
