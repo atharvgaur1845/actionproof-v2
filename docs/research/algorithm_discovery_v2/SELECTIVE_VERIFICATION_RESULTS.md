@@ -84,6 +84,20 @@ the sequence signal does not already give.
 GRPO's 0.001. The recovery skill itself is fixed by the environment's repair rates. The estimators differ only in
 whether they look.
 
+## 2b. Scope correction (TB7, V-F9)
+
+About one third of igc's regret gain in TB2 comes from gating re-verification after a repair. In the testbed that
+decision is labelled uninformative only because the replay holds the rollout's hidden repair-success bit fixed. The
+artefact-free variant gates only the first read after a write (igc_v1):
+
+| Budget | igc_v1 regret | nostd regret | Seeds better | igc_v1 never-faulted-op verify | nostd never-faulted-op verify |
+|---|---|---|---|---|---|
+| ×1 | 0.0202 | 0.0296 | 5/5 | 0.020 | 0.197 |
+| ×4 | 0.0062 | 0.0080 | 5/5 | 0.002 | 0.039 |
+
+**The selectivity effect is entirely in the first-read gate.** The headline numbers below should be read with this
+correction.
+
 ## 3. What this does and does not show
 
 **Shown, in a controlled testbed with an exact optimum:**

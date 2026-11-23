@@ -171,6 +171,12 @@ matched episode budget.
 | 5 | ctxema | weak | high | sign-preserving | worse than nostd | **falsified** | rejected |
 | 6 | lagr / lagr_grpo | none | high | cancellation under std | worse | **falsified** | rejected |
 
+**TB7 scope correction (V-F9).**
+- The artefact-free first-read gate (igc_v1) retains 66% of igc's gain: regret 0.0202 vs nostd's 0.0296 at ×1, and
+  0.0062 vs 0.0080 at ×4, 5/5 seeds each.
+- Registered P7a (≥ 80%) failed.
+- The surviving candidate is therefore stated as igc_v1.
+
 **Does any surviving candidate change a meaningful part of the optimisation procedure?** Yes: igc changes the
 credit assigned to verification decisions (the advantage estimator), not the reward. It is still only a development
 result in a tabular testbed. It needs privileged training-time information: the support of the hidden-fault prior

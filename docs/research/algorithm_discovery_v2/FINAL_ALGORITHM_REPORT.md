@@ -31,6 +31,9 @@ evidence are kept separate.
    - It does not pass at 8× budget: its benefit is sample efficiency, not a different end point.
    - Its LLM version (first-stage D3) had not run at the time of writing.
    - It is per-decision credit with an exact local value. It is not novel as a mechanism.
+   - **Scope correction (TB7, V-F9).** About one third of igc's TB2 regret gain came from a testbed artefact: the
+     replay labels re-verification after a repair as uninformative. The artefact-free first-read gate (igc_v1)
+     still gives 0.0202 vs 0.0296 (×1) and 0.0062 vs 0.0080 (×4), 5/5 seeds each, with the same 10× selectivity.
 4. **Forked counterfactual credit** (actual-world or belief-resampled forks) is unbiased and best per update, but it
    is **not cost-effective** at matched episode budget (registered gate failed in 5/5 seeds).
 

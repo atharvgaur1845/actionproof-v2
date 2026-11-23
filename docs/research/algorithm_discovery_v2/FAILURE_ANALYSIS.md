@@ -69,3 +69,21 @@ noisy signal, larger steps can drive the read probability into the absorbing ρ 
 from that state, because every group then has zero variance. This is a stability failure, not the vote mechanism.
 
 It also qualifies first-stage D3 (nostd_ema_irc), which uses the same EMA scale.
+
+## V-F9. Part of igc's TB2 gain comes from a testbed artefact (TB7; P7a failed)
+
+| Field | Content |
+|---|---|
+| Finding (code review after TB2) | The tabular information gate labels re-verification after a repair as uninformative. The replay rows hold the rollout's own repair-success bit fixed, although the agent cannot observe it |
+| Registered P7a | Gating V1 alone retains ≥ 80% of igc's gain over nostd |
+| Actual | 66% at both ×1 and ×4 (`results/ad2/tabular/TB7_summary.json`). igc_full reproduces TB2's igc exactly (0.0155 / 0.0053) |
+| Scoped result (descriptive, not a registered gate) | **igc_v1** (gate only the first read after a write; no artefact) vs nostd. Its safe-op verify rate is identical to the full igc's (0.020 at ×1, 0.002 at ×4) |
+
+| Budget | igc_v1 regret | nostd regret | Relative gain | Seeds positive |
+|---|---|---|---|---|
+| ×1 | 0.0202 | 0.0296 | 31.6% | 5/5 |
+| ×4 | 0.0062 | 0.0080 | 22.1% | 5/5 |
+
+**Consequence.** Every igc claim is restated on the igc_v1 numbers. The selectivity result (never-faulted-op verify
+0.197 → 0.020) is unaffected. The regret gain is about two thirds of the TB2 figure. igc_v1 would still satisfy the
+T1 criterion (≥ 20%, ≥ 4/5 seeds) at ×1 and ×4, but that is a post-hoc reading, not a registered gate.
