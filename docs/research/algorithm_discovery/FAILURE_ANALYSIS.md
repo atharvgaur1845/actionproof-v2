@@ -49,3 +49,12 @@ Every failed or partly failed expectation in the programme, recorded as it happe
 | Observation | RSC s0: VSC 0.960, J_c 0.812. A12 R_V s0: VSC 0.913, J_c 0.769. Best costed arm at seed 0: J_c 0.740 (nostd). |
 | Cause | Repair after a revealed payment fault: RSC 0.82, A12 R_V 0.61, nostd 0.53, awrb 0.44, awrbn 0.29. The free-read models were trained on fault-dense pools (and RSC on recovery starts), where repair is learned. Under cw1, 60% of training tasks are clean, so repairs are practised less. |
 | Implication | Within the costed testbed, the estimator comparison is clean. Across training recipes it is not. **The costed arms do not beat the strongest existing ActionProof baseline.** Any claim must be scoped to "estimators under a costed, low-fault training distribution". |
+
+## F6. The c = 0.30 intervention probably cannot discriminate the mirror bias (design limitation, noted 2026-11-23 16:53 IST, before any c = 0.30 output)
+
+| Field | Content |
+|---|---|
+| Registered | Amendment 1 predicted that at c = 0.30, awrb verifies more than awrbn (the mirror bias, P4). |
+| Problem found before the outcome | P4's rule for group-std AWRB is "verify iff p > c" (for p < 1/2). In CW, the per-decision probability of a silent fault after an ok acknowledgement is about 0.16 in the two-site workflows and about 0.3 in pay_post. At c = 0.30, c ≥ p for most decisions, so P4 also predicts that awrb stops verifying. The registered prediction was carried over from the toy's s = 0 case, where p > c holds. The window that would separate P4 from the VoI rule is p·s < c < p. With repair success after a revealed payment fault of 0.29–0.53 at c = 0.05, that window is about 0.08–0.16 for two-site workflows. It is narrow and workflow-dependent. |
+| Consequence | The c = 0.30 runs test something weaker: whether each estimator stops verifying once verification clearly does not pay. That is the "not excessively conservative" requirement. A finding that awrb ≈ awrbn at c = 0.30 does **not** refute P4. A finding that awrb verifies much more than awrbn would support P4 even at this cost. |
+| Action | No new run (budget). The mirror bias stays a toy-level result (AD-T0b), plus the LLM observation that awrb verifies after the never-faulted journal entry at 0.91. That observation is also explained by site-agnostic reading (F3), so it is not specific to P4. |
