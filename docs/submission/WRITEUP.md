@@ -80,7 +80,7 @@ Source: `results/s2/a12_summary.json` and `results/eval/a12/conf/*`. The two-met
 | FCA (development) | Forked counterfactual credit beats RSC by ≥ 0.03 | Failed: −0.10; dropped |
 | **R1 (new)** | H1: SFT costs capability. H2: GRPO is non-inferior within 3 points (primary). H3: GRPO lowers abstention | H2 **supported** (non-inferior on both benchmarks, both arms); H1 and H3 not supported |
 | **J1 (new)** | J-H1: transcript-only judges are fooled on unverifiable failures. J-H2: a snapshot gives ≥ 0.90 accuracy | J-H1 **not supported** (≤ 1 of 120 accepted: judges abstain); J-H2 **not supported** (0.886–0.989) |
-| **C5/G (new, development)** | Verified-progress turn credit; hint-guided sampling; kill criterion +0.03 over RSC | C5 **dropped** (−0.32 and −0.37; it penalises reads by construction, `docs/research/algorithm/C5_RESULT.md`); G pending (seed 1 re-run after an HF bundle failure) |
+| **C5/G (new, development)** | Verified-progress turn credit; hint-guided sampling; kill criterion +0.03 over RSC | C5 **dropped** (−0.32 and −0.37; it penalises reads by construction, `docs/research/algorithm/C5_RESULT.md`); G **dropped** (−0.11 and −0.033; `docs/research/algorithm/G_RESULT.md`) |
 | **AD (algorithm discovery, development)** | Group-std scaling can distort costly-verification learning when rollouts share a hidden fault (mechanism known from Dr. GRPO and Bereket & Leskovec; the interaction is ours); AWRB (aliased-world return baseline) passes development gates | Development only (2 seeds): GRPO stops reading in 2 of 2 seeds at read cost 0.05 (cw_dev VSC 0.707 = warm start); AWRB 0.867 in both seeds; no-std GRPO 0.833. Confirmatory AD-C1 (`PREREGISTRATION_AD_C1.md`) is running, so **no confirmed algorithm** |
 
 ## 7. Threat model
@@ -210,7 +210,7 @@ Full report: `docs/upgrade/CAPABILITY_RETENTION.md`, generated from `results/r1/
 
 - **No trained arm shows a measurable loss.** The most negative point estimate across all arms and endpoints is −0.012.
 - **Low abstention is the base model's own property** (0.079).
-- **τ-bench (R1-T):** pending. The feasibility pilot's first launch failed at server start (D-R1T-1) and has been re-queued.
+- **τ-bench retail (R1-T, descriptive):** a floor regime for a 3B model (base pass^1 0.058). The SFT warm start lowers it by 0.020 [−0.038, −0.006]; GRPO adds no change (state reward −0.006, recovery-start −0.004, intervals include 0). Most successes involve no write action, so at this scale τ-bench measures hand-off behaviour more than state-changing competence. Two infrastructure deviations were fixed before any episode (D-R1T-1, D-R1T-2).
 
 Benchmark selection:
 - BFCL and IFEval are primary.

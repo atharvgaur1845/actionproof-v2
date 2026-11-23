@@ -729,4 +729,28 @@ claims:
       deepseek: {value: 9, file: results/j1/j1_addendum1.json, key: [deepseek, v0, fooled], shown: ["9 of 120"]}
     commit: null
 
+  - id: G
+    statement: "Stage 5 G (sampler-only reconciliation-hint guidance) dropped by its pre-set kill criteria (docs/research/algorithm/C5G_DEV.md): s3_rec_dev -0.11 and proc_dev -0.033 vs recovery-start GRPO (seeds 0-1; seed 1 re-run on Slurm after an HF bundle failure). Hinted episodes were about 5% of training rollouts."
+    status: refuted
+    prereg: docs/research/algorithm/C5G_DEV.md
+    eval: [results/s5/s5_dev_summary.json]
+    stats: scripts/s5_dev.py
+    numbers:
+      d_rec: {value: -0.11, file: results/s5/s5_dev_summary.json, key: [guide, criteria, s3_rec_dev_diff], shown: ["-0.11", "−0.11", "0.11"]}
+      d_proc: {value: -0.033, file: results/s5/s5_dev_summary.json, key: [guide, criteria, proc_dev_diff], shown: ["-0.033", "−0.033", "0.033"]}
+    commit: null
+
+  - id: R1-T
+    statement: "R1-T (descriptive, PREREGISTRATION_R1_TAU.md; deviations D-R1T-1, D-R1T-2 before any episode): tau-bench retail test, 115 tasks x 3 trials, Aya Expanse 32B simulated user. Floor regime: base pass^1 0.058; the SFT warm start lowers it by 0.020 [-0.038, -0.006]; GRPO adds no change (state reward -0.006, recovery-start -0.004, intervals include 0). Most successes involve no write action."
+    status: supported
+    prereg: PREREGISTRATION_R1_TAU.md
+    eval: [results/r1_tau/r1_tau_summary.json]
+    stats: scripts/r1_tau_stats.py
+    numbers:
+      base: {value: 0.058, file: results/r1_tau/r1_tau_summary.json, key: [models, base, pass1], shown: ["0.058"]}
+      warm_vs_base: {value: -0.020, file: results/r1_tau/r1_tau_summary.json, key: [contrasts, warm_vs_base, delta], shown: ["-0.020", "−0.020", "0.020"]}
+      rv: {value: -0.006, file: results/r1_tau/r1_tau_summary.json, key: [contrasts, a12_rv_vs_warm, delta], shown: ["-0.006", "−0.006", "0.006"]}
+      rsc: {value: -0.004, file: results/r1_tau/r1_tau_summary.json, key: [contrasts, rsc_vs_warm, delta], shown: ["-0.004", "−0.004"]}
+    commit: null
+
 allow: ["3.12", "2.11", "5.22", "1.7", "0.23", "0.8", "0.80", "0.30", "0.02", "0.5", "0.3"]  # 0.5, 0.3: registered H4 thresholds (PREREGISTRATION_A11 §9)

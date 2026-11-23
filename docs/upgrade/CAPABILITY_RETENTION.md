@@ -40,6 +40,27 @@ Registration: `PREREGISTRATION_R1.md` (deviation D-R1-1, before any analysed out
 | Stage 1 tool-trust − Stage 1 warm (2) | −0.006 [−0.024, +0.011] (0.760) | +0.011 [+0.003, +0.020] (0.504) | −0.002 [−0.014, +0.006] (0.185) | −0.008 [−0.025, +0.008] (0.104) | −0.001 [−0.013, +0.011] (0.225) |
 | Tool-name randomisation − recovery-start (3 vs 5) | — | +0.004 [−0.001, +0.010] (0.493) | +0.006 [−0.008, +0.024] (0.237) | — | — |
 
+## τ-bench retail (R1-T, descriptive; `PREREGISTRATION_R1_TAU.md`, deviations D-R1T-1/2 before any episode)
+
+| Model | pass^1 | pass^2 | pass^3 | Context overflow | Mean messages |
+|---|---|---|---|---|---|
+| `a12_rv_s0` | 0.029 | 0.014 | 0.009 | 0.157 | 24.9 |
+| `a12_rv_s1` | 0.038 | 0.023 | 0.017 | 0.125 | 25.6 |
+| `a12_rv_s2` | 0.029 | 0.014 | 0.009 | 0.142 | 24.6 |
+| `base` | 0.058 | 0.055 | 0.052 | 0.055 | 18.9 |
+| `rsc_s0` | 0.029 | 0.017 | 0.009 | 0.130 | 24.5 |
+| `rsc_s1` | 0.026 | 0.014 | 0.009 | 0.133 | 21.9 |
+| `rsc_s2` | 0.046 | 0.035 | 0.026 | 0.139 | 23.6 |
+| `warm_start` | 0.038 | 0.020 | 0.009 | 0.125 | 25.3 |
+
+| Contrast (per-task pass^1, paired task bootstrap) | Δ | 95% CI |
+|---|---|---|
+| warm vs base | −0.020 | [−0.038, −0.006] |
+| a12 rv vs warm | −0.006 | [−0.019, +0.006] |
+| rsc vs warm | −0.004 | [−0.019, +0.013] |
+
+Floor regime: Tiny Aya Global solves about 3–6% of retail tasks with an Aya Expanse 32B simulated user (not comparable with published τ-bench numbers). Most successes involve no write action, so the benchmark mainly measures hand-off and no-change behaviour at this scale. The SFT warm start lowers pass^1 slightly; GRPO adds no change. Trained models overflow the 8,192-token context more often (longer episodes).
+
 ## Reading
 
 - **No trained arm shows a measurable loss.** Across every arm and endpoint the most negative point estimate is −0.012 (Stage 1 PCSTR-d, BFCL live irrelevance). Every procurement-study interval stays above −0.024 (lowest: acknowledgement-reward GRPO, IFEval). The only lower bound past −0.03 is Stage 1 PCSTR-d on BFCL live calls (−0.032, two seeds, point estimate −0.004). The primary non-inferiority test passes for both registered arms on both benchmarks.

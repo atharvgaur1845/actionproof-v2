@@ -56,6 +56,20 @@ def retention() -> str:
             x = C.get(f"{k}:{e}")
             cells.append("—" if not x else f"{f(x['delta'])} [{f(x['ci95'][0])}, {f(x['ci95'][1])}] ({x['ref_value']:.3f})")
         L.append(f"| {lab} | " + " | ".join(cells) + " |")
+    tp = ROOT / "results/r1_tau/r1_tau_summary.json"
+    if tp.exists():
+        t = json.loads(tp.read_text())
+        L += ["", "## τ-bench retail (R1-T, descriptive; `PREREGISTRATION_R1_TAU.md`, deviations D-R1T-1/2 before any episode)", "",
+              "| Model | pass^1 | pass^2 | pass^3 | Context overflow | Mean messages |", "|---|---|---|---|---|---|"]
+        for tag, m in t["models"].items():
+            pk = m["pass_hat_k"]
+            L.append(f"| `{tag}` | {m['pass1']:.3f} | {pk.get('2', 0):.3f} | {pk.get('3', 0):.3f} | {m['overflow_rate']:.3f} | {m['mean_messages']:.1f} |")
+        L += ["", "| Contrast (per-task pass^1, paired task bootstrap) | Δ | 95% CI |", "|---|---|---|"]
+        L += [f"| {k.replace('_', ' ')} | {f(x['delta'])} | [{f(x['ci95'][0])}, {f(x['ci95'][1])}] |" for k, x in t["contrasts"].items()]
+        L += ["", "Floor regime: Tiny Aya Global solves about 3–6% of retail tasks with an Aya Expanse 32B simulated user "
+              "(not comparable with published τ-bench numbers). Most successes involve no write action, so the benchmark mainly "
+              "measures hand-off and no-change behaviour at this scale. The SFT warm start lowers pass^1 slightly; GRPO adds no "
+              "change. Trained models overflow the 8,192-token context more often (longer episodes)."]
     L += ["", "## Reading", "",
           "- **No trained arm shows a measurable loss.** Across every arm and endpoint the most negative point estimate is "
           "−0.012 (Stage 1 PCSTR-d, BFCL live irrelevance). Every procurement-study interval stays above −0.024 "

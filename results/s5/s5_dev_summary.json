@@ -209,6 +209,212 @@
     "verdict": "dropped"
   },
   "guide": {
-    "missing": "[Errno 2] No such file or directory: '/scratch/pabitra/actionproof/results/s5/dev/s5_guide_s1__s3_rec_dev.summary.json'"
+    "per_seed": {
+      "0": {
+        "s3_rec_dev": {
+          "cand": 0.7,
+          "rsc": 0.8066666666666666,
+          "cand_false_success": 0.18666666666666668,
+          "rsc_false_success": 0.08666666666666667,
+          "cand_calls": 4.706666666666667,
+          "rsc_calls": 5.1866666666666665
+        },
+        "proc_dev": {
+          "cand": 0.8266666666666667,
+          "rsc": 0.86,
+          "cand_false_success": 0.05333333333333334,
+          "rsc_false_success": 0.02,
+          "cand_calls": 7.413333333333333,
+          "rsc_calls": 7.54
+        },
+        "kl_step100": {
+          "cand": 0.012101447762688622,
+          "rsc": 0.008971358562121168
+        },
+        "training": {
+          "episodes": 6400,
+          "hinted_share": 0.0503125,
+          "partial_pay_repaired_by_block": {
+            "0": 0.022727272727272728,
+            "50": 0.01838235294117647,
+            "100": 0.020161290322580645,
+            "150": 0.034722222222222224
+          }
+        }
+      },
+      "1": {
+        "s3_rec_dev": {
+          "cand": 0.6933333333333334,
+          "rsc": 0.8066666666666666,
+          "cand_false_success": 0.2,
+          "rsc_false_success": 0.08,
+          "cand_calls": 4.6,
+          "rsc_calls": 5.226666666666667
+        },
+        "proc_dev": {
+          "cand": 0.8266666666666667,
+          "rsc": 0.86,
+          "cand_false_success": 0.05333333333333334,
+          "rsc_false_success": 0.02,
+          "cand_calls": 7.386666666666667,
+          "rsc_calls": 7.54
+        },
+        "kl_step100": {
+          "cand": 0.02284695681737503,
+          "rsc": 0.016586724192166002
+        },
+        "training": {
+          "episodes": 6400,
+          "hinted_share": 0.054375,
+          "partial_pay_repaired_by_block": {
+            "0": 0.020833333333333332,
+            "50": 0.028225806451612902,
+            "100": 0.02,
+            "150": 0.03869047619047619
+          }
+        }
+      }
+    },
+    "by_class_s3_rec_dev": {
+      "s3:complete:ack": {
+        "cand": [
+          1.0,
+          1.0
+        ],
+        "rsc": [
+          1.0,
+          1.0
+        ]
+      },
+      "s3:complete:read": {
+        "cand": [
+          1.0,
+          1.0
+        ],
+        "rsc": [
+          1.0,
+          1.0
+        ]
+      },
+      "s3:done": {
+        "cand": [
+          1.0,
+          1.0
+        ],
+        "rsc": [
+          1.0,
+          1.0
+        ]
+      },
+      "s3:dup_delivery:ack": {
+        "cand": [
+          1.0,
+          1.0
+        ],
+        "rsc": [
+          0.8888888888888888,
+          0.7777777777777778
+        ]
+      },
+      "s3:dup_delivery:read": {
+        "cand": [
+          0.9285714285714286,
+          0.8571428571428571
+        ],
+        "rsc": [
+          0.7857142857142857,
+          0.7857142857142857
+        ]
+      },
+      "s3:lost_ack:ack": {
+        "cand": [
+          1.0,
+          1.0
+        ],
+        "rsc": [
+          1.0,
+          1.0
+        ]
+      },
+      "s3:lost_ack:read": {
+        "cand": [
+          1.0,
+          1.0
+        ],
+        "rsc": [
+          1.0,
+          1.0
+        ]
+      },
+      "s3:never_commit:ack": {
+        "cand": [
+          0.0,
+          0.0
+        ],
+        "rsc": [
+          0.0,
+          0.0
+        ]
+      },
+      "s3:never_commit:read": {
+        "cand": [
+          0.0,
+          0.0
+        ],
+        "rsc": [
+          0.0,
+          0.0
+        ]
+      },
+      "s3:partial:ack": {
+        "cand": [
+          0.1875,
+          0.1875
+        ],
+        "rsc": [
+          0.8125,
+          0.75
+        ]
+      },
+      "s3:partial:read": {
+        "cand": [
+          0.16666666666666666,
+          0.16666666666666666
+        ],
+        "rsc": [
+          0.6666666666666666,
+          0.7777777777777778
+        ]
+      },
+      "s3:phantom:ack": {
+        "cand": [
+          1.0,
+          1.0
+        ],
+        "rsc": [
+          1.0,
+          1.0
+        ]
+      },
+      "s3:phantom:read": {
+        "cand": [
+          1.0,
+          1.0
+        ],
+        "rsc": [
+          1.0,
+          1.0
+        ]
+      }
+    },
+    "criteria": {
+      "s3_rec_dev_diff": -0.10999999999999999,
+      "kill_1": true,
+      "proc_dev_diff": -0.033333333333333326,
+      "kill_2": true,
+      "kl_ratio_step100_max": 1.3774242914201087,
+      "kill_3": false
+    },
+    "verdict": "dropped"
   }
 }
