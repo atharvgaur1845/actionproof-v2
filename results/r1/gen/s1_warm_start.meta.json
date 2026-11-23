@@ -1,0 +1,25 @@
+{
+  "tag": "s1_warm_start",
+  "model": "runs/rft_tiny_v2/merged",
+  "vllm": "0.23.0",
+  "n": 4032,
+  "over_length": 1,
+  "timing_batched": {
+    "512": {
+      "n": 3490,
+      "seconds": 19.61,
+      "output_tokens": 139735
+    },
+    "1280": {
+      "n": 541,
+      "seconds": 9.95,
+      "output_tokens": 174615
+    }
+  },
+  "limit": 0,
+  "ctx": 8192,
+  "merged_from": {
+    "base": "CohereLabs/tiny-aya-global",
+    "adapter": "/scratch/pabitra/actionproof/runs/rft_tiny_v2/final"
+  }
+}

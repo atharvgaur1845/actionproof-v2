@@ -1,0 +1,25 @@
+{
+  "tag": "control_s0",
+  "model": "runs/s3_matched_s0/merged",
+  "vllm": "0.23.0",
+  "n": 4032,
+  "over_length": 1,
+  "timing_batched": {
+    "512": {
+      "n": 3490,
+      "seconds": 20.32,
+      "output_tokens": 151446
+    },
+    "1280": {
+      "n": 541,
+      "seconds": 10.05,
+      "output_tokens": 178028
+    }
+  },
+  "limit": 0,
+  "ctx": 8192,
+  "merged_from": {
+    "base": "runs/rft_proc/merged",
+    "adapter": "/scratch/pabitra/actionproof/runs/s3_matched_s0/final"
+  }
+}

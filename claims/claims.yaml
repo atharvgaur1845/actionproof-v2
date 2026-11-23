@@ -649,4 +649,72 @@ claims:
 
 # Non-result numbers that appear in scanned documents: software versions, and registered design constants
 # (H3 agreement threshold 0.8, stop-rule threshold 0.80, demonstrator share 0.30, KL coefficient 0.02).
+  - id: R1-H2
+    statement: "Registered R1 primary (PREREGISTRATION_R1.md; deviation D-R1-1 before output): ProcureSim GRPO (A12 state reward, recovery-start curriculum; 5 seeds each) is non-inferior to its SFT warm start within 0.03 on IFEval prompt-level strict accuracy and BFCL v4 non-live AST accuracy (all four Holm p < 0.05). Every other arm and endpoint also shows no change beyond +/-0.03."
+    status: supported
+    prereg: PREREGISTRATION_R1.md
+    eval: [results/r1/r1_summary.json]
+    stats: scripts/r1_stats.py
+    numbers:
+      rv_ifeval: {value: 0.000, file: results/r1/r1_summary.json, key: [H2, "a12_rv:ifeval_prompt_strict", delta], shown: ["0.000", "+0.000"]}
+      rv_bfcl: {value: -0.002, file: results/r1/r1_summary.json, key: [H2, "a12_rv:bfcl_nonlive_ast", delta], shown: ["-0.002", "−0.002"]}
+      rsc_ifeval: {value: -0.004, file: results/r1/r1_summary.json, key: [H2, "rsc:ifeval_prompt_strict", delta], shown: ["-0.004", "−0.004"]}
+      rsc_bfcl: {value: 0.001, file: results/r1/r1_summary.json, key: [H2, "rsc:bfcl_nonlive_ast", delta], shown: ["+0.001", "0.001"]}
+    commit: null
+
+  - id: R1-H1
+    statement: "R1 H1 (SFT warm start loses capability vs the base model) not supported: IFEval +0.011 [-0.020, 0.043], BFCL non-live +0.022 [-0.004, 0.048]."
+    status: not_supported
+    prereg: PREREGISTRATION_R1.md
+    eval: [results/r1/r1_summary.json]
+    numbers:
+      ifeval: {value: 0.011, file: results/r1/r1_summary.json, key: [H1, ifeval_prompt_strict, delta], shown: ["+0.011"]}
+      bfcl: {value: 0.022, file: results/r1/r1_summary.json, key: [H1, bfcl_nonlive_ast, delta], shown: ["+0.022"]}
+    commit: null
+
+  - id: R1-H3
+    statement: "R1 H3 (training lowers BFCL irrelevance abstention) not supported (Holm p 0.819 both arms); the base model itself abstains on 0.079 of irrelevance items."
+    status: not_supported
+    prereg: PREREGISTRATION_R1.md
+    eval: [results/r1/r1_summary.json]
+    numbers:
+      holm: {value: 0.819, file: results/r1/r1_summary.json, key: [H3, rsc, holm_p], shown: ["0.819"]}
+      base_irrelevance: {value: 0.079, file: results/r1/r1_summary.json, key: [contrasts, "warm_vs_base:bfcl_irrelevance", ref_value], shown: ["0.079", "7.9%"]}
+    commit: null
+
+  - id: J1-H1
+    statement: "Registered J1 J-H1 (transcript-only judges are fooled on unverifiable failures, share >= 0.25 for 3 of 4 judges) not supported: with a rubric stating that an ok reply is not proof, judges answered 'it happened' on 0-1 of 120 such episodes; they abstained instead (coverage 0.43-0.59 on all main cases)."
+    status: not_supported
+    prereg: PREREGISTRATION_J1.md
+    eval: [results/j1/j1_summary.json]
+    stats: evaluation/llm_judge_committee/analyze.py
+    numbers:
+      qwen_fooled: {value: 1, file: results/j1/j1_summary.json, key: [J-H1, per_judge, qwen, fooled], shown: ["1 of 120"]}
+      n: {value: 120, file: results/j1/j1_summary.json, key: [J-H1, per_judge, gemma, n], shown: ["120"]}
+    commit: null
+
+  - id: J1-H2
+    statement: "Registered J1 J-H2 (database snapshot gives >= 0.90 accuracy, Wilson lower bound, for 3 of 4 judges) not supported: Gemma 4 31B 0.989, gpt-oss-120b 0.933, Qwen3 235B 0.889, DeepSeek V3.2 0.886; majority committee 0.897 does not beat its best member."
+    status: not_supported
+    prereg: PREREGISTRATION_J1.md
+    eval: [results/j1/j1_summary.json]
+    numbers:
+      gemma: {value: 0.989, file: results/j1/j1_summary.json, key: [J-H2, per_judge, gemma, accuracy], shown: ["0.989"]}
+      gptoss: {value: 0.933, file: results/j1/j1_summary.json, key: [J-H2, per_judge, gptoss, accuracy], shown: ["0.933"]}
+      qwen: {value: 0.889, file: results/j1/j1_summary.json, key: [J-H2, per_judge, qwen, accuracy], shown: ["0.889"]}
+      deepseek: {value: 0.886, file: results/j1/j1_summary.json, key: [J-H2, per_judge, deepseek, accuracy], shown: ["0.886"]}
+      committee: {value: 0.897, file: results/j1/j1_summary.json, key: ["main:transcript_state", committee, majority, accuracy_abstain_wrong], shown: ["0.897"]}
+    commit: null
+
+  - id: C5
+    statement: "Stage 5 C5 (verified-progress turn credit) dropped by its pre-set kill criteria (docs/research/algorithm/C5G_DEV.md): s3_rec_dev -0.32 and proc_dev -0.37 vs recovery-start GRPO (seeds 0-1). Post-hoc diagnosis: state-progress turn credit gives read turns negative normalised credit by construction; C5 policies stopped reading (docs/research/algorithm/C5_RESULT.md)."
+    status: refuted
+    prereg: docs/research/algorithm/C5G_DEV.md
+    eval: [results/s5/s5_dev_summary.json, results/s5/c5_diagnosis.json]
+    stats: scripts/s5_dev.py
+    numbers:
+      d_rec: {value: -0.32, file: results/s5/s5_dev_summary.json, key: [c5, criteria, s3_rec_dev_diff], shown: ["-0.32", "−0.32"]}
+      d_proc: {value: -0.37, file: results/s5/s5_dev_summary.json, key: [c5, criteria, proc_dev_diff], shown: ["-0.37", "−0.37"]}
+    commit: null
+
 allow: ["3.12", "2.11", "5.22", "1.7", "0.23", "0.8", "0.80", "0.30", "0.02", "0.5", "0.3"]  # 0.5, 0.3: registered H4 thresholds (PREREGISTRATION_A11 §9)

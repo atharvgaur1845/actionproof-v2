@@ -1,0 +1,25 @@
+{
+  "tag": "ackonly_s4",
+  "model": "runs/s3_ackonly_s4/merged",
+  "vllm": "0.23.0",
+  "n": 4032,
+  "over_length": 1,
+  "timing_batched": {
+    "512": {
+      "n": 3490,
+      "seconds": 20.31,
+      "output_tokens": 150663
+    },
+    "1280": {
+      "n": 541,
+      "seconds": 10.03,
+      "output_tokens": 178345
+    }
+  },
+  "limit": 0,
+  "ctx": 8192,
+  "merged_from": {
+    "base": "runs/rft_proc/merged",
+    "adapter": "/scratch/pabitra/actionproof/runs/s3_ackonly_s4/final"
+  }
+}
