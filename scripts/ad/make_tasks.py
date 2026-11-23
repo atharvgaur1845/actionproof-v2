@@ -62,13 +62,21 @@ def write(tid: int, name: str, minutes: int, after: str | None, body: str) -> No
 
 
 def main() -> None:
+    # Amendment 1 (EXPERIMENT_PROTOCOL.md §8): two serial chains, so at most two GPUs at once.
+    #   chain A: 1200 smoke -> 1201 grpo s0 -> 1203 awrbn s0 -> 1205 awrb s1 -> 1207 nostd s1 -> 1209 awrb c30 s0
+    #   chain B: 1200 smoke -> 1210 baselines -> 1202 nostd s0 -> 1204 awrb s0 -> 1206 grpo s1 -> 1208 awrbn s1
+    #            -> 1211 awrbn c30 s0
     write(1200, "ad_smoke", 60, None, SMOKE)
-    arms = [(1201, "awrb", 0, "1200_ad_smoke"), (1202, "grpo", 0, "1210_ad_baselines"),
-            (1203, "nostd", 0, "1201_ad_awrb_s0"), (1204, "awrb", 1, "1202_ad_grpo_s0"),
-            (1205, "grpo", 1, "1203_ad_nostd_s0"), (1206, "nostd", 1, "1204_ad_awrb_s1")]
-    for tid, est, seed, after in arms:
-        write(tid, f"ad_{est}_s{seed}", 300, after, f"source slurm/ad_arm.sh {est} {seed} 200\n")
     write(1210, "ad_baselines", 90, "1200_ad_smoke", BASELINES)
+    arms = [(1201, "grpo", 0, "1200_ad_smoke", ""), (1203, "awrbn", 0, "1201_ad_grpo_s0", ""),
+            (1205, "awrb", 1, "1203_ad_awrbn_s0", ""), (1207, "nostd", 1, "1205_ad_awrb_s1", ""),
+            (1209, "awrb", 0, "1207_ad_nostd_s1", "c30"),
+            (1202, "nostd", 0, "1210_ad_baselines", ""), (1204, "awrb", 0, "1202_ad_nostd_s0", ""),
+            (1206, "grpo", 1, "1204_ad_awrb_s0", ""), (1208, "awrbn", 1, "1206_ad_grpo_s1", ""),
+            (1211, "awrbn", 0, "1208_ad_awrbn_s1", "c30")]
+    for tid, est, seed, after, ct in arms:
+        cost = " 0.30 c30" if ct else ""
+        write(tid, f"ad_{est}{ct}_s{seed}", 300, after, f"source slurm/ad_arm.sh {est} {seed} 200{cost}\n")
 
 
 if __name__ == "__main__":

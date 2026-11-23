@@ -129,7 +129,7 @@ def test_reward_functions():
     kw = {"ap_episodes": [rec]}
     assert R.make_reward("r_v", 0.05)(None, [0], **kw)[0] == pytest.approx(rec["score"]["r_v"] - 0.05 * rec["n_verify"])
     assert R.make_reward("r_bar", 0.05)(None, [0], **kw)[0] == pytest.approx(rec["ad"]["r_bar"] - 0.05 * rec["n_verify"])
-    assert set(R.ESTIMATORS) == {"grpo", "nostd", "batchstd", "awrb", "cvar"}
+    assert set(R.ESTIMATORS) == {"grpo", "nostd", "batchstd", "awrb", "awrbn", "cvar"}
 
 
 def test_exact_policy_gradient_identity():

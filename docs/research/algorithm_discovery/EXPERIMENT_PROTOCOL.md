@@ -132,4 +132,44 @@ AWRB vs nostd is descriptive at this stage. It becomes a confirmatory hypothesis
 
 ## 8. Deviations
 
-(none yet)
+### Amendment 1 (2026-11-23 11:39 IST, before any GPU run; no task had started, none was claimed)
+
+**What was wrong.** §1's toy derivation and AD-T0 modelled AWRB's return for a *read* rollout as the expectation over
+all worlds. That is a forked-continuation Q-value. The implemented estimator (`marginalise`) conditions on the
+observations, and a read reveals the world. So a read rollout keeps its own revealed-world return; only rollouts that
+never observe the world get the prior mean. The CPU dry run on the login node (`scripts/ad/cpu_dryrun.py`) made this
+visible: a read that reveals an unrepaired fault scores 0 while a no-read rollout in the same group scores 0.69.
+
+**Corrected analysis** (AD-T0b, `scripts/ad/toy_verify_bandit_v2.py`, `results/ad/t0/toy_bandit_v2.json`).
+
+| Estimator (return / scaling) | Behaviour in the toy |
+|---|---|
+| raw/group (grpo) | Never reads whenever reading is optimal. This includes p = 0.6 with imperfect repair (s = 0.6). |
+| rb/group (awrb as registered) | Reads even when reading is worthless (s = 0; or c = 0.15 > p·s = 0.12). This is the mirror-image bias: group std scaling is still wrong when the group shares the world. |
+| raw/none (nostd) | Correct sign in every setting. |
+| rb/none (new arm `awrbn`) | Correct sign in every setting. Higher gradient signal-to-noise than raw/none when repair works (10.7 vs 1.08 at s = 1; 1.09 vs 0.84 at s = 0.6). Lower when repair never works (s = 0), because the raw within-group comparison is already paired by the shared world. |
+| raw/batch | Unreliable with 4 groups per batch. Not run. |
+
+**Changes (before any output).**
+
+1. **Arms at c = 0.05,** seeds 0 and 1 each: grpo, nostd, awrb (rb/group, kept as registered), and **awrbn**
+   (rb/none; `ESTIMATORS["awrbn"] = ("r_bar", "none")`).
+2. **Verification-cost intervention at c = 0.30,** seed 0: awrb and awrbn.
+   - On the cw_dev frontier at c = 0.30, never-verify (J 0.704) beats skip-post (J 0.39) and always (J 0.09).
+   - **Registered prediction:** awrb verifies after writes at a higher rate than awrbn, and below its own c = 0.05
+     rate by less than awrbn does. This falsifies or supports the mirror-bias prediction in the LLM.
+3. **Order,** two serial chains, so at most two GPUs:
+   - A: smoke → grpo s0 → awrbn s0 → awrb s1 → nostd s1 → awrb c30 s0;
+   - B: smoke → baselines → nostd s0 → awrb s0 → grpo s1 → awrbn s1 → awrbn c30 s0.
+
+   Task ids 1200–1211; the never-run D1 task files 1201–1206 are replaced.
+4. **Gates.** §4 applies to each of awrb, awrbn and nostd against grpo. AWRB's contribution beyond the known fix is
+   tested descriptively here as awrbn vs nostd on cw_dev:
+   - VSC;
+   - J_c;
+   - the across-step std of the training reward signal;
+   - the step at which m_reads stabilises.
+
+   It becomes a confirmatory hypothesis only if awrbn passes G1–G4.
+5. **Hashes:** `results/ad_hashes_a1.json`. The original `results/ad_hashes.json` is kept as the record of the
+   first registration.

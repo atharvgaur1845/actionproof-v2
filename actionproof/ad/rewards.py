@@ -57,5 +57,6 @@ ESTIMATORS = {  # estimator -> (reward field, TRL scale_rewards)
     "nostd": ("r_v", "none"),
     "batchstd": ("r_v", "batch"),
     "awrb": ("r_bar", "group"),
+    "awrbn": ("r_bar", "none"),
     "cvar": ("cvar", "group"),
 }
