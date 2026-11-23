@@ -6,7 +6,8 @@ model's chat template and generates, so the exact inputs every model sees are fi
 
 BFCL inputs are built by BFCL's own `system_prompt_pre_processing_chat_model` (its prompting-mode
 default: python call format, json function docs, plaintext, classic style), as its OSS handler does.
-IFEval inputs are the single user turn, as in lm-eval.
+IFEval inputs are the single user turn, as in lm-eval. Consecutive user turns are merged with BFCL's
+`combine_consecutive_user_prompts` (deviation D-R1-1, before any analysed output).
 
     .venv-r1/bin/python -m actionproof.retention.build_prompts   # writes data/retention/r1_inputs.jsonl
 """
@@ -36,7 +37,7 @@ def bfcl_dir() -> Path:
 
 
 def bfcl_items() -> list[dict]:
-    from bfcl_eval.model_handler.utils import system_prompt_pre_processing_chat_model
+    from bfcl_eval.model_handler.utils import combine_consecutive_user_prompts, system_prompt_pre_processing_chat_model
     items = []
     for cat in BFCL_CATEGORIES:
         for line in (bfcl_dir() / f"BFCL_v4_{cat}.json").read_text().splitlines():
@@ -44,6 +45,9 @@ def bfcl_items() -> list[dict]:
             turns = copy.deepcopy(e["question"])
             assert len(turns) == 1, f"{e['id']} is multi-turn"
             msgs = system_prompt_pre_processing_chat_model(turns[0], e["function"], e["id"])
+            # Deviation D-R1-1: Tiny Aya's template requires alternating roles; 3 live_irrelevance inputs have
+            # consecutive user turns. BFCL's own helper (used by its Claude, Nova and NVIDIA handlers) merges them.
+            msgs = combine_consecutive_user_prompts(msgs)
             items.append({"bench": "bfcl", "id": e["id"], "category": cat, "messages": msgs,
                           "max_tokens": MAX_TOKENS["bfcl"]})
     return items

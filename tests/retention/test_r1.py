@@ -84,3 +84,10 @@ def test_stats_known_delta(tmp_path, monkeypatch):
     assert out["p_noninferior"] < 0.01  # Δ = +0.1 is far above the −0.03 margin
     assert r1_stats.contrast(["a"], ["ref", "a"], ("ifeval",), np.random.default_rng(0))["delta"] == pytest.approx(0.05)
     assert r1_stats.holm([0.01, 0.04, 0.03]) == pytest.approx([0.03, 0.06, 0.06])
+
+
+def test_roles_alternate_after_system():
+    """Tiny Aya's template rejects consecutive same-role turns (deviation D-R1-1)."""
+    for line in (ROOT / "data/retention/r1_inputs.jsonl").read_text().splitlines():
+        roles = [m["role"] for m in json.loads(line)["messages"] if m["role"] != "system"]
+        assert roles[0] == "user" and all(a != b for a, b in zip(roles, roles[1:])), line[:80]

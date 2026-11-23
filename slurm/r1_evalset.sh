@@ -2,7 +2,7 @@
 #   usage (from a task script): source slurm/r1_evalset.sh "tag=run_dir ..."
 #   special tags: base (the HF base model), warm_start (runs/rft_proc), s1_warm_start (runs/rft_tiny_v2).
 #   Stage 1 tags (s1_*) merge onto runs/rft_tiny_v2/merged; every other adapter onto runs/rft_proc/merged.
-.venv/bin/python scripts/freeze_r1.py --check || exit 1
+.venv/bin/python scripts/freeze_r1_d1.py --check || exit 1   # D-R1-1 supersedes the input hashes in results/r1_hashes.json
 mkdir -p logs results/r1/gen
 for w in rft_proc rft_tiny_v2; do
   [ -f runs/$w/merged/config.json ] || .venv/bin/python -m actionproof.train.merge runs/$w/final \

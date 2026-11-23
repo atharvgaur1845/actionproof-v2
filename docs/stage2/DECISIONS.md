@@ -73,3 +73,16 @@ Newest last. Times are IST. Each entry says what was decided, who decided it, an
 - **Smoke (task 1009, not analysed):** C5 advantages installed; G hints fired.
 - **HF Jobs:** dev task 1013 runs on HF (job 6b03c7388d268c0fbd239179, about $10 of the $50 the author allotted).
 - **Confirmatory split `c1_pp`:** 150 fresh tasks, built before any development verdict. It is used only if a candidate survives, under a registration written before any confirmatory training.
+
+## 2026-11-23 11:29 IST: research upgrade (branch actionproof-research-upgrade)
+
+- **Registered before any output:** R1 capability retention (IFEval + BFCL), R1-T τ-bench retail, and J1 judge committee (`PREREGISTRATION_R1.md`, `_R1_TAU.md`, `_J1.md`). Benchmark choice and the exclusion of AgentBench: `docs/upgrade/PLAN.md` §2.
+- **Deviation D-R1-1** (2026-11-23 11:29). The first full R1 task (1100) failed on the base model's chat template: "Conversation roles must alternate".
+  - **Cause.** 3 of the 884 BFCL live_irrelevance inputs (`live_irrelevance_292-72-1`, `_298-73-5`, `_527-162-2`) have consecutive user turns. The 20-input smoke test did not include them.
+  - **Fix.** These turns are merged with BFCL's own `combine_consecutive_user_prompts`, which its Claude, Nova and NVIDIA handlers use for the same reason. Exactly those 3 inputs changed. A test now checks that roles alternate in every input.
+  - **Why this is not a re-run.** No analysed output existed: the generator writes only after a whole model finishes. `results/r1_hashes.json` is kept as registered. `results/r1_d1_hashes.json` freezes the corrected files, and `slurm/r1_evalset.sh` now checks that file.
+- **Ledger sync.** Claim C3 (A11 decomposition) changed from `pending` to `not_supported`.
+  - The analysis had already run on Nov 20 (b817d24, `results/s2/a11_summary.json`). The registered interaction rejects in seed 0 only, so the primary claim was not made.
+  - The Aya 32B prompt-only reference cells were never run.
+  - Found by the new inventory (`scripts/build_inventory.py`).
+- **Agent.** A separate Opus research agent was launched at the author's request, with the author's exact prompt (novel-algorithm discovery). It works in its own git worktree and numbers its cluster tasks 1200+.
