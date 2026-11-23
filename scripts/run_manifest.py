@@ -165,17 +165,63 @@ def entry(run: Path, tasks: dict) -> dict:
     }
 
 
+def cpu_and_judge_entries() -> dict:
+    """CPU testbed runs (LAB1, one JSON line per run in results/lab/tabular/*.jsonl) and J2 judge runs
+    (evaluation/llm_judge_committee/outputs_j2/*.jsonl), with provenance from results/lab/provenance.json."""
+    prov_p = ROOT / "results/lab/provenance.json"
+    prov = json.loads(prov_p.read_text()) if prov_p.exists() else {}
+    cpu = []
+    for f in sorted((ROOT / "results/lab/tabular").glob("*.jsonl*")) if (ROOT / "results/lab/tabular").exists() else []:
+        fam = f.name.split(".")[0]
+        opener = __import__("gzip").open if f.suffix == ".gz" else open
+        with opener(f, "rt") as fh:
+            for line in fh:
+                r = json.loads(line)
+                spec = r.get("spec", {})
+                cpu.append({"run_id": r["id"], "family": f"LAB1-{fam}", "registration": "PREREGISTRATION_LAB1.md",
+                            "status": "complete", "estimator": spec.get("est"), "seed": spec.get("seed"),
+                            "config": {k: v for k, v in spec.items() if k not in ("est", "seed")},
+                            "steps_done": r.get("steps_done"), "policy_updates": r.get("n_updates"),
+                            "episodes_used": r.get("episodes_used"), "forks": r.get("n_forks"),
+                            "cpu_seconds": r.get("seconds"), "raw_file": str(f.relative_to(ROOT)),
+                            "raw_file_sha256": sha(f), "commit": prov.get(fam, {}).get("commit"),
+                            "slurm_job": prov.get(fam, {}).get("slurm_job"), "node": prov.get(fam, {}).get("node"),
+                            "model": "tabular softmax policy (no LLM; no adapter)", "verifier": "exact expectimax walker"})
+    judge = []
+    jd = ROOT / "evaluation/llm_judge_committee/outputs_j2"
+    for f in sorted(jd.glob("*.jsonl")) if jd.exists() else []:
+        rows = [json.loads(l) for l in f.read_text().splitlines()]
+        judge.append({"run_id": f.stem, "family": "J2", "registration": "PREREGISTRATION_J2.md", "status": "complete",
+                      "model": rows[0]["model"] if rows else None,
+                      "served_models": sorted({r.get("served_model") or "" for r in rows}), "rows": len(rows),
+                      "parsed": sum(r["parsed"] is not None for r in rows), "errors": sum(bool(r["error"]) for r in rows),
+                      "cost_usd_estimate": sum(r.get("cost_usd", 0.0) for r in rows), "file": str(f.relative_to(ROOT)),
+                      "file_sha256": sha(f), "slurm_job": prov.get("J2", {}).get("slurm_job")})
+    return {"cpu_runs": cpu, "judge_runs": judge}
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="results/run_manifest.json")
+    ap.add_argument("--merge-cpu-judge", action="store_true",
+                    help="keep the existing GPU run entries of --out and (re)write only cpu_runs and judge_runs")
     a = ap.parse_args()
+    if a.merge_cpu_judge:
+        cur = json.loads((ROOT / a.out).read_text())
+        extra = cpu_and_judge_entries()
+        cur.update(extra)
+        cur["cpu_judge_counts"] = {k: len(v) for k, v in extra.items()}
+        (ROOT / a.out).write_text(json.dumps(cur, indent=1))
+        print(json.dumps(cur["cpu_judge_counts"]))
+        return
     tasks = producing_tasks()
     runs = [entry(r, tasks) for r in sorted((ROOT / "runs").iterdir()) if r.is_dir()]
     git = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip() or None
     counts: dict = {}
     for r in runs:
         counts[r["status"]] = counts.get(r["status"], 0) + 1
-    (ROOT / a.out).write_text(json.dumps({"git_commit_at_build": git, "status_counts": counts, "runs": runs}, indent=1))
+    (ROOT / a.out).write_text(json.dumps({"git_commit_at_build": git, "status_counts": counts, "runs": runs,
+                                          **cpu_and_judge_entries()}, indent=1))
     print(json.dumps(counts))
 
 

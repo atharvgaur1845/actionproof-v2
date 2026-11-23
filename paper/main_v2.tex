@@ -1,0 +1,338 @@
+\pdfoutput=1
+% 6+6 restructure (research lab draft, 2026-11-24). The current paper (main.tex) stays buildable; the lead engineer
+% integrates. Every number below resolves to claims/claims.yaml (section LAB). Items marked \pend{...} are not
+% results and must not be stated until their result file exists.
+\documentclass[11pt]{article}
+\usepackage{emnlp2023}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{url}
+\def\UrlBreaks{\do\/\do\_\do\.\do\:}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newcommand{\RV}{R$_V$}
+\newcommand{\pend}[1]{\textbf{[pending: #1]}}
+\newcommand{\sgn}{\operatorname{sign}}
+
+\title{Group Normalisation Turns the Value of Checking into a Vote:\\Cost-Blind Verification in RL-Trained Tool Agents}
+
+\author{Atharv Sharma \\
+  BITS Pilani, Goa Campus \\
+  \texttt{atharvgaur591@gmail.com}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+A tool agent whose writes can fail silently must decide when to pay for a read that checks the authoritative state.
+The right rule is value of information: verify when the probability that checking changes the outcome, times what
+the outcome is worth, exceeds the cost. We show that GRPO's group-standardised advantage does not learn this rule
+when the rollouts of a group share a hidden execution state, as they do whenever a task's fault plan is fixed per
+prompt. For a decision whose payoff is deterministic given the hidden state, GRPO's expected update is exactly the
+probability-weighted \emph{majority sign} of the action's effect across states, while Dr.~GRPO and RLOO estimate its
+expected effect (Theorem~1, exact at finite group size). GRPO therefore verifies iff checking changes the outcome in
+more than half of the states, whatever the cost, the task value or the failure penalty. In an exactly solvable
+costed-verification testbed, the sign of this exact expected update at the warm start predicts the decision GRPO
+learns in 494 of 495 cells; GRPO decides wrongly in 64\% of them, Dr.~GRPO in 6\%. A causal intervention that keeps
+the hidden-state-conditional scale but removes sample sharing reproduces the failure, and a scale of the same kind
+computed without the hidden state removes it. In Tiny Aya Global trained on ProcureSim, the group-std arm stops
+reading in both development seeds and the training-log decomposition shows the predicted cancellation. A natural
+remedy, counterfactual decision-value credit from paired forks of the simulator state, is a known estimator family
+(TRPO's vine, COMA's counterfactual advantage, CRR); at matched episode budgets it does not beat the strongest simple
+baseline, with or without adaptive branch allocation. The practical conclusion is a one-line change: do not divide
+by a scale estimated from samples that share a hidden state.
+\end{abstract}
+
+\section{Introduction}
+
+A payment API returns \texttt{\{"status": "ok"\}}; the payment may have been stored, stored in part, stored twice, or
+not at all. An agent can read the payment record to find out, at a cost in latency, money or rate limit. Whether to
+read is a value-of-information (VOI) decision: read iff $p\,s\,(V+L_f) > c$, where $p$ is the probability of a silent
+fault, $s$ the probability that a detected fault is repaired, $V$ the task value, $L_f$ the failure penalty and $c$
+the cost of the read.
+
+Group-relative policy optimisation (GRPO) standardises each rollout's return within its group,
+$\hat A_i=(R_i-\bar R_g)/(\sigma_g+\epsilon)$. When a tool-agent task is posed with a fixed hidden fault plan, every
+rollout in a group shares that hidden state. We show that this combination removes the cost from the learned rule
+entirely.
+
+\paragraph{Contributions.}
+(i) \textbf{A finite-group theorem} (\S\ref{sec:mech}). With a hidden state shared within the group and payoffs
+deterministic given the state, GRPO's expected update on a binary decision is
+$(G{-}1)\,m_G(\rho)\sum_z\pi(z)\sgn\beta_z$, where $\beta_z$ is the action's effect in state $z$. Dr.~GRPO's is
+$(G{-}1)\rho(1{-}\rho)\,\mathrm{VOI}$ exactly. The result extends the group-std identity of
+\citet{bay2026identity} from binary rewards to arbitrary stakes, and it applies the hidden-state version of the
+$1/\sigma$ weighting of \citet{bereket2025uncalibrated} to a costed information action. We state when the effect
+weakens and when it vanishes.
+(ii) \textbf{Exact confirmation} in a solvable costed-verification testbed with 18 estimators (\S\ref{sec:exp}),
+including a causal intervention on the normaliser and an exact gradient bias/variance study.
+(iii) \textbf{Observation in a trained language agent}: a reproduction of the training-log decomposition, and
+development runs in which the group-std arm stops reading.
+(iv) \textbf{A negative result for the obvious remedy.} Paired-fork decision-value credit is a known family, and it
+does not pay for its forks at matched budget, even with adaptive branch allocation.
+
+\section{Problem and environment}\label{sec:setup}
+
+\paragraph{POMDP.} A task $x$ has a hidden execution state $z\sim\pi_0(\cdot\mid x)$: which writes silently failed,
+were applied partially, duplicated or timed out. The agent sees histories $h_t$ of tool calls and replies. A write's
+\emph{ok} acknowledgement is identical in every $z$. After an acknowledgement the agent chooses $r\in\{0,1\}$
+(continue or verify), with $\rho=\pi_\theta(r{=}1\mid h)$. The return is
+$R=V\cdot\mathrm{succ}-c\,n_{\mathrm{reads}}-L_f(1-\mathrm{succ})-D\,n_{\mathrm{dup}}$.
+The deterministic SQLite verifier, not the agent, decides $\mathrm{succ}$.
+
+\paragraph{ProcureSim and the costed-verification pool.} ProcureSim (Appendix~\ref{app2:env}) processes purchase
+orders through order, receive, pay and post tools. Its faults (phantom, partial, lost acknowledgement, duplicate
+delivery, never-commit) return byte-identical acknowledgements. In the costed pool (\texttt{cw}), each read costs
+$c=0.05$ and the reward is $R_V-c\,n_{\mathrm{reads}}$. Training uses Tiny Aya Global (3.35B) with LoRA rank 16,
+warm-started by SFT, then 200 steps of TRL GRPO (4 prompts $\times$ 8 rollouts). The task's fault plan is fixed
+per prompt, so the 8 rollouts of a group share $z$ (``condition A'').
+
+\paragraph{Exact testbed.} A CPU simulator with the same structure: writes with fault rate $p$, repair rate $s$,
+false alarms, visible timeouts with duplicate risk, and a never-faulted write. The optimum is computed exactly by
+expectimax over the hidden fault plan, and so is every policy's value, so regret $J^*-J$ is exact. The policy is a
+softmax over observable features only; tests check that the hidden state never enters an actor or critic input.
+
+\section{The mechanism: a stake-free vote}\label{sec:mech}
+
+Let $k\sim\mathrm{Bin}(G,\rho)$ be the number of verifying rollouts in a group and
+$m_G(\rho)=\mathbb E\big[\sqrt{k(G-k)/(G(G-1))}\,;\,0<k<G\big]$.
+
+\begin{theorem}\label{thm:vote}
+Suppose all $G$ rollouts of a group share $z$, and $R_i=\alpha_z+\beta_z r_i$ (deterministic within the state).
+Then as $\epsilon\to0$ the expected update on the verify logit satisfies
+$U_{\mathrm{GRPO}}=(G{-}1)\,m_G(\rho)\sum_z\pi_0(z)\sgn(\beta_z)$,
+$U_{\mathrm{Dr}}=(G{-}1)\rho(1{-}\rho)\sum_z\pi_0(z)\beta_z$ and
+$U_{\mathrm{RLOO}}=G\rho(1{-}\rho)\sum_z\pi_0(z)\beta_z$.
+The last two need only i.i.d.\ rollouts given the state(s), so they hold for stochastic payoffs and for i.i.d.\
+states too.
+\end{theorem}
+\noindent\emph{Proof sketch.} Inside state $z$, $\hat A_i=\sgn(\beta_z)(r_i-\bar r)/\hat\sigma_r$. With the score
+$r_i-\rho$ and $\sum_i(r_i-\bar r)=0$, the group contributes $\sgn(\beta_z)(G-1)\hat\sigma_r$. Taking expectations
+over $k$ gives the result. The magnitude $|\beta_z|$ cancels; without the std it survives
+(Appendix~\ref{app2:proofs}). $\square$
+
+For verification, outcome states (faulted and repairable) have $\beta=V+L_f-c>0$. Cost-only states (clean,
+unrepairable, or uninformative) have $\beta=-c$. Hence:
+
+\begin{corollary}[vote rule]
+GRPO verifies iff $P(\text{outcome state})>P(\text{cost-only state})$, i.e.\ $p\,s>1/2$, independent of $c$, $V$ and
+$L_f$. Dr.~GRPO and RLOO verify iff $p\,s\,(V+L_f)>c$.
+\end{corollary}
+
+Nothing in the theorem is specific to reading. Any binary choice whose payoff is fixed by a hidden state shared within
+the group is decided by a count of states, not by stakes: a rare catastrophic state casts the same vote as a common
+trivial one.
+
+\paragraph{When it weakens or vanishes.} The exact enumeration (Table~\ref{tab:thr}) shows six regimes:
+\begin{itemize}
+\item \textbf{Exogenous noise.} Within-state noise that is not caused by the decision (an exogenous failure rate
+$q_0=0.3$) restores cost sensitivity, biased upward at small $c$. This is the counterexample: GRPO does \emph{not}
+remove costs in general.
+\item \textbf{Stochastic recovery} ($s<1$) shrinks the outcome states' vote. At $s=0.3$, GRPO never verifies.
+\item \textbf{Independent states per rollout} (condition B) weaken but do not remove the bias, because the group
+scale still depends on the sampled composition of states.
+\item \textbf{Free reads} ($c=0$). Cost-only groups have zero variance, so GRPO verifies whenever $p>0$. This
+matches the earlier free-read result (read-back 1.00 in five of five seeds).
+\item \textbf{A never-reading policy} ($\rho=0$) is absorbing for every estimator. This matches the ID1 result: a
+warm start that never reads stays at 0/153.
+\item \textbf{Very small costs} ($c\,\sigma_r\lesssim\epsilon$): the $\epsilon$ term restores some dependence on the
+cost.
+\end{itemize}
+The general condition is that \emph{a scale preserves every decision's expected sign iff it is independent of the
+hidden states of the samples it scales}. No scale, RLOO, and an EMA of past scales qualify. Group std, small-batch
+std, fork- or tree-node std and GDPO's per-component std \citep{liu2026gdpo} do not.
+
+\begin{table}[t]
+\centering\small
+\begin{tabular}{lccc}
+\toprule
+Regime ($G{=}8$, $\rho{=}0.3$) & $c{=}0.01$ & $c{=}0.05$ & $c{=}0.2$\\
+\midrule
+GRPO, A, $s{=}1$ & 0.495 & 0.499 & 0.500\\
+GRPO, A, $s{=}0.6$ & 0.654 & 0.667 & 0.706\\
+GRPO, A, $q_0{=}0.3$ & 0.090 & 0.134 & 0.281\\
+GRPO, B, $s{=}1$ & 0.233 & 0.247 & 0.310\\
+Dr.~GRPO / RLOO, $s{=}1$ & 0.010 & 0.050 & 0.200\\
+\bottomrule
+\end{tabular}
+\caption{Exact fault-rate threshold $p^*$ above which the expected update favours verifying
+(\path{results/lab/exact_analysis.json}). The VOI threshold is $c/(s(V{+}L_f))$; Dr.~GRPO and RLOO attain it
+exactly.}
+\label{tab:thr}
+\end{table}
+
+\section{Would decision-value credit fix it?}\label{sec:cdvo}
+
+If GRPO's problem is that a read gets credit for whether its trajectory was rewarded, the remedy seems to be
+crediting the read with its \emph{decision value}, $\Delta^\pi(h)=Q^\pi(h,\text{verify})-Q^\pi(h,\text{continue})$.
+The estimator works as follows. Snapshot the simulator at an on-policy decision. Fork a verify branch and a continue
+branch, keep the latent fault plan, and couple exogenous noise by common random numbers (CRN). Continue each branch
+with the current policy on its own history, through recovery and reporting. Use the all-action gradient
+$\sum_a\pi(a\mid h)(G_a-\bar G)\nabla\log\pi(a\mid h)$. The contrast is unbiased for $\Delta^\pi(h)$, because forked
+states are samples of the history-state value $Q^\pi(h,z,a)$ \citep{baisero2022unbiased}.
+
+CRN cannot remove $\mathrm{Var}_z\Delta^\pi(h,z)$, the spread across hidden states, and stored fork means are biased
+by policy drift (Appendix~\ref{app2:proofs}).
+
+\paragraph{It is not new.} The construction is TRPO's vine estimator with CRN \citep{schulman2015trpo} used as COMA's
+counterfactual advantage \citep{foerster2017coma}. Forked on-policy counterfactual credit at selected agent
+decisions is Counterfactual Rollout Replay \citep{li2026crr}. Allocating forks to uncertain decisions is RSPI
+\citep{dimitrakakis2008rspi}, EPIG-Tree \citep{khomich2026epig} and ARPO \citep{dong2026arpo}. We therefore test it
+as a known family. The registered question is whether it pays for its forks in costed verification.
+
+\section{Experiments}\label{sec:exp}
+
+All testbed families were registered before any output, run on 5 seeds, and analysed once
+(Appendix~\ref{app2:results}).
+
+\paragraph{The vote rule is what GRPO learns.} TB1 sweeps $p\times c\times s\times L_f$, 216 cells, 3 seeds, 18
+estimators (Figure~\ref{fig:vote}). GRPO's final decision disagrees with the sign of the exact VOI in 319 of 495 cells (0.644). Every error
+is a never-verify where VOI~$>0$. Dr.~GRPO disagrees in 28 (0.057), all small positive VOIs that it had not yet
+learned. The sign of Theorem~\ref{thm:vote}'s exact expected update at the warm start predicts GRPO's learned
+decision in 494 of 495 cells. In the multi-decision workflow, with timeouts, false alarms and a never-faulted
+operation, GRPO's expected gradient points the wrong way on every risky verify logit: its cosine with the exact
+gradient is $-0.175$, against $\geq0.989$ for every other estimator.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures_v2/vote.pdf}
+\caption{TB1 (540 runs per estimator, $c\geq0.01$): learned verification probability. GRPO switches on with $p\,s$,
+the probability that reading changes the outcome, whatever the cost (colour); the switch sits at $p\,s=1/2$ for
+$s=1$ and lower for $s<1$ (Table~\ref{tab:thr}). Dr.~GRPO switches at VOI~$=0$. Generated by
+\path{scripts/lab/fig_vote.py} from \path{results/ad2/tabular/TB1.jsonl.gz}.}
+\label{fig:vote}
+\end{figure}
+
+\paragraph{The normaliser is the causal source.} Two arms differ from GRPO only in the scale.
+\begin{itemize}
+\item Dividing by the return std of 16 \emph{independent} rollouts in the \emph{same} hidden state reproduces the
+failure: wrong-decision rate 0.667, against GRPO's 0.727.
+\item The same construction in fresh states of the same task behaves like Dr.~GRPO: 0.061 against 0.045.
+\end{itemize}
+What removes the cost is the scale's dependence on the hidden state, not the reuse of the gradient's own samples.
+PPO's usual per-batch advantage normalisation raises regret from 0.0215 to 0.0512 and
+lowers risky-operation verification from 0.785 to 0.531. This is consistent with the condition, though only
+descriptive: the batch is built from four hidden states.
+
+\paragraph{In the trained agent.} On the costed pool with Tiny Aya Global, the GRPO and Dr.~GRPO arms share reward,
+pool, LoRA and seeds and differ only in \texttt{scale\_rewards}. The two estimators diverge:
+\begin{itemize}
+\item \textbf{GRPO.} The share of sampled rollouts that read falls from 0.19 and 0.20 (steps 0--20) to 0.02 and 0.04
+(steps 150--200), and 66--81\% of groups end with zero variance.
+\item \textbf{Dr.~GRPO.} The share rises from 0.23 and 0.28 to 0.48 and 0.50.
+\item \textbf{Greedy outcome.} GRPO stays at the warm start's behaviour (no reads; net utility $J_c$ 0.707), while
+Dr.~GRPO reads 1.6--1.9 times per episode and reaches $J_c$ 0.740 and 0.753 (two development seeds).
+\item \textbf{Training-log decomposition.} Under std normalisation, clean groups push against reading ($-143.6$).
+Faulted groups nearly cancel: those whose read changed the outcome give $+49.6$, those whose read changed only the
+cost give $-49.6$. Under centring the net is $-0.36$.
+\end{itemize}
+These are development results; the registered five-seed comparison (AD-C1) is \pend{AD-C1, tasks 1220--1241}.
+
+\paragraph{Decision-value credit does not pay at matched budget.} The setting is TB2's rich workflows (12 settings,
+3 workflows) at 6{,}400 (E1) and 25{,}600 (E4) episodes, with forks charged as partial episodes
+(Table~\ref{tab:l1}). The baselines are the strongest simple ones: Dr.~GRPO, RLOO, a learned value baseline, a
+learned Q, and PPO with 4 epochs.
+\begin{itemize}
+\item Adaptive forks (25\% of verification decisions, allocated by sign uncertainty) have regret 0.0170 at E4,
+against Dr.~GRPO's 0.0080. They are worse in 5 of 5 seeds at both budgets, so the registered hypothesis is not
+supported.
+\item The information-gated variant (forks only at informative decisions, exact $-c$ elsewhere) loses to igc alone:
+0.0097 against 0.0062, again 0 of 5 seeds.
+\item Full branching, random branching and adaptive branching rank by fork count, not by allocation: fewer forks is
+better, and adaptive is no better than random (0.0170 against 0.0143 at E4).
+\item A critic that stores fork means collapses verification (regret 0.085).
+\item CRN does not reduce gradient variance (ratios 0.94--1.12).
+\end{itemize}
+The gradient study explains why. Forks raise the signal-to-noise ratio only on \emph{uninformative} reads (0.34 to
+12.4 on the never-faulted operation), where the exact value $-c$ is free. On the risky reads they leave SNR almost
+unchanged (0.14 vs 0.12, 0.38 vs 0.35, 0.46 vs 0.33), because the dominant variance is the spread of $\Delta$ across
+hidden states. Meanwhile they cost 1.9--5.1$\times$ the episodes per update.
+
+\begin{table}[t]
+\centering\small
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+Estimator & Regret E1 & Regret E4 & Never-faulted verify E4 & Updates E4\\
+\midrule
+GRPO & 0.1834 & -- & -- & --\\
+Dr.~GRPO & 0.0296 & 0.0080 & 0.039 & 800\\
+RLOO & 0.0296 & 0.0080 & 0.042 & 800\\
+PPO (4 epochs) & 0.0215 & 0.0103 & 0.021 & 3200\\
+igc (exact $-c$, support needed) & 0.0202 & 0.0062 & 0.002 & 800\\
+Forks, full & 0.0942 & 0.0216 & 0.033 & 157\\
+Forks, random 25\% & 0.0601 & 0.0143 & 0.114 & 395\\
+Forks, adaptive 25\% & 0.0595 & 0.0170 & 0.179 & 347\\
+Forks, adaptive + igc & 0.0380 & 0.0097 & 0.006 & 426\\
+\bottomrule
+\end{tabular}}
+\caption{LAB1, exact regret $J^*-J$ (5 seeds $\times$ 12 settings) at matched episodes. A scripted
+verify-every-risky-write policy has regret 0.0064.}
+\label{tab:l1}
+\end{table}
+
+\paragraph{Generalisation and the agent we would ship.}
+\begin{itemize}
+\item \textbf{Testbed generalisation.} On unseen fault rates, costs and workflow length (feature policy, 51{,}200
+episodes), PPO generalises best: 0.0028 on shifted parameters and 0.0243 on longer workflows. Every fork arm is
+2--5$\times$ worse.
+\item \textbf{Best confirmed language agent.} The recovery-start GRPO agent: +0.21 verified completion over the
+state-reward agent in five of five seeds, and a five-run start-state effect against a class-matched control (Holm
+0.036; Appendix~\ref{app2:results}). Its training used free reads. Evaluated on the costed pool (one run,
+development tasks), it reaches $J_c$ 0.812 with 2.96 reads per episode, above every costed-pool arm.
+\item \textbf{The practical study.} The registered comparison of four practical recipes is \pend{P1 frozen test}.
+\end{itemize}
+
+\paragraph{Judges.} Four judge families read 660 blinded episodes (registered); an Aya Expanse baseline is
+\pend{J2}. With a database snapshot, the best judge matches the verifier on 0.989 of episodes. With the transcript
+alone, the judges abstain on unverifiable failures rather than accept them; one judge accepts 1 of 120. They do so
+only while one warning sentence is in the prompt; without it, three of four accept them. The deterministic verifier therefore stays the reward, and judges are used
+only for report truthfulness. Human calibration is \pend{author's 76 labels; second annotator}
+(Appendix~\ref{app2:judge}).
+
+\section{Discussion}
+
+\paragraph{One change, one condition.} The failure has a simple condition: a normaliser estimated from samples that
+share a hidden state. It has a one-line fix: centre, but do not scale, or scale by something that does not see the
+hidden state. More elaborate credit assignment does not pay where the hard part of the decision is uncertainty about
+the hidden state. Paired forks, belief replay and adaptive branching all cancel within-state noise, but the variance
+that matters lies across states. Exact credit for provably uninformative reads (igc) is the one cheap gain, and it
+buys speed, not a different end point.
+
+\paragraph{Beyond verification.} The vote is a property of any binary choice whose payoff a shared hidden state
+fixes. Rare catastrophic states get one vote, like common trivial ones. GRPO-trained agents may therefore
+systematically under-weight tail risks that a pooled-reward estimator would price. We leave that test to future
+work.
+
+\section*{Limitations}
+
+\begin{itemize}
+\item Theorem~\ref{thm:vote} is exact for one binary decision with deterministic within-state payoffs. Multi-decision
+trajectories, token-level loss weighting, KL and clipping are covered only empirically.
+\item The testbed is tabular and its policy class is small, so every unbiased estimator eventually reaches the
+optimum. Speed differences there do not imply different end points in an LLM.
+\item The LLM evidence is from one model family and one simulator, with development seeds that produce identical
+greedy behaviour. The confirmatory AD-C1 comparison has not run.
+\item The judge study has one human annotator.
+\item Every fork-based estimator needs a resettable simulator.
+\end{itemize}
+
+\section*{Ethics Statement}
+
+Synthetic purchase orders only; no real payment, person or organisation is involved. The mechanism we describe can
+make a trained agent skip checks whose stakes are high but whose failure states are rare. We recommend normalisers
+that do not depend on the hidden state, together with deterministic verification of writes.
+
+\bibliography{refs,refs_v2}
+\bibliographystyle{acl_natbib}
+
+\appendix
+\input{appendix_v2}
+
+\end{document}
