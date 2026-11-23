@@ -144,4 +144,33 @@ GRPO_FAILURE_DERIVATION.md. b(z | h) is the posterior over hidden fault plans gi
 
 ## Results of the registered candidate gates (TB2)
 
-Filled in from `results/ad2/tabular/TB2_summary.json` only.
+Filled in from `results/ad2/tabular/TB2_summary.json`. The SFB is the strongest fair non-privileged baseline at a
+matched episode budget.
+
+| Variant | SFB (matched) | Regret, candidate vs SFB | Seed differences (SFB − candidate) | T1 | T2 | T3 | Pass |
+|---|---|---|---|---|---|---|---|
+| **igc ×1** | rloo ×1 | 0.0155 vs 0.0296 | +.015 +.011 +.018 +.015 +.012 | ✓ | ✓ | ✓ | **yes** |
+| **igc ×4** | nostd ×4 | 0.0053 vs 0.0080 | +.0025 +.0028 +.0036 +.0028 +.0016 | ✓ | ✓ | ✓ | **yes** |
+| igc ×8 | rloo ×8 | 0.0043 vs 0.0051 | +.0006 +.0011 +.0012 +.0010 −.0002 | ✗ (16% < 20%; 4/5 seeds) | ✓ | ✓ | no |
+| cvc k1 | rloo ×8 | 0.0103 vs 0.0051 | all negative | ✗ | ✓ | ✓ | no |
+| cvc k4 | rloo ×8 (under-budget) | 0.0093 vs 0.0051 | all negative | ✗ | ✓ | ✓ | no |
+| fork_bel k1 / k4 | rloo ×8 | 0.0142 / 0.0129 vs 0.0051 | all negative | ✗ | ✓ | ✓ | no |
+| fork_act k1 / k4 | rloo ×8 | 0.0167 / 0.0174 vs 0.0051 | all negative | ✗ | ✓ | ✓ | no |
+| ctxema ×1 / ×4 / ×8 | rloo / nostd / rloo | worse at every budget | mostly negative | ✗ | ✓ | ✓ | no |
+| awrbn ×1 / ×4 / ×8 | rloo / nostd / rloo | 0.0249 vs 0.0296; 0.0075 vs 0.0080; 0.0049 vs 0.0051 | mixed | ✗ | ✓ | ✓ | no |
+
+## Ranking (novelty, feasibility, justification, improvement, falsifiability)
+
+| Rank | Candidate | Novelty | Feasibility in LLM | Theory | Measured improvement | Falsified? | Decision |
+|---|---|---|---|---|---|---|---|
+| 1 | **igc** (information-gated exact local credit) | weak–moderate | high: replay already exists; LLM version = first-stage D3 | exact: an uninformative read's Q-difference is exactly −c | passes T1–T3 at 1× and 4×; selectivity 10× better at 1× | not falsified in the testbed; the LLM test (D3) is pending | **survives as the only candidate**; LLM evidence required |
+| 2 | cvc | weak–moderate | medium: forks need env snapshots and extra generation | unbiased belief Q | best regret per *update*; fails at matched budget | **falsified** as cost-effective (TB2, TB3) | rejected |
+| 3 | fork_bel / fork_act | weak | medium | unbiased | fails at matched budget | **falsified** | rejected |
+| 4 | awrbn | moderate (first stage) | done | unbiased RB | ≈ nostd; catastrophic under p/4 | **falsified** as superior | rejected |
+| 5 | ctxema | weak | high | sign-preserving | worse than nostd | **falsified** | rejected |
+| 6 | lagr / lagr_grpo | none | high | cancellation under std | worse | **falsified** | rejected |
+
+**Does any surviving candidate change a meaningful part of the optimisation procedure?** Yes: igc changes the
+credit assigned to verification decisions (the advantage estimator), not the reward. It is still only a development
+result in a tabular testbed. It needs privileged training-time information: the support of the hidden-fault prior
+and a replayable simulator.
