@@ -38,7 +38,7 @@ Every failed or partly failed expectation in the programme, recorded as it happe
 | Field | Content |
 |---|---|
 | Expected | AD-T0b: an SNR gain when repair succeeds often. |
-| Actual | Mean within-group std of the Rao-Blackwellised return R̄ − c·reads is 10–20% below that of the raw return (`analyze_d1.py` blocks), and awrbn learned to read *more slowly* than nostd in seed 0. |
+| Actual | Mean within-group std of the Rao-Blackwellised return R̄ − c·reads is 10–20% below that of the raw return (`analyze_d1.py` blocks). The mean within-group variance of R_V falls to 0.66–0.75 of raw over all 800 training groups of each seed-0 arm, so world luck is about 25–34% of within-group variance. Even so, awrbn learned to read *more slowly* than nostd in seed 0. |
 | Cause (hypothesis) | Most within-group variance is action noise, not world noise. Once agents read, the world is revealed and R̄ = R. AD-T0b's caveat also applies: replacing no-read returns by the prior mean breaks the shared-world pairing. Repair after a revealed payment fault is low (awrbn 0.29), the regime where AD-T0b predicts no SNR gain. |
 | Diagnostic | D2 (awrbn_ema vs nostd_ema at a matched scale). |
 

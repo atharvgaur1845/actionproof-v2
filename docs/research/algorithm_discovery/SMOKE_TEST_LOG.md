@@ -55,3 +55,22 @@ Training curves (T = 1 rollouts, `scripts/ad/analyze_d1.py`):
 no-std learning is slow at GRPO's learning rate.
 
 (continued below as results land)
+
+**16:27 D1 awrb seed 1.**
+- cw_dev greedy is identical to seed 0 in every summary metric (VSC 0.867, J_c 0.736, reads 2.61).
+- The traces are *not* identical: 54 of 150 call sequences differ (`scripts/ad/compare_traces.py`), but every
+  task's VSC agrees, so greedy outcomes have saturated.
+- Sampled VSC differs (0.860 vs 0.787), and so does KL₁₀₀ (0.009 vs 0.018). Not a seeding bug.
+
+**16:30 Read-information diagnostic** (`actionproof/ad/readinfo.py`, `results/ad/read_waste_cw_dev.json`).
+- 42–49% of every reading model's reads are provably uninformative under cw1. This includes RSC (0.49) and A12 R_V
+  (0.48).
+- They cost 0.02–0.07 J_c.
+
+**16:35 Registration AD-D3** (uninformative-read local credit) **and C1 addendum 1** (494ba06).
+
+**16:37 D1 grpo seed 1, training** (live rollout log): reads 0.56 → 0.07 by step 25. This replicates seed 0's
+collapse.
+
+**16:48 World-luck share of within-group R_V variance** (training rollouts, seed-0 arms): ratio of Rao-Blackwellised
+to raw variance 0.66–0.75.
