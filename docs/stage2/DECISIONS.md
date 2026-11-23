@@ -86,3 +86,7 @@ Newest last. Times are IST. Each entry says what was decided, who decided it, an
   - The Aya 32B prompt-only reference cells were never run.
   - Found by the new inventory (`scripts/build_inventory.py`).
 - **Agent.** A separate Opus research agent was launched at the author's request, with the author's exact prompt (novel-algorithm discovery). It works in its own git worktree and numbers its cluster tasks 1200+.
+- **Deviation D-R1T-1** (2026-11-23 16:12). The τ-bench feasibility pilot (task 1104) failed at simulated-user server start.
+  - **Cause.** vLLM refused `--max-model-len 32768` because Aya Expanse 32B's `max_position_embeddings` is 8,192.
+  - **Fix.** The user server runs at 8,192, its native limit. No episode had run.
+  - `results/r1_tau_hashes.json` is kept; `results/r1_tau_d1_hashes.json` freezes the change. The pilot is re-queued.

@@ -1,12 +1,12 @@
 # R1-T τ-bench retail (PREREGISTRATION_R1_TAU.md): one H200 holds the simulated user (Aya Expanse 32B) and the agent.
 #   usage (from a task script): source slurm/r1_tau_set.sh "tag=run_dir ..."   (R1T_LIMIT / R1T_TRIALS / R1T_OUT optional)
-.venv/bin/python scripts/freeze_r1_tau.py --check || exit 1
+.venv/bin/python scripts/freeze_r1_tau_d1.py --check || exit 1   # D-R1T-1: user-simulator context 8192 (its native limit)
 mkdir -p logs results/r1_tau
 P=$((8100 + ${LANE:-0} * 10))
 export AP_TAU_USER_BASE=http://127.0.0.1:$P/v1 AP_TAU_AGENT_BASE=http://127.0.0.1:$((P+1))/v1 AP_TAU_MAX_TOKENS=512
 export PYTHONPATH=$PWD/actionproof/retention/tau_shim:/scratch/pabitra/ext/tau-bench:$PWD
 wait_up() { for _ in $(seq 120); do curl -sf "http://127.0.0.1:$1/health" >/dev/null && return 0; sleep 10; done; return 1; }
-.venv/bin/vllm serve CohereLabs/aya-expanse-32b --served-model-name user --port $P --max-model-len 32768 \
+.venv/bin/vllm serve CohereLabs/aya-expanse-32b --served-model-name user --port $P --max-model-len 8192 \
   --gpu-memory-utilization 0.62 --generation-config vllm --seed 0 > logs/r1t_user_$P.log 2>&1 &
 UPID=$!
 trap 'kill $UPID ${APID:-} 2>/dev/null' EXIT
