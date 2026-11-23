@@ -31,3 +31,17 @@ may be queued. In response:
 
 **Side effect.** 1300's failure counts once toward the A100 worker's two-consecutive-failure pause
 (`slurm/worker.sh`). Any successful task resets the count.
+
+## DV-3. Falsy-default bug in a frozen analysis line (2026-11-23 22:45 IST, local; found when TB1 was first analysed)
+
+**Bug.** `scripts/ad2/tab_analyze.py` line 74 evaluates `(value or 1) <= 0.2`. A measured value of exactly 0.0 is
+falsy, so it is replaced by 1 and the hypothesis is reported false.
+
+**Effect.** TB1 gives awrbn's mirror-cell verify fraction as 0.0 over 18 cells, which satisfies H1g_awrbn (≤ 0.2).
+The summary file still records `false`. We report the hypothesis as **supported (0.0 ≤ 0.2)** on the raw value,
+which is stored in `TB1_summary.json` → `per_est.awrbn.mirror_cells_verify_frac`.
+
+**Checks.** No other registered test is affected. The other `or 1` defaults (H1b nostd 0.057, H1c 0.315, H1f) and
+the `or 0` defaults (TB2 G2/G3: a 0.0 value maps to 0) are checked by hand.
+
+**Script.** The frozen script is not edited, so its hash stays valid.
