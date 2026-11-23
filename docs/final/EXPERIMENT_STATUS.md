@@ -1,13 +1,13 @@
 # Experiment status
 
-As of 2026-11-23 10:29 IST.
+As of 2026-11-23 11:47 IST (branch actionproof-research-upgrade).
 
 **Compute:**
 - Slurm lease 460633: 2 H200 GPUs until Nov 25 10:27.
 - A100 worker 460629.
 - A 200-step GRPO run takes about 1 h 55 min on an H200 (`logs/*_s*.full.log`) and about 2 h 30 min on the A100.
 
-**Submission:** Nov 24, midnight IST (confirmed by the author on 2026-11-22). Paper freeze: Tue Nov 24 12:00 IST.
+**Submission:** Nov 27, 23:59 IST (moved by the author on 2026-11-23).
 
 **Labels:**
 - **Completed and verified:** the result file exists and is in the claims ledger.
@@ -30,6 +30,10 @@ As of 2026-11-23 10:29 IST.
 | SR1: tool-name randomisation (a known fix, tested here) | `PREREGISTRATION_SR1.md` | 3 | **Completed and verified. Not supported.** Renamed API +0.00 [−0.04, 0.04]; on the canonical tools −0.248 [−0.296, −0.201] (non-inferiority fails) | `results/s4/sr1_summary.json` | — |
 | E1/E2: sampled outcomes and decision-point probes (21 frozen models, fresh splits) | `PREREGISTRATION_E1E2.md` | 5 per arm | **Completed and verified.** Sampled RSC − control +0.098 (Holm 0.103), not supported; threshold reading (ρ 0.92); position H1 not supported as registered; reconciliation line +0.48 ("computation helps") | `results/e1e2_summary.json`, `docs/research/E1E2_RESULT.md` | — |
 | Stage 5 development: C5 verified-progress turn credit, G hint-guided sampling | `docs/research/algorithm/C5G_DEV.md` | 2 + 2 | **Running** (3 on the lease, 1 on HF Jobs). Kill criteria fixed before training | `results/s5/s5_dev_summary.json` | Mon 23 Nov, afternoon |
+| R1 capability retention: IFEval + BFCL v4 single-turn, 30 procurement models + Stage 1 chain | `PREREGISTRATION_R1.md` (deviation D-R1-1, before output) | 5 per arm (SR1 3) | **Running** (cluster, tasks 1100–1103) | `results/r1/r1_summary.json` | Mon 23 Nov |
+| R1-T τ-bench retail (descriptive), with a feasibility pilot and an overflow cancellation rule | `PREREGISTRATION_R1_TAU.md` | 3 per arm | **Queued** (H200 pool, tasks 1104–1106) | `results/r1_tau/r1_tau_summary.json` | Mon 23 Nov |
+| J1 judge committee: 4 families × 736 cases × 2 views + prompt variant; human calibration | `PREREGISTRATION_J1.md` | — | **Running** (HF router; calibration views done, $0.19); human labels pending | `results/j1/j1_summary.json` | Mon 23 Nov |
+| Algorithm discovery programme (separate research agent, own worktree) | its own registrations under `docs/research/algorithm_discovery/` | — | **Running** | — | — |
 | Mechanistic causal test (CircuitKIT) | — | — | **Not run.** CircuitKIT failed to install in Stage 2 (D-A16-1); A16's ablation is not specific | — | Future work |
 
 **Not attempted, by decision:**
