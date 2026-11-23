@@ -60,7 +60,7 @@ no-std learning is slow at GRPO's learning rate.
 - cw_dev greedy is identical to seed 0 in every summary metric (VSC 0.867, J_c 0.736, reads 2.61).
 - The traces are *not* identical: 54 of 150 call sequences differ (`scripts/ad/compare_traces.py`), but every
   task's VSC agrees, so greedy outcomes have saturated.
-- Sampled VSC differs (0.860 vs 0.787), and so does KL₁₀₀ (0.009 vs 0.018). Not a seeding bug.
+- KL₁₀₀ differs (0.009 vs 0.018). Not a seeding bug. (Correction, 16:53: an earlier version of this entry gave a sampled VSC of 0.860 for seed 1. That was read from a partial file holding 1 of the 4 samples. With all 4, sampled VSC is 0.788, against 0.787 for seed 0.)
 
 **16:30 Read-information diagnostic** (`actionproof/ad/readinfo.py`, `results/ad/read_waste_cw_dev.json`).
 - 42–49% of every reading model's reads are provably uninformative under cw1. This includes RSC (0.49) and A12 R_V
