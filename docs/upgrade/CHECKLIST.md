@@ -15,7 +15,7 @@
 | F | Judge committee and human calibration | `PREREGISTRATION_J1.md`, addendum 1, `docs/upgrade/JUDGES.md` | done ($3.20); **human labels: author** (`label.html`, 76 cases) |
 | G | External capability benchmarks before and after | `docs/upgrade/CAPABILITY_RETENTION.md` (R1 done); R1-T τ-bench | R1 done; τ-bench pilot waiting for an H200 |
 | H | Operational impact and ROI | `docs/upgrade/ROI.md`, `results/roi/roi_model.json` | done |
-| I | Lexsi write-up | `docs/submission/WRITEUP.md` (all mandatory fields), `docs/submission/TRACES.md` | draft; R1, J1 and C5/G sections pending |
+| I | Lexsi write-up | `docs/submission/WRITEUP.md` (all mandatory fields), `docs/submission/TRACES.md` | complete draft; τ-bench, G and AD-C1 results still to add |
 | J | Website and demo | sections 06–08 in `demo/site_template.html`, calculator `demo/roi.js` (tested) | built locally; **deploy needs the author's approval** |
 | K | Reproducible artefacts | `docs/upgrade/TOOLKITS.md`, freeze scripts, write-up §29; R1 and J1 outputs to publish | partly; publishing R1 and J1 outputs needs approval |
 | L | Final scientific review | after results land | pending |
