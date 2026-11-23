@@ -166,4 +166,19 @@ changes what the agent is rewarded for.
 
 ## 6. LLM results
 
-PENDING: filled from `results/ad/d1_summary.json` and `results/ad/d1_mechanism.json` only.
+### 6.1 P1 in the LLM agent (development data, descriptive)
+
+**Collapse.** grpo with c = 0.05 on cw_train drives training-time reads from 0.59 to 0.03 per episode in seed 0, and
+from 0.56 to 0.07 within 25 steps in seed 1. Zero-variance groups reach 86%. Greedy cw_dev behaviour ends exactly at
+the warm start's: 0 reads, VSC 0.707, in both seeds (`results/ad/dev/ad_grpo_s{0,1}__cw_dev.summary.json`).
+
+**Mechanism.** We recomputed the advantages of grpo s0's logged training returns, steps 0–40, under both
+normalisations (`results/ad/advantage_decomposition_steps0-40.json`). With centring only, the summed advantage of
+read rollouts is −12.5 from clean-world groups and +12.2 from faulted-world groups: net −0.4, about the true value of
+information at the warm start's repair ability. With group std it is −143.6 and +0.06. Clean groups, whose only
+spread is the read cost, are amplified by 1/σ_w and dominate. This is the 1/σ_w world weighting of P1, observed
+directly.
+
+### 6.2 Gates and confirmatory results
+
+PENDING: filled from `results/ad/d1_summary.json`, `d2_summary.json`, `d3_summary.json` and `c1_summary.json` only.
