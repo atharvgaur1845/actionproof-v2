@@ -20,6 +20,24 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;paddin
 .cap{font:500 11px/16px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--gr)}
 .src{font:11px/16px var(--mono);color:var(--gr);margin-top:12px}
 .src b{font-weight:500;color:var(--ink)}
+/* ---------- upgrade sections: retention, judges, ROI ---------- */
+.kind{display:flex;gap:14px;align-items:baseline;font-size:14px;line-height:22px;margin:0 0 8px}
+.kb{font:500 11px/16px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border:1px solid currentColor;white-space:nowrap}
+.kb.m{color:var(--ink)}.dark .kb.m{color:#E9E7DF}
+.wft td.dn{color:var(--ver-t);font-weight:500}.wft td.up{font-weight:500}.dark .wft th{color:#8C8F86;border-bottom-color:#E9E7DF}.dark .wft td{border-bottom-color:rgba(233,231,223,.16)}
+.wft td small{display:block;color:var(--gr);font-size:11px;line-height:14px}.dark .wft td.dn{color:#FF7A5C}
+.proj{background:repeating-linear-gradient(135deg,var(--paper) 0 14px,#ECEADF 14px 15px)}
+.stamp{margin:0 56px 24px;padding:14px 18px;border:2px solid var(--ink);background:var(--chr);font-size:15px;line-height:23px;max-width:900px}
+.stamp b{font:16px/20px var(--disp);text-transform:uppercase;margin-right:10px}
+.roictl{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;margin:0 56px;border-top:1px solid var(--ink);border-bottom:1px solid var(--hair)}
+.roictl label{display:block;padding:12px 12px 12px 0;font:500 11px/16px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--gr)}
+.roictl label+label{padding-left:12px;border-left:1px solid var(--hair)}
+.roictl input{display:block;width:100%;margin-top:6px;font:500 18px/26px var(--mono);color:var(--ink);background:#fff;border:1px solid var(--hair);padding:2px 6px}
+.roiscn{grid-column:1/-1;display:flex;gap:8px;padding:10px 0;border-top:1px solid var(--hair)}
+.roiscn button{font:500 11px/16px var(--mono);letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--ink);padding:5px 10px;background:#fff}
+.roiscn button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.bar{display:block;height:6px;background:var(--ink);margin-top:4px}.bar.r{background:var(--ver)}
+@media (max-width:860px){#u-roi,#u-j1,#u-r1{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}#u-roi td,#u-j1 td,#u-r1 td{min-width:84px}.roictl{grid-template-columns:1fr 1fr;margin:0 16px}.roictl label+label{border-left:0;padding-left:0}.stamp{margin:0 16px 20px}.kind{flex-direction:column;gap:6px}}
 /* ---------- rail ---------- */
 .rail{position:fixed;left:0;top:0;bottom:0;width:var(--rail);border-right:1px solid var(--hair);padding:28px 22px;display:flex;flex-direction:column;z-index:20;background:var(--paper)}
 .rail .brand{font:15px/18px var(--disp);letter-spacing:.01em}.rail .brand span{display:block;font:11px/16px var(--mono);color:var(--gr);margin-top:6px;letter-spacing:.04em}
@@ -393,14 +411,14 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  <div class="brand">ACTIONPROOF<span>a research study, 2026</span></div>
  <ol id="railnav">
   <li><a href="#top"><i>00</i>The incident</a></li><li><a href="#truths"><i>01</i>Three truths</a></li><li><a href="#reward"><i>02</i>What the reward sees</a></li>
-  <li><a href="#recovery"><i>03</i>Reading is not recovery</a></li><li><a href="#training"><i>04</i>Training recovery</a></li><li><a href="#inside"><i>05</i>Inside the model</a></li><li><a href="#repro"><i>06</i>Reproduction</a></li>
+  <li><a href="#recovery"><i>03</i>Reading is not recovery</a></li><li><a href="#training"><i>04</i>Training recovery</a></li><li><a href="#inside"><i>05</i>Inside the model</a></li><li><a href="#retain"><i>06</i>General ability</a></li><li><a href="#judges"><i>07</i>Can a judge see it?</a></li><li><a href="#worth"><i>08</i>What it is worth</a></li><li><a href="#repro"><i>09</i>Reproduction</a></li>
   <li style="margin-top:14px"><a href="#study1"><i>+</i>Study 1: refunds</a></li><li><a href="#why"><i>·</i>Main finding</a></li><li><a href="#key"><i>·</i>What we found</a></li>
   <li><a href="#problem"><i>1</i>The problem</a></li><li><a href="#bench"><i>2</i>The test world</a></li><li><a href="#experiment"><i>3</i>The experiment</a></li>
   <li><a href="#lab"><i>4</i>Same situation test</a></li><li><a href="#templates"><i>5</i>Copied workflows</a></li><li><a href="#findings"><i>6</i>Results and checks</a></li>
   <li><a href="#autopsy"><i>7</i>Mistakes we fixed</a></li><li><a href="#methods"><i>8</i>How we measure</a></li><li><a href="#artifacts"><i>9</i>Code and data</a></li></ol>
  <div class="foot">Lexsi hackathon, track 3<a href="https://github.com/atharvgaur1845/actionproof-v2">GitHub ↗</a><a href="https://huggingface.co/collections/atharvgaur18/actionproof-procurement-study-6b0321cd11bad297aead6e81">Models ↗</a></div>
 </nav>
-<nav class="mnav" aria-label="Sections"><a class="b" href="#top">ACTIONPROOF</a><a href="#truths">01 Truths</a><a href="#reward">02 Reward</a><a href="#recovery">03 Recovery</a><a href="#training">04 Training</a><a href="#inside">05 Inside</a><a href="#repro">06 Reproduce</a><a href="#study1">Study 1</a><a href="#why">Main finding</a><a href="#key">What we found</a><a href="#problem">1 Problem</a><a href="#bench">2 Test world</a><a href="#experiment">3 Experiment</a>
+<nav class="mnav" aria-label="Sections"><a class="b" href="#top">ACTIONPROOF</a><a href="#truths">01 Truths</a><a href="#reward">02 Reward</a><a href="#recovery">03 Recovery</a><a href="#training">04 Training</a><a href="#inside">05 Inside</a><a href="#retain">06 Ability</a><a href="#judges">07 Judges</a><a href="#worth">08 Worth</a><a href="#repro">09 Reproduce</a><a href="#study1">Study 1</a><a href="#why">Main finding</a><a href="#key">What we found</a><a href="#problem">1 Problem</a><a href="#bench">2 Test world</a><a href="#experiment">3 Experiment</a>
  <a href="#lab">4 Same situation</a><a href="#templates">5 Workflows</a><a href="#findings">6 Results</a><a href="#autopsy">7 Mistakes</a><a href="#methods">8 Measures</a><a href="#artifacts">9 Code and data</a></nav>
 <main>
 
@@ -518,9 +536,43 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  </div>
 </section>
 
-<!-- ============ 06 RESEARCH AND REPRODUCTION ============ -->
+<!-- ============ 06 GENERAL ABILITY (R1, R1-T) ============ -->
+<section id="retain">
+ <div class="shead rv"><div class="snum">06</div><div><div class="cap">General ability · registered experiments R1 and R1-T</div>
+  <h2 class="stitle">Did it forget <span class="ser">everything else?</span></h2>
+  <p class="lede">Training on one procurement world could damage what the base model already did well. Every trained agent was tested on public benchmarks it never saw, scored with the benchmarks' own code: <b>BFCL</b> function calling (3,491 single-turn cases) and <b>IFEval</b> instruction following (541 prompts). Each change is measured against the agent's own starting point, in percentage points.</p></div></div>
+ <div class="kind pad rv"><span class="kb m">Measured</span><span>Registered before any output (<span class="mono">PREREGISTRATION_R1.md</span>). Intervals: 95% paired task bootstrap with the trained models held fixed.</span></div>
+ <table class="wft rv" id="u-r1"></table>
+ <div class="src pad" id="u-r1-src"></div>
+ <div class="kgrid rv" style="margin:28px 56px 0" id="u-r1v"></div>
+ <div class="note pad rv" style="margin:28px 56px 56px;padding-left:16px" id="u-r1t"></div>
+</section>
+
+<!-- ============ 07 CAN A JUDGE SEE IT (J1) ============ -->
+<section class="dark" id="judges">
+ <div class="shead rv"><div class="snum">07</div><div><div class="cap">LLM judges · registered experiment J1</div>
+  <h2 class="stitle">Can a judge <span class="ser">see it?</span></h2>
+  <p class="lede">Four models from four independent families read 660 recorded episodes, blind to which agent produced them. Each answers the same seven questions. The database decides who is right. With only the transcript, a write that was never checked looks exactly like one that worked.</p></div></div>
+ <div class="kind pad rv"><span class="kb m">Measured</span><span>Ground truth is the SQLite verifier; no judge can change a result. Rubric and every reply: <span class="mono">evaluation/llm_judge_committee/</span>.</span></div>
+ <table class="wft rv" id="u-j1"></table>
+ <div class="src pad" id="u-j1-src" style="padding-bottom:56px"></div>
+</section>
+
+<!-- ============ 08 WHAT IT IS WORTH (ROI) ============ -->
+<section class="proj" id="worth">
+ <div class="shead rv"><div class="snum">08</div><div><div class="cap">Operational impact · projection</div>
+  <h2 class="stitle">What it is <span class="ser">worth.</span></h2>
+  <p class="lede">Each agent's outcome rates under every fault type are <b>measured</b> in ProcureSim. Real operations have far fewer faults than the test pool, so the rates are re-weighted by a fault rate <b>you choose</b>, and priced with costs <b>you choose</b>. The defaults are three cited scenarios.</p></div></div>
+ <div class="stamp pad rv"><b>Projection</b> Measured simulator rates × your assumptions. This is not customer data and not a measured saving. Sources and their quality: <span class="mono">docs/upgrade/ROI.md</span>.</div>
+ <div class="roictl rv" id="u-roictl"></div>
+ <table class="wft rv" id="u-roi"></table>
+ <div class="src pad" id="u-roi-src"></div>
+ <p class="note v rv" style="margin:28px 56px 56px">In this simulator, a short hand-written layer that reads back every write and repairs with fixed rules beats every trained agent. ActionProof's value is the fault-injection harness and verifier that show which checks are missing and prove they work. Training reduces losses when checks are incomplete; it does not replace them, and it did not transfer to new workflows.</p>
+</section>
+
+<!-- ============ 09 RESEARCH AND REPRODUCTION ============ -->
 <section id="repro">
- <div class="shead rv"><div class="snum">06</div><div><div class="cap">Research and reproduction</div>
+ <div class="shead rv"><div class="snum">09</div><div><div class="cap">Research and reproduction</div>
   <h2 class="stitle">Every number <span class="ser">has a file.</span></h2>
   <p class="lede">Each experiment was written down with its predictions and locked with a hash before it ran. Mistakes are corrected in dated notes, never by editing a registration. A checker re-reads every number in the paper and README from its result file.</p></div></div>
  <div class="repgrid rv" id="p-repgrid"></div>
@@ -1170,6 +1222,7 @@ $("#p-repgrid").innerHTML=[["Base model","<code>CohereLabs/tiny-aya-global</code
  $("#m-table-src").textContent="Highlighted: the registered ablation rule is met (change larger than every one of 20 random directions). An effect specific to the state-reward behaviour would leave the acknowledgement-reward seeds and the empty-record branch unchanged; it does not. Source: "+M.src;
 })();
 /* ---------- reveal, bars, counters, rail ---------- */
+{{UPGRADEJS}}
 function fill(root){$$("[data-w]",root).forEach(x=>x.style.width=x.dataset.w+"%")}
 function count(el){const t=+el.dataset.count,f=el.dataset.fmt,fmt=v=>f==="pct"?(v*100).toFixed(t<0.9?2:1)+"%":"+"+v.toFixed(2);
  if(RM){el.textContent=fmt(t);return}const t0=performance.now(),D=1200;const step=n=>{const k=Math.min(1,(n-t0)/D),e=1-Math.pow(1-k,3);el.textContent=fmt(t*e);if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}

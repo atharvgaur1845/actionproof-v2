@@ -133,7 +133,7 @@ def main() -> None:
     out = {"note": "Simulator frequencies are measured; every money figure is a projection from the assumptions.",
            "assumptions": SCENARIOS, "episodes_per_gpu_hour": EPISODES_PER_GPU_HOUR, "arms": {}, "projections": {}}
     for name, m in arms.items():
-        out["arms"][name] = {k: m[k] for k in ("runs", "rates", "calls", "n")}
+        out["arms"][name] = {k: m[k] for k in ("runs", "rates", "calls", "n", "llm")}
         out["projections"][name] = {sc: project(m, s, m["llm"]) for sc, s in SCENARIOS.items()}
     base = "SFT agent (warm start)"
     for sc in SCENARIOS:

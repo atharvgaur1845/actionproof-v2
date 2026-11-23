@@ -128,9 +128,11 @@ def main() -> None:
     sys.path.insert(0, str(ROOT / "scripts"))
     import site_procure
     site["procure"] = site_procure.build()
+    import site_upgrade
+    site["upgrade"] = site_upgrade.build()
     assert set(site["audit"]) == {"refund timeout", "refund UR"}, site["audit"]
     page = R("demo/site_template.html").replace("{{SITE}}", json.dumps(site, ensure_ascii=False, separators=(",", ":"))
-                                                .replace("</", "<\\/")).replace("{{GIT}}", site["git"])
+                                                .replace("</", "<\\/")).replace("{{GIT}}", site["git"]).replace("{{UPGRADEJS}}", R("demo/site_upgrade.js").replace("{{ROIJS}}", R("demo/roi.js").split("if (typeof module")[0]))
     out = ROOT / "demo/static/index.html"
     out.write_text(page)
     print(out, out.stat().st_size, {k: (len(v) if hasattr(v, "__len__") else v) for k, v in site.items() if k != "git"})
