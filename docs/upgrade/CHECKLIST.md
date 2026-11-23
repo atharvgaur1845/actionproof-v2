@@ -13,12 +13,12 @@
 | D | Selected candidates implemented and tested | C5/G (`actionproof/stage4/*c5g*`); AD estimators with 17 enumeration tests (`tests/ad/`) | C5 dropped; AWRB passes development gates; confirmatory pending |
 | E | Multi-seed baselines and ablations | A12, S3 and addenda, S4, SR1, E1/E2 (`docs/final/FINAL_CLAIMS.md`) | done |
 | F | Judge committee and human calibration | `PREREGISTRATION_J1.md`, addendum 1, `docs/upgrade/JUDGES.md` | done ($3.20); **human labels: author** (`label.html`, 76 cases) |
-| G | External capability benchmarks before and after | `docs/upgrade/CAPABILITY_RETENTION.md` (R1 done); R1-T τ-bench | R1 done; τ-bench pilot waiting for an H200 |
+| G | External capability benchmarks before and after | `docs/upgrade/CAPABILITY_RETENTION.md` (R1 and R1-T) | done |
 | H | Operational impact and ROI | `docs/upgrade/ROI.md`, `results/roi/roi_model.json` | done |
 | I | Lexsi write-up | `docs/submission/WRITEUP.md` (all mandatory fields), `docs/submission/TRACES.md` | complete draft; τ-bench, G and AD-C1 results still to add |
 | J | Website and demo | sections 06–08 in `demo/site_template.html`, calculator `demo/roi.js` (tested) | built locally; **deploy needs the author's approval** |
 | K | Reproducible artefacts | `docs/upgrade/TOOLKITS.md`, freeze scripts, write-up §29; R1 and J1 outputs to publish | partly; publishing R1 and J1 outputs needs approval |
-| L | Final scientific review | after results land | pending |
+| L | Final scientific review | `docs/upgrade/FINAL_REVIEW.md` | draft done; updated when the algorithm programme reports |
 
 ## Author actions
 
