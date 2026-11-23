@@ -95,3 +95,7 @@ Newest last. Times are IST. Each entry says what was decided, who decided it, an
   - **Consequence.** No training happened, and the HF cost was negligible.
   - **Action.** The claim was released and the same registered task re-queued on the idle Slurm A100.
   - **Verdict timing.** The C5 and G kill verdicts (`scripts/s5_dev.py`, which averages seeds 0–1) wait for it. No verdict is taken from seed 0 alone.
+- **Deviation D-R1T-2** (2026-11-23 18:25). The re-queued τ-bench pilot never ran.
+  - **Cause.** `slurm/r1_tau_set.sh` set its own `trap … EXIT` (to stop the vLLM servers), which replaced `slurm/claim.sh`'s claim-release trap. The first, failed launch therefore left its claim lock. The retry saw it, deleted itself as "claimed elsewhere", and the worker logged rc 0.
+  - **Fix.** No EXIT trap in the script: the servers are stopped explicitly on every exit path. The stale lock was removed and the pilot re-queued.
+  - Still no τ-bench episode has run. `results/r1_tau_d2_hashes.json` freezes the change; the earlier hash files are kept.
