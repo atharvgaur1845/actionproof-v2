@@ -99,3 +99,12 @@ Newest last. Times are IST. Each entry says what was decided, who decided it, an
   - **Cause.** `slurm/r1_tau_set.sh` set its own `trap … EXIT` (to stop the vLLM servers), which replaced `slurm/claim.sh`'s claim-release trap. The first, failed launch therefore left its claim lock. The retry saw it, deleted itself as "claimed elsewhere", and the worker logged rc 0.
   - **Fix.** No EXIT trap in the script: the servers are stopped explicitly on every exit path. The stale lock was removed and the pilot re-queued.
   - Still no τ-bench episode has run. `results/r1_tau_d2_hashes.json` freezes the change; the earlier hash files are kept.
+
+## 2026-11-23 22:40 IST: P1 practical agent
+
+- **Smoke (task 1149, not analysed).** Arm B on 6 `p1_dev_rec` tasks: the freeze check passed, the episodes ran and the metrics were written. `partial_pay_repaired` was null only because those 6 tasks had no partial-payment fault; the detector matches the split metadata (`kind: partial`, `tool: pay_supplier`).
+- **Queued:** tasks 1150–1171 (training, development and the frozen test) in every pool.
+- **D-P1-1 (specification, before any P1 test output).** The registration (§6) fixed the AuditKIT score as secondary and descriptive but did not name the sample. It is fixed now, in `scripts/p1_auditkit.py` (task 1172):
+  - the greedy episode of seed 0 of every arm on all 450 test tasks;
+  - AuditKIT TaskCompletion's exact prompt, judged by Aya Expanse 32B without the ledger.
+  - It never decides an outcome, and no frozen file changed.
