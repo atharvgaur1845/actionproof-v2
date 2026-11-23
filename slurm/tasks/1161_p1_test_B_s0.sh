@@ -1,0 +1,7 @@
+# minutes: 150
+# P1 practical agent (PREREGISTRATION_P1.md): frozen test, arm B seed 0, five test splits once
+set -uo pipefail
+source slurm/claim.sh || exit 0
+source slurm/env.sh
+.venv/bin/python scripts/freeze_p1.py --check || exit 1
+source slurm/p1_evalset.sh test "B_s0|runs/rft_proc/merged|runs/s3_rv_mix_s0/final|1" "p1_test_full p1_test_pp p1_test_rec p1_test_wf4 p1_test_combo"
