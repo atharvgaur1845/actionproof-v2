@@ -90,7 +90,8 @@ GRPO_FAILURE_DERIVATION.md. b(z | h) is the posterior over hidden fault plans gi
 - **Hypothesis.** Giving every *provably uninformative* verification decision its exact all-action value removes
   the sequence-level smear that prevents selectivity (first-stage F3). A decision is uninformative when its read
   observation is the same in every hidden state of the prior's support that is consistent with h; its exact value
-  is then Q(verify) − Q(skip) = −c.
+  is then Q(verify) − Q(skip) = −c when later behaviour does not depend on the read's predictable observation.
+  That holds exactly in the testbed and only approximately in an LLM (FINAL_ALGORITHM_REPORT §3).
 - **Update.**
 
       g_t = π(1 − π)·(−c)·φ_t

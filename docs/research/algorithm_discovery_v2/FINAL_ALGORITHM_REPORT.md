@@ -124,12 +124,18 @@ In the LLM no arm has yet been shown selective (first-stage F3).
 prior's **support**. Weights are not needed. Nothing is needed at deployment.
 
 **Uninformativeness test.** For a verification decision at history h, with Z(h) the set of support worlds consistent
-with h, the decision is uninformative iff the verify observation o_v(h, z) is the same for every z ∈ Z(h). Then the
-read cannot change any later decision, and its exact action-value difference is
+with h, the decision is uninformative iff the verify observation o_v(h, z) is the same for every z ∈ Z(h). The read
+then cannot change the posterior. Its action-value difference is
 
-  Q(h, verify) − Q(h, skip) = −c,
+  Q(h, verify) − Q(h, skip) = −c + [V^π(h, verify, o_v) − V^π(h, skip)],
 
-for every continuation policy. The LLM implementation of this test is `actionproof/ad/readinfo.py`.
+where the bracket is the effect of the (predictable) observation on the policy's *later behaviour*.
+- **Testbed:** the bracket is exactly 0, because the policy's features do not depend on an uninformative observation.
+- **LLM:** the bracket is not guaranteed to be 0. The read's text enters the context and can change later actions,
+  so igc's −c is an approximation there. It assumes that context-only effects of uninformative reads are
+  negligible. That is untested.
+
+The LLM implementation of the test is `actionproof/ad/readinfo.py`.
 
 **Update.** For such decisions, use the all-action term
 
@@ -140,9 +146,9 @@ independent of the sampled action and of the episode outcome.
 For all other decisions, use the sequence-level advantage *without* group std (R_i − mean_g R). Any scale must be
 independent of the current samples' hidden states.
 
-**Unbiasedness.** The exact value replaces a Monte Carlo estimate of the same quantity at those decisions; the
-remaining decisions use the unbiased no-std estimator. The combination is an unbiased policy gradient, because the
-per-decision terms are exact.
+**Unbiasedness.** In the testbed, where the bracket is 0, the exact value replaces a Monte Carlo estimate of the same
+quantity at those decisions, and the remaining decisions use the unbiased no-std estimator. The combination is an
+unbiased policy gradient. In the LLM it carries a bias equal to the bracket above.
 
 **Why selectivity follows.** Under sequence-level credit, a worthless read and a valuable read in the same
 trajectory share one advantage. The only signal separating them is c per read, between trajectories, buried in
