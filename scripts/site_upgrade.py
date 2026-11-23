@@ -67,6 +67,13 @@ def j1() -> dict:
     out["committee"] = {v: _r(s["main:transcript"].get("committee", {}).get("majority", {}).get(m))
                         for v, m in (("transcript_acc", "accuracy_abstain_wrong"),)}
     out["verdicts"] = {k: (s.get(k) or {}).get("supported") for k in ("J-H1", "J-H2")}
+    st = s.get("main:transcript_state", {})
+    out["state_committee"] = _r(st.get("committee", {}).get("majority", {}).get("accuracy_abstain_wrong"))
+    out["all_four_wrong_state"] = len(st.get("all_four_contradict_verifier", []))
+    out["max_fooled"] = max((v["fooled"] for v in (s.get("J-H1") or {}).get("per_judge", {}).values()), default=None)
+    out["n_unverifiable"] = next(iter((s.get("J-H1") or {}).get("per_judge", {}).values()), {}).get("n")
+    a1 = _j("results/j1/j1_addendum1.json")
+    out["addendum1"] = a1
     out["human"] = s.get("human")
     return out
 
