@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | Track | Track 3: agentic fine-tuning (problem statement 9: Measure → Understand → Fix) |
-| Team | Atharv Gaur (BITS Pilani); author contributions in §34 |
+| Team | Atharv Gaur (BITS Pilani); author contributions in §31 |
 | Base model | Tiny Aya Global, 3.35B (CohereLabs, CC-BY-NC-4.0) |
 | Method in one line | LoRA SFT warm start, then GRPO (AgentTune `TrlAgenticGrpo`) on ProcureSim, a SQLite procurement world with silent write faults; rewards: database-state (R_V) vs acknowledgement (R_A); recovery-start curriculum |
 | Code, models, data | GitHub `atharvgaur1845/actionproof-v2`; HF collection `atharvgaur18/actionproof-procurement-study-6b0321cd11bad297aead6e81` (30 adapters, splits, traces); site https://atharvgaur18-actionproof.static.hf.space/index.html |
@@ -64,6 +64,7 @@ Source: `results/s2/a12_summary.json` and `results/eval/a12/conf/*`. The two-met
 - **RQ5 (new).** Does the training cost general capability?
 - **RQ6 (new).** Can independent LLM judges detect silent write failures without database access?
 - **RQ7 (new).** Is any new credit-assignment or sampling method better than the recovery-start curriculum?
+- **RQ8 (new).** Can the best agent be made to repair correctly from what it can see: an inference-time reconciliation line, recovery SFT, or recovery SFT followed by the same RL (P1)?
 
 ## 6. Preregistered hypotheses (selection; all 33 registrations in `docs/upgrade/INVENTORY.md`)
 
@@ -82,6 +83,7 @@ Source: `results/s2/a12_summary.json` and `results/eval/a12/conf/*`. The two-met
 | **J1 (new)** | J-H1: transcript-only judges are fooled on unverifiable failures. J-H2: a snapshot gives ≥ 0.90 accuracy | J-H1 **not supported** (≤ 1 of 120 accepted: judges abstain); J-H2 **not supported** (0.886–0.989) |
 | **C5/G (new, development)** | Verified-progress turn credit; hint-guided sampling; kill criterion +0.03 over RSC | C5 **dropped** (−0.32 and −0.37; it penalises reads by construction, `docs/research/algorithm/C5_RESULT.md`); G **dropped** (−0.11 and −0.033; `docs/research/algorithm/G_RESULT.md`) |
 | **AD (algorithm discovery, development)** | Group-std scaling can distort costly-verification learning when rollouts share a hidden fault (mechanism known from Dr. GRPO and Bereket & Leskovec; the interaction is ours); AWRB (aliased-world return baseline) passes development gates | Development only (2 seeds): GRPO stops reading in 2 of 2 seeds at read cost 0.05 (cw_dev VSC 0.707 = warm start); AWRB 0.867 in both seeds; no-std GRPO 0.833. Confirmatory AD-C1 (`PREREGISTRATION_AD_C1.md`) is running, so **no confirmed algorithm** |
+| **P1 (new, practical agent)** | Against the recovery-start agent (A), on 450 fresh test tasks (unseen payment fractions, an unseen workflow, two-fault episodes): H1 reconciliation line at inference (B) > A; H2 recovery SFT (C) > A; H3 recovery SFT warm start + the same GRPO (D) > A. Holm over three, and all three seed pairs must improve | **Running** (`PREREGISTRATION_P1.md`); the frozen test runs once per model |
 
 ## 7. Threat model
 

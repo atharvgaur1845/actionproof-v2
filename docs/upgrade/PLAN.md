@@ -1,7 +1,7 @@
 # ActionProof research upgrade: audit summary and execution plan
 
 Branch `actionproof-research-upgrade`, cut from `research/e1e2` at b49a581. `stage4` is an ancestor of this branch, so nothing is lost.
-Written 2026-11-23 10:55 IST. **Deadline: Nov 27, 2026** (moved from Nov 24 by the author on 2026-11-23; the exact hour is still to be confirmed).
+Written 2026-11-23 10:55 IST. **Deadline: Nov 27, 2026** (moved from Nov 24 by the author on 2026-11-23; the author gave 23:59 IST). **Not yet confirmed against the submission portal**, which we cannot access; until the author confirms it there, the work is paced for completion well before Nov 27.
 
 ## 1. What already exists (audit, first pass)
 
