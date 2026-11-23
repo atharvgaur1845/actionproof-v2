@@ -40,7 +40,7 @@
 | TB6, 1,944 runs | same | about 5 min |
 | TB4, 135 runs | same | about 2 min |
 | TB3, 75 runs | same | about 3 min |
-| TB2, 2,220 runs | same | filled from `results/ad2/tabular_TB2.log` |
+| TB2, 2,220 runs | same | 1,914 s |
 | derivation_numeric | same, 1 core | about 3 min |
 | V2 GPU | A100, task 1300 | < 1 min (failed at start; DV-2) |
 | First-stage AD runs | H100/H200 | about 1.5 h each (logs in `queue/*/logs` on sharanga) |

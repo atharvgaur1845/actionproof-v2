@@ -39,3 +39,33 @@ them (1.0) and awrbn in none (0.0).
 
 Harmless for AWRB, because replay uses the same seed. Recorded because the code reads as if each rollout had its
 own seed.
+
+## V-F6. Counterfactual forks (fork_act, fork_bel, cvc) fail at matched budget (TB2, TB3)
+
+| Field | Content |
+|---|---|
+| Hypothesis | Paired forked continuations at verification decisions give decision-level credit worth their extra rollouts |
+| Actual | Gate T1 fails for every fork variant in 5/5 seeds against rloo/nostd ×8 at matched episodes (TB2: cvc k1 0.0103, fork_bel k1 0.0142, fork_act k1 0.0167, vs rloo ×8 0.0051). In TB3 every fork method has 2–3× the test regret of 4×-trained cheap estimators |
+| Diagnosis | (i) The fork term matters only at *informative* verification decisions. There the sequence-level, correctly signed advantage already carries the right sign, and spending the episodes on more independent groups reduces variance as much. (ii) Selectivity comes from the *uninformative* decisions, which igc handles exactly at zero cost; cvc inherits igc's selectivity and adds fork cost. (iii) With K = 1–4 forks, the Q-difference at informative decisions is noisy (repair success 0.5 at pay) |
+| Targeted diagnostic | At equal *updates* (TB2 ×1): cvc 0.0103 vs igc 0.0155, so forks help per update. At equal *episodes* (igc ×4, 25.6k, vs cvc k1, 27.8k): igc 0.0053 vs cvc 0.0103. The fork advantage per update is smaller than the gain from about 4× more groups |
+| Falsifies | Forked counterfactual credit as a cost-effective method in this testbed. In the LLM, forks are partial continuations with shared prefixes, so the cost ratio could differ. That was not tested |
+
+## V-F7. Per-context EMA scaling (ctxema) is not better than no scaling (TB2, TB3)
+
+ctxema is sign-preserving, as derived, but worse than nostd at every budget in TB2 (e.g. ×4: 0.0093 vs 0.0080, 5/5
+seeds negative) and at ×1 in TB3.
+
+Diagnosis: with Adam, the global scale of the advantage is irrelevant. A per-context scale only *re-weights
+contexts*, and here it over-weights low-variance contexts. The curvature argument of arXiv 2601.23135 does not carry
+over to a setting where low reward variance means "verification only costs".
+
+## V-F8. AD-D2 (first stage, LLM): the EMA-scaled no-std arms fail G1, and one seed of each collapses
+
+nostd_ema s1 and awrbn_ema s0 end with 0 reads (VSC 0.707), the same as grpo, even though their scale does not
+depend on the hidden world.
+
+Diagnosis (not tested further): the EMA restores GRPO-sized steps, about 1/σ ≈ 6–8× nostd's. With a sign-correct but
+noisy signal, larger steps can drive the read probability into the absorbing ρ = 0 state. No estimator recovers
+from that state, because every group then has zero variance. This is a stability failure, not the vote mechanism.
+
+It also qualifies first-stage D3 (nostd_ema_irc), which uses the same EMA scale.
