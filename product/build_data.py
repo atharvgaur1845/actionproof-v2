@@ -109,9 +109,25 @@ def replays(n_per_class: int = 2) -> dict:
     return out
 
 
+def evidence() -> dict:
+    """Every ledger claim with its evidence label, from results/canonical/results.json (actionproof.reporting)."""
+    from actionproof.reporting import canonical, freshness
+    c = canonical.build()
+    (ROOT / "results/canonical").mkdir(parents=True, exist_ok=True)
+    (ROOT / "results/canonical/results.json").write_text(json.dumps(c, indent=1, default=str))
+    per = {}
+    for m in c["metrics"]:
+        per.setdefault(m["claim"], []).append(m)
+    claims = [{**k, "n_numbers": len(per.get(k["id"], [])), "sources": sorted({str(m["source"]) for m in per.get(k["id"], [])})[:4]}
+              for k in c["claims"]]
+    return {"canonical_sha256": c["content_sha256"], "claims": claims, "label_counts": c["label_counts"],
+            "studies": {k: {"registration": v["registration"], "label": v["label"]} for k, v in c["studies"].items()},
+            "freshness": {k: v["status"] for k, v in freshness.check().items() if not k.startswith("product/data/")}}
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "dashboard.json").write_text(json.dumps(dashboard(), indent=1))
+    (OUT / "dashboard.json").write_text(json.dumps({**dashboard(), "evidence": evidence()}, indent=1))
     r = replays()
     (OUT / "replays.json").write_text(json.dumps(r))
     print("dashboard rows", len(dashboard()["rows"]), "replay tasks", len(r["tasks"]))

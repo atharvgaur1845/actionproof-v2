@@ -132,6 +132,8 @@ def build() -> gr.Blocks:
         with gr.Tab("Research dashboard"):
             d = _load("dashboard.json")
             gr.HTML(render.dashboard_html(d) if d else '<div class="ap"><p class="note">Run <code>python -m product.build_data</code>.</p></div>')
+            if d and d.get("evidence"):
+                gr.HTML(render.evidence_html(d["evidence"]))
         with gr.Tab("Reproducibility"):
             gr.HTML(REPRO)
     return demo

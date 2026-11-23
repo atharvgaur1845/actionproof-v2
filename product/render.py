@@ -119,6 +119,26 @@ def dashboard_html(d: dict) -> str:
             f'<div class="note">Generated from {esc(", ".join(d["sources"].values()))} by <code>python -m product.build_data</code>.</div></div>')
 
 
+LABEL_NOTE = {"confirmatory": "registered, rule met", "unsupported": "registered, rule not met", "failed": "candidate dropped by its own criterion",
+              "development": "development only", "exploratory": "registered after results, or descriptive by registration",
+              "descriptive": "description of recorded data", "incomplete": "registered, not finished", "future": "registered, not run"}
+
+
+def evidence_html(e: dict) -> str:
+    rows = "".join(f"<tr><td><code>{esc(c['id'])}</code></td><td><span class='tag{' conf' if c['label'] == 'confirmatory' else ''}'>"
+                   f"{esc(c['label'])}</span></td><td>{esc(c['statement'] or '')}</td><td><code>{esc(c['registration'])}</code></td>"
+                   f"<td class='num'>{c['n_numbers']}</td></tr>" for c in e["claims"])
+    studies = "".join(f"<li><b>{esc(k)}</b> ({esc(v['registration'])}): {esc(v['label'])}</li>" for k, v in e["studies"].items())
+    fresh = ", ".join(f"{esc(k)}: {esc(v)}" for k, v in e["freshness"].items())
+    legend = "".join(f"<li><b>{esc(k)}</b>: {esc(v)}</li>" for k, v in LABEL_NOTE.items())
+    return (f'<div class="ap"><h2 style="margin-top:1.5rem">Evidence ledger</h2><p class="lede">Every claim the project makes, '
+            f'with its evidence level. Each number is re-read from its result file when this page is built.</p><ul>{legend}</ul>'
+            f'<table><tr><th>Claim</th><th>Evidence</th><th>Statement</th><th>Registration</th><th>Numbers</th></tr>{rows}</table>'
+            f'<h3 style="margin-top:1rem">Registered studies still running</h3><ul>{studies}</ul>'
+            f'<div class="note">Built from <code>results/canonical/results.json</code> (sha256 {esc(e["canonical_sha256"][:12])}). '
+            f'Freshness at build: {fresh}.</div></div>')
+
+
 def comparison_html(task: dict, models: dict) -> str:
     cols = []
     for m, run in task["runs"].items():

@@ -1199,5 +1199,629 @@
   "S4": "results/s4/s4_summary.json",
   "FCA": "results/s4/fca_dev_summary.json",
   "review numbers": "results/s3/s3_review_numbers.json"
+ },
+ "evidence": {
+  "canonical_sha256": "f524c94435774973c9c2c98d48946dc8b0fea4a989f843f6c697b553a7204b6b",
+  "claims": [
+   {
+    "id": "C1",
+    "statement": "On writes whose first acknowledgement is success but which did not commit, a verdict-grounded reward selects authoritative read-back and an acknowledgement-grounded reward of identical form does not, with the same sign in every paired seed.",
+    "status": "not_supported",
+    "label": "unsupported",
+    "registration": "PREREGISTRATION_A12.md",
+    "stats": "scripts/s2_stats.py",
+    "n_numbers": 0,
+    "sources": []
+   },
+   {
+    "id": "C1-H3-PRED",
+    "statement": "Step-0 prediction (committed before GRPO step 1): mean group-relative advantage of reading back minus not reading back, per fault class and reward, on the warm start's gate samples.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A12_ADDENDUM1.md",
+    "stats": null,
+    "n_numbers": 3,
+    "sources": [
+     "results/a12b/h3_predictions.json"
+    ]
+   },
+   {
+    "id": "A12-GATE",
+    "statement": "Warm-start gate (Addendum 1): passed on proc_train_b at group size 8.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A12_ADDENDUM1.md",
+    "stats": null,
+    "n_numbers": 4,
+    "sources": [
+     "results/a12b/gate.json"
+    ]
+   },
+   {
+    "id": "C2",
+    "statement": "Finite-set coverage results (deviation D-A13-1 replaces the registered Fisher test, which treated repeated deterministic rows as samples): the full contract accepts none of the 194 single-fault and 479 two-fault violating configurations it was written for (exhaustive enumeration; no configuration varies across the 200 worlds), and 14 of 161 independently written violations (8 of 151 unambiguous). Describes this test set only.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A13.md",
+    "stats": null,
+    "n_numbers": 9,
+    "sources": [
+     "results/a13/h5_finite.json"
+    ]
+   },
+   {
+    "id": "H7",
+    "statement": "Defences on identical fault traces (scripted policies): keys alone recover no phantom write; verify-before-retry recovers all.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A11.md",
+    "stats": null,
+    "n_numbers": 2,
+    "sources": [
+     "results/a11/h7_matrix.json"
+    ]
+   },
+   {
+    "id": "C3",
+    "statement": "Per gateway mode and fault cell: the learned policy's contribution (delta_policy), the runtime's contribution (delta_runtime) and the value of exposing evidence (delta_information).",
+    "status": "not_supported",
+    "label": "unsupported",
+    "registration": "PREREGISTRATION_A11.md",
+    "stats": "scripts/a11_estimands.py",
+    "n_numbers": 0,
+    "sources": []
+   },
+   {
+    "id": "S1-H1",
+    "statement": "Registered Stage 1 confirmatory test (PREREGISTRATION.md H1): PCSTR-d 0.8425 vs best baseline (outcome) 0.8275, +1.5 pp.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION.md",
+    "stats": null,
+    "n_numbers": 5,
+    "sources": [
+     "results/confirmatory.json"
+    ]
+   },
+   {
+    "id": "S1-VSC",
+    "statement": "Not registered, rewards of different form: warm start 0.6425, tool_trust 0.640 (2 seeds), PCSTR-d \u2212 tool_trust +20.25 pp; strict VSC tool_trust 0.424.",
+    "status": "supported",
+    "label": "descriptive",
+    "registration": null,
+    "stats": null,
+    "n_numbers": 7,
+    "sources": [
+     "results/a10/strict_vsc.md",
+     "results/confirmatory.json"
+    ]
+   },
+   {
+    "id": "S1-JUDGE",
+    "statement": "AuditKIT TaskCompletion (Aya Expanse 32B), given the receipt ledger, still accepts 213 of the 298 false completions the ledger shows (71.5%; 0.960 without the ledger on the same episodes).",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A9.md",
+    "stats": null,
+    "n_numbers": 2,
+    "sources": [
+     "results/judge/aya32b_grounded__summary.json"
+    ]
+   },
+   {
+    "id": "S1-CHANNEL",
+    "statement": "Exploratory (development splits): with two rewards of identical form from one warm start, test-IID VSC 0.825 (outcome, 2 seeds) vs 0.605 (ack_outcome, 2 seeds); sampled refund read-back on val, warm start 0.25, outcome 0.71, PCSTR-d 0.72, ack_outcome 0.10 (seed 0).",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A4.md",
+    "stats": null,
+    "n_numbers": 6,
+    "sources": [
+     "['results/eval/r3/grpo_tiny_v2_ack_outcome_s0__neutral__test_iid.summary.json', 'results/eval/r3/grpo_tiny_v2_ack_outcome_s1__neutral__test_iid.summary.json']",
+     "['results/eval/r3/grpo_tiny_v2_outcome_s0__neutral__test_iid.summary.json', 'results/eval/r3/grpo_tiny_v2_outcome_s1__neutral__test_iid.summary.json']",
+     "docs/figures/figures_data.json"
+    ]
+   },
+   {
+    "id": "S1-A8",
+    "statement": "A8 intervention (registered, development split, one seed per cell): ack arm read-back 0.669 on the X1 pool vs 0.000 on the full pool; state arm 1.000 on both; interaction +0.678 [0.605, 0.750].",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A8.md",
+    "stats": null,
+    "n_numbers": 6,
+    "sources": [
+     "results/a8/x1_interaction.md"
+    ]
+   },
+   {
+    "id": "S1-STRESS",
+    "statement": "v2 stress test (34 tasks, timeouts before the commit, seed 0): PCSTR-d 0.176, outcome 0.118, tool_trust 0.706 VSC.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A10_ADDENDUM.md",
+    "stats": null,
+    "n_numbers": 3,
+    "sources": [
+     "results/a10/v2_env.md"
+    ]
+   },
+   {
+    "id": "S1-REFVER",
+    "statement": "Independently implemented reference verifier agrees with the VSC verdict on 4,000 of 4,000 confirmatory episodes.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION.md",
+    "stats": null,
+    "n_numbers": 1,
+    "sources": [
+     "results/reference_verifier.md"
+    ]
+   },
+   {
+    "id": "C1-H2",
+    "statement": "Registered primary (A12 H2, proc_conf, step-200 models, each run once): phantom read-back R_V 1.00 vs R_A 0.00 in each of seeds 0-4 (task level 153/153 vs 0/153 in each); VSC difference +0.313, +0.323, +0.313, +0.277, +0.273. Exact sign-flip p over 5 seeds is 1/32 one-sided, 2/32 two-sided (the floors).",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A12.md",
+    "stats": "scripts/s2_stats.py",
+    "n_numbers": 18,
+    "sources": [
+     "results/s2/a12_secondary.json",
+     "results/s2/a12_summary.json"
+    ]
+   },
+   {
+    "id": "C1-H3",
+    "statement": "Registered H3 (A12 \u00a77) fails: sign agreement R_V 3 of 5 classes (0.6), R_A 0 of 5, against >= 0.8, in each of seeds 0-2. The warm start decoded greedily never reads back on proc_dev (0/96).",
+    "status": "not_supported",
+    "label": "unsupported",
+    "registration": "PREREGISTRATION_A12.md",
+    "stats": null,
+    "n_numbers": 3,
+    "sources": [
+     "results/eval/a12/dev/warm_start__neutral__proc_dev.summary.json",
+     "results/s2/h3_test.json"
+    ]
+   },
+   {
+    "id": "STRESS-DUP",
+    "statement": "proc_stress (duplicate delivery, not seen in training): R_V reads back after every write (benign read-back 1.0) yet the duplicate rate equals R_A's (0.58) in every seed.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A12_ADDENDUM2.md",
+    "stats": null,
+    "n_numbers": 3,
+    "sources": [
+     "results/s2/a12_secondary.json"
+    ]
+   },
+   {
+    "id": "A11-H1",
+    "statement": "A11 H1 (registered): runtime engineering check passes (Delta_runtime > 0 for every policy); registered interaction test rejects for PCSTR-d seed 0 but not seed 1, so the primary claim is not made; Delta_information +0.25 for the warm start, about 0 for PCSTR-d.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A11.md",
+    "stats": null,
+    "n_numbers": 4,
+    "sources": [
+     "results/s2/a11_summary.json"
+    ]
+   },
+   {
+    "id": "A12-SIGNAL",
+    "statement": "Exploratory reward-signal ranges over five seeds and four 50-step blocks (results/s2/reward_signal_summary.json).",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A12_ADDENDUM2.md",
+    "stats": null,
+    "n_numbers": 18,
+    "sources": [
+     "results/s2/reward_signal_summary.json"
+    ]
+   },
+   {
+    "id": "A14",
+    "statement": "A14 (registered): given forced authoritative evidence, every policy (warm start, R_V and R_A seeds 0-2) has BCA 1.00 and signed S +1.00 on the success-acknowledgement family; thesis check met. Partial branch correct action: R_V 0.36/0.48/0.35, R_A 0.00, warm start 0.03. Exploratory runtime-attributed ablation: R_A BCA 0.83, S +0.66.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A14.md",
+    "stats": "scripts/a14_stats.py",
+    "n_numbers": 15,
+    "sources": [
+     "results/a14/a14_summary.json",
+     "results/a14/a14_summary_runtime.json"
+    ]
+   },
+   {
+    "id": "TRACK3",
+    "statement": "Track 3 metrics (A12 models): proc_conf claimed success R_A 1.000 vs verified 0.470; R_V claimed 0.843 vs verified 0.743-0.793; tool-call validity 1.000; batch-1 latency per episode warm start 2.44 s, R_V 3.82 s, R_A 2.44 s; gateway overhead about 0.2 ms per call (in-process).",
+    "status": "supported",
+    "label": "descriptive",
+    "registration": null,
+    "stats": null,
+    "n_numbers": 10,
+    "sources": [
+     "results/s2/track3_metrics.json"
+    ]
+   },
+   {
+    "id": "A12-IDENTITY",
+    "statement": "Exploratory: ignoring report wording, R_A's greedy tool calls equal the warm start's on 500 of 500 confirmatory tasks in each of 5 seeds; R_V's on 7-12 per split. Warm start reference (evaluated once after all models were frozen): proc_conf VSC 0.47, false success 0.53.",
+    "status": "supported",
+    "label": "descriptive",
+    "registration": null,
+    "stats": null,
+    "n_numbers": 6,
+    "sources": [
+     "results/eval/a12/conf_reference/warm_start__neutral__proc_conf.summary.json",
+     "results/s2/a12_identity.json"
+    ]
+   },
+   {
+    "id": "H4",
+    "statement": "Registered (A11 section 9; one annotator, 60 episodes, between-subjects): on failures invisible in the transcript, the annotator accepted 8 of 10 as completed from the transcript alone and 1 of 10 with the receipt ledger; prediction met (>= 0.5 and <= 0.2), falsification (< 0.3) not triggered. Descriptive: visible failures accepted 10 of 10 from the transcript, 0 of 10 with the ledger.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A11.md",
+    "stats": null,
+    "n_numbers": 8,
+    "sources": [
+     "results/h4/h4_summary.json"
+    ]
+   },
+   {
+    "id": "A15",
+    "statement": "Registered: with forced evidence of a partial payment, R_V refunds or escalates at unseen ratios (1/4, 3/4) as often as at the trained 1/2 in seeds 0-3 (0.25-0.58; generalises across ratios, not pattern-specific); seed 4 never does; R_A 0.00 in all seeds; warm start 0.035. By workflow (results/s2/partial_by_workflow.json, seeds 0-2): 0.99-1.00 when payment is the first step, 0.00 after a goods receipt, 0.05-0.55 after an order, so the repair generalises across ratios within the pay-first workflow, not across workflows.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A15.md",
+    "stats": "scripts/a15_stats.py",
+    "n_numbers": 9,
+    "sources": [
+     "results/a15/a15_summary.json",
+     "results/s2/partial_by_workflow.json"
+    ]
+   },
+   {
+    "id": "A16",
+    "statement": "Registered: every model encodes partial vs complete (probe AUROC 1.00, refit and frozen warm-start probe, all checkpoints); R_V's evidence-dependent action margin grows with training (step 200: +2.9/+3.9/+5.1 nats) while R_A's stays near the warm start (+2.0 vs +2.4); ablating the dev-fitted partial-minus-complete direction at layer 18 lowers R_V's partial-branch margin beyond every random direction in 5/5 seeds (causal rule met); single-position final-token patching does not exceed random controls in any seed.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A15.md",
+    "stats": "scripts/a16_analyze.py",
+    "n_numbers": 14,
+    "sources": [
+     "results/a16/a16_summary.json"
+    ]
+   },
+   {
+    "id": "A17",
+    "statement": "Registered: in healthcare administration, R_V phantom read-back exceeds R_A's in 5/5 seeds, seed-averaged +0.37 [0.18, 0.58] (positive criterion met; D-A17-1); R_V vs warm start +0.15 [-0.06, 0.39] (not established); in IT operations no difference (-0.03 [-0.07, 0.01]; warm start already reads back). Forced-evidence forks: no model meets the credit rule in either domain.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_A17.md",
+    "stats": "scripts/a17_stats.py",
+    "n_numbers": 4,
+    "sources": [
+     "results/a17/a17_seedavg.json"
+    ]
+   },
+   {
+    "id": "K1",
+    "statement": "Registered: R_A trained without the lost-acknowledgement and never-commit classes (targeted) or on a random pool of the same size (placebo), seeds 0-2: greedy phantom read-back 0/153 on proc_conf in all six, VSC 0.47 and false success 0.53 as the warm start; sampled read rate declines more under placebo (about 0.13 to 0.06) than under targeted (about 0.21 to 0.16). Composition explains part of the drift away from reading, not the absence of read-back.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_K1.md",
+    "stats": null,
+    "n_numbers": 9,
+    "sources": [
+     "results/eval/k1/conf/k1_k1p_ra_s0__neutral__proc_conf.summary.json",
+     "results/eval/k1/conf/k1_k1p_ra_s1__neutral__proc_conf.summary.json",
+     "results/eval/k1/conf/k1_k1p_ra_s2__neutral__proc_conf.summary.json",
+     "results/eval/k1/conf/k1_k1t_ra_s0__neutral__proc_conf.summary.json"
+    ]
+   },
+   {
+    "id": "S3",
+    "statement": "Registered (PREREGISTRATION_S3; corrected by ADDENDUM1 \u00a71): GRPO with the A12 update rule and R_V reward, trained on a recovery-start curriculum (RSC; half the episodes start from scripted fault states, and the pool also adds fault types A12 never trained on), vs A12 R_V, 5 seeds, paired tasks. This compares training RECIPES (start states plus fault coverage), not start states alone. VSC on fresh recovery starts +0.21 [0.17, 0.25] (5/5 seeds, exact sign-flip 1/32; H1 supported) and on fresh full episodes +0.21 [0.17, 0.25] (H2 non-inferiority supported); duplicate stress +0.39 (explained by coverage, see S3-A1); false completion -0.21 and violations -0.12 on full episodes; honest failure unchanged. OpsSim transfer is negative in care_admin (see S3-R). Intervals: task bootstrap with one draw shared across seeds.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_S3.md",
+    "stats": "scripts/s3_stats.py",
+    "n_numbers": 8,
+    "sources": [
+     "results/s3/s3_summary.json"
+    ]
+   },
+   {
+    "id": "S3-A1",
+    "statement": "Registered (PREREGISTRATION_S3_ADDENDUM1, before S3 outputs were read): the start-state comparison, RSC vs a class-matched full-episode R_V control (same faults, prompts and worlds), 3 seeds (exact sign-flip resolution 1/8; intervals are task bootstraps conditional on the trained models, not seed-level inference). VSC +0.09 [0.06, 0.11] on recovery starts (H3, 3/3 seeds positive, seed 0 only +0.02) and +0.22 [0.15, 0.29] on full-episode partial and duplicate tasks (H4, 3/3, seed 0 only +0.01; bound corrected 2026-11-21 from a mis-rounded 0.16). Trade-off: RSC has MORE violations than the control (+0.027 [0.003, 0.052] on that subset, +0.010 on all full episodes, +0.04 on duplicate stress) and less false completion (-0.22 on the subset). On duplicate stress the control is better (VSC -0.04 [-0.07, -0.01]); that gain is due to fault coverage, not the curriculum.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_S3_ADDENDUM1.md",
+    "stats": "scripts/s3_stats_addendum.py",
+    "n_numbers": 11,
+    "sources": [
+     "results/s3/s3_addendum.json",
+     "results/s3/s3_addendum_full_pd.json"
+    ]
+   },
+   {
+    "id": "S3-A2",
+    "statement": "Registered (PREREGISTRATION_S3_ADDENDUM2 Part A, before control seeds 3-4 were trained; seeds 0-2 were already known): RSC (5 runs) vs the class-matched control (5 runs), one-sided unpaired seed permutation, Holm over three. H3' recovery starts, all classes: +0.107 [0.085, 0.131], p 0.012, Holm 0.036, SUPPORTED. H4'p full episodes, partial class: +0.384 [0.322, 0.447] over tasks but p 0.056, Holm 0.111, NOT supported (control seeds 0 and 3 learned partial repair; 5/5 RSC vs 2/5 control learners). H4'd duplicate class: +0.130, p 0.337, NOT supported (control seed 4 never repaired a duplicate). Secondary: with five control seeds RSC has FEWER violations than the control on all full episodes (-0.021 [-0.030, -0.013]) and is better on duplicate stress (VSC +0.068 [0.040, 0.096]), reversing the three-seed trade-off of S3-A1; both are reported.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_S3_ADDENDUM2.md",
+    "stats": "scripts/s3_stats_a2.py",
+    "n_numbers": 10,
+    "sources": [
+     "results/s3/s3_addendum2.json"
+    ]
+   },
+   {
+    "id": "S3-A2B",
+    "statement": "Registered (PREREGISTRATION_S3_ADDENDUM2 Part B): with partial-payment tasks spread evenly across workflows in the training pool (receive-then-pay 6 -> 21 of 400), rebalanced RSC (2 runs) repairs receive-then-pay partial payments on 0.005 of the 100 targeted tasks (s3_pp_full + s3_pp_rec): reading 'not explained by pool frequency' (W <= 0.15). Rebalanced control: 0.000. Descriptive: rebalancing lowered repair in the other workflows (order then pay -0.51, pay first -0.48 vs RSC seeds 0-1). On the targeted splits (50 tasks per workflow) every model repairs about 0 after a goods receipt except RSC seed 3 (0.26).",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_S3_ADDENDUM2.md",
+    "stats": "scripts/s3_stats_a2.py",
+    "n_numbers": 3,
+    "sources": [
+     "results/s3/s3_addendum2.json"
+    ]
+   },
+   {
+    "id": "S3-A4",
+    "statement": "Registered (PREREGISTRATION_S3_ADDENDUM4, before training): recovery starts that end at the acknowledgement, without the scripted read (ACK, 5 runs), against RSC and the class-matched control (5 runs each), on s3_conf_full partial-class VSC. D1 = RSC - ACK +0.203 [0.169, 0.238], unpaired seed permutation p 0.103, Holm 0.206; D2 = ACK - CONTROL +0.181 [0.137, 0.225], p 0.262, Holm 0.262. Neither contrast meets the rule: registered reading 'inconclusive'. Descriptive: runs that learn partial repair (VSC >= 0.40): control 2 of 5, ACK 4 of 5, RSC 5 of 5.",
+    "status": "not_supported",
+    "label": "unsupported",
+    "registration": "PREREGISTRATION_S3_ADDENDUM4.md",
+    "stats": "scripts/s3_stats_a4.py",
+    "n_numbers": 12,
+    "sources": [
+     "results/s3/s3_addendum4.json"
+    ]
+   },
+   {
+    "id": "SR1",
+    "statement": "Registered (PREREGISTRATION_SR1, before training): recovery-start training with per-episode randomised tool names (SR, 3 runs) vs RSC seeds 0-2, paired tasks. SR-H1 (renamed API s4_api VSC higher): not supported, +0.00 [-0.04, 0.04], per seed +0.03, -0.01, -0.02. SR-H2 (non-inferiority on s3_conf_full, lower bound above -0.05): not supported, -0.248 [-0.296, -0.201]. Descriptive: SR is lower on every language split and on two-fault episodes; on the unseen four-step workflow it is +0.11, carried by one run (0.29; others 0.02, 0.07), with more violations (+0.07).",
+    "status": "not_supported",
+    "label": "unsupported",
+    "registration": "PREREGISTRATION_SR1.md",
+    "stats": "scripts/sr1_stats.py",
+    "n_numbers": 8,
+    "sources": [
+     "results/s4/sr1_summary.json"
+    ]
+   },
+   {
+    "id": "E1E2",
+    "statement": "Registered (PREREGISTRATION_E1E2, before any output; 21 frozen models, fresh splits). E1 sampled (T=1, 8 samples) partial-payment VSC over 120 tasks: RSC - control +0.098 [0.081, 0.114], Holm 0.103; RSC - ACK +0.087, Holm 0.095; ACK - control +0.010; none supported. Threshold reading: greedy vs sampled per-run rho 0.92. E2 decision-point probes: position H1 not supported as registered (mean -0.013); a reconciliation line computed from visible values raises correct refunds after a goods receipt by +0.48 [0.43, 0.52] ('computation helps').",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_E1E2.md",
+    "stats": "scripts/e1e2_stats.py",
+    "n_numbers": 12,
+    "sources": [
+     "results/e1e2_summary.json"
+    ]
+   },
+   {
+    "id": "ID1",
+    "statement": "Registered (PREREGISTRATION_ID1; deviation D-ID1-1): a warm start trained with no verifying demonstrations reads back after 0 of 164 phantom payments when sampled (T=1); R_V training from it (2 seeds, A12 settings) never samples a read in 200 steps (training read rate 0.00 in every block) and reaches phantom read-back 0/153 on proc_conf in both seeds, with VSC 0.47 as the warm start. Registered reading: selection. R_V selects read-back from the warm start's repertoire; it does not create it from exploration here.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_ID1.md",
+    "stats": "scripts/id1_stats.py",
+    "n_numbers": 4,
+    "sources": [
+     "results/id1/id1_summary.json"
+    ]
+   },
+   {
+    "id": "S3-R",
+    "statement": "Descriptive, from the post-results review and recomputed by scripts/s3_review_numbers.py and scripts/s4_stats.py on the S3 files (not registered). Seed level: every RSC run beats every A12 R_V run on s3_conf_rec and s3_conf_full (unpaired permutation p = 1/252 = 0.004); RSC vs control, 3 seeds per arm, p = 0.05 (the smallest possible). Per class on s3_conf_full, the RSC - A12 R_V gain is 0.116 duplicate delivery (0.12) and 0.093 partial payment, every other class 0. Partial repair (partial-class VSC >= 0.40) learned in 5/5 RSC runs, 1/3 control runs, 3/5 A12 R_V runs; control seed 0 and RSC seed 0 make identical tool calls on 283/300 tasks. Receive-then-pay partial payments repaired: RSC 5/60 full episodes, A12 R_V 0/60, control 0/36. Clean episodes: 6.40 calls and 2.70 reads per episode for every R_V-family arm, 3.70 and 0.00 for the warm start. Transfer: care_admin VSC 0.158 warm, 0.080 A12 R_V, 0.047 RSC (below A12 R_V in 5/5 seed pairs); collateral 0.18, 0.27, 0.33; it_ops VSC 0.14-0.20.",
+    "status": "supported",
+    "label": "descriptive",
+    "registration": null,
+    "stats": "scripts/s3_review_numbers.py",
+    "n_numbers": 18,
+    "sources": [
+     "results/s3/s3_review_numbers.json",
+     "results/s3/s3_seedlevel.json"
+    ]
+   },
+   {
+    "id": "S4-EVAL",
+    "statement": "Registered (PREREGISTRATION_S4_EVAL as amended by ADDENDUM1 before any output; scripts/s4_stats.py via the D-S4E-2 wrapper). RSC - A12 R_V VSC, 5 runs each, seed-averaged [95% task CI], seeds positive, Holm over the unpaired seed permutation: G1 renamed API -0.016 [-0.044, 0.011], 3/5, not supported; G2 Hindi +0.127 [0.080, 0.176] and Hinglish +0.072 [0.040, 0.109], 5/5, Holm p 0.016, supported; G3 unseen four-step workflow +0.016 [0.004, 0.030], 2/5, not supported; G4 two-fault episodes +0.072 [0.032, 0.118], 5/5, Holm p 0.016, supported. Secondary: Hinglish costs RSC 0.091 VSC against English on the same tasks, A12 R_V 0.040; Hindi about 0.02 for both.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": [
+     "PREREGISTRATION_S4_EVAL.md",
+     "PREREGISTRATION_S4_EVAL_ADDENDUM1.md"
+    ],
+    "stats": "scripts/s4_stats_d2.py",
+    "n_numbers": 16,
+    "sources": [
+     "results/s4/s4_diagnostics.json",
+     "results/s4/s4_summary.json"
+    ]
+   },
+   {
+    "id": "S4-DIAG",
+    "statement": "Descriptive (scripts/s4_diagnose.py; not registered). Renamed API: share of episodes with at least one call to a training-time tool name (rejected) is 0.62 for the warm start, 0.31 A12 R_V, 0.35 RSC, 0.13 control. Unseen four-step workflow: goods receipt absent at the end in 0.84 (warm start), 0.96 (A12 R_V), 0.95 (RSC), 0.88 (control) of episodes; mean VSC 0.12, 0.03, 0.05, 0.11; scripted oracle 0.91 (PREREGISTRATION_S4_EVAL).",
+    "status": "supported",
+    "label": "exploratory",
+    "registration": null,
+    "stats": "scripts/s4_diagnose.py",
+    "n_numbers": 9,
+    "sources": [
+     "PREREGISTRATION_S4_EVAL.md",
+     "results/s4/s4_diagnostics.json"
+    ]
+   },
+   {
+    "id": "FCA",
+    "statement": "Dropped by its kill criterion fixed before training (docs/research/algorithm/FCA_GRPO.md \u00a77): s3_rec_dev VSC FCA - recovery-start GRPO = -0.097 averaged over development seeds 0-1 (0.640 vs 0.807; 0.780 vs 0.807), where at least +0.03 was required; proc_dev -0.017 and KL ratio 1.08 within bounds. Forced branches differed from the on-policy mean in 66-72% of fork groups. Never evaluated on test data.",
+    "status": "refuted",
+    "label": "failed",
+    "registration": "docs/research/algorithm/FCA_GRPO.md",
+    "stats": "scripts/s4_fca_dev.py",
+    "n_numbers": 6,
+    "sources": [
+     "results/s4/fca_dev_summary.json"
+    ]
+   },
+   {
+    "id": "PAPER-RANGES",
+    "statement": "Values quoted in the paper as ranges or single figures, each read from its file.",
+    "status": "supported",
+    "label": "descriptive",
+    "registration": null,
+    "stats": null,
+    "n_numbers": 4,
+    "sources": [
+     "results/s2/a11_summary.json",
+     "results/s2/a12_summary.json",
+     "results/s2/stop_rule_seeds.json"
+    ]
+   },
+   {
+    "id": "R1-H2",
+    "statement": "Registered R1 primary (PREREGISTRATION_R1.md; deviation D-R1-1 before output): ProcureSim GRPO (A12 state reward, recovery-start curriculum; 5 seeds each) is non-inferior to its SFT warm start within 0.03 on IFEval prompt-level strict accuracy and BFCL v4 non-live AST accuracy (all four Holm p < 0.05). Every other arm and endpoint also shows no change beyond +/-0.03.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_R1.md",
+    "stats": "scripts/r1_stats.py",
+    "n_numbers": 4,
+    "sources": [
+     "results/r1/r1_summary.json"
+    ]
+   },
+   {
+    "id": "R1-H1",
+    "statement": "R1 H1 (SFT warm start loses capability vs the base model) not supported: IFEval +0.011 [-0.020, 0.043], BFCL non-live +0.022 [-0.004, 0.048].",
+    "status": "not_supported",
+    "label": "unsupported",
+    "registration": "PREREGISTRATION_R1.md",
+    "stats": null,
+    "n_numbers": 2,
+    "sources": [
+     "results/r1/r1_summary.json"
+    ]
+   },
+   {
+    "id": "R1-H3",
+    "statement": "R1 H3 (training lowers BFCL irrelevance abstention) not supported (Holm p 0.819 both arms); the base model itself abstains on 0.079 of irrelevance items.",
+    "status": "not_supported",
+    "label": "unsupported",
+    "registration": "PREREGISTRATION_R1.md",
+    "stats": null,
+    "n_numbers": 2,
+    "sources": [
+     "results/r1/r1_summary.json"
+    ]
+   },
+   {
+    "id": "J1-H1",
+    "statement": "Registered J1 J-H1 (transcript-only judges are fooled on unverifiable failures, share >= 0.25 for 3 of 4 judges) not supported: with a rubric stating that an ok reply is not proof, judges answered 'it happened' on 0-1 of 120 such episodes; they abstained instead (coverage 0.43-0.59 on all main cases).",
+    "status": "not_supported",
+    "label": "unsupported",
+    "registration": "PREREGISTRATION_J1.md",
+    "stats": "evaluation/llm_judge_committee/analyze.py",
+    "n_numbers": 2,
+    "sources": [
+     "results/j1/j1_summary.json"
+    ]
+   },
+   {
+    "id": "J1-H2",
+    "statement": "Registered J1 J-H2 (database snapshot gives >= 0.90 accuracy, Wilson lower bound, for 3 of 4 judges) not supported: Gemma 4 31B 0.989, gpt-oss-120b 0.933, Qwen3 235B 0.889, DeepSeek V3.2 0.886; majority committee 0.897 does not beat its best member.",
+    "status": "not_supported",
+    "label": "unsupported",
+    "registration": "PREREGISTRATION_J1.md",
+    "stats": null,
+    "n_numbers": 5,
+    "sources": [
+     "results/j1/j1_summary.json"
+    ]
+   },
+   {
+    "id": "C5",
+    "statement": "Stage 5 C5 (verified-progress turn credit) dropped by its pre-set kill criteria (docs/research/algorithm/C5G_DEV.md): s3_rec_dev -0.32 and proc_dev -0.37 vs recovery-start GRPO (seeds 0-1). Post-hoc diagnosis: state-progress turn credit gives read turns negative normalised credit by construction; C5 policies stopped reading (docs/research/algorithm/C5_RESULT.md).",
+    "status": "refuted",
+    "label": "failed",
+    "registration": "docs/research/algorithm/C5G_DEV.md",
+    "stats": "scripts/s5_dev.py",
+    "n_numbers": 2,
+    "sources": [
+     "results/s5/s5_dev_summary.json"
+    ]
+   },
+   {
+    "id": "J1-A1",
+    "statement": "J1 addendum 1 (exploratory; registered after J1 results, before any v0 output): removing the single rubric sentence that an ok reply does not prove a write turns abstention into acceptance. Transcript-only judges then answer 'it happened' on unverifiable failures in 120 of 120 (Gemma 4 31B), 120 of 120 (gpt-oss-120b), 115 of 120 (Qwen3 235B) and 9 of 120 (DeepSeek V3.2) episodes, against 0, 0, 1 and 0 with the sentence.",
+    "status": "supported",
+    "label": "exploratory",
+    "registration": "PREREGISTRATION_J1_ADDENDUM1.md",
+    "stats": "evaluation/llm_judge_committee/analyze_a1.py",
+    "n_numbers": 3,
+    "sources": [
+     "results/j1/j1_addendum1.json"
+    ]
+   },
+   {
+    "id": "G",
+    "statement": "Stage 5 G (sampler-only reconciliation-hint guidance) dropped by its pre-set kill criteria (docs/research/algorithm/C5G_DEV.md): s3_rec_dev -0.11 and proc_dev -0.033 vs recovery-start GRPO (seeds 0-1; seed 1 re-run on Slurm after an HF bundle failure). Hinted episodes were about 5% of training rollouts.",
+    "status": "refuted",
+    "label": "failed",
+    "registration": "docs/research/algorithm/C5G_DEV.md",
+    "stats": "scripts/s5_dev.py",
+    "n_numbers": 2,
+    "sources": [
+     "results/s5/s5_dev_summary.json"
+    ]
+   },
+   {
+    "id": "R1-T",
+    "statement": "R1-T (descriptive, PREREGISTRATION_R1_TAU.md; deviations D-R1T-1, D-R1T-2 before any episode): tau-bench retail test, 115 tasks x 3 trials, Aya Expanse 32B simulated user. Floor regime: base pass^1 0.058; the SFT warm start lowers it by 0.020 [-0.038, -0.006]; GRPO adds no change (state reward -0.006, recovery-start -0.004, intervals include 0). Most successes involve no write action.",
+    "status": "supported",
+    "label": "exploratory",
+    "registration": "PREREGISTRATION_R1_TAU.md",
+    "stats": "scripts/r1_tau_stats.py",
+    "n_numbers": 4,
+    "sources": [
+     "results/r1_tau/r1_tau_summary.json"
+    ]
+   }
+  ],
+  "label_counts": {
+   "confirmatory": 211,
+   "descriptive": 45,
+   "exploratory": 16,
+   "failed": 10,
+   "unsupported": 34
+  },
+  "studies": {
+   "P1": {
+    "registration": "PREREGISTRATION_P1.md",
+    "label": "incomplete"
+   },
+   "P2": {
+    "registration": "PREREGISTRATION_P2.md",
+    "label": "incomplete"
+   },
+   "AD-C1": {
+    "registration": "PREREGISTRATION_AD_C1.md",
+    "label": "incomplete"
+   }
+  },
+  "freshness": {
+   "demo/static/index.html": "fresh",
+   "demo/data.json": "fresh",
+   "docs/figures/figures_data.json": "fresh",
+   "results/canonical/results.json": "fresh"
+  }
  }
 }
