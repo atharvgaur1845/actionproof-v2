@@ -10,7 +10,9 @@ from collections import defaultdict
 from pathlib import Path
 from statistics import mean
 
-SHOW = ["grpo", "grpo_B", "nostd", "rloo", "gdpo", "batchstd", "awrb", "awrbn", "critic_q", "igc", "cvc"]
+SHOW = ["grpo", "grpo_B", "nostd", "gdpo", "batchstd", "awrb", "awrbn", "critic_q", "igc", "cvc"]
+COL = {"grpo": "#d62728", "grpo_B": "#ff9896", "nostd": "#1f77b4", "gdpo": "#7f7f7f", "batchstd": "#8c564b",
+       "awrb": "#e377c2", "awrbn": "#c5b0d5", "critic_q": "#bcbd22", "igc": "#17becf", "cvc": "#2ca02c"}
 
 
 def load(p: Path) -> list[dict]:
@@ -42,7 +44,8 @@ def main() -> None:
     for ax, s in zip(axs, (1.0, 0.6)):
         for name in SHOW:
             ys = [mean(x[0] for x in cell[(name, p, 0.05, s, 0.0)]) for p in P if (name, p, 0.05, s, 0.0) in cell]
-            ax.plot(P[:len(ys)], ys, marker="o", label=name, lw=2.5 if name in ("grpo", "nostd", "cvc") else 1)
+            ax.plot(P[:len(ys)], ys, marker="o", label=name, color=COL[name],
+                    lw=2.5 if name in ("grpo", "nostd", "cvc") else 1)
         thr = 0.05 / s
         ax.axvline(thr, color="k", ls="--", lw=1)
         ax.set_title(f"c = 0.05, repair s = {s}; dashed: VOI threshold p = c/s")
@@ -70,7 +73,8 @@ def main() -> None:
     for ax, (p, s) in zip(axs, ((0.2, 1.0), (0.4, 0.6))):
         for name in SHOW:
             ys = [mean(x[3] for x in cell[(name, p, c, s, 0.0)]) for c in C]
-            ax.plot(C, ys, marker="o", label=name, lw=2.5 if name in ("grpo", "nostd", "cvc") else 1)
+            ax.plot(C, ys, marker="o", label=name, color=COL[name],
+                    lw=2.5 if name in ("grpo", "nostd", "cvc") else 1)
         ax.plot(C, [mean(x[4] for x in cell[("nostd", p, c, s, 0.0)]) for c in C], "k--", label="oracle J*")
         ax.set_title(f"p = {p}, s = {s}")
         ax.set_xlabel("read cost c")
