@@ -39,3 +39,13 @@ def test_freshness_flags_a_newer_source(tmp_path, monkeypatch):
     assert F.check()["s.json"]["status"] == "stale"
     os.utime(surf, None)
     assert F.check()["s.json"]["status"] == "fresh"
+
+
+def test_tables_from_synthetic_summaries():
+    from actionproof.reporting import tables
+    r = {"delta": 0.1, "ci95": [0.05, 0.15], "holm_p": 0.001, "seed_deltas": [0.1, 0.09, -0.01], "supported": False,
+         "X_mean": 0.6, "A_mean": 0.5, "Y_mean": 0.5, "contrast": "E - D"}
+    t = tables.p1({"test": {"B": r, "C": r, "D": r}, "dev": {"winner": "C"}})
+    assert "$-$0.010" in t and "Development winner: C" in t and t.count("\\\\") >= 5
+    t2 = tables.p2({"primary": {"H1": r}, "secondary": {"S1": r}, "references": {"O": {"mean_vsc": 0.9, "decoding": "greedy", "n_models": 1}}})
+    assert "H1" in t2 and "S1" in t2 and "O: 0.900" in t2
