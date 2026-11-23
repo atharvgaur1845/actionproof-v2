@@ -47,6 +47,8 @@
 | Website procurement chapter, deck, claims ledger | Completed and verified locally (tests, number check, browser at 1440 px and 375 px) |
 | S3 addendum 2, addendum 4, ID1 | Completed and verified (addendum 4 inconclusive) |
 | SR1 | Completed and verified (not supported) |
+| E1/E2 | Completed and verified (sampled contrasts not supported; reconciliation line +0.48) |
+| Stage 5 development (C5, G) | Running; kill criteria fixed before training |
 | Addendum 3 | Withdrawn before training |
 | FCA | Failed |
 | Mechanistic causal test, own-history recovery starts, second model family | Proposed future work |

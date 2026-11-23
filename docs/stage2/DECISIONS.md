@@ -58,3 +58,18 @@ Newest last. Times are IST. Each entry says what was decided, who decided it, an
 | 2026-11-22 01:29 | **S3 addendum 3 withdrawn before any training** (`docs/research/ADDENDUM3_WITHDRAWN.md`). The red-team review showed that hiding the scripted prefix leaves its idempotency key live: the agent's own write is answered from the store, so the arm matches the control on partial payments. Receive-then-pay starts also become unwinnable. Tasks 970–976 were removed unclaimed. The registration file is unchanged. | Claude | Found by `docs/RESEARCH_RED_TEAM_REVIEW.md`. |
 | 2026-11-22 03:11 | **S3 addendum 2 Part A results** (`results/s3/s3_addendum2.json`). RSC vs the class-matched control, 5 runs each. H3′ (recovery starts) +0.107 [0.085, 0.131], unpaired seed permutation p 0.012, Holm 0.036: supported. H4′p (full-episode partial) p 0.056, Holm 0.111: not supported (control seeds 0 and 3 learned partial repair). H4′d (duplicate) Holm 0.337: not supported. With five control seeds the three-seed safety trade-off reverses: violations -0.021, stress +0.068, driven by control seed 4. Paper, README, site, ledger and claims updated; the three-seed results stay reported. | Claude | Registered extension. |
 | 2026-11-22 05:37 | **ID1 result** (`results/id1/id1_summary.json`): registered reading 'selection'. From a warm start whose demonstrations never read (sampled read-back 0/164), R_V training never samples a read (2 seeds, 200 steps) and proc_conf read-back is 0/153. **S3 addendum 2 Part B** (`results/s3/s3_addendum2.json`): rebalanced RSC repairs receive-then-pay partial payments in 0.005 of 100 targeted tasks, registered reading 'not frequency'; repair in other workflows fell. Paper, README, site, deck and ledgers updated. | Claude | Registered results. |
+
+## 2026-11-23 10:29 IST: E1/E2 and Stage 5 development (branch research/e1e2)
+
+- **E1/E2 registered before any output** (`PREREGISTRATION_E1E2.md`, commit d07e92f, 2026-11-22 23:04 IST). Fresh splits `e1_pp_full`, `e1_pp_rec` and `e2_pp`; 21 frozen models, each evaluated once.
+- **E1/E2 results** (commit efd6499; `docs/research/E1E2_RESULT.md`):
+  - sampled contrasts not supported (Holm 0.103, 0.095, 0.43);
+  - threshold reading;
+  - position H1 not supported as registered;
+  - reconciliation line +0.48.
+- **Known limitation of the registered E2 measure:** re-reads count as incorrect first actions. The exploratory analyses are labelled as such.
+- **Stage 5 development registered before training** (`docs/research/algorithm/C5G_DEV.md`, commit aa633b9). C5 and G, 2 seeds each, kill criteria fixed.
+- **Deviation from the plan given to the author:** the offline C5 credit check on old rollouts was not run, because the old logs do not store per-turn database states. The same quantity is logged during C5 training instead (`turn_progress` in the rollout logs).
+- **Smoke (task 1009, not analysed):** C5 advantages installed; G hints fired.
+- **HF Jobs:** dev task 1013 runs on HF (job 6b03c7388d268c0fbd239179, about $10 of the $50 the author allotted).
+- **Confirmatory split `c1_pp`:** 150 fresh tasks, built before any development verdict. It is used only if a candidate survives, under a registration written before any confirmatory training.

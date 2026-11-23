@@ -1,6 +1,6 @@
 # Experiment status
 
-As of 2026-11-22 22:47 IST.
+As of 2026-11-23 10:29 IST.
 
 **Compute:**
 - Slurm lease 460633: 2 H200 GPUs until Nov 25 10:27.
@@ -28,6 +28,8 @@ As of 2026-11-22 22:47 IST.
 | S3 addendum 4: acknowledgement-only starts (is it the handed evidence?) | `PREREGISTRATION_S3_ADDENDUM4.md` | 5 | **Completed and verified.** Reading "inconclusive": RSC − ACK +0.203 [0.169, 0.238], Holm 0.206; ACK − control +0.181 [0.137, 0.225], Holm 0.262. Runs that learn partial repair: control 2/5, ACK 4/5, RSC 5/5 | `results/s3/s3_addendum4.json` | — |
 | ID1: warm start that never reads, then R_V | `PREREGISTRATION_ID1.md` (deviation D-ID1-1) | 2 | **Completed and verified.** Reading "selection": 0/153 read-back in both seeds, no read sampled in training | `results/id1/id1_summary.json` | — |
 | SR1: tool-name randomisation (a known fix, tested here) | `PREREGISTRATION_SR1.md` | 3 | **Completed and verified. Not supported.** Renamed API +0.00 [−0.04, 0.04]; on the canonical tools −0.248 [−0.296, −0.201] (non-inferiority fails) | `results/s4/sr1_summary.json` | — |
+| E1/E2: sampled outcomes and decision-point probes (21 frozen models, fresh splits) | `PREREGISTRATION_E1E2.md` | 5 per arm | **Completed and verified.** Sampled RSC − control +0.098 (Holm 0.103), not supported; threshold reading (ρ 0.92); position H1 not supported as registered; reconciliation line +0.48 ("computation helps") | `results/e1e2_summary.json`, `docs/research/E1E2_RESULT.md` | — |
+| Stage 5 development: C5 verified-progress turn credit, G hint-guided sampling | `docs/research/algorithm/C5G_DEV.md` | 2 + 2 | **Running** (3 on the lease, 1 on HF Jobs). Kill criteria fixed before training | `results/s5/s5_dev_summary.json` | Mon 23 Nov, afternoon |
 | Mechanistic causal test (CircuitKIT) | — | — | **Not run.** CircuitKIT failed to install in Stage 2 (D-A16-1); A16's ablation is not specific | — | Future work |
 
 **Not attempted, by decision:**

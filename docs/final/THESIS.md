@@ -19,7 +19,7 @@ The model is Cohere Tiny Aya Global (3.35B) with LoRA. Training is GRPO through 
 
 1. **What the reward sees changes what the agent checks.** Two rewards share the same binary form, warm start and trainer. The one that reads the database made read-back after a phantom payment the default: 1.00 in five of five seeds. The one that reads acknowledgements left the agent where it started: 0.00, identical to the untrained warm start. Verified completion rose by 0.27 to 0.32 per seed.
    - *Caveat:* the warm start already reads back when it samples (31% at temperature 1). Training selected a habit; it did not invent one. The registered follow-up ID1 confirms it: from a starting model that never reads, the same reward produced no reading at all in two seeds.
-2. **Reading is not recovery.** Given the authoritative record, every model handles present-or-absent evidence correctly. Quantitative repair of a partial payment is different:
+2. **Reading is not recovery.** Given the authoritative record, every model handles present-or-absent evidence correctly. Quantitative repair of a partial payment is different. A registered probe (E2) shows that one line reconciling the visible amounts raises correct refunds by +0.48, so the gap is acting on the evidence, not seeing it:
    - it is learned almost only under the state reward;
    - it is bound to workflow position: 0.99 to 1.00 when payment comes first, 0.00 after a goods receipt;
    - in recorded episodes, every trained model reads the partial payment after a goods receipt and still reports "completed".
