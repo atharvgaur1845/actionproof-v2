@@ -100,7 +100,18 @@ Evidence levels are kept separate; a claim appears under its strongest *verified
 
 ## 8. Results of this lab (filled from result files)
 
-(See the end of this file; written after jobs finished.)
+| ID | Level | Result | File |
+|---|---|---|---|
+| LAB1 H1 | testbed, registered (development) | **not supported**: adaptive forks 0.0170 vs Dr. GRPO 0.0080 at E4, 0/5 seeds | `results/lab/lab1_summary.json` |
+| LAB1 H2 | testbed, registered | **not supported**: forks + igc 0.0097 vs igc 0.0062, 0/5 | same |
+| LAB1 H3 | testbed, registered | **not supported**: CRN variance ratios 0.94–1.12 | `results/lab/grad_snr.json` |
+| LAB1 H4 | testbed, registered | **supported**: same-state scale wrong 0.667, fresh-state scale 0.061 | `lab1_summary.json` (L2N) |
+| LAB1 H5/T4 | testbed | fail (PPO generalises best) | L3G |
+| L2G | testbed, exact | GRPO's mean gradient is wrong-signed on every risky verify logit (cos −0.175) | `grad_snr.json` |
+| LLM read rates | trained agents, development | grpo read share 0.19 / 0.20 → 0.02 / 0.04; Dr. GRPO 0.23 / 0.28 → 0.48 / 0.50 | `results/lab/train_read_rate.json` |
+| J2 | exploratory (registered) | see `docs/research_lab/JUDGE_RESULTS.md` | `results/j2/j2_summary.json` |
+
+**CDVO verdict: rejected** (fails novelty, H1, H2, generalisation). No GPU task was registered for it.
 
 ## 9. Decisions only the author can make
 
