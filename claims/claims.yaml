@@ -657,7 +657,7 @@ claims:
     stats: scripts/r1_stats.py
     numbers:
       rv_ifeval: {value: 0.000, file: results/r1/r1_summary.json, key: [H2, "a12_rv:ifeval_prompt_strict", delta], shown: ["0.000", "+0.000"]}
-      rv_bfcl: {value: -0.002, file: results/r1/r1_summary.json, key: [H2, "a12_rv:bfcl_nonlive_ast", delta], shown: ["-0.002", "−0.002"]}
+      rv_bfcl: {value: -0.002, file: results/r1/r1_summary.json, key: [H2, "a12_rv:bfcl_nonlive_ast", delta], shown: ["-0.002", "−0.002", "0.002"]}
       rsc_ifeval: {value: -0.004, file: results/r1/r1_summary.json, key: [H2, "rsc:ifeval_prompt_strict", delta], shown: ["-0.004", "−0.004"]}
       rsc_bfcl: {value: 0.001, file: results/r1/r1_summary.json, key: [H2, "rsc:bfcl_nonlive_ast", delta], shown: ["+0.001", "0.001"]}
     commit: null
@@ -713,8 +713,8 @@ claims:
     eval: [results/s5/s5_dev_summary.json, results/s5/c5_diagnosis.json]
     stats: scripts/s5_dev.py
     numbers:
-      d_rec: {value: -0.32, file: results/s5/s5_dev_summary.json, key: [c5, criteria, s3_rec_dev_diff], shown: ["-0.32", "−0.32"]}
-      d_proc: {value: -0.37, file: results/s5/s5_dev_summary.json, key: [c5, criteria, proc_dev_diff], shown: ["-0.37", "−0.37"]}
+      d_rec: {value: -0.32, file: results/s5/s5_dev_summary.json, key: [c5, criteria, s3_rec_dev_diff], shown: ["-0.32", "−0.32", "0.32"]}
+      d_proc: {value: -0.37, file: results/s5/s5_dev_summary.json, key: [c5, criteria, proc_dev_diff], shown: ["-0.37", "−0.37", "0.37"]}
     commit: null
 
 allow: ["3.12", "2.11", "5.22", "1.7", "0.23", "0.8", "0.80", "0.30", "0.02", "0.5", "0.3"]  # 0.5, 0.3: registered H4 thresholds (PREREGISTRATION_A11 §9)
