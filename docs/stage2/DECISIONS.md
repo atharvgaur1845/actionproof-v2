@@ -90,3 +90,8 @@ Newest last. Times are IST. Each entry says what was decided, who decided it, an
   - **Cause.** vLLM refused `--max-model-len 32768` because Aya Expanse 32B's `max_position_embeddings` is 8,192.
   - **Fix.** The user server runs at 8,192, its native limit. No episode had run.
   - `results/r1_tau_hashes.json` is kept; `results/r1_tau_d1_hashes.json` freezes the change. The pilot is re-queued.
+- **G seed 1 relaunch** (2026-11-23 16:15). HF job 6b03c7388d268c0fbd239179 (task 1013) exited in seconds.
+  - **Cause.** The registration check could not find `docs/research/algorithm/C5G_DEV.md`, which `scripts/hf_launch.sh` does not bundle.
+  - **Consequence.** No training happened, and the HF cost was negligible.
+  - **Action.** The claim was released and the same registered task re-queued on the idle Slurm A100.
+  - **Verdict timing.** The C5 and G kill verdicts (`scripts/s5_dev.py`, which averages seeds 0–1) wait for it. No verdict is taken from seed 0 alone.
