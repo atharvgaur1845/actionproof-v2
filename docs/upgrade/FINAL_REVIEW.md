@@ -3,7 +3,7 @@
 Draft of 2026-11-23, about 21:55 IST, on branch `actionproof-research-upgrade`.
 
 - **Every row is backed by a ledger entry:** `claims/claims.yaml` (316 numbers re-read from their files, 0 failures).
-- **Pending:** the algorithm-discovery confirmatory study (AD-C1) and the second-stage programme. This file is updated when they report.
+- **Pending:** the algorithm-discovery confirmatory study (AD-C1) and the P1 frozen test. The second-stage programme reported on 2026-11-23 at 23:35 IST and has been merged. This file is updated when the pending studies report.
 
 ## Established: registered, rule met
 
@@ -33,7 +33,14 @@ Draft of 2026-11-23, about 21:55 IST, on branch `actionproof-research-upgrade`.
 - **J1 bias.** Every judge misreads a refunded duplicate as a double payment (4 snapshot cases).
 - **τ-bench (R1-T).** Floor regime: base pass^1 0.058. SFT −0.020 [−0.038, −0.006]; GRPO no change.
 - **C5 diagnosis.** Read turns receive negative normalised credit in every block (−0.5 to −0.7).
-- **Algorithm discovery (development, 2 seeds).** At read cost 0.05, group-std GRPO stops reading in 2 of 2 seeds. The advantage decomposition shows the scale effect. AWRB 0.867 vs no-std 0.833 vs GRPO 0.707. No arm verifies selectively.
+- **Algorithm discovery (development, 2 seeds).** At read cost 0.05, group-std GRPO stops reading in 2 of 2 seeds. AWRB 0.867 vs no-std 0.833 vs GRPO 0.707. No arm verifies selectively.
+- **Algorithm discovery v2** (`docs/research/algorithm_discovery_v2/FINAL_ALGORITHM_REPORT.md`; derivation plus a CPU testbed with exact optima).
+  - **The vote rule.** Under group std, a verification cost cancels in every group where verifying changes only cost, so GRPO verifies iff P(verifying changes the outcome) ≳ 1/2. The value-of-information threshold plays no role.
+  - **Testbed.** GRPO gives the wrong decision in 64% of cells, against 5.7% for no-std.
+  - **LLM logs.** The decomposition was reproduced exactly: faulted groups split +49.6 / −49.6.
+  - **AWRB audit (negative).** Its VSC lead over no-std comes from over-verifying, and the unbiased variant is below no-std. It also needs the simulator and the prior.
+  - **igc** (exact local credit for provably uninformative reads) passes development gates in the testbed only, as a sample-efficiency gain. It is not a new mechanism.
+- **P1 development diagnosis** (`docs/research/P1_DEV_DIAGNOSIS.md`). The inference-time reconciliation line induces same-key top-ups on short payments: 12 of 14 false successes, against 1 of 14 without it.
 - **ROI.** Projections from measured rates and cited assumptions, not savings.
 
 ## Untested or out of scope
@@ -57,6 +64,6 @@ Draft of 2026-11-23, about 21:55 IST, on branch `actionproof-research-upgrade`.
 **An honest map of what monitors and optimisers do there:**
 - LLM judges are only as cautious as their prompt;
 - state-progress credit penalises evidence;
-- group-std GRPO can distort costly-verification learning under shared latent faults (development evidence; mechanism known from Dr. GRPO and Bereket & Leskovec, the interaction is new).
+- group-std GRPO makes the decision to verify blind to its cost whenever the advantage scale depends on the hidden state of the sampled rollouts. This is derived and shown in a controlled testbed and in the training logs. The 1/σ mechanism is Bereket & Leskovec's and the fix is Dr. GRPO's; the consequence for verification is ours.
 
 **No new optimiser is claimed.** That changes only if AD-C1 or the second-stage programme passes its registered confirmatory test.
