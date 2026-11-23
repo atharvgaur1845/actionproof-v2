@@ -74,3 +74,17 @@ collapse.
 
 **16:48 World-luck share of within-group R_V variance** (training rollouts, seed-0 arms): ratio of Rao-Blackwellised
 to raw variance 0.66–0.75.
+
+**16:58 P1 mechanism measured in the LLM** (`scripts/ad/advantage_decomposition.py`,
+`results/ad/advantage_decomposition_steps0-40.json`). This is grpo s0's logged training returns, steps 0–40, with
+the advantage recomputed under two normalisations.
+
+| Normalisation | Mean advantage of read rollouts, clean world | Mean advantage of read rollouts, faulted world | Summed read advantage, clean / faulted / net |
+|---|---|---|---|
+| group std (GRPO) | −1.61 (n 89) | +0.001 (n 59) | −143.6 / +0.06 / −143.6 |
+| centring only | −0.14 | +0.21 | −12.5 / +12.2 / −0.4 |
+
+- Without std, the cost penalty in clean worlds and the repair benefit in faulted worlds cancel. The net is about 0:
+  the value of information at the warm start's repair ability.
+- Group std weights each world by 1/σ_w, so clean groups (σ ≈ c) dominate.
+- The nostd s0 rollouts show the same pattern: std −230.7 net, centring −2.5 net.
