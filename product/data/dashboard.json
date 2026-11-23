@@ -1201,7 +1201,7 @@
   "review numbers": "results/s3/s3_review_numbers.json"
  },
  "evidence": {
-  "canonical_sha256": "f524c94435774973c9c2c98d48946dc8b0fea4a989f843f6c697b553a7204b6b",
+  "canonical_sha256": "28576dedafac0fff40859cf7e9da51305772019107393d00f87ae7241e99e175",
   "claims": [
    {
     "id": "C1",
@@ -1794,14 +1794,93 @@
     "sources": [
      "results/r1_tau/r1_tau_summary.json"
     ]
+   },
+   {
+    "id": "LAB-THM1",
+    "statement": "Exact thresholds of the expected verify-logit update (Theorem 1 and regimes; Table thr).",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_LAB1.md",
+    "stats": null,
+    "n_numbers": 15,
+    "sources": [
+     "results/lab/exact_analysis.json"
+    ]
+   },
+   {
+    "id": "LAB-TB1",
+    "statement": "TB1 recount from raw v2 files and exact-sign prediction.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_LAB1.md",
+    "stats": null,
+    "n_numbers": 3,
+    "sources": [
+     "results/lab/exact_analysis.json"
+    ]
+   },
+   {
+    "id": "LAB-L2",
+    "statement": "LAB1 mechanistic families: normaliser intervention (H4 supported) and exact gradient study (H3 not supported).",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_LAB1.md",
+    "stats": null,
+    "n_numbers": 18,
+    "sources": [
+     "results/lab/derived_numbers.json",
+     "results/lab/grad_snr.json",
+     "results/lab/lab1_summary.json"
+    ]
+   },
+   {
+    "id": "LAB-L1",
+    "statement": "LAB1 L1 matched-budget comparison: H1 and H2 not supported (CDVO family worse than SFB in 0/5 seeds).",
+    "status": "not_supported",
+    "label": "unsupported",
+    "registration": "PREREGISTRATION_LAB1.md",
+    "stats": null,
+    "n_numbers": 32,
+    "sources": [
+     "results/lab/lab1_refs.json",
+     "results/lab/lab1_summary.json"
+    ]
+   },
+   {
+    "id": "LAB-LLM",
+    "statement": "Language agent, costed pool, development (2 seeds per arm): training read share, greedy outcome, log decomposition.",
+    "status": "supported",
+    "label": "development",
+    "registration": "docs/research/algorithm_discovery/EXPERIMENT_PROTOCOL.md",
+    "stats": null,
+    "n_numbers": 19,
+    "sources": [
+     "results/ad/d1_summary.json",
+     "results/ad2/decomposition.json",
+     "results/lab/train_read_rate.json"
+    ]
+   },
+   {
+    "id": "LAB-PARAMS",
+    "statement": "Design parameters quoted in appendix_v2 (not results): L2N fault-rate grid and the testbed warm-start repair probability.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_LAB1.md",
+    "stats": null,
+    "n_numbers": 3,
+    "sources": [
+     "PREREGISTRATION_LAB1.md",
+     "docs/research/algorithm_discovery_v2/V2TB_PROTOCOL.md"
+    ]
    }
   ],
   "label_counts": {
-   "confirmatory": 211,
+   "confirmatory": 250,
    "descriptive": 45,
+   "development": 19,
    "exploratory": 16,
    "failed": 10,
-   "unsupported": 34
+   "unsupported": 66
   },
   "studies": {
    "P1": {
