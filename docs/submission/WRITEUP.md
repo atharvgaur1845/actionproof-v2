@@ -27,8 +27,8 @@ Tool-using agents increasingly write to systems of record: payments, goods recei
 **The gains held** under Hindi, Hinglish and two-fault episodes. **They failed** under renamed tools and a new workflow step, where agents replay the trained procedure. Randomising tool names did not help (+0.00) and cost a quarter of canonical performance. Our own counterfactual credit method (FCA) failed its pre-set test.
 
 **New in this round:**
-1. Capability retention on BFCL and IFEval, registered before any output: PENDING (R1).
-2. A four-family LLM judge committee, calibrated against human labels and measured against the database: PENDING (J1).
+1. Capability retention on BFCL and IFEval, registered before any output (R1): across 35 models, no trained arm loses measurable general ability. GRPO is non-inferior to its warm start within 0.03 on both benchmarks (all four Holm p < 0.001).
+2. A four-family LLM judge committee measured against the database (J1). Told that "ok" is not proof, judges abstain rather than accept unverifiable failures, so they cannot certify outcomes. With a database snapshot, two of four families stay near 0.89 accuracy, and majority voting (0.897) does not beat the best single judge (0.989).
 3. A cost model built from measured per-fault outcome rates. Recovery-start GRPO cuts projected losses by about 80% against the untrained agent, but hand-written read-back-and-repair checks beat every trained agent. So we present ActionProof as fault-injection testing plus runtime verification, with training as a second line.
 
 Every experiment was registered and hashed before it ran. A checker re-reads every reported number from its result file.
@@ -78,9 +78,9 @@ Source: `results/s2/a12_summary.json` and `results/eval/a12/conf/*`. The two-met
 | ID1 | The reward creates verification from a non-reading start | Reading "selection": 0/153 read-back |
 | E1/E2 | Sampled decoding contrasts; decision-point probes | Sampled contrasts not supported; reconciliation line +0.48 |
 | FCA (development) | Forked counterfactual credit beats RSC by ≥ 0.03 | Failed: −0.10; dropped |
-| **R1 (new)** | H1: SFT costs capability. H2: GRPO is non-inferior within 3 points (primary). H3: GRPO lowers abstention | PENDING `results/r1/r1_summary.json` |
-| **J1 (new)** | J-H1: transcript-only judges are fooled on unverifiable failures. J-H2: a snapshot gives ≥ 0.90 accuracy | PENDING `results/j1/j1_summary.json` |
-| **C5/G (new, development)** | Verified-progress turn credit; hint-guided sampling; kill criterion +0.03 over RSC | PENDING `results/s5/s5_dev_summary.json` |
+| **R1 (new)** | H1: SFT costs capability. H2: GRPO is non-inferior within 3 points (primary). H3: GRPO lowers abstention | H2 **supported** (non-inferior on both benchmarks, both arms); H1 and H3 not supported |
+| **J1 (new)** | J-H1: transcript-only judges are fooled on unverifiable failures. J-H2: a snapshot gives ≥ 0.90 accuracy | J-H1 **not supported** (≤ 1 of 120 accepted: judges abstain); J-H2 **not supported** (0.886–0.989) |
+| **C5/G (new, development)** | Verified-progress turn credit; hint-guided sampling; kill criterion +0.03 over RSC | C5 **dropped** (−0.32 and −0.37; it penalises reads by construction, `docs/research/algorithm/C5_RESULT.md`); G pending (seed 1 re-run after an HF bundle failure) |
 
 ## 7. Threat model
 
@@ -173,7 +173,23 @@ We use VSC rather than reward or claimed success because claimed success is exac
 
 ## 15. Automatic judge validation (J1)
 
-PENDING `results/j1/j1_summary.json`. Design (`PREREGISTRATION_J1.md`):
+Full report: `docs/upgrade/JUDGES.md`, generated from `results/j1/j1_summary.json`.
+
+| Judge (660 main cases) | Transcript only: accuracy / coverage | With database snapshot: accuracy | Prompt-paraphrase κ | $ per 1,000 |
+|---|---|---|---|---|
+| Gemma 4 31B | 0.576 / 0.58 | **0.989** | 0.96 | 0.17 |
+| Qwen3 235B-A22B | 0.373 / 0.59 | 0.889 | 0.56 | 0.17 |
+| gpt-oss-120b | 0.514 / 0.56 | 0.933 | 0.49 | 0.44 |
+| DeepSeek V3.2 | 0.300 / 0.43 | 0.886 | 0.65 | 0.34 |
+| Majority committee | 0.385 / 0.42 | 0.897 | — | — |
+
+Accuracy counts an abstention as wrong.
+- **Not fooled, but abstaining.** No judge accepted more than 1 of 120 unverifiable failures; judges confirmed only 29–67% of genuinely completed episodes.
+- **One systematic bias.** In 4 snapshot cases all four judges contradict the verifier, and the verifier is right: a refunded duplicate nets to one payment.
+- **Human calibration labels:** pending (one annotator).
+- **Exploratory addendum 1:** the same prompt without the "ok is not proof" sentence; reported in `results/j1/j1_addendum1.json`.
+
+Design (`PREREGISTRATION_J1.md`):
 - four families, temperature 0, seeded option order;
 - 76 stratified calibration cases, labelled by the author with the same rubric, and 660 main cases;
 - two views: transcript only, and transcript plus database snapshot;
@@ -183,7 +199,19 @@ Outputs: accuracy, coverage, precision, recall, F1, κ, Fleiss κ, abstention, c
 
 ## 16. Capability retention (R1, R1-T)
 
-PENDING `results/r1/r1_summary.json` and `results/r1_tau/r1_tau_summary.json`. Benchmark selection:
+Full report: `docs/upgrade/CAPABILITY_RETENTION.md`, generated from `results/r1/r1_summary.json`.
+
+| Same model, change vs its warm start (5 seeds; 95% paired task bootstrap) | IFEval prompt-strict (warm 0.771) | BFCL non-live AST (warm 0.493) | BFCL irrelevance (warm 0.062) |
+|---|---|---|---|
+| State-reward GRPO | +0.000 [−0.016, +0.017] | −0.002 [−0.009, +0.006] | −0.003 [−0.020, +0.015] |
+| Recovery-start GRPO | −0.004 [−0.021, +0.012] | +0.001 [−0.008, +0.009] | +0.005 [−0.009, +0.021] |
+| SFT warm start vs base (base 0.760 / 0.471 / 0.079) | +0.011 [−0.020, +0.043] | +0.022 [−0.004, +0.048] | −0.017 [−0.050, +0.017] |
+
+- **No trained arm shows a measurable loss.** The most negative point estimate across all arms and endpoints is −0.012.
+- **Low abstention is the base model's own property** (0.079).
+- **τ-bench (R1-T):** pending. The feasibility pilot's first launch failed at server start (D-R1T-1) and has been re-queued.
+
+Benchmark selection:
 - BFCL and IFEval are primary.
 - τ-bench retail is secondary, with a pre-set context-overflow cancellation rule.
 - AgentBench is excluded: heavy infrastructure, floor scores for 3B models, little relevance.
@@ -232,8 +260,9 @@ Five independent training seeds per arm (0–4) for A12 R_V and R_A, RSC, the cl
 2. **Reading is not recovery** (A14/A15, trace §9).
 3. **Start state matters, partial-specificity unproven** (S3 addenda).
 4. **Procedure replay** (S4, SR1).
-5. **Judges cannot see unverified writes**: PENDING J1.
-6. **Retention**: PENDING R1.
+5. **Warned judges abstain; snapshot judges are not verifier-grade** (J1, `docs/upgrade/JUDGES.md`).
+6. **No capability cost** (R1, `docs/upgrade/CAPABILITY_RETENTION.md`).
+7. **Progress credit penalises evidence** (C5 diagnosis).
 
 ## 22. Negative results (kept and reported)
 
