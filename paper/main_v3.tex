@@ -1,0 +1,315 @@
+\pdfoutput=1
+% v3 draft (research/latent-state-theory, 2026-11-24). main.tex and main_v2.tex are untouched. Anonymous for review.
+% Every number resolves to a file named in the text or in docs/final/RESEARCH_DECISION.md (number -> file table).
+% \pend{} marks results that do not exist yet; they must be filled from result files or removed before submission.
+\documentclass[11pt]{article}
+\usepackage[review]{emnlp2023}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{url}
+\def\UrlBreaks{\do\/\do\_\do\.\do\:}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newcommand{\pend}[1]{\textbf{[pending: #1]}}
+\newcommand{\sgn}{\operatorname{sign}}
+
+\title{When Group Rollouts Share a Hidden State:\\Group Normalisation Cannot See the Stakes of Verification}
+
+\author{Anonymous submission}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+In agentic RL, the rollouts of a GRPO group usually start from the same task instance, so they share its hidden
+environment state: here, which writes failed silently behind an ``ok'' acknowledgement. We show what this does to
+learning a costly verification action.
+\begin{itemize}
+\item Under a shared state, GRPO's expected update is invariant to any per-state positive rescaling of the return.
+A rare catastrophic fault therefore weighs no more than a common trivial one.
+\item For a decision whose payoff is deterministic given the state, the update reduces exactly, at finite group size,
+to a probability-weighted vote of signs. Std-free centring (Dr.~GRPO, RLOO) follows the on-policy action-value gap
+under \emph{every} group law.
+\item We give the exact scope of the resulting rule ``verify iff $p\,s>1/2$'': it holds only when repairability is
+part of the shared state.
+\item Independent resampling of states does not cure the bias. Reads that remove the state make groups homogeneous
+again, so GRPO stalls at an interior read rate with $\Theta(1/G)$ regret.
+\item Pairwise state correlation does not determine the update.
+\end{itemize}
+We ran a registered held-out testbed of 731 random problems, trained with an independently implemented sampler.
+The exact theory predicts GRPO's learned decision in 721 of 721 decided cells, with median error 0.0003 in the
+learned read probability. GRPO follows the vote, not the value, in 77 of 77 cells where the two disagree. In a 3.35B tool agent, all 800 logged groups per run share their fault plan. Re-weighting fixed
+rollouts at a 20$\times$ higher read cost changes GRPO's clean-group update by 7\%. Every std-normalised run moves in
+the direction of the vote estimated from its first 20 steps. The registered five-seed comparison is \pend{AD-C1}.
+\end{abstract}
+
+\section{Introduction}
+A payment API answers ``ok'', and the payment may or may not have been stored. A tool agent can
+read the record back at a cost. Whether to read is a value-of-information decision: its worth grows with the
+probability of a silent fault and with what an unrepaired fault costs.
+
+Group-relative estimators standardise each rollout's return within its group~\cite{liu2025drgrpo,bay2026identity}.
+Prior analyses take the group to be a prompt and the reward to be correctness. Under that reading, std normalisation
+re-weights prompts by difficulty~\cite{liu2025drgrpo}, miscalibrates stochastic outcomes~\cite{bereket2025uncalibrated},
+and optimises a monotone transform of per-prompt success~\cite{davis2025objective}.
+
+In agent training the group key is larger: it is the prompt \emph{and} the hidden environment state attached to the
+task instance. All $G$ rollouts of a task see the same database, repository or fault plan. We ask:
+\emph{does group normalisation distort the learning of information acquisition when rollouts share a hidden state?}
+
+\paragraph{Contributions.}
+\begin{itemize}
+\item \textbf{(i) Per-state scale invariance.} Under a shared state, GRPO's expected update is invariant to per-state
+positive affine maps of the return, for any policy and reward (Thm.~\ref{thm:inv}). Stakes across hidden states
+cannot reach the update.
+\item \textbf{(ii) The exact vote.} For one binary decision this gives a finite-$G$ vote. We delimit the folk rule
+$p\,s>1/2$ and its ``cost-blindness'' exactly.
+\item \textbf{(iii) A theory of group laws.}
+\begin{itemize}
+\item a $\pi$-free Bernstein representation of the update;
+\item centred estimators are law-invariant;
+\item \emph{endogenous homogeneity}: decorrelating states cannot remove the vote near always-verify;
+\item the critical correlation depends on the law's family, not on pairwise correlation alone.
+\end{itemize}
+\item \textbf{(iv) Validation.}
+\begin{itemize}
+\item a registered held-out testbed;
+\item mechanism diagnostics on a trained 3.35B agent;
+\item theory predictions for a registered five-seed comparison, frozen before its outcome.
+\end{itemize}
+\end{itemize}
+We propose no new algorithm. Every candidate fix we examined is either already Dr.~GRPO or provably partial
+(\S\ref{sec:disc}).
+
+\section{Setting}\label{sec:setup}
+\paragraph{Hidden state and decision.} A task has a hidden state $z\sim w$, e.g.\ clean, or a phantom, partial or
+duplicated write. After an ``ok'' acknowledgement, which is identical in every $z$, the agent chooses $r\in\{0,1\}$
+(continue or verify) with $\pi=\pi_\theta(r{=}1\mid h)$; this is the aliasing assumption A1. In the canonical
+problem the state is faulted with probability $p$. A detected fault is repaired with probability $s$, success is
+worth $V$, an unrepaired fault costs $L$, and a read costs $c$. Let $\beta_z=\mathbb E[R\mid z,1]-\mathbb E[R\mid z,0]$
+and $\Delta Q=\sum_zw(z)\beta_z$. $\Delta Q$ equals net value of information only if the behaviour after the read is
+Bayes-optimal; in general it is the on-policy action-value gap.
+
+\paragraph{Groups and estimators.} A group is $G$ rollouts whose states follow an exchangeable law with marginal $w$
+(A3), conditionally independent given the states (A2). Laws: \emph{shared}; \emph{iid}; \emph{mix}$(\rho)$ (shared
+with probability $\rho$); \emph{dirmult}$(\rho)$ (Dirichlet-multinomial). The last two both have pairwise
+correlation $\rho$. GRPO uses $A_i=(R_i-\bar R)/(\hat\sigma+\epsilon)$ with Bessel $\hat\sigma$ and
+$\epsilon=10^{-4}$ (TRL); Dr.~GRPO uses $R_i-\bar R$. The expected update on the verify logit is
+$U(\pi)=\mathbb E\sum_iA_i(r_i-\pi)$.
+
+\paragraph{ActionProof.} ProcureSim tasks (order, receive, pay, post) carry one fault plan drawn from a fixed prior
+(60\% clean). The reward is the verifier's $R_V\in\{0,1\}$ minus $0.05$ per read. Training: Tiny Aya Global (3.35B),
+LoRA, TRL GRPO with 4 prompts $\times$ 8 rollouts and 200 steps. The fault plan is fixed per task, so \emph{every
+group shares its hidden state}: we checked the code and 800 of 800 logged groups per run
+(Appendix~\ref{app3:impl}). The only environment randomness is hashed ids, so within-group variation comes from the
+policy.
+
+\section{Theory}\label{sec:theory}
+\begin{theorem}[per-state scale invariance]\label{thm:inv}
+Under the shared law and $\epsilon\to0$, GRPO's expected update is unchanged by $R\mapsto\lambda_zR+\kappa_z$ for any
+$\lambda_z>0$, $\kappa_z$, for any policy class and trajectory structure. Dr.~GRPO's update becomes
+$(G-1)\sum_zw(z)\lambda_z\nabla J_z$.
+\end{theorem}
+\noindent\emph{Proof.} A shared-state group's returns all come from $z$, and z-scoring is affine-invariant.
+$\square$
+
+\begin{corollary}[the vote; exact at finite $G$]\label{cor:vote}
+If returns are deterministic within a state, $R=\alpha_z+\beta_zr$, then
+$U_{\rm GRPO}=(G-1)m_G(\pi)\,\mathcal V$ with $\mathcal V=\sum_zw(z)\sgn\beta_z$ and
+$m_G=\mathbb E[\sqrt{k(G-k)/(G(G-1))};0<k<G]$, $k\sim{\rm Bin}(G,\pi)$. The sign of $U$ is $\sgn\mathcal V$ at every
+$\pi$.
+\end{corollary}
+
+\paragraph{Scope of ``verify iff $p\,s>1/2$''.}
+\begin{itemize}
+\item \textbf{When it is exact.} If repairability is part of the state (repairable, unrepairable, clean) and
+$0<c<V+L$, then $\mathcal V=2ps-1$: GRPO's update is positive iff $ps>1/2$, and identically zero at equality, whatever
+$c$, $V$ or $L$.
+\item \textbf{The $\epsilon$ boundary.} The exact threshold is $0.499$--$0.5005$ for $0.05\le c\le0.99$, but $0.452$
+at $c=10^{-3}$.
+\item \textbf{When it fails.} If repair success is rollout randomness, which is the LLM case, within-state returns are
+not deterministic and the threshold depends on $c$: $0.654$, $0.667$, $0.706$ at $s=0.6$ and $c=0.01$, $0.05$, $0.2$,
+against $1/(2s)=0.833$. Within-state noise from another source can make GRPO cost-sensitive again: with exogenous
+failure $q_0=0.3$ it reaches the Bayes action (Appendix~\ref{app3:counter}).
+\end{itemize}
+Severity cannot enter. With two fault classes, multiplying the rare class's stakes by 1000 leaves GRPO's update
+unchanged ($-2.961$) while Dr.~GRPO's turns from $-0.015$ to $+57.3$. All numbers are from exact enumeration
+(\path{results/theory/scan.json}).
+
+\begin{proposition}[Bernstein form; law-invariance of centring]\label{prop:bern}
+For any centred estimator, $\sum_iA_i(r_i-\pi)=\sum_{i:r_i=1}A_i$, so
+$U(\pi)=\sum_{k}C(G,k)\pi^k(1-\pi)^{G-k}b_k$ with $b_k$ independent of $\pi$ and $b_0=b_G=0$. Hence
+$U'(0)=Gb_1$, $U'(1)=-Gb_{G-1}$, and $U$ has at most as many interior zeros as $(b_k)$ has sign changes. For
+Dr.~GRPO, $b_k=\tfrac{k(G-k)}{G}\Delta Q$ and $U=(G-1)\pi(1-\pi)\Delta Q$ \emph{under every exchangeable law}.
+\end{proposition}
+
+\begin{corollary}[endogenous homogeneity]\label{cor:homog}
+If a read makes the return state-independent and skip returns are deterministic within a state, then under every
+exchangeable law $U'(1)=-(G-1)\sqrt G\,\mathcal V$. For $\mathcal V<0<\Delta Q$ (e.g.\ $p<1/2$ with cheap, valuable
+reads), always-verify is unstable whatever the sampler does to decorrelate states.
+\end{corollary}
+\noindent Near always-verify the readers' returns no longer depend on the state, so each lone skipper is
+standardised to $\pm(G-1)/\sqrt G$ and the vote returns.
+
+Under iid states GRPO therefore stalls at an interior $\pi^\ast$: $0.597$ at $p=0.3$, $c=0.05$, $G=8$, with regret
+$0.101$. $G(1-\pi^\ast)$ converges as $G$ grows, to about $2.4$ at $p=0.3$, so the regret is $\Theta(1/G)$ rather than
+$\Theta(1)$. For rare faults ($p\le0.1$) never-verify stays stable up to $G=32$ even with iid states.
+
+\paragraph{Pairwise correlation is not enough.} mix$(\rho)$ is linear in $\rho$:
+$U=\rho U_{\rm sh}+(1-\rho)U_{\rm iid}$. Never-verify becomes stable above
+$\rho^\ast=b_1^{\rm iid}/(b_1^{\rm iid}-b_1^{\rm sh})$, which decays like $G^{-1/2}$ (0.211 at $G=8$, 0.149 at $G=64$,
+$p=0.3$). dirmult$(\rho)$ has the same pairwise correlation, but its $\rho^\ast$ \emph{rises} towards a constant
+(0.152 to 0.305). What matters is the probability that a group is payoff-homogeneous, not the correlation.
+
+\paragraph{Other estimators.}
+\begin{itemize}
+\item \textbf{Zero-variance filtering} (DAPO) rescales $U$ without changing its sign.
+\item \textbf{Per-component normalisation} of utility and cost (GDPO-style) never verifies under a shared state.
+\item \textbf{Observation-measurable returns} (AWRB) recover $\sgn\Delta Q$ only for perfect detection and repair
+and state-independent costs.
+\end{itemize}
+Proofs and 25 classified counterexamples are in Appendices~\ref{app3:proofs}--\ref{app3:counter}.
+
+\section{Experiments}\label{sec:exp3}
+\paragraph{Held-out testbed (TH1, registered).} We drew 600 random verification problems plus Dirichlet-multinomial
+twins of every mixture cell. Their parameters:
+\begin{itemize}
+\item 1--3 fault states, severities up to 30, repairability, detection, false alarms with duplicate penalties;
+\item state-dependent and log-uniform costs, exogenous noise;
+\item $G\in\{2,4,8,16\}$, all four laws, four initial policies.
+\end{itemize}
+Ten estimators were trained with an implementation that shares no code with the theory's derivation (plain SGD, 300
+steps, 16 groups per step, 10 seeds). Predictions come from the exact mean-field map. The registration was frozen
+before any held-out output; three development runs fixed only the strata.
+
+Five of seven registered hypotheses are supported (Table~\ref{tab:th1}):
+\begin{itemize}
+\item \textbf{Accuracy.} The mean-field map predicts the trained read probability with median error $0.0003$ (90th
+percentile $\le0.0073$) for GRPO, Dr.~GRPO and RLOO. It predicts GRPO's decision in 721/721 cells.
+\item \textbf{The vote.} In exact shared-state cells GRPO moves with the vote in 152/152. These include all 77 cells
+where the vote and $\Delta Q$ disagree.
+\item \textbf{Endogenous homogeneity.} With independent or partially shared states and state-neutralising reads,
+GRPO stays below $\pi=0.95$ in 67/69 cells.
+\item \textbf{Centring.} Dr.~GRPO follows $\sgn\Delta Q$ in 661/661 cells under every law.
+\end{itemize}
+
+Two hypotheses are not supported:
+\begin{itemize}
+\item \textbf{H6, not supported} (53/75). It asked that GRPO be no worse when the vote is right. In all 22 failures
+GRPO reached the right corner, but slowly: its step size does not grow with the stakes. That is again
+Thm.~\ref{thm:inv}, and the map predicted these $\pi_T$ to within 0.045.
+\item \textbf{H7, untestable.} Only 3 twin pairs had a predicted difference $\ge0.05$ (all 3 in the predicted
+direction).
+\end{itemize}
+
+Descriptively:
+\begin{itemize}
+\item zero-variance filtering (DAPO) lands where GRPO does (720/721);
+\item PPO and batch-std follow $\sgn\Delta Q$ (0.970, 0.979);
+\item per-component normalisation is worst (Bayes agreement 0.222).
+\end{itemize}
+
+\begin{table}[t]\centering\small
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lccc}\toprule
+Estimator & Bayes-action agreement & median regret & regret shared / iid\\\midrule
+GRPO & 0.596 & 0.065 & 0.676 / 0.364\\
+GRPO + zero-var.\ filter (DAPO) & 0.596 & 0.034 & 0.668 / 0.356\\
+GRPO + KL & 0.595 & 0.073 & 0.676 / 0.360\\
+Dr.~GRPO (centred) & 0.970 & 0.009 & 0.012 / 0.012\\
+RLOO & 0.974 & 0.007 & 0.008 / 0.008\\
+REINFORCE (EMA baseline) & 0.975 & 0.007 & 0.009 / 0.008\\
+batch std & 0.949 & 0.009 & 0.045 / 0.029\\
+PPO (4 clipped epochs) & 0.947 & 0.004 & 0.063 / 0.015\\
+AWRB (obs.-measurable return) & 0.903 & 0.004 & 0.056 / 0.015\\
+per-component norm.\ (GDPO-style) & 0.222 & 0.509 & 1.537 / 2.197\\\bottomrule
+\end{tabular}}
+\caption{TH1 held-out (731 cells, 10 seeds each; \path{results/theory/th1_heldout_summary.json}). Regret is exact
+expected-utility regret of the learned policy; mean regret is dominated by high-stakes cells.}\label{tab:th1}
+\end{table}
+
+\paragraph{Mechanism in the trained agent (development, descriptive).} We recomputed both advantages on the
+\emph{same} logged rollouts of 18 training runs (Appendix~\ref{app3:mech}).
+\begin{itemize}
+\item In GRPO runs, 111/146 to 127/163 of clean non-degenerate groups vary only through reads, the cost-only states
+of Cor.~\ref{cor:vote}.
+\item \textbf{Cost re-weighting.} Re-scoring the same rollouts at read cost 1.0 instead of 0.05 changes GRPO's
+clean-group update by 7\% ($-898\to-962$); the centred update grows $13.5\times$ ($-86\to-1163$). This is
+Thm.~\ref{thm:inv} on real data.
+\item \textbf{Direction.} All 7 std-normalised runs move in the direction of the vote estimated from their first 20
+steps:
+\begin{itemize}
+\item GRPO: vote $-0.375$ to $-0.583$, read share $0.19$--$0.22\to0.02$--$0.04$;
+\item AWRB: $+0.56/+0.64$, $\to0.76/0.79$;
+\item AWRB at $c=0.30$: $-1.0$, $\to0.02$.
+\end{itemize}
+\item \textbf{A negative result.} Dr.~GRPO's rise in reading ($0.23/0.28\to0.48/0.50$) is \emph{not} predicted by
+the warm-start $\Delta Q$ (estimate $\le0$ or interval containing 0 in all 10 centred runs). $\Delta Q$ turns
+positive later (last window $+0.02$ to $+0.11$, all 10 runs), as repair behaviour improves. The vote stays negative
+throughout.
+\end{itemize}
+
+\paragraph{Registered five-seed comparison (AD-C1).} The registration (VSC on 300 unseen tasks, Dr.~GRPO vs GRPO,
+permutation test, Holm) is unchanged. The theory's predictions were frozen before any outcome: supported direction,
+difference in $[+0.05,+0.20]$; GRPO $\le0.2$ reads per episode in every seed; the gain located in faulted tasks; AWRB
+over-verifies. Outcome: \pend{AD-C1}.
+
+\paragraph{Context: what else is known about this agent.}
+\begin{itemize}
+\item In the registered practical study (P1, 450 frozen test tasks, three seeds), recovery SFT and recovery SFT plus
+GRPO beat the baseline by $+0.259$ and $+0.306$ VSC. An inference-time reconciliation line did not ($-0.030$;
+\path{results/p1/p1_summary.json}).
+\item \textbf{Judges.} With a database snapshot the best LLM judge agrees with the verifier at F1 $0.990$. Without
+it, the policy-family judge accepts 70\% of failed executions (\path{results/j2/j2_summary.json}). No human labels
+exist, so we use the verifier as ground truth.
+\end{itemize}
+
+\section{Discussion}\label{sec:disc}
+\paragraph{What to change.} When groups share environment state and the task contains costly information actions,
+do not divide by a group-local std. Centre only (Dr.~GRPO, RLOO), or use a scale that does not depend on the group's
+hidden states. Decorrelating states inside groups is not a fix (Cor.~\ref{cor:homog}). We examined four candidate
+interventions:
+\begin{itemize}
+\item state decorrelation;
+\item external scales;
+\item observation-measurable returns;
+\item stake weighting.
+\end{itemize}
+Each is either Dr.~GRPO in expectation, provably partial, or needs hidden-state labels. So we propose none.
+
+\paragraph{Beyond verification.} Thm.~\ref{thm:inv} is about any decision whose consequences differ across hidden
+states that a group shares. It predicts that GRPO-trained agents under-weight rare high-stakes states. Paired-noise
+samplers~\cite{sakib2026luck} and fixed task snapshots create exactly this structure. A cost-insensitive collapse has
+been reported for GRPO on costed exploration~\cite{ding2026calibrate}; its group construction is not reported, so we
+do not claim it as an instance.
+
+\section*{Limitations}
+\begin{itemize}
+\item The exact results cover one binary decision. The multi-decision case is covered by Thm.~\ref{thm:inv}, which is
+exact but not quantitative, and by experiments.
+\item The LLM evidence is one model family, one simulator and development seeds, plus one registered comparison.
+\item The warm-start $\Delta Q$ does not predict Dr.~GRPO's trajectory.
+\item The read count includes uninformative reads.
+\item No human-labelled judge evaluation exists.
+\item Novelty is incremental: the invariance of z-scores within homogeneous groups is noted
+by~\citet{wang2026darkroom} for all-fail groups. Our contribution is the hidden-state group key and its exact
+decision-theoretic consequences.
+\end{itemize}
+
+\section*{Ethics Statement}
+Synthetic purchase orders only. The mechanism can make agents skip checks whose stakes are high but whose failure
+states are rare. We recommend scales independent of hidden state and deterministic verification of writes.
+
+\bibliography{refs_v3}
+\bibliographystyle{acl_natbib}
+
+\appendix
+\input{appendix_v3}
+\end{document}

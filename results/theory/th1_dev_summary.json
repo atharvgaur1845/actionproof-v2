@@ -1,0 +1,632 @@
+{
+ "split": "dev",
+ "cells_expected": 74,
+ "cells_complete": 74,
+ "missing": [],
+ "H1": {
+  "by_est": {
+   "grpo": {
+    "median_abs_err": 0.00029488041914133185,
+    "p90_abs_err": 0.006602119421451261,
+    "mean_abs_err": 0.0023722535019356345,
+    "max_abs_err": 0.028874074874972594,
+    "n": 74
+   },
+   "nostd": {
+    "median_abs_err": 0.0002836729382802994,
+    "p90_abs_err": 0.005746358439946442,
+    "mean_abs_err": 0.010993834892038205,
+    "max_abs_err": 0.2271935059937028,
+    "n": 74
+   },
+   "rloo": {
+    "median_abs_err": 0.00023625461762694783,
+    "p90_abs_err": 0.007892121542757945,
+    "mean_abs_err": 0.013509551683071466,
+    "max_abs_err": 0.28485745853488587,
+    "n": 74
+   },
+   "awrb": {
+    "median_abs_err": 0.0001328735717429641,
+    "p90_abs_err": 0.0009790031852268694,
+    "mean_abs_err": 0.0005952588322237985,
+    "max_abs_err": 0.013456236993586182,
+    "n": 74
+   },
+   "gdpo": {
+    "median_abs_err": 9.448804549813195e-05,
+    "p90_abs_err": 0.0003624927500072593,
+    "mean_abs_err": 0.0001428508934576038,
+    "max_abs_err": 0.0006947486508262594,
+    "n": 74
+   }
+  },
+  "criteria": [
+   {
+    "criterion": "grpo median |sim - pred|",
+    "value": 0.00029488041914133185,
+    "threshold": 0.03,
+    "op": "<=",
+    "met": true
+   },
+   {
+    "criterion": "nostd median |sim - pred|",
+    "value": 0.0002836729382802994,
+    "threshold": 0.03,
+    "op": "<=",
+    "met": true
+   },
+   {
+    "criterion": "rloo median |sim - pred|",
+    "value": 0.00023625461762694783,
+    "threshold": 0.03,
+    "op": "<=",
+    "met": true
+   },
+   {
+    "criterion": "grpo p90 |sim - pred|",
+    "value": 0.006602119421451261,
+    "threshold": 0.1,
+    "op": "<=",
+    "met": true
+   },
+   {
+    "criterion": "nostd p90 |sim - pred|",
+    "value": 0.005746358439946442,
+    "threshold": 0.1,
+    "op": "<=",
+    "met": true
+   },
+   {
+    "criterion": "rloo p90 |sim - pred|",
+    "value": 0.007892121542757945,
+    "threshold": 0.1,
+    "op": "<=",
+    "met": true
+   }
+  ]
+ },
+ "H2": {
+  "n": 73,
+  "k": 73,
+  "rate": 1.0,
+  "ci95": [
+   1.0,
+   1.0
+  ],
+  "criteria": [
+   {
+    "criterion": "grpo decision agreement",
+    "value": 1.0,
+    "threshold": 0.95,
+    "op": ">=",
+    "met": true
+   }
+  ]
+ },
+ "H3": {
+  "n": 4,
+  "k": 4,
+  "rate": 1.0,
+  "ci95": [
+   1.0,
+   1.0
+  ],
+  "cells_where_vote_and_delta_q_disagree": {
+   "n": 2,
+   "k": 2,
+   "rate": 1.0,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "criteria": [
+   {
+    "criterion": "grpo moves with sign(vote)",
+    "value": 1.0,
+    "threshold": 0.95,
+    "op": ">=",
+    "met": true
+   }
+  ]
+ },
+ "H4": {
+  "grpo_below_0.95": {
+   "n": 10,
+   "k": 10,
+   "rate": 1.0,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "nostd_above_grpo": {
+   "n": 10,
+   "k": 10,
+   "rate": 1.0,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "criteria": [
+   {
+    "criterion": "grpo pi_T < 0.95",
+    "value": 1.0,
+    "threshold": 0.9,
+    "op": ">=",
+    "met": true
+   },
+   {
+    "criterion": "nostd pi_T > grpo pi_T",
+    "value": 1.0,
+    "threshold": 0.9,
+    "op": ">=",
+    "met": true
+   }
+  ]
+ },
+ "H5": {
+  "n": 64,
+  "k": 64,
+  "rate": 1.0,
+  "ci95": [
+   1.0,
+   1.0
+  ],
+  "criteria": [
+   {
+    "criterion": "nostd moves with sign(delta_q)",
+    "value": 1.0,
+    "threshold": 0.95,
+    "op": ">=",
+    "met": true
+   }
+  ]
+ },
+ "H6": {
+  "n": 2,
+  "k": 2,
+  "rate": 1.0,
+  "ci95": [
+   1.0,
+   1.0
+  ],
+  "criteria": [
+   {
+    "criterion": "grpo regret <= nostd regret + 0.01",
+    "value": 1.0,
+    "threshold": 0.9,
+    "op": ">=",
+    "met": true
+   }
+  ]
+ },
+ "H7": {
+  "pairs": 14,
+  "pairs_pred_diff_ge_0.05": 2,
+  "n": 2,
+  "k": 2,
+  "rate": 1.0,
+  "ci95": [
+   1.0,
+   1.0
+  ],
+  "criteria": [
+   {
+    "criterion": "twin difference direction",
+    "value": 1.0,
+    "threshold": 0.9,
+    "op": ">=",
+    "met": true
+   },
+   {
+    "criterion": "pairs with predicted difference >= 0.05",
+    "value": 2,
+    "threshold": 10,
+    "op": ">=",
+    "met": false
+   }
+  ]
+ },
+ "descriptive": {
+  "grpo": {
+   "agrees_bayes_cell": {
+    "n": 74,
+    "k": 39,
+    "rate": 0.527027027027027,
+    "ci95": [
+     0.40540540540540543,
+     0.6351351351351351
+    ]
+   },
+   "mean_regret": 0.7980260696125498,
+   "median_regret": 0.11068572923386982,
+   "mean_false_completion": 0.34605304061854336,
+   "mean_grad_sd": 0.047227887837605356,
+   "mean_abs_grad": 0.03533370099689094,
+   "rollouts_per_run": 30486.486486486487,
+   "regret|shared": 0.3037876543167066,
+   "agrees_bayes|shared": 0.6428571428571429,
+   "regret|iid": 0.6980512325031053,
+   "agrees_bayes|iid": 0.6363636363636364,
+   "regret|mix": 1.132255939601582,
+   "agrees_bayes|mix": 0.35714285714285715,
+   "regret|dirmult": 0.8934501508268142,
+   "agrees_bayes|dirmult": 0.5142857142857142
+  },
+  "nostd": {
+   "agrees_bayes_cell": {
+    "n": 74,
+    "k": 69,
+    "rate": 0.9324324324324325,
+    "ci95": [
+     0.8783783783783784,
+     0.9864864864864865
+    ]
+   },
+   "mean_regret": 0.012421160309955801,
+   "median_regret": 0.00919080052418696,
+   "mean_false_completion": 0.25554557344473994,
+   "mean_grad_sd": 0.07562160291477062,
+   "mean_abs_grad": 0.03927347691352693,
+   "rollouts_per_run": 30486.486486486487,
+   "regret|shared": 0.010123212421683674,
+   "agrees_bayes|shared": 1.0,
+   "regret|iid": 0.010480178353796483,
+   "agrees_bayes|iid": 1.0,
+   "regret|mix": 0.01387074088865071,
+   "agrees_bayes|mix": 0.8571428571428571,
+   "regret|dirmult": 0.013370530134293903,
+   "agrees_bayes|dirmult": 0.9142857142857143
+  },
+  "rloo": {
+   "agrees_bayes_cell": {
+    "n": 74,
+    "k": 71,
+    "rate": 0.9594594594594594,
+    "ci95": [
+     0.9054054054054054,
+     1.0
+    ]
+   },
+   "mean_regret": 0.01296854240289787,
+   "median_regret": 0.0071595756887695376,
+   "mean_false_completion": 0.2546413451948687,
+   "mean_grad_sd": 0.08981786660214368,
+   "mean_abs_grad": 0.042659048125724616,
+   "rollouts_per_run": 30486.486486486487,
+   "regret|shared": 0.007322083812281967,
+   "agrees_bayes|shared": 1.0,
+   "regret|iid": 0.027736391706624373,
+   "agrees_bayes|iid": 1.0,
+   "regret|mix": 0.012132765466559493,
+   "agrees_bayes|mix": 0.9285714285714286,
+   "regret|dirmult": 0.010920112546794107,
+   "agrees_bayes|dirmult": 0.9428571428571428
+  },
+  "batchstd": {
+   "agrees_bayes_cell": {
+    "n": 74,
+    "k": 67,
+    "rate": 0.9054054054054054,
+    "ci95": [
+     0.8378378378378378,
+     0.972972972972973
+    ]
+   },
+   "mean_regret": 0.08096162250985468,
+   "median_regret": 0.009475154856495685,
+   "mean_false_completion": 0.2639435376748736,
+   "mean_grad_sd": 0.054888788631842926,
+   "mean_abs_grad": 0.04305443219050756,
+   "rollouts_per_run": 30486.486486486487,
+   "regret|shared": 0.16448110384805897,
+   "agrees_bayes|shared": 0.8571428571428571,
+   "regret|iid": 0.12277060755411824,
+   "agrees_bayes|iid": 1.0,
+   "regret|mix": 0.043767045025472004,
+   "agrees_bayes|mix": 0.8571428571428571,
+   "regret|dirmult": 0.049291694240128955,
+   "agrees_bayes|dirmult": 0.9142857142857143
+  },
+  "reinforce": {
+   "agrees_bayes_cell": {
+    "n": 74,
+    "k": 69,
+    "rate": 0.9324324324324325,
+    "ci95": [
+     0.8648648648648649,
+     0.9864864864864865
+    ]
+   },
+   "mean_regret": 0.010368700439896817,
+   "median_regret": 0.00715349557848724,
+   "mean_false_completion": 0.2547309581081738,
+   "mean_grad_sd": 0.09360887233325633,
+   "mean_abs_grad": 0.04786638032826225,
+   "rollouts_per_run": 30486.486486486487,
+   "regret|shared": 0.007466551613734423,
+   "agrees_bayes|shared": 1.0,
+   "regret|iid": 0.007535889181954421,
+   "agrees_bayes|iid": 1.0,
+   "regret|mix": 0.015120199954582868,
+   "agrees_bayes|mix": 0.7857142857142857,
+   "regret|dirmult": 0.010519272274126395,
+   "agrees_bayes|dirmult": 0.9428571428571428
+  },
+  "ppo": {
+   "agrees_bayes_cell": {
+    "n": 74,
+    "k": 66,
+    "rate": 0.8918918918918919,
+    "ci95": [
+     0.8108108108108109,
+     0.9594594594594594
+    ]
+   },
+   "mean_regret": 0.07996795227428154,
+   "median_regret": 0.004018412885561592,
+   "mean_false_completion": 0.2626125268956395,
+   "mean_grad_sd": 16439.7637194014,
+   "mean_abs_grad": 950.7721936166922,
+   "rollouts_per_run": 30486.486486486487,
+   "regret|shared": 0.30822868628710254,
+   "agrees_bayes|shared": 0.7857142857142857,
+   "regret|iid": 0.023641206960755685,
+   "agrees_bayes|iid": 1.0,
+   "regret|mix": 0.032947649463090395,
+   "agrees_bayes|mix": 0.8571428571428571,
+   "regret|dirmult": 0.02517447117788059,
+   "agrees_bayes|dirmult": 0.9142857142857143
+  },
+  "dapo": {
+   "agrees_bayes_cell": {
+    "n": 74,
+    "k": 39,
+    "rate": 0.527027027027027,
+    "ci95": [
+     0.4189189189189189,
+     0.6486486486486487
+    ]
+   },
+   "mean_regret": 0.7815330114213305,
+   "median_regret": 0.078244156582071,
+   "mean_false_completion": 0.3443364581333632,
+   "mean_grad_sd": 0.07683899897742932,
+   "mean_abs_grad": 0.08545028676686954,
+   "rollouts_per_run": 66066.94324324324,
+   "regret|shared": 0.27578182162238607,
+   "agrees_bayes|shared": 0.6428571428571429,
+   "regret|iid": 0.6626321667830336,
+   "agrees_bayes|iid": 0.6363636363636364,
+   "regret|mix": 1.1246120427759174,
+   "agrees_bayes|mix": 0.35714285714285715,
+   "regret|dirmult": 0.8839707116853953,
+   "agrees_bayes|dirmult": 0.5142857142857142
+  },
+  "grpo_kl": {
+   "agrees_bayes_cell": {
+    "n": 74,
+    "k": 40,
+    "rate": 0.5405405405405406,
+    "ci95": [
+     0.43243243243243246,
+     0.6621621621621622
+    ]
+   },
+   "mean_regret": 0.7955888170243556,
+   "median_regret": 0.11058147810052088,
+   "mean_false_completion": 0.346479984298361,
+   "mean_grad_sd": 0.047981501815224516,
+   "mean_abs_grad": 0.036688592003479105,
+   "rollouts_per_run": 30486.486486486487,
+   "regret|shared": 0.3112286174742809,
+   "agrees_bayes|shared": 0.6428571428571429,
+   "regret|iid": 0.710226670010489,
+   "agrees_bayes|iid": 0.6363636363636364,
+   "regret|mix": 1.1255681589085604,
+   "agrees_bayes|mix": 0.42857142857142855,
+   "regret|dirmult": 0.8841692634379189,
+   "agrees_bayes|dirmult": 0.5142857142857142
+  },
+  "awrb": {
+   "agrees_bayes_cell": {
+    "n": 74,
+    "k": 61,
+    "rate": 0.8243243243243243,
+    "ci95": [
+     0.7297297297297297,
+     0.9054054054054054
+    ]
+   },
+   "mean_regret": 0.058487889306554366,
+   "median_regret": 0.0064277645778531844,
+   "mean_false_completion": 0.2632486685346439,
+   "mean_grad_sd": 0.06141583740904789,
+   "mean_abs_grad": 0.03922437957843466,
+   "rollouts_per_run": 30486.486486486487,
+   "regret|shared": 0.014933514765183384,
+   "agrees_bayes|shared": 1.0,
+   "regret|iid": 0.2175389220061519,
+   "agrees_bayes|iid": 0.8181818181818182,
+   "regret|mix": 0.03532815828808033,
+   "agrees_bayes|mix": 0.7142857142857143,
+   "regret|dirmult": 0.03518606411061888,
+   "agrees_bayes|dirmult": 0.8
+  },
+  "gdpo": {
+   "agrees_bayes_cell": {
+    "n": 74,
+    "k": 22,
+    "rate": 0.2972972972972973,
+    "ci95": [
+     0.1891891891891892,
+     0.40540540540540543
+    ]
+   },
+   "mean_regret": 1.7938281485092977,
+   "median_regret": 0.32651485933774105,
+   "mean_false_completion": 0.48798076867412843,
+   "mean_grad_sd": 0.04814230582044094,
+   "mean_abs_grad": 0.030863367932419637,
+   "rollouts_per_run": 30486.486486486487,
+   "regret|shared": 3.1377246106653898,
+   "agrees_bayes|shared": 0.21428571428571427,
+   "regret|iid": 1.1571042490534336,
+   "agrees_bayes|iid": 0.36363636363636365,
+   "regret|mix": 1.3425572249782984,
+   "agrees_bayes|mix": 0.2857142857142857,
+   "regret|dirmult": 1.6368911586025323,
+   "agrees_bayes|dirmult": 0.3142857142857143
+  }
+ },
+ "P_dapo_follows_grpo_pred": {
+  "n": 73,
+  "k": 73,
+  "rate": 1.0,
+  "ci95": [
+   1.0,
+   1.0
+  ]
+ },
+ "P_ppo_follows_delta_q": {
+  "n": 64,
+  "k": 61,
+  "rate": 0.953125,
+  "ci95": [
+   0.890625,
+   1.0
+  ]
+ },
+ "P_batchstd_follows_delta_q": {
+  "n": 64,
+  "k": 62,
+  "rate": 0.96875,
+  "ci95": [
+   0.921875,
+   1.0
+  ]
+ },
+ "by_stratum_grpo_decision": {
+  "broad": {
+   "n": 41,
+   "k": 41,
+   "rate": 1.0,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "adversarial": {
+   "n": 9,
+   "k": 9,
+   "rate": 1.0,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  }
+ },
+ "all_criteria": [
+  {
+   "criterion": "grpo median |sim - pred|",
+   "value": 0.00029488041914133185,
+   "threshold": 0.03,
+   "op": "<=",
+   "met": true
+  },
+  {
+   "criterion": "nostd median |sim - pred|",
+   "value": 0.0002836729382802994,
+   "threshold": 0.03,
+   "op": "<=",
+   "met": true
+  },
+  {
+   "criterion": "rloo median |sim - pred|",
+   "value": 0.00023625461762694783,
+   "threshold": 0.03,
+   "op": "<=",
+   "met": true
+  },
+  {
+   "criterion": "grpo p90 |sim - pred|",
+   "value": 0.006602119421451261,
+   "threshold": 0.1,
+   "op": "<=",
+   "met": true
+  },
+  {
+   "criterion": "nostd p90 |sim - pred|",
+   "value": 0.005746358439946442,
+   "threshold": 0.1,
+   "op": "<=",
+   "met": true
+  },
+  {
+   "criterion": "rloo p90 |sim - pred|",
+   "value": 0.007892121542757945,
+   "threshold": 0.1,
+   "op": "<=",
+   "met": true
+  },
+  {
+   "criterion": "grpo decision agreement",
+   "value": 1.0,
+   "threshold": 0.95,
+   "op": ">=",
+   "met": true
+  },
+  {
+   "criterion": "grpo moves with sign(vote)",
+   "value": 1.0,
+   "threshold": 0.95,
+   "op": ">=",
+   "met": true
+  },
+  {
+   "criterion": "grpo pi_T < 0.95",
+   "value": 1.0,
+   "threshold": 0.9,
+   "op": ">=",
+   "met": true
+  },
+  {
+   "criterion": "nostd pi_T > grpo pi_T",
+   "value": 1.0,
+   "threshold": 0.9,
+   "op": ">=",
+   "met": true
+  },
+  {
+   "criterion": "nostd moves with sign(delta_q)",
+   "value": 1.0,
+   "threshold": 0.95,
+   "op": ">=",
+   "met": true
+  },
+  {
+   "criterion": "grpo regret <= nostd regret + 0.01",
+   "value": 1.0,
+   "threshold": 0.9,
+   "op": ">=",
+   "met": true
+  },
+  {
+   "criterion": "twin difference direction",
+   "value": 1.0,
+   "threshold": 0.9,
+   "op": ">=",
+   "met": true
+  },
+  {
+   "criterion": "pairs with predicted difference >= 0.05",
+   "value": 2,
+   "threshold": 10,
+   "op": ">=",
+   "met": false
+  }
+ ]
+}
