@@ -428,6 +428,14 @@
    "stats": "scripts/p2_guard_diagnosis.py"
   },
   {
+   "id": "P2-SHIFT",
+   "statement": "P2 shift splits (registered as descriptive, PREREGISTRATION_P2.md: each model minus A with a 95% task bootstrap; 150 tasks each; sampled VSC).",
+   "status": "supported",
+   "label": "descriptive",
+   "registration": null,
+   "stats": "scripts/p2_stats.py"
+  },
+  {
    "id": "J1-DESC",
    "statement": "J1 descriptive measurements on the 660 main cases (PREREGISTRATION_J1.md reports them without a hypothesis): transcript-only accuracy (abstain = wrong) and coverage, recall on genuinely completed episodes, prompt-paraphrase kappa and cost per 1,000 judgements.",
    "status": "supported",
@@ -10828,6 +10836,582 @@
    "ci_type": "not_recorded"
   },
   {
+   "claim": "P2-SHIFT",
+   "metric": "hi_A",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.6683333333333333,
+   "stated": 0.668,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_lang_hi",
+    "A",
+    "sampled_vsc"
+   ],
+   "agg": null,
+   "shown": [
+    "0.668"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "hi_C",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.16055555555555556,
+   "stated": 0.161,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_lang_hi",
+    "C",
+    "delta_vs_A"
+   ],
+   "agg": null,
+   "shown": [
+    "+0.161"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "hi_C_lo",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.12222222222222223,
+   "stated": 0.122,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_lang_hi",
+    "C",
+    "ci95",
+    0
+   ],
+   "agg": null,
+   "shown": [
+    "0.122"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "hi_D",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.18166666666666667,
+   "stated": 0.182,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_lang_hi",
+    "D",
+    "delta_vs_A"
+   ],
+   "agg": null,
+   "shown": [
+    "+0.182"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "hi_D_lo",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.14166666666666666,
+   "stated": 0.142,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_lang_hi",
+    "D",
+    "ci95",
+    0
+   ],
+   "agg": null,
+   "shown": [
+    "0.142"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "hi_E",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.13,
+   "stated": 0.13,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_lang_hi",
+    "E",
+    "delta_vs_A"
+   ],
+   "agg": null,
+   "shown": [
+    "+0.130"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "hi_E_lo",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.08722222222222223,
+   "stated": 0.087,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_lang_hi",
+    "E",
+    "ci95",
+    0
+   ],
+   "agg": null,
+   "shown": [
+    "0.087"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "hinglish_A",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.5955555555555555,
+   "stated": 0.596,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_lang_hinglish",
+    "A",
+    "sampled_vsc"
+   ],
+   "agg": null,
+   "shown": [
+    "0.596"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "hinglish_C",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.17,
+   "stated": 0.17,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_lang_hinglish",
+    "C",
+    "delta_vs_A"
+   ],
+   "agg": null,
+   "shown": [
+    "+0.170"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "hinglish_C_lo",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.12555555555555556,
+   "stated": 0.126,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_lang_hinglish",
+    "C",
+    "ci95",
+    0
+   ],
+   "agg": null,
+   "shown": [
+    "0.126"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "hinglish_D",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.1811111111111111,
+   "stated": 0.181,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_lang_hinglish",
+    "D",
+    "delta_vs_A"
+   ],
+   "agg": null,
+   "shown": [
+    "+0.181"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "hinglish_D_lo",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.13333333333333333,
+   "stated": 0.133,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_lang_hinglish",
+    "D",
+    "ci95",
+    0
+   ],
+   "agg": null,
+   "shown": [
+    "0.133"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "hinglish_E",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.22,
+   "stated": 0.22,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_lang_hinglish",
+    "E",
+    "delta_vs_A"
+   ],
+   "agg": null,
+   "shown": [
+    "+0.220"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "hinglish_E_lo",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.17,
+   "stated": 0.17,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_lang_hinglish",
+    "E",
+    "ci95",
+    0
+   ],
+   "agg": null,
+   "shown": [
+    "0.170"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "api_A",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.15666666666666668,
+   "stated": 0.157,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_api",
+    "A",
+    "sampled_vsc"
+   ],
+   "agg": null,
+   "shown": [
+    "0.157"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "api_C",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.15944444444444442,
+   "stated": 0.159,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_api",
+    "C",
+    "delta_vs_A"
+   ],
+   "agg": null,
+   "shown": [
+    "+0.159"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "api_C_lo",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.11888888888888888,
+   "stated": 0.119,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_api",
+    "C",
+    "ci95",
+    0
+   ],
+   "agg": null,
+   "shown": [
+    "0.119"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "api_D",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.045,
+   "stated": 0.045,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_api",
+    "D",
+    "delta_vs_A"
+   ],
+   "agg": null,
+   "shown": [
+    "+0.045"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "api_D_lo",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.008333333333333333,
+   "stated": 0.008,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_api",
+    "D",
+    "ci95",
+    0
+   ],
+   "agg": null,
+   "shown": [
+    "0.008"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "api_E",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.09555555555555556,
+   "stated": 0.096,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_api",
+    "E",
+    "delta_vs_A"
+   ],
+   "agg": null,
+   "shown": [
+    "+0.096"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-SHIFT",
+   "metric": "api_E_lo",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.05831944444444446,
+   "stated": 0.058,
+   "match": true,
+   "error": null,
+   "source": "results/p2/p2_summary.json",
+   "key": [
+    "shift",
+    "s4_api",
+    "E",
+    "ci95",
+    0
+   ],
+   "agg": null,
+   "shown": [
+    "0.058"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
    "claim": "J1-DESC",
    "metric": "gemma_acc",
    "label": "descriptive",
@@ -15795,7 +16379,7 @@
   }
  },
  "sources": {
-  "claims/claims.yaml": "60c8dd441bcecad25ba56d89af7caaef86972d5bb2cd9045f42c7012107b13be",
+  "claims/claims.yaml": "d04a9fb0f9b5ebe3f39f0473031397e830faa23303377ccf903af21c8574e16d",
   "results/a12b/h3_predictions.json": "efa235a165776041e08293786a4105928a413989cac20d4bbd36bb8900548397",
   "results/a12b/gate.json": "593b1c909595be7cfbd8e2984be42cfe6dcbe913f43d3784e00cc1c74586f5a4",
   "results/a13/h5_finite.json": "2f0170a26db94accb79cfc05a945f29d947aea1301a8723b9996f252d0b23edb",
@@ -15875,12 +16459,12 @@
  },
  "label_counts": {
   "confirmatory": 310,
-  "descriptive": 82,
+  "descriptive": 103,
   "development": 22,
   "exploratory": 17,
   "failed": 10,
   "unsupported": 92
  },
  "mismatches": [],
- "content_sha256": "056d5eb59eece8908e7adbd00b1d265c209864e1d014c681765ab325a34e72d7"
+ "content_sha256": "aafeebce57a6bac28b8664282944cbcdf55f77fe3f9dcea7b8065ea8f28d308f"
 }

@@ -877,6 +877,36 @@ claims:
       episodes: {value: 5400, file: results/quality/diagnosis_p2_test.json, key: ["E|sampled|ALL", episodes], shown: ["5,400"]}
     commit: null
 
+  - id: P2-SHIFT
+    statement: "P2 shift splits (registered as descriptive, PREREGISTRATION_P2.md: each model minus A with a 95% task bootstrap; 150 tasks each; sampled VSC)."
+    status: supported
+    prereg: null
+    eval: [results/p2/p2_summary.json]
+    stats: scripts/p2_stats.py
+    numbers:
+      hi_A: {value: 0.668, file: results/p2/p2_summary.json, key: [shift, s4_lang_hi, A, sampled_vsc], shown: ["0.668"]}
+      hi_C: {value: 0.161, file: results/p2/p2_summary.json, key: [shift, s4_lang_hi, C, delta_vs_A], shown: ["+0.161"]}
+      hi_C_lo: {value: 0.122, file: results/p2/p2_summary.json, key: [shift, s4_lang_hi, C, ci95, 0], shown: ["0.122"]}
+      hi_D: {value: 0.182, file: results/p2/p2_summary.json, key: [shift, s4_lang_hi, D, delta_vs_A], shown: ["+0.182"]}
+      hi_D_lo: {value: 0.142, file: results/p2/p2_summary.json, key: [shift, s4_lang_hi, D, ci95, 0], shown: ["0.142"]}
+      hi_E: {value: 0.130, file: results/p2/p2_summary.json, key: [shift, s4_lang_hi, E, delta_vs_A], shown: ["+0.130"]}
+      hi_E_lo: {value: 0.087, file: results/p2/p2_summary.json, key: [shift, s4_lang_hi, E, ci95, 0], shown: ["0.087"]}
+      hinglish_A: {value: 0.596, file: results/p2/p2_summary.json, key: [shift, s4_lang_hinglish, A, sampled_vsc], shown: ["0.596"]}
+      hinglish_C: {value: 0.170, file: results/p2/p2_summary.json, key: [shift, s4_lang_hinglish, C, delta_vs_A], shown: ["+0.170"]}
+      hinglish_C_lo: {value: 0.126, file: results/p2/p2_summary.json, key: [shift, s4_lang_hinglish, C, ci95, 0], shown: ["0.126"]}
+      hinglish_D: {value: 0.181, file: results/p2/p2_summary.json, key: [shift, s4_lang_hinglish, D, delta_vs_A], shown: ["+0.181"]}
+      hinglish_D_lo: {value: 0.133, file: results/p2/p2_summary.json, key: [shift, s4_lang_hinglish, D, ci95, 0], shown: ["0.133"]}
+      hinglish_E: {value: 0.220, file: results/p2/p2_summary.json, key: [shift, s4_lang_hinglish, E, delta_vs_A], shown: ["+0.220"]}
+      hinglish_E_lo: {value: 0.170, file: results/p2/p2_summary.json, key: [shift, s4_lang_hinglish, E, ci95, 0], shown: ["0.170"]}
+      api_A: {value: 0.157, file: results/p2/p2_summary.json, key: [shift, s4_api, A, sampled_vsc], shown: ["0.157"]}
+      api_C: {value: 0.159, file: results/p2/p2_summary.json, key: [shift, s4_api, C, delta_vs_A], shown: ["+0.159"]}
+      api_C_lo: {value: 0.119, file: results/p2/p2_summary.json, key: [shift, s4_api, C, ci95, 0], shown: ["0.119"]}
+      api_D: {value: 0.045, file: results/p2/p2_summary.json, key: [shift, s4_api, D, delta_vs_A], shown: ["+0.045"]}
+      api_D_lo: {value: 0.008, file: results/p2/p2_summary.json, key: [shift, s4_api, D, ci95, 0], shown: ["0.008"]}
+      api_E: {value: 0.096, file: results/p2/p2_summary.json, key: [shift, s4_api, E, delta_vs_A], shown: ["+0.096"]}
+      api_E_lo: {value: 0.058, file: results/p2/p2_summary.json, key: [shift, s4_api, E, ci95, 0], shown: ["0.058"]}
+    commit: null
+
   # ---- Write-up numbers (docs/submission/WRITEUP.md, enforced from 2026-11-24)
   - id: J1-DESC
     statement: "J1 descriptive measurements on the 660 main cases (PREREGISTRATION_J1.md reports them without a hypothesis): transcript-only accuracy (abstain = wrong) and coverage, recall on genuinely completed episodes, prompt-paraphrase kappa and cost per 1,000 judgements."
