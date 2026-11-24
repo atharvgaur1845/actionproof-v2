@@ -8,6 +8,25 @@ a cross-check against the independently written `actionproof/lab/exact_vote.py`)
 
 Evidence label for this file: **[math]** (derived; exact-enumeration checks).
 
+**Provenance inside the project.** Several statements restate earlier ActionProof derivations; they are re-proved
+here independently.
+- v2 `docs/research/algorithm_discovery_v2/GRPO_FAILURE_DERIVATION.md`:
+  - Lemma 1 (per-group affine invariance), which is the core of Thm 3.1;
+  - Proposition 1 (large-G world-reweighted 1/σ mixture), which is Prop. 3.6;
+  - §3(e) (GDPO anti-read vote), which is Prop. 4.3;
+  - §3c (AWRB clean-group vote), which is Prop. 4.2;
+  - the qualitative statement that condition B "weakens but does not remove" the bias.
+- Lab `docs/research_lab/GRPO_MECHANISM_FORMAL.md`: Theorem 1 (exact finite-G vote), which is Cor. 3.2.
+
+**New in this phase:**
+- the scope of p·s > 1/2 (state-level vs rollout-level repairability, exact thresholds);
+- Prop. 2.1 (π-free Bernstein form, corner derivatives, Descartes bound);
+- Prop. 2.2 stated for every exchangeable law;
+- Cor. 3.3 (law-free always-verify corner; interior equilibrium; Θ(1/G) regret scaling);
+- Props 3.4–3.5 (critical correlation by family; pairwise insufficiency);
+- the AWRB state-dependent-cost counterexample;
+- the classified counterexample list.
+
 ---
 
 ## 0. What the implementation actually does (the facts the theory must match)
@@ -260,7 +279,7 @@ every world. `scripts/theory/llm_mechanism.py` §6 measures how far the trained 
 | Estimator | Expected update under the shared law | Status |
 |---|---|---|
 | Dr. GRPO, RLOO | (G − 1)π(1 − π)ΔQ, resp. Gπ(1 − π)ΔQ, every law | Prop. 2.2 |
-| **AWRB** (return := E[R \| own observations] under the true prior), then group std | In the canonical problem with s = 1 and perfect detection, *every* state has β = ΔQ = p(V + L) − c, so the vote is sign ΔQ (`test_awrb_vote_is_sign_of_delta_q`). With s < 1 as rollout noise, the clean state's β stays p(V + L) − c, larger than ΔQ = ps(V + L) − c. So AWRB-GRPO over-verifies when ps(V + L) < c < p(V + L). This is consistent with the v2 audit's "AWRB verifies in 18/18 mirror cells where VOI < 0" (verifying that those cells have s < 1 is listed in THEOREM_AUDIT §5) | Prop. 4.2 |
+| **AWRB** (return := E[R \| own observations] under the true prior), then group std | In the canonical problem with s = 1 and perfect detection, *every* state has β = ΔQ = p(V + L) − c, so the vote is sign ΔQ (`test_awrb_vote_is_sign_of_delta_q`). With s < 1 as rollout noise, the clean state's β stays p(V + L) − c, larger than ΔQ = ps(V + L) − c. So AWRB-GRPO over-verifies when ps(V + L) < c < p(V + L). This explains the v2 audit's "AWRB verifies in 18/18 mirror cells" (those cells have s < 1 by definition). The clean-group vote was first derived in v2 `GRPO_FAILURE_DERIVATION` §3c | Prop. 4.2 (prior internal result, restated) |
 | **GDPO-style per-component normalisation** of (utility, −c·r) | The cost component is a full anti-read vote −(G − 1)σ̂_r in every non-degenerate group. The utility component is 0 in the clean state and +(G − 1)σ̂_r in the repairable fault. So U = −w(clean)(G − 1)m_G(π) ≤ 0: **never verifies, for any p < 1** (`test_gdpo_never_verifies_when_cost_is_a_component`). Consistent with TB1 GDPO wrong in 370/495 runs | Prop. 4.3 |
 | **DAPO dynamic sampling** (drop zero-variance groups and refill) | Degenerate groups contribute 0, so the expected update per kept group is U/P(non-degenerate). Same sign: the filter changes step size, not direction | Prop. 4.4 |
 | **External scale** (constant, batch std with B → ∞, EMA of past steps, per-task-family scale) | If the scale S is independent of the group's own states given the context, E[A·score] = E[1/S]·U_Dr, so the sign is ΔQ. Batch std over B groups depends on the group's states through 1/B of its terms (bias O(1/B)) | v2 normaliser condition; LAB1 H4 (causal, supported) |

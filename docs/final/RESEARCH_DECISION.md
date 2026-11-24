@@ -21,6 +21,13 @@ Branch `research/latent-state-theory` (local, not pushed). Evidence labels:
 - **Files:** `docs/theory/PROOF_AND_ASSUMPTIONS.md`, `tests/theory` (44 tests).
 
 ## 2. What is genuinely new?
+**Within the project:**
+- The per-state affine invariance, the large-G 1/σ mixture and the GDPO and AWRB votes were derived in v2
+  (`GRPO_FAILURE_DERIVATION.md` Lemma 1, Prop. 1, §3c, §3e).
+- The finite-G vote was derived in the lab phase.
+- This phase re-proved them independently, delimited them, and added the items below.
+
+**Relative to the literature:**
 These are new as far as the searches show (`docs/theory/RELATED_WORK_MATRIX.md`):
 - treating the group key in agentic RL as (prompt, hidden environment state), and deriving its exact consequence for
   a costed information action;
