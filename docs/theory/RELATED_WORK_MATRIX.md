@@ -84,6 +84,9 @@ Absence from search is weak evidence.
      - the family-dependent critical correlation.
    - They are modest.
 
+**Internal provenance.** Thm 3.1's per-group invariance, Prop. 3.6 and Props 4.2–4.3 first appear in v2's
+GRPO_FAILURE_DERIVATION. This phase's additions are listed in PROOF_AND_ASSUMPTIONS ("New in this phase").
+
 ## 3. Verdict
 
 **Incremental but defensible.**

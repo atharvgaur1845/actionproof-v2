@@ -8,6 +8,25 @@ a cross-check against the independently written `actionproof/lab/exact_vote.py`)
 
 Evidence label for this file: **[math]** (derived; exact-enumeration checks).
 
+**Provenance inside the project.** Several statements restate earlier ActionProof derivations; they are re-proved
+here independently.
+- v2 `docs/research/algorithm_discovery_v2/GRPO_FAILURE_DERIVATION.md`:
+  - Lemma 1 (per-group affine invariance), which is the core of Thm 3.1;
+  - Proposition 1 (large-G world-reweighted 1/σ mixture), which is Prop. 3.6;
+  - §3(e) (GDPO anti-read vote), which is Prop. 4.3;
+  - §3c (AWRB clean-group vote), which is Prop. 4.2;
+  - the qualitative statement that condition B "weakens but does not remove" the bias.
+- Lab `docs/research_lab/GRPO_MECHANISM_FORMAL.md`: Theorem 1 (exact finite-G vote), which is Cor. 3.2.
+
+**New in this phase:**
+- the scope of p·s > 1/2 (state-level vs rollout-level repairability, exact thresholds);
+- Prop. 2.1 (π-free Bernstein form, corner derivatives, Descartes bound);
+- Prop. 2.2 stated for every exchangeable law;
+- Cor. 3.3 (law-free always-verify corner; interior equilibrium; Θ(1/G) regret scaling);
+- Props 3.4–3.5 (critical correlation by family; pairwise insufficiency);
+- the AWRB state-dependent-cost counterexample;
+- the classified counterexample list.
+
 ---
 
 ## 0. What the implementation actually does (the facts the theory must match)
