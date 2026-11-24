@@ -1201,7 +1201,7 @@
   "review numbers": "results/s3/s3_review_numbers.json"
  },
  "evidence": {
-  "canonical_sha256": "aafeebce57a6bac28b8664282944cbcdf55f77fe3f9dcea7b8065ea8f28d308f",
+  "canonical_sha256": "300b596807d14e2eb4a9cc7854d1efeb243303ecd27ba448d172e66ae1163560",
   "claims": [
    {
     "id": "C1",
@@ -1870,6 +1870,33 @@
     ]
    },
    {
+    "id": "AD-D3",
+    "statement": "AD D3 development gates (information-gated read credit with an EMA scale; 2 seeds, cw_dev): gates G1-G4 pass (VSC +0.16 in both seeds, 0.867), but the mechanism prediction R1 (fewer uninformative reads) fails: uninformative reads rose (drop share -1.79). Development only; no algorithm is claimed.",
+    "status": "supported",
+    "label": "development",
+    "registration": "docs/research/algorithm_discovery_v2/FINAL_ALGORITHM_REPORT.md",
+    "stats": "scripts/ad/d3_gates.py",
+    "n_numbers": 3,
+    "sources": [
+     "results/ad/d3_summary.json"
+    ]
+   },
+   {
+    "id": "PAPER-V3",
+    "statement": "Numbers in paper/main_v3.tex and appendix_v3.tex (Phase II; docs/final/RESEARCH_DECISION.md section N): exact-theory scans, the registered TH1 held-out simulation (descriptive estimator table), development mechanism diagnostics on language-agent rollouts, and J2.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_TH1.md",
+    "stats": null,
+    "n_numbers": 52,
+    "sources": [
+     "docs/stage2/HF_CREDITS.md",
+     "results/j2/j2_summary.json",
+     "results/research/llm_mechanism.json",
+     "results/theory/scan.json"
+    ]
+   },
+   {
     "id": "J1-DESC",
     "statement": "J1 descriptive measurements on the 660 main cases (PREREGISTRATION_J1.md reports them without a hypothesis): transcript-only accuracy (abstain = wrong) and coverage, recall on genuinely completed episodes, prompt-paraphrase kappa and cost per 1,000 judgements.",
     "status": "supported",
@@ -2009,9 +2036,9 @@
    }
   ],
   "label_counts": {
-   "confirmatory": 310,
+   "confirmatory": 362,
    "descriptive": 103,
-   "development": 22,
+   "development": 25,
    "exploratory": 17,
    "failed": 10,
    "unsupported": 92
