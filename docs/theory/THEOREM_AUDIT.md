@@ -52,11 +52,14 @@ are mislabelled (§2).
   "weaker but present"; it is now explained. Near always-verify the read-neutralised returns make groups
   homogeneous, so the vote returns under every group law. At G = 8, p = 0.3, c = 0.05, GRPO stalls at π* = 0.597.
 - AWRB's sign guarantee fails with state-dependent read costs (scan `state_dependent_cost_b`: regret 0.017) and with
-  stochastic repair (over-verification). The claim that v2's 18/18 over-verifying mirror cells are s < 1 cells was
-  **not checked in this audit**; it is listed as open.
+  stochastic repair (over-verification). The v2 18/18 over-verifying mirror cells have s < 1 by definition (§5).
 
 ## 5. Open items
 
-1. Check that the 18/18 AWRB mirror cells of the v2 audit have s < 1 (Prop. 4.2 explanation).
+1. **Resolved.** The v2 "mirror cells" are defined by VOI = p·s(1 + L) − c < 0 < p(1 + L) − c
+   (`docs/research/algorithm_discovery_v2/ABLATION_RESULTS.md` L45). That implies s < 1, so Prop. 4.2's explanation
+   applies by construction. Prop. 4.2's clean-group vote ("read iff p(1 + L) > c, independent of repair") was
+   **already derived** in v2 (`GRPO_FAILURE_DERIVATION` §3c, cited in `AWRB_IMPLEMENTATION_AUDIT.md` L147). It is
+   prior internal work, not a new result of this phase.
 2. The large-G statement (Prop. 3.6) is proved by the law of large numbers plus Slutsky. It is not checked numerically
    for G > 64.
