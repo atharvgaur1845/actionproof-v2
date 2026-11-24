@@ -147,6 +147,34 @@ def analyse(rows: list[dict], info: dict, rng: np.random.Generator) -> dict:
                                              float(np.quantile(boots[:, 1], 0.975))],
                             "P_vote_negative": float((boots[:, 0] < 0).mean()),
                             "P_delta_q_positive": float((boots[:, 1] > 0).mean())}
+    # --- 4b. the same within-group effects per step window (exploratory: is delta_q non-stationary?)
+    per_w = {}
+    for lo, hi in ((0, 20), (20, 50), (50, 100), (100, 150), (150, 200)):
+        bw = defaultdict(list)
+        for g in G:
+            if not lo <= g[0]["step"] < hi:
+                continue
+            R = np.array([base(r, field) - c * r["reads"] for r in g])
+            x1 = np.array([r["reads"] > 0 for r in g])
+            if 0 < x1.sum() < len(g):
+                bw[g[0]["cls"]].append(float(R[x1].mean() - R[~x1].mean()))
+        if bw:
+            bt, vt, dqt = summarise(bw)
+            per_w[f"{lo}-{hi}"] = {"vote": vt, "delta_q": dqt, "beta_by_class": bt,
+                                   "n_groups_mixed": sum(len(v) for v in bw.values())}
+    res["effects_by_window"] = per_w
+    # --- 4c. why clean groups vary: reads only (vote regime) or also R_V (other within-state noise)
+    cg = {"nonzero_var": 0, "rv_constant": 0, "rv_varies": 0}
+    for g in G:
+        if g[0]["cls"] != "clean":
+            continue
+        R = np.array([base(r, field) - c * r["reads"] for r in g])
+        if R.std() < 1e-12:
+            continue
+        cg["nonzero_var"] += 1
+        rv = np.array([base(r, field) for r in g])
+        cg["rv_constant" if rv.std() < 1e-12 else "rv_varies"] += 1
+    res["clean_group_variance_source"] = cg
     # --- 5. counterfactual cost sweep (all steps and early steps)
     sweep = {}
     for label, gs in (("all", G), ("early", early)):
