@@ -2,6 +2,7 @@
 # TH1 shards as a Slurm array on compute (own copy /scratch/pabitra/lab_theory).
 #   sbatch --array=0-31 --export=ALL,SPLIT=heldout,NSH=32 slurm/theory/th1_array.sh
 #SBATCH -p compute
+#SBATCH --mem=16G
 #SBATCH -c 8
 #SBATCH -t 03:00:00
 #SBATCH -J th1

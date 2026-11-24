@@ -3,6 +3,7 @@
 # hash-checked /scratch/pabitra/actionproof tree). Uses that tree's venv read-only.
 #   sbatch -J <name> -c <cpus> -t <time> slurm/theory/run_py.sh <script.py> [args...]
 #SBATCH -p compute
+#SBATCH --mem=16G
 #SBATCH -o /scratch/pabitra/lab_theory/logs/%x.%j.log
 set -euo pipefail
 cd /scratch/pabitra/lab_theory
