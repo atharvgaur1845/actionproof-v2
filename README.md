@@ -56,6 +56,7 @@ Stage 4 (`docs/research/`):
 
   Tables: `paper/tables/p1.tex`; diagnosis: `docs/quality/diagnosis_tables.md`.
 - **Ledger and guard** (P2, registered, `PREREGISTRATION_P2.md`; same frozen test). Training on a structured ledger (E) beats the recovery-start agent (0.782, +0.269 [+0.238, +0.301], **supported**), but not P1's best agent (−0.038). The ledger at inference lowers the recovery-start agent to 0.253. A deterministic action guard lowers every arm (−0.122 to −0.273). It removes false successes, but it also blocks the registered refund-then-re-pay repair (the scripted oracle would be blocked on 90 of 90 partial-payment tasks), and blocked agents rarely recover. The scripted oracle reaches 0.924 on the same tasks. Diagnosis: `docs/quality/PERFORMANCE_DIAGNOSIS.md`.
+- **Why GRPO cannot see the stakes** (Phase II theory, `docs/theory/`; registered held-out simulation `PREREGISTRATION_TH1.md`). When every rollout in a group meets the same hidden fault, GRPO's expected update ignores per-state stakes and read costs. For a single read-or-not decision it becomes a stake-free vote, while centred estimators (Dr. GRPO) follow the value gap. On 731 held-out problems GRPO's decision was predicted in 721 of 721 cells. One registered prediction (H6) failed. The language-agent link is development-level, and the confirmatory test AD-C1 is reported separately. No new algorithm is claimed.
 - **Operational model** (`docs/upgrade/ROI.md`): projections, not savings. Hand-written read-back-and-repair checks beat every trained agent in ProcureSim.
 
 ## Deliverables

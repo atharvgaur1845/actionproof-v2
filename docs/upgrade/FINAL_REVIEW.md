@@ -19,6 +19,8 @@ Draft of 2026-11-23, about 21:55 IST, on branch `actionproof-research-upgrade`.
 | Ledger-trained recovery agent E beats the recovery-start agent: +0.269 [+0.238, +0.301] | P2 H2 | E does not beat D (H1 −0.038), so the ledger adds nothing over recovery SFT + GRPO |
 | Hand-written read-back-and-repair checks beat every trained agent in ProcureSim (0.917 VSC, 0 false success) | `results/roi/scripted_s3_conf_full.json` | The scripted checker knows the fault taxonomy |
 
+| **GRPO under a shared hidden state is stake-blind** (exact theorem); its predictions hold on 731 registered held-out problems (721 of 721 decisions predicted) | TH1 H1–H5; `docs/theory/PROOF_AND_ASSUMPTIONS.md` | Stylised single decision. H6 not supported, H7 untestable. The language-agent link is development-level only |
+
 ## Not supported or failed (registered rules not met)
 
 - Renamed tools and an unseen workflow: no gain (S4).
@@ -27,6 +29,8 @@ Draft of 2026-11-23, about 21:55 IST, on branch `actionproof-research-upgrade`.
 - A11 interaction: not made. Negative transfer to healthcare administration.
 - **FCA** (−0.10), **C5** (−0.32 and −0.37; it penalises reads by construction) and **G** (−0.11, −0.033): all dropped by criteria fixed before training.
 - R1 H1 (SFT costs capability) and H3 (training lowers abstention): not supported. Abstention is low in the base model itself.
+- **TH1 H6**: GRPO no worse than Dr. GRPO whenever the vote is right, 53 of 75 cells (threshold 0.9). Post hoc: slow convergence under large stakes.
+- **AD D3** (development): passed its gates, but its mechanism prediction failed (uninformative reads rose).
 - **P2 H1, H3, H4, S1–S3**: E below D (−0.038); ledger at inference −0.260; the action guard lowers every arm (−0.122 to −0.273). Post-hoc diagnosis: the guard's read-before-retry rule blocks the registered repair (oracle replay: 90 of 90 partial-payment tasks), and blocked agents rarely recover.
 - **P1 H1**: a reconciliation line at inference lowers sampled VSC (−0.030 [−0.041, −0.019]); it induces same-key top-ups (`docs/research/P1_DEV_DIAGNOSIS.md`).
 - J1 J-H1 (warned judges fooled) and J-H2 (snapshot judges ≥ 0.90 for 3 of 4): not supported.
