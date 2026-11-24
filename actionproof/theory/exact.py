@@ -129,13 +129,21 @@ def categories(pb: Problem, est: str) -> dict:
                     num[(r, o)] = num.get((r, o), 0.0) + wz * p * R
                     den[(r, o)] = den.get((r, o), 0.0) + wz * p
         rb = {k: num[k] / den[k] for k in num if den[k] > 0}
+    merge = est not in ("gdpo",)
+    seen: dict[tuple, int] = {}
     for z in range(pb.K):
         for r in (0, 1):
             for p, R, o, comp in pb.out[z][r]:
+                Rv = rb[(r, o)] if rb else R
+                key = (z, r, round(Rv, 12))
+                if merge and key in seen:
+                    qs[seen[key]] += p
+                    continue
+                seen[key] = len(qs)
                 zs.append(z)
                 rs.append(r)
                 qs.append(p)
-                Rs.append(rb[(r, o)] if rb else R)
+                Rs.append(Rv)
                 comps.append(comp)
     return {"z": np.array(zs), "r": np.array(rs), "q": np.array(qs), "R": np.array(Rs, dtype=float),
             "comp": np.array(comps, dtype=float)}
