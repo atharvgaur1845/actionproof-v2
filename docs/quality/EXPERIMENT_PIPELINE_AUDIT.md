@@ -85,6 +85,11 @@ These runs are dropped methods. Re-running them only to log more would spend GPU
 - `rollout_c5g.py` samples hinted rollouts from q = π(·|hinted context), then overwrites their sampling log-probabilities with p = π(·|un-hinted context).
 - TRL's importance ratio is therefore 1 by construction, and the update estimates E_q[A ∇ log p] instead of E_p[A ∇ log p]. It is biased by the gap between q and p, and no correction is applied.
 - The original q log-probabilities were not logged, so the gap is unmeasurable from the logs. `scripts/audit_g_mismatch.py` estimates it offline (KL(q‖p) per token and the importance-weight ESS on the 322 hinted episodes of G seed 0). It rebuilds assistant turns in canonical format, which is an approximation, because raw text was not logged.
+- **Audit result** (task 1197, Slurm; `results/quality/g_mismatch_s0_ck100.json`; G seed 0 at checkpoint 100, 322 hinted episodes, 90,030 assistant tokens):
+  - Per token the gap is small: the mean log q − log p is 0.0097.
+  - Per episode it compounds: the mean summed log-ratio is 2.70 and the largest 21.8.
+  - The implied importance weights p/q have an effective sample size of 1.01 out of 322 episodes (0.3%). A correctly reweighted estimate of the on-policy gradient from these rollouts would rest on about one episode. The update G applied therefore followed the hinted policy's tokens almost entirely, not the un-hinted policy it was meant to train.
+  - Caveats: one seed and one checkpoint; assistant turns rebuilt in canonical format, because the raw text was not logged. This describes the estimator. It does not by itself prove that the mismatch caused G's development loss.
 - G is dropped (−0.11, −0.033); **it must not be described as an unbiased on-policy method.**
 
 **C5 credit assignment** (`actionproof/stage4/progress.py`).
