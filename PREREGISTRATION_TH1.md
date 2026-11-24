@@ -25,6 +25,17 @@ The exact engine was cross-checked against `actionproof/lab/exact_vote.py` befor
   - run 3: confirms coverage.
 - **No change was made to the trainer settings, the estimators or the criteria thresholds** after seeing dev output.
   The thresholds below were written into `th1_analyze.py` before dev run 1.
+- **Dev run 3 (final generator), recorded before the held-out run:**
+  - H1 met: medians ≤ 0.0003, p90 ≤ 0.0074;
+  - H2 1.00 (73 cells), H3 1.00 (4 cells), H5 1.00 (64 cells);
+  - **H4 0.80 on its first criterion (10 cells): not met**; 1.00 on the second;
+  - **H6 0.857: not met**;
+  - H7 untestable (2 pairs).
+
+  The thresholds are kept as written. Explanation, recorded in advance: under Cor. 3.3 the interior equilibrium π*
+  approaches 1 as G grows and p → 1/2 (scan: π* = 0.969 at p = 0.45, G = 16). A fixed 0.95 cut can therefore fail
+  without contradicting the theory. H1 is the quantitative test of that regime. H4 and H6 may fail on the held-out
+  split for this reason.
 - The analytical scan `results/theory/scan.json` (canonical problems; not TH1 cells).
 - The held-out grid file was generated once, locally, to check that it builds (518 cells under the first generator).
   **Its contents were not inspected**, and no output was produced for it.
