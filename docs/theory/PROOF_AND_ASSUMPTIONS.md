@@ -186,7 +186,16 @@ If 0 < c_rep < V + L and c_clean, c_unrep > 0, then 𝒱 = ps − (1 − ps) = 2
   - A cost above the stake flips that state's vote; this is the only route by which c enters.
 - **When repair success is rollout randomness** (the LLM case and TB1's `s`), the returns within a faulted state are
   not deterministic. The vote is replaced by the general expression of Proposition 2.1. The GRPO threshold is no longer
-  1/(2s): it lies between 1/2 and 1/(2s) and depends on c ([scan] `threshold_exactness`). **So the phrase "irrespective of costs" is false for s ∈ (0,1)
+  1/(2s) and depends on c ([scan] `threshold_exactness`, G = 8, π = 0.3):
+
+  | s | c | 1/(2s) | GRPO p*, repairability in the state | GRPO p*, repair as rollout noise | Dr. GRPO p* = c/s |
+  |---|---|---|---|---|---|
+  | 1.0 | 0.01 / 0.05 / 0.2 | 0.5 | 0.4948 / 0.4990 / 0.4998 | same | 0.01 / 0.05 / 0.2 |
+  | 0.6 | 0.01 / 0.05 / 0.2 | 0.833 | 0.8246 / 0.8316 / 0.8330 | **0.6543 / 0.6671 / 0.7062** | 0.017 / 0.083 / 0.333 |
+  | 0.3 | any | 1.67 | never verifies | never verifies | 0.033 / 0.167 / 0.667 |
+
+  The residual below 1/2 at s = 1 is the ε term (cost_blindness: p* = 0.4896 at c = 0.005, 0.452 at c = 0.001,
+  0.412 at c = 0.0005; p* ∈ [0.499, 0.5005] for 0.05 ≤ c ≤ 0.99). **So the phrase "irrespective of costs" is false for s ∈ (0,1)
   as rollout noise.**
 
 ### Corollary 3.3 (endogenous homogeneity: the always-verify corner is governed by the vote under *every* law)
