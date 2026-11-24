@@ -403,7 +403,7 @@ LLM judges (§15) are evaluation instruments whose outputs never replace the dat
   - website sections 06–08;
   - Stage 5 development (C5, G);
   - a separate algorithm-discovery programme.
-- **Nov 24:** P1 frozen test reported (H2, H3 supported; H1 not supported). P2 reported (H2 supported; H1, H3, H4 and S1–S3 not supported), with a post-hoc guard diagnosis.
+- **Nov 24:** P1 frozen test reported (H2, H3 supported; H1 not supported). P2 reported (H2 supported; H1, H3, H4 and S1–S3 not supported), with a post-hoc guard diagnosis. Phase II theory merged (TH1 registered held-out simulation). The HF Space site was redeployed with sections 09 (P1, P2) and 10 (theory) on Nov 24 (Space commit acf4f79).
 - **Deviations:** `docs/stage2/DECISIONS.md` (this round: D-R1-1, D-P1-1).
 
 ## 35. Appendix pointers
