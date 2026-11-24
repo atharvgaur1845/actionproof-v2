@@ -55,4 +55,17 @@ Greedy decoding gives every arm higher VSC and fewer false successes than sample
 - **The action guard (rule R3, no refunded key; rule R1, read before retry)** blocks the exact stage-4 failure B shows. P2's H4 and S1–S3 test whether blocking helps.
 - **The unseen workflow** is the gap no P1 arm closes. P2's shift splits measure it again.
 
-P2 sections are added when `results/p2/p2_summary.json` exists.
+## 6. P2: why the ledger and the guard lower completion (written after the P2 results)
+
+Sources: `results/quality/p2_guard_diagnosis.json` (`scripts/p2_guard_diagnosis.py`) and `results/quality/diagnosis_p2_test.json`, both computed on Slurm. Registered verdicts: claims P2-H2 and P2.
+
+**The guard does what it specifies; the specification is the problem.**
+- *Rule R1 (read before retry) blocks the registered repair.* The registered repair for a short payment is refund, then re-pay with a new key. A refund counts as a write to payments, so R1 demands a read in between. Replaying the scripted oracle through the guard, R1 would block it on 90 of 90 partial-payment tasks. Every would-block across all test splits is R1.
+- *Blocked agents rarely recover.* Sampled VSC after any block: Ag 0.12, Dg 0.145, Eg 0.37. (Blocked and unblocked episodes are not comparable groups: whether a block happens depends on what the agent does.)
+- *The guard converts false successes into non-completions.* E reports a false success in 702 of 5,400 sampled episodes; Eg in one. But Eg has 522 episodes without a report (turn limit) and 465 under-claims, where the work was done and the agent did not report it as done. VSC counts both as failures.
+- *Failure stage.* With the guard, "acted, not resolved" grows for C and D (`diagnosis_p2_test.json`): blocked mid-repair, the agents improvise a different repair, which is often wrong.
+
+**The ledger at inference raises false success.** B2 (A with the ledger block) reports false success in 3,092 of 5,400 episodes, against 2,081 for A. A was never trained on the block. The text is out of distribution for it, and it does not use the "below the PO total" field to repair.
+
+**What would fix it, not tested here.** A guard that allows a refund-then-re-pay pair under a new key, without a read in between, would not block the oracle. This is a post-hoc design observation. Testing it needs a new registration, and it is not claimed.
+

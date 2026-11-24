@@ -1201,7 +1201,7 @@
   "review numbers": "results/s3/s3_review_numbers.json"
  },
  "evidence": {
-  "canonical_sha256": "7ef9f990dc64340682fc8c44a342c373052068c2cc33bdb13a77b3ef010ff82a",
+  "canonical_sha256": "056d5eb59eece8908e7adbd00b1d265c209864e1d014c681765ab325a34e72d7",
   "claims": [
    {
     "id": "C1",
@@ -1808,6 +1808,56 @@
     ]
    },
    {
+    "id": "P2-H2",
+    "statement": "Registered P2 H2 (PREREGISTRATION_P2.md, Holm over H1-H4; frozen test of 450 tasks, 3 seeds, sampled VSC): E, recovery SFT on ledger-formatted demonstrations then GRPO with ledger rollouts, beats the recovery-start agent A: 0.782 vs 0.513, +0.269 [+0.238, +0.301], Holm 0.0004, all three seeds positive.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_P2.md",
+    "stats": "scripts/p2_stats.py",
+    "n_numbers": 5,
+    "sources": [
+     "results/p2/p2_summary.json"
+    ]
+   },
+   {
+    "id": "P2",
+    "statement": "Registered P2, hypotheses not supported (frozen test, sampled VSC): H1 E vs D -0.038 [-0.053, -0.022] (the ledger-trained agent is below the P1 agent D); H3 structured ledger at inference on A (B2) 0.253, -0.260; H4 action guard on A (Ag) 0.391, -0.122; secondary: the guard lowers C (-0.244), D (-0.273) and E (-0.142). Diagnosis: docs/quality/PERFORMANCE_DIAGNOSIS.md.",
+    "status": "not_supported",
+    "label": "unsupported",
+    "registration": "PREREGISTRATION_P2.md",
+    "stats": "scripts/p2_stats.py",
+    "n_numbers": 24,
+    "sources": [
+     "results/p2/p2_summary.json"
+    ]
+   },
+   {
+    "id": "P2-REF",
+    "statement": "P2 references on the same test tasks (registered in PREREGISTRATION_P2.md section 4 as references, not hypotheses): scripted oracle 0.924 (one greedy episode per task; it encodes the fault taxonomy by hand), s3_matched control 0.479 and warm start 0.335 (sampled).",
+    "status": "supported",
+    "label": "descriptive",
+    "registration": null,
+    "stats": "scripts/p2_stats.py",
+    "n_numbers": 3,
+    "sources": [
+     "results/p2/p2_summary.json"
+    ]
+   },
+   {
+    "id": "P2-DIAG",
+    "statement": "P2 guard and ledger diagnosis (descriptive, after results; scripts/p2_guard_diagnosis.py and scripts/diagnose_failures.py on Slurm). The guard works as specified, but rule R1 (read before retry) blocks the registered repair itself: replaying the scripted oracle through the guard, R1 would block it on 90 of 90 partial-payment tasks (refund then re-pay with no read between). Guarded episodes that hit a block rarely recover (sampled VSC if blocked: Ag 0.12, Dg 0.145, Eg 0.37). The guard removes false success (E 702 of 5,400 sampled episodes, Eg 1) but adds missing reports (Eg 522) and under-claims (Eg 465). The ledger at inference raises A's false successes from 2,081 to 3,092 of 5,400 (B2).",
+    "status": "supported",
+    "label": "descriptive",
+    "registration": null,
+    "stats": "scripts/p2_guard_diagnosis.py",
+    "n_numbers": 11,
+    "sources": [
+     "results/quality/diagnosis_p1_test.json",
+     "results/quality/diagnosis_p2_test.json",
+     "results/quality/p2_guard_diagnosis.json"
+    ]
+   },
+   {
     "id": "J1-DESC",
     "statement": "J1 descriptive measurements on the 660 main cases (PREREGISTRATION_J1.md reports them without a hypothesis): transcript-only accuracy (abstain = wrong) and coverage, recall on genuinely completed episodes, prompt-paraphrase kappa and cost per 1,000 judgements.",
     "status": "supported",
@@ -1947,12 +1997,12 @@
    }
   ],
   "label_counts": {
-   "confirmatory": 305,
-   "descriptive": 68,
+   "confirmatory": 310,
+   "descriptive": 82,
    "development": 22,
    "exploratory": 17,
    "failed": 10,
-   "unsupported": 68
+   "unsupported": 92
   },
   "studies": {
    "P1": {
@@ -1961,7 +2011,7 @@
    },
    "P2": {
     "registration": "PREREGISTRATION_P2.md",
-    "label": "incomplete"
+    "label": "registered"
    },
    "AD-C1": {
     "registration": "PREREGISTRATION_AD_C1.md",

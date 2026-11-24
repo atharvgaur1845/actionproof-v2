@@ -1,0 +1,842 @@
+{
+ "part_a_guarded_episodes": {
+  "Ag|sampled": {
+   "episodes": 5400,
+   "vsc": 0.39111111111111113,
+   "share_blocked": 0.5957407407407408,
+   "blocks_per_episode_by_rule": {
+    "guard_read_before_retry": 0.8657407407407407,
+    "guard_unverified_completion": 0.580925925925926,
+    "guard_overfill": 0.08777777777777777,
+    "guard_refunded_key": 0.013148148148148148
+   },
+   "first_block_rule": {
+    "guard_read_before_retry": 1376,
+    "guard_unverified_completion": 1812,
+    "guard_overfill": 28,
+    "guard_refunded_key": 1
+   },
+   "ended_by": {
+    "report": 4770,
+    "max_turns": 524,
+    "no_call": 106
+   },
+   "ended_by_if_blocked": {
+    "report": 2685,
+    "max_turns": 490,
+    "no_call": 42
+   },
+   "vsc_if_blocked": 0.1196767174386074,
+   "vsc_if_not_blocked": 0.7911131470453504
+  },
+  "Ag|greedy": {
+   "episodes": 1350,
+   "vsc": 0.5037037037037037,
+   "share_blocked": 0.5140740740740741,
+   "blocks_per_episode_by_rule": {
+    "guard_read_before_retry": 0.6711111111111111,
+    "guard_unverified_completion": 0.4888888888888889,
+    "guard_overfill": 0.05333333333333334
+   },
+   "first_block_rule": {
+    "guard_read_before_retry": 361,
+    "guard_unverified_completion": 333
+   },
+   "ended_by": {
+    "report": 1288,
+    "max_turns": 62
+   },
+   "ended_by_if_blocked": {
+    "report": 632,
+    "max_turns": 62
+   },
+   "vsc_if_blocked": 0.15273775216138327,
+   "vsc_if_not_blocked": 0.875
+  },
+  "A|sampled": {
+   "episodes": 5400,
+   "vsc": 0.5127777777777778,
+   "share_blocked": 0.0,
+   "blocks_per_episode_by_rule": {},
+   "first_block_rule": {},
+   "ended_by": {
+    "report": 5264,
+    "no_call": 77,
+    "max_turns": 59
+   },
+   "ended_by_if_blocked": {},
+   "vsc_if_blocked": null,
+   "vsc_if_not_blocked": 0.5127777777777778
+  },
+  "A|greedy": {
+   "episodes": 1350,
+   "vsc": 0.6659259259259259,
+   "share_blocked": 0.0,
+   "blocks_per_episode_by_rule": {},
+   "first_block_rule": {},
+   "ended_by": {
+    "report": 1350
+   },
+   "ended_by_if_blocked": {},
+   "vsc_if_blocked": null,
+   "vsc_if_not_blocked": 0.6659259259259259
+  },
+  "Cg|sampled": {
+   "episodes": 5400,
+   "vsc": 0.5274074074074074,
+   "share_blocked": 0.4242592592592593,
+   "blocks_per_episode_by_rule": {
+    "guard_read_before_retry": 0.33314814814814814,
+    "guard_unverified_completion": 0.5524074074074075,
+    "guard_overfill": 0.3390740740740741,
+    "guard_refunded_key": 0.004074074074074074
+   },
+   "first_block_rule": {
+    "guard_read_before_retry": 1701,
+    "guard_unverified_completion": 519,
+    "guard_overfill": 71
+   },
+   "ended_by": {
+    "report": 4662,
+    "max_turns": 669,
+    "no_call": 69
+   },
+   "ended_by_if_blocked": {
+    "report": 1594,
+    "max_turns": 657,
+    "no_call": 40
+   },
+   "vsc_if_blocked": 0.09384548232213008,
+   "vsc_if_not_blocked": 0.8468961080733355
+  },
+  "Cg|greedy": {
+   "episodes": 1350,
+   "vsc": 0.5711111111111111,
+   "share_blocked": 0.4066666666666667,
+   "blocks_per_episode_by_rule": {
+    "guard_read_before_retry": 0.3348148148148148,
+    "guard_unverified_completion": 0.5348148148148149,
+    "guard_overfill": 0.38592592592592595
+   },
+   "first_block_rule": {
+    "guard_read_before_retry": 449,
+    "guard_unverified_completion": 76,
+    "guard_overfill": 24
+   },
+   "ended_by": {
+    "report": 1153,
+    "max_turns": 196,
+    "no_call": 1
+   },
+   "ended_by_if_blocked": {
+    "max_turns": 196,
+    "report": 352,
+    "no_call": 1
+   },
+   "vsc_if_blocked": 0.09289617486338798,
+   "vsc_if_not_blocked": 0.898876404494382
+  },
+  "C|sampled": {
+   "episodes": 5400,
+   "vsc": 0.7718518518518519,
+   "share_blocked": 0.0,
+   "blocks_per_episode_by_rule": {},
+   "first_block_rule": {},
+   "ended_by": {
+    "report": 5334,
+    "no_call": 36,
+    "max_turns": 30
+   },
+   "ended_by_if_blocked": {},
+   "vsc_if_blocked": null,
+   "vsc_if_not_blocked": 0.7718518518518519
+  },
+  "C|greedy": {
+   "episodes": 1350,
+   "vsc": 0.8555555555555555,
+   "share_blocked": 0.0,
+   "blocks_per_episode_by_rule": {},
+   "first_block_rule": {},
+   "ended_by": {
+    "report": 1350
+   },
+   "ended_by_if_blocked": {},
+   "vsc_if_blocked": null,
+   "vsc_if_not_blocked": 0.8555555555555555
+  },
+  "Dg|sampled": {
+   "episodes": 5400,
+   "vsc": 0.5466666666666666,
+   "share_blocked": 0.4551851851851852,
+   "blocks_per_episode_by_rule": {
+    "guard_read_before_retry": 0.5627777777777778,
+    "guard_unverified_completion": 0.625,
+    "guard_refunded_key": 0.04981481481481481,
+    "guard_overfill": 0.08481481481481482
+   },
+   "first_block_rule": {
+    "guard_read_before_retry": 2001,
+    "guard_unverified_completion": 451,
+    "guard_overfill": 6
+   },
+   "ended_by": {
+    "report": 4608,
+    "max_turns": 761,
+    "no_call": 31
+   },
+   "ended_by_if_blocked": {
+    "report": 1680,
+    "max_turns": 759,
+    "no_call": 19
+   },
+   "vsc_if_blocked": 0.14483319772172498,
+   "vsc_if_not_blocked": 0.8823929299796057
+  },
+  "Dg|greedy": {
+   "episodes": 1350,
+   "vsc": 0.6044444444444445,
+   "share_blocked": 0.3940740740740741,
+   "blocks_per_episode_by_rule": {
+    "guard_read_before_retry": 0.4437037037037037,
+    "guard_unverified_completion": 0.5496296296296296,
+    "guard_refunded_key": 0.056296296296296296,
+    "guard_overfill": 0.07851851851851852
+   },
+   "first_block_rule": {
+    "guard_read_before_retry": 499,
+    "guard_unverified_completion": 33
+   },
+   "ended_by": {
+    "report": 1145,
+    "max_turns": 205
+   },
+   "ended_by_if_blocked": {
+    "report": 327,
+    "max_turns": 205
+   },
+   "vsc_if_blocked": 0.15037593984962405,
+   "vsc_if_not_blocked": 0.8997555012224939
+  },
+  "D|sampled": {
+   "episodes": 5400,
+   "vsc": 0.8192592592592592,
+   "share_blocked": 0.0,
+   "blocks_per_episode_by_rule": {},
+   "first_block_rule": {},
+   "ended_by": {
+    "report": 5383,
+    "no_call": 16,
+    "max_turns": 1
+   },
+   "ended_by_if_blocked": {},
+   "vsc_if_blocked": null,
+   "vsc_if_not_blocked": 0.8192592592592592
+  },
+  "D|greedy": {
+   "episodes": 1350,
+   "vsc": 0.8881481481481481,
+   "share_blocked": 0.0,
+   "blocks_per_episode_by_rule": {},
+   "first_block_rule": {},
+   "ended_by": {
+    "report": 1350
+   },
+   "ended_by_if_blocked": {},
+   "vsc_if_blocked": null,
+   "vsc_if_not_blocked": 0.8881481481481481
+  },
+  "Eg|sampled": {
+   "episodes": 5400,
+   "vsc": 0.6396296296296297,
+   "share_blocked": 0.45796296296296296,
+   "blocks_per_episode_by_rule": {
+    "guard_read_before_retry": 0.5011111111111111,
+    "guard_unverified_completion": 0.36814814814814817,
+    "guard_overfill": 0.14944444444444444,
+    "guard_refunded_key": 0.03333333333333333
+   },
+   "first_block_rule": {
+    "guard_read_before_retry": 1867,
+    "guard_unverified_completion": 594,
+    "guard_overfill": 10,
+    "guard_refunded_key": 2
+   },
+   "ended_by": {
+    "report": 4878,
+    "no_call": 94,
+    "max_turns": 421,
+    "context": 7
+   },
+   "ended_by_if_blocked": {
+    "max_turns": 421,
+    "report": 1964,
+    "no_call": 81,
+    "context": 7
+   },
+   "vsc_if_blocked": 0.36959158916296,
+   "vsc_if_not_blocked": 0.867782712675094
+  },
+  "Eg|greedy": {
+   "episodes": 1350,
+   "vsc": 0.6785185185185185,
+   "share_blocked": 0.46444444444444444,
+   "blocks_per_episode_by_rule": {
+    "guard_read_before_retry": 0.4674074074074074,
+    "guard_unverified_completion": 0.41185185185185186,
+    "guard_overfill": 0.15851851851851853,
+    "guard_refunded_key": 0.0362962962962963
+   },
+   "first_block_rule": {
+    "guard_read_before_retry": 451,
+    "guard_unverified_completion": 175,
+    "guard_refunded_key": 1
+   },
+   "ended_by": {
+    "report": 1195,
+    "max_turns": 141,
+    "no_call": 9,
+    "context": 5
+   },
+   "ended_by_if_blocked": {
+    "max_turns": 141,
+    "report": 472,
+    "no_call": 9,
+    "context": 5
+   },
+   "vsc_if_blocked": 0.4609250398724083,
+   "vsc_if_not_blocked": 0.8672199170124482
+  },
+  "E|sampled": {
+   "episodes": 5400,
+   "vsc": 0.7816666666666666,
+   "share_blocked": 0.0,
+   "blocks_per_episode_by_rule": {},
+   "first_block_rule": {},
+   "ended_by": {
+    "report": 5364,
+    "no_call": 33,
+    "max_turns": 3
+   },
+   "ended_by_if_blocked": {},
+   "vsc_if_blocked": null,
+   "vsc_if_not_blocked": 0.7816666666666666
+  },
+  "E|greedy": {
+   "episodes": 1350,
+   "vsc": 0.7807407407407407,
+   "share_blocked": 0.0,
+   "blocks_per_episode_by_rule": {},
+   "first_block_rule": {},
+   "ended_by": {
+    "report": 1347,
+    "no_call": 3
+   },
+   "ended_by_if_blocked": {},
+   "vsc_if_blocked": null,
+   "vsc_if_not_blocked": 0.7807407407407407
+  }
+ },
+ "part_b_guarded_oracle": {
+  "p1_test_full": {
+   "tasks": 120,
+   "oracle_vsc": 0.8416666666666667,
+   "tasks_with_a_would_block": 9,
+   "would_blocks_by_rule": {
+    "guard_read_before_retry": 9
+   },
+   "by_rule_tool": {
+    "guard_read_before_retry": {
+     "pay_supplier": 9
+    }
+   },
+   "examples": [
+    {
+     "task_id": "p1_test_full-0005",
+     "workflow": "pay_post",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 11
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_full-0014",
+     "workflow": "order_prepay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 15
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_full-0027",
+     "workflow": "order_prepay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 15
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_full-0034",
+     "workflow": "order_prepay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 15
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_full-0038",
+     "workflow": "pay_post",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 11
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_full-0069",
+     "workflow": "pay_post",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 11
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    }
+   ]
+  },
+  "p1_test_pp": {
+   "tasks": 90,
+   "oracle_vsc": 1.0,
+   "tasks_with_a_would_block": 90,
+   "would_blocks_by_rule": {
+    "guard_read_before_retry": 90
+   },
+   "by_rule_tool": {
+    "guard_read_before_retry": {
+     "pay_supplier": 90
+    }
+   },
+   "examples": [
+    {
+     "task_id": "p1_test_pp-0000",
+     "workflow": "order_prepay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 15
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_pp-0004",
+     "workflow": "pay_post",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 11
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_pp-0006",
+     "workflow": "receive_pay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 15
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_pp-0007",
+     "workflow": "order_prepay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 15
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_pp-0008",
+     "workflow": "pay_post",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 11
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_pp-0020",
+     "workflow": "receive_pay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 15
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    }
+   ]
+  },
+  "p1_test_rec": {
+   "tasks": 120,
+   "oracle_vsc": 0.9333333333333333,
+   "tasks_with_a_would_block": 27,
+   "would_blocks_by_rule": {
+    "guard_read_before_retry": 27
+   },
+   "by_rule_tool": {
+    "guard_read_before_retry": {
+     "pay_supplier": 27
+    }
+   },
+   "examples": [
+    {
+     "task_id": "p1_test_rec-0000",
+     "workflow": "pay_post",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 9
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_rec-0002",
+     "workflow": "receive_pay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 15
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_rec-0005",
+     "workflow": "pay_post",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 11
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_rec-0006",
+     "workflow": "receive_pay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 15
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_rec-0010",
+     "workflow": "pay_post",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 9
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_rec-0016",
+     "workflow": "pay_post",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 9
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    }
+   ]
+  },
+  "p1_test_wf4": {
+   "tasks": 60,
+   "oracle_vsc": 1.0,
+   "tasks_with_a_would_block": 6,
+   "would_blocks_by_rule": {
+    "guard_read_before_retry": 6
+   },
+   "by_rule_tool": {
+    "guard_read_before_retry": {
+     "pay_supplier": 6
+    }
+   },
+   "examples": [
+    {
+     "task_id": "p1_test_wf4-0001",
+     "workflow": "order_receive_pay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 19
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_wf4-0017",
+     "workflow": "order_receive_pay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 19
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_wf4-0021",
+     "workflow": "order_receive_pay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 19
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_wf4-0029",
+     "workflow": "order_receive_pay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 19
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_wf4-0037",
+     "workflow": "order_receive_pay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 19
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_wf4-0057",
+     "workflow": "order_receive_pay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 19
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier"
+     ]
+    }
+   ]
+  },
+  "p1_test_combo": {
+   "tasks": 60,
+   "oracle_vsc": 0.8833333333333333,
+   "tasks_with_a_would_block": 16,
+   "would_blocks_by_rule": {
+    "guard_read_before_retry": 16
+   },
+   "by_rule_tool": {
+    "guard_read_before_retry": {
+     "pay_supplier": 16
+    }
+   },
+   "examples": [
+    {
+     "task_id": "p1_test_combo-0002",
+     "workflow": "receive_pay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 21
+      }
+     ],
+     "faults": [
+      "partial:pay_supplier",
+      "partial:record_goods_receipt"
+     ]
+    },
+    {
+     "task_id": "p1_test_combo-0003",
+     "workflow": "pay_post",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 11
+      }
+     ],
+     "faults": [
+      "precommit_timeout:post_journal_entry",
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_combo-0004",
+     "workflow": "order_prepay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 19
+      }
+     ],
+     "faults": [
+      "precommit_timeout:place_supplier_order",
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_combo-0005",
+     "workflow": "receive_pay",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 19
+      }
+     ],
+     "faults": [
+      "precommit_timeout:record_goods_receipt",
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_combo-0006",
+     "workflow": "pay_post",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 11
+      }
+     ],
+     "faults": [
+      "precommit_timeout:post_journal_entry",
+      "partial:pay_supplier"
+     ]
+    },
+    {
+     "task_id": "p1_test_combo-0008",
+     "workflow": "pay_post",
+     "blocks": [
+      {
+       "tool": "pay_supplier",
+       "rule": "guard_read_before_retry",
+       "step": 11
+      }
+     ],
+     "faults": [
+      "lost_ack:post_journal_entry",
+      "partial:pay_supplier"
+     ]
+    }
+   ]
+  }
+ }
+}

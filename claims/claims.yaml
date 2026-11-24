@@ -857,6 +857,26 @@ claims:
       ref_W: {value: 0.335, file: results/p2/p2_summary.json, key: ["references", "W", "mean_vsc"], shown: ["0.335"]}
     commit: null
 
+  - id: P2-DIAG
+    statement: "P2 guard and ledger diagnosis (descriptive, after results; scripts/p2_guard_diagnosis.py and scripts/diagnose_failures.py on Slurm). The guard works as specified, but rule R1 (read before retry) blocks the registered repair itself: replaying the scripted oracle through the guard, R1 would block it on 90 of 90 partial-payment tasks (refund then re-pay with no read between). Guarded episodes that hit a block rarely recover (sampled VSC if blocked: Ag 0.12, Dg 0.145, Eg 0.37). The guard removes false success (E 702 of 5,400 sampled episodes, Eg 1) but adds missing reports (Eg 522) and under-claims (Eg 465). The ledger at inference raises A's false successes from 2,081 to 3,092 of 5,400 (B2)."
+    status: supported
+    prereg: null
+    eval: [results/quality/p2_guard_diagnosis.json, results/quality/diagnosis_p2_test.json]
+    stats: scripts/p2_guard_diagnosis.py
+    numbers:
+      oracle_pp_blocked: {value: 90, file: results/quality/p2_guard_diagnosis.json, key: [part_b_guarded_oracle, p1_test_pp, tasks_with_a_would_block], shown: ["90 of 90"]}
+      ag_blocked_vsc: {value: 0.12, file: results/quality/p2_guard_diagnosis.json, key: [part_a_guarded_episodes, "Ag|sampled", vsc_if_blocked], shown: ["0.12"]}
+      dg_blocked_vsc: {value: 0.145, file: results/quality/p2_guard_diagnosis.json, key: [part_a_guarded_episodes, "Dg|sampled", vsc_if_blocked], shown: ["0.145"]}
+      eg_blocked_vsc: {value: 0.37, file: results/quality/p2_guard_diagnosis.json, key: [part_a_guarded_episodes, "Eg|sampled", vsc_if_blocked], shown: ["0.37"]}
+      e_fs: {value: 702, file: results/quality/diagnosis_p2_test.json, key: ["E|sampled|ALL", report, false_success], shown: ["702"]}
+      eg_fs: {value: 1, file: results/quality/diagnosis_p2_test.json, key: ["Eg|sampled|ALL", report, false_success], shown: []}
+      eg_norep: {value: 522, file: results/quality/diagnosis_p2_test.json, key: ["Eg|sampled|ALL", report, no_report], shown: ["522"]}
+      eg_under: {value: 465, file: results/quality/diagnosis_p2_test.json, key: ["Eg|sampled|ALL", report, under_claim], shown: ["465"]}
+      a_fs: {value: 2081, file: results/quality/diagnosis_p1_test.json, key: ["A|sampled|ALL", report, false_success], shown: ["2,081"]}
+      b2_fs: {value: 3092, file: results/quality/diagnosis_p2_test.json, key: ["B2|sampled|ALL", report, false_success], shown: ["3,092"]}
+      episodes: {value: 5400, file: results/quality/diagnosis_p2_test.json, key: ["E|sampled|ALL", episodes], shown: ["5,400"]}
+    commit: null
+
   # ---- Write-up numbers (docs/submission/WRITEUP.md, enforced from 2026-11-24)
   - id: J1-DESC
     statement: "J1 descriptive measurements on the 660 main cases (PREREGISTRATION_J1.md reports them without a hypothesis): transcript-only accuracy (abstain = wrong) and coverage, recall on genuinely completed episodes, prompt-paraphrase kappa and cost per 1,000 judgements."

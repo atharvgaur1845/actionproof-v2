@@ -55,6 +55,7 @@ Stage 4 (`docs/research/`):
   - the unseen workflow stays hard: 0.486, against 0.174 for the recovery-start agent.
 
   Tables: `paper/tables/p1.tex`; diagnosis: `docs/quality/diagnosis_tables.md`.
+- **Ledger and guard** (P2, registered, `PREREGISTRATION_P2.md`; same frozen test). Training on a structured ledger (E) beats the recovery-start agent (0.782, +0.269 [+0.238, +0.301], **supported**), but not P1's best agent (−0.038). The ledger at inference lowers the recovery-start agent to 0.253. A deterministic action guard lowers every arm (−0.122 to −0.273). It removes false successes, but it also blocks the registered refund-then-re-pay repair (the scripted oracle would be blocked on 90 of 90 partial-payment tasks), and blocked agents rarely recover. The scripted oracle reaches 0.924 on the same tasks. Diagnosis: `docs/quality/PERFORMANCE_DIAGNOSIS.md`.
 - **Operational model** (`docs/upgrade/ROI.md`): projections, not savings. Hand-written read-back-and-repair checks beat every trained agent in ProcureSim.
 
 ## Deliverables
