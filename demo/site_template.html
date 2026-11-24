@@ -120,6 +120,14 @@ section{border-top:1px solid var(--ink);position:relative}
 .p1col h4{font:500 12px/18px var(--mono);margin:0 0 8px;text-transform:uppercase;letter-spacing:.06em}
 .p1s{font:12px/17px var(--mono);padding:6px 0;border-bottom:1px solid var(--hair2);overflow-wrap:anywhere}.p1s.pre{color:var(--gr)}
 .p1s b{font-weight:500}.p1s .ak{display:block;color:var(--gr)}.p1s .db{display:block}.p1s .db.bad{color:var(--ver-t);font-weight:500}
+.thgrid{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:8px 56px 8px}@media(max-width:900px){.thgrid{grid-template-columns:1fr;padding:8px 20px}}
+.thfig{margin:0}.thfig figcaption{font:500 15px/21px var(--sans);margin-bottom:10px}.thfig figcaption small{display:block;font:13px/19px var(--sans);color:var(--gr);margin-top:4px}
+.thpanels{display:grid;grid-template-columns:1fr 1fr;gap:16px}.thpanels svg{width:100%;height:auto;overflow:visible}
+.thfig svg text{font:12px var(--mono);fill:var(--gr)}.thfig svg .ttl{fill:var(--ink);font:600 12px var(--mono)}.thfig svg .ax{stroke:var(--hair);stroke-width:1}
+.thfig svg .grid{stroke:var(--hair2);stroke-width:1}.thfig svg .band{fill:var(--min)}
+.thlegend{display:flex;gap:18px;font:13px var(--sans);margin:0 0 8px}.thlegend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.thtip{min-height:20px;font:13px/19px var(--mono);color:var(--ink);margin-top:6px}
+#th-th1 .row:hover text,#th-th1 .row:focus text{fill:var(--ink)}#th-th1 .row{cursor:default;outline:none}
 .p1v{margin-top:10px;font:500 12px/18px var(--mono);padding:6px 8px}.p1v.ok{background:var(--chr)}.p1v.no{background:var(--ver);color:#fff}
 @media (max-width:900px){.p1grid{grid-template-columns:1fr}.p1col+.p1col{padding-left:0;border-left:0;border-top:1px solid var(--ink)}}
 /* ---------- env (dark) ---------- */
@@ -421,14 +429,14 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  <div class="brand">ACTIONPROOF<span>a research study, 2026</span></div>
  <ol id="railnav">
   <li><a href="#top"><i>00</i>The incident</a></li><li><a href="#truths"><i>01</i>Three truths</a></li><li><a href="#reward"><i>02</i>What the reward sees</a></li>
-  <li><a href="#recovery"><i>03</i>Reading is not recovery</a></li><li><a href="#training"><i>04</i>Training recovery</a></li><li><a href="#inside"><i>05</i>Inside the model</a></li><li><a href="#retain"><i>06</i>General ability</a></li><li><a href="#judges"><i>07</i>Can a judge see it?</a></li><li><a href="#worth"><i>08</i>What it is worth</a></li><li><a href="#agent"><i>09</i>A practical agent</a></li><li><a href="#repro"><i>10</i>Reproduction</a></li>
+  <li><a href="#recovery"><i>03</i>Reading is not recovery</a></li><li><a href="#training"><i>04</i>Training recovery</a></li><li><a href="#inside"><i>05</i>Inside the model</a></li><li><a href="#retain"><i>06</i>General ability</a></li><li><a href="#judges"><i>07</i>Can a judge see it?</a></li><li><a href="#worth"><i>08</i>What it is worth</a></li><li><a href="#agent"><i>09</i>A practical agent</a></li><li><a href="#theory"><i>10</i>Why it happens</a></li><li><a href="#repro"><i>11</i>Reproduction</a></li>
   <li style="margin-top:14px"><a href="#study1"><i>+</i>Study 1: refunds</a></li><li><a href="#why"><i>·</i>Main finding</a></li><li><a href="#key"><i>·</i>What we found</a></li>
   <li><a href="#problem"><i>1</i>The problem</a></li><li><a href="#bench"><i>2</i>The test world</a></li><li><a href="#experiment"><i>3</i>The experiment</a></li>
   <li><a href="#lab"><i>4</i>Same situation test</a></li><li><a href="#templates"><i>5</i>Copied workflows</a></li><li><a href="#findings"><i>6</i>Results and checks</a></li>
   <li><a href="#autopsy"><i>7</i>Mistakes we fixed</a></li><li><a href="#methods"><i>8</i>How we measure</a></li><li><a href="#artifacts"><i>9</i>Code and data</a></li></ol>
  <div class="foot">Lexsi hackathon, track 3<a href="https://github.com/atharvgaur1845/actionproof-v2">GitHub ↗</a><a href="https://huggingface.co/collections/atharvgaur18/actionproof-procurement-study-6b0321cd11bad297aead6e81">Models ↗</a></div>
 </nav>
-<nav class="mnav" aria-label="Sections"><a class="b" href="#top">ACTIONPROOF</a><a href="#truths">01 Truths</a><a href="#reward">02 Reward</a><a href="#recovery">03 Recovery</a><a href="#training">04 Training</a><a href="#inside">05 Inside</a><a href="#retain">06 Ability</a><a href="#judges">07 Judges</a><a href="#worth">08 Worth</a><a href="#agent">09 Agent</a><a href="#repro">10 Reproduce</a><a href="#study1">Study 1</a><a href="#why">Main finding</a><a href="#key">What we found</a><a href="#problem">1 Problem</a><a href="#bench">2 Test world</a><a href="#experiment">3 Experiment</a>
+<nav class="mnav" aria-label="Sections"><a class="b" href="#top">ACTIONPROOF</a><a href="#truths">01 Truths</a><a href="#reward">02 Reward</a><a href="#recovery">03 Recovery</a><a href="#training">04 Training</a><a href="#inside">05 Inside</a><a href="#retain">06 Ability</a><a href="#judges">07 Judges</a><a href="#worth">08 Worth</a><a href="#agent">09 Agent</a><a href="#theory">10 Why</a><a href="#repro">11 Reproduce</a><a href="#study1">Study 1</a><a href="#why">Main finding</a><a href="#key">What we found</a><a href="#problem">1 Problem</a><a href="#bench">2 Test world</a><a href="#experiment">3 Experiment</a>
  <a href="#lab">4 Same situation</a><a href="#templates">5 Workflows</a><a href="#findings">6 Results</a><a href="#autopsy">7 Mistakes</a><a href="#methods">8 Measures</a><a href="#artifacts">9 Code and data</a></nav>
 <main>
 
@@ -596,9 +604,22 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  <div class="src pad" id="u-p2-src"></div>
 </section>
 
+<!-- ============ 10 WHY THE UPDATE CANNOT SEE THE STAKES (theory) ============ -->
+<section id="theory">
+ <div class="shead rv"><div class="snum">10</div><div><div class="cap">Why · exact theory and a registered simulation</div>
+  <h2 class="stitle">The update cannot <span class="ser">see the stakes.</span></h2>
+  <p class="lede">In agent training, every rollout in a group meets the same hidden fault: the same payment either went through or did not. GRPO compares rollouts only within their group and divides by the group's spread. So it learns <b>whether</b> checking wins inside each hidden state, not <b>how much</b> is at stake or what the check costs. Estimators that only subtract a baseline, such as Dr. GRPO, keep the size of the difference and learn the cost-aware answer.</p></div></div>
+ <div class="kind pad rv"><span class="kb m">Analytical</span><span>Analytical results are exact computations on a stylised problem: one decision, read or not, before a write. The simulation tests those predictions on held-out problems; it is not a language-agent result. In the trained agents, the same pattern appears only in development runs (two seeds or fewer per arm), and the confirmatory test AD-C1 is reported separately.</span></div>
+ <div class="thgrid rv">
+  <figure class="thfig"><figcaption><b>Learned chance of reading, as the read cost rises</b><small>Exact; the faulty share of states p is 0.3 (left) and 0.6 (right). Reading is worth it while the cost is below p (shaded).</small></figcaption><div class="thlegend" id="th-leg"></div><div class="thpanels" id="th-cost"></div></figure>
+  <figure class="thfig"><figcaption><b>How often each estimator learns the right decision</b><small>Registered held-out simulation TH1: 731 problems, 10 seeds, an independent trainer. Agreement with the Bayes-optimal action.</small></figcaption><svg id="th-th1" viewBox="0 0 560 330" role="img" aria-label="Agreement with the Bayes action, per estimator"></svg><div class="thtip" id="th-tip" role="status" aria-live="polite"></div></figure>
+ </div>
+ <div class="src pad" id="th-src"></div>
+</section>
+
 <!-- ============ 10 RESEARCH AND REPRODUCTION ============ -->
 <section id="repro">
- <div class="shead rv"><div class="snum">10</div><div><div class="cap">Research and reproduction</div>
+ <div class="shead rv"><div class="snum">11</div><div><div class="cap">Research and reproduction</div>
   <h2 class="stitle">Every number <span class="ser">has a file.</span></h2>
   <p class="lede">Each experiment was written down with its predictions and locked with a hash before it ran. Mistakes are corrected in dated notes, never by editing a registration. A checker re-reads every number in the paper and README from its result file.</p></div></div>
  <div class="repgrid rv" id="p-repgrid"></div>

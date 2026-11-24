@@ -194,8 +194,24 @@ def p2() -> dict:
             "oracle_pp_blocked": pb.get("tasks_with_a_would_block"), "oracle_pp_tasks": pb.get("tasks")}
 
 
+def theory() -> dict:
+    """Section 10: exact-theory curves and the registered TH1 estimator comparison (results/theory/site_theory.json)."""
+    src = "results/theory/site_theory.json"
+    d = _j(src)
+    if not d:
+        return {"status": "missing", "source": src}
+    std = {"grpo", "dapo", "grpo_kl", "gdpo"}
+    names = {"grpo": "GRPO", "dapo": "DAPO-style filtering", "grpo_kl": "GRPO + KL", "gdpo": "GDPO-style per-component",
+             "nostd": "Dr. GRPO (no std)", "rloo": "RLOO", "reinforce": "REINFORCE + mean baseline", "ppo": "PPO (learned value)",
+             "batchstd": "Batch-std scaling", "awrb": "AWRB"}
+    return {"status": "done", "source": src, "labels": d["labels"],
+            "cost": [{k: r[k] for k in ("p", "c", "grpo", "drgrpo", "bayes")} for r in d["cost"]],
+            "th1": [{"key": k, "name": names.get(k, k), "group_std": k in std, "agreement": _r(v["bayes_agreement"]),
+                     "regret": _r(v["median_regret"])} for k, v in sorted(d["th1"].items(), key=lambda kv: -kv[1]["bayes_agreement"])]}
+
+
 def build() -> dict:
-    return {"r1": r1(), "r1t": r1t(), "j1": j1(), "roi": roi(), "p1": p1(), "p2": p2()}
+    return {"r1": r1(), "r1t": r1t(), "j1": j1(), "roi": roi(), "p1": p1(), "p2": p2(), "theory": theory()}
 
 
 if __name__ == "__main__":

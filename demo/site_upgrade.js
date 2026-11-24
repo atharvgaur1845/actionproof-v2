@@ -49,6 +49,36 @@
  sync();draw();
  $("#u-roi-src").innerHTML=`Measured rates: <b>${esc(A.source)}</b> (s3_conf_full, every seed pooled; scripted rows on the same tasks). Formula: <span class="mono">demo/roi.js</span>, identical to scripts/roi_model.py (tested). Inference priced at the measured ${A.episodes_per_gpu_hour.toLocaleString("en-US")} policy calls per GPU-hour.`;
 })();
+/* ---------- 10: theory (data: S.upgrade.theory, scripts/site_upgrade.py::theory) ---------- */
+(function(){const T=S.upgrade&&S.upgrade.theory;if(!T||T.status!=="done"||!document.getElementById("th-cost"))return;
+ const COL={grpo:"#F05236",dr:"#2B6CB0"};const NS="http://www.w3.org/2000/svg";
+ $("#th-leg").innerHTML=`<span><i style="background:${COL.grpo}"></i>GRPO (divides by the group's spread)</span><span><i style="background:${COL.dr}"></i>Dr. GRPO (subtracts the mean only)</span>`;
+ const W=260,H=190,L=34,R=8,TP=22,B=34,cs=[...new Set(T.cost.map(r=>r.c))].sort((a,b)=>a-b);
+ const lx=c=>L+(Math.log(c)-Math.log(cs[0]))/(Math.log(cs[cs.length-1])-Math.log(cs[0]))*(W-L-R),ly=v=>TP+(1-v)*(H-TP-B);
+ const step=(pts,k)=>pts.map((r,i)=>i?`H${((lx(pts[i-1].c)+lx(r.c))/2).toFixed(1)}V${ly(r[k]).toFixed(1)}`:`M${lx(r.c).toFixed(1)},${ly(r[k]).toFixed(1)}`).join("")+`H${lx(pts[pts.length-1].c).toFixed(1)}`;
+ $("#th-cost").innerHTML=[0.3,0.6].map(p=>{const pts=T.cost.filter(r=>r.p===p).sort((a,b)=>a.c-b.c);
+  const xb=lx(Math.min(p,cs[cs.length-1]));
+  const ticks=[0.01,0.1,1].filter(c=>c>=cs[0]&&c<=cs[cs.length-1]);
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Learned read probability against read cost at p = ${p}">`+
+   `<rect class="band" x="${L}" y="${TP}" width="${(xb-L).toFixed(1)}" height="${H-TP-B}"/>`+
+   [0,0.5,1].map(v=>`<line class="grid" x1="${L}" x2="${W-R}" y1="${ly(v)}" y2="${ly(v)}"/><text x="${L-6}" y="${ly(v)+4}" text-anchor="end">${v}</text>`).join("")+
+   ticks.map(c=>`<text x="${lx(c)}" y="${H-B+16}" text-anchor="middle">${c}</text>`).join("")+
+   `<text class="ttl" x="${L}" y="12">p = ${p}</text><text x="${(L+W-R)/2}" y="${H-4}" text-anchor="middle">read cost (log)</text>`+
+   `<path d="${step(pts,"drgrpo")}" fill="none" stroke="${COL.dr}" stroke-width="2" stroke-linejoin="round"/>`+
+   `<path d="${step(pts,"grpo")}" fill="none" stroke="${COL.grpo}" stroke-width="2" stroke-dasharray="${p===0.6?"6 4":"0"}" stroke-linejoin="round"/>`+
+   `</svg>`}).join("");
+ const S2=$("#th-th1"),rows=T.th1,X0=210,X1=540,top=12,rh=29,x=v=>X0+v*(X1-X0);
+ let h=[0,0.5,1].map(v=>`<line class="grid" x1="${x(v)}" x2="${x(v)}" y1="${top-4}" y2="${top+rows.length*rh}"/><text x="${x(v)}" y="${top+rows.length*rh+16}" text-anchor="middle">${v===1?"1.0":v}</text>`).join("");
+ h+=rows.map((r,i)=>{const y=top+i*rh+rh/2,c=r.group_std?COL.grpo:COL.dr;
+  return `<g class="row" tabindex="0" data-i="${i}"><rect x="0" y="${y-rh/2}" width="${X1+16}" height="${rh}" fill="transparent"/>`+
+   `<text x="${X0-12}" y="${y+4}" text-anchor="end">${esc(r.name)}</text><line x1="${x(0)}" x2="${x(r.agreement)}" y1="${y}" y2="${y}" stroke="${c}" stroke-opacity=".35" stroke-width="2"/>`+
+   `<circle cx="${x(r.agreement)}" cy="${y}" r="6" fill="${c}" stroke="var(--paper)" stroke-width="2"/></g>`}).join("");
+ S2.innerHTML=h;const tip=$("#th-tip");
+ const show=i=>{const r=rows[i];tip.textContent=`${r.name}: right decision in ${(r.agreement*100).toFixed(1)}% of problems · median regret ${r.regret.toFixed(3)}${r.group_std?" · divides by the group's spread":""}`};
+ S2.querySelectorAll(".row").forEach(g=>{g.addEventListener("mouseenter",()=>show(+g.dataset.i));g.addEventListener("focus",()=>show(+g.dataset.i))});
+ S2.addEventListener("mouseleave",()=>tip.textContent="");
+ $("#th-src").innerHTML=`Source: <b>${esc(T.source)}</b> (generated on Slurm by scripts/theory/site_data.py). Left: ${esc(T.labels.cost)}. Right: ${esc(T.labels.th1)}; PREREGISTRATION_TH1.md, results/theory/th1_heldout_summary.json. Red dots: estimators that divide by the group's reward spread. Blue: estimators that do not. GRPO never reads at p = 0.3, even when reading is cheap. At p = 0.6 it always reads, even when reading costs more than the fault (dashed red). Dr. GRPO switches where the cost equals p. Proofs: docs/theory/PROOF_AND_ASSUMPTIONS.md.`})();
+
 /* ---------- 09b: ledger and guard (data: S.upgrade.p2, scripts/site_upgrade.py::p2) ---------- */
 (function(){const P=S.upgrade&&S.upgrade.p2;if(!P||P.status!=="done"||!document.getElementById("u-p2"))return;
  const pp=x=>x==null?"—":(x>=0?"+":"−")+Math.abs(x*100).toFixed(1),pc=x=>x==null?"—":(x*100).toFixed(1)+"%";
