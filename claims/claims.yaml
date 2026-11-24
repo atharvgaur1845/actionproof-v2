@@ -14,6 +14,7 @@
 documents:   # scanned by s2_numcheck.py
   - docs/stage2/VIDEO_SCRIPT.md
   - docs/stage2/PRODUCT.md
+  - docs/submission/WRITEUP.md
   - README.md
   - paper/main.tex
   - paper/appendix.tex
@@ -433,7 +434,7 @@ claims:
     stats: scripts/s3_stats.py
     numbers:
       h1_avg: {value: 0.21, file: results/s3/s3_summary.json, key: [splits, s3_conf_rec, across, vsc, seed_avg, est], shown: ["+0.21"]}
-      h1_lo: {value: 0.17, file: results/s3/s3_summary.json, key: [splits, s3_conf_rec, across, vsc, seed_avg, ci95, 0], shown: []}
+      h1_lo: {value: 0.17, file: results/s3/s3_summary.json, key: [splits, s3_conf_rec, across, vsc, seed_avg, ci95, 0], shown: ["0.17"]}
       h1_npos: {value: 5, file: results/s3/s3_summary.json, key: [splits, s3_conf_rec, across, vsc, n_positive], shown: []}
       h2_avg: {value: 0.21, file: results/s3/s3_summary.json, key: [splits, s3_conf_full, across, vsc, seed_avg, est], shown: []}
       h2_lo: {value: 0.17, file: results/s3/s3_summary.json, key: [splits, s3_conf_full, across, vsc, seed_avg, ci95, 0], shown: []}
@@ -751,8 +752,149 @@ claims:
     numbers:
       base: {value: 0.058, file: results/r1_tau/r1_tau_summary.json, key: [models, base, pass1], shown: ["0.058"]}
       warm_vs_base: {value: -0.020, file: results/r1_tau/r1_tau_summary.json, key: [contrasts, warm_vs_base, delta], shown: ["-0.020", "−0.020", "0.020"]}
+      warm_vs_base_lo: {value: -0.038, file: results/r1_tau/r1_tau_summary.json, key: [contrasts, warm_vs_base, ci95, 0], shown: ["-0.038", "−0.038", "0.038"]}
       rv: {value: -0.006, file: results/r1_tau/r1_tau_summary.json, key: [contrasts, a12_rv_vs_warm, delta], shown: ["-0.006", "−0.006", "0.006"]}
-      rsc: {value: -0.004, file: results/r1_tau/r1_tau_summary.json, key: [contrasts, rsc_vs_warm, delta], shown: ["-0.004", "−0.004"]}
+      rsc: {value: -0.004, file: results/r1_tau/r1_tau_summary.json, key: [contrasts, rsc_vs_warm, delta], shown: ["-0.004", "−0.004", "0.004"]}
+    commit: null
+
+  - id: P1
+    statement: "Registered (PREREGISTRATION_P1.md, frozen; deviation D-P1-1 before any test output). P1 frozen test, 450 fresh tasks, 3 seeds per arm, sampled VSC (T=1, 4 samples). Against the recovery-start agent A (0.513): H1 reconciliation line at inference (B) 0.483, -0.030 [-0.041, -0.019], not supported; H2 recovery SFT (C) 0.772, +0.259 [+0.231, +0.287], Holm 0.0003, all three seeds positive, supported; H3 recovery SFT warm start + the same GRPO (D) 0.819, +0.306 [+0.276, +0.337], Holm 0.0003, all three seeds positive, supported. Development winner (dev sampled VSC): D 0.872 against A 0.731."
+    status: supported
+    prereg: PREREGISTRATION_P1.md
+    eval: [results/p1/p1_summary.json]
+    stats: scripts/p1_stats.py
+    verifier: actionproof/integrity/sim/truth.py
+    numbers:
+      a_mean: {value: 0.513, file: results/p1/p1_summary.json, key: [test, C, A_mean], shown: ["0.513"]}
+      b_mean: {value: 0.483, file: results/p1/p1_summary.json, key: [test, B, X_mean], shown: ["0.483"]}
+      b_delta: {value: -0.030, file: results/p1/p1_summary.json, key: [test, B, delta], shown: ["-0.030", "−0.030", "0.030"]}
+      b_lo: {value: -0.041, file: results/p1/p1_summary.json, key: [test, B, ci95, 0], shown: ["-0.041", "−0.041", "0.041"]}
+      b_hi: {value: -0.019, file: results/p1/p1_summary.json, key: [test, B, ci95, 1], shown: ["-0.019", "−0.019", "0.019"]}
+      c_mean: {value: 0.772, file: results/p1/p1_summary.json, key: [test, C, X_mean], shown: ["0.772", "0.77"]}
+      c_delta: {value: 0.259, file: results/p1/p1_summary.json, key: [test, C, delta], shown: ["+0.259", "+0.26"]}
+      c_lo: {value: 0.231, file: results/p1/p1_summary.json, key: [test, C, ci95, 0], shown: ["+0.231", "0.231"]}
+      c_hi: {value: 0.287, file: results/p1/p1_summary.json, key: [test, C, ci95, 1], shown: ["+0.287", "0.287"]}
+      c_holm: {value: 0.0003, file: results/p1/p1_summary.json, key: [test, C, holm_p], shown: ["0.0003"]}
+      d_mean: {value: 0.819, file: results/p1/p1_summary.json, key: [test, D, X_mean], shown: ["0.819", "0.82"]}
+      d_delta: {value: 0.306, file: results/p1/p1_summary.json, key: [test, D, delta], shown: ["+0.306", "+0.31"]}
+      d_lo: {value: 0.276, file: results/p1/p1_summary.json, key: [test, D, ci95, 0], shown: ["+0.276", "0.276"]}
+      d_hi: {value: 0.337, file: results/p1/p1_summary.json, key: [test, D, ci95, 1], shown: ["+0.337", "0.337"]}
+      d_holm: {value: 0.0003, file: results/p1/p1_summary.json, key: [test, D, holm_p], shown: ["0.0003"]}
+      dev_a: {value: 0.731, file: results/p1/p1_summary.json, key: [dev, mean_sampled_vsc, A], shown: ["0.731"]}
+      dev_d: {value: 0.872, file: results/p1/p1_summary.json, key: [dev, mean_sampled_vsc, D], shown: ["0.872"]}
+      dev_c: {value: 0.851, file: results/p1/p1_summary.json, key: [dev, mean_sampled_vsc, C], shown: ["0.851"]}
+      dev_b: {value: 0.719, file: results/p1/p1_summary.json, key: [dev, mean_sampled_vsc, B], shown: ["0.719"]}
+      # descriptive (registered §7 "Descriptive"; sampled VSC per split, seed-pooled, no test)
+      pp_a: {value: 0.319, file: results/p1/p1_summary.json, key: [descriptive, A, test, p1_test_pp, sampled, vsc], shown: ["0.319"]}
+      pp_b: {value: 0.206, file: results/p1/p1_summary.json, key: [descriptive, B, test, p1_test_pp, sampled, vsc], shown: ["0.206"]}
+      pp_c: {value: 0.860, file: results/p1/p1_summary.json, key: [descriptive, C, test, p1_test_pp, sampled, vsc], shown: ["0.860"]}
+      pp_d: {value: 0.931, file: results/p1/p1_summary.json, key: [descriptive, D, test, p1_test_pp, sampled, vsc], shown: ["0.931"]}
+      wf4_a: {value: 0.174, file: results/p1/p1_summary.json, key: [descriptive, A, test, p1_test_wf4, sampled, vsc], shown: ["0.174"]}
+      wf4_c: {value: 0.397, file: results/p1/p1_summary.json, key: [descriptive, C, test, p1_test_wf4, sampled, vsc], shown: ["0.397"]}
+      wf4_d: {value: 0.486, file: results/p1/p1_summary.json, key: [descriptive, D, test, p1_test_wf4, sampled, vsc], shown: ["0.486"]}
+      fs_a_pp: {value: 0.651, file: results/p1/p1_summary.json, key: [descriptive, A, test, p1_test_pp, sampled, false_success], shown: ["0.651"]}
+      fs_d_pp: {value: 0.058, file: results/p1/p1_summary.json, key: [descriptive, D, test, p1_test_pp, sampled, false_success], shown: ["0.058"]}
+    deviations:
+      - "D-P1-1: AuditKIT sample named before any test output (docs/stage2/DECISIONS.md)."
+    commit: null
+
+  # ---- Write-up numbers (docs/submission/WRITEUP.md, enforced from 2026-11-24)
+  - id: J1-DESC
+    statement: "J1 descriptive measurements on the 660 main cases (PREREGISTRATION_J1.md reports them without a hypothesis): transcript-only accuracy (abstain = wrong) and coverage, recall on genuinely completed episodes, prompt-paraphrase kappa and cost per 1,000 judgements."
+    status: supported
+    prereg: null
+    eval: [results/j1/j1_summary.json]
+    stats: evaluation/llm_judge_committee/analyze.py
+    numbers:
+      gemma_acc: {value: 0.576, file: results/j1/j1_summary.json, key: ["main:transcript", judges, gemma, q1_vs_goal_met, accuracy_abstain_wrong], shown: ["0.576"]}
+      gemma_cov: {value: 0.58, file: results/j1/j1_summary.json, key: ["main:transcript", judges, gemma, q1_vs_goal_met, coverage], shown: ["0.58"]}
+      qwen_acc: {value: 0.373, file: results/j1/j1_summary.json, key: ["main:transcript", judges, qwen, q1_vs_goal_met, accuracy_abstain_wrong], shown: ["0.373"]}
+      qwen_cov: {value: 0.59, file: results/j1/j1_summary.json, key: ["main:transcript", judges, qwen, q1_vs_goal_met, coverage], shown: ["0.59"]}
+      gptoss_acc: {value: 0.514, file: results/j1/j1_summary.json, key: ["main:transcript", judges, gptoss, q1_vs_goal_met, accuracy_abstain_wrong], shown: ["0.514"]}
+      gptoss_cov: {value: 0.56, file: results/j1/j1_summary.json, key: ["main:transcript", judges, gptoss, q1_vs_goal_met, coverage], shown: ["0.56"]}
+      deepseek_acc: {value: 0.300, file: results/j1/j1_summary.json, key: ["main:transcript", judges, deepseek, q1_vs_goal_met, accuracy_abstain_wrong], shown: ["0.300"]}
+      deepseek_cov: {value: 0.43, file: results/j1/j1_summary.json, key: ["main:transcript", judges, deepseek, q1_vs_goal_met, coverage], shown: ["0.43"]}
+      maj_acc: {value: 0.385, file: results/j1/j1_summary.json, key: ["main:transcript", committee, majority, accuracy_abstain_wrong], shown: ["0.385"]}
+      maj_cov: {value: 0.42, file: results/j1/j1_summary.json, key: ["main:transcript", committee, majority, coverage], shown: ["0.42"]}
+      gemma_recall: {value: 0.67, file: results/j1/j1_summary.json, key: ["main:transcript", judges, gemma, q1_vs_goal_met, recall], shown: ["67%"]}
+      deepseek_recall: {value: 0.29, file: results/j1/j1_summary.json, key: ["main:transcript", judges, deepseek, q1_vs_goal_met, recall], shown: ["29"]}
+      gemma_kappa: {value: 0.96, file: results/j1/j1_summary.json, key: [prompt_sensitivity, gemma, kappa_q1], shown: ["0.96"]}
+      qwen_kappa: {value: 0.56, file: results/j1/j1_summary.json, key: [prompt_sensitivity, qwen, kappa_q1], shown: ["0.56"]}
+      gptoss_kappa: {value: 0.49, file: results/j1/j1_summary.json, key: [prompt_sensitivity, gptoss, kappa_q1], shown: ["0.49"]}
+      deepseek_kappa: {value: 0.65, file: results/j1/j1_summary.json, key: [prompt_sensitivity, deepseek, kappa_q1], shown: ["0.65"]}
+      gemma_cost: {value: 0.17, file: results/j1/j1_summary.json, key: ["main:transcript", judges, gemma, cost_per_1000_usd], shown: ["0.17"]}
+      qwen_cost: {value: 0.17, file: results/j1/j1_summary.json, key: ["main:transcript", judges, qwen, cost_per_1000_usd], shown: ["0.17"]}
+      gptoss_cost: {value: 0.44, file: results/j1/j1_summary.json, key: ["main:transcript", judges, gptoss, cost_per_1000_usd], shown: ["0.44"]}
+      deepseek_cost: {value: 0.34, file: results/j1/j1_summary.json, key: ["main:transcript", judges, deepseek, cost_per_1000_usd], shown: ["0.34"]}
+    commit: null
+
+  - id: R1-TABLE
+    statement: "R1 change vs warm start with 95% paired task bootstrap intervals (PREREGISTRATION_R1.md; the H2 rows are the registered primary, the irrelevance column is the H3 endpoint, the SFT row is H1)."
+    status: supported
+    prereg: PREREGISTRATION_R1.md
+    eval: [results/r1/r1_summary.json]
+    stats: scripts/r1_stats.py
+    numbers:
+      warm_ifeval: {value: 0.771, file: results/r1/r1_summary.json, key: [contrasts, "a12_rv_vs_warm:ifeval_prompt_strict", ref_value], shown: ["0.771"]}
+      warm_bfcl: {value: 0.493, file: results/r1/r1_summary.json, key: [contrasts, "a12_rv_vs_warm:bfcl_nonlive_ast", ref_value], shown: ["0.493"]}
+      warm_irr: {value: 0.062, file: results/r1/r1_summary.json, key: [contrasts, "a12_rv_vs_warm:bfcl_irrelevance", ref_value], shown: ["0.062"]}
+      base_ifeval: {value: 0.760, file: results/r1/r1_summary.json, key: [contrasts, "warm_vs_base:ifeval_prompt_strict", ref_value], shown: ["0.760"]}
+      base_bfcl: {value: 0.471, file: results/r1/r1_summary.json, key: [contrasts, "warm_vs_base:bfcl_nonlive_ast", ref_value], shown: ["0.471"]}
+      rv_if_lo: {value: -0.016, file: results/r1/r1_summary.json, key: [H2, "a12_rv:ifeval_prompt_strict", ci95, 0], shown: ["-0.016", "−0.016", "0.016"]}
+      rv_if_hi: {value: 0.017, file: results/r1/r1_summary.json, key: [H2, "a12_rv:ifeval_prompt_strict", ci95, 1], shown: ["+0.017"]}
+      rv_bf_lo: {value: -0.009, file: results/r1/r1_summary.json, key: [H2, "a12_rv:bfcl_nonlive_ast", ci95, 0], shown: ["-0.009", "−0.009", "0.009"]}
+      rv_bf_hi: {value: 0.006, file: results/r1/r1_summary.json, key: [H2, "a12_rv:bfcl_nonlive_ast", ci95, 1], shown: ["+0.006"]}
+      rv_irr: {value: -0.003, file: results/r1/r1_summary.json, key: [contrasts, "a12_rv_vs_warm:bfcl_irrelevance", delta], shown: ["-0.003", "−0.003", "0.003"]}
+      rv_irr_lo: {value: -0.020, file: results/r1/r1_summary.json, key: [contrasts, "a12_rv_vs_warm:bfcl_irrelevance", ci95, 0], shown: ["-0.020", "−0.020", "0.020"]}
+      rv_irr_hi: {value: 0.015, file: results/r1/r1_summary.json, key: [contrasts, "a12_rv_vs_warm:bfcl_irrelevance", ci95, 1], shown: ["+0.015"]}
+      rsc_if_lo: {value: -0.021, file: results/r1/r1_summary.json, key: [H2, "rsc:ifeval_prompt_strict", ci95, 0], shown: ["-0.021", "−0.021", "0.021"]}
+      rsc_if_hi: {value: 0.012, file: results/r1/r1_summary.json, key: [H2, "rsc:ifeval_prompt_strict", ci95, 1], shown: ["+0.012"]}
+      rsc_bf_lo: {value: -0.008, file: results/r1/r1_summary.json, key: [H2, "rsc:bfcl_nonlive_ast", ci95, 0], shown: ["-0.008", "−0.008", "0.008"]}
+      rsc_bf_hi: {value: 0.009, file: results/r1/r1_summary.json, key: [H2, "rsc:bfcl_nonlive_ast", ci95, 1], shown: ["+0.009"]}
+      rsc_irr: {value: 0.005, file: results/r1/r1_summary.json, key: [contrasts, "rsc_vs_warm:bfcl_irrelevance", delta], shown: ["+0.005"]}
+      rsc_irr_lo: {value: -0.009, file: results/r1/r1_summary.json, key: [contrasts, "rsc_vs_warm:bfcl_irrelevance", ci95, 0], shown: ["-0.009", "−0.009", "0.009"]}
+      rsc_irr_hi: {value: 0.021, file: results/r1/r1_summary.json, key: [contrasts, "rsc_vs_warm:bfcl_irrelevance", ci95, 1], shown: ["+0.021"]}
+      sft_if_lo: {value: -0.020, file: results/r1/r1_summary.json, key: [contrasts, "warm_vs_base:ifeval_prompt_strict", ci95, 0], shown: ["-0.020", "−0.020", "0.020"]}
+      sft_if_hi: {value: 0.043, file: results/r1/r1_summary.json, key: [contrasts, "warm_vs_base:ifeval_prompt_strict", ci95, 1], shown: ["+0.043"]}
+      sft_bf_lo: {value: -0.004, file: results/r1/r1_summary.json, key: [contrasts, "warm_vs_base:bfcl_nonlive_ast", ci95, 0], shown: ["-0.004", "−0.004", "0.004"]}
+      sft_bf_hi: {value: 0.048, file: results/r1/r1_summary.json, key: [contrasts, "warm_vs_base:bfcl_nonlive_ast", ci95, 1], shown: ["+0.048"]}
+      sft_irr: {value: -0.017, file: results/r1/r1_summary.json, key: [contrasts, "warm_vs_base:bfcl_irrelevance", delta], shown: ["-0.017", "−0.017", "0.017"]}
+      sft_irr_lo: {value: -0.050, file: results/r1/r1_summary.json, key: [contrasts, "warm_vs_base:bfcl_irrelevance", ci95, 0], shown: ["-0.050", "−0.050", "0.050"]}
+      sft_irr_hi: {value: 0.017, file: results/r1/r1_summary.json, key: [contrasts, "warm_vs_base:bfcl_irrelevance", ci95, 1], shown: ["+0.017"]}
+      most_negative: {value: -0.012, file: results/r1/r1_summary.json, key: [contrasts, "s1_pcstr_d_vs_warm:bfcl_live_irrelevance", delta], shown: ["-0.012", "−0.012", "0.012"]}
+    commit: null
+
+  - id: AD-DEV
+    statement: "Algorithm-discovery development (2 seeds, cw_dev, read cost 0.05; docs/research/algorithm_discovery/): GRPO 0.707 in both seeds (= warm start, no reads), no-std GRPO 0.833, AWRB 0.867. Development only; AD-C1 is the registered test."
+    status: supported
+    prereg: docs/research/algorithm_discovery/FINAL_ALGORITHM.md
+    eval: [results/ad/d1_summary.json]
+    numbers:
+      grpo: {value: 0.707, file: results/ad/d1_summary.json, key: [runs, ad_grpo_s0, vsc], shown: ["0.707"]}
+      nostd: {value: 0.833, file: results/ad/d1_summary.json, key: [runs, ad_nostd_s0, vsc], shown: ["0.833"]}
+      awrb: {value: 0.867, file: results/ad/d1_summary.json, key: [runs, ad_awrb_s0, vsc], shown: ["0.867"]}
+    commit: null
+
+  - id: ROI
+    statement: "Operational projection (docs/upgrade/ROI.md): measured per-fault outcome rates times cited assumptions, moderate scenario, cost per 1,000 workflows. Projections, not savings."
+    status: supported
+    prereg: null
+    eval: [results/roi/roi_model.json]
+    stats: scripts/roi_model.py
+    numbers:
+      sft: {value: 10261, file: results/roi/roi_model.json, key: [projections, "SFT agent (warm start)", moderate, cost_per_1000_ops, total_usd], shown: ["10,261", "$10,261"]}
+      rsc: {value: 2106, file: results/roi/roi_model.json, key: [projections, "Recovery-start GRPO (RSC)", moderate, cost_per_1000_ops, total_usd], shown: ["2,106", "$2,106"]}
+      scripted: {value: 120, file: results/roi/roi_model.json, key: [projections, "Hand-written database checks + fixed repair rules (scripted)", moderate, cost_per_1000_ops, total_usd], shown: ["$120"]}
+    commit: null
+
+  - id: A12-GATE0
+    statement: "Original A12 warm-start gate on proc_train (PREREGISTRATION_A12.md): sampled phantom read-back 0.31 (58 of 188); the informative-groups check failed, so Addendum 1 replaced the gate (A12-GATE)."
+    status: not_supported
+    prereg: PREREGISTRATION_A12.md
+    eval: [results/a12/gate.json]
+    numbers:
+      readback: {value: 0.31, file: results/a12/gate.json, key: [phantom_readback], shown: ["31%"]}
+      num: {value: 58, file: results/a12/gate.json, key: [phantom_readback_counts, 0], shown: ["58/188"]}
     commit: null
 
   # ---- Research lab (2026-11-24): numbers in paper/main_v2.tex and appendix_v2.tex; generated by scripts/lab/ledger_lab.py
@@ -881,4 +1023,5 @@ claims:
       grid_p_mid: {value: 0.4, file: PREREGISTRATION_LAB1.md, key: "p \\{0\\.1, 0\\.2, (0\\.4)", shown: ["0.4"]}
       warm_repair: {value: 0.9, file: docs/research/algorithm_discovery_v2/V2TB_PROTOCOL.md, key: "repair probability (0\\.9)", shown: ["0.9"]}
 
-allow: ["3.12", "2.11", "5.22", "1.7", "0.23", "0.8", "0.80", "0.30", "0.02", "0.5", "0.3"]  # 0.5, 0.3: registered H4 thresholds (PREREGISTRATION_A11 §9)
+allow: ["1,000", "10,000", "95%", "1e-4", "2e-5", "8,192", "2503.20783", "2508.11800", "62,892", "251,570", "87,180", "116,240", "2.0%", "0.90",  # write-up constants: sample sizes, hyperparameters, arXiv ids, task amounts, a cited survey range, a registered threshold
+       "3.12", "2.11", "5.22", "1.7", "0.23", "0.8", "0.80", "0.30", "0.02", "0.5", "0.3"]  # 0.5, 0.3: registered H4 thresholds (PREREGISTRATION_A11 §9)

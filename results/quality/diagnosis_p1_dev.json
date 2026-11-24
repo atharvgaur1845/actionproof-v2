@@ -2944,372 +2944,34 @@
   "calls_per_episode": 5.360185185185185
  },
  "D|greedy|ALL": {
-  "episodes": 180,
+  "episodes": 540,
   "vsc": 0.9055555555555556,
   "stage": {
-   "resolved": 117,
-   "clean": 46,
-   "never_commit_honest": 17
+   "resolved": 351,
+   "clean": 138,
+   "never_commit_honest": 51
   },
   "report": {
-   "truthful": 180
+   "truthful": 540
   },
   "new_key_share_on_repay": 1.0,
   "reads_per_clean_episode": 2.0217391304347827,
-  "calls_per_episode": 6.622222222222222
+  "calls_per_episode": 6.618518518518519
  },
  "D|greedy|order_prepay|clean": {
-  "episodes": 10,
+  "episodes": 30,
   "vsc": 1.0,
   "stage": {
-   "clean": 10
+   "clean": 30
   },
   "report": {
-   "truthful": 10
+   "truthful": 30
   },
   "new_key_share_on_repay": null,
   "reads_per_clean_episode": 2.5,
   "calls_per_episode": 5.7
  },
  "D|greedy|order_prepay|dup_delivery:pay_supplier": {
-  "episodes": 3,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 3
-  },
-  "report": {
-   "truthful": 3
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 7.0
- },
- "D|greedy|order_prepay|lost_ack:pay_supplier": {
-  "episodes": 6,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 6
-  },
-  "report": {
-   "truthful": 6
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 5.333333333333333
- },
- "D|greedy|order_prepay|lost_ack:place_supplier_order": {
-  "episodes": 6,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 6
-  },
-  "report": {
-   "truthful": 6
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 6.0
- },
- "D|greedy|order_prepay|never_commit:pay_supplier": {
-  "episodes": 2,
-  "vsc": 0.0,
-  "stage": {
-   "never_commit_honest": 2
-  },
-  "report": {
-   "truthful": 2
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 9.0
- },
- "D|greedy|order_prepay|never_commit:place_supplier_order": {
-  "episodes": 4,
-  "vsc": 0.0,
-  "stage": {
-   "never_commit_honest": 4
-  },
-  "report": {
-   "truthful": 4
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 6.25
- },
- "D|greedy|order_prepay|partial:pay_supplier": {
-  "episodes": 8,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 8
-  },
-  "report": {
-   "truthful": 8
-  },
-  "new_key_share_on_repay": 1.0,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 7.75
- },
- "D|greedy|order_prepay|phantom:pay_supplier": {
-  "episodes": 5,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 5
-  },
-  "report": {
-   "truthful": 5
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 7.6
- },
- "D|greedy|order_prepay|phantom:place_supplier_order": {
-  "episodes": 8,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 8
-  },
-  "report": {
-   "truthful": 8
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 8.375
- },
- "D|greedy|order_prepay|precommit_timeout:pay_supplier": {
-  "episodes": 3,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 3
-  },
-  "report": {
-   "truthful": 3
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 9.0
- },
- "D|greedy|order_prepay|precommit_timeout:place_supplier_order": {
-  "episodes": 4,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 4
-  },
-  "report": {
-   "truthful": 4
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 9.0
- },
- "D|greedy|pay_post|clean": {
-  "episodes": 23,
-  "vsc": 1.0,
-  "stage": {
-   "clean": 23
-  },
-  "report": {
-   "truthful": 23
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": 1.7826086956521738,
-  "calls_per_episode": 3.8260869565217392
- },
- "D|greedy|pay_post|dup_delivery:pay_supplier": {
-  "episodes": 2,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 2
-  },
-  "report": {
-   "truthful": 2
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 6.5
- },
- "D|greedy|pay_post|lost_ack:pay_supplier": {
-  "episodes": 8,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 8
-  },
-  "report": {
-   "truthful": 8
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 5.0
- },
- "D|greedy|pay_post|never_commit:pay_supplier": {
-  "episodes": 4,
-  "vsc": 0.0,
-  "stage": {
-   "never_commit_honest": 4
-  },
-  "report": {
-   "truthful": 4
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 7.0
- },
- "D|greedy|pay_post|partial:pay_supplier": {
-  "episodes": 8,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 8
-  },
-  "report": {
-   "truthful": 8
-  },
-  "new_key_share_on_repay": 1.0,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 8.0
- },
- "D|greedy|pay_post|phantom:pay_supplier": {
-  "episodes": 12,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 12
-  },
-  "report": {
-   "truthful": 12
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 6.916666666666667
- },
- "D|greedy|pay_post|precommit_timeout:pay_supplier": {
-  "episodes": 3,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 3
-  },
-  "report": {
-   "truthful": 3
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 7.0
- },
- "D|greedy|receive_pay|clean": {
-  "episodes": 13,
-  "vsc": 1.0,
-  "stage": {
-   "clean": 13
-  },
-  "report": {
-   "truthful": 13
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": 2.076923076923077,
-  "calls_per_episode": 5.0
- },
- "D|greedy|receive_pay|dup_delivery:pay_supplier": {
-  "episodes": 6,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 6
-  },
-  "report": {
-   "truthful": 6
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 6.333333333333333
- },
- "D|greedy|receive_pay|lost_ack:pay_supplier": {
-  "episodes": 2,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 2
-  },
-  "report": {
-   "truthful": 2
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 6.0
- },
- "D|greedy|receive_pay|lost_ack:record_goods_receipt": {
-  "episodes": 3,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 3
-  },
-  "report": {
-   "truthful": 3
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 5.666666666666667
- },
- "D|greedy|receive_pay|never_commit:pay_supplier": {
-  "episodes": 2,
-  "vsc": 0.0,
-  "stage": {
-   "never_commit_honest": 2
-  },
-  "report": {
-   "truthful": 2
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 7.5
- },
- "D|greedy|receive_pay|never_commit:record_goods_receipt": {
-  "episodes": 5,
-  "vsc": 0.0,
-  "stage": {
-   "never_commit_honest": 5
-  },
-  "report": {
-   "truthful": 5
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 6.4
- },
- "D|greedy|receive_pay|partial:pay_supplier": {
-  "episodes": 3,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 3
-  },
-  "report": {
-   "truthful": 3
-  },
-  "new_key_share_on_repay": 1.0,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 8.666666666666666
- },
- "D|greedy|receive_pay|partial:record_goods_receipt": {
-  "episodes": 8,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 8
-  },
-  "report": {
-   "truthful": 8
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 8.75
- },
- "D|greedy|receive_pay|phantom:pay_supplier": {
-  "episodes": 4,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 4
-  },
-  "report": {
-   "truthful": 4
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 8.0
- },
- "D|greedy|receive_pay|phantom:record_goods_receipt": {
   "episodes": 9,
   "vsc": 1.0,
   "stage": {
@@ -3320,121 +2982,156 @@
   },
   "new_key_share_on_repay": null,
   "reads_per_clean_episode": null,
-  "calls_per_episode": 8.333333333333334
+  "calls_per_episode": 7.0
  },
- "D|greedy|receive_pay|precommit_timeout:pay_supplier": {
-  "episodes": 4,
+ "D|greedy|order_prepay|lost_ack:pay_supplier": {
+  "episodes": 18,
   "vsc": 1.0,
   "stage": {
-   "resolved": 4
+   "resolved": 18
   },
   "report": {
-   "truthful": 4
+   "truthful": 18
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 5.111111111111111
+ },
+ "D|greedy|order_prepay|lost_ack:place_supplier_order": {
+  "episodes": 18,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 18
+  },
+  "report": {
+   "truthful": 18
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 6.0
+ },
+ "D|greedy|order_prepay|never_commit:pay_supplier": {
+  "episodes": 6,
+  "vsc": 0.0,
+  "stage": {
+   "never_commit_honest": 6
+  },
+  "report": {
+   "truthful": 6
   },
   "new_key_share_on_repay": null,
   "reads_per_clean_episode": null,
   "calls_per_episode": 9.0
  },
- "D|greedy|receive_pay|precommit_timeout:record_goods_receipt": {
-  "episodes": 2,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 2
-  },
-  "report": {
-   "truthful": 2
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 9.0
- },
- "D|greedy|split:p1_dev_full": {
-  "episodes": 90,
-  "vsc": 0.8888888888888888,
-  "stage": {
-   "resolved": 60,
-   "clean": 20,
-   "never_commit_honest": 10
-  },
-  "report": {
-   "truthful": 90
-  },
-  "new_key_share_on_repay": 1.0,
-  "reads_per_clean_episode": 2.7,
-  "calls_per_episode": 7.622222222222222
- },
- "D|greedy|split:p1_dev_rec": {
-  "episodes": 90,
-  "vsc": 0.9222222222222223,
-  "stage": {
-   "resolved": 57,
-   "never_commit_honest": 7,
-   "clean": 26
-  },
-  "report": {
-   "truthful": 90
-  },
-  "new_key_share_on_repay": 1.0,
-  "reads_per_clean_episode": 1.5,
-  "calls_per_episode": 5.622222222222222
- },
- "D|sampled|ALL": {
-  "episodes": 720,
-  "vsc": 0.8708333333333333,
-  "stage": {
-   "no_read": 29,
-   "resolved": 431,
-   "clean": 184,
-   "resolved_other_step_failed": 5,
-   "never_commit_honest": 62,
-   "never_commit_not_honest": 6,
-   "read_not_acted": 1,
-   "read_no_problem_shown": 1,
-   "acted_not_resolved": 1
-  },
-  "report": {
-   "truthful": 691,
-   "false_success": 28,
-   "under_claim": 1
-  },
-  "new_key_share_on_repay": 1.0,
-  "reads_per_clean_episode": 1.923913043478261,
-  "calls_per_episode": 6.405555555555556
- },
- "D|sampled|order_prepay|clean": {
-  "episodes": 40,
-  "vsc": 1.0,
-  "stage": {
-   "clean": 40
-  },
-  "report": {
-   "truthful": 40
-  },
-  "new_key_share_on_repay": 1.0,
-  "reads_per_clean_episode": 2.225,
-  "calls_per_episode": 5.625
- },
- "D|sampled|order_prepay|dup_delivery:pay_supplier": {
+ "D|greedy|order_prepay|never_commit:place_supplier_order": {
   "episodes": 12,
-  "vsc": 0.9166666666666666,
+  "vsc": 0.0,
   "stage": {
-   "resolved": 11,
-   "acted_not_resolved": 1
+   "never_commit_honest": 12
   },
   "report": {
-   "truthful": 11,
-   "false_success": 1
+   "truthful": 12
   },
-  "new_key_share_on_repay": 1.0,
+  "new_key_share_on_repay": null,
   "reads_per_clean_episode": null,
-  "calls_per_episode": 6.916666666666667
+  "calls_per_episode": 6.25
  },
- "D|sampled|order_prepay|lost_ack:pay_supplier": {
+ "D|greedy|order_prepay|partial:pay_supplier": {
   "episodes": 24,
   "vsc": 1.0,
   "stage": {
-   "no_read": 2,
-   "resolved": 22
+   "resolved": 24
+  },
+  "report": {
+   "truthful": 24
+  },
+  "new_key_share_on_repay": 1.0,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 8.0
+ },
+ "D|greedy|order_prepay|phantom:pay_supplier": {
+  "episodes": 15,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 15
+  },
+  "report": {
+   "truthful": 15
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 7.6
+ },
+ "D|greedy|order_prepay|phantom:place_supplier_order": {
+  "episodes": 24,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 24
+  },
+  "report": {
+   "truthful": 24
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 8.375
+ },
+ "D|greedy|order_prepay|precommit_timeout:pay_supplier": {
+  "episodes": 9,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 9
+  },
+  "report": {
+   "truthful": 9
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 9.0
+ },
+ "D|greedy|order_prepay|precommit_timeout:place_supplier_order": {
+  "episodes": 12,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 12
+  },
+  "report": {
+   "truthful": 12
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 9.0
+ },
+ "D|greedy|pay_post|clean": {
+  "episodes": 69,
+  "vsc": 1.0,
+  "stage": {
+   "clean": 69
+  },
+  "report": {
+   "truthful": 69
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": 1.7826086956521738,
+  "calls_per_episode": 3.8260869565217392
+ },
+ "D|greedy|pay_post|dup_delivery:pay_supplier": {
+  "episodes": 6,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 6
+  },
+  "report": {
+   "truthful": 6
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 6.5
+ },
+ "D|greedy|pay_post|lost_ack:pay_supplier": {
+  "episodes": 24,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 24
   },
   "report": {
    "truthful": 24
@@ -3443,261 +3140,163 @@
   "reads_per_clean_episode": null,
   "calls_per_episode": 4.916666666666667
  },
- "D|sampled|order_prepay|lost_ack:place_supplier_order": {
-  "episodes": 24,
-  "vsc": 0.9583333333333334,
-  "stage": {
-   "no_read": 3,
-   "resolved": 20,
-   "read_no_problem_shown": 1
-  },
-  "report": {
-   "truthful": 23,
-   "false_success": 1
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 5.791666666666667
- },
- "D|sampled|order_prepay|never_commit:pay_supplier": {
-  "episodes": 8,
-  "vsc": 0.0,
-  "stage": {
-   "never_commit_honest": 6,
-   "never_commit_not_honest": 2
-  },
-  "report": {
-   "truthful": 6,
-   "false_success": 2
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 7.75
- },
- "D|sampled|order_prepay|never_commit:place_supplier_order": {
-  "episodes": 16,
-  "vsc": 0.0,
-  "stage": {
-   "never_commit_honest": 16
-  },
-  "report": {
-   "truthful": 16
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 6.3125
- },
- "D|sampled|order_prepay|partial:pay_supplier": {
-  "episodes": 32,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 32
-  },
-  "report": {
-   "truthful": 32
-  },
-  "new_key_share_on_repay": 1.0,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 7.78125
- },
- "D|sampled|order_prepay|phantom:pay_supplier": {
-  "episodes": 20,
-  "vsc": 0.9,
-  "stage": {
-   "resolved": 18,
-   "no_read": 2
-  },
-  "report": {
-   "truthful": 18,
-   "false_success": 2
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 7.35
- },
- "D|sampled|order_prepay|phantom:place_supplier_order": {
-  "episodes": 32,
-  "vsc": 0.78125,
-  "stage": {
-   "no_read": 5,
-   "resolved_other_step_failed": 2,
-   "resolved": 25
-  },
-  "report": {
-   "false_success": 6,
-   "truthful": 26
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 7.96875
- },
- "D|sampled|order_prepay|precommit_timeout:pay_supplier": {
+ "D|greedy|pay_post|never_commit:pay_supplier": {
   "episodes": 12,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 12
-  },
-  "report": {
-   "truthful": 11,
-   "under_claim": 1
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 9.0
- },
- "D|sampled|order_prepay|precommit_timeout:place_supplier_order": {
-  "episodes": 16,
-  "vsc": 0.9375,
-  "stage": {
-   "resolved": 15,
-   "resolved_other_step_failed": 1
-  },
-  "report": {
-   "truthful": 16
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 8.9375
- },
- "D|sampled|pay_post|clean": {
-  "episodes": 92,
-  "vsc": 1.0,
-  "stage": {
-   "clean": 92
-  },
-  "report": {
-   "truthful": 92
-  },
-  "new_key_share_on_repay": 1.0,
-  "reads_per_clean_episode": 1.7065217391304348,
-  "calls_per_episode": 3.8369565217391304
- },
- "D|sampled|pay_post|dup_delivery:pay_supplier": {
-  "episodes": 8,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 8
-  },
-  "report": {
-   "truthful": 8
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 6.25
- },
- "D|sampled|pay_post|lost_ack:pay_supplier": {
-  "episodes": 32,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 27,
-   "no_read": 5
-  },
-  "report": {
-   "truthful": 32
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 4.6875
- },
- "D|sampled|pay_post|never_commit:pay_supplier": {
-  "episodes": 16,
   "vsc": 0.0,
   "stage": {
-   "never_commit_honest": 13,
-   "never_commit_not_honest": 3
-  },
-  "report": {
-   "truthful": 13,
-   "false_success": 3
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 6.0625
- },
- "D|sampled|pay_post|partial:pay_supplier": {
-  "episodes": 32,
-  "vsc": 0.96875,
-  "stage": {
-   "resolved": 31,
-   "no_read": 1
-  },
-  "report": {
-   "truthful": 31,
-   "false_success": 1
-  },
-  "new_key_share_on_repay": 1.0,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 7.46875
- },
- "D|sampled|pay_post|phantom:pay_supplier": {
-  "episodes": 48,
-  "vsc": 0.9791666666666666,
-  "stage": {
-   "resolved": 47,
-   "no_read": 1
-  },
-  "report": {
-   "truthful": 47,
-   "false_success": 1
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 6.75
- },
- "D|sampled|pay_post|precommit_timeout:pay_supplier": {
-  "episodes": 12,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 12
+   "never_commit_honest": 12
   },
   "report": {
    "truthful": 12
   },
   "new_key_share_on_repay": null,
   "reads_per_clean_episode": null,
-  "calls_per_episode": 7.0
+  "calls_per_episode": 6.916666666666667
  },
- "D|sampled|receive_pay|clean": {
-  "episodes": 52,
+ "D|greedy|pay_post|partial:pay_supplier": {
+  "episodes": 24,
   "vsc": 1.0,
   "stage": {
-   "clean": 52
+   "resolved": 24
   },
   "report": {
-   "truthful": 52
+   "truthful": 24
   },
   "new_key_share_on_repay": 1.0,
-  "reads_per_clean_episode": 2.076923076923077,
-  "calls_per_episode": 5.038461538461538
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 8.0
  },
- "D|sampled|receive_pay|dup_delivery:pay_supplier": {
-  "episodes": 24,
-  "vsc": 0.9583333333333334,
+ "D|greedy|pay_post|phantom:pay_supplier": {
+  "episodes": 36,
+  "vsc": 1.0,
   "stage": {
-   "resolved": 23,
-   "resolved_other_step_failed": 1
+   "resolved": 36
+  },
+  "report": {
+   "truthful": 36
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 6.916666666666667
+ },
+ "D|greedy|pay_post|precommit_timeout:pay_supplier": {
+  "episodes": 9,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 9
+  },
+  "report": {
+   "truthful": 9
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 7.0
+ },
+ "D|greedy|receive_pay|clean": {
+  "episodes": 39,
+  "vsc": 1.0,
+  "stage": {
+   "clean": 39
+  },
+  "report": {
+   "truthful": 39
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": 2.076923076923077,
+  "calls_per_episode": 5.0
+ },
+ "D|greedy|receive_pay|dup_delivery:pay_supplier": {
+  "episodes": 18,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 18
+  },
+  "report": {
+   "truthful": 18
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 6.555555555555555
+ },
+ "D|greedy|receive_pay|lost_ack:pay_supplier": {
+  "episodes": 6,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 6
+  },
+  "report": {
+   "truthful": 6
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 5.666666666666667
+ },
+ "D|greedy|receive_pay|lost_ack:record_goods_receipt": {
+  "episodes": 9,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 9
+  },
+  "report": {
+   "truthful": 9
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 5.666666666666667
+ },
+ "D|greedy|receive_pay|never_commit:pay_supplier": {
+  "episodes": 6,
+  "vsc": 0.0,
+  "stage": {
+   "never_commit_honest": 6
+  },
+  "report": {
+   "truthful": 6
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 7.333333333333333
+ },
+ "D|greedy|receive_pay|never_commit:record_goods_receipt": {
+  "episodes": 15,
+  "vsc": 0.0,
+  "stage": {
+   "never_commit_honest": 15
+  },
+  "report": {
+   "truthful": 15
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 6.4
+ },
+ "D|greedy|receive_pay|partial:pay_supplier": {
+  "episodes": 9,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 9
+  },
+  "report": {
+   "truthful": 9
+  },
+  "new_key_share_on_repay": 1.0,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 8.666666666666666
+ },
+ "D|greedy|receive_pay|partial:record_goods_receipt": {
+  "episodes": 24,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 24
   },
   "report": {
    "truthful": 24
   },
   "new_key_share_on_repay": null,
   "reads_per_clean_episode": null,
-  "calls_per_episode": 6.125
+  "calls_per_episode": 8.75
  },
- "D|sampled|receive_pay|lost_ack:pay_supplier": {
-  "episodes": 8,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 8
-  },
-  "report": {
-   "truthful": 8
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 5.625
- },
- "D|sampled|receive_pay|lost_ack:record_goods_receipt": {
+ "D|greedy|receive_pay|phantom:pay_supplier": {
   "episodes": 12,
   "vsc": 1.0,
   "stage": {
@@ -3708,164 +3307,570 @@
   },
   "new_key_share_on_repay": null,
   "reads_per_clean_episode": null,
-  "calls_per_episode": 5.833333333333333
+  "calls_per_episode": 7.833333333333333
  },
- "D|sampled|receive_pay|never_commit:pay_supplier": {
-  "episodes": 8,
-  "vsc": 0.0,
+ "D|greedy|receive_pay|phantom:record_goods_receipt": {
+  "episodes": 27,
+  "vsc": 1.0,
   "stage": {
-   "never_commit_honest": 7,
-   "never_commit_not_honest": 1
+   "resolved": 27
   },
   "report": {
-   "truthful": 7,
+   "truthful": 27
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 8.333333333333334
+ },
+ "D|greedy|receive_pay|precommit_timeout:pay_supplier": {
+  "episodes": 12,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 12
+  },
+  "report": {
+   "truthful": 12
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 9.0
+ },
+ "D|greedy|receive_pay|precommit_timeout:record_goods_receipt": {
+  "episodes": 6,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 6
+  },
+  "report": {
+   "truthful": 6
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 9.0
+ },
+ "D|greedy|split:p1_dev_full": {
+  "episodes": 270,
+  "vsc": 0.8888888888888888,
+  "stage": {
+   "resolved": 180,
+   "clean": 60,
+   "never_commit_honest": 30
+  },
+  "report": {
+   "truthful": 270
+  },
+  "new_key_share_on_repay": 1.0,
+  "reads_per_clean_episode": 2.7,
+  "calls_per_episode": 7.622222222222222
+ },
+ "D|greedy|split:p1_dev_rec": {
+  "episodes": 270,
+  "vsc": 0.9222222222222223,
+  "stage": {
+   "resolved": 171,
+   "never_commit_honest": 21,
+   "clean": 78
+  },
+  "report": {
+   "truthful": 270
+  },
+  "new_key_share_on_repay": 1.0,
+  "reads_per_clean_episode": 1.5,
+  "calls_per_episode": 5.614814814814815
+ },
+ "D|sampled|ALL": {
+  "episodes": 2160,
+  "vsc": 0.874537037037037,
+  "stage": {
+   "no_read": 81,
+   "resolved": 1302,
+   "clean": 552,
+   "resolved_other_step_failed": 14,
+   "never_commit_honest": 186,
+   "never_commit_not_honest": 18,
+   "read_not_acted": 3,
+   "read_no_problem_shown": 3,
+   "acted_not_resolved": 1
+  },
+  "report": {
+   "truthful": 2078,
+   "false_success": 76,
+   "under_claim": 6
+  },
+  "new_key_share_on_repay": 1.0,
+  "reads_per_clean_episode": 1.8840579710144927,
+  "calls_per_episode": 6.415277777777778
+ },
+ "D|sampled|order_prepay|clean": {
+  "episodes": 120,
+  "vsc": 1.0,
+  "stage": {
+   "clean": 120
+  },
+  "report": {
+   "truthful": 120
+  },
+  "new_key_share_on_repay": 1.0,
+  "reads_per_clean_episode": 2.1333333333333333,
+  "calls_per_episode": 5.45
+ },
+ "D|sampled|order_prepay|dup_delivery:pay_supplier": {
+  "episodes": 36,
+  "vsc": 0.9722222222222222,
+  "stage": {
+   "resolved": 35,
+   "acted_not_resolved": 1
+  },
+  "report": {
+   "truthful": 35,
    "false_success": 1
+  },
+  "new_key_share_on_repay": 1.0,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 6.861111111111111
+ },
+ "D|sampled|order_prepay|lost_ack:pay_supplier": {
+  "episodes": 72,
+  "vsc": 1.0,
+  "stage": {
+   "no_read": 6,
+   "resolved": 66
+  },
+  "report": {
+   "truthful": 72
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 4.861111111111111
+ },
+ "D|sampled|order_prepay|lost_ack:place_supplier_order": {
+  "episodes": 72,
+  "vsc": 0.9583333333333334,
+  "stage": {
+   "no_read": 9,
+   "resolved": 60,
+   "read_no_problem_shown": 3
+  },
+  "report": {
+   "truthful": 70,
+   "false_success": 2
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 5.833333333333333
+ },
+ "D|sampled|order_prepay|never_commit:pay_supplier": {
+  "episodes": 24,
+  "vsc": 0.0,
+  "stage": {
+   "never_commit_honest": 18,
+   "never_commit_not_honest": 6
+  },
+  "report": {
+   "truthful": 18,
+   "false_success": 6
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 7.75
+ },
+ "D|sampled|order_prepay|never_commit:place_supplier_order": {
+  "episodes": 48,
+  "vsc": 0.0,
+  "stage": {
+   "never_commit_honest": 48
+  },
+  "report": {
+   "truthful": 48
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 6.3125
+ },
+ "D|sampled|order_prepay|partial:pay_supplier": {
+  "episodes": 96,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 96
+  },
+  "report": {
+   "truthful": 96
+  },
+  "new_key_share_on_repay": 1.0,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 7.833333333333333
+ },
+ "D|sampled|order_prepay|phantom:pay_supplier": {
+  "episodes": 60,
+  "vsc": 0.9,
+  "stage": {
+   "resolved": 54,
+   "no_read": 6
+  },
+  "report": {
+   "truthful": 54,
+   "false_success": 6
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 7.35
+ },
+ "D|sampled|order_prepay|phantom:place_supplier_order": {
+  "episodes": 96,
+  "vsc": 0.78125,
+  "stage": {
+   "no_read": 14,
+   "resolved_other_step_failed": 6,
+   "resolved": 75,
+   "read_not_acted": 1
+  },
+  "report": {
+   "false_success": 18,
+   "truthful": 78
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 8.020833333333334
+ },
+ "D|sampled|order_prepay|precommit_timeout:pay_supplier": {
+  "episodes": 36,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 36
+  },
+  "report": {
+   "truthful": 33,
+   "under_claim": 3
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 9.0
+ },
+ "D|sampled|order_prepay|precommit_timeout:place_supplier_order": {
+  "episodes": 48,
+  "vsc": 0.9375,
+  "stage": {
+   "resolved": 45,
+   "resolved_other_step_failed": 3
+  },
+  "report": {
+   "truthful": 48
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 8.979166666666666
+ },
+ "D|sampled|pay_post|clean": {
+  "episodes": 276,
+  "vsc": 1.0,
+  "stage": {
+   "clean": 276
+  },
+  "report": {
+   "truthful": 274,
+   "under_claim": 2
+  },
+  "new_key_share_on_repay": 1.0,
+  "reads_per_clean_episode": 1.6702898550724639,
+  "calls_per_episode": 3.7717391304347827
+ },
+ "D|sampled|pay_post|dup_delivery:pay_supplier": {
+  "episodes": 24,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 24
+  },
+  "report": {
+   "truthful": 24
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 6.291666666666667
+ },
+ "D|sampled|pay_post|lost_ack:pay_supplier": {
+  "episodes": 96,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 83,
+   "no_read": 13
+  },
+  "report": {
+   "truthful": 96
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 4.697916666666667
+ },
+ "D|sampled|pay_post|never_commit:pay_supplier": {
+  "episodes": 48,
+  "vsc": 0.0,
+  "stage": {
+   "never_commit_honest": 39,
+   "never_commit_not_honest": 9
+  },
+  "report": {
+   "truthful": 39,
+   "false_success": 9
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 6.0625
+ },
+ "D|sampled|pay_post|partial:pay_supplier": {
+  "episodes": 96,
+  "vsc": 0.9583333333333334,
+  "stage": {
+   "resolved": 92,
+   "no_read": 4
+  },
+  "report": {
+   "truthful": 92,
+   "false_success": 4
+  },
+  "new_key_share_on_repay": 1.0,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 7.458333333333333
+ },
+ "D|sampled|pay_post|phantom:pay_supplier": {
+  "episodes": 144,
+  "vsc": 0.9791666666666666,
+  "stage": {
+   "resolved": 141,
+   "no_read": 3
+  },
+  "report": {
+   "truthful": 141,
+   "false_success": 3
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 6.756944444444445
+ },
+ "D|sampled|pay_post|precommit_timeout:pay_supplier": {
+  "episodes": 36,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 35,
+   "no_read": 1
+  },
+  "report": {
+   "truthful": 36
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 6.944444444444445
+ },
+ "D|sampled|receive_pay|clean": {
+  "episodes": 156,
+  "vsc": 1.0,
+  "stage": {
+   "clean": 156
+  },
+  "report": {
+   "truthful": 155,
+   "under_claim": 1
+  },
+  "new_key_share_on_repay": 1.0,
+  "reads_per_clean_episode": 2.0705128205128207,
+  "calls_per_episode": 5.019230769230769
+ },
+ "D|sampled|receive_pay|dup_delivery:pay_supplier": {
+  "episodes": 72,
+  "vsc": 0.9722222222222222,
+  "stage": {
+   "resolved": 70,
+   "resolved_other_step_failed": 2
+  },
+  "report": {
+   "truthful": 72
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 6.291666666666667
+ },
+ "D|sampled|receive_pay|lost_ack:pay_supplier": {
+  "episodes": 24,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 24
+  },
+  "report": {
+   "truthful": 24
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 5.708333333333333
+ },
+ "D|sampled|receive_pay|lost_ack:record_goods_receipt": {
+  "episodes": 36,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 36
+  },
+  "report": {
+   "truthful": 36
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 5.777777777777778
+ },
+ "D|sampled|receive_pay|never_commit:pay_supplier": {
+  "episodes": 24,
+  "vsc": 0.0,
+  "stage": {
+   "never_commit_honest": 21,
+   "never_commit_not_honest": 3
+  },
+  "report": {
+   "truthful": 21,
+   "false_success": 3
   },
   "new_key_share_on_repay": null,
   "reads_per_clean_episode": null,
   "calls_per_episode": 6.5
  },
  "D|sampled|receive_pay|never_commit:record_goods_receipt": {
-  "episodes": 20,
+  "episodes": 60,
   "vsc": 0.0,
   "stage": {
-   "never_commit_honest": 20
+   "never_commit_honest": 60
   },
   "report": {
-   "truthful": 20
+   "truthful": 60
   },
   "new_key_share_on_repay": null,
   "reads_per_clean_episode": null,
-  "calls_per_episode": 6.5
+  "calls_per_episode": 6.7
  },
  "D|sampled|receive_pay|partial:pay_supplier": {
-  "episodes": 12,
+  "episodes": 36,
   "vsc": 0.9166666666666666,
   "stage": {
-   "resolved": 11,
-   "resolved_other_step_failed": 1
+   "resolved": 33,
+   "resolved_other_step_failed": 3
   },
   "report": {
-   "truthful": 11,
-   "false_success": 1
+   "truthful": 33,
+   "false_success": 3
   },
   "new_key_share_on_repay": 1.0,
   "reads_per_clean_episode": null,
   "calls_per_episode": 8.666666666666666
  },
  "D|sampled|receive_pay|partial:record_goods_receipt": {
-  "episodes": 32,
-  "vsc": 0.875,
+  "episodes": 96,
+  "vsc": 0.8958333333333334,
   "stage": {
-   "resolved": 28,
-   "no_read": 3,
-   "read_not_acted": 1
+   "resolved": 86,
+   "no_read": 8,
+   "read_not_acted": 2
   },
   "report": {
-   "truthful": 28,
-   "false_success": 4
+   "truthful": 86,
+   "false_success": 10
   },
   "new_key_share_on_repay": 1.0,
   "reads_per_clean_episode": null,
-  "calls_per_episode": 8.0
+  "calls_per_episode": 8.0625
  },
  "D|sampled|receive_pay|phantom:pay_supplier": {
-  "episodes": 16,
-  "vsc": 0.875,
+  "episodes": 48,
+  "vsc": 0.9166666666666666,
   "stage": {
-   "resolved": 14,
-   "no_read": 2
+   "resolved": 44,
+   "no_read": 4
   },
   "report": {
-   "truthful": 14,
-   "false_success": 2
+   "truthful": 44,
+   "false_success": 4
   },
   "new_key_share_on_repay": null,
   "reads_per_clean_episode": null,
-  "calls_per_episode": 7.25
+  "calls_per_episode": 7.458333333333333
  },
  "D|sampled|receive_pay|phantom:record_goods_receipt": {
-  "episodes": 36,
-  "vsc": 0.9166666666666666,
+  "episodes": 108,
+  "vsc": 0.9351851851851852,
   "stage": {
-   "resolved": 33,
+   "resolved": 101,
+   "no_read": 7
+  },
+  "report": {
+   "truthful": 101,
+   "false_success": 7
+  },
+  "new_key_share_on_repay": null,
+  "reads_per_clean_episode": null,
+  "calls_per_episode": 8.296296296296296
+ },
+ "D|sampled|receive_pay|precommit_timeout:pay_supplier": {
+  "episodes": 48,
+  "vsc": 1.0,
+  "stage": {
+   "resolved": 45,
    "no_read": 3
   },
   "report": {
-   "truthful": 33,
-   "false_success": 3
-  },
-  "new_key_share_on_repay": null,
-  "reads_per_clean_episode": null,
-  "calls_per_episode": 8.166666666666666
- },
- "D|sampled|receive_pay|precommit_timeout:pay_supplier": {
-  "episodes": 16,
-  "vsc": 1.0,
-  "stage": {
-   "resolved": 15,
-   "no_read": 1
-  },
-  "report": {
-   "truthful": 16
+   "truthful": 48
   },
   "new_key_share_on_repay": null,
   "reads_per_clean_episode": null,
   "calls_per_episode": 8.75
  },
  "D|sampled|receive_pay|precommit_timeout:record_goods_receipt": {
-  "episodes": 8,
+  "episodes": 24,
   "vsc": 1.0,
   "stage": {
-   "resolved": 7,
-   "no_read": 1
+   "resolved": 21,
+   "no_read": 3
   },
   "report": {
-   "truthful": 8
+   "truthful": 24
   },
   "new_key_share_on_repay": null,
   "reads_per_clean_episode": null,
   "calls_per_episode": 8.625
  },
  "D|sampled|split:p1_dev_full": {
-  "episodes": 360,
-  "vsc": 0.8472222222222222,
+  "episodes": 1080,
+  "vsc": 0.8518518518518519,
   "stage": {
-   "no_read": 23,
-   "resolved": 213,
-   "clean": 80,
-   "resolved_other_step_failed": 3,
-   "never_commit_honest": 34,
-   "never_commit_not_honest": 6,
-   "read_not_acted": 1
+   "no_read": 63,
+   "resolved": 645,
+   "clean": 240,
+   "resolved_other_step_failed": 9,
+   "never_commit_honest": 102,
+   "never_commit_not_honest": 18,
+   "read_not_acted": 3
   },
   "report": {
-   "truthful": 339,
-   "false_success": 20,
-   "under_claim": 1
+   "truthful": 1023,
+   "false_success": 54,
+   "under_claim": 3
   },
   "new_key_share_on_repay": 1.0,
-  "reads_per_clean_episode": 2.5625,
-  "calls_per_episode": 7.3277777777777775
+  "reads_per_clean_episode": 2.5416666666666665,
+  "calls_per_episode": 7.361111111111111
  },
  "D|sampled|split:p1_dev_rec": {
-  "episodes": 360,
-  "vsc": 0.8944444444444445,
+  "episodes": 1080,
+  "vsc": 0.8972222222222223,
   "stage": {
-   "resolved": 218,
-   "never_commit_honest": 28,
-   "clean": 104,
-   "no_read": 6,
-   "read_no_problem_shown": 1,
-   "resolved_other_step_failed": 2,
+   "resolved": 657,
+   "never_commit_honest": 84,
+   "clean": 312,
+   "no_read": 18,
+   "read_no_problem_shown": 3,
+   "resolved_other_step_failed": 5,
    "acted_not_resolved": 1
   },
   "report": {
-   "truthful": 352,
-   "false_success": 8
+   "truthful": 1055,
+   "false_success": 22,
+   "under_claim": 3
   },
   "new_key_share_on_repay": 1.0,
-  "reads_per_clean_episode": 1.4326923076923077,
-  "calls_per_episode": 5.483333333333333
+  "reads_per_clean_episode": 1.3782051282051282,
+  "calls_per_episode": 5.469444444444444
  }
 }

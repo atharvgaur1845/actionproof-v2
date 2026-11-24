@@ -1,5 +1,7 @@
 # ActionProof: what the reward can see decides whether a tool agent checks its writes
 
+> **Superseded (2026-11-24).** This is an earlier draft, kept for history. The current write-up is `docs/submission/WRITEUP.md`, whose numbers are enforced by `scripts/s2_numcheck.py`. Numbers here are not maintained.
+
 *Draft for the HF Article. Rule for editing: every number traces to a file in `results/`. Anything marked `[[pending: …]]` is not written until the result exists. Track 3 (Agentic Fine-tuning), toolkit chain AgentTune → AuditKIT (+ CuratorKIT).*
 
 **Problem statement addressed:** reward design and reward-hacking defences, in a business-workflow tool agent.

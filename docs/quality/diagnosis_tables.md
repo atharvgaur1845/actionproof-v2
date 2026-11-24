@@ -2,29 +2,29 @@
 
 ## P1 dev, sampled: failure stage of each episode
 
-Episodes per arm: {'A': 2160, 'B': 2160, 'C': 2160, 'D': 720}. Every arm pools its available seeds. An arm with fewer episodes has seeds still running.
+Episodes per arm: {'A': 2160, 'B': 2160, 'C': 2160, 'D': 2160}. Every arm pools its available seeds. An arm with fewer episodes has seeds still running.
 
 | Stage (share of episodes) | A | B | C | D |
 |---|---|---|---|---|
 | clean | 0.257 | 0.257 | 0.256 | 0.256 |
-| resolved | 0.437 | 0.423 | 0.601 | 0.599 |
-| no_read | 0.102 | 0.102 | 0.010 | 0.040 |
+| resolved | 0.437 | 0.423 | 0.601 | 0.603 |
+| no_read | 0.102 | 0.102 | 0.010 | 0.037 |
 | read_no_problem_shown | 0.005 | 0.005 | 0.000 | 0.001 |
 | read_not_acted | 0.048 | 0.030 | 0.005 | 0.001 |
-| acted_not_resolved | 0.046 | 0.074 | 0.021 | 0.001 |
-| resolved_other_step_failed | 0.011 | 0.014 | 0.013 | 0.007 |
+| acted_not_resolved | 0.046 | 0.074 | 0.021 | 0.000 |
+| resolved_other_step_failed | 0.011 | 0.014 | 0.013 | 0.006 |
 | never_commit_honest | 0.066 | 0.065 | 0.092 | 0.086 |
 | never_commit_not_honest | 0.029 | 0.029 | 0.003 | 0.008 |
-| report: truthful | 0.811 | 0.798 | 0.954 | 0.960 |
-| report: false_success | 0.169 | 0.187 | 0.032 | 0.039 |
-| report: under_claim | 0.000 | 0.000 | 0.003 | 0.001 |
+| report: truthful | 0.811 | 0.798 | 0.954 | 0.962 |
+| report: false_success | 0.169 | 0.187 | 0.032 | 0.035 |
+| report: under_claim | 0.000 | 0.000 | 0.003 | 0.003 |
 | report: no_report | 0.019 | 0.016 | 0.011 | 0.000 |
-| VSC | 0.731 | 0.719 | 0.856 | 0.871 |
-| episodes | 2160 | 2160 | 2160 | 720 |
+| VSC | 0.731 | 0.719 | 0.856 | 0.875 |
+| episodes | 2160 | 2160 | 2160 | 2160 |
 
 ## P1 dev, greedy: failure stage of each episode
 
-Episodes per arm: {'A': 540, 'B': 540, 'C': 540, 'D': 180}. Every arm pools its available seeds. An arm with fewer episodes has seeds still running.
+Episodes per arm: {'A': 540, 'B': 540, 'C': 540, 'D': 540}. Every arm pools its available seeds. An arm with fewer episodes has seeds still running.
 
 | Stage (share of episodes) | A | B | C | D |
 |---|---|---|---|---|
@@ -42,7 +42,7 @@ Episodes per arm: {'A': 540, 'B': 540, 'C': 540, 'D': 180}. Every arm pools its 
 | report: under_claim | 0.000 | 0.000 | 0.000 | 0.000 |
 | report: no_report | 0.000 | 0.000 | 0.000 | 0.000 |
 | VSC | 0.881 | 0.822 | 0.906 | 0.906 |
-| episodes | 540 | 540 | 540 | 180 |
+| episodes | 540 | 540 | 540 | 540 |
 
 ### P1 dev, arm A, sampled: the twelve cells with the most failures
 
@@ -80,57 +80,57 @@ Episodes per arm: {'A': 540, 'B': 540, 'C': 540, 'D': 180}. Every arm pools its 
 
 ## P1 test, sampled: failure stage of each episode
 
-Episodes per arm: {'A': 5400, 'B': 5400, 'C': 5400, 'D': 1800}. Every arm pools its available seeds. An arm with fewer episodes has seeds still running.
+Episodes per arm: {'A': 5400, 'B': 5400, 'C': 5400, 'D': 5400}. Every arm pools its available seeds. An arm with fewer episodes has seeds still running.
 
 | Stage (share of episodes) | A | B | C | D |
 |---|---|---|---|---|
-| clean | 0.207 | 0.210 | 0.179 | 0.176 |
+| clean | 0.207 | 0.210 | 0.179 | 0.180 |
 | resolved | 0.330 | 0.299 | 0.630 | 0.659 |
-| no_read | 0.138 | 0.136 | 0.010 | 0.048 |
-| read_no_problem_shown | 0.017 | 0.018 | 0.010 | 0.008 |
+| no_read | 0.138 | 0.136 | 0.010 | 0.045 |
+| read_no_problem_shown | 0.017 | 0.018 | 0.010 | 0.007 |
 | read_not_acted | 0.117 | 0.067 | 0.024 | 0.019 |
-| acted_not_resolved | 0.089 | 0.168 | 0.054 | 0.006 |
+| acted_not_resolved | 0.089 | 0.168 | 0.054 | 0.007 |
 | resolved_other_step_failed | 0.042 | 0.041 | 0.034 | 0.024 |
 | never_commit_honest | 0.048 | 0.049 | 0.057 | 0.056 |
 | never_commit_not_honest | 0.012 | 0.011 | 0.003 | 0.004 |
-| report: truthful | 0.588 | 0.555 | 0.856 | 0.889 |
-| report: false_success | 0.385 | 0.420 | 0.129 | 0.106 |
-| report: under_claim | 0.001 | 0.001 | 0.003 | 0.002 |
+| report: truthful | 0.588 | 0.555 | 0.856 | 0.884 |
+| report: false_success | 0.385 | 0.420 | 0.129 | 0.110 |
+| report: under_claim | 0.001 | 0.001 | 0.003 | 0.003 |
 | report: no_report | 0.025 | 0.024 | 0.012 | 0.003 |
-| VSC | 0.518 | 0.488 | 0.778 | 0.826 |
-| episodes | 5400 | 5400 | 5400 | 1800 |
+| VSC | 0.518 | 0.488 | 0.778 | 0.823 |
+| episodes | 5400 | 5400 | 5400 | 5400 |
 
 ### P1 test, sampled: VSC per split
 
 | Split | A | B | C | D |
 |---|---|---|---|---|
-| p1_test_full | 0.714 | 0.700 | 0.808 | 0.815 |
-| p1_test_pp | 0.322 | 0.206 | 0.863 | 0.939 |
+| p1_test_full | 0.714 | 0.700 | 0.808 | 0.813 |
+| p1_test_pp | 0.322 | 0.206 | 0.863 | 0.931 |
 | p1_test_rec | 0.630 | 0.622 | 0.857 | 0.917 |
-| p1_test_wf4 | 0.176 | 0.185 | 0.403 | 0.496 |
-| p1_test_combo | 0.539 | 0.521 | 0.806 | 0.825 |
+| p1_test_wf4 | 0.176 | 0.185 | 0.403 | 0.486 |
+| p1_test_combo | 0.539 | 0.521 | 0.806 | 0.829 |
 
 ## P1 test, greedy: failure stage of each episode
 
-Episodes per arm: {'A': 1350, 'B': 1350, 'C': 1350, 'D': 450}. Every arm pools its available seeds. An arm with fewer episodes has seeds still running.
+Episodes per arm: {'A': 1350, 'B': 1350, 'C': 1350, 'D': 1350}. Every arm pools its available seeds. An arm with fewer episodes has seeds still running.
 
 | Stage (share of episodes) | A | B | C | D |
 |---|---|---|---|---|
-| clean | 0.223 | 0.223 | 0.170 | 0.147 |
-| resolved | 0.484 | 0.347 | 0.709 | 0.747 |
+| clean | 0.223 | 0.223 | 0.170 | 0.153 |
+| resolved | 0.484 | 0.347 | 0.709 | 0.742 |
 | no_read | 0.044 | 0.044 | 0.001 | 0.000 |
 | read_no_problem_shown | 0.018 | 0.018 | 0.007 | 0.000 |
-| read_not_acted | 0.104 | 0.023 | 0.008 | 0.027 |
-| acted_not_resolved | 0.016 | 0.240 | 0.010 | 0.011 |
-| resolved_other_step_failed | 0.051 | 0.046 | 0.035 | 0.009 |
+| read_not_acted | 0.104 | 0.023 | 0.008 | 0.022 |
+| acted_not_resolved | 0.016 | 0.240 | 0.010 | 0.010 |
+| resolved_other_step_failed | 0.051 | 0.046 | 0.035 | 0.013 |
 | never_commit_honest | 0.060 | 0.060 | 0.060 | 0.060 |
 | never_commit_not_honest | 0.000 | 0.000 | 0.000 | 0.000 |
-| report: truthful | 0.727 | 0.588 | 0.916 | 0.953 |
-| report: false_success | 0.273 | 0.412 | 0.084 | 0.047 |
-| report: under_claim | 0.000 | 0.000 | 0.000 | 0.000 |
+| report: truthful | 0.727 | 0.588 | 0.916 | 0.948 |
+| report: false_success | 0.273 | 0.412 | 0.084 | 0.051 |
+| report: under_claim | 0.000 | 0.000 | 0.000 | 0.001 |
 | report: no_report | 0.000 | 0.000 | 0.000 | 0.000 |
-| VSC | 0.666 | 0.528 | 0.856 | 0.893 |
-| episodes | 1350 | 1350 | 1350 | 450 |
+| VSC | 0.666 | 0.528 | 0.856 | 0.889 |
+| episodes | 1350 | 1350 | 1350 | 1350 |
 
 ### P1 test, greedy: VSC per split
 
@@ -139,7 +139,7 @@ Episodes per arm: {'A': 1350, 'B': 1350, 'C': 1350, 'D': 450}. Every arm pools i
 | p1_test_full | 0.831 | 0.797 | 0.842 | 0.842 |
 | p1_test_pp | 0.648 | 0.181 | 1.000 | 1.000 |
 | p1_test_rec | 0.828 | 0.700 | 0.931 | 0.933 |
-| p1_test_wf4 | 0.017 | 0.022 | 0.494 | 0.767 |
+| p1_test_wf4 | 0.017 | 0.022 | 0.494 | 0.733 |
 | p1_test_combo | 0.689 | 0.672 | 0.878 | 0.883 |
 
 ### P1 test, arm A, sampled: the twelve cells with the most failures

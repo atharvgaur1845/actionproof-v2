@@ -27,7 +27,8 @@ def stage_table(d: dict, arms: list[str], mode: str) -> str:
     for r in ("truthful", "false_success", "under_claim", "no_report"):
         rows.append(f"| report: {r} | " + " | ".join(pct(d[f'{a}|{mode}|ALL']['report'].get(r, 0), d[f'{a}|{mode}|ALL']['episodes'])
                                                  for a in arms) + " |")
-    rows.append("| VSC | " + " | ".join(f"{d[f'{a}|{mode}|ALL']['vsc']:.3f}" for a in arms) + " |")
+    rows.append("| goal met (state only) | " + " | ".join(f"{d[f'{a}|{mode}|ALL'].get('goal_met', float('nan')):.3f}" for a in arms) + " |")
+    rows.append("| VSC (goal met and truthful report) | " + " | ".join(f"{d[f'{a}|{mode}|ALL']['vsc']:.3f}" for a in arms) + " |")
     rows.append("| episodes | " + " | ".join(str(d[f'{a}|{mode}|ALL']['episodes']) for a in arms) + " |")
     return "\n".join(rows)
 
@@ -63,7 +64,7 @@ def main() -> None:
         for mode in ("sampled", "greedy"):
             n = {a: d[f"{a}|{mode}|ALL"]["episodes"] for a in arms}
             out += [f"## P1 {ph}, {mode}: failure stage of each episode", "",
-                    f"Episodes per arm: {n}. Every arm pools its available seeds. An arm with fewer episodes has seeds still running.", "",
+                    f"Episodes per arm: {n}, pooled over seeds and samples (descriptive). The registered statistics are in `results/p1/p1_summary.json`.", "",
                     stage_table(d, arms, mode), ""]
             if ph == "test":
                 out += [f"### P1 test, {mode}: VSC per split", "", split_table(d, arms, mode), ""]

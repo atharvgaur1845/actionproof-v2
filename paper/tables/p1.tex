@@ -1,0 +1,10 @@
+\begin{table*}[t]\centering\small
+\begin{tabular}{llccccc}\toprule
+Arm & Model & VSC (sampled) & $\Delta$ vs A [95\% CI] & Holm $p$ & Seed $\Delta$s & Supported \\\midrule
+A & RSC (reference) & 0.513 & -- & -- & -- & -- \\
+B & A + reconciliation line & 0.483 & $-$0.030 [$-$0.041, $-$0.019] & 1.0000 & $-$0.040, $-$0.031, $-$0.019 & no \\
+C & A + recovery SFT & 0.772 & +0.259 [+0.231, +0.287] & 0.0003 & +0.238, +0.251, +0.289 & yes \\
+D & Recovery SFT warm start + RSC recipe & 0.819 & +0.306 [+0.276, +0.337] & 0.0003 & +0.293, +0.292, +0.334 & yes \\
+\bottomrule\end{tabular}
+\caption{P1 frozen test (450 tasks, 3 seeds per arm, 4 samples at $T{=}1$). Paired task bootstrap on seed-averaged task scores, one-sided, Holm over B, C, D; supported iff Holm $p<0.05$ and all three seed differences are positive (\texttt{PREREGISTRATION\_P1.md}). Development winner: D. Source: \texttt{results/p1/p1\_summary.json}.}
+\label{tab:p1}\end{table*}

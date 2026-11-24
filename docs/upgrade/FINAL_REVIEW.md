@@ -3,7 +3,7 @@
 Draft of 2026-11-23, about 21:55 IST, on branch `actionproof-research-upgrade`.
 
 - **Every row is backed by a ledger entry:** `claims/claims.yaml` (316 numbers re-read from their files, 0 failures).
-- **Pending:** the algorithm-discovery confirmatory study (AD-C1) and the P1 frozen test. The second-stage programme reported on 2026-11-23 at 23:35 IST and has been merged. This file is updated when the pending studies report.
+- **Pending:** the algorithm-discovery confirmatory study (AD-C1) and P2 (structured ledger, action guard, arm E; `PREREGISTRATION_P2.md`). The P1 frozen test reported on 2026-11-24 at 05:58 IST (`results/p1/p1_summary.json`). The second-stage programme reported on 2026-11-23 at 23:35 IST and has been merged. This file is updated when the pending studies report.
 
 ## Established: registered, rule met
 
@@ -15,6 +15,7 @@ Draft of 2026-11-23, about 21:55 IST, on branch `actionproof-research-upgrade`.
 | Start-state effect on recovery starts vs a class-matched control, five runs per arm | S3 addendum 2 (Holm 0.036) | Not partial-specific |
 | Gains hold under Hindi, Hinglish and two-fault episodes | S4-EVAL | Task-level intervals |
 | **No measurable capability loss**: GRPO non-inferior to its warm start within 0.03 on IFEval and BFCL, both arms | R1 H2 | Single-turn benchmarks; prompting mode |
+| **A practical recovery agent** (P1 frozen test, 450 fresh tasks, sampled): recovery SFT +0.259 [+0.231, +0.287] and recovery SFT then the same GRPO +0.306 [+0.276, +0.337] over the recovery-start agent (0.513), Holm 0.0003, every seed positive | P1 H2, H3 | One base model, 3 seeds. Descriptive: partial payments 0.319 → 0.931, but the unseen workflow only 0.486. The demonstrations encode the registered repair rule, so this shows the rule can be taught, not discovered |
 | Hand-written read-back-and-repair checks beat every trained agent in ProcureSim (0.917 VSC, 0 false success) | `results/roi/scripted_s3_conf_full.json` | The scripted checker knows the fault taxonomy |
 
 ## Not supported or failed (registered rules not met)
@@ -25,6 +26,7 @@ Draft of 2026-11-23, about 21:55 IST, on branch `actionproof-research-upgrade`.
 - A11 interaction: not made. Negative transfer to healthcare administration.
 - **FCA** (−0.10), **C5** (−0.32 and −0.37; it penalises reads by construction) and **G** (−0.11, −0.033): all dropped by criteria fixed before training.
 - R1 H1 (SFT costs capability) and H3 (training lowers abstention): not supported. Abstention is low in the base model itself.
+- **P1 H1**: a reconciliation line at inference lowers sampled VSC (−0.030 [−0.041, −0.019]); it induces same-key top-ups (`docs/research/P1_DEV_DIAGNOSIS.md`).
 - J1 J-H1 (warned judges fooled) and J-H2 (snapshot judges ≥ 0.90 for 3 of 4): not supported.
 
 ## Exploratory: real measurements, registered after looking or descriptive

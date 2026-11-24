@@ -1201,7 +1201,7 @@
   "review numbers": "results/s3/s3_review_numbers.json"
  },
  "evidence": {
-  "canonical_sha256": "28576dedafac0fff40859cf7e9da51305772019107393d00f87ae7241e99e175",
+  "canonical_sha256": "7ef9f990dc64340682fc8c44a342c373052068c2cc33bdb13a77b3ef010ff82a",
   "claims": [
    {
     "id": "C1",
@@ -1790,9 +1790,81 @@
     "label": "exploratory",
     "registration": "PREREGISTRATION_R1_TAU.md",
     "stats": "scripts/r1_tau_stats.py",
-    "n_numbers": 4,
+    "n_numbers": 5,
     "sources": [
      "results/r1_tau/r1_tau_summary.json"
+    ]
+   },
+   {
+    "id": "P1",
+    "statement": "Registered (PREREGISTRATION_P1.md, frozen; deviation D-P1-1 before any test output). P1 frozen test, 450 fresh tasks, 3 seeds per arm, sampled VSC (T=1, 4 samples). Against the recovery-start agent A (0.513): H1 reconciliation line at inference (B) 0.483, -0.030 [-0.041, -0.019], not supported; H2 recovery SFT (C) 0.772, +0.259 [+0.231, +0.287], Holm 0.0003, all three seeds positive, supported; H3 recovery SFT warm start + the same GRPO (D) 0.819, +0.306 [+0.276, +0.337], Holm 0.0003, all three seeds positive, supported. Development winner (dev sampled VSC): D 0.872 against A 0.731.",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_P1.md",
+    "stats": "scripts/p1_stats.py",
+    "n_numbers": 28,
+    "sources": [
+     "results/p1/p1_summary.json"
+    ]
+   },
+   {
+    "id": "J1-DESC",
+    "statement": "J1 descriptive measurements on the 660 main cases (PREREGISTRATION_J1.md reports them without a hypothesis): transcript-only accuracy (abstain = wrong) and coverage, recall on genuinely completed episodes, prompt-paraphrase kappa and cost per 1,000 judgements.",
+    "status": "supported",
+    "label": "descriptive",
+    "registration": null,
+    "stats": "evaluation/llm_judge_committee/analyze.py",
+    "n_numbers": 20,
+    "sources": [
+     "results/j1/j1_summary.json"
+    ]
+   },
+   {
+    "id": "R1-TABLE",
+    "statement": "R1 change vs warm start with 95% paired task bootstrap intervals (PREREGISTRATION_R1.md; the H2 rows are the registered primary, the irrelevance column is the H3 endpoint, the SFT row is H1).",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_R1.md",
+    "stats": "scripts/r1_stats.py",
+    "n_numbers": 27,
+    "sources": [
+     "results/r1/r1_summary.json"
+    ]
+   },
+   {
+    "id": "AD-DEV",
+    "statement": "Algorithm-discovery development (2 seeds, cw_dev, read cost 0.05; docs/research/algorithm_discovery/): GRPO 0.707 in both seeds (= warm start, no reads), no-std GRPO 0.833, AWRB 0.867. Development only; AD-C1 is the registered test.",
+    "status": "supported",
+    "label": "development",
+    "registration": "docs/research/algorithm_discovery/FINAL_ALGORITHM.md",
+    "stats": null,
+    "n_numbers": 3,
+    "sources": [
+     "results/ad/d1_summary.json"
+    ]
+   },
+   {
+    "id": "ROI",
+    "statement": "Operational projection (docs/upgrade/ROI.md): measured per-fault outcome rates times cited assumptions, moderate scenario, cost per 1,000 workflows. Projections, not savings.",
+    "status": "supported",
+    "label": "descriptive",
+    "registration": null,
+    "stats": "scripts/roi_model.py",
+    "n_numbers": 3,
+    "sources": [
+     "results/roi/roi_model.json"
+    ]
+   },
+   {
+    "id": "A12-GATE0",
+    "statement": "Original A12 warm-start gate on proc_train (PREREGISTRATION_A12.md): sampled phantom read-back 0.31 (58 of 188); the informative-groups check failed, so Addendum 1 replaced the gate (A12-GATE).",
+    "status": "not_supported",
+    "label": "unsupported",
+    "registration": "PREREGISTRATION_A12.md",
+    "stats": null,
+    "n_numbers": 2,
+    "sources": [
+     "results/a12/gate.json"
     ]
    },
    {
@@ -1875,17 +1947,17 @@
    }
   ],
   "label_counts": {
-   "confirmatory": 250,
-   "descriptive": 45,
-   "development": 19,
-   "exploratory": 16,
+   "confirmatory": 305,
+   "descriptive": 68,
+   "development": 22,
+   "exploratory": 17,
    "failed": 10,
-   "unsupported": 66
+   "unsupported": 68
   },
   "studies": {
    "P1": {
     "registration": "PREREGISTRATION_P1.md",
-    "label": "incomplete"
+    "label": "registered"
    },
    "P2": {
     "registration": "PREREGISTRATION_P2.md",

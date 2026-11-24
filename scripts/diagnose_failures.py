@@ -130,6 +130,7 @@ def main() -> None:
                 n = num[key]
                 n["episodes"] += 1
                 n["goal"] += c["goal"]
+                n["vsc"] += bool(r["vsc"])
                 n["repay"] += c["repay"]
                 n["repay_new"] += c["repay_new"]
                 n["calls"] += c["calls"]
@@ -139,7 +140,7 @@ def main() -> None:
     out = {}
     for k in sorted(agg):
         n = num[k]
-        out[k] = {"episodes": n["episodes"], "vsc": n["goal"] / n["episodes"], "stage": dict(agg[k]["stage"]),
+        out[k] = {"episodes": n["episodes"], "goal_met": n["goal"] / n["episodes"], "vsc": n["vsc"] / n["episodes"], "stage": dict(agg[k]["stage"]),
                   "report": dict(agg[k]["report"]),
                   "new_key_share_on_repay": (n["repay_new"] / n["repay"]) if n["repay"] else None,
                   "reads_per_clean_episode": (n["clean_reads"] / n["clean"]) if n["clean"] else None,
@@ -147,7 +148,7 @@ def main() -> None:
     (ROOT / a.out).parent.mkdir(parents=True, exist_ok=True)
     (ROOT / a.out).write_text(json.dumps(out, indent=1))
     for k in [k for k in out if k.endswith("|ALL")]:
-        print(k, out[k]["episodes"], round(out[k]["vsc"], 3), out[k]["stage"], out[k]["report"])
+        print(k, out[k]["episodes"], round(out[k]["vsc"], 3), round(out[k]["goal_met"], 3), out[k]["stage"], out[k]["report"])
 
 
 if __name__ == "__main__":

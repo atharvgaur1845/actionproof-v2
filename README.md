@@ -48,6 +48,13 @@ Stage 4 (`docs/research/`):
   - Without that one sentence (exploratory addendum), the same judges accept 120 of 120, 120 of 120, 115 of 120 and 9 of 120.
   - With a database snapshot, accuracy is 0.989 (Gemma), 0.933 (gpt-oss), 0.889 (Qwen) and 0.886 (DeepSeek). A majority committee reaches 0.897, so the verifier stays authoritative.
 - **Stage 5 C5** (verified-progress turn credit) was dropped by its kill criteria (−0.32, −0.37), and **G** (hint-guided sampling) was dropped too (−0.11, −0.033). State-progress credit penalises read turns by construction (`docs/research/algorithm/C5_RESULT.md`).
+- **A practical recovery agent** (P1, registered, `PREREGISTRATION_P1.md`; frozen test of 450 fresh tasks with unseen payment fractions, an unseen workflow and two-fault episodes; 3 seeds per arm, sampled). Against the recovery-start agent (0.513):
+  - recovery SFT 0.772 (+0.259 [+0.231, +0.287]) and recovery SFT then the same GRPO 0.819 (+0.306 [+0.276, +0.337]) are **supported** (Holm 0.0003, every seed positive);
+  - a reconciliation line at inference is **not**: 0.483 (−0.030);
+  - partial payments rise from 0.319 to 0.931 (descriptive), which closes the gap Stage 3 left unsolved;
+  - the unseen workflow stays hard: 0.486, against 0.174 for the recovery-start agent.
+
+  Tables: `paper/tables/p1.tex`; diagnosis: `docs/quality/diagnosis_tables.md`.
 - **Operational model** (`docs/upgrade/ROI.md`): projections, not savings. Hand-written read-back-and-repair checks beat every trained agent in ProcureSim.
 
 ## Deliverables

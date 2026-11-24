@@ -28,8 +28,9 @@ Tool-using agents increasingly write to systems of record: payments, goods recei
 
 **New in this round:**
 1. Capability retention on BFCL and IFEval, registered before any output (R1): across 35 models, no trained arm loses measurable general ability. GRPO is non-inferior to its warm start within 0.03 on both benchmarks (all four Holm p < 0.001).
-2. A four-family LLM judge committee measured against the database (J1). Told that "ok" is not proof, judges abstain rather than accept unverifiable failures, so they cannot certify outcomes. Without that one sentence, three of four judges accept nearly all of them (exploratory). With a database snapshot, two of four families stay near 0.89 accuracy, and majority voting (0.897) does not beat the best single judge (0.989).
-3. A cost model built from measured per-fault outcome rates. Recovery-start GRPO cuts projected losses by about 80% against the untrained agent, but hand-written read-back-and-repair checks beat every trained agent. So we present ActionProof as fault-injection testing plus runtime verification, with training as a second line.
+2. A four-family LLM judge committee measured against the database (J1). Told that "ok" is not proof, judges abstain rather than accept unverifiable failures, so they cannot certify outcomes. Without that one sentence, three of four judges accept nearly all of them (exploratory). With a database snapshot, Qwen and DeepSeek reach only 0.889 and 0.886 accuracy, and majority voting (0.897) does not beat the best single judge (0.989).
+3. **A practical recovery agent (P1, registered, frozen test of 450 fresh tasks).** Recovery demonstrations followed by the same GRPO (D) raise sampled verified completion from 0.513 to 0.819 (+0.306 [+0.276, +0.337], all three seeds). Recovery SFT alone (C) reaches 0.772. On partial payments D reaches 0.931 against 0.319. A reconciliation line added at inference (B) hurts (−0.030). An unseen workflow stays hard (D 0.486).
+4. A cost model built from measured per-fault outcome rates. Recovery-start GRPO cuts projected losses from $10,261 to $2,106 per 1,000 workflows against the untrained agent (moderate scenario), but hand-written read-back-and-repair checks beat every trained agent. So we present ActionProof as fault-injection testing plus runtime verification, with training as a second line.
 
 Every experiment was registered and hashed before it ran. A checker re-reads every reported number from its result file.
 
@@ -47,7 +48,7 @@ Source: `results/s2/a12_summary.json` and `results/eval/a12/conf/*`. The two-met
 1. **The problem is real and silent.** The reply looks the same whether the payment happened or not (§9).
 2. **The reward's information source decides whether the agent checks.** Database reward: checks in 5/5 seeds; reply reward: never. Same model, same data, one change (§2).
 3. **RL selects, it does not invent.** From a starting model that never reads, nothing changes (ID1).
-4. **Checking is not recovering.** Agents read the shortfall and post anyway. Training from broken states helps (+0.21, 5/5), but partial payments after a goods receipt remain unsolved by every arm.
+4. **Checking is not recovering, until recovery is taught.** Agents read the shortfall and post anyway. Training from broken states helps (+0.21, 5/5). Recovery demonstrations then the same GRPO (P1 arm D) lift the frozen test from 0.513 to 0.819, and partial payments from 0.319 to 0.931. A hint at inference does not help (−0.030).
 5. **The skill does not transfer** to renamed tools or new workflows. The known fix (tool-name randomisation) failed here.
 6. **New:** capability retention (R1), a judge committee against database truth (J1), and a cost model whose honest answer is "write the checks; use ActionProof to find them and to train a second line".
 
@@ -83,7 +84,7 @@ Source: `results/s2/a12_summary.json` and `results/eval/a12/conf/*`. The two-met
 | **J1 (new)** | J-H1: transcript-only judges are fooled on unverifiable failures. J-H2: a snapshot gives ≥ 0.90 accuracy | J-H1 **not supported** (≤ 1 of 120 accepted: judges abstain); J-H2 **not supported** (0.886–0.989) |
 | **C5/G (new, development)** | Verified-progress turn credit; hint-guided sampling; kill criterion +0.03 over RSC | C5 **dropped** (−0.32 and −0.37; it penalises reads by construction, `docs/research/algorithm/C5_RESULT.md`); G **dropped** (−0.11 and −0.033; `docs/research/algorithm/G_RESULT.md`) |
 | **AD (algorithm discovery, development)** | Group-std scaling can distort costly-verification learning when rollouts share a hidden fault (mechanism known from Dr. GRPO and Bereket & Leskovec; the interaction is ours); AWRB (aliased-world return baseline) passes development gates | Development only (2 seeds): GRPO stops reading in 2 of 2 seeds at read cost 0.05 (cw_dev VSC 0.707 = warm start); AWRB 0.867 in both seeds; no-std GRPO 0.833. Confirmatory AD-C1 (`PREREGISTRATION_AD_C1.md`) is running, so **no confirmed algorithm**. Second stage (`docs/research/algorithm_discovery_v2/`): the cost-blind "vote rule" is derived and reproduced; AWRB's lead comes from over-verifying, and its unbiased variant does not beat no-std |
-| **P1 (new, practical agent)** | Against the recovery-start agent (A), on 450 fresh test tasks (unseen payment fractions, an unseen workflow, two-fault episodes): H1 reconciliation line at inference (B) > A; H2 recovery SFT (C) > A; H3 recovery SFT warm start + the same GRPO (D) > A. Holm over three, and all three seed pairs must improve | **Running** (`PREREGISTRATION_P1.md`); the frozen test runs once per model |
+| **P1 (new, practical agent)** | Against the recovery-start agent (A), on 450 fresh test tasks (unseen payment fractions, an unseen workflow, two-fault episodes): H1 reconciliation line at inference (B) > A; H2 recovery SFT (C) > A; H3 recovery SFT warm start + the same GRPO (D) > A. Holm over three, and all three seed pairs must improve | H1 **not supported**: B 0.483 vs A 0.513, −0.030 [−0.041, −0.019]. H2 **supported**: C 0.772, +0.259 [+0.231, +0.287], Holm 0.0003. H3 **supported**: D 0.819, +0.306 [+0.276, +0.337], Holm 0.0003. All three seed differences are positive for C and D. Development winner: D (`results/p1/p1_summary.json`) |
 
 ## 7. Threat model
 
@@ -266,7 +267,8 @@ Five independent training seeds per arm (0–4) for A12 R_V and R_A, RSC, the cl
 5. **Warned judges abstain; snapshot judges are not verifier-grade** (J1, `docs/upgrade/JUDGES.md`).
 6. **No capability cost** (R1, `docs/upgrade/CAPABILITY_RETENTION.md`).
 7. **Progress credit penalises evidence** (C5 diagnosis).
-8. **Group-std scaling can distort the learning signal for costly verification when rollouts share a hidden fault** (development evidence; `docs/research/algorithm_discovery/FINAL_ALGORITHM.md`). Dividing by the group's reward standard deviation makes each group's update invariant to positive rescaling of its reward differences. A small cost-only difference in a clean-world group can then receive an update as large as a utility difference in a faulted group. Because all rollouts in a group share one latent fault state, the group never compares reading across the fault states that determine its expected value. This is a statement about these conditions, not a claim that GRPO ignores action costs in general.
+8. **Recovery is learned from demonstrations, not from a hint** (P1). Recovery SFT (+0.259) and recovery SFT then GRPO (+0.306) pass the registered test; a reconciliation line at inference fails it (−0.030). The development diagnosis (`docs/research/P1_DEV_DIAGNOSIS.md`) traces the hint's failure to same-key top-ups on short payments.
+9. **Group-std scaling can distort the learning signal for costly verification when rollouts share a hidden fault** (development evidence; `docs/research/algorithm_discovery/FINAL_ALGORITHM.md`). Dividing by the group's reward standard deviation makes each group's update invariant to positive rescaling of its reward differences. A small cost-only difference in a clean-world group can then receive an update as large as a utility difference in a faulted group. Because all rollouts in a group share one latent fault state, the group never compares reading across the fault states that determine its expected value. This is a statement about these conditions, not a claim that GRPO ignores action costs in general.
    - **Prior work.** The normalisation effect itself is known: Dr. GRPO (Liu et al., arXiv 2503.20783) removes the denominator; Bereket & Leskovec (arXiv 2508.11800) study the distortion under stochastic outcomes. Dropping the std is therefore a baseline, not our contribution.
    - **Our candidate contribution:** the interaction between shared hidden execution faults, verification cost and tool-agent behaviour, with controlled evidence.
    - **Evidence in the LLM** (development): collapse in 2 of 2 seeds at read cost 0.05, and an advantage decomposition (`results/ad/advantage_decomposition_steps0-40.json`).
@@ -283,7 +285,9 @@ Five independent training seeds per arm (0–4) for A12 R_V and R_A, RSC, the cl
 - Negative transfer to healthcare administration (VSC 0.158 → 0.047).
 - FCA failed (−0.10).
 - Addendum 3 was withdrawn before training as a degenerate design.
-- The after-receipt partial cell remains unsolved, and rebalancing did not fix it (0.005).
+- The after-receipt partial cell remained unsolved by every Stage 3 arm, and rebalancing did not fix it (0.005). P1's recovery arms address it (above); the Stage 3 result stands as recorded.
+- P1 H1: the inference-time reconciliation line lowers sampled verified completion (−0.030 [−0.041, −0.019]).
+- P1 unseen workflow (order → receive → pay → post): the best arm reaches 0.486 (A 0.174), so recovery does not fully transfer to a new step order.
 
 ## 23. Sample inputs and outputs
 
@@ -394,7 +398,8 @@ LLM judges (§15) are evaluation instruments whose outputs never replace the dat
   - website sections 06–08;
   - Stage 5 development (C5, G);
   - a separate algorithm-discovery programme.
-- **Deviations:** `docs/stage2/DECISIONS.md` (this round: D-R1-1).
+- **Nov 24:** P1 frozen test reported (H2, H3 supported; H1 not supported); P2 (ledger, guard, arm E) running.
+- **Deviations:** `docs/stage2/DECISIONS.md` (this round: D-R1-1, D-P1-1).
 
 ## 35. Appendix pointers
 
