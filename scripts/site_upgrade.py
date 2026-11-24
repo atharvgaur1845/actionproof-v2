@@ -178,8 +178,24 @@ def p1() -> dict:
             "splits": splits, "tasks": dict(sorted(tasks.items())), "show": P1_SHOW}
 
 
+def p2() -> dict:
+    """P2 registered contrasts and references, straight from results/p2/p2_summary.json."""
+    src = "results/p2/p2_summary.json"
+    s = _j(src)
+    if not s or not s.get("primary"):
+        return {"status": "running", "source": src}
+    rows = [{"id": h, "family": fam, "contrast": r["contrast"], "Y": _r(r.get("Y_mean")), "X": _r(r.get("X_mean")),
+             "delta": _r(r["delta"]), "ci95": [_r(c) for c in r["ci95"]], "holm_p": _r(r["holm_p"]),
+             "seed_deltas": [_r(x) for x in r.get("seed_deltas", [])], "supported": r["supported"]}
+            for fam in ("primary", "secondary") for h, r in s[fam].items()]
+    g = _j("results/quality/p2_guard_diagnosis.json") or {}
+    pb = g.get("part_b_guarded_oracle", {}).get("p1_test_pp", {})
+    return {"status": "done", "source": src, "rows": rows, "references": s.get("references", {}),
+            "oracle_pp_blocked": pb.get("tasks_with_a_would_block"), "oracle_pp_tasks": pb.get("tasks")}
+
+
 def build() -> dict:
-    return {"r1": r1(), "r1t": r1t(), "j1": j1(), "roi": roi(), "p1": p1()}
+    return {"r1": r1(), "r1t": r1t(), "j1": j1(), "roi": roi(), "p1": p1(), "p2": p2()}
 
 
 if __name__ == "__main__":

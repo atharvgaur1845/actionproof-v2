@@ -49,6 +49,15 @@
  sync();draw();
  $("#u-roi-src").innerHTML=`Measured rates: <b>${esc(A.source)}</b> (s3_conf_full, every seed pooled; scripted rows on the same tasks). Formula: <span class="mono">demo/roi.js</span>, identical to scripts/roi_model.py (tested). Inference priced at the measured ${A.episodes_per_gpu_hour.toLocaleString("en-US")} policy calls per GPU-hour.`;
 })();
+/* ---------- 09b: ledger and guard (data: S.upgrade.p2, scripts/site_upgrade.py::p2) ---------- */
+(function(){const P=S.upgrade&&S.upgrade.p2;if(!P||P.status!=="done"||!document.getElementById("u-p2"))return;
+ const pp=x=>x==null?"—":(x>=0?"+":"−")+Math.abs(x*100).toFixed(1),pc=x=>x==null?"—":(x*100).toFixed(1)+"%";
+ const L={"E - D":"E (ledger in training) vs D","E - A":"E (ledger in training) vs A","B2 - A":"Ledger at run time vs A","Ag - A":"Guard on A","Cg - C":"Guard on C","Dg - D":"Guard on D","Eg - E":"Guard on E"};
+ $("#u-p2").innerHTML=`<tr><th>Registered test</th><th>Verified success, sampled</th><th>Change</th><th>Holm p</th><th>Verdict</th></tr>`+
+  P.rows.map(r=>`<tr><td><b>${r.id}</b> ${esc(L[r.contrast]||r.contrast)}${r.family==="secondary"?" <small>secondary</small>":""}</td><td>${pc(r.Y)} → ${pc(r.X)}</td><td class="${r.ci95[0]>0?"up":(r.ci95[1]<0?"dn":"")}">${pp(r.delta)}<small>[${pp(r.ci95[0])}, ${pp(r.ci95[1])}] · seeds ${r.seed_deltas.map(pp).join(" ")}</small></td><td>${r.holm_p.toFixed(4)}</td><td>${r.supported?"<b>supported</b>":"not supported"}</td></tr>`).join("");
+ const R=P.references||{};
+ $("#u-p2-src").innerHTML=`Source: <b>${esc(P.source)}</b> · scripts/p2_stats.py · Holm within each family. References on the same tasks: hand-written checker ${pc(R.O&&R.O.mean_vsc)} (greedy), class-matched control ${pc(R.M&&R.M.mean_vsc)}, warm start ${pc(R.W&&R.W.mean_vsc)}.${P.oracle_pp_blocked!=null?` Why the guard hurts (descriptive, after results): its read-before-retry rule would block the checker's own refund-then-re-pay repair on ${P.oracle_pp_blocked} of ${P.oracle_pp_tasks} short-payment tasks, and blocked agents rarely recover. results/quality/p2_guard_diagnosis.json`:""}`})();
+
 /* ---------- 09: practical agent (data: S.upgrade.p1, scripts/site_upgrade.py::p1) ---------- */
 (function(){const P=S.upgrade&&S.upgrade.p1;if(!P)return;
  const pp=x=>x==null?"—":(x>=0?"+":"−")+Math.abs(x*100).toFixed(1);
