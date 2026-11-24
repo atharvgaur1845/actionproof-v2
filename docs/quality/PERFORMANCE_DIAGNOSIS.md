@@ -39,8 +39,9 @@ Readings:
 ## 3. Where the best arm still fails
 
 - **Unseen workflow** (`p1_test_wf4`, order → receive → pay → post). D reaches 0.486 sampled VSC (A 0.174).
-  - The largest single loss is not a fault at all. On the **fault-free** episodes of this workflow D succeeds in none of 159 sampled episodes, and reports "completed" in 149 of them (`results/quality/diagnosis_p1_test.json`, cell `D|sampled|order_receive_pay|clean`).
-  - The same holds for every arm: no arm completes any such episode (A 0 of 296, B 0 of 305, C 0 of 150). The agents do not finish the four-step order they were never trained on, and say they did. This is the Stage 4 procedure-replay finding, and P1 does not remove it. Episode counts differ between arms because the stage "clean" is assigned only when no injected fault was triggered, and that depends on the agent's own actions.
+  - The largest single loss is a skipped step. Every test task of this workflow injects a fault, and the scripted oracle solves all 60 (`results/p2/ref/O__p1_test_wf4.summary.json`). Yet in 158 of D's sampled episodes the fault never fires, and none of them succeeds. They report "completed" in 149 (`results/quality/diagnosis_p1_test.json`, cell `D|sampled|order_receive_pay|clean`).
+  - In every one of those episodes the faulted step is the goods receipt, and the agent never calls `record_goods_receipt`. It runs order → pay → post, the three-step order it was trained on, and reports success.
+  - The same holds for every arm: no arm completes any such episode (A 0 of 296, B 0 of 305, C 0 of 150). This is the Stage 4 procedure-replay finding, and P1 does not remove it. The diagnosis labels these episodes "clean" because no injected fault fired. That label means the fault never fired; it does not mean the task was fault-free. Counts differ between arms because whether the fault fires depends on the agent's own actions.
   - Two further losses in this workflow: a lost acknowledgement on the goods receipt (read, then not acted on, in most episodes), and short payments where the payment is repaired but another step fails.
 - **Never-commit tasks** cap VSC by design. The VSC ceiling of the test union is 0.940 (27 never-commit tasks).
 
