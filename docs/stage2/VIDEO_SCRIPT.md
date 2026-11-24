@@ -32,6 +32,9 @@ Each segment shows a small label: **LIVE** (run during recording) or **RECORDED 
 - **So put the evidence in front of the agent.** Showing the warm start the verified state through the gateway adds +0.25 verified completion. `results/s2/a11_summary.json`
 - Contract coverage: the contract accepts none of the 194 single-fault and 479 two-fault violating configurations it was written for (an exhaustive enumeration, not a sample), and 14 of 161 independently written violations (8 of 151 unambiguous), mostly refunds and master data. `results/a13/h5_finite.json`
 - Defences on identical fault traces: idempotency keys alone recover 0% of phantom writes; verify-before-retry 100% (deterministic; true by construction). `results/a11/h7_matrix.md`
+- **Then teach the repair.** Registered P1, 450 fresh tasks, three seeds per arm. Recovery demonstrations followed by the same RL lift verified completion from 0.513 to 0.819 (+0.306), and partial payments from 0.319 to 0.931. A hint added at run time does not help (−0.030). `results/p1/p1_summary.json`
+- **What did not work (P2).** A structured ledger at run time lowers completion to 0.253. A runtime guard removes false successes, but it blocks the taught refund-then-re-pay repair, so it lowers every agent. The hand-written checker still leads (0.924). `results/p2/p2_summary.json`
+- **The limit.** On a workflow it has never seen, every agent skips the new step and says "done" (best agent 0.486).
 - Track 3 metrics: task success, tool-call validity, latency, judge-human agreement. PENDING.
 
 ## 5:30 to 6:30: what it guarantees and what it does not (slide from `docs/stage2/PRODUCT.md`)
