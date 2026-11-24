@@ -138,7 +138,7 @@ Traces of all 30 procurement-study models are published in the HF collection.
 |---|---|---|
 | CohereLabs/tiny-aya-global (3.35B, `Cohere2ForCausalLM`, 8,192 context) | Policy (all training) | CC-BY-NC-4.0 + Cohere Labs acceptable-use policy |
 | CohereLabs/aya-expanse-32b | Stage 1 judge; τ-bench simulated user (R1-T) | CC-BY-NC-4.0 + acceptable-use policy |
-| google/gemma-4-31B-it | J1 judge | Gemma licence (model card) |
+| google/gemma-4-31B-it | J1 judge | Apache-2.0 (Hugging Face Hub metadata) |
 | Qwen/Qwen3-235B-A22B-Instruct-2507 | J1 judge | Apache-2.0 |
 | openai/gpt-oss-120b | J1 judge | Apache-2.0 |
 | deepseek-ai/DeepSeek-V3.2 | J1 judge | MIT |
