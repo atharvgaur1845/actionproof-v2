@@ -6,7 +6,8 @@
 The held-out grid is a pure function of its seed; it is written by the analysis job and hashed by freeze_th1.py
 together with this file. Strata (fixed after the first dev run showed the exact regimes were too rare, 2/72 cells):
   broad 45%        unrestricted draws
-  exact 25%        deterministic within-state returns (q0 = 0, f = 0, d = 1, s in {0, 1} or repairability split)
+  exact 25%        deterministic within-state returns (q0 = 0, f = 0, d = 1, s in {0, 1} or repairability split);
+                   shared law with probability 0.7
   neutralise 15%   reads neutralise the state (s = d = 1, f = q0 = 0, one read cost), law not shared, pi0 >= 0.3
   adversarial 15%  c near the stake, vote near zero, c at the eps boundary, or G = 2
 """
@@ -70,6 +71,8 @@ def draw(rng: np.random.Generator, i: int, split: str) -> dict:
         s = [x if x in (0.0, 1.0) else x for x in s]
         if any(0 < x < 1 for x in s):
             split_repair = True
+        if rng.random() < 0.7:
+            law_kind = "shared"
     if stratum == "neutralise":
         q0, f, D, d, s = 0.0, 0.0, 0.0, [1.0] * nf, [1.0] * nf
         c = float(math.exp(rng.uniform(math.log(0.005), math.log(0.3))))
