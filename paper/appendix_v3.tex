@@ -48,12 +48,13 @@ and unrepairable $(p(1-s))$, with $\beta=-c,\;V+L-c,\;-c$. So $\mathcal V=2ps-1$
 Table~\ref{tab:thr3} gives exact thresholds when repair is rollout noise instead.
 
 \begin{table}[h]\centering\small
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{llcccc}\toprule
 $s$&$c$&$1/(2s)$&GRPO, $s$ in state&GRPO, $s$ as noise&Dr.~GRPO\\\midrule
 1.0&0.01/0.05/0.2&0.5&0.495/0.499/0.500&same&$c$\\
 0.6&0.01/0.05/0.2&0.833&0.825/0.832/0.833&0.654/0.667/0.706&$c/s$\\
 0.3&any&1.67&never&never&$c/s$\\\bottomrule
-\end{tabular}
+\end{tabular}}
 \caption{Smallest fault rate at which the expected update at $\pi=0.3$, $G=8$ is positive
 (\path{results/theory/scan.json}).}\label{tab:thr3}
 \end{table}
@@ -136,12 +137,16 @@ scan took 65\,s; each TH1 shard took a few minutes on 8 cores.
 \end{itemize}
 
 \section{Reproduction}\label{app3:repro}
-\begin{verbatim}
-pytest tests/theory                       # 44 identities
-python scripts/theory/scan.py             # exact scans
-python scripts/theory/freeze_th1.py --check
-sbatch --array=0-11 --export=ALL,SPLIT=heldout,NSH=12 \
-       slurm/theory/th1_array.sh
-python scripts/theory/th1_analyze.py --split heldout
-python scripts/theory/llm_mechanism.py --rollouts <dir>
-\end{verbatim}
+{\footnotesize\begin{verbatim}
+pytest tests/theory
+python scripts/theory/scan.py
+python scripts/theory/freeze_th1.py \
+  --check
+sbatch --array=0-11 --export=\
+  ALL,SPLIT=heldout,NSH=12 \
+  slurm/theory/th1_array.sh
+python scripts/theory/th1_analyze.py \
+  --split heldout
+python scripts/theory/llm_mechanism.py \
+  --rollouts <dir>
+\end{verbatim}}
