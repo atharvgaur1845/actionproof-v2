@@ -4,8 +4,11 @@
     python scripts/theory/th1_grid.py --split heldout   # 400 cells + dirmult twins, RNG seed 20261124 (registered)
 
 The held-out grid is a pure function of its seed; it is written by the analysis job and hashed by freeze_th1.py
-together with this file. Strata: 85% "broad" draws, 15% "adversarial" draws (c near the stake, p near 1/2,
-c at the eps boundary, G = 2).
+together with this file. Strata (fixed after the first dev run showed the exact regimes were too rare, 2/72 cells):
+  broad 45%        unrestricted draws
+  exact 25%        deterministic within-state returns (q0 = 0, f = 0, d = 1, s in {0, 1} or repairability split)
+  neutralise 15%   reads neutralise the state (s = d = 1, f = q0 = 0, one read cost), law not shared, pi0 >= 0.3
+  adversarial 15%  c near the stake, vote near zero, c at the eps boundary, or G = 2
 """
 from __future__ import annotations
 
@@ -22,7 +25,7 @@ sys.path.insert(0, str(ROOT))
 from actionproof.theory.exact import categories  # noqa: E402
 from actionproof.theory.problems import verification  # noqa: E402
 
-SEEDS = {"dev": (101, 60), "heldout": (20261124, 400)}
+SEEDS = {"dev": (101, 60), "heldout": (20261124, 600)}
 BUDGET = 150_000  # max category compositions per exact evaluation
 
 
@@ -36,7 +39,9 @@ def build(cell: dict):
 
 
 def draw(rng: np.random.Generator, i: int, split: str) -> dict:
-    adv = rng.random() < 0.15
+    u0 = rng.random()
+    stratum = "broad" if u0 < 0.45 else "exact" if u0 < 0.70 else "neutralise" if u0 < 0.85 else "adversarial"
+    adv = stratum == "adversarial"
     nf = int(rng.choice([1, 2, 3], p=[0.5, 0.35, 0.15]))
     mass = float(rng.uniform(0.05, 0.9))
     p = (rng.dirichlet(np.ones(nf)) * mass).tolist()
@@ -60,9 +65,17 @@ def draw(rng: np.random.Generator, i: int, split: str) -> dict:
     law_kind = str(rng.choice(["shared", "iid", "mix", "dirmult"], p=[0.3, 0.2, 0.25, 0.25]))
     rho = float(rng.uniform(0.05, 0.95))
     pi0 = float(rng.choice([0.1, 0.3, 0.5, 0.7]))
-    stratum = "broad"
+    if stratum == "exact":
+        q0, f, D, d = 0.0, 0.0, 0.0, [1.0] * nf
+        s = [x if x in (0.0, 1.0) else x for x in s]
+        if any(0 < x < 1 for x in s):
+            split_repair = True
+    if stratum == "neutralise":
+        q0, f, D, d, s = 0.0, 0.0, 0.0, [1.0] * nf, [1.0] * nf
+        c = float(math.exp(rng.uniform(math.log(0.005), math.log(0.3))))
+        law_kind = str(rng.choice(["iid", "mix", "dirmult"]))
+        pi0 = float(rng.choice([0.3, 0.5, 0.7]))
     if adv:
-        stratum = "adversarial"
         kind = int(rng.integers(4))
         if kind == 0:   # cost near the stake of the first fault
             c = float(rng.uniform(0.8, 1.2) * (1 + L[0]))
