@@ -43,8 +43,9 @@ part of the shared state.
 again, so GRPO stalls at an interior read rate with $\Theta(1/G)$ regret.
 \item Pairwise state correlation does not determine the update.
 \end{itemize}
-A registered held-out testbed of random problems, trained with an independently implemented sampler,
-\pend{TH1 headline}. In a 3.35B tool agent, all 800 logged groups per run share their fault plan. Re-weighting fixed
+We ran a registered held-out testbed of 731 random problems, trained with an independently implemented sampler.
+The exact theory predicts GRPO's learned decision in 721 of 721 decided cells, with median error 0.0003 in the
+learned read probability. GRPO follows the vote, not the value, in 77 of 77 cells where the two disagree. In a 3.35B tool agent, all 800 logged groups per run share their fault plan. Re-weighting fixed
 rollouts at a 20$\times$ higher read cost changes GRPO's clean-group update by 7\%. Every std-normalised run moves in
 the direction of the vote estimated from its first 20 steps. The registered five-seed comparison is \pend{AD-C1}.
 \end{abstract}
@@ -187,7 +188,52 @@ twins of every mixture cell. Their parameters:
 Ten estimators were trained with an implementation that shares no code with the theory's derivation (plain SGD, 300
 steps, 16 groups per step, 10 seeds). Predictions come from the exact mean-field map. The registration was frozen
 before any held-out output; three development runs fixed only the strata.
-\pend{TH1 results paragraph and table}
+
+Five of seven registered hypotheses are supported (Table~\ref{tab:th1}):
+\begin{itemize}
+\item \textbf{Accuracy.} The mean-field map predicts the trained read probability with median error $0.0003$ (90th
+percentile $\le0.0073$) for GRPO, Dr.~GRPO and RLOO. It predicts GRPO's decision in 721/721 cells.
+\item \textbf{The vote.} In exact shared-state cells GRPO moves with the vote in 152/152. These include all 77 cells
+where the vote and $\Delta Q$ disagree.
+\item \textbf{Endogenous homogeneity.} With independent or partially shared states and state-neutralising reads,
+GRPO stays below $\pi=0.95$ in 67/69 cells.
+\item \textbf{Centring.} Dr.~GRPO follows $\sgn\Delta Q$ in 661/661 cells under every law.
+\end{itemize}
+
+Two hypotheses are not supported:
+\begin{itemize}
+\item \textbf{H6, not supported} (53/75). It asked that GRPO be no worse when the vote is right. In all 22 failures
+GRPO reached the right corner, but slowly: its step size does not grow with the stakes. That is again
+Thm.~\ref{thm:inv}, and the map predicted these $\pi_T$ to within 0.045.
+\item \textbf{H7, untestable.} Only 3 twin pairs had a predicted difference $\ge0.05$ (all 3 in the predicted
+direction).
+\end{itemize}
+
+Descriptively:
+\begin{itemize}
+\item zero-variance filtering (DAPO) lands where GRPO does (720/721);
+\item PPO and batch-std follow $\sgn\Delta Q$ (0.970, 0.979);
+\item per-component normalisation is worst (Bayes agreement 0.222).
+\end{itemize}
+
+\begin{table}[t]\centering\small
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lccc}\toprule
+Estimator & Bayes-action agreement & median regret & regret shared / iid\\\midrule
+GRPO & 0.596 & 0.065 & 0.676 / 0.364\\
+GRPO + zero-var.\ filter (DAPO) & 0.596 & 0.034 & 0.668 / 0.356\\
+GRPO + KL & 0.595 & 0.073 & 0.676 / 0.360\\
+Dr.~GRPO (centred) & 0.970 & 0.009 & 0.012 / 0.012\\
+RLOO & 0.974 & 0.007 & 0.008 / 0.008\\
+REINFORCE (EMA baseline) & 0.975 & 0.007 & 0.009 / 0.008\\
+batch std & 0.949 & 0.009 & 0.045 / 0.029\\
+PPO (4 clipped epochs) & 0.947 & 0.004 & 0.063 / 0.015\\
+AWRB (obs.-measurable return) & 0.903 & 0.004 & 0.056 / 0.015\\
+per-component norm.\ (GDPO-style) & 0.222 & 0.509 & 1.537 / 2.197\\\bottomrule
+\end{tabular}}
+\caption{TH1 held-out (731 cells, 10 seeds each; \path{results/theory/th1_heldout_summary.json}). Regret is exact
+expected-utility regret of the learned policy; mean regret is dominated by high-stakes cells.}\label{tab:th1}
+\end{table}
 
 \paragraph{Mechanism in the trained agent (development, descriptive).} We recomputed both advantages on the
 \emph{same} logged rollouts of 18 training runs (Appendix~\ref{app3:mech}).
