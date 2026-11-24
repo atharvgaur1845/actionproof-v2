@@ -1,0 +1,53 @@
+{
+  "tag": "B2_s2",
+  "split": "p1_test_wf4",
+  "phase": "test",
+  "ledger": true,
+  "guard": false,
+  "model": "runs/rft_proc/merged",
+  "adapter": "runs/s3_rv_mix_s2/final",
+  "samples": 4,
+  "seconds": 54.0,
+  "greedy": {
+    "n": 60,
+    "vsc": 0.5,
+    "false_success": 0.5,
+    "duplicate_unrefunded": 0.15,
+    "honest_fail": 0.0,
+    "partial_pay_repaired": 0.0,
+    "new_key_share_on_repay": null,
+    "redundant_reads_per_episode": 0.0,
+    "reads_per_episode": 4.866666666666666,
+    "calls_per_success": 11.2,
+    "context_ended": 0.0
+  },
+  "sampled": {
+    "n": 240,
+    "vsc": 0.22916666666666666,
+    "false_success": 0.525,
+    "duplicate_unrefunded": 0.07083333333333333,
+    "honest_fail": 0.09583333333333334,
+    "partial_pay_repaired": 0.041666666666666664,
+    "new_key_share_on_repay": 0.68,
+    "redundant_reads_per_episode": 0.35833333333333334,
+    "reads_per_episode": 5.108333333333333,
+    "calls_per_success": 11.309090909090909,
+    "context_ended": 0.0
+  },
+  "by_workflow_sampled": {
+    "order_receive_pay": {
+      "n": 240,
+      "vsc": 0.22916666666666666,
+      "false_success": 0.525,
+      "duplicate_unrefunded": 0.07083333333333333,
+      "honest_fail": 0.09583333333333334,
+      "partial_pay_repaired": 0.041666666666666664,
+      "new_key_share_on_repay": 0.68,
+      "redundant_reads_per_episode": 0.35833333333333334,
+      "reads_per_episode": 5.108333333333333,
+      "calls_per_success": 11.309090909090909,
+      "context_ended": 0.0
+    }
+  },
+  "guard_blocks_per_episode": 0.0
+}

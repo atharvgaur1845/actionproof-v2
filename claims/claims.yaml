@@ -798,6 +798,65 @@ claims:
       - "D-P1-1: AuditKIT sample named before any test output (docs/stage2/DECISIONS.md)."
     commit: null
 
+  - id: P2-H2
+    statement: "Registered P2 H2 (PREREGISTRATION_P2.md, Holm over H1-H4; frozen test of 450 tasks, 3 seeds, sampled VSC): E, recovery SFT on ledger-formatted demonstrations then GRPO with ledger rollouts, beats the recovery-start agent A: 0.782 vs 0.513, +0.269 [+0.238, +0.301], Holm 0.0004, all three seeds positive."
+    status: supported
+    prereg: PREREGISTRATION_P2.md
+    eval: [results/p2/p2_summary.json]
+    stats: scripts/p2_stats.py
+    numbers:
+      h2_delta: {value: 0.269, file: results/p2/p2_summary.json, key: ["primary", "H2", "delta"], shown: ["+0.269"]}
+      h2_lo: {value: 0.238, file: results/p2/p2_summary.json, key: ["primary", "H2", "ci95", 0], shown: ["+0.238"]}
+      h2_hi: {value: 0.301, file: results/p2/p2_summary.json, key: ["primary", "H2", "ci95", 1], shown: ["+0.301"]}
+      h2_x: {value: 0.782, file: results/p2/p2_summary.json, key: ["primary", "H2", "X_mean"], shown: ["0.782"]}
+      h2_holm: {value: 0.0004, file: results/p2/p2_summary.json, key: ["primary", "H2", "holm_p"], shown: ["0.0004"]}
+    commit: null
+
+  - id: P2
+    statement: "Registered P2, hypotheses not supported (frozen test, sampled VSC): H1 E vs D -0.038 [-0.053, -0.022] (the ledger-trained agent is below the P1 agent D); H3 structured ledger at inference on A (B2) 0.253, -0.260; H4 action guard on A (Ag) 0.391, -0.122; secondary: the guard lowers C (-0.244), D (-0.273) and E (-0.142). Diagnosis: docs/quality/PERFORMANCE_DIAGNOSIS.md."
+    status: not_supported
+    prereg: PREREGISTRATION_P2.md
+    eval: [results/p2/p2_summary.json]
+    stats: scripts/p2_stats.py
+    numbers:
+      h1_delta: {value: -0.038, file: results/p2/p2_summary.json, key: ["primary", "H1", "delta"], shown: ["-0.038", "−0.038", "0.038"]}
+      h1_lo: {value: -0.053, file: results/p2/p2_summary.json, key: ["primary", "H1", "ci95", 0], shown: ["-0.053", "−0.053", "0.053"]}
+      h1_hi: {value: -0.022, file: results/p2/p2_summary.json, key: ["primary", "H1", "ci95", 1], shown: ["-0.022", "−0.022", "0.022"]}
+      h1_x: {value: 0.782, file: results/p2/p2_summary.json, key: ["primary", "H1", "X_mean"], shown: ["0.782"]}
+      h3_delta: {value: -0.260, file: results/p2/p2_summary.json, key: ["primary", "H3", "delta"], shown: ["-0.260", "−0.260", "0.260"]}
+      h3_lo: {value: -0.290, file: results/p2/p2_summary.json, key: ["primary", "H3", "ci95", 0], shown: ["-0.290", "−0.290", "0.290"]}
+      h3_hi: {value: -0.230, file: results/p2/p2_summary.json, key: ["primary", "H3", "ci95", 1], shown: ["-0.230", "−0.230", "0.230"]}
+      h3_x: {value: 0.253, file: results/p2/p2_summary.json, key: ["primary", "H3", "X_mean"], shown: ["0.253"]}
+      h4_delta: {value: -0.122, file: results/p2/p2_summary.json, key: ["primary", "H4", "delta"], shown: ["-0.122", "−0.122", "0.122"]}
+      h4_lo: {value: -0.144, file: results/p2/p2_summary.json, key: ["primary", "H4", "ci95", 0], shown: ["-0.144", "−0.144", "0.144"]}
+      h4_hi: {value: -0.101, file: results/p2/p2_summary.json, key: ["primary", "H4", "ci95", 1], shown: ["-0.101", "−0.101", "0.101"]}
+      h4_x: {value: 0.391, file: results/p2/p2_summary.json, key: ["primary", "H4", "X_mean"], shown: ["0.391"]}
+      s1_delta: {value: -0.244, file: results/p2/p2_summary.json, key: ["secondary", "S1", "delta"], shown: ["-0.244", "−0.244", "0.244"]}
+      s1_lo: {value: -0.284, file: results/p2/p2_summary.json, key: ["secondary", "S1", "ci95", 0], shown: ["-0.284", "−0.284", "0.284"]}
+      s1_hi: {value: -0.206, file: results/p2/p2_summary.json, key: ["secondary", "S1", "ci95", 1], shown: ["-0.206", "−0.206", "0.206"]}
+      s1_x: {value: 0.527, file: results/p2/p2_summary.json, key: ["secondary", "S1", "X_mean"], shown: ["0.527"]}
+      s2_delta: {value: -0.273, file: results/p2/p2_summary.json, key: ["secondary", "S2", "delta"], shown: ["-0.273", "−0.273", "0.273"]}
+      s2_lo: {value: -0.312, file: results/p2/p2_summary.json, key: ["secondary", "S2", "ci95", 0], shown: ["-0.312", "−0.312", "0.312"]}
+      s2_hi: {value: -0.235, file: results/p2/p2_summary.json, key: ["secondary", "S2", "ci95", 1], shown: ["-0.235", "−0.235", "0.235"]}
+      s2_x: {value: 0.547, file: results/p2/p2_summary.json, key: ["secondary", "S2", "X_mean"], shown: ["0.547"]}
+      s3_delta: {value: -0.142, file: results/p2/p2_summary.json, key: ["secondary", "S3", "delta"], shown: ["-0.142", "−0.142", "0.142"]}
+      s3_lo: {value: -0.170, file: results/p2/p2_summary.json, key: ["secondary", "S3", "ci95", 0], shown: ["-0.170", "−0.170", "0.170"]}
+      s3_hi: {value: -0.115, file: results/p2/p2_summary.json, key: ["secondary", "S3", "ci95", 1], shown: ["-0.115", "−0.115", "0.115"]}
+      s3_x: {value: 0.640, file: results/p2/p2_summary.json, key: ["secondary", "S3", "X_mean"], shown: ["0.640"]}
+    commit: null
+
+  - id: P2-REF
+    statement: "P2 references on the same test tasks (registered in PREREGISTRATION_P2.md section 4 as references, not hypotheses): scripted oracle 0.924 (one greedy episode per task; it encodes the fault taxonomy by hand), s3_matched control 0.479 and warm start 0.335 (sampled)."
+    status: supported
+    prereg: null
+    eval: [results/p2/p2_summary.json]
+    stats: scripts/p2_stats.py
+    numbers:
+      ref_O: {value: 0.924, file: results/p2/p2_summary.json, key: ["references", "O", "mean_vsc"], shown: ["0.924"]}
+      ref_M: {value: 0.479, file: results/p2/p2_summary.json, key: ["references", "M", "mean_vsc"], shown: ["0.479"]}
+      ref_W: {value: 0.335, file: results/p2/p2_summary.json, key: ["references", "W", "mean_vsc"], shown: ["0.335"]}
+    commit: null
+
   # ---- Write-up numbers (docs/submission/WRITEUP.md, enforced from 2026-11-24)
   - id: J1-DESC
     statement: "J1 descriptive measurements on the 660 main cases (PREREGISTRATION_J1.md reports them without a hypothesis): transcript-only accuracy (abstain = wrong) and coverage, recall on genuinely completed episodes, prompt-paraphrase kappa and cost per 1,000 judgements."

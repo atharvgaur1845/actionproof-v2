@@ -2,7 +2,7 @@
 
 ## P1 dev, sampled: failure stage of each episode
 
-Episodes per arm: {'A': 2160, 'B': 2160, 'C': 2160, 'D': 2160}. Every arm pools its available seeds. An arm with fewer episodes has seeds still running.
+Episodes per arm: {'A': 2160, 'B': 2160, 'C': 2160, 'D': 2160}, pooled over seeds and samples (descriptive). The registered statistics are in `results/p1/p1_summary.json`.
 
 | Stage (share of episodes) | A | B | C | D |
 |---|---|---|---|---|
@@ -19,12 +19,13 @@ Episodes per arm: {'A': 2160, 'B': 2160, 'C': 2160, 'D': 2160}. Every arm pools 
 | report: false_success | 0.169 | 0.187 | 0.032 | 0.035 |
 | report: under_claim | 0.000 | 0.000 | 0.003 | 0.003 |
 | report: no_report | 0.019 | 0.016 | 0.011 | 0.000 |
-| VSC | 0.731 | 0.719 | 0.856 | 0.875 |
+| goal met (state only) | 0.731 | 0.719 | 0.856 | 0.875 |
+| VSC (goal met and truthful report) | 0.731 | 0.719 | 0.851 | 0.872 |
 | episodes | 2160 | 2160 | 2160 | 2160 |
 
 ## P1 dev, greedy: failure stage of each episode
 
-Episodes per arm: {'A': 540, 'B': 540, 'C': 540, 'D': 540}. Every arm pools its available seeds. An arm with fewer episodes has seeds still running.
+Episodes per arm: {'A': 540, 'B': 540, 'C': 540, 'D': 540}, pooled over seeds and samples (descriptive). The registered statistics are in `results/p1/p1_summary.json`.
 
 | Stage (share of episodes) | A | B | C | D |
 |---|---|---|---|---|
@@ -41,7 +42,8 @@ Episodes per arm: {'A': 540, 'B': 540, 'C': 540, 'D': 540}. Every arm pools its 
 | report: false_success | 0.024 | 0.083 | 0.000 | 0.000 |
 | report: under_claim | 0.000 | 0.000 | 0.000 | 0.000 |
 | report: no_report | 0.000 | 0.000 | 0.000 | 0.000 |
-| VSC | 0.881 | 0.822 | 0.906 | 0.906 |
+| goal met (state only) | 0.881 | 0.822 | 0.906 | 0.906 |
+| VSC (goal met and truthful report) | 0.881 | 0.822 | 0.906 | 0.906 |
 | episodes | 540 | 540 | 540 | 540 |
 
 ### P1 dev, arm A, sampled: the twelve cells with the most failures
@@ -76,11 +78,11 @@ Episodes per arm: {'A': 540, 'B': 540, 'C': 540, 'D': 540}. Every arm pools its 
 | order_prepay · dup_delivery:pay_supplier | 36 | 0.69 | 0 | 0 | 10 | 11 | 1.00 |
 | receive_pay · dup_delivery:pay_supplier | 72 | 0.85 | 0 | 1 | 7 | 7 | 1.00 |
 | receive_pay · partial:record_goods_receipt | 96 | 0.91 | 3 | 1 | 0 | 1 | — |
-| receive_pay · clean | 157 | 0.97 | 0 | 0 | 0 | 0 | — |
+| receive_pay · clean | 157 | 0.96 | 0 | 0 | 0 | 0 | — |
 
 ## P1 test, sampled: failure stage of each episode
 
-Episodes per arm: {'A': 5400, 'B': 5400, 'C': 5400, 'D': 5400}. Every arm pools its available seeds. An arm with fewer episodes has seeds still running.
+Episodes per arm: {'A': 5400, 'B': 5400, 'C': 5400, 'D': 5400}, pooled over seeds and samples (descriptive). The registered statistics are in `results/p1/p1_summary.json`.
 
 | Stage (share of episodes) | A | B | C | D |
 |---|---|---|---|---|
@@ -97,22 +99,23 @@ Episodes per arm: {'A': 5400, 'B': 5400, 'C': 5400, 'D': 5400}. Every arm pools 
 | report: false_success | 0.385 | 0.420 | 0.129 | 0.110 |
 | report: under_claim | 0.001 | 0.001 | 0.003 | 0.003 |
 | report: no_report | 0.025 | 0.024 | 0.012 | 0.003 |
-| VSC | 0.518 | 0.488 | 0.778 | 0.823 |
+| goal met (state only) | 0.518 | 0.488 | 0.778 | 0.823 |
+| VSC (goal met and truthful report) | 0.513 | 0.483 | 0.772 | 0.819 |
 | episodes | 5400 | 5400 | 5400 | 5400 |
 
 ### P1 test, sampled: VSC per split
 
 | Split | A | B | C | D |
 |---|---|---|---|---|
-| p1_test_full | 0.714 | 0.700 | 0.808 | 0.813 |
-| p1_test_pp | 0.322 | 0.206 | 0.863 | 0.931 |
-| p1_test_rec | 0.630 | 0.622 | 0.857 | 0.917 |
-| p1_test_wf4 | 0.176 | 0.185 | 0.403 | 0.486 |
-| p1_test_combo | 0.539 | 0.521 | 0.806 | 0.829 |
+| p1_test_full | 0.706 | 0.692 | 0.806 | 0.810 |
+| p1_test_pp | 0.319 | 0.206 | 0.860 | 0.931 |
+| p1_test_rec | 0.624 | 0.615 | 0.846 | 0.909 |
+| p1_test_wf4 | 0.174 | 0.183 | 0.397 | 0.486 |
+| p1_test_combo | 0.535 | 0.517 | 0.799 | 0.824 |
 
 ## P1 test, greedy: failure stage of each episode
 
-Episodes per arm: {'A': 1350, 'B': 1350, 'C': 1350, 'D': 1350}. Every arm pools its available seeds. An arm with fewer episodes has seeds still running.
+Episodes per arm: {'A': 1350, 'B': 1350, 'C': 1350, 'D': 1350}, pooled over seeds and samples (descriptive). The registered statistics are in `results/p1/p1_summary.json`.
 
 | Stage (share of episodes) | A | B | C | D |
 |---|---|---|---|---|
@@ -129,7 +132,8 @@ Episodes per arm: {'A': 1350, 'B': 1350, 'C': 1350, 'D': 1350}. Every arm pools 
 | report: false_success | 0.273 | 0.412 | 0.084 | 0.051 |
 | report: under_claim | 0.000 | 0.000 | 0.000 | 0.001 |
 | report: no_report | 0.000 | 0.000 | 0.000 | 0.000 |
-| VSC | 0.666 | 0.528 | 0.856 | 0.889 |
+| goal met (state only) | 0.666 | 0.528 | 0.856 | 0.889 |
+| VSC (goal met and truthful report) | 0.666 | 0.528 | 0.856 | 0.888 |
 | episodes | 1350 | 1350 | 1350 | 1350 |
 
 ### P1 test, greedy: VSC per split
@@ -140,14 +144,14 @@ Episodes per arm: {'A': 1350, 'B': 1350, 'C': 1350, 'D': 1350}. Every arm pools 
 | p1_test_pp | 0.648 | 0.181 | 1.000 | 1.000 |
 | p1_test_rec | 0.828 | 0.700 | 0.931 | 0.933 |
 | p1_test_wf4 | 0.017 | 0.022 | 0.494 | 0.733 |
-| p1_test_combo | 0.689 | 0.672 | 0.878 | 0.883 |
+| p1_test_combo | 0.689 | 0.672 | 0.878 | 0.878 |
 
 ### P1 test, arm A, sampled: the twelve cells with the most failures
 
 | Workflow · first fault | Episodes | VSC | no read | read, not acted | acted, not resolved | false success | new key on re-pay |
 |---|---|---|---|---|---|---|---|
+| pay_post · partial:pay_supplier | 600 | 0.32 | 64 | 148 | 164 | 382 | 0.86 |
 | receive_pay · partial:pay_supplier | 460 | 0.11 | 57 | 285 | 58 | 394 | 0.86 |
-| pay_post · partial:pay_supplier | 600 | 0.33 | 64 | 148 | 164 | 382 | 0.86 |
 | order_receive_pay · clean | 296 | 0.00 | 0 | 0 | 0 | 271 | 1.00 |
 | order_prepay · partial:pay_supplier | 505 | 0.47 | 100 | 55 | 110 | 255 | 0.93 |
 | pay_post · never_commit:pay_supplier | 120 | 0.00 | 0 | 0 | 0 | 13 | 0.00 |
@@ -155,8 +159,8 @@ Episodes per arm: {'A': 1350, 'B': 1350, 'C': 1350, 'D': 1350}. Every arm pools 
 | order_receive_pay · partial:pay_supplier | 69 | 0.09 | 0 | 5 | 47 | 63 | 0.95 |
 | order_prepay · never_commit:place_supplier_order | 60 | 0.00 | 0 | 0 | 0 | 16 | — |
 | receive_pay · never_commit:pay_supplier | 60 | 0.00 | 0 | 0 | 0 | 10 | — |
+| pay_post · phantom:pay_supplier | 204 | 0.73 | 15 | 0 | 8 | 49 | 0.00 |
 | order_receive_pay · lost_ack:pay_supplier | 70 | 0.24 | 0 | 0 | 0 | 53 | 0.67 |
-| pay_post · phantom:pay_supplier | 204 | 0.75 | 15 | 0 | 8 | 49 | 0.00 |
 | receive_pay · never_commit:record_goods_receipt | 48 | 0.00 | 0 | 0 | 0 | 14 | — |
 
 ### P1 test, arm C, sampled: the twelve cells with the most failures
@@ -166,12 +170,12 @@ Episodes per arm: {'A': 1350, 'B': 1350, 'C': 1350, 'D': 1350}. Every arm pools 
 | order_receive_pay · clean | 150 | 0.00 | 0 | 0 | 0 | 126 | — |
 | pay_post · never_commit:pay_supplier | 120 | 0.00 | 0 | 0 | 0 | 0 | — |
 | pay_post · partial:pay_supplier | 600 | 0.82 | 1 | 2 | 73 | 100 | 0.98 |
-| order_prepay · partial:pay_supplier | 507 | 0.88 | 1 | 3 | 55 | 56 | 1.00 |
+| order_prepay · partial:pay_supplier | 507 | 0.87 | 1 | 3 | 55 | 56 | 1.00 |
 | order_prepay · never_commit:place_supplier_order | 60 | 0.00 | 0 | 0 | 0 | 6 | — |
 | receive_pay · never_commit:pay_supplier | 60 | 0.00 | 0 | 0 | 0 | 0 | — |
 | order_receive_pay · partial:record_goods_receipt | 84 | 0.31 | 5 | 15 | 18 | 32 | — |
 | receive_pay · partial:pay_supplier | 464 | 0.89 | 0 | 0 | 46 | 50 | 1.00 |
 | receive_pay · never_commit:record_goods_receipt | 48 | 0.00 | 0 | 0 | 0 | 0 | — |
 | order_receive_pay · lost_ack:record_goods_receipt | 74 | 0.42 | 10 | 15 | 5 | 31 | 1.00 |
+| order_receive_pay · phantom:record_goods_receipt | 73 | 0.42 | 1 | 20 | 0 | 14 | 1.00 |
 | order_receive_pay · partial:pay_supplier | 64 | 0.36 | 0 | 7 | 21 | 38 | 1.00 |
-| order_receive_pay · phantom:record_goods_receipt | 73 | 0.44 | 1 | 20 | 0 | 14 | 1.00 |

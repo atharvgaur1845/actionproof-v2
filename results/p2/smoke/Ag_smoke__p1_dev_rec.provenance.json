@@ -1,0 +1,49 @@
+{
+  "tag": "Ag_smoke",
+  "split": "p1_dev_rec",
+  "phase": "smoke",
+  "git_commit": null,
+  "split_sha256": "20c94758148642ed455e30f7e1aba7115a15be7bbdc18ccf42d2bad7608020c0",
+  "task_ids": [
+    "p1_dev_rec-0000",
+    "p1_dev_rec-0001",
+    "p1_dev_rec-0002",
+    "p1_dev_rec-0003",
+    "p1_dev_rec-0004",
+    "p1_dev_rec-0005",
+    "p1_dev_rec-0006",
+    "p1_dev_rec-0007"
+  ],
+  "expected_episodes": 16,
+  "actual_episodes": 16,
+  "decoding": {
+    "greedy": {
+      "temperature": 0,
+      "max_tokens": 256
+    },
+    "sampled": {
+      "temperature": 1.0,
+      "top_p": 1.0,
+      "max_tokens": 256,
+      "n": 1,
+      "seed": "E1.seed_of(task_id, sample, turn)"
+    },
+    "max_turns": 16,
+    "max_model_len": 8192
+  },
+  "model": "runs/rft_proc/merged",
+  "adapter": "runs/s3_rv_mix_s0/final",
+  "adapter_sha256": "a691110296959e66a5c6ed93de9c51767a76c0c9da79a016d5d66158563846e9",
+  "code_sha256": {
+    "scripts/p2_eval.py": "6e43965aac34a382f003941180b10e6b0447acf2a9779f4d52e9d3932138a07f",
+    "scripts/p1_eval.py": "5e230b42707853c2eda89e51802d0e3ea2aa5964570d36cb0001baa887efc3d8",
+    "scripts/e1_eval.py": "7e57b07e2043875c46f17ea405ae21efc7b54cfbd843fdaf36479446fe430a8b",
+    "actionproof/p2/ledger.py": "cf8e29e83e9d214a9be28461c790bbf36945dbd6bbb1e2d59980aef7bc8c654f",
+    "actionproof/p2/guard.py": "e5f69bead1a9d0ff4e7764fffedfd741407c2c98c333c1d99f5d04541e767e7a",
+    "actionproof/integrity/sim/truth.py": "e0b14cc63fb7a295f33d8ca62d0665acd14a0a0a2ebb1e7cff51e5caf3e2b983",
+    "actionproof/integrity/sim/env.py": "9e71bf01e2858d38c5d38fe3b59b091efebd2abe383d986219ed45a825f775b2"
+  },
+  "ledger": false,
+  "guard": true,
+  "api": false
+}

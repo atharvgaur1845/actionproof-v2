@@ -1,0 +1,14 @@
+\begin{table*}[t]\centering\small
+\begin{tabular}{llccccc}\toprule
+Test & Contrast & VSC & $\Delta$ [95\% CI] & Holm $p$ & Seed $\Delta$s & Supported \\\midrule
+H1 & E - D & 0.819 $\to$ 0.782 & $-$0.038 [$-$0.053, $-$0.022] & 1.0000 & $-$0.044, $-$0.027, $-$0.041 & no \\
+H2 & E - A & 0.513 $\to$ 0.782 & +0.269 [+0.238, +0.301] & 0.0004 & +0.249, +0.265, +0.293 & yes \\
+H3 & B2 - A & 0.513 $\to$ 0.253 & $-$0.260 [$-$0.290, $-$0.230] & 1.0000 & $-$0.279, $-$0.253, $-$0.248 & no \\
+H4 & Ag - A & 0.513 $\to$ 0.391 & $-$0.122 [$-$0.144, $-$0.101] & 1.0000 & $-$0.137, $-$0.123, $-$0.105 & no \\
+\midrule
+S1 & Cg - C & 0.772 $\to$ 0.527 & $-$0.244 [$-$0.284, $-$0.206] & 1.0000 & $-$0.251, $-$0.241, $-$0.242 & no \\
+S2 & Dg - D & 0.819 $\to$ 0.547 & $-$0.273 [$-$0.312, $-$0.235] & 1.0000 & $-$0.262, $-$0.276, $-$0.279 & no \\
+S3 & Eg - E & 0.782 $\to$ 0.640 & $-$0.142 [$-$0.170, $-$0.115] & 1.0000 & $-$0.112, $-$0.177, $-$0.138 & no \\
+\bottomrule\end{tabular}
+\caption{P2 frozen test (450 tasks, 3 seeds per arm). Primary family H1--H4 and secondary family S1--S3, Holm within each; same rule as P1 (\texttt{PREREGISTRATION\_P2.md}). References on the same tasks: W: 0.335 (sampled, 1 model(s)); M: 0.479 (sampled, 3 model(s)); O: 0.924 (greedy, 1 model(s)). Source: \texttt{results/p2/p2\_summary.json}.}
+\label{tab:p2}\end{table*}

@@ -1,0 +1,79 @@
+{
+  "tag": "Ag_smoke",
+  "split": "p1_dev_rec",
+  "phase": "smoke",
+  "ledger": false,
+  "guard": true,
+  "model": "runs/rft_proc/merged",
+  "adapter": "runs/s3_rv_mix_s0/final",
+  "samples": 1,
+  "seconds": 7.0,
+  "greedy": {
+    "n": 8,
+    "vsc": 0.875,
+    "false_success": 0.0,
+    "duplicate_unrefunded": 0.0,
+    "honest_fail": 0.125,
+    "partial_pay_repaired": null,
+    "new_key_share_on_repay": null,
+    "redundant_reads_per_episode": 0.0,
+    "reads_per_episode": 2.375,
+    "calls_per_success": 4.857142857142857,
+    "context_ended": 0.0
+  },
+  "sampled": {
+    "n": 8,
+    "vsc": 0.625,
+    "false_success": 0.0,
+    "duplicate_unrefunded": 0.0,
+    "honest_fail": 0.25,
+    "partial_pay_repaired": null,
+    "new_key_share_on_repay": null,
+    "redundant_reads_per_episode": 0.0,
+    "reads_per_episode": 3.25,
+    "calls_per_success": 5.4,
+    "context_ended": 0.0
+  },
+  "by_workflow_sampled": {
+    "order_prepay": {
+      "n": 2,
+      "vsc": 0.5,
+      "false_success": 0.0,
+      "duplicate_unrefunded": 0.0,
+      "honest_fail": 0.5,
+      "partial_pay_repaired": null,
+      "new_key_share_on_repay": null,
+      "redundant_reads_per_episode": 0.0,
+      "reads_per_episode": 2.5,
+      "calls_per_success": 3.0,
+      "context_ended": 0.0
+    },
+    "pay_post": {
+      "n": 2,
+      "vsc": 0.5,
+      "false_success": 0.0,
+      "duplicate_unrefunded": 0.0,
+      "honest_fail": 0.5,
+      "partial_pay_repaired": null,
+      "new_key_share_on_repay": null,
+      "redundant_reads_per_episode": 0.0,
+      "reads_per_episode": 2.5,
+      "calls_per_success": 4.0,
+      "context_ended": 0.0
+    },
+    "receive_pay": {
+      "n": 4,
+      "vsc": 0.75,
+      "false_success": 0.0,
+      "duplicate_unrefunded": 0.0,
+      "honest_fail": 0.0,
+      "partial_pay_repaired": null,
+      "new_key_share_on_repay": null,
+      "redundant_reads_per_episode": 0.0,
+      "reads_per_episode": 4.0,
+      "calls_per_success": 6.666666666666667,
+      "context_ended": 0.0
+    }
+  },
+  "guard_blocks_per_episode": 0.3125
+}

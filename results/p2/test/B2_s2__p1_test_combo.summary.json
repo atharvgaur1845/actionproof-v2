@@ -1,0 +1,79 @@
+{
+  "tag": "B2_s2",
+  "split": "p1_test_combo",
+  "phase": "test",
+  "ledger": true,
+  "guard": false,
+  "model": "runs/rft_proc/merged",
+  "adapter": "runs/s3_rv_mix_s2/final",
+  "samples": 4,
+  "seconds": 47.2,
+  "greedy": {
+    "n": 60,
+    "vsc": 0.3,
+    "false_success": 0.5166666666666667,
+    "duplicate_unrefunded": 0.11666666666666667,
+    "honest_fail": 0.06666666666666667,
+    "partial_pay_repaired": 0.0,
+    "new_key_share_on_repay": 0.6666666666666666,
+    "redundant_reads_per_episode": 0.31666666666666665,
+    "reads_per_episode": 4.833333333333333,
+    "calls_per_success": 9.11111111111111,
+    "context_ended": 0.0
+  },
+  "sampled": {
+    "n": 240,
+    "vsc": 0.2625,
+    "false_success": 0.5958333333333333,
+    "duplicate_unrefunded": 0.2,
+    "honest_fail": 0.0375,
+    "partial_pay_repaired": 0.014705882352941176,
+    "new_key_share_on_repay": 0.5555555555555556,
+    "redundant_reads_per_episode": 0.5458333333333333,
+    "reads_per_episode": 4.45,
+    "calls_per_success": 9.412698412698413,
+    "context_ended": 0.0
+  },
+  "by_workflow_sampled": {
+    "order_prepay": {
+      "n": 52,
+      "vsc": 0.17307692307692307,
+      "false_success": 0.7307692307692307,
+      "duplicate_unrefunded": 0.25,
+      "honest_fail": 0.038461538461538464,
+      "partial_pay_repaired": 0.0,
+      "new_key_share_on_repay": 0.3333333333333333,
+      "redundant_reads_per_episode": 0.40384615384615385,
+      "reads_per_episode": 3.230769230769231,
+      "calls_per_success": 8.88888888888889,
+      "context_ended": 0.0
+    },
+    "pay_post": {
+      "n": 96,
+      "vsc": 0.22916666666666666,
+      "false_success": 0.5520833333333334,
+      "duplicate_unrefunded": 0.21875,
+      "honest_fail": 0.07291666666666667,
+      "partial_pay_repaired": 0.041666666666666664,
+      "new_key_share_on_repay": 0.5588235294117647,
+      "redundant_reads_per_episode": 0.8020833333333334,
+      "reads_per_episode": 5.447916666666667,
+      "calls_per_success": 9.227272727272727,
+      "context_ended": 0.0
+    },
+    "receive_pay": {
+      "n": 92,
+      "vsc": 0.34782608695652173,
+      "false_success": 0.5652173913043478,
+      "duplicate_unrefunded": 0.15217391304347827,
+      "honest_fail": 0.0,
+      "partial_pay_repaired": 0.0,
+      "new_key_share_on_repay": 0.7272727272727273,
+      "redundant_reads_per_episode": 0.358695652173913,
+      "reads_per_episode": 4.0978260869565215,
+      "calls_per_success": 9.6875,
+      "context_ended": 0.0
+    }
+  },
+  "guard_blocks_per_episode": 0.0
+}

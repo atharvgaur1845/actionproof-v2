@@ -1,0 +1,79 @@
+{
+  "tag": "B2_smoke",
+  "split": "p1_dev_rec",
+  "phase": "smoke",
+  "ledger": true,
+  "guard": false,
+  "model": "runs/rft_proc/merged",
+  "adapter": "runs/s3_rv_mix_s0/final",
+  "samples": 1,
+  "seconds": 7.1,
+  "greedy": {
+    "n": 8,
+    "vsc": 0.625,
+    "false_success": 0.375,
+    "duplicate_unrefunded": 0.25,
+    "honest_fail": 0.0,
+    "partial_pay_repaired": null,
+    "new_key_share_on_repay": null,
+    "redundant_reads_per_episode": 0.0,
+    "reads_per_episode": 3.0,
+    "calls_per_success": 5.2,
+    "context_ended": 0.0
+  },
+  "sampled": {
+    "n": 8,
+    "vsc": 0.5,
+    "false_success": 0.5,
+    "duplicate_unrefunded": 0.5,
+    "honest_fail": 0.0,
+    "partial_pay_repaired": null,
+    "new_key_share_on_repay": 0.6666666666666666,
+    "redundant_reads_per_episode": 0.625,
+    "reads_per_episode": 4.5,
+    "calls_per_success": 7.25,
+    "context_ended": 0.0
+  },
+  "by_workflow_sampled": {
+    "order_prepay": {
+      "n": 2,
+      "vsc": 0.0,
+      "false_success": 1.0,
+      "duplicate_unrefunded": 1.0,
+      "honest_fail": 0.0,
+      "partial_pay_repaired": null,
+      "new_key_share_on_repay": null,
+      "redundant_reads_per_episode": 1.0,
+      "reads_per_episode": 5.0,
+      "calls_per_success": null,
+      "context_ended": 0.0
+    },
+    "pay_post": {
+      "n": 2,
+      "vsc": 0.5,
+      "false_success": 0.5,
+      "duplicate_unrefunded": 0.5,
+      "honest_fail": 0.0,
+      "partial_pay_repaired": null,
+      "new_key_share_on_repay": 1.0,
+      "redundant_reads_per_episode": 1.5,
+      "reads_per_episode": 6.5,
+      "calls_per_success": 10.0,
+      "context_ended": 0.0
+    },
+    "receive_pay": {
+      "n": 4,
+      "vsc": 0.75,
+      "false_success": 0.25,
+      "duplicate_unrefunded": 0.25,
+      "honest_fail": 0.0,
+      "partial_pay_repaired": null,
+      "new_key_share_on_repay": 0.5,
+      "redundant_reads_per_episode": 0.0,
+      "reads_per_episode": 3.25,
+      "calls_per_success": 6.333333333333333,
+      "context_ended": 0.0
+    }
+  },
+  "guard_blocks_per_episode": 0.0
+}
