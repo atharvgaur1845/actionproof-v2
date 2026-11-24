@@ -907,6 +907,18 @@ claims:
       api_E_lo: {value: 0.058, file: results/p2/p2_summary.json, key: [shift, s4_api, E, ci95, 0], shown: ["0.058"]}
     commit: null
 
+  - id: AD-D3
+    statement: "AD D3 development gates (information-gated read credit with an EMA scale; 2 seeds, cw_dev): gates G1-G4 pass (VSC +0.16 in both seeds, 0.867), but the mechanism prediction R1 (fewer uninformative reads) fails: uninformative reads rose (drop share -1.79). Development only; no algorithm is claimed."
+    status: supported
+    prereg: docs/research/algorithm_discovery_v2/FINAL_ALGORITHM_REPORT.md
+    eval: [results/ad/d3_summary.json]
+    stats: scripts/ad/d3_gates.py
+    numbers:
+      vsc_diff: {value: 0.16, file: results/ad/d3_summary.json, key: [gates, vsc_diff_mean], shown: ["+0.16"]}
+      irc_vsc: {value: 0.867, file: results/ad/d3_summary.json, key: [runs, ad_nostd_ema_irc_s0, vsc], shown: ["0.867"]}
+      r1: {value: -1.79, file: results/ad/d3_summary.json, key: [predictions, R1_uninf_drop_share], shown: ["-1.79", "−1.79"]}
+    commit: null
+
   # ---- Write-up numbers (docs/submission/WRITEUP.md, enforced from 2026-11-24)
   - id: J1-DESC
     statement: "J1 descriptive measurements on the 660 main cases (PREREGISTRATION_J1.md reports them without a hypothesis): transcript-only accuracy (abstain = wrong) and coverage, recall on genuinely completed episodes, prompt-paraphrase kappa and cost per 1,000 judgements."

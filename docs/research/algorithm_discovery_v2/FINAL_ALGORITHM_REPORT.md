@@ -193,6 +193,13 @@ outcome noise. igc delivers that signal exactly, at every uninformative decision
 **Checkpoints:** none from v2. The tabular policies are small and written in each run's JSON line (`theta`, for
 non-core runs).
 
+## 4b. D3 development gates (igc + EMA scale; 2 seeds, cw_dev; `results/ad/d3_summary.json`, computed on Slurm 2026-11-24)
+
+- **Gates G1–G4 pass.** VSC +0.16 over the reference in both seeds; nostd_ema_irc reaches 0.867 in each.
+- **The mechanism prediction fails.** R1 predicted fewer uninformative reads. They rose instead: the drop share is −1.79, and uninformative reads per episode are about 1.17. R2 (more reads after pay) and R3 (cost-aware return) hold.
+- **Reading.** The gain does not come from the mechanism igc was designed around. It reads more, and the extra reads include uninformative ones.
+- This is a development result on two seeds. D3 has no confirmatory run (PREREGISTRATION_AD_C1_NOTE3), so **no algorithm is claimed**.
+
 ## 5. AD-C1 confirmatory verdict (first stage)
 
 PENDING. This section is filled from `results/ad/c1_summary.json` only, after tasks 1220–1231 (training) and

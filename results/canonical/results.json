@@ -436,6 +436,14 @@
    "stats": "scripts/p2_stats.py"
   },
   {
+   "id": "AD-D3",
+   "statement": "AD D3 development gates (information-gated read credit with an EMA scale; 2 seeds, cw_dev): gates G1-G4 pass (VSC +0.16 in both seeds, 0.867), but the mechanism prediction R1 (fewer uninformative reads) fails: uninformative reads rose (drop share -1.79). Development only; no algorithm is claimed.",
+   "status": "supported",
+   "label": "development",
+   "registration": "docs/research/algorithm_discovery_v2/FINAL_ALGORITHM_REPORT.md",
+   "stats": "scripts/ad/d3_gates.py"
+  },
+  {
    "id": "J1-DESC",
    "statement": "J1 descriptive measurements on the 660 main cases (PREREGISTRATION_J1.md reports them without a hypothesis): transcript-only accuracy (abstain = wrong) and coverage, recall on genuinely completed episodes, prompt-paraphrase kappa and cost per 1,000 judgements.",
    "status": "supported",
@@ -11412,6 +11420,83 @@
    "ci_type": "not_recorded"
   },
   {
+   "claim": "AD-D3",
+   "metric": "vsc_diff",
+   "label": "development",
+   "registration": "docs/research/algorithm_discovery_v2/FINAL_ALGORITHM_REPORT.md",
+   "value": 0.16000000000000003,
+   "stated": 0.16,
+   "match": true,
+   "error": null,
+   "source": "results/ad/d3_summary.json",
+   "key": [
+    "gates",
+    "vsc_diff_mean"
+   ],
+   "agg": null,
+   "shown": [
+    "+0.16"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "AD-D3",
+   "metric": "irc_vsc",
+   "label": "development",
+   "registration": "docs/research/algorithm_discovery_v2/FINAL_ALGORITHM_REPORT.md",
+   "value": 0.8666666666666667,
+   "stated": 0.867,
+   "match": true,
+   "error": null,
+   "source": "results/ad/d3_summary.json",
+   "key": [
+    "runs",
+    "ad_nostd_ema_irc_s0",
+    "vsc"
+   ],
+   "agg": null,
+   "shown": [
+    "0.867"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "AD-D3",
+   "metric": "r1",
+   "label": "development",
+   "registration": "docs/research/algorithm_discovery_v2/FINAL_ALGORITHM_REPORT.md",
+   "value": -1.7857142857142858,
+   "stated": -1.79,
+   "match": true,
+   "error": null,
+   "source": "results/ad/d3_summary.json",
+   "key": [
+    "predictions",
+    "R1_uninf_drop_share"
+   ],
+   "agg": null,
+   "shown": [
+    "-1.79",
+    "\u22121.79"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
    "claim": "J1-DESC",
    "metric": "gemma_acc",
    "label": "descriptive",
@@ -16379,7 +16464,7 @@
   }
  },
  "sources": {
-  "claims/claims.yaml": "d04a9fb0f9b5ebe3f39f0473031397e830faa23303377ccf903af21c8574e16d",
+  "claims/claims.yaml": "db71a985a1993071f6b72cb84db7541d23492b36fcbde8615100384ced0a832a",
   "results/a12b/h3_predictions.json": "efa235a165776041e08293786a4105928a413989cac20d4bbd36bb8900548397",
   "results/a12b/gate.json": "593b1c909595be7cfbd8e2984be42cfe6dcbe913f43d3784e00cc1c74586f5a4",
   "results/a13/h5_finite.json": "2f0170a26db94accb79cfc05a945f29d947aea1301a8723b9996f252d0b23edb",
@@ -16443,6 +16528,7 @@
   "results/quality/p2_guard_diagnosis.json": "4a5da479cb2b784c6b622cc64e8dac3b3210b359741c4920f37210988151ab28",
   "results/quality/diagnosis_p2_test.json": "6523f1c73da7c015d5a50e3f23ba6582aa12fb5c2bbf3113c853cea73e587e16",
   "results/quality/diagnosis_p1_test.json": "3d899b48e44f106aa6d3973e8d3bdd5a7fe2c221e650c3c70e7a5af68e89d5d2",
+  "results/ad/d3_summary.json": "778e36c52c16ec73dd990d338d79f6858c4e417056b580f55b56c419126d0bac",
   "results/ad/d1_summary.json": "c2e7db74b47362ec615010cc793d573345bde50cee85f86f6b73d70765135174",
   "results/roi/roi_model.json": "ea84ad83c634ef41934475e7505f78d2910cc7c0dd9533ee3afa52fed24fbfd9",
   "results/a12/gate.json": "8309aaa8454b10bdd849b4b787e7371e3e427c2d038cff711cbcc68b7b692b9e",
@@ -16460,11 +16546,11 @@
  "label_counts": {
   "confirmatory": 310,
   "descriptive": 103,
-  "development": 22,
+  "development": 25,
   "exploratory": 17,
   "failed": 10,
   "unsupported": 92
  },
  "mismatches": [],
- "content_sha256": "aafeebce57a6bac28b8664282944cbcdf55f77fe3f9dcea7b8065ea8f28d308f"
+ "content_sha256": "e7669af3184d10b5e7725af146778e381f7ee7774522dbd9d1818c9c67aad23b"
 }
