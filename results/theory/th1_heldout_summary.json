@@ -1,0 +1,632 @@
+{
+ "split": "heldout",
+ "cells_expected": 731,
+ "cells_complete": 731,
+ "missing": [],
+ "H1": {
+  "by_est": {
+   "grpo": {
+    "median_abs_err": 0.00025719242911610013,
+    "p90_abs_err": 0.0073383967591686555,
+    "mean_abs_err": 0.0030902318048692304,
+    "max_abs_err": 0.1905081565856867,
+    "n": 731
+   },
+   "nostd": {
+    "median_abs_err": 0.0002543054632931918,
+    "p90_abs_err": 0.005651927554263865,
+    "mean_abs_err": 0.0034179653235900443,
+    "max_abs_err": 0.22381170190648342,
+    "n": 731
+   },
+   "rloo": {
+    "median_abs_err": 0.00021960081470162596,
+    "p90_abs_err": 0.0055606537625865204,
+    "mean_abs_err": 0.004081125686295278,
+    "max_abs_err": 0.38961179953237446,
+    "n": 731
+   },
+   "awrb": {
+    "median_abs_err": 0.00011286711781477443,
+    "p90_abs_err": 0.0007553087975699091,
+    "mean_abs_err": 0.0011282981946515785,
+    "max_abs_err": 0.07714424019571767,
+    "n": 731
+   },
+   "gdpo": {
+    "median_abs_err": 9.492976590840582e-05,
+    "p90_abs_err": 0.00037159619427959683,
+    "mean_abs_err": 0.00019903207083254328,
+    "max_abs_err": 0.010758095431266435,
+    "n": 731
+   }
+  },
+  "criteria": [
+   {
+    "criterion": "grpo median |sim - pred|",
+    "value": 0.00025719242911610013,
+    "threshold": 0.03,
+    "op": "<=",
+    "met": true
+   },
+   {
+    "criterion": "nostd median |sim - pred|",
+    "value": 0.0002543054632931918,
+    "threshold": 0.03,
+    "op": "<=",
+    "met": true
+   },
+   {
+    "criterion": "rloo median |sim - pred|",
+    "value": 0.00021960081470162596,
+    "threshold": 0.03,
+    "op": "<=",
+    "met": true
+   },
+   {
+    "criterion": "grpo p90 |sim - pred|",
+    "value": 0.0073383967591686555,
+    "threshold": 0.1,
+    "op": "<=",
+    "met": true
+   },
+   {
+    "criterion": "nostd p90 |sim - pred|",
+    "value": 0.005651927554263865,
+    "threshold": 0.1,
+    "op": "<=",
+    "met": true
+   },
+   {
+    "criterion": "rloo p90 |sim - pred|",
+    "value": 0.0055606537625865204,
+    "threshold": 0.1,
+    "op": "<=",
+    "met": true
+   }
+  ]
+ },
+ "H2": {
+  "n": 721,
+  "k": 721,
+  "rate": 1.0,
+  "ci95": [
+   1.0,
+   1.0
+  ],
+  "criteria": [
+   {
+    "criterion": "grpo decision agreement",
+    "value": 1.0,
+    "threshold": 0.95,
+    "op": ">=",
+    "met": true
+   }
+  ]
+ },
+ "H3": {
+  "n": 152,
+  "k": 152,
+  "rate": 1.0,
+  "ci95": [
+   1.0,
+   1.0
+  ],
+  "cells_where_vote_and_delta_q_disagree": {
+   "n": 77,
+   "k": 77,
+   "rate": 1.0,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "criteria": [
+   {
+    "criterion": "grpo moves with sign(vote)",
+    "value": 1.0,
+    "threshold": 0.95,
+    "op": ">=",
+    "met": true
+   }
+  ]
+ },
+ "H4": {
+  "grpo_below_0.95": {
+   "n": 69,
+   "k": 67,
+   "rate": 0.9710144927536232,
+   "ci95": [
+    0.927536231884058,
+    1.0
+   ]
+  },
+  "nostd_above_grpo": {
+   "n": 69,
+   "k": 69,
+   "rate": 1.0,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "criteria": [
+   {
+    "criterion": "grpo pi_T < 0.95",
+    "value": 0.9710144927536232,
+    "threshold": 0.9,
+    "op": ">=",
+    "met": true
+   },
+   {
+    "criterion": "nostd pi_T > grpo pi_T",
+    "value": 1.0,
+    "threshold": 0.9,
+    "op": ">=",
+    "met": true
+   }
+  ]
+ },
+ "H5": {
+  "n": 661,
+  "k": 661,
+  "rate": 1.0,
+  "ci95": [
+   1.0,
+   1.0
+  ],
+  "criteria": [
+   {
+    "criterion": "nostd moves with sign(delta_q)",
+    "value": 1.0,
+    "threshold": 0.95,
+    "op": ">=",
+    "met": true
+   }
+  ]
+ },
+ "H6": {
+  "n": 75,
+  "k": 53,
+  "rate": 0.7066666666666667,
+  "ci95": [
+   0.6,
+   0.8
+  ],
+  "criteria": [
+   {
+    "criterion": "grpo regret <= nostd regret + 0.01",
+    "value": 0.7066666666666667,
+    "threshold": 0.9,
+    "op": ">=",
+    "met": false
+   }
+  ]
+ },
+ "H7": {
+  "pairs": 131,
+  "pairs_pred_diff_ge_0.05": 3,
+  "n": 3,
+  "k": 3,
+  "rate": 1.0,
+  "ci95": [
+   1.0,
+   1.0
+  ],
+  "criteria": [
+   {
+    "criterion": "twin difference direction",
+    "value": 1.0,
+    "threshold": 0.9,
+    "op": ">=",
+    "met": true
+   },
+   {
+    "criterion": "pairs with predicted difference >= 0.05",
+    "value": 3,
+    "threshold": 10,
+    "op": ">=",
+    "met": false
+   }
+  ]
+ },
+ "descriptive": {
+  "grpo": {
+   "agrees_bayes_cell": {
+    "n": 731,
+    "k": 436,
+    "rate": 0.5964432284541724,
+    "ci95": [
+     0.560875512995896,
+     0.6320109439124487
+    ]
+   },
+   "mean_regret": 0.6096377935625863,
+   "median_regret": 0.06501989975606787,
+   "mean_false_completion": 0.28321156910601464,
+   "mean_grad_sd": 0.05123942793240285,
+   "mean_abs_grad": 0.03781768676769042,
+   "rollouts_per_run": 31400.273597811218,
+   "regret|shared": 0.6761211043934722,
+   "agrees_bayes|shared": 0.5021834061135371,
+   "regret|iid": 0.3641335314330535,
+   "agrees_bayes|iid": 0.7450980392156863,
+   "regret|mix": 0.763696928876035,
+   "agrees_bayes|mix": 0.5877862595419847,
+   "regret|dirmult": 0.5711062315955885,
+   "agrees_bayes|dirmult": 0.6245353159851301
+  },
+  "nostd": {
+   "agrees_bayes_cell": {
+    "n": 731,
+    "k": 709,
+    "rate": 0.9699042407660738,
+    "ci95": [
+     0.9562243502051984,
+     0.9822161422708618
+    ]
+   },
+   "mean_regret": 0.011182264190478871,
+   "median_regret": 0.009128576918831422,
+   "mean_false_completion": 0.20792280034090918,
+   "mean_grad_sd": 0.07145541048371243,
+   "mean_abs_grad": 0.03584324799841521,
+   "rollouts_per_run": 31400.273597811218,
+   "regret|shared": 0.011960723839153892,
+   "agrees_bayes|shared": 0.9606986899563319,
+   "regret|iid": 0.011638202975366028,
+   "agrees_bayes|iid": 0.9509803921568627,
+   "regret|mix": 0.010532038236401524,
+   "agrees_bayes|mix": 0.9770992366412213,
+   "regret|dirmult": 0.01066332955991777,
+   "agrees_bayes|dirmult": 0.9814126394052045
+  },
+  "rloo": {
+   "agrees_bayes_cell": {
+    "n": 731,
+    "k": 712,
+    "rate": 0.9740082079343365,
+    "ci95": [
+     0.9616963064295485,
+     0.9849521203830369
+    ]
+   },
+   "mean_regret": 0.008002041185489963,
+   "median_regret": 0.007106221539086998,
+   "mean_false_completion": 0.2060339921319098,
+   "mean_grad_sd": 0.08649135792027499,
+   "mean_abs_grad": 0.03948055646310589,
+   "rollouts_per_run": 31400.273597811218,
+   "regret|shared": 0.008373162913142726,
+   "agrees_bayes|shared": 0.9650655021834061,
+   "regret|iid": 0.008289090255714787,
+   "agrees_bayes|iid": 0.9509803921568627,
+   "regret|mix": 0.0076554849706590355,
+   "agrees_bayes|mix": 0.9847328244274809,
+   "regret|dirmult": 0.007746029971168169,
+   "agrees_bayes|dirmult": 0.9851301115241635
+  },
+  "batchstd": {
+   "agrees_bayes_cell": {
+    "n": 731,
+    "k": 694,
+    "rate": 0.9493844049247606,
+    "ci95": [
+     0.9343365253077975,
+     0.9644322845417237
+    ]
+   },
+   "mean_regret": 0.04293089756373729,
+   "median_regret": 0.009210589417829906,
+   "mean_false_completion": 0.20760073617404948,
+   "mean_grad_sd": 0.058154646536378016,
+   "mean_abs_grad": 0.045005984699063306,
+   "rollouts_per_run": 31400.273597811218,
+   "regret|shared": 0.045312974025531104,
+   "agrees_bayes|shared": 0.9213973799126638,
+   "regret|iid": 0.02883566142036175,
+   "agrees_bayes|iid": 0.9411764705882353,
+   "regret|mix": 0.05084915434593729,
+   "agrees_bayes|mix": 0.9694656488549618,
+   "regret|dirmult": 0.04239159250204702,
+   "agrees_bayes|dirmult": 0.966542750929368
+  },
+  "reinforce": {
+   "agrees_bayes_cell": {
+    "n": 731,
+    "k": 713,
+    "rate": 0.9753761969904241,
+    "ci95": [
+     0.9644322845417237,
+     0.9849863201094389
+    ]
+   },
+   "mean_regret": 0.008210358582214649,
+   "median_regret": 0.0071201625934046555,
+   "mean_false_completion": 0.20602162297465984,
+   "mean_grad_sd": 0.09503484722011848,
+   "mean_abs_grad": 0.0477520586836704,
+   "rollouts_per_run": 31400.273597811218,
+   "regret|shared": 0.008918092607606952,
+   "agrees_bayes|shared": 0.9650655021834061,
+   "regret|iid": 0.008214044116792977,
+   "agrees_bayes|iid": 0.9607843137254902,
+   "regret|mix": 0.007929570181192572,
+   "agrees_bayes|mix": 0.9923664122137404,
+   "regret|dirmult": 0.007743207147984409,
+   "agrees_bayes|dirmult": 0.9814126394052045
+  },
+  "ppo": {
+   "agrees_bayes_cell": {
+    "n": 731,
+    "k": 692,
+    "rate": 0.9466484268125855,
+    "ci95": [
+     0.9302325581395349,
+     0.9616963064295485
+    ]
+   },
+   "mean_regret": 0.03978564054861372,
+   "median_regret": 0.0035102320158885035,
+   "mean_false_completion": 0.20517346047532858,
+   "mean_grad_sd": 26568.346256976594,
+   "mean_abs_grad": 1536.5271254014713,
+   "rollouts_per_run": 31400.273597811218,
+   "regret|shared": 0.0633396656532279,
+   "agrees_bayes|shared": 0.8864628820960698,
+   "regret|iid": 0.01511901916319608,
+   "agrees_bayes|iid": 0.9509803921568627,
+   "regret|mix": 0.03412273467325607,
+   "agrees_bayes|mix": 0.9847328244274809,
+   "regret|dirmult": 0.0318449873963007,
+   "agrees_bayes|dirmult": 0.9776951672862454
+  },
+  "dapo": {
+   "agrees_bayes_cell": {
+    "n": 731,
+    "k": 436,
+    "rate": 0.5964432284541724,
+    "ci95": [
+     0.560875512995896,
+     0.6320109439124487
+    ]
+   },
+   "mean_regret": 0.6009972348895403,
+   "median_regret": 0.033548166832701135,
+   "mean_false_completion": 0.2811439870647376,
+   "mean_grad_sd": 0.09056602387772403,
+   "mean_abs_grad": 0.11087083570405318,
+   "rollouts_per_run": 79170.09384404925,
+   "regret|shared": 0.6683359862167656,
+   "agrees_bayes|shared": 0.5021834061135371,
+   "regret|iid": 0.35584145230876907,
+   "agrees_bayes|iid": 0.7450980392156863,
+   "regret|mix": 0.7548630216365293,
+   "agrees_bayes|mix": 0.5877862595419847,
+   "regret|dirmult": 0.5616994568428807,
+   "agrees_bayes|dirmult": 0.6245353159851301
+  },
+  "grpo_kl": {
+   "agrees_bayes_cell": {
+    "n": 731,
+    "k": 435,
+    "rate": 0.5950752393980848,
+    "ci95": [
+     0.5622093023255814,
+     0.6292749658002736
+    ]
+   },
+   "mean_regret": 0.6098642177498925,
+   "median_regret": 0.07310082230809115,
+   "mean_false_completion": 0.28377233418422704,
+   "mean_grad_sd": 0.051960372303518375,
+   "mean_abs_grad": 0.03924405651666953,
+   "rollouts_per_run": 31400.273597811218,
+   "regret|shared": 0.6757835957023728,
+   "agrees_bayes|shared": 0.5065502183406113,
+   "regret|iid": 0.36016786226536207,
+   "agrees_bayes|iid": 0.7450980392156863,
+   "regret|mix": 0.7672818552581887,
+   "agrees_bayes|mix": 0.5877862595419847,
+   "regret|dirmult": 0.5717667463547895,
+   "agrees_bayes|dirmult": 0.6171003717472119
+  },
+  "awrb": {
+   "agrees_bayes_cell": {
+    "n": 731,
+    "k": 660,
+    "rate": 0.9028727770177839,
+    "ci95": [
+     0.8809849521203831,
+     0.9247606019151847
+    ]
+   },
+   "mean_regret": 0.030935443480571343,
+   "median_regret": 0.004100438476950486,
+   "mean_false_completion": 0.21115316597600706,
+   "mean_grad_sd": 0.06330309059347888,
+   "mean_abs_grad": 0.039203349753103314,
+   "rollouts_per_run": 31400.273597811218,
+   "regret|shared": 0.05553815472030676,
+   "agrees_bayes|shared": 0.851528384279476,
+   "regret|iid": 0.015274070488231777,
+   "agrees_bayes|iid": 0.9803921568627451,
+   "regret|mix": 0.022759206692347128,
+   "agrees_bayes|mix": 0.9007633587786259,
+   "regret|dirmult": 0.019911377274536377,
+   "agrees_bayes|dirmult": 0.9182156133828996
+  },
+  "gdpo": {
+   "agrees_bayes_cell": {
+    "n": 731,
+    "k": 162,
+    "rate": 0.2216142270861833,
+    "ci95": [
+     0.19151846785225718,
+     0.25170998632010944
+    ]
+   },
+   "mean_regret": 1.913847697961685,
+   "median_regret": 0.5086701763195431,
+   "mean_false_completion": 0.48981891886620216,
+   "mean_grad_sd": 0.04787369269149768,
+   "mean_abs_grad": 0.031160227244638995,
+   "rollouts_per_run": 31400.273597811218,
+   "regret|shared": 1.5372972779850576,
+   "agrees_bayes|shared": 0.24017467248908297,
+   "regret|iid": 2.1970580363094223,
+   "agrees_bayes|iid": 0.20588235294117646,
+   "regret|mix": 2.195707183276318,
+   "agrees_bayes|mix": 0.1984732824427481,
+   "regret|dirmult": 1.9897547577645165,
+   "agrees_bayes|dirmult": 0.22304832713754646
+  }
+ },
+ "P_dapo_follows_grpo_pred": {
+  "n": 721,
+  "k": 720,
+  "rate": 0.9986130374479889,
+  "ci95": [
+   0.9958391123439667,
+   1.0
+  ]
+ },
+ "P_ppo_follows_delta_q": {
+  "n": 661,
+  "k": 641,
+  "rate": 0.9697428139183056,
+  "ci95": [
+   0.9561270801815431,
+   0.9818456883509834
+  ]
+ },
+ "P_batchstd_follows_delta_q": {
+  "n": 661,
+  "k": 647,
+  "rate": 0.9788199697428139,
+  "ci95": [
+   0.9667170953101362,
+   0.989409984871407
+  ]
+ },
+ "by_stratum_grpo_decision": {
+  "broad": {
+   "n": 331,
+   "k": 331,
+   "rate": 1.0,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  },
+  "adversarial": {
+   "n": 95,
+   "k": 95,
+   "rate": 1.0,
+   "ci95": [
+    1.0,
+    1.0
+   ]
+  }
+ },
+ "all_criteria": [
+  {
+   "criterion": "grpo median |sim - pred|",
+   "value": 0.00025719242911610013,
+   "threshold": 0.03,
+   "op": "<=",
+   "met": true
+  },
+  {
+   "criterion": "nostd median |sim - pred|",
+   "value": 0.0002543054632931918,
+   "threshold": 0.03,
+   "op": "<=",
+   "met": true
+  },
+  {
+   "criterion": "rloo median |sim - pred|",
+   "value": 0.00021960081470162596,
+   "threshold": 0.03,
+   "op": "<=",
+   "met": true
+  },
+  {
+   "criterion": "grpo p90 |sim - pred|",
+   "value": 0.0073383967591686555,
+   "threshold": 0.1,
+   "op": "<=",
+   "met": true
+  },
+  {
+   "criterion": "nostd p90 |sim - pred|",
+   "value": 0.005651927554263865,
+   "threshold": 0.1,
+   "op": "<=",
+   "met": true
+  },
+  {
+   "criterion": "rloo p90 |sim - pred|",
+   "value": 0.0055606537625865204,
+   "threshold": 0.1,
+   "op": "<=",
+   "met": true
+  },
+  {
+   "criterion": "grpo decision agreement",
+   "value": 1.0,
+   "threshold": 0.95,
+   "op": ">=",
+   "met": true
+  },
+  {
+   "criterion": "grpo moves with sign(vote)",
+   "value": 1.0,
+   "threshold": 0.95,
+   "op": ">=",
+   "met": true
+  },
+  {
+   "criterion": "grpo pi_T < 0.95",
+   "value": 0.9710144927536232,
+   "threshold": 0.9,
+   "op": ">=",
+   "met": true
+  },
+  {
+   "criterion": "nostd pi_T > grpo pi_T",
+   "value": 1.0,
+   "threshold": 0.9,
+   "op": ">=",
+   "met": true
+  },
+  {
+   "criterion": "nostd moves with sign(delta_q)",
+   "value": 1.0,
+   "threshold": 0.95,
+   "op": ">=",
+   "met": true
+  },
+  {
+   "criterion": "grpo regret <= nostd regret + 0.01",
+   "value": 0.7066666666666667,
+   "threshold": 0.9,
+   "op": ">=",
+   "met": false
+  },
+  {
+   "criterion": "twin difference direction",
+   "value": 1.0,
+   "threshold": 0.9,
+   "op": ">=",
+   "met": true
+  },
+  {
+   "criterion": "pairs with predicted difference >= 0.05",
+   "value": 3,
+   "threshold": 10,
+   "op": ">=",
+   "met": false
+  }
+ ]
+}
