@@ -7,7 +7,7 @@ sdk_version: 4.44.1
 python_version: "3.10"
 app_file: app.py
 license: cc-by-nc-4.0
-short_description: Run a Cohere Labs model live as an agent in a simulated procurement environment
+short_description: A Cohere Labs agent live in simulated procurement
 ---
 
 # ActionProof live
