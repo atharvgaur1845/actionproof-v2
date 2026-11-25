@@ -1,6 +1,6 @@
 # Final decision
 
-2026-11-24. AD-C1 is still running; its result is added when `results/ad/c1_summary.json` exists.
+2026-11-24; AD-C1 added 2026-11-25. AD-C1 supports the theory's prediction in the trained agent: no-std GRPO beats GRPO, +0.120 in all five seeds. AWRB adds nothing over that baseline, so no algorithm is claimed.
 
 1. **Ship D as the demonstration agent.** It is registered (P1 H3: +0.306 over the recovery-start agent, all seeds positive), and it won development selection.
 2. **Do not ship the ledger or the action guard.** Both fail their registered tests (P2). The guard's failure is a design fault: its read-before-retry rule blocks the taught refund-then-re-pay repair. A revised guard would need a new registration.

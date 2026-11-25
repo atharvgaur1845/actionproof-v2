@@ -3,7 +3,7 @@
 Draft of 2026-11-23, about 21:55 IST, on branch `actionproof-research-upgrade`.
 
 - **Every row is backed by a ledger entry:** `claims/claims.yaml` (316 numbers re-read from their files, 0 failures).
-- **Pending:** the algorithm-discovery confirmatory study (AD-C1). P2 reported on 2026-11-24 at 07:29 IST (`results/p2/p2_summary.json`). The P1 frozen test reported on 2026-11-24 at 05:58 IST (`results/p1/p1_summary.json`). The second-stage programme reported on 2026-11-23 at 23:35 IST and has been merged. This file is updated when the pending studies report.
+- **Pending:** nothing registered. AD-C1 reported on 2026-11-25 (`results/ad/c1_summary.json`). P2 reported on 2026-11-24 at 07:29 IST (`results/p2/p2_summary.json`). The P1 frozen test reported on 2026-11-24 at 05:58 IST (`results/p1/p1_summary.json`). The second-stage programme reported on 2026-11-23 at 23:35 IST and has been merged. This file is updated when the pending studies report.
 
 ## Established: registered, rule met
 
@@ -74,4 +74,4 @@ Draft of 2026-11-23, about 21:55 IST, on branch `actionproof-research-upgrade`.
 - state-progress credit penalises evidence;
 - group-std GRPO makes the decision to verify blind to its cost whenever the advantage scale depends on the hidden state of the sampled rollouts. This is derived and shown in a controlled testbed and in the training logs. The 1/σ mechanism is Bereket & Leskovec's and the fix is Dr. GRPO's; the consequence for verification is ours.
 
-**No new optimiser is claimed.** That changes only if AD-C1 or the second-stage programme passes its registered confirmatory test.
+**No new optimiser is claimed.** AD-C1 confirmed that removing the std (Dr. GRPO, prior work) beats GRPO (+0.120, all five seeds). AWRB's own addition failed its registered test against that baseline (−0.088).

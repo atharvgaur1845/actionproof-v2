@@ -452,6 +452,22 @@
    "stats": null
   },
   {
+   "id": "AD-C1",
+   "statement": "Registered AD-C1 (PREREGISTRATION_AD_C1.md + addendum 1, notes 2-3; frozen; analysis scripts/ad/c1_stats.py committed before any C1 output and run once): cw_conf, greedy, 5 vs 5 seeds, unpaired seed permutation (252 assignments), Holm over four tests. Against GRPO (0.687 in every seed): no-std GRPO +0.120 [+0.088, +0.153], Holm 0.016; AWRB with group std +0.192 [+0.149, +0.239], Holm 0.016; AWRB without std +0.032 [+0.017, +0.048], Holm 0.048. All supported. H_D3 not run (note 3).",
+   "status": "supported",
+   "label": "confirmatory",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "stats": "scripts/ad/c1_stats.py"
+  },
+  {
+   "id": "AD-C1-AWRB",
+   "statement": "Registered AD-C1 H_AWRB (AWRB without std > no-std GRPO): not supported, -0.088 [-0.114, -0.064], Holm 1.0; predicted not supported before any output (FINAL_ALGORITHM_REPORT section 5). AWRB adds nothing over a plain centred baseline; no algorithm is claimed.",
+   "status": "not_supported",
+   "label": "unsupported",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "stats": "scripts/ad/c1_stats.py"
+  },
+  {
    "id": "J1-DESC",
    "statement": "J1 descriptive measurements on the 660 main cases (PREREGISTRATION_J1.md reports them without a hypothesis): transcript-only accuracy (abstain = wrong) and coverage, recall on genuinely completed episodes, prompt-paraphrase kappa and cost per 1,000 judgements.",
    "status": "supported",
@@ -12879,6 +12895,415 @@
    "ci_type": "not_recorded"
   },
   {
+   "claim": "AD-C1",
+   "metric": "grpo",
+   "label": "confirmatory",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "value": 0.6866666666666666,
+   "stated": 0.687,
+   "match": true,
+   "error": null,
+   "source": "results/ad/c1_summary.json",
+   "key": [
+    "results",
+    "H_nostd",
+    "base_per_seed",
+    0
+   ],
+   "agg": null,
+   "shown": [
+    "0.687"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "AD-C1",
+   "metric": "nostd",
+   "label": "confirmatory",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "value": 0.12,
+   "stated": 0.12,
+   "match": true,
+   "error": null,
+   "source": "results/ad/c1_summary.json",
+   "key": [
+    "results",
+    "H_nostd",
+    "est"
+   ],
+   "agg": null,
+   "shown": [
+    "+0.120",
+    "+0.12"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "AD-C1",
+   "metric": "nostd_lo",
+   "label": "confirmatory",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "value": 0.08800000000000008,
+   "stated": 0.088,
+   "match": true,
+   "error": null,
+   "source": "results/ad/c1_summary.json",
+   "key": [
+    "results",
+    "H_nostd",
+    "ci95_runs_fixed",
+    0
+   ],
+   "agg": null,
+   "shown": [
+    "+0.088",
+    "0.088"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "AD-C1",
+   "metric": "nostd_hi",
+   "label": "confirmatory",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "value": 0.15333333333333332,
+   "stated": 0.153,
+   "match": true,
+   "error": null,
+   "source": "results/ad/c1_summary.json",
+   "key": [
+    "results",
+    "H_nostd",
+    "ci95_runs_fixed",
+    1
+   ],
+   "agg": null,
+   "shown": [
+    "+0.153",
+    "0.153"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "AD-C1",
+   "metric": "awrb",
+   "label": "confirmatory",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "value": 0.19200000000000006,
+   "stated": 0.192,
+   "match": true,
+   "error": null,
+   "source": "results/ad/c1_summary.json",
+   "key": [
+    "results",
+    "H_awrb",
+    "est"
+   ],
+   "agg": null,
+   "shown": [
+    "+0.192",
+    "+0.19"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "AD-C1",
+   "metric": "awrb_lo",
+   "label": "confirmatory",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "value": 0.14866666666666672,
+   "stated": 0.149,
+   "match": true,
+   "error": null,
+   "source": "results/ad/c1_summary.json",
+   "key": [
+    "results",
+    "H_awrb",
+    "ci95_runs_fixed",
+    0
+   ],
+   "agg": null,
+   "shown": [
+    "+0.149"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "AD-C1",
+   "metric": "awrb_hi",
+   "label": "confirmatory",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "value": 0.2393333333333333,
+   "stated": 0.239,
+   "match": true,
+   "error": null,
+   "source": "results/ad/c1_summary.json",
+   "key": [
+    "results",
+    "H_awrb",
+    "ci95_runs_fixed",
+    1
+   ],
+   "agg": null,
+   "shown": [
+    "+0.239"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "AD-C1",
+   "metric": "awrbn",
+   "label": "confirmatory",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "value": 0.03200000000000003,
+   "stated": 0.032,
+   "match": true,
+   "error": null,
+   "source": "results/ad/c1_summary.json",
+   "key": [
+    "results",
+    "H_awrbn",
+    "est"
+   ],
+   "agg": null,
+   "shown": [
+    "+0.032"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "AD-C1",
+   "metric": "awrbn_lo",
+   "label": "confirmatory",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "value": 0.01733333333333331,
+   "stated": 0.017,
+   "match": true,
+   "error": null,
+   "source": "results/ad/c1_summary.json",
+   "key": [
+    "results",
+    "H_awrbn",
+    "ci95_runs_fixed",
+    0
+   ],
+   "agg": null,
+   "shown": [
+    "+0.017"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "AD-C1",
+   "metric": "awrbn_hi",
+   "label": "confirmatory",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "value": 0.04800000000000004,
+   "stated": 0.048,
+   "match": true,
+   "error": null,
+   "source": "results/ad/c1_summary.json",
+   "key": [
+    "results",
+    "H_awrbn",
+    "ci95_runs_fixed",
+    1
+   ],
+   "agg": null,
+   "shown": [
+    "+0.048"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "AD-C1",
+   "metric": "holm_nostd",
+   "label": "confirmatory",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "value": 0.015873015873015872,
+   "stated": 0.016,
+   "match": true,
+   "error": null,
+   "source": "results/ad/c1_summary.json",
+   "key": [
+    "results",
+    "H_nostd",
+    "p_holm"
+   ],
+   "agg": null,
+   "shown": [
+    "0.016"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "AD-C1",
+   "metric": "holm_awrbn",
+   "label": "confirmatory",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "value": 0.047619047619047616,
+   "stated": 0.048,
+   "match": true,
+   "error": null,
+   "source": "results/ad/c1_summary.json",
+   "key": [
+    "results",
+    "H_awrbn",
+    "p_holm"
+   ],
+   "agg": null,
+   "shown": [
+    "0.048"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "AD-C1-AWRB",
+   "metric": "d",
+   "label": "unsupported",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "value": -0.08799999999999997,
+   "stated": -0.088,
+   "match": true,
+   "error": null,
+   "source": "results/ad/c1_summary.json",
+   "key": [
+    "results",
+    "H_AWRB_none",
+    "est"
+   ],
+   "agg": null,
+   "shown": [
+    "-0.088",
+    "\u22120.088",
+    "0.088"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "AD-C1-AWRB",
+   "metric": "lo",
+   "label": "unsupported",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "value": -0.11399999999999999,
+   "stated": -0.114,
+   "match": true,
+   "error": null,
+   "source": "results/ad/c1_summary.json",
+   "key": [
+    "results",
+    "H_AWRB_none",
+    "ci95_runs_fixed",
+    0
+   ],
+   "agg": null,
+   "shown": [
+    "-0.114",
+    "\u22120.114",
+    "0.114"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "AD-C1-AWRB",
+   "metric": "hi",
+   "label": "unsupported",
+   "registration": "PREREGISTRATION_AD_C1.md",
+   "value": -0.06400000000000006,
+   "stated": -0.064,
+   "match": true,
+   "error": null,
+   "source": "results/ad/c1_summary.json",
+   "key": [
+    "results",
+    "H_AWRB_none",
+    "ci95_runs_fixed",
+    1
+   ],
+   "agg": null,
+   "shown": [
+    "-0.064",
+    "\u22120.064",
+    "0.064"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
    "claim": "J1-DESC",
    "metric": "gemma_acc",
    "label": "descriptive",
@@ -17840,13 +18265,211 @@
   "AD-C1": {
    "registration": "PREREGISTRATION_AD_C1.md",
    "summary": "results/ad/c1_summary.json",
-   "label": "incomplete",
+   "label": "registered",
    "registration_exists": true,
-   "summary_data": null
+   "summary_data": {
+    "arms": [
+     "grpo",
+     "awrb",
+     "awrbn",
+     "nostd",
+     "nostd_ema_irc"
+    ],
+    "hypotheses": {
+     "H_awrb": [
+      "awrb",
+      "grpo",
+      "vsc"
+     ],
+     "H_awrbn": [
+      "awrbn",
+      "grpo",
+      "vsc"
+     ],
+     "H_nostd": [
+      "nostd",
+      "grpo",
+      "vsc"
+     ],
+     "H_AWRB_none": [
+      "awrbn",
+      "nostd",
+      "vsc"
+     ],
+     "H_D3": [
+      "nostd_ema_irc",
+      "grpo",
+      "vsc"
+     ]
+    },
+    "results": {
+     "H_awrb": {
+      "metric": "vsc",
+      "n_tasks": 300,
+      "cand_per_seed": [
+       0.88,
+       0.88,
+       0.88,
+       0.8766666666666667,
+       0.8766666666666667
+      ],
+      "base_per_seed": [
+       0.6866666666666666,
+       0.6866666666666666,
+       0.6866666666666666,
+       0.6866666666666666,
+       0.6866666666666666
+      ],
+      "est": 0.19200000000000006,
+      "p_perm_one_sided": 0.003968253968253968,
+      "ci95_runs_fixed": [
+       0.14866666666666672,
+       0.2393333333333333
+      ],
+      "ci95_two_level": [
+       0.14933333333333332,
+       0.2393333333333333
+      ],
+      "per_seed_diff_same_index": [
+       0.19333333333333336,
+       0.19333333333333336,
+       0.19333333333333336,
+       0.19000000000000006,
+       0.19000000000000006
+      ],
+      "n_positive_same_index": 5,
+      "p_holm": 0.015873015873015872,
+      "supported": true
+     },
+     "H_awrbn": {
+      "metric": "vsc",
+      "n_tasks": 300,
+      "cand_per_seed": [
+       0.7433333333333333,
+       0.7433333333333333,
+       0.7033333333333334,
+       0.6866666666666666,
+       0.7166666666666667
+      ],
+      "base_per_seed": [
+       0.6866666666666666,
+       0.6866666666666666,
+       0.6866666666666666,
+       0.6866666666666666,
+       0.6866666666666666
+      ],
+      "est": 0.03200000000000003,
+      "p_perm_one_sided": 0.023809523809523808,
+      "ci95_runs_fixed": [
+       0.01733333333333331,
+       0.04800000000000004
+      ],
+      "ci95_two_level": [
+       0.010000000000000009,
+       0.058666666666666756
+      ],
+      "per_seed_diff_same_index": [
+       0.05666666666666664,
+       0.05666666666666664,
+       0.01666666666666672,
+       0.0,
+       0.030000000000000027
+      ],
+      "n_positive_same_index": 4,
+      "p_holm": 0.047619047619047616,
+      "supported": true
+     },
+     "H_nostd": {
+      "metric": "vsc",
+      "n_tasks": 300,
+      "cand_per_seed": [
+       0.8266666666666667,
+       0.7966666666666666,
+       0.8233333333333334,
+       0.7433333333333333,
+       0.8433333333333334
+      ],
+      "base_per_seed": [
+       0.6866666666666666,
+       0.6866666666666666,
+       0.6866666666666666,
+       0.6866666666666666,
+       0.6866666666666666
+      ],
+      "est": 0.12,
+      "p_perm_one_sided": 0.003968253968253968,
+      "ci95_runs_fixed": [
+       0.08800000000000008,
+       0.15333333333333332
+      ],
+      "ci95_two_level": [
+       0.07466666666666666,
+       0.16666666666666674
+      ],
+      "per_seed_diff_same_index": [
+       0.14,
+       0.10999999999999999,
+       0.13666666666666671,
+       0.05666666666666664,
+       0.15666666666666673
+      ],
+      "n_positive_same_index": 5,
+      "p_holm": 0.015873015873015872,
+      "supported": true
+     },
+     "H_AWRB_none": {
+      "metric": "vsc",
+      "n_tasks": 300,
+      "cand_per_seed": [
+       0.7433333333333333,
+       0.7433333333333333,
+       0.7033333333333334,
+       0.6866666666666666,
+       0.7166666666666667
+      ],
+      "base_per_seed": [
+       0.8266666666666667,
+       0.7966666666666666,
+       0.8233333333333334,
+       0.7433333333333333,
+       0.8433333333333334
+      ],
+      "est": -0.08799999999999997,
+      "p_perm_one_sided": 1.0,
+      "ci95_runs_fixed": [
+       -0.11399999999999999,
+       -0.06400000000000006
+      ],
+      "ci95_two_level": [
+       -0.136,
+       -0.04600000000000004
+      ],
+      "per_seed_diff_same_index": [
+       -0.08333333333333337,
+       -0.053333333333333344,
+       -0.12,
+       -0.05666666666666664,
+       -0.1266666666666667
+      ],
+      "n_positive_same_index": 0,
+      "p_holm": 1.0,
+      "supported": false
+     },
+     "H_D3": {
+      "missing": [
+       "ad_nostd_ema_irc_s0",
+       "ad_nostd_ema_irc_s1",
+       "ad_nostd_ema_irc_s2",
+       "ad_nostd_ema_irc_s3",
+       "ad_nostd_ema_irc_s4"
+      ]
+     }
+    }
+   }
   }
  },
  "sources": {
-  "claims/claims.yaml": "9397230cd7ffe4f3e38e773c38c88cb3695425427337e8f95bcdaad07f439e80",
+  "claims/claims.yaml": "d074c25508d55c65f39e056f919006a3a70305ec50146553b38ce9de1ea0a189",
   "results/a12b/h3_predictions.json": "efa235a165776041e08293786a4105928a413989cac20d4bbd36bb8900548397",
   "results/a12b/gate.json": "593b1c909595be7cfbd8e2984be42cfe6dcbe913f43d3784e00cc1c74586f5a4",
   "results/a13/h5_finite.json": "2f0170a26db94accb79cfc05a945f29d947aea1301a8723b9996f252d0b23edb",
@@ -17916,6 +18539,7 @@
   "results/research/llm_mechanism.json": "6e7baab0b98c79bd301e269202b6faf51b37f45b9da9ad2879eec149410bbc69",
   "results/j2/j2_summary.json": "21b8c73167f51a51275d4cd058be48b1e36ecc63d0a1fb9aec0fd74d14a549ca",
   "docs/stage2/HF_CREDITS.md": "1e27015a83fdbea4a21befa416dd0be2bec00677ce16464e8a357f1d7c46da63",
+  "results/ad/c1_summary.json": "bd53d2e7d59e1db383bc608f3234ae07699697c71a90347f2c0613be34717547",
   "results/ad/d1_summary.json": "c2e7db74b47362ec615010cc793d573345bde50cee85f86f6b73d70765135174",
   "results/roi/roi_model.json": "ea84ad83c634ef41934475e7505f78d2910cc7c0dd9533ee3afa52fed24fbfd9",
   "results/a12/gate.json": "8309aaa8454b10bdd849b4b787e7371e3e427c2d038cff711cbcc68b7b692b9e",
@@ -17927,17 +18551,16 @@
   "results/lab/train_read_rate.json": "6132a374e641d386b1610b13331384deb28fa91af5fbd1a170ec9d7d64bb36d8",
   "results/ad2/decomposition.json": "d9ff3426431ba3be1a5cab7c2695243babe2d4bed4bc67995eb3578ca85d5a91",
   "PREREGISTRATION_LAB1.md": "e6afaaf53461644df7adf0d7e620f57ba27d16d064376150cef0ff25d8906bc5",
-  "docs/research/algorithm_discovery_v2/V2TB_PROTOCOL.md": "aaac4a1e5b4b215d805cc4e575f963f842e04864ddd87410563042033c3ed449",
-  "results/ad/c1_summary.json": null
+  "docs/research/algorithm_discovery_v2/V2TB_PROTOCOL.md": "aaac4a1e5b4b215d805cc4e575f963f842e04864ddd87410563042033c3ed449"
  },
  "label_counts": {
-  "confirmatory": 362,
+  "confirmatory": 374,
   "descriptive": 103,
   "development": 25,
   "exploratory": 17,
   "failed": 10,
-  "unsupported": 92
+  "unsupported": 95
  },
  "mismatches": [],
- "content_sha256": "300b596807d14e2eb4a9cc7854d1efeb243303ecd27ba448d172e66ae1163560"
+ "content_sha256": "d93976654eeb068bfedff12f899be888adadbd914792e1e6e3c98c4dc7a3ef37"
 }

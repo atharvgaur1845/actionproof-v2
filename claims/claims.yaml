@@ -981,6 +981,39 @@ claims:
       j2_cost: {value: 2.816, file: results/j2/j2_summary.json, key: ["j2_cost_usd_estimate"], shown: ["2.816", "2.82"]}
     commit: null
 
+  - id: AD-C1
+    statement: "Registered AD-C1 (PREREGISTRATION_AD_C1.md + addendum 1, notes 2-3; frozen; analysis scripts/ad/c1_stats.py committed before any C1 output and run once): cw_conf, greedy, 5 vs 5 seeds, unpaired seed permutation (252 assignments), Holm over four tests. Against GRPO (0.687 in every seed): no-std GRPO +0.120 [+0.088, +0.153], Holm 0.016; AWRB with group std +0.192 [+0.149, +0.239], Holm 0.016; AWRB without std +0.032 [+0.017, +0.048], Holm 0.048. All supported. H_D3 not run (note 3)."
+    status: supported
+    prereg: PREREGISTRATION_AD_C1.md
+    eval: [results/ad/c1_summary.json]
+    stats: scripts/ad/c1_stats.py
+    numbers:
+      grpo: {value: 0.687, file: results/ad/c1_summary.json, key: ["results", "H_nostd", "base_per_seed", 0], shown: ["0.687"]}
+      nostd: {value: 0.12, file: results/ad/c1_summary.json, key: ["results", "H_nostd", "est"], shown: ["+0.120", "+0.12"]}
+      nostd_lo: {value: 0.088, file: results/ad/c1_summary.json, key: ["results", "H_nostd", "ci95_runs_fixed", 0], shown: ["+0.088", "0.088"]}
+      nostd_hi: {value: 0.153, file: results/ad/c1_summary.json, key: ["results", "H_nostd", "ci95_runs_fixed", 1], shown: ["+0.153", "0.153"]}
+      awrb: {value: 0.192, file: results/ad/c1_summary.json, key: ["results", "H_awrb", "est"], shown: ["+0.192", "+0.19"]}
+      awrb_lo: {value: 0.149, file: results/ad/c1_summary.json, key: ["results", "H_awrb", "ci95_runs_fixed", 0], shown: ["+0.149"]}
+      awrb_hi: {value: 0.239, file: results/ad/c1_summary.json, key: ["results", "H_awrb", "ci95_runs_fixed", 1], shown: ["+0.239"]}
+      awrbn: {value: 0.032, file: results/ad/c1_summary.json, key: ["results", "H_awrbn", "est"], shown: ["+0.032"]}
+      awrbn_lo: {value: 0.017, file: results/ad/c1_summary.json, key: ["results", "H_awrbn", "ci95_runs_fixed", 0], shown: ["+0.017"]}
+      awrbn_hi: {value: 0.048, file: results/ad/c1_summary.json, key: ["results", "H_awrbn", "ci95_runs_fixed", 1], shown: ["+0.048"]}
+      holm_nostd: {value: 0.016, file: results/ad/c1_summary.json, key: ["results", "H_nostd", "p_holm"], shown: ["0.016"]}
+      holm_awrbn: {value: 0.048, file: results/ad/c1_summary.json, key: ["results", "H_awrbn", "p_holm"], shown: ["0.048"]}
+    commit: null
+
+  - id: AD-C1-AWRB
+    statement: "Registered AD-C1 H_AWRB (AWRB without std > no-std GRPO): not supported, -0.088 [-0.114, -0.064], Holm 1.0; predicted not supported before any output (FINAL_ALGORITHM_REPORT section 5). AWRB adds nothing over a plain centred baseline; no algorithm is claimed."
+    status: not_supported
+    prereg: PREREGISTRATION_AD_C1.md
+    eval: [results/ad/c1_summary.json]
+    stats: scripts/ad/c1_stats.py
+    numbers:
+      d: {value: -0.088, file: results/ad/c1_summary.json, key: ["results", "H_AWRB_none", "est"], shown: ["-0.088", "−0.088", "0.088"]}
+      lo: {value: -0.114, file: results/ad/c1_summary.json, key: ["results", "H_AWRB_none", "ci95_runs_fixed", 0], shown: ["-0.114", "−0.114", "0.114"]}
+      hi: {value: -0.064, file: results/ad/c1_summary.json, key: ["results", "H_AWRB_none", "ci95_runs_fixed", 1], shown: ["-0.064", "−0.064", "0.064"]}
+    commit: null
+
   # ---- Write-up numbers (docs/submission/WRITEUP.md, enforced from 2026-11-24)
   - id: J1-DESC
     statement: "J1 descriptive measurements on the 660 main cases (PREREGISTRATION_J1.md reports them without a hypothesis): transcript-only accuracy (abstain = wrong) and coverage, recall on genuinely completed episodes, prompt-paraphrase kappa and cost per 1,000 judgements."

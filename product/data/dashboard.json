@@ -1201,7 +1201,7 @@
   "review numbers": "results/s3/s3_review_numbers.json"
  },
  "evidence": {
-  "canonical_sha256": "300b596807d14e2eb4a9cc7854d1efeb243303ecd27ba448d172e66ae1163560",
+  "canonical_sha256": "d93976654eeb068bfedff12f899be888adadbd914792e1e6e3c98c4dc7a3ef37",
   "claims": [
    {
     "id": "C1",
@@ -1897,6 +1897,30 @@
     ]
    },
    {
+    "id": "AD-C1",
+    "statement": "Registered AD-C1 (PREREGISTRATION_AD_C1.md + addendum 1, notes 2-3; frozen; analysis scripts/ad/c1_stats.py committed before any C1 output and run once): cw_conf, greedy, 5 vs 5 seeds, unpaired seed permutation (252 assignments), Holm over four tests. Against GRPO (0.687 in every seed): no-std GRPO +0.120 [+0.088, +0.153], Holm 0.016; AWRB with group std +0.192 [+0.149, +0.239], Holm 0.016; AWRB without std +0.032 [+0.017, +0.048], Holm 0.048. All supported. H_D3 not run (note 3).",
+    "status": "supported",
+    "label": "confirmatory",
+    "registration": "PREREGISTRATION_AD_C1.md",
+    "stats": "scripts/ad/c1_stats.py",
+    "n_numbers": 12,
+    "sources": [
+     "results/ad/c1_summary.json"
+    ]
+   },
+   {
+    "id": "AD-C1-AWRB",
+    "statement": "Registered AD-C1 H_AWRB (AWRB without std > no-std GRPO): not supported, -0.088 [-0.114, -0.064], Holm 1.0; predicted not supported before any output (FINAL_ALGORITHM_REPORT section 5). AWRB adds nothing over a plain centred baseline; no algorithm is claimed.",
+    "status": "not_supported",
+    "label": "unsupported",
+    "registration": "PREREGISTRATION_AD_C1.md",
+    "stats": "scripts/ad/c1_stats.py",
+    "n_numbers": 3,
+    "sources": [
+     "results/ad/c1_summary.json"
+    ]
+   },
+   {
     "id": "J1-DESC",
     "statement": "J1 descriptive measurements on the 660 main cases (PREREGISTRATION_J1.md reports them without a hypothesis): transcript-only accuracy (abstain = wrong) and coverage, recall on genuinely completed episodes, prompt-paraphrase kappa and cost per 1,000 judgements.",
     "status": "supported",
@@ -2036,12 +2060,12 @@
    }
   ],
   "label_counts": {
-   "confirmatory": 362,
+   "confirmatory": 374,
    "descriptive": 103,
    "development": 25,
    "exploratory": 17,
    "failed": 10,
-   "unsupported": 92
+   "unsupported": 95
   },
   "studies": {
    "P1": {
@@ -2054,7 +2078,7 @@
    },
    "AD-C1": {
     "registration": "PREREGISTRATION_AD_C1.md",
-    "label": "incomplete"
+    "label": "registered"
    }
   },
   "freshness": {
