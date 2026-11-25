@@ -49,8 +49,8 @@ There is none. Every candidate (A: forked counterfactual credit; B: recovery-awa
 | G4 | two faults per episode | +0.072 [0.032, 0.118] | 5/5 | 0.016 | supported |
 
 Diagnostics (`results/s4/s4_diagnostics.json`, descriptive):
-- **Renamed API.** Trained agents still call training-time tool names in 13–35% of episodes (warm start 62%).
-- **Four-step workflow.** Every model replays the trained three-step sequence and leaves the goods receipt undone in 84–96% of episodes. Each trained arm's mean VSC is below the warm start's (individual runs vary: one control run scores 0.27).
+- **Renamed API.** Trained agents still call training-time tool names in 13–35% of episodes (per-arm means) (warm start 62%).
+- **Four-step workflow.** Every model replays the trained three-step sequence and leaves the goods receipt undone in 84–96% of episodes (per-arm means). Each trained arm's mean VSC is below the warm start's (individual runs vary: one control run scores 0.27).
 - **Language cost.** Hinglish costs RSC 0.09 VSC against English on the same tasks, twice A12 R_V's cost.
 
 **Seed-level and per-class S3** (`results/s3/s3_seedlevel.json`, `results/s3/s3_review_numbers.json`):

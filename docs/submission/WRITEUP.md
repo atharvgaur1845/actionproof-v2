@@ -20,7 +20,7 @@ Tool-using agents increasingly write to systems of record: payments, goods recei
 - The state reward, which reads the database, produced read-back after every phantom write in all five seeds (1.00; idempotency-store replies, where nothing reached the database, are not counted).
 - The acknowledgement reward produced read-back in none (0.00).
 - Verified completion rose by +0.27 to +0.32 per seed.
-- A warm start that never reads stayed at zero reads under the same reward (ID1). So the reward *selects* checking that the starting model already does; it does not create it.
+- A warm start that never reads stayed at zero reads under the same reward (ID1). No read was ever sampled during training, so the reward had nothing to reinforce. So the reward *selects* checking that the starting model already samples; within 200 steps from this warm start it did not create it.
 
 **Checking is not recovering.** Agents that read a partial payment then posted the journal entry anyway. Training from faulted states (a recovery-start curriculum, a known technique) raised verified completion by +0.21 over the state-reward agent in five of five runs. Against a control trained on the same faults, the start-state effect held on recovery starts across five runs per arm (Holm p = 0.036). A partial-payment-specific effect was not established.
 
@@ -48,7 +48,7 @@ Source: `results/s2/a12_summary.json` and `results/eval/a12/conf/*`. The two-met
 
 1. **The problem is real and silent.** The reply looks the same whether the payment happened or not (§9).
 2. **The reward's information source decides whether the agent checks.** Database reward: checks in 5/5 seeds; reply reward: never. Same model, same data, one change (§2).
-3. **RL selects, it does not invent.** From a starting model that never reads, nothing changes (ID1).
+3. **RL selects, it does not invent.** From a starting model that never reads, nothing changes (ID1): no read is ever sampled, so the reward has nothing to reinforce.
 4. **Checking is not recovering, until recovery is taught.** Agents read the shortfall and post anyway. Training from broken states helps (+0.21, 5/5). Recovery demonstrations then the same GRPO (P1 arm D) lift the frozen test from 0.513 to 0.819, and partial payments from 0.319 to 0.931. A hint at inference does not help (−0.030).
 5. **The skill does not transfer** to renamed tools or new workflows. The known fix (tool-name randomisation) failed here.
 6. **New:** capability retention (R1), a judge committee against database truth (J1), and a cost model whose honest answer is "write the checks; use ActionProof to find them and to train a second line".
@@ -73,7 +73,7 @@ Source: `results/s2/a12_summary.json` and `results/eval/a12/conf/*`. The two-met
 | Registration | Hypothesis | Verdict |
 |---|---|---|
 | A12 | R_V selects phantom read-back; R_A does not; same sign in every seed | H2 supported (5/5); composite C1 not supported because H3 failed |
-| S3 | Recovery-start curriculum beats the state-reward agent | Supported: +0.21 [0.17, 0.25], 5/5, seed permutation p = 0.004 |
+| S3 | Recovery-start curriculum beats the state-reward agent | Supported: +0.21 [0.17, 0.25], 5/5 seeds positive, registered exact sign-flip p = 1/32 (the unpaired seed permutation p = 0.004 is the post-hoc review statistic, claim S3-R) |
 | S3 addendum 2 | Start-state effect vs a class-matched control (five runs per arm) | Recovery starts supported (Holm 0.036); partial class not supported (Holm 0.111) |
 | S3 addendum 4 | The handed evidence explains the effect | Inconclusive (Holm 0.206, 0.262) |
 | S4-EVAL | Gains survive four shifts | Hindi, Hinglish and two-fault supported; renamed API and new workflow not |
@@ -271,14 +271,14 @@ Five independent training seeds per arm (0–4) for A12 R_V and R_A, RSC, the cl
 
 ## 21. Named findings
 
-1. **Reward observability selects verification** (A12, ID1).
+1. **A reward that depends on hidden state selects verification the starting model already samples** (A12, ID1). Observation and incentive are not separated: the acknowledgement reward never pays for a read, and no dissociation run was done (`research_audit/RED_TEAM_VERIFICATION.md` R1.5).
 2. **Reading is not recovery** (A14/A15, trace §9).
 3. **Start state matters, partial-specificity unproven** (S3 addenda).
 4. **Procedure replay** (S4, SR1).
 5. **Warned judges abstain; snapshot judges are not verifier-grade** (J1, `docs/upgrade/JUDGES.md`).
 6. **No capability cost** (R1, `docs/upgrade/CAPABILITY_RETENTION.md`).
 7. **Progress credit penalises evidence** (C5 diagnosis).
-8. **Recovery is learned from demonstrations, not from a hint** (P1). Recovery SFT (+0.259) and recovery SFT then GRPO (+0.306) pass the registered test; a reconciliation line at inference fails it (−0.030). The development diagnosis (`docs/research/P1_DEV_DIAGNOSIS.md`) traces the hint's failure to same-key top-ups on short payments.
+8. **Recovery is learned from demonstrations, not from a hint** (P1). Recovery SFT (+0.259) and recovery SFT then GRPO (+0.306) pass the registered test; a reconciliation line at inference fails it (−0.030). C and D are not nested: D starts from its own recovery-SFT warm start, so the gap between them is not what GRPO adds (`research_audit/P1_DECOMPOSITION.md`). The development diagnosis (`docs/research/P1_DEV_DIAGNOSIS.md`) traces the hint's failure to same-key top-ups on short payments.
 9. **A guard that blocks the taught repair costs more than the false successes it removes** (P2, `docs/quality/PERFORMANCE_DIAGNOSIS.md` §6). A runtime check has to accept the repair sequence the agent was trained on.
 10. **When a group shares one hidden state, GRPO's update cannot see the stakes** (Phase II; `docs/theory/PROOF_AND_ASSUMPTIONS.md`, `docs/final/RESEARCH_DECISION.md`).
    - **Proved.** In agentic RL every rollout in a group meets the same hidden fault, so the group key is really (prompt, hidden state). Under that sharing, GRPO's expected update does not change under any per-state positive rescaling of the return. For a single read-or-not decision with deterministic returns within a state, it becomes a stake-free vote: severity and read cost drop out. Centred estimators (Dr. GRPO, RLOO) give an update proportional to the on-policy action-value gap instead.
@@ -336,6 +336,11 @@ See `docs/submission/TRACES.md`: two complete recorded episodes with the databas
 - ROI rests on assumed fault rates and costs.
 - One human annotator.
 - No mechanistic causal claim (A16 is not specific; CircuitKIT failed).
+- Missing baselines: no prompted or larger-model policy was run on ProcureSim, and dynamic sampling (DAPO-style) was not tested.
+- Under greedy decoding several seeds give identical scores (for example AD GRPO 0.687 in all five), so sampled metrics carry the seed-level evidence.
+- The reference verifier was written from the same specification as the main verifier. Its 100% agreement is a consistency check, not independent ground truth.
+- The P1, P2 and AD-C1 adapters are on the cluster only, so a public clone reproduces the analyses from stored episodes, not the training.
+- ID1's null is scoped: no read was sampled in 200 steps from one warm start, so the reward had nothing to reinforce.
 
 ## 26. Dual use and ethics
 
