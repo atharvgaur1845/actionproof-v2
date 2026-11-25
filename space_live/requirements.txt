@@ -1,5 +1,7 @@
 gradio==4.44.1
 spaces
-transformers>=4.56
+# gradio 4.44.1 imports huggingface_hub.HfFolder, removed in huggingface_hub 1.0; transformers 5.x requires hub >= 1.0
+huggingface_hub>=0.34,<1.0
+transformers==4.57.1
 torch
 accelerate
