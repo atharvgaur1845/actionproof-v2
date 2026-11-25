@@ -1,7 +1,10 @@
 gradio==4.44.1
 spaces
-# gradio 4.44.1 imports huggingface_hub.HfFolder, removed in huggingface_hub 1.0; transformers 5.x requires hub >= 1.0
+# gradio 4.44.1 era stack: huggingface_hub 1.0 removed HfFolder; newer starlette changed TemplateResponse
+# ("unhashable type: 'dict'"); pydantic >= 2.11 breaks gradio 4.x's JSON-schema handling
 huggingface_hub>=0.34,<1.0
+fastapi==0.112.2
+pydantic==2.10.6
 transformers==4.57.1
 torch
 accelerate
