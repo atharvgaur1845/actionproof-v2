@@ -58,3 +58,21 @@ No result or registration exists only on these commits.
 **`submission-candidate` is the canonical research branch.** It contains every remote branch, so no merge is needed to recover any experiment.
 
 `main` should be fast-forwarded to it only with the author's approval. Updating the default branch changes what the public repository shows.
+
+## 5. Containment re-check, every local and remote ref (2026-11-25, addendum audit)
+
+Method: `git merge-base --is-ancestor <ref> submission-candidate` for every ref in `refs/heads` and `refs/remotes/origin`; for refs that fail, `git cherry submission-candidate <ref>` and a blob comparison of every file the ref touches.
+
+**Contained as ancestors (no commit missing):** `main`, `stage4`, `quality-upgrade`, `actionproof-research-upgrade`, `research/ad-c1-theory`, `research/algorithm-discovery`, `research/algorithm-discovery-v2`, `research/e1e2`, `research/lab-final`, `research/latent-state-theory`, all nine `origin/*` branches, and the worktree branches `worktree-agent-a8db2b87`, `-ab40f210`, `-ad6ea450`, `-afa8d08a`.
+
+**Not ancestors, but their content is present.** Five worktree branches from 2026-11-20 hold eight commits that were cherry-picked rather than merged:
+
+| Ref | Commits not ancestral | Content | Present in `submission-candidate`? |
+|---|---|---|---|
+| `worktree-agent-a0dcc706` | 7670411 | 91 ProcureSim golden traces, structural checker | yes, patch-equivalent (`git cherry` "−"); `proc_golden.jsonl` later revised |
+| `worktree-agent-a3e141bd` | be80c5a, b306f6c, 2e14b97 | A11 untouched splits and fault labels; e-commerce verification gateway; A11 draft registration and tasks 500–509 | be80c5a and 2e14b97 patch-equivalent; b306f6c re-committed as de0d40c (same message); every file present, some later revised |
+| `worktree-agent-a6aa0cd4` | 5f1bb58 | gateway dashboard, API tests, screenshots | patch-equivalent; `api.py` later revised |
+| `worktree-agent-a894375d` | 48ecfab | 194 adversarial procurement end-state cases | patch-equivalent |
+| `worktree-agent-aa813db5` | e8e0bf4 | independent reference verifier (proc1 spec) and tests | patch-equivalent; `reference_verifier_proc.py` later revised |
+
+**No file touched by any branch is absent from `submission-candidate`.** No branch holds an experiment, result or registration that the canonical branch lacks. The statement in §4 stands.
