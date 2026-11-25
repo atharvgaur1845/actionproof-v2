@@ -17,7 +17,7 @@
 
 - [ ] **P3** (`PREREGISTRATION_P3.md`, tasks 1610–1613). Add `results/p3/p3_summary.json` to the ledger, write-up, README, paper and site.
 - [ ] **Judge study** (tasks 1600, 1601). Run `python evaluation/judge_next/analyze.py`, then fill `research_audit/JUDGE_RELIABILITY.md`.
-- [ ] **P2 judge committee** (job 467654, finished). Pull its output and add it as a descriptive result.
+- [x] P2 judge committee added (descriptive, `results/p2/committee_p2.json`; ledger claim P2-COMMITTEE).
 
 ## Deliverables
 

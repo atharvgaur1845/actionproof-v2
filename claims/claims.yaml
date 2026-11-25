@@ -1018,6 +1018,22 @@ claims:
       hi: {value: -0.064, file: results/ad/c1_summary.json, key: ["results", "H_AWRB_none", "ci95_runs_fixed", 1], shown: ["-0.064", "−0.064", "0.064"]}
     commit: null
 
+  - id: P2-COMMITTEE
+    statement: "P2 secondary (PREREGISTRATION_P2.md section 6, descriptive): the J1 four-family committee, transcript view, rubric v1, on the seed-0 greedy test episodes of A, C, D, E and Eg (450 each). Gemma 4 31B accuracy 0.951-0.998 and acceptance of verifier failures 0-0.017. Qwen3 235B accepts 0.284 of E's failures and 0.211 of A's. The majority never exceeds 0.684. Judge spend J1 + P2 $6.17."
+    status: supported
+    prereg: null
+    eval: [results/p2/committee_p2.json]
+    stats: evaluation/llm_judge_committee/committee_p2.py
+    numbers:
+      gemma_A: {value: 0.951, file: results/p2/committee_p2.json, key: [arms, A, gemma, accuracy], shown: ["0.951"]}
+      gemma_C: {value: 0.998, file: results/p2/committee_p2.json, key: [arms, C, gemma, accuracy], shown: ["0.998"]}
+      gemma_C_aof: {value: 0.017, file: results/p2/committee_p2.json, key: [arms, C, gemma, accept_on_failure], shown: ["0.017"]}
+      qwen_E_aof: {value: 0.284, file: results/p2/committee_p2.json, key: [arms, E, qwen, accept_on_failure], shown: ["0.284"]}
+      qwen_A_aof: {value: 0.211, file: results/p2/committee_p2.json, key: [arms, A, qwen, accept_on_failure], shown: ["0.211"]}
+      maj_A: {value: 0.684, file: results/p2/committee_p2.json, key: [arms, A, majority, accuracy], shown: ["0.684"]}
+      spend: {value: 6.17, file: results/p2/committee_p2.json, key: [spent_usd_total_j1_p2], shown: ["6.17", "$6.17"]}
+    commit: null
+
   # ---- Write-up numbers (docs/submission/WRITEUP.md, enforced from 2026-11-24)
   - id: J1-DESC
     statement: "J1 descriptive measurements on the 660 main cases (PREREGISTRATION_J1.md reports them without a hypothesis): transcript-only accuracy (abstain = wrong) and coverage, recall on genuinely completed episodes, prompt-paraphrase kappa and cost per 1,000 judgements."

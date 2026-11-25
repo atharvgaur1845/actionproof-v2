@@ -468,6 +468,14 @@
    "stats": "scripts/ad/c1_stats.py"
   },
   {
+   "id": "P2-COMMITTEE",
+   "statement": "P2 secondary (PREREGISTRATION_P2.md section 6, descriptive): the J1 four-family committee, transcript view, rubric v1, on the seed-0 greedy test episodes of A, C, D, E and Eg (450 each). Gemma 4 31B accuracy 0.951-0.998 and acceptance of verifier failures 0-0.017. Qwen3 235B accepts 0.284 of E's failures and 0.211 of A's. The majority never exceeds 0.684. Judge spend J1 + P2 $6.17.",
+   "status": "supported",
+   "label": "descriptive",
+   "registration": null,
+   "stats": "evaluation/llm_judge_committee/committee_p2.py"
+  },
+  {
    "id": "J1-DESC",
    "statement": "J1 descriptive measurements on the 660 main cases (PREREGISTRATION_J1.md reports them without a hypothesis): transcript-only accuracy (abstain = wrong) and coverage, recall on genuinely completed episodes, prompt-paraphrase kappa and cost per 1,000 judgements.",
    "status": "supported",
@@ -13408,6 +13416,193 @@
    "ci_type": "not_recorded"
   },
   {
+   "claim": "P2-COMMITTEE",
+   "metric": "gemma_A",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.9511111111111111,
+   "stated": 0.951,
+   "match": true,
+   "error": null,
+   "source": "results/p2/committee_p2.json",
+   "key": [
+    "arms",
+    "A",
+    "gemma",
+    "accuracy"
+   ],
+   "agg": null,
+   "shown": [
+    "0.951"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-COMMITTEE",
+   "metric": "gemma_C",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.9977777777777778,
+   "stated": 0.998,
+   "match": true,
+   "error": null,
+   "source": "results/p2/committee_p2.json",
+   "key": [
+    "arms",
+    "C",
+    "gemma",
+    "accuracy"
+   ],
+   "agg": null,
+   "shown": [
+    "0.998"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-COMMITTEE",
+   "metric": "gemma_C_aof",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.016666666666666666,
+   "stated": 0.017,
+   "match": true,
+   "error": null,
+   "source": "results/p2/committee_p2.json",
+   "key": [
+    "arms",
+    "C",
+    "gemma",
+    "accept_on_failure"
+   ],
+   "agg": null,
+   "shown": [
+    "0.017"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-COMMITTEE",
+   "metric": "qwen_E_aof",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.28421052631578947,
+   "stated": 0.284,
+   "match": true,
+   "error": null,
+   "source": "results/p2/committee_p2.json",
+   "key": [
+    "arms",
+    "E",
+    "qwen",
+    "accept_on_failure"
+   ],
+   "agg": null,
+   "shown": [
+    "0.284"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-COMMITTEE",
+   "metric": "qwen_A_aof",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.2108843537414966,
+   "stated": 0.211,
+   "match": true,
+   "error": null,
+   "source": "results/p2/committee_p2.json",
+   "key": [
+    "arms",
+    "A",
+    "qwen",
+    "accept_on_failure"
+   ],
+   "agg": null,
+   "shown": [
+    "0.211"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-COMMITTEE",
+   "metric": "maj_A",
+   "label": "descriptive",
+   "registration": null,
+   "value": 0.6844444444444444,
+   "stated": 0.684,
+   "match": true,
+   "error": null,
+   "source": "results/p2/committee_p2.json",
+   "key": [
+    "arms",
+    "A",
+    "majority",
+    "accuracy"
+   ],
+   "agg": null,
+   "shown": [
+    "0.684"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P2-COMMITTEE",
+   "metric": "spend",
+   "label": "descriptive",
+   "registration": null,
+   "value": 6.16764211999999,
+   "stated": 6.17,
+   "match": true,
+   "error": null,
+   "source": "results/p2/committee_p2.json",
+   "key": [
+    "spent_usd_total_j1_p2"
+   ],
+   "agg": null,
+   "shown": [
+    "6.17",
+    "$6.17"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
    "claim": "J1-DESC",
    "metric": "gemma_acc",
    "label": "descriptive",
@@ -18573,7 +18768,7 @@
   }
  },
  "sources": {
-  "claims/claims.yaml": "b3eed7d23e22f148dc2507eb27632229eab1c82a6cc18b45c6cf4a920a9e18ba",
+  "claims/claims.yaml": "cd6b11efd2403deaa6b84a906b05afffadf6910e039a8da96b8120eb54f1e905",
   "results/a12b/h3_predictions.json": "efa235a165776041e08293786a4105928a413989cac20d4bbd36bb8900548397",
   "results/a12b/gate.json": "593b1c909595be7cfbd8e2984be42cfe6dcbe913f43d3784e00cc1c74586f5a4",
   "results/a13/h5_finite.json": "2f0170a26db94accb79cfc05a945f29d947aea1301a8723b9996f252d0b23edb",
@@ -18651,6 +18846,7 @@
   "results/ad/conf_summaries/ad_nostd_s3__cw_conf.summary.json": "4614b30ecbcb4283539210c3b0bce57622dc46b1ff2eff90edfc33e5958a454c",
   "results/ad/conf_summaries/ad_nostd_s4__cw_conf.summary.json": "9a22a71d8c04a86ca360baed20a006bf41e2d2956c3fffb7df6d7e4252cdb0d3",
   "results/ad/conf_summaries/ad_awrb_s0__cw_conf.summary.json": "77282254a406caaf64c37a7afab02e1a225025e4a122c24b1fefab82f19dddd8",
+  "results/p2/committee_p2.json": "1556861dbfb97adef3693f51a3ae55a702ad556e0643479c1a5de35c3e2282b3",
   "results/ad/d1_summary.json": "c2e7db74b47362ec615010cc793d573345bde50cee85f86f6b73d70765135174",
   "results/roi/roi_model.json": "ea84ad83c634ef41934475e7505f78d2910cc7c0dd9533ee3afa52fed24fbfd9",
   "results/a12/gate.json": "8309aaa8454b10bdd849b4b787e7371e3e427c2d038cff711cbcc68b7b692b9e",
@@ -18666,12 +18862,12 @@
  },
  "label_counts": {
   "confirmatory": 378,
-  "descriptive": 103,
+  "descriptive": 110,
   "development": 25,
   "exploratory": 17,
   "failed": 10,
   "unsupported": 95
  },
  "mismatches": [],
- "content_sha256": "0e8d0fbf83c8f7ed34d57268183da73b0afe972fc261321474ac63c32635c7f9"
+ "content_sha256": "0fc19c0752a8da0c14e7969fb5e61aca10f1b173d7bafc31b7740ad7cba778ba"
 }

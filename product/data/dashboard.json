@@ -1201,7 +1201,7 @@
   "review numbers": "results/s3/s3_review_numbers.json"
  },
  "evidence": {
-  "canonical_sha256": "0e8d0fbf83c8f7ed34d57268183da73b0afe972fc261321474ac63c32635c7f9",
+  "canonical_sha256": "0fc19c0752a8da0c14e7969fb5e61aca10f1b173d7bafc31b7740ad7cba778ba",
   "claims": [
    {
     "id": "C1",
@@ -1924,6 +1924,18 @@
     ]
    },
    {
+    "id": "P2-COMMITTEE",
+    "statement": "P2 secondary (PREREGISTRATION_P2.md section 6, descriptive): the J1 four-family committee, transcript view, rubric v1, on the seed-0 greedy test episodes of A, C, D, E and Eg (450 each). Gemma 4 31B accuracy 0.951-0.998 and acceptance of verifier failures 0-0.017. Qwen3 235B accepts 0.284 of E's failures and 0.211 of A's. The majority never exceeds 0.684. Judge spend J1 + P2 $6.17.",
+    "status": "supported",
+    "label": "descriptive",
+    "registration": null,
+    "stats": "evaluation/llm_judge_committee/committee_p2.py",
+    "n_numbers": 7,
+    "sources": [
+     "results/p2/committee_p2.json"
+    ]
+   },
+   {
     "id": "J1-DESC",
     "statement": "J1 descriptive measurements on the 660 main cases (PREREGISTRATION_J1.md reports them without a hypothesis): transcript-only accuracy (abstain = wrong) and coverage, recall on genuinely completed episodes, prompt-paraphrase kappa and cost per 1,000 judgements.",
     "status": "supported",
@@ -2064,7 +2076,7 @@
   ],
   "label_counts": {
    "confirmatory": 378,
-   "descriptive": 103,
+   "descriptive": 110,
    "development": 25,
    "exploratory": 17,
    "failed": 10,

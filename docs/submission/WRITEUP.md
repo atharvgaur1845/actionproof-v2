@@ -190,6 +190,7 @@ Full report: `docs/upgrade/JUDGES.md`, generated from `results/j1/j1_summary.jso
 | Majority committee | 0.385 / 0.42 | 0.897 | — | — |
 
 Accuracy counts an abstention as wrong.
+- **On the practical agents' episodes (P2 secondary, descriptive, transcript view).** On the P1/P2 test episodes, Gemma 4 31B agrees with the verifier in 0.951–0.998 of cases and accepts at most 0.017 of failures; these agents read back often, so their transcripts carry the evidence. Qwen3 235B accepts 0.284 of arm E's failures and 0.211 of A's, and the majority never exceeds 0.684 (`results/p2/committee_p2.json`; judge spend J1 + P2 $6.17).
 - **Not fooled, but abstaining.** No judge accepted more than 1 of 120 unverifiable failures; judges confirmed only 29–67% of genuinely completed episodes.
 - **One systematic bias.** In 4 snapshot cases all four judges contradict the verifier, and the verifier is right: a refunded duplicate nets to one payment.
 - **Human calibration labels:** pending (one annotator).
