@@ -38,6 +38,10 @@ class Agent:
     def call(self, tool: str, args: dict[str, Any]) -> dict[str, Any]:
         if self.n >= BUDGET:
             raise BudgetExceeded
+        if self.n == BUDGET - 1 and tool != "submit_report":  # the last call of the budget is kept for the report
+            self.n += 1
+            self.env.call("submit_report", {"status": "failed", "summary": f"call budget exhausted for {self.pid}"})
+            raise BudgetExceeded
         self.n += 1
         return self.env.call(tool, args)
 
@@ -238,7 +242,7 @@ def run_policy(name: str, task: Any) -> dict[str, Any]:
     except BudgetExceeded:
         ended = "budget"
     rec = episode_record_proc(task, env)
-    rec.update(policy=name, ended_by=ended if env.done else "budget", sample=-1, workflow=task.workflow)
+    rec.update(policy=name, ended_by=ended, sample=-1, workflow=task.workflow)
     rec["txn"] = truth.txn_score(rec)
     rec["invariants"] = invariants.check(rec)
     rec["decision_record"] = truth.decision_record(rec)
