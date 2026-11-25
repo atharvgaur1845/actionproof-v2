@@ -84,3 +84,25 @@ def test_decision_record_sees_conflicts():
     b2 = {t.meta["fault_class"] for t, r in zip(dev(), runs("B2"))
           for c in r["decision_record"]["conflicts"] if c["kind"] == "audit_vs_ledger"}
     assert not b2  # B2 never reads the ledger, so it can see no audit/ledger conflict
+
+
+def test_colleague_commit_is_not_an_agent_replay_after_partial():
+    """TXN1 addendum 1 (D-TXN1-1): a colleague's concurrent payment after a partial receipt is not the agent replaying
+    its workflow; the same record with that payment attributed to the agent is still flagged."""
+    import copy
+
+    from actionproof.txn import invariants
+    tasks = [t for t in load_tasks(DATA / "txn_test.jsonl")
+             if "receive.partial+pay.concurrent" in str(t.meta.get("fault_class"))]
+    assert tasks
+    for t in tasks:
+        rec = run_policy("B4", t)
+        assert not rec["invariants"], (t.task_id, rec["invariants"])
+        col = [a for a in rec["attempts"] if a.get("by") == "colleague" and a["committed"] in ("full", "double")]
+        if not col:
+            continue
+        bad = copy.deepcopy(rec)
+        for a in bad["attempts"]:
+            if a.get("by") == "colleague":
+                a["by"] = "agent"
+        assert any(v["code"] == "replay_after_partial" for v in invariants.replay_after_partial(bad))

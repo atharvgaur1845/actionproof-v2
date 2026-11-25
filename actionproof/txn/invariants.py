@@ -72,7 +72,9 @@ def replay_after_partial(rec: dict[str, Any]) -> list[dict[str, Any]]:
                 continue
             s2 = TOOL_STEP[w["tool"]]
             if s2 != step:
-                done = [a for a in ats if a["tool"] == w["tool"] and a["po_id"] == pid
+                # only the agent's own earlier commits make this a replay (TXN1 addendum 1, D-TXN1-1): a colleague's
+                # concurrent write of the same step is not the agent re-executing its workflow
+                done = [a for a in ats if a["tool"] == w["tool"] and a["po_id"] == pid and a.get("by", "agent") == "agent"
                         and a["committed"] in ("full", "double") and (_cidx(a) is not None and _cidx(a) < w["idx"])]
                 if done:
                     out.append(_v("replay_after_partial", w["idx"], f"{w['tool']} re-executed after a partial commit"))
