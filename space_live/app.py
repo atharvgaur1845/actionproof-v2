@@ -12,6 +12,30 @@ from core import AGENTS, MODELS, REALITIES, REPLAY_URL, SESSION_CAP, run_session
 
 
 # ------------------------------------------------------------------ models (lazy, bfloat16)
+def _load_tokenizer(repo: str, token: str | None):
+    """The fast tokenizer from tokenizer.json, its special tokens and the chat template.
+
+    transformers 5 writes `tokenizer_class: TokenizersBackend` (and a list-valued `extra_special_tokens`), which the
+    4.x AutoTokenizer this Space pins (gradio 4.44.1 needs huggingface_hub < 1.0) cannot resolve. The tokenizer itself
+    is the same file either way."""
+    import json
+
+    from huggingface_hub import hf_hub_download
+    from huggingface_hub.utils import EntryNotFoundError
+    from transformers import PreTrainedTokenizerFast
+    cfg = json.loads(open(hf_hub_download(repo, "tokenizer_config.json", token=token)).read())
+    tok = PreTrainedTokenizerFast(tokenizer_file=hf_hub_download(repo, "tokenizer.json", token=token),
+                                  **{k: cfg[k] for k in ("bos_token", "eos_token", "pad_token", "unk_token") if cfg.get(k)})
+    try:
+        tok.chat_template = open(hf_hub_download(repo, "chat_template.jinja", token=token)).read()
+    except EntryNotFoundError:
+        ct = cfg.get("chat_template")
+        if isinstance(ct, list):  # named templates; with no name given, transformers uses "default"
+            ct = {t["name"]: t["template"] for t in ct}.get("default")
+        tok.chat_template = ct
+    return tok
+
+
 class HFGenerator:
     """Greedy chat generation, 256 new tokens, tokenizer chat template (the p1_eval settings)."""
 
@@ -24,10 +48,17 @@ class HFGenerator:
             if self.model is not None:
                 return
             import torch
-            from transformers import AutoModelForCausalLM, AutoTokenizer
+            from transformers import AutoConfig, AutoModelForCausalLM
             token = os.environ.get("HF_TOKEN")  # optional: the models are public
-            self.tok = AutoTokenizer.from_pretrained(self.repo, token=token)
-            self.model = AutoModelForCausalLM.from_pretrained(self.repo, torch_dtype=torch.bfloat16, token=token)
+            self.tok = _load_tokenizer(self.repo, token)
+            config = AutoConfig.from_pretrained(self.repo, token=token)
+            # Checkpoints saved by transformers 5 keep rope_theta inside rope_parameters; 4.x reads only the
+            # top-level field and would otherwise fall back silently to its default (10000 instead of 50000).
+            rp = getattr(config, "rope_parameters", None)
+            if isinstance(rp, dict) and "rope_theta" in rp:
+                config.rope_theta = rp["rope_theta"]
+            self.model = AutoModelForCausalLM.from_pretrained(self.repo, config=config, torch_dtype=torch.bfloat16,
+                                                              token=token)
             self.model.eval()
 
     def cuda(self) -> None:
