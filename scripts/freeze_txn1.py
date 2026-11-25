@@ -25,7 +25,17 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--addendum1", action="store_true", help="register PREREGISTRATION_TXN1_ADDENDUM1.md (D-TXN1-1)")
+    ap.add_argument("--addendum2", action="store_true", help="register PREREGISTRATION_TXN1_ADDENDUM2.md (D-TXN1-2)")
     a = ap.parse_args()
+    if a.addendum2:
+        dst = ROOT / "results/txn1_addendum2_hashes.json"
+        if dst.exists():
+            sys.exit(f"{dst} exists; addendum 2 already registered")
+        fs = ["PREREGISTRATION_TXN1_ADDENDUM2.md", "scripts/txn_stats.py", "tests/txn/test_scripts.py"]
+        dst.write_text(json.dumps({"files": {f: hashlib.sha256((ROOT / f).read_bytes()).hexdigest() for f in fs},
+                                   "registered": datetime.datetime.now().isoformat(timespec="minutes")}, indent=2))
+        print("registered addendum 2:", len(fs), "files")
+        return
     if a.addendum1:
         dst = ROOT / "results/txn1_addendum1_hashes.json"
         if dst.exists():
@@ -40,9 +50,10 @@ def main() -> None:
     cur = derive()
     if a.check:
         old = json.loads(ref.read_text())["files"]
-        add = ROOT / "results/txn1_addendum1_hashes.json"  # D-TXN1-1: files superseded by addendum 1
-        if add.exists():
-            old = {**old, **json.loads(add.read_text())["files"]}
+        for n in (1, 2):  # files superseded by addendum n (D-TXN1-n), applied in order
+            add = ROOT / f"results/txn1_addendum{n}_hashes.json"
+            if add.exists():
+                old = {**old, **json.loads(add.read_text())["files"]}
         cur.update({f: hashlib.sha256((ROOT / f).read_bytes()).hexdigest() for f in old if f not in cur and (ROOT / f).exists()})
         bad = [f for f in old if cur.get(f) != old[f]]
         print("OK: TXN1 matches the registration" if not bad else "MISMATCH: " + ", ".join(bad))

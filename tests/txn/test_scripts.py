@@ -158,3 +158,19 @@ def test_api_client_hard_budget_stop(lite, monkeypatch):
     assert rep["usd_spent"] <= 0.002 and rep["budget_stopped"] and outs[-1] == "" and len(calls) < 6
     with pytest.raises(SystemExit):
         llm.chat([conv], [P(temperature=1.0, max_tokens=8)])
+
+
+def test_h3_restricted_to_in_distribution_when_ood_groups_present(tmp_path, synthetic):
+    """TXN1 addendum 2 (D-TXN1-2): with OOD groups in the files, H3 runs on the in-distribution tasks only."""
+    S = _load("txn_stats")
+    tids = sorted({json.loads(l)["task"]["task_id"] for l in (synthetic / "B4__txn_dev.jsonl").read_text().splitlines()})
+    ood = set(tids[::3])
+    for f in synthetic.glob("*__txn_dev.jsonl"):
+        rows = [json.loads(l) for l in f.read_text().splitlines()]
+        for r in rows:
+            if r["task"]["task_id"] in ood:
+                r["txn"]["group"] = "ood_alias"
+        (tmp_path / f.name).write_text("".join(json.dumps(r) + "\n" for r in rows))
+    res = S.main(["--split", "txn_dev", "--res-dir", str(tmp_path)])
+    assert {t["n_tasks"] for t in res["H3"]["tests"]} == {len(tids) - len(ood)}
+    assert all(isinstance(t["supported"], bool) for t in res["H3"]["tests"])

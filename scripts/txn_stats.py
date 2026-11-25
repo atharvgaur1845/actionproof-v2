@@ -179,6 +179,10 @@ def h3(models: dict[str, list[dict]], bs: Bootstrap | None) -> dict:
     if missing or bs is None:
         return {"status": f"PENDING (missing tags: {missing})"}
     models = {t: [e for e in v if not str(e["group"]).startswith("ood_")] for t, v in models.items()}
+    # TXN1 addendum 2 (D-TXN1-2): resample over the in-distribution tasks only (same B, seed and template clusters);
+    # the shared bootstrap spans every group, so the paired check failed once OOD episodes were filtered out
+    ind = set.intersection(*({e["task_id"] for e in models[t]} for t in D_TAGS + H3_COMPARATORS))
+    bs = Bootstrap(sorted(ind & set(bs.tasks)), templates(models))
     tests = []
     for comp in H3_COMPARATORS:
         vt = paired(d_values(models, "vtc"), per_task(models[comp], "vtc"), bs)
