@@ -4,8 +4,8 @@
 
 ActionProof is an environment, a set of rewards and a controlled training study for tool-using agents whose tool acknowledgements can lie: phantom, partial, stale, timed-out and ambiguous writes. Every number is checked against the environment's database and receipt log, never against the transcript.
 
-**Status (2026-11-21).** How the labels map:
-- **Hackathon rounds.** "Stage 1" (Nov 1–15) is the preliminary round and "Stage 2" (Nov 20–25) the finalist round.
+**Status (2026-11-26).** Canonical branch `submission-candidate`. The research site is deployed as a Hugging Face Space ([atharvgaur18/actionproof](https://huggingface.co/spaces/atharvgaur18/actionproof), deterministic replay of recorded episodes; last redeployed 2026-11-25 with P3). Final-round studies B1, P4 and TXN1 are registered and running; their results appear here only from their result files. How the labels map:
+- **Hackathon rounds.** "Stage 1" (Nov 1–15) is the preliminary round and "Stage 2" (Nov 20–28) the finalist round.
 - **Internal research phases.** "Stage 3" (`docs/stage3/`, `actionproof/stage3/`) and "Stage 4" (`docs/research/`, `actionproof/stage4/`, branch `stage4`) are internal phases run inside the Stage 2 window. They are not hackathon rounds.
 
 Every number resolves through `claims/claims.yaml` (`python scripts/s2_numcheck.py`). Contradictions found and fixed: `docs/CONSISTENCY_AUDIT.md`.
@@ -36,7 +36,7 @@ Stage 4 (`docs/research/`):
 - **E1/E2 (registered, fresh splits): what the agent does with evidence.** Under sampled decoding, recovery-start runs lead the control by +0.098, short of the registered rule (Holm 0.103). Greedy decoding exaggerates the gaps between runs (ρ 0.92). One line that reconciles amounts the agent can already see raises correct refunds after a goods receipt by +0.48. Two development candidates built on this (verified-progress credit and hint-guided sampling) are training. See `docs/research/E1E2_RESULT.md`.
 - **SR1 (registered): the known fix does not work here.** Recovery-start training with randomised tool names gives +0.00 on the renamed API and costs −0.25 VSC on the canonical tools (three runs).
 
-**Product (`product/`, branch `stage4`).** Run it locally with `python -m product.app` (port 7860). It has not been deployed.
+**Product (`product/`).** The operator console runs locally with `python -m product.app` (port 7860); it is separate from the deployed research Space above.
 - **Live, deterministic and CPU-only** (the real ProcureSim simulator and verifier; no model calls):
   - *Incident simulator.* Choose a workflow, a fault, the faulted step, the partial ratio and the agent. It shows an execution-truth timeline that separates what the agent saw, what the database did, and the evaluator-only verdict.
   - *Reward lab.* The same trajectory scored by R_V, R_A, the exploratory safety-first reward and VSC.
