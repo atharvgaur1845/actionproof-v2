@@ -88,6 +88,16 @@
  const R=P.references||{};
  $("#u-p2-src").innerHTML=`Source: <b>${esc(P.source)}</b> · scripts/p2_stats.py · Holm within each family. References on the same tasks: hand-written checker ${pc(R.O&&R.O.mean_vsc)} (greedy), class-matched control ${pc(R.M&&R.M.mean_vsc)}, warm start ${pc(R.W&&R.W.mean_vsc)}.${P.oracle_pp_blocked!=null?` Why the guard hurts (descriptive, after results): its read-before-retry rule would block the checker's own refund-then-re-pay repair on ${P.oracle_pp_blocked} of ${P.oracle_pp_tasks} short-payment tasks, and blocked agents rarely recover. results/quality/p2_guard_diagnosis.json`:""}`})();
 
+/* ---------- 09c: P3 no-std on D, plus the exploratory 2x2 (data: S.upgrade.p3, scripts/site_upgrade.py::p3) ---------- */
+(function(){const P=S.upgrade&&S.upgrade.p3;if(!P||!document.getElementById("u-p3"))return;
+ if(P.status!=="done"&&!P.x2)return;document.getElementById("u-p3wrap").hidden=false;
+ const pp=x=>x==null?"—":(x>=0?"+":"−")+Math.abs(x*100).toFixed(1),pc=x=>x==null?"—":(x*100).toFixed(1)+"%";
+ const cls=c=>c[0]>0?"up":(c[1]<0?"dn":"");let h=`<tr><th>Test</th><th>Verified success, sampled</th><th>Change</th><th>Verdict</th></tr>`;
+ if(P.status==="done")h+=`<tr><td><b>H1</b> Dn (no spread division) vs D</td><td>${pc(P.D)} → ${pc(P.Dn)}</td><td class="${cls(P.ci95)}">${pp(P.delta)}<small>[${pp(P.ci95[0])}, ${pp(P.ci95[1])}] · one-sided p ${P.p.toFixed(4)} · seeds ${P.seed_deltas.map(pp).join(" ")}</small></td><td>${P.supported?"<b>supported</b>":"not supported"}</td></tr>`;
+ if(P.x2)h+=P.x2.rows.filter(r=>!/reference/.test(r.name)).map(r=>`<tr><td>${esc(r.name)} <small>exploratory</small></td><td>—</td><td class="${cls(r.ci95)}">${pp(r.delta)}<small>[${pp(r.ci95[0])}, ${pp(r.ci95[1])}]</small></td><td>descriptive</td></tr>`).join("");
+ $("#u-p3").innerHTML=h;
+ $("#u-p3-src").innerHTML=`Source: <b>${esc(P.source)}</b> · scripts/p3_stats.py · supported only if one-sided p < 0.05 and all three seed differences are positive.`+(P.x2?` Exploratory rows: <b>${esc(P.x2.source)}</b> (scripts/audit/dwarm_2x2.py; read rule fixed before output in research_audit/NOTE_DWARM_EVAL.md). W = warm start, A = recovery-start GRPO, Dw = recovery-SFT warm start of D, never evaluated in P1.`:"")})();
+
 /* ---------- 09: practical agent (data: S.upgrade.p1, scripts/site_upgrade.py::p1) ---------- */
 (function(){const P=S.upgrade&&S.upgrade.p1;if(!P)return;
  const pp=x=>x==null?"—":(x>=0?"+":"−")+Math.abs(x*100).toFixed(1);

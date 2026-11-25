@@ -194,6 +194,23 @@ def p2() -> dict:
             "oracle_pp_blocked": pb.get("tasks_with_a_would_block"), "oracle_pp_tasks": pb.get("tasks")}
 
 
+def p3() -> dict:
+    """P3 registered test (Dn vs D) and the exploratory W/A/Dw/D 2x2, straight from their result files."""
+    src, src2 = "results/p3/p3_summary.json", "results/audit/dwarm_2x2.json"
+    s, x = _j(src), _j(src2)
+    out = {"status": "running", "source": src}
+    if s and s.get("H1"):
+        h = s["H1"]
+        out = {"status": "done", "source": src, "D": _r(h["D_mean"]), "Dn": _r(h["Dn_mean"]), "delta": _r(h["delta"]),
+               "ci95": [_r(c) for c in h["ci95"]], "p": _r(h["p_one_sided"]), "seed_deltas": [_r(d) for d in h["seed_deltas"]],
+               "supported": h["supported"]}
+    if x and x.get("contrasts"):
+        out["x2"] = {"source": src2, "arms": {k: _r(v) for k, v in x["arm_means"].items()},
+                     "rows": [{"name": k, "delta": _r(v["delta"]), "ci95": [_r(c) for c in v["ci95"]]}
+                              for k, v in x["contrasts"].items()]}
+    return out
+
+
 def theory() -> dict:
     """Section 10: exact-theory curves and the registered TH1 estimator comparison (results/theory/site_theory.json)."""
     src = "results/theory/site_theory.json"
@@ -211,7 +228,7 @@ def theory() -> dict:
 
 
 def build() -> dict:
-    return {"r1": r1(), "r1t": r1t(), "j1": j1(), "roi": roi(), "p1": p1(), "p2": p2(), "theory": theory()}
+    return {"r1": r1(), "r1t": r1t(), "j1": j1(), "roi": roi(), "p1": p1(), "p2": p2(), "p3": p3(), "theory": theory()}
 
 
 if __name__ == "__main__":
