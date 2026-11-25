@@ -1,0 +1,14 @@
+{
+ "dataset": "evaluation/judge_next/data (build.py, seed 20261125)",
+ "decoding": "greedy, max_tokens 700, vLLM",
+ "models": {
+  "aya8b": "CohereLabs/aya-expanse-8b",
+  "aya32b": "CohereLabs/aya-expanse-32b"
+ },
+ "configs": {
+  "v1_<view>": "J1 rubric v1 (seven questions); decision rule in run.py",
+  "st_<view>": "structured-evidence prompt (run.py ST_PROMPT)",
+  "st_facts_gated": "st_facts with the verifier gate (analyze.py)",
+  "verifier|deterministic_facts": "decision from verifier facts alone"
+ }
+}

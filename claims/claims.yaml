@@ -543,7 +543,7 @@ claims:
       p2_holm: {value: 0.095, file: results/e1e2_summary.json, key: [e1, P2, p_holm], shown: ["0.095"]}
       p3: {value: 0.010, file: results/e1e2_summary.json, key: [e1, P3, seed_avg, est], shown: ["+0.010"]}
       rho: {value: 0.92, file: results/e1e2_summary.json, key: [e1, T, spearman_greedy_vs_sampled], shown: ["0.92"]}
-      h1: {value: -0.013, file: results/e1e2_summary.json, key: [e2, H1, mean], shown: ["-0.013", "−0.013"]}
+      h1: {value: -0.013, file: results/e1e2_summary.json, key: [e2, H1, mean], shown: ["-0.013", "−0.013", "0.013"]}
       h2: {value: 0.48, file: results/e1e2_summary.json, key: [e2, H2, mean], shown: ["+0.48"]}
       h2_lo: {value: 0.43, file: results/e1e2_summary.json, key: [e2, H2, ci95_over_runs, 0], shown: ["0.43"]}
       h2_hi: {value: 0.52, file: results/e1e2_summary.json, key: [e2, H2, ci95_over_runs, 1], shown: ["0.52"]}
@@ -1258,6 +1258,26 @@ claims:
       grid_p_lo: {value: 0.1, file: PREREGISTRATION_LAB1.md, key: "p \\{(0\\.1), 0\\.2, 0\\.4", shown: ["0.1"]}
       grid_p_mid: {value: 0.4, file: PREREGISTRATION_LAB1.md, key: "p \\{0\\.1, 0\\.2, (0\\.4)", shown: ["0.4"]}
       warm_repair: {value: 0.9, file: docs/research/algorithm_discovery_v2/V2TB_PROTOCOL.md, key: "repair probability (0\\.9)", shown: ["0.9"]}
+
+  - id: P3
+    statement: "Registered P3 (PREREGISTRATION_P3.md, frozen 7074e8d before training; scripts/p3_stats.py run once): P1 arm D retrained with the group std removed from the advantage (Dn, scale_rewards none), 3 seeds, 450 frozen P1 test tasks, sampled VSC, paired task bootstrap. Dn 0.813 vs D 0.819: -0.007 [-0.013, -0.001], one-sided p 0.988, seed deltas -0.009, +0.005, -0.016. Not supported: the AD-C1 fix does not improve the practical recipe."
+    status: not_supported
+    prereg: PREREGISTRATION_P3.md
+    eval: [results/p3/p3_summary.json]
+    stats: scripts/p3_stats.py
+    numbers:
+      d: {value: 0.819, file: results/p3/p3_summary.json, key: [H1, D_mean], shown: ["0.819"]}
+      dn: {value: 0.813, file: results/p3/p3_summary.json, key: [H1, Dn_mean], shown: ["0.813"]}
+      delta: {value: -0.007, file: results/p3/p3_summary.json, key: [H1, delta], shown: ["-0.007", "−0.007", "0.007"]}
+      lo: {value: -0.013, file: results/p3/p3_summary.json, key: [H1, ci95, 0], shown: ["-0.013", "−0.013", "0.013"]}
+      hi: {value: -0.001, file: results/p3/p3_summary.json, key: [H1, ci95, 1], shown: ["-0.001", "−0.001", "0.001"]}
+      p: {value: 0.988, file: results/p3/p3_summary.json, key: [H1, p_one_sided], shown: ["0.988"]}
+      s0: {value: -0.009, file: results/p3/p3_summary.json, key: [H1, seed_deltas, 0], shown: ["-0.009", "−0.009", "0.009"]}
+      s1: {value: 0.005, file: results/p3/p3_summary.json, key: [H1, seed_deltas, 1], shown: ["+0.005"]}
+      s2: {value: -0.016, file: results/p3/p3_summary.json, key: [H1, seed_deltas, 2], shown: ["-0.016", "−0.016", "0.016"]}
+      pp_d: {value: 0.931, file: results/p3/p3_summary.json, key: [descriptive_per_split_sampled_vsc, p1_test_pp, D], shown: ["0.931"]}
+      pp_dn: {value: 0.911, file: results/p3/p3_summary.json, key: [descriptive_per_split_sampled_vsc, p1_test_pp, Dn], shown: ["0.911"]}
+    commit: null
 
 allow: ["0.95", "1.0", "2.0", "+0.05",  # paper v3: a stated pi threshold, cost and table parameters, Apache 2.0, a registered prediction bound
        "1,000", "10,000", "95%", "1e-4", "2e-5", "8,192", "2503.20783", "2508.11800", "62,892", "251,570", "87,180", "116,240", "2.0%", "0.90",  # write-up constants: sample sizes, hyperparameters, arXiv ids, task amounts, a cited survey range, a registered threshold

@@ -4,7 +4,7 @@
 
 The answers are grounded in the full branch history (`STUDY_HISTORY.md`, `REVISED_RESEARCH_STRATEGY.md`), not `main` alone.
 
-**Three inputs had not reported when this was written:** P3, the judge study (judge_next), and the `p1_dwarm` evaluation. They are marked **PENDING**, and each one is filled only from its result file.
+The three late inputs (P3, judge_next and the `p1_dwarm` evaluation) were filled from their result files on Nov 25 evening.
 
 ## Decision
 
@@ -35,7 +35,12 @@ The one confirmed training-method result is removing the std from GRPO's advanta
 
 **Scope:**
 - The two arms are not nested, so 0.772 → 0.819 is not what GRPO adds.
-- That increment is measured descriptively in `NOTE_DWARM_EVAL.md`. **Dw result: PENDING (task 1620).**
+- That increment was measured descriptively (`NOTE_DWARM_EVAL.md`, read rule fixed before output; `results/audit/dwarm_2x2.json`, exploratory):
+  - Dw (recovery SFT, no RL) scores 0.679.
+  - **SFT alone adds +0.344** [+0.311, +0.378] over the warm start (0.335).
+  - **GRPO then adds +0.140** [+0.121, +0.160] on top of SFT. On the plain warm start it adds +0.178.
+  - Interaction −0.037 [−0.065, −0.011]: GRPO adds slightly less after SFT.
+  - **Reading:** most of the gain comes from demonstrations, but GRPO's increment is real and positive in both rows.
 
 **Second strongest: a proved result with a registered confirmation.**
 - When a group shares one hidden state, std-normalised GRPO is stake-blind: per-state positive rescaling of the return leaves its expected update unchanged (TH1).
@@ -69,7 +74,7 @@ The recovery-start curriculum (RS-GRPO) is a start-state curriculum applied to G
 | P2 ledger arm E | against D (H1) | −0.038 |
 | P2 guard | — | −0.142 to −0.273 |
 
-The one registered test of a std change inside the practical recipe is **P3** (Dn vs D, `PREREGISTRATION_P3.md`, H1). It is not a new algorithm: it applies the AD-C1 fix to D. **P3 result: PENDING (tasks 1610–1613).**
+The one registered test of a std change inside the practical recipe is **P3** (Dn vs D, `PREREGISTRATION_P3.md`, H1). It is not a new algorithm: it applies the AD-C1 fix to D. **P3 is not supported:** Dn 0.813 vs D 0.819, −0.007 [−0.013, −0.001], one-sided p 0.988, seeds −0.009 / +0.005 / −0.016 (`results/p3/p3_summary.json`). The confirmed AD-C1 fix does not transfer to the practical recipe. One reading, made after the result, is that reads are free in ProcureSim, which is outside the theory's cost-sensitive regime.
 
 ## 4. Does the LLM judge reliably reject false completion?
 
@@ -86,7 +91,14 @@ The one registered test of a std change inside the practical recipe is **P3** (D
 
 Every judge figure is judge-versus-verifier. No human labels exist.
 
-**Judge study** (structured evidence vs prompt, views, 8B vs 32B, adversarial categories, abstention, calibration; `JUDGE_RELIABILITY.md`): **PENDING (tasks 1600, 1601).**
+**Judge study** (`JUDGE_RELIABILITY.md`, descriptive, 497 cases):
+- **Best LLM configuration** (32B, structured prompt, verifier facts): FAR 0.162, FRR 0.318.
+- **J1 transcript baseline:** FAR 0.428.
+- **Effects measured separately:** state evidence +0.046 to +0.080 accuracy; structured prompt +0.062.
+- **Aya 8B accepts about 90% of failures in every configuration.**
+- **Zero false acceptance** comes only when code gates on the verifier's facts.
+
+Answer: no LLM judge is verifier-grade. The verifier must own commit facts.
 
 ## 5. Does the benchmark have meaningful OOD generalisation?
 
@@ -156,7 +168,7 @@ Each item is either removed or already corrected.
   - false acceptance despite database evidence;
   - judge-family dependence.
 
-  The structured-evidence part is **PENDING** (judge_next).
+  judge_next adds that state evidence and prompt structure each help, measured separately, but neither reaches verifier grade.
 
 ## 10. What exactly should be frozen and submitted?
 
@@ -173,10 +185,6 @@ Each item is either removed or already corrected.
    - the §30/§31 declarations;
    - title approval.
 
-## Pending fills (do not edit before the result files exist)
+## Fills
 
-| Item | Source | Fills |
-|---|---|---|
-| P3 | `results/p3/p3_summary.json` | §3, §1 scope |
-| judge_next | `results/judge_next/report.md`, `JUDGE_RELIABILITY.md` | §4, §9 |
-| Dw | `results/audit/dwarm_2x2.json` (`scripts/audit/dwarm_2x2.py`) | §1 scope |
+All three filled on 2026-11-25 from `results/p3/p3_summary.json`, `results/judge_next/report.md` and `results/audit/dwarm_2x2.json`.
