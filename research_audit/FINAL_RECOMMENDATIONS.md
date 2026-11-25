@@ -25,7 +25,7 @@ The one confirmed training-method result is removing the std from GRPO's advanta
 
 **The limited corrections:**
 - **Already applied:** commits 7d06fe8 and ff31128, and the site template in 63d194e. Each is listed in §8 below.
-- **Still to do:** the author-only items in `SUBMISSION_CHECKLIST.md`, plus filling the three PENDING results.
+- **Still to do:** the author-only items in `SUBMISSION_CHECKLIST.md` (the three late results are now filled).
 
 ## 1. What is the strongest claim ActionProof can defend?
 

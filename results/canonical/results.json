@@ -562,6 +562,14 @@
    "label": "confirmatory",
    "registration": "PREREGISTRATION_LAB1.md",
    "stats": null
+  },
+  {
+   "id": "P3",
+   "statement": "Registered P3 (PREREGISTRATION_P3.md, frozen 7074e8d before training; scripts/p3_stats.py run once): P1 arm D retrained with the group std removed from the advantage (Dn, scale_rewards none), 3 seeds, 450 frozen P1 test tasks, sampled VSC, paired task bootstrap. Dn 0.813 vs D 0.819: -0.007 [-0.013, -0.001], one-sided p 0.988, seed deltas -0.009, +0.005, -0.016. Not supported: the AD-C1 fix does not improve the practical recipe.",
+   "status": "not_supported",
+   "label": "unsupported",
+   "registration": "PREREGISTRATION_P3.md",
+   "stats": "scripts/p3_stats.py"
   }
  ],
  "metrics": [
@@ -6548,7 +6556,8 @@
    "agg": null,
    "shown": [
     "-0.013",
-    "\u22120.013"
+    "\u22120.013",
+    "0.013"
    ],
    "model": "not_recorded",
    "split": "not_recorded",
@@ -17570,6 +17579,298 @@
    "tasks": "not_recorded",
    "stat_status": "not_recorded",
    "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P3",
+   "metric": "d",
+   "label": "unsupported",
+   "registration": "PREREGISTRATION_P3.md",
+   "value": 0.8192592592592594,
+   "stated": 0.819,
+   "match": true,
+   "error": null,
+   "source": "results/p3/p3_summary.json",
+   "key": [
+    "H1",
+    "D_mean"
+   ],
+   "agg": null,
+   "shown": [
+    "0.819"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P3",
+   "metric": "dn",
+   "label": "unsupported",
+   "registration": "PREREGISTRATION_P3.md",
+   "value": 0.8125925925925926,
+   "stated": 0.813,
+   "match": true,
+   "error": null,
+   "source": "results/p3/p3_summary.json",
+   "key": [
+    "H1",
+    "Dn_mean"
+   ],
+   "agg": null,
+   "shown": [
+    "0.813"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P3",
+   "metric": "delta",
+   "label": "unsupported",
+   "registration": "PREREGISTRATION_P3.md",
+   "value": -0.006666666666666668,
+   "stated": -0.007,
+   "match": true,
+   "error": null,
+   "source": "results/p3/p3_summary.json",
+   "key": [
+    "H1",
+    "delta"
+   ],
+   "agg": null,
+   "shown": [
+    "-0.007",
+    "\u22120.007",
+    "0.007"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P3",
+   "metric": "lo",
+   "label": "unsupported",
+   "registration": "PREREGISTRATION_P3.md",
+   "value": -0.012592592592592594,
+   "stated": -0.013,
+   "match": true,
+   "error": null,
+   "source": "results/p3/p3_summary.json",
+   "key": [
+    "H1",
+    "ci95",
+    0
+   ],
+   "agg": null,
+   "shown": [
+    "-0.013",
+    "\u22120.013",
+    "0.013"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P3",
+   "metric": "hi",
+   "label": "unsupported",
+   "registration": "PREREGISTRATION_P3.md",
+   "value": -0.0007407407407407431,
+   "stated": -0.001,
+   "match": true,
+   "error": null,
+   "source": "results/p3/p3_summary.json",
+   "key": [
+    "H1",
+    "ci95",
+    1
+   ],
+   "agg": null,
+   "shown": [
+    "-0.001",
+    "\u22120.001",
+    "0.001"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P3",
+   "metric": "p",
+   "label": "unsupported",
+   "registration": "PREREGISTRATION_P3.md",
+   "value": 0.9881011898810119,
+   "stated": 0.988,
+   "match": true,
+   "error": null,
+   "source": "results/p3/p3_summary.json",
+   "key": [
+    "H1",
+    "p_one_sided"
+   ],
+   "agg": null,
+   "shown": [
+    "0.988"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P3",
+   "metric": "s0",
+   "label": "unsupported",
+   "registration": "PREREGISTRATION_P3.md",
+   "value": -0.009444444444444445,
+   "stated": -0.009,
+   "match": true,
+   "error": null,
+   "source": "results/p3/p3_summary.json",
+   "key": [
+    "H1",
+    "seed_deltas",
+    0
+   ],
+   "agg": null,
+   "shown": [
+    "-0.009",
+    "\u22120.009",
+    "0.009"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P3",
+   "metric": "s1",
+   "label": "unsupported",
+   "registration": "PREREGISTRATION_P3.md",
+   "value": 0.005,
+   "stated": 0.005,
+   "match": true,
+   "error": null,
+   "source": "results/p3/p3_summary.json",
+   "key": [
+    "H1",
+    "seed_deltas",
+    1
+   ],
+   "agg": null,
+   "shown": [
+    "+0.005"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P3",
+   "metric": "s2",
+   "label": "unsupported",
+   "registration": "PREREGISTRATION_P3.md",
+   "value": -0.015555555555555555,
+   "stated": -0.016,
+   "match": true,
+   "error": null,
+   "source": "results/p3/p3_summary.json",
+   "key": [
+    "H1",
+    "seed_deltas",
+    2
+   ],
+   "agg": null,
+   "shown": [
+    "-0.016",
+    "\u22120.016",
+    "0.016"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P3",
+   "metric": "pp_d",
+   "label": "unsupported",
+   "registration": "PREREGISTRATION_P3.md",
+   "value": 0.9305555555555556,
+   "stated": 0.931,
+   "match": true,
+   "error": null,
+   "source": "results/p3/p3_summary.json",
+   "key": [
+    "descriptive_per_split_sampled_vsc",
+    "p1_test_pp",
+    "D"
+   ],
+   "agg": null,
+   "shown": [
+    "0.931"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
+  },
+  {
+   "claim": "P3",
+   "metric": "pp_dn",
+   "label": "unsupported",
+   "registration": "PREREGISTRATION_P3.md",
+   "value": 0.9111111111111111,
+   "stated": 0.911,
+   "match": true,
+   "error": null,
+   "source": "results/p3/p3_summary.json",
+   "key": [
+    "descriptive_per_split_sampled_vsc",
+    "p1_test_pp",
+    "Dn"
+   ],
+   "agg": null,
+   "shown": [
+    "0.911"
+   ],
+   "model": "not_recorded",
+   "split": "not_recorded",
+   "seeds": "not_recorded",
+   "tasks": "not_recorded",
+   "stat_status": "not_recorded",
+   "ci_type": "not_recorded"
   }
  ],
  "studies": {
@@ -18768,7 +19069,7 @@
   }
  },
  "sources": {
-  "claims/claims.yaml": "cd6b11efd2403deaa6b84a906b05afffadf6910e039a8da96b8120eb54f1e905",
+  "claims/claims.yaml": "37c5bd4022b25d6d0b5656b215e451ce7bd22dda088abd104c3f10edced70ffa",
   "results/a12b/h3_predictions.json": "efa235a165776041e08293786a4105928a413989cac20d4bbd36bb8900548397",
   "results/a12b/gate.json": "593b1c909595be7cfbd8e2984be42cfe6dcbe913f43d3784e00cc1c74586f5a4",
   "results/a13/h5_finite.json": "2f0170a26db94accb79cfc05a945f29d947aea1301a8723b9996f252d0b23edb",
@@ -18858,7 +19159,8 @@
   "results/lab/train_read_rate.json": "6132a374e641d386b1610b13331384deb28fa91af5fbd1a170ec9d7d64bb36d8",
   "results/ad2/decomposition.json": "d9ff3426431ba3be1a5cab7c2695243babe2d4bed4bc67995eb3578ca85d5a91",
   "PREREGISTRATION_LAB1.md": "e6afaaf53461644df7adf0d7e620f57ba27d16d064376150cef0ff25d8906bc5",
-  "docs/research/algorithm_discovery_v2/V2TB_PROTOCOL.md": "aaac4a1e5b4b215d805cc4e575f963f842e04864ddd87410563042033c3ed449"
+  "docs/research/algorithm_discovery_v2/V2TB_PROTOCOL.md": "aaac4a1e5b4b215d805cc4e575f963f842e04864ddd87410563042033c3ed449",
+  "results/p3/p3_summary.json": "71588ea5b31d5affcd0232c8d94d9a9f1220d8f8ceeda6e2e94395f834ce2439"
  },
  "label_counts": {
   "confirmatory": 378,
@@ -18866,8 +19168,8 @@
   "development": 25,
   "exploratory": 17,
   "failed": 10,
-  "unsupported": 95
+  "unsupported": 106
  },
  "mismatches": [],
- "content_sha256": "0fc19c0752a8da0c14e7969fb5e61aca10f1b173d7bafc31b7740ad7cba778ba"
+ "content_sha256": "d3cfb6c117af05ed235ae5f4bd84127d8b8c78d240ab3deaa7524bff2125bf8f"
 }

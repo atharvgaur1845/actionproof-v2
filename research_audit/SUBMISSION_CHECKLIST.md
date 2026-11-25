@@ -15,8 +15,8 @@
 
 ## Results still running (fill when they report; never before)
 
-- [ ] **P3** (`PREREGISTRATION_P3.md`, tasks 1610–1613). Add `results/p3/p3_summary.json` to the ledger, write-up, README, paper and site.
-- [ ] **Judge study** (tasks 1600, 1601). Run `python evaluation/judge_next/analyze.py`, then fill `research_audit/JUDGE_RELIABILITY.md`.
+- [x] **P3** reported: not supported (−0.007); in ledger, write-up, README, paper, site.
+- [x] **Judge study** analysed: `JUDGE_RELIABILITY.md`, `results/judge_next/`.
 - [x] P2 judge committee added (descriptive, `results/p2/committee_p2.json`; ledger claim P2-COMMITTEE).
 
 ## Deliverables
@@ -25,8 +25,8 @@
   - BRANCH_AUDIT, MASTER_EXPERIMENT_LEDGER, CLAIM_VERIFICATION, SCIENTIFIC_STORY;
   - ALGORITHM_DISCOVERY, DATASET_EXPANSION, EXTERNAL_BENCHMARKS, INTERPRETABILITY_AUDIT;
   - EXPERIMENT_PRIORITY, this file.
-- [ ] `research_audit/JUDGE_RELIABILITY.md` and `results/judge_next/{configs,metrics,confusion_matrices,per_fault,report.md}` (after tasks 1600 and 1601)
-- [ ] `research_audit/FINAL_RECOMMENDATIONS.md` (after P3)
+- [x] `research_audit/JUDGE_RELIABILITY.md` and `results/judge_next/`
+- [x] `research_audit/FINAL_RECOMMENDATIONS.md` (filled)
 - [x] Paper v3 builds, anonymised, 7 pages (`paper/main_v3.pdf`)
 - [x] Site redeployed on Nov 24 with sections 09–10; redeploy again after P3 and the judge results
 - [x] Write-up `docs/submission/WRITEUP.md` enforced by the number check
@@ -39,4 +39,4 @@
 - [ ] Title and thesis of paper v3 (options in `docs/final/RESEARCH_DECISION.md`).
 - [ ] Whether to fast-forward `main` to `submission-candidate`, which changes the public default branch.
 - [ ] Publishing the ~760 MB of P1/P2 episode traces to the HF dataset.
-- [ ] Final redeploy of the HF Space after the last results.
+- [x] HF Space redeployed Nov 25 with P3 and the 2x2 (Space commit 644c862).

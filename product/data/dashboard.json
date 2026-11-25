@@ -1201,7 +1201,7 @@
   "review numbers": "results/s3/s3_review_numbers.json"
  },
  "evidence": {
-  "canonical_sha256": "0fc19c0752a8da0c14e7969fb5e61aca10f1b173d7bafc31b7740ad7cba778ba",
+  "canonical_sha256": "d3cfb6c117af05ed235ae5f4bd84127d8b8c78d240ab3deaa7524bff2125bf8f",
   "claims": [
    {
     "id": "C1",
@@ -2072,6 +2072,18 @@
      "PREREGISTRATION_LAB1.md",
      "docs/research/algorithm_discovery_v2/V2TB_PROTOCOL.md"
     ]
+   },
+   {
+    "id": "P3",
+    "statement": "Registered P3 (PREREGISTRATION_P3.md, frozen 7074e8d before training; scripts/p3_stats.py run once): P1 arm D retrained with the group std removed from the advantage (Dn, scale_rewards none), 3 seeds, 450 frozen P1 test tasks, sampled VSC, paired task bootstrap. Dn 0.813 vs D 0.819: -0.007 [-0.013, -0.001], one-sided p 0.988, seed deltas -0.009, +0.005, -0.016. Not supported: the AD-C1 fix does not improve the practical recipe.",
+    "status": "not_supported",
+    "label": "unsupported",
+    "registration": "PREREGISTRATION_P3.md",
+    "stats": "scripts/p3_stats.py",
+    "n_numbers": 11,
+    "sources": [
+     "results/p3/p3_summary.json"
+    ]
    }
   ],
   "label_counts": {
@@ -2080,7 +2092,7 @@
    "development": 25,
    "exploratory": 17,
    "failed": 10,
-   "unsupported": 95
+   "unsupported": 106
   },
   "studies": {
    "P1": {
