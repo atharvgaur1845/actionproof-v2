@@ -69,8 +69,24 @@ With enough unrelated within-state noise (q₀ = 0.3), GRPO reaches the Bayes ac
 - **Confirmatory:** pending AD-C1.
 
 ## 6. Does AD-C1 support the registered hypothesis?
-**Pending.** The theory's predictions T1–T8 were frozen before any cw_conf output
-(`docs/research/AD_C1_THEORY_PREDICTION.md`, commit 2354929). The registered statistic is the lead engineer's.
+**Yes [conf].** Source: `results/ad/c1_summary.json` (Slurm 469851, registered analysis run once).
+
+| H | Result | Holm | Supported |
+|---|---|---|---|
+| H_nostd | +0.120 [0.088, 0.153], 5/5 seeds positive | 0.016 | yes |
+| H_awrb | +0.192 | 0.016 | yes |
+| H_awrbn | +0.032 | 0.048 | yes |
+| H_AWRB (awrbn > nostd) | −0.088 | — | no |
+| H_D3 | not run | — | — |
+
+All seven testable theory predictions frozen before the outcome (T1–T7) are met; T8 is untestable:
+- every GRPO seed has 0 reads and VSC 0.687;
+- the gain is entirely on faulted tasks;
+- the false-success gap of 0.122 matches the VSC gap;
+- AWRB over-verifies.
+
+Caveats: the GRPO seeds are identical, and cost-blindness is untested on the LLM
+(`docs/research/AD_C1_ANALYSIS.md`).
 
 ## 7. Does the result generalise beyond the existing task distribution?
 - **The mechanism, on synthetic problems: yes [sim-reg].** TH1 held-out, 731 cells:
@@ -128,7 +144,7 @@ states.
 - The lead engineer must add the v3 numbers to `claims/claims.yaml` and the canonical pipeline.
 - The author must approve the title and thesis.
 
-## Decision: **Interesting result requiring further validation**, leaning to "defensible but incremental"
+## Decision: **Defensible but incremental contribution** (updated after AD-C1: T1–T3 met, so the pre-stated upgrade rule applies)
 The mathematics is correct and now delimited, and the registered held-out testbed confirms its quantitative
 predictions. But the language-agent link is development-level, one of its predictions (Dr. GRPO from the warm-start
 ΔQ) failed, and the single confirmatory test is pending. If AD-C1 meets T1–T3, the paper becomes "defensible but

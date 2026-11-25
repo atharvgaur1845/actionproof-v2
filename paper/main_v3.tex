@@ -47,7 +47,8 @@ We ran a registered held-out testbed of 731 random problems, trained with an ind
 The exact theory predicts GRPO's learned decision in 721 of 721 decided cells, with median error 0.0003 in the
 learned read probability. GRPO follows the vote, not the value, in 77 of 77 cells where the two disagree. In a 3.35B tool agent, all 800 logged groups per run share their fault plan. Re-weighting fixed
 rollouts at a 20$\times$ higher read cost changes GRPO's clean-group update by 7\%. Every std-normalised run moves in
-the direction of the vote estimated from its first 20 steps. The registered five-seed comparison is \pend{AD-C1}.
+the direction of the vote estimated from its first 20 steps. In the registered five-seed comparison on 300 unseen tasks, Dr.~GRPO beats GRPO by $+0.120$ verified completion
+(Holm $p=0.016$); every GRPO seed reads zero times, and all seven pre-stated theory predictions hold.
 \end{abstract}
 
 \section{Introduction}
@@ -259,7 +260,17 @@ throughout.
 \paragraph{Registered five-seed comparison (AD-C1).} The registration (VSC on 300 unseen tasks, Dr.~GRPO vs GRPO,
 permutation test, Holm) is unchanged. The theory's predictions were frozen before any outcome: supported direction,
 difference in $[+0.05,+0.20]$; GRPO $\le0.2$ reads per episode in every seed; the gain located in faulted tasks; AWRB
-over-verifies. Outcome: \pend{AD-C1}.
+over-verifies. Outcome (\path{results/ad/c1_summary.json}, confirmatory):
+\begin{itemize}
+\item H$_{\rm nostd}$ is supported: $+0.120$ [0.088, 0.153], Holm 0.016, positive in 5/5 seeds.
+\item All five GRPO seeds read 0 times and score 0.687; Dr.~GRPO reads 0.93--2.02 times per episode.
+\item The whole gain is on faulted tasks: clean-task difference 0.000, and faulted-task VSC 0.223 vs 0.521 accounts for
+all of $+0.120$. The false-success gap is $0.122$.
+\item AWRB reads more than Dr.~GRPO in 5/5 pairs (2.7 reads) and scores $+0.192$ over GRPO. AWRB-centred vs
+Dr.~GRPO is not supported ($-0.088$).
+\end{itemize}
+All seven testable predictions (T1--T7) are met. Two caveats: the GRPO seeds are behaviourally identical, and
+cost-blindness itself was not tested on the language agent.
 
 \paragraph{Context: what else is known about this agent.}
 \begin{itemize}
