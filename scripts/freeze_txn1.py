@@ -43,6 +43,7 @@ def main() -> None:
         add = ROOT / "results/txn1_addendum1_hashes.json"  # D-TXN1-1: files superseded by addendum 1
         if add.exists():
             old = {**old, **json.loads(add.read_text())["files"]}
+        cur.update({f: hashlib.sha256((ROOT / f).read_bytes()).hexdigest() for f in old if f not in cur and (ROOT / f).exists()})
         bad = [f for f in old if cur.get(f) != old[f]]
         print("OK: TXN1 matches the registration" if not bad else "MISMATCH: " + ", ".join(bad))
         sys.exit(1 if bad else 0)

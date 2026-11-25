@@ -6,4 +6,5 @@ source slurm/claim.sh || exit 0
 source slurm/env.sh
 .venv/bin/python scripts/freeze_txn1.py --check || exit 1
 .venv/bin/python scripts/txn_stats.py --split txn_test || exit 1
+.venv/bin/python scripts/txn_invariants_recheck.py --split txn_test || exit 1  # D-TXN1-1, addendum 1
 echo TXN_STATS_OK
