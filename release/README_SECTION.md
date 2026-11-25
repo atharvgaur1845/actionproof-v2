@@ -1,7 +1,7 @@
 <!--
 Draft section for README.md (paste after "Deliverables"). It contains no result numbers on purpose: README.md is scanned
 by scripts/s2_numcheck.py, and every result-like number in it must resolve through claims/claims.yaml.
-Placeholders to fill before pasting: https://huggingface.co/spaces/atharvgaur18/actionproof-live. The paper PDF is built from paper/main_v3.tex and is not tracked in git.
+No placeholders left. The paper PDF is built from paper/main_v3.tex and is not tracked in git.
 -->
 
 ## Public release
