@@ -26,6 +26,7 @@ def _load_tokenizer(repo: str, token: str | None):
     cfg = json.loads(open(hf_hub_download(repo, "tokenizer_config.json", token=token)).read())
     tok = PreTrainedTokenizerFast(tokenizer_file=hf_hub_download(repo, "tokenizer.json", token=token),
                                   **{k: cfg[k] for k in ("bos_token", "eos_token", "pad_token", "unk_token") if cfg.get(k)})
+    tok.model_input_names = ["input_ids", "attention_mask"]  # the bare fast tokenizer also emits token_type_ids
     try:
         tok.chat_template = open(hf_hub_download(repo, "chat_template.jinja", token=token)).read()
     except EntryNotFoundError:
