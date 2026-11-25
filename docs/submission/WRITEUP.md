@@ -17,7 +17,7 @@
 Tool-using agents increasingly write to systems of record: payments, goods receipts, journal entries. A write tool's reply ("ok") is usually treated as proof that the write happened. We built **ProcureSim**, a SQLite procurement environment in which the success reply is **byte-identical** whether the write stored everything, part of it, two copies, or nothing. A deterministic verifier reads the authoritative database, which the agent can query only through read tools.
 
 **Same model, one change.** We trained Tiny Aya Global (3.35B) with GRPO from the same supervised warm start, changing only the reward's information source:
-- The state reward, which reads the database, produced read-back after every phantom write in all five seeds (1.00).
+- The state reward, which reads the database, produced read-back after every phantom write in all five seeds (1.00; idempotency-store replies, where nothing reached the database, are not counted).
 - The acknowledgement reward produced read-back in none (0.00).
 - Verified completion rose by +0.27 to +0.32 per seed.
 - A warm start that never reads stayed at zero reads under the same reward (ID1). So the reward *selects* checking that the starting model already does; it does not create it.
@@ -153,7 +153,7 @@ Traces of all 30 procurement-study models are published in the HF collection.
 
 **Languages:** English; Hindi and Hinglish shift splits (`s4_lang_hi`, `s4_lang_hinglish`, 150 tasks each), reviewed by a native speaker (the author).
 
-**Splits:** train pools (`proc_train_b`, `s3_trainb_half`, `s3_rec_train_half`), development (`proc_dev`, `s3_rec_dev`) and confirmatory (`proc_conf`, `s3_conf_full`, `s3_conf_rec`, S4 shift splits, fresh `e1_*`/`e2_pp`, `c1_pp`). Each is hashed at registration (`results/*_hashes.json`), checked in CI (`scripts/ci_freeze_check.py`), and **run once**.
+**Splits:** train pools (`proc_train_b`, `s3_trainb_half`, `s3_rec_train_half`), development (`proc_dev`, `s3_rec_dev`) and confirmatory (`proc_conf`, `s3_conf_full`, `s3_conf_rec`, S4 shift splits, fresh `e1_*`/`e2_pp`). `c1_pp` was reserved for Stage 5 but never used, since no candidate survived development; the later AD training pool reuses 75 of its prompts, so it is no longer held-out (`research_audit/DATASET_EXPANSION.md`). Each is hashed at registration (`results/*_hashes.json`), checked in CI (`scripts/ci_freeze_check.py`), and **run once**.
 
 **Leak checks:**
 - Task-id disjointness across splits: `actionproof/stage3/tasks.py` `seen_ids`.
