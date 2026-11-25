@@ -1,0 +1,684 @@
+[
+ {
+  "initial_state": {
+   "escalations": [],
+   "journal": [],
+   "payments": [],
+   "pos": [
+    {
+     "amount_cents": 654360,
+     "po_id": "PO-EDC559CA",
+     "qty": 56,
+     "sku": "SKU-9557",
+     "status": "approved",
+     "supplier_id": "SUP-2999CA",
+     "unit_price_cents": 11685
+    },
+    {
+     "amount_cents": 68000,
+     "po_id": "PO-57C5A0DB",
+     "qty": 16,
+     "sku": "SKU-4681",
+     "status": "approved",
+     "supplier_id": "SUP-7BB37F",
+     "unit_price_cents": 4250
+    },
+    {
+     "amount_cents": 166090,
+     "po_id": "PO-0FD7852C",
+     "qty": 17,
+     "sku": "SKU-3446",
+     "status": "approved",
+     "supplier_id": "SUP-2999CA",
+     "unit_price_cents": 9770
+    },
+    {
+     "amount_cents": 120275,
+     "po_id": "PO-23D02271",
+     "qty": 17,
+     "sku": "SKU-1777",
+     "status": "approved",
+     "supplier_id": "SUP-7BB37F",
+     "unit_price_cents": 7075
+    }
+   ],
+   "receipts": [],
+   "supplier_orders": [
+    {
+     "order_ref": "SO-AA25F4",
+     "po_id": "PO-57C5A0DB",
+     "qty": 16,
+     "sku": "SKU-4681",
+     "status": "placed"
+    },
+    {
+     "order_ref": "SO-BA4188",
+     "po_id": "PO-EDC559CA",
+     "qty": 56,
+     "sku": "SKU-9557",
+     "status": "placed"
+    }
+   ],
+   "suppliers": [
+    {
+     "name": "Fulcrum Electric",
+     "payee_account": "ACCT-419E42",
+     "supplier_id": "SUP-CAF71D"
+    },
+    {
+     "name": "Borealis Parts",
+     "payee_account": "ACCT-0916AF",
+     "supplier_id": "SUP-2999CA"
+    },
+    {
+     "name": "Evergreen Paper",
+     "payee_account": "ACCT-3CE136",
+     "supplier_id": "SUP-7BB37F"
+    }
+   ]
+  },
+  "meta": {
+   "domain": "proc",
+   "env_seed": 1705544022,
+   "env_version": "proc1",
+   "fault_class": "clean",
+   "faults": [],
+   "never_commit": null,
+   "po_id": "PO-0FD7852C",
+   "requested": [
+    "order",
+    "pay",
+    "post"
+   ]
+  },
+  "prompt": "Purchase order PO-0FD7852C is approved: 17 x safety gloves (SKU-3446) from Borealis Parts at 9770 cents each, total 166090 cents. Place the order with the supplier, prepay the supplier the full amount, and post the journal entry for the payment.",
+  "split": "p1_test_full",
+  "task_id": "p1_test_full-0004",
+  "workflow": "order_prepay"
+ },
+ {
+  "initial_state": {
+   "escalations": [],
+   "journal": [
+    {
+     "amount_cents": 42960,
+     "entry_id": "JE-E81BF0",
+     "kind": "payment",
+     "po_id": "PO-1D0B360B"
+    }
+   ],
+   "payments": [
+    {
+     "amount_cents": 42960,
+     "kind": "payment",
+     "payee_account": "ACCT-2177DE",
+     "payment_id": "PAY-A44CD3",
+     "po_id": "PO-1D0B360B",
+     "refund_of": null
+    }
+   ],
+   "pos": [
+    {
+     "amount_cents": 130900,
+     "po_id": "PO-4EB698AD",
+     "qty": 11,
+     "sku": "SKU-3965",
+     "status": "approved",
+     "supplier_id": "SUP-28B978",
+     "unit_price_cents": 11900
+    },
+    {
+     "amount_cents": 170850,
+     "po_id": "PO-31AFDEA5",
+     "qty": 15,
+     "sku": "SKU-3274",
+     "status": "approved",
+     "supplier_id": "SUP-28B978",
+     "unit_price_cents": 11390
+    },
+    {
+     "amount_cents": 99550,
+     "po_id": "PO-A17FED5C",
+     "qty": 10,
+     "sku": "SKU-8501",
+     "status": "approved",
+     "supplier_id": "SUP-2E1F8A",
+     "unit_price_cents": 9955
+    },
+    {
+     "amount_cents": 883470,
+     "po_id": "PO-C4F126DE",
+     "qty": 49,
+     "sku": "SKU-3494",
+     "status": "approved",
+     "supplier_id": "SUP-A9113E",
+     "unit_price_cents": 18030
+    },
+    {
+     "amount_cents": 42960,
+     "po_id": "PO-1D0B360B",
+     "qty": 24,
+     "sku": "SKU-4852",
+     "status": "approved",
+     "supplier_id": "SUP-A9113E",
+     "unit_price_cents": 1790
+    }
+   ],
+   "receipts": [],
+   "supplier_orders": [
+    {
+     "order_ref": "SO-D34C34",
+     "po_id": "PO-A17FED5C",
+     "qty": 10,
+     "sku": "SKU-8501",
+     "status": "placed"
+    },
+    {
+     "order_ref": "SO-AA1BFC",
+     "po_id": "PO-1D0B360B",
+     "qty": 24,
+     "sku": "SKU-4852",
+     "status": "placed"
+    },
+    {
+     "order_ref": "SO-05E369",
+     "po_id": "PO-4EB698AD",
+     "qty": 11,
+     "sku": "SKU-3965",
+     "status": "placed"
+    }
+   ],
+   "suppliers": [
+    {
+     "name": "Delta Packaging",
+     "payee_account": "ACCT-2177DE",
+     "supplier_id": "SUP-A9113E"
+    },
+    {
+     "name": "Fulcrum Electric",
+     "payee_account": "ACCT-9B9B39",
+     "supplier_id": "SUP-28B978"
+    },
+    {
+     "name": "Granite Safety",
+     "payee_account": "ACCT-A5AAE7",
+     "supplier_id": "SUP-2E1F8A"
+    }
+   ]
+  },
+  "meta": {
+   "domain": "proc",
+   "env_seed": 984090206,
+   "env_version": "proc1",
+   "fault_class": "clean",
+   "faults": [],
+   "never_commit": null,
+   "po_id": "PO-C4F126DE",
+   "requested": [
+    "order",
+    "pay",
+    "post"
+   ]
+  },
+  "prompt": "Purchase order PO-C4F126DE is approved: 49 x hex bolts (SKU-3494) from Delta Packaging at 18030 cents each, total 883470 cents. Place the order with the supplier, prepay the supplier the full amount, and post the journal entry for the payment.",
+  "split": "p1_test_full",
+  "task_id": "p1_test_full-0010",
+  "workflow": "order_prepay"
+ },
+ {
+  "initial_state": {
+   "escalations": [],
+   "journal": [
+    {
+     "amount_cents": 657400,
+     "entry_id": "JE-FAC2DF",
+     "kind": "payment",
+     "po_id": "PO-3F536055"
+    },
+    {
+     "amount_cents": 1003685,
+     "entry_id": "JE-44B6E0",
+     "kind": "payment",
+     "po_id": "PO-193158C2"
+    }
+   ],
+   "payments": [
+    {
+     "amount_cents": 657400,
+     "kind": "payment",
+     "payee_account": "ACCT-FF394A",
+     "payment_id": "PAY-C918F1",
+     "po_id": "PO-3F536055",
+     "refund_of": null
+    },
+    {
+     "amount_cents": 1003685,
+     "kind": "payment",
+     "payee_account": "ACCT-FF394A",
+     "payment_id": "PAY-E5DCAB",
+     "po_id": "PO-193158C2",
+     "refund_of": null
+    }
+   ],
+   "pos": [
+    {
+     "amount_cents": 334960,
+     "po_id": "PO-098871FD",
+     "qty": 53,
+     "sku": "SKU-0804",
+     "status": "approved",
+     "supplier_id": "SUP-41B0AF",
+     "unit_price_cents": 6320
+    },
+    {
+     "amount_cents": 733350,
+     "po_id": "PO-FBF3E2CB",
+     "qty": 30,
+     "sku": "SKU-9110",
+     "status": "approved",
+     "supplier_id": "SUP-41B0AF",
+     "unit_price_cents": 24445
+    },
+    {
+     "amount_cents": 657400,
+     "po_id": "PO-3F536055",
+     "qty": 38,
+     "sku": "SKU-5086",
+     "status": "approved",
+     "supplier_id": "SUP-41B0AF",
+     "unit_price_cents": 17300
+    },
+    {
+     "amount_cents": 34000,
+     "po_id": "PO-2F64154D",
+     "qty": 40,
+     "sku": "SKU-4337",
+     "status": "approved",
+     "supplier_id": "SUP-41B0AF",
+     "unit_price_cents": 850
+    },
+    {
+     "amount_cents": 1003685,
+     "po_id": "PO-193158C2",
+     "qty": 47,
+     "sku": "SKU-4719",
+     "status": "approved",
+     "supplier_id": "SUP-41B0AF",
+     "unit_price_cents": 21355
+    }
+   ],
+   "receipts": [],
+   "supplier_orders": [
+    {
+     "order_ref": "SO-509699",
+     "po_id": "PO-098871FD",
+     "qty": 53,
+     "sku": "SKU-0804",
+     "status": "placed"
+    },
+    {
+     "order_ref": "SO-3E586A",
+     "po_id": "PO-3F536055",
+     "qty": 38,
+     "sku": "SKU-5086",
+     "status": "placed"
+    },
+    {
+     "order_ref": "SO-6ED8A7",
+     "po_id": "PO-2F64154D",
+     "qty": 40,
+     "sku": "SKU-4337",
+     "status": "placed"
+    },
+    {
+     "order_ref": "SO-CFA9CE",
+     "po_id": "PO-FBF3E2CB",
+     "qty": 30,
+     "sku": "SKU-9110",
+     "status": "placed"
+    },
+    {
+     "order_ref": "SO-296900",
+     "po_id": "PO-193158C2",
+     "qty": 47,
+     "sku": "SKU-4719",
+     "status": "placed"
+    }
+   ],
+   "suppliers": [
+    {
+     "name": "Borealis Parts",
+     "payee_account": "ACCT-EE0C7A",
+     "supplier_id": "SUP-E844ED"
+    },
+    {
+     "name": "Harbor Office Supply",
+     "payee_account": "ACCT-FF394A",
+     "supplier_id": "SUP-41B0AF"
+    },
+    {
+     "name": "Granite Safety",
+     "payee_account": "ACCT-8CE386",
+     "supplier_id": "SUP-7CCBB2"
+    }
+   ]
+  },
+  "meta": {
+   "domain": "proc",
+   "env_seed": 716913529,
+   "env_version": "proc1",
+   "fault_class": "clean",
+   "faults": [],
+   "never_commit": null,
+   "po_id": "PO-2F64154D",
+   "requested": [
+    "receive",
+    "pay",
+    "post"
+   ]
+  },
+  "prompt": "Purchase order PO-2F64154D is approved: 40 x packing tape (SKU-4337) from Harbor Office Supply at 850 cents each, total 34000 cents. All 40 units arrived today. Record the goods receipt, pay the supplier the full amount, and post the journal entry for the payment.",
+  "split": "p1_test_full",
+  "task_id": "p1_test_full-0006",
+  "workflow": "receive_pay"
+ },
+ {
+  "initial_state": {
+   "escalations": [],
+   "journal": [],
+   "payments": [],
+   "pos": [
+    {
+     "amount_cents": 252525,
+     "po_id": "PO-2BFF0F48",
+     "qty": 39,
+     "sku": "SKU-6667",
+     "status": "approved",
+     "supplier_id": "SUP-FEECE1",
+     "unit_price_cents": 6475
+    },
+    {
+     "amount_cents": 914175,
+     "po_id": "PO-A126F2BF",
+     "qty": 45,
+     "sku": "SKU-8704",
+     "status": "approved",
+     "supplier_id": "SUP-FEECE1",
+     "unit_price_cents": 20315
+    },
+    {
+     "amount_cents": 184800,
+     "po_id": "PO-C5B9DB25",
+     "qty": 35,
+     "sku": "SKU-5961",
+     "status": "approved",
+     "supplier_id": "SUP-96BA4A",
+     "unit_price_cents": 5280
+    }
+   ],
+   "receipts": [],
+   "supplier_orders": [
+    {
+     "order_ref": "SO-C58B43",
+     "po_id": "PO-2BFF0F48",
+     "qty": 39,
+     "sku": "SKU-6667",
+     "status": "placed"
+    }
+   ],
+   "suppliers": [
+    {
+     "name": "Harbor Office Supply",
+     "payee_account": "ACCT-6F3FA3",
+     "supplier_id": "SUP-C6E6AE"
+    },
+    {
+     "name": "Acme Tools",
+     "payee_account": "ACCT-F5258C",
+     "supplier_id": "SUP-FEECE1"
+    },
+    {
+     "name": "Evergreen Paper",
+     "payee_account": "ACCT-33D8C1",
+     "supplier_id": "SUP-96BA4A"
+    }
+   ]
+  },
+  "meta": {
+   "domain": "proc",
+   "env_seed": 1025543333,
+   "env_version": "proc1",
+   "fault_class": "clean",
+   "faults": [],
+   "never_commit": null,
+   "po_id": "PO-2BFF0F48",
+   "requested": [
+    "receive",
+    "pay",
+    "post"
+   ]
+  },
+  "prompt": "Purchase order PO-2BFF0F48 is approved: 39 x pallet wrap (SKU-6667) from Acme Tools at 6475 cents each, total 252525 cents. All 39 units arrived today. Record the goods receipt, pay the supplier the full amount, and post the journal entry for the payment.",
+  "split": "p1_test_full",
+  "task_id": "p1_test_full-0040",
+  "workflow": "receive_pay"
+ },
+ {
+  "initial_state": {
+   "escalations": [],
+   "journal": [
+    {
+     "amount_cents": 90545,
+     "entry_id": "JE-BAC9CD",
+     "kind": "payment",
+     "po_id": "PO-0261ECC5"
+    },
+    {
+     "amount_cents": 936600,
+     "entry_id": "JE-D7348E",
+     "kind": "payment",
+     "po_id": "PO-8910413C"
+    }
+   ],
+   "payments": [
+    {
+     "amount_cents": 936600,
+     "kind": "payment",
+     "payee_account": "ACCT-164995",
+     "payment_id": "PAY-F0B806",
+     "po_id": "PO-8910413C",
+     "refund_of": null
+    },
+    {
+     "amount_cents": 90545,
+     "kind": "payment",
+     "payee_account": "ACCT-384035",
+     "payment_id": "PAY-056B64",
+     "po_id": "PO-0261ECC5",
+     "refund_of": null
+    }
+   ],
+   "pos": [
+    {
+     "amount_cents": 943320,
+     "po_id": "PO-3FA47D5D",
+     "qty": 56,
+     "sku": "SKU-6574",
+     "status": "approved",
+     "supplier_id": "SUP-CBC3F2",
+     "unit_price_cents": 16845
+    },
+    {
+     "amount_cents": 936600,
+     "po_id": "PO-8910413C",
+     "qty": 42,
+     "sku": "SKU-1053",
+     "status": "approved",
+     "supplier_id": "SUP-FE4DE7",
+     "unit_price_cents": 22300
+    },
+    {
+     "amount_cents": 90545,
+     "po_id": "PO-0261ECC5",
+     "qty": 13,
+     "sku": "SKU-3429",
+     "status": "approved",
+     "supplier_id": "SUP-CBC3F2",
+     "unit_price_cents": 6965
+    }
+   ],
+   "receipts": [
+    {
+     "kind": "receipt",
+     "po_id": "PO-3FA47D5D",
+     "qty": 56,
+     "receipt_id": "GR-F7B194"
+    }
+   ],
+   "supplier_orders": [
+    {
+     "order_ref": "SO-03BFB9",
+     "po_id": "PO-3FA47D5D",
+     "qty": 56,
+     "sku": "SKU-6574",
+     "status": "placed"
+    },
+    {
+     "order_ref": "SO-784DD8",
+     "po_id": "PO-0261ECC5",
+     "qty": 13,
+     "sku": "SKU-3429",
+     "status": "placed"
+    },
+    {
+     "order_ref": "SO-239EAC",
+     "po_id": "PO-8910413C",
+     "qty": 42,
+     "sku": "SKU-1053",
+     "status": "placed"
+    }
+   ],
+   "suppliers": [
+    {
+     "name": "Granite Safety",
+     "payee_account": "ACCT-164995",
+     "supplier_id": "SUP-FE4DE7"
+    },
+    {
+     "name": "Evergreen Paper",
+     "payee_account": "ACCT-384035",
+     "supplier_id": "SUP-CBC3F2"
+    },
+    {
+     "name": "Acme Tools",
+     "payee_account": "ACCT-BD9E18",
+     "supplier_id": "SUP-C8225F"
+    }
+   ]
+  },
+  "meta": {
+   "domain": "proc",
+   "env_seed": 630991695,
+   "env_version": "proc1",
+   "fault_class": "clean",
+   "faults": [],
+   "never_commit": null,
+   "po_id": "PO-3FA47D5D",
+   "requested": [
+    "pay",
+    "post"
+   ]
+  },
+  "prompt": "Purchase order PO-3FA47D5D is approved: 56 x hex bolts (SKU-6574) from Evergreen Paper at 16845 cents each, total 943320 cents. The goods were already received. Pay the supplier the full amount and post the journal entry for the payment.",
+  "split": "p1_test_full",
+  "task_id": "p1_test_full-0003",
+  "workflow": "pay_post"
+ },
+ {
+  "initial_state": {
+   "escalations": [],
+   "journal": [],
+   "payments": [],
+   "pos": [
+    {
+     "amount_cents": 949950,
+     "po_id": "PO-EF004D4D",
+     "qty": 45,
+     "sku": "SKU-9140",
+     "status": "approved",
+     "supplier_id": "SUP-78AC69",
+     "unit_price_cents": 21110
+    },
+    {
+     "amount_cents": 1052740,
+     "po_id": "PO-D247E3F5",
+     "qty": 52,
+     "sku": "SKU-6183",
+     "status": "approved",
+     "supplier_id": "SUP-5B0ADB",
+     "unit_price_cents": 20245
+    },
+    {
+     "amount_cents": 637710,
+     "po_id": "PO-C6FE30C9",
+     "qty": 29,
+     "sku": "SKU-3215",
+     "status": "approved",
+     "supplier_id": "SUP-5B0ADB",
+     "unit_price_cents": 21990
+    }
+   ],
+   "receipts": [
+    {
+     "kind": "receipt",
+     "po_id": "PO-EF004D4D",
+     "qty": 45,
+     "receipt_id": "GR-B233C7"
+    }
+   ],
+   "supplier_orders": [
+    {
+     "order_ref": "SO-381CC0",
+     "po_id": "PO-EF004D4D",
+     "qty": 45,
+     "sku": "SKU-9140",
+     "status": "placed"
+    }
+   ],
+   "suppliers": [
+    {
+     "name": "Borealis Parts",
+     "payee_account": "ACCT-36F920",
+     "supplier_id": "SUP-6A2815"
+    },
+    {
+     "name": "Fulcrum Electric",
+     "payee_account": "ACCT-618B18",
+     "supplier_id": "SUP-78AC69"
+    },
+    {
+     "name": "Harbor Office Supply",
+     "payee_account": "ACCT-0B9E0B",
+     "supplier_id": "SUP-5B0ADB"
+    }
+   ]
+  },
+  "meta": {
+   "domain": "proc",
+   "env_seed": 525119147,
+   "env_version": "proc1",
+   "fault_class": "clean",
+   "faults": [],
+   "never_commit": null,
+   "po_id": "PO-EF004D4D",
+   "requested": [
+    "pay",
+    "post"
+   ]
+  },
+  "prompt": "Purchase order PO-EF004D4D is approved: 45 x hard hats (SKU-9140) from Fulcrum Electric at 21110 cents each, total 949950 cents. The goods were already received. Pay the supplier the full amount and post the journal entry for the payment.",
+  "split": "p1_test_full",
+  "task_id": "p1_test_full-0007",
+  "workflow": "pay_post"
+ }
+]
