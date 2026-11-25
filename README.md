@@ -10,6 +10,11 @@ ActionProof is an environment, a set of rewards and a controlled training study 
 
 Every number resolves through `claims/claims.yaml` (`python scripts/s2_numcheck.py`). Contradictions found and fixed: `docs/CONSISTENCY_AUDIT.md`.
 
+**What "GRPO" means here** (`research_audit/OPTIMIZER_AUDIT.md`):
+- TRL 1.7.1 takes one optimizer step per 32 rollouts, so the PPO clip never acts (`clip_ratio` is exactly zero at every logged step).
+- The update is a group-baselined, std-scaled policy gradient, with token-level loss aggregation, a KL penalty and a vLLM mismatch weight.
+- "No-std GRPO" removes only the std division (Dr. GRPO's advantage).
+
 Stage 2 results (finalist round):
 - **A12.** Training with a state reward (R_V) made read-back after phantom writes the default (1.00), while an acknowledgement reward (R_A) of identical form left the warm start's behaviour unchanged (0.00), in 5 of 5 seeds from one warm start. R_A's greedy behaviour equals the untrained warm start's.
 - **ID1 (registered, 2 seeds).** From a warm start whose demonstrations never read, R_V never samples a read in 200 steps and read-back stays 0/153: the reward selects checking from the starting model's repertoire; it does not create it.

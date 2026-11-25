@@ -102,7 +102,8 @@ Bayes-optimal; in general it is the on-policy action-value gap.
 (A3), conditionally independent given the states (A2). Laws: \emph{shared}; \emph{iid}; \emph{mix}$(\rho)$ (shared
 with probability $\rho$); \emph{dirmult}$(\rho)$ (Dirichlet-multinomial). The last two both have pairwise
 correlation $\rho$. GRPO uses $A_i=(R_i-\bar R)/(\hat\sigma+\epsilon)$ with Bessel $\hat\sigma$ and
-$\epsilon=10^{-4}$ (TRL); Dr.~GRPO uses $R_i-\bar R$. The expected update on the verify logit is
+$\epsilon=10^{-4}$ (TRL); Dr.~GRPO uses $R_i-\bar R$ (our trained ``Dr.~GRPO'' arm takes this advantage but keeps TRL's
+token-level aggregation; one update per batch, so the PPO clip is inactive; App.~\ref{app3:impl}). The expected update on the verify logit is
 $U(\pi)=\mathbb E\sum_iA_i(r_i-\pi)$.
 
 \paragraph{ActionProof.} ProcureSim tasks (order, receive, pay, post) carry one fault plan drawn from a fixed prior

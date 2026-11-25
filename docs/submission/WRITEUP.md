@@ -234,6 +234,14 @@ Reasons: `docs/upgrade/PLAN.md` §2. Thirty procurement-study models plus the St
   - ≤ 16 turns, at most 256 completion tokens per turn;
   - LoRA r16;
   - batched colocated vLLM rollouts.
+- **What the GRPO update actually is** (`research_audit/OPTIMIZER_AUDIT.md`):
+  - TRL 1.7.1 takes one optimizer step per batch of 32 rollouts (`num_iterations` 1), as in the original single-update GRPO. The PPO ratio is therefore 1 and the clip never acts: `clip_ratio` is exactly zero at every logged step of every run.
+  - The update is the group-baselined, std-scaled policy gradient (REINFORCE with a group-mean baseline), with:
+    - DAPO-style token-level loss aggregation;
+    - a KL penalty (β 0.02);
+    - a sequence-level weight correcting vLLM/trainer mismatch.
+  - Tool-result tokens carry no loss.
+  - "No-std GRPO" (AD-C1, P3) removes only the std division. That is Dr. GRPO's advantage, without Dr. GRPO's length normalisation.
 - **RSC** is the same, on the pools `s3_trainb_half` + `s3_rec_train_half`.
 - **Hardware:** one H200 per run, about 1 h 55 min per run (`logs/*_s*.full.log`).
 - **Library versions:** TRL 1.7.1, vLLM 0.23.0, AgentTune d4db4c1 (`requirements.lock`, `uv.lock`).
@@ -276,7 +284,7 @@ Five independent training seeds per arm (0–4) for A12 R_V and R_A, RSC, the cl
    - **Proved.** In agentic RL every rollout in a group meets the same hidden fault, so the group key is really (prompt, hidden state). Under that sharing, GRPO's expected update does not change under any per-state positive rescaling of the return. For a single read-or-not decision with deterministic returns within a state, it becomes a stake-free vote: severity and read cost drop out. Centred estimators (Dr. GRPO, RLOO) give an update proportional to the on-policy action-value gap instead.
    - **Registered held-out simulation (TH1, `PREREGISTRATION_TH1.md`, 731 problems).** GRPO's learned decision was predicted in 721 of 721 cells, and it followed the vote in all 77 cells where the vote and the value disagree. Dr. GRPO followed the value gap in 661 of 661. H6 (GRPO no worse whenever the vote is right) was **not supported** (53 of 75), and H7 was untestable.
    - **Scope.** The rule "verify iff p·s > 1/2" is exact only when repairability belongs to the shared state. In the trained agent, the registered AD-C1 test confirms the predicted direction: no-std GRPO beats GRPO by +0.120 in all five seeds. The mechanism evidence beyond that is development-level: groups share one fault plan in 800 of 800 logged groups, and std-normalised runs follow the early vote. One prediction failed: Dr. GRPO's rise in reading is not predicted by its starting value gap.
-   - **Prior work.** Removing the std is Dr. GRPO (Liu et al., arXiv 2503.20783); the distortion under stochastic outcomes is studied by Bereket & Leskovec (arXiv 2508.11800). Ours is the exact consequence of a shared hidden state for a costed information action: a new consequence of a known mechanism, not a new mechanism. **No new algorithm is claimed.** AWRB and D3 passed development gates only, and D3's mechanism prediction failed.
+   - **Prior work.** Removing the std is Dr. GRPO's advantage (Liu et al., arXiv 2503.20783; our arm keeps TRL's token-level aggregation, so it is not full Dr. GRPO); the distortion under stochastic outcomes is studied by Bereket & Leskovec (arXiv 2508.11800). Ours is the exact consequence of a shared hidden state for a costed information action: a new consequence of a known mechanism, not a new mechanism. **No new algorithm is claimed.** AWRB and D3 passed development gates only, and D3's mechanism prediction failed.
 
 ## 22. Negative results (kept and reported)
 
