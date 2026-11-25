@@ -277,7 +277,7 @@ cost-blindness itself was not tested on the language agent.
 \begin{itemize}
 \item In the registered practical study (P1, 450 frozen test tasks, three seeds), recovery SFT and recovery SFT plus
 GRPO beat the baseline by $+0.259$ and $+0.306$ VSC. An inference-time reconciliation line did not ($-0.030$;
-\path{results/p1/p1_summary.json}).
+\path{results/p1/p1_summary.json}). The two recovery arms start from different checkpoints, so their difference does not isolate what GRPO adds.
 \item \textbf{Judges.} With a database snapshot the best LLM judge agrees with the verifier at F1 $0.990$. Without
 it, the policy-family judge accepts 70\% of failed executions (\path{results/j2/j2_summary.json}). No human labels
 exist, so we use the verifier as ground truth.
