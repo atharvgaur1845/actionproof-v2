@@ -1,0 +1,208 @@
+{
+ "mutants": 25,
+ "killed": 25,
+ "kill_rate": 1.0,
+ "suite": "pytest -x tests/txn",
+ "results": [
+  {
+   "id": "M01",
+   "file": "actionproof/txn/env.py",
+   "description": "late commit off by one (lands after the 1st later call)",
+   "killed": true,
+   "pytest": "1 failed, 18 passed in 0.57s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M02",
+   "file": "actionproof/txn/env.py",
+   "description": "late commit off by one (lands after the 3rd later call)",
+   "killed": true,
+   "pytest": "1 failed, 7 passed in 0.56s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M03",
+   "file": "actionproof/txn/env.py",
+   "description": "the faulted call itself counts towards the landing",
+   "killed": true,
+   "pytest": "1 failed, 18 passed in 0.58s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M04",
+   "file": "actionproof/txn/env.py",
+   "description": "late-commit dedupe ignores the idempotency key (tool, po only)",
+   "killed": true,
+   "pytest": "1 failed, 19 passed in 0.57s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M05",
+   "file": "actionproof/txn/env.py",
+   "description": "a landed late commit is not stored for later same-key retries",
+   "killed": true,
+   "pytest": "1 failed, 7 passed in 0.56s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M06",
+   "file": "actionproof/txn/env.py",
+   "description": "log_conflict: the audit log records the timeout instead of the conflicting error",
+   "killed": true,
+   "pytest": "1 failed, 15 passed in 0.56s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M07",
+   "file": "actionproof/txn/env.py",
+   "description": "log_conflict/visibility_lag commit without storing the key",
+   "killed": true,
+   "pytest": "1 failed, 9 passed in 0.57s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M08",
+   "file": "actionproof/txn/env.py",
+   "description": "concurrent: the colleague's write is never inserted",
+   "killed": true,
+   "pytest": "1 failed, 6 passed in 0.57s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M09",
+   "file": "actionproof/txn/env.py",
+   "description": "the consistent flag is ignored",
+   "killed": true,
+   "pytest": "1 failed, 28 passed in 0.58s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M10",
+   "file": "actionproof/txn/env.py",
+   "description": "delayed window off by one (1 stale read)",
+   "killed": true,
+   "pytest": "1 failed, 5 passed in 0.56s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M11",
+   "file": "actionproof/txn/env.py",
+   "description": "the audit log stays available in the unresolvable regime",
+   "killed": true,
+   "pytest": "1 failed, 2 passed in 0.55s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M12",
+   "file": "actionproof/txn/env.py",
+   "description": "a consistent read is labelled stale",
+   "killed": true,
+   "pytest": "1 failed, 28 passed in 0.58s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M13",
+   "file": "actionproof/txn/truth.py",
+   "description": "FCompR counts a refund row as a live payment",
+   "killed": true,
+   "pytest": "1 failed, 54 passed in 0.60s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M14",
+   "file": "actionproof/txn/truth.py",
+   "description": "URR: a retry concurrent with a late landing counts as after it",
+   "killed": true,
+   "pytest": "1 failed, 47 passed in 0.59s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M15",
+   "file": "actionproof/txn/truth.py",
+   "description": "URR counts idempotency-store replies as re-executions",
+   "killed": true,
+   "pytest": "1 failed, 45 passed in 0.59s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M16",
+   "file": "actionproof/txn/truth.py",
+   "description": "STR ignores harm caused before escalating",
+   "killed": true,
+   "pytest": "1 failed, 61 passed in 0.61s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M17",
+   "file": "actionproof/txn/truth.py",
+   "description": "STR ignores whether escalation was correct",
+   "killed": true,
+   "pytest": "1 failed, 67 passed in 0.61s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M18",
+   "file": "actionproof/txn/truth.py",
+   "description": "FCR counts honest failures",
+   "killed": true,
+   "pytest": "1 failed, 61 passed in 0.61s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M19",
+   "file": "actionproof/txn/truth.py",
+   "description": "PRS ignores duplicates",
+   "killed": true,
+   "pytest": "1 failed, 68 passed in 0.61s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M20",
+   "file": "actionproof/txn/truth.py",
+   "description": "unverified claim does not require goal_met",
+   "killed": true,
+   "pytest": "1 failed, 60 passed in 0.61s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M21",
+   "file": "actionproof/txn/truth.py",
+   "description": "a failed report counts as escalation",
+   "killed": true,
+   "pytest": "1 failed, 50 passed in 0.60s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M22",
+   "file": "actionproof/txn/truth.py",
+   "description": "FCompR flags refunds of an extra payment",
+   "killed": true,
+   "pytest": "1 failed, 52 passed in 0.60s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M23",
+   "file": "actionproof/txn/truth.py",
+   "description": "DMR looks only at the pay step",
+   "killed": true,
+   "pytest": "1 failed, 51 passed in 0.60s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M24",
+   "file": "actionproof/txn/invariants.py",
+   "description": "money conservation counts a refund as a payment",
+   "killed": true,
+   "pytest": "1 failed, 52 passed in 0.60s",
+   "seconds": 1.4
+  },
+  {
+   "id": "M25",
+   "file": "actionproof/txn/invariants.py",
+   "description": "unresolved-mutation check exempts unkeyed retries",
+   "killed": true,
+   "pytest": "1 failed, 69 passed in 0.61s",
+   "seconds": 1.4
+  }
+ ]
+}
