@@ -1,6 +1,6 @@
 # Submission checklist
 
-2026-11-25. Branch `submission-candidate`. Brief deadline: Nov 28, 23:59 IST. The author earlier said there were about 40 hours left from Nov 24 07:45. **The author must confirm the deadline on the portal.**
+2026-11-25. Branch `submission-candidate`. **Deadline confirmed by the author: Nov 28, 2026, 23:59 IST.**
 
 ## Integrity (checked by commands, 2026-11-25)
 
@@ -33,7 +33,7 @@
 
 ## Author-only (cannot be done by the agent)
 
-- [ ] Confirm the deadline on the portal.
+- [x] Deadline confirmed by the author (Nov 28, 23:59 IST).
 - [ ] The §30 declaration of work done outside the hackathon, and team contributions (§31).
 - [ ] Human labels: the 76 J1 calibration cases, or keep every judge result explicitly model-vs-verifier (the current wording).
 - [ ] Title and thesis of paper v3 (options in `docs/final/RESEARCH_DECISION.md`).
