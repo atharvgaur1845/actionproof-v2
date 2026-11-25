@@ -134,8 +134,9 @@ Reads behave as in proc2, plus §2.
 ### 4.2 Delayed
 
 The delayed regime is on when `regime == "delayed"` or when the episode has a `visibility_lag` fault. Every
-commit event opens a lag window on each service it changed. A commit event is any write that inserts rows: by the
-agent, by a colleague, or a landing. The window holds:
+commit event opens a lag window on each service it changed. A commit event is a step write or a refund that
+inserts rows: by the agent, by a colleague, or a landing. An `escalate_to_human` row opens no window. The window
+holds:
 
 - the pre-commit view of that service's tables, taken before the event's first insert;
 - that view's version (`as_of`);
@@ -159,9 +160,10 @@ agent then cannot tell the hidden outcome of the faulted write from any observat
 2. Not found.
 3. `consistent=True`: primary view.
 4. An open delayed window on the service: window view.
-5. `replica_lag` fault on (read tool, k), or `meta.txn.lag_first_reads = n` with this read among the first n agent
-   read calls (the five proc1 reads, counted whatever their arguments): proc1 lagged view, which is the state
-   before the service's last insert, with `as_of = version - 1` when the version is above 0.
+5. `replica_lag` fault on (read tool, k), or `meta.txn.lag_first_reads = n` with this read among the first n
+   served read calls. A served read call is a call to one of the five proc1 reads that passed steps 1-2; consistent
+   calls count too. Both give the proc1 lagged view: the state before the service's last insert, with
+   `as_of = version - 1` when the version is above 0.
 6. Primary view.
 
 `meta.txn.reorder_fields = true`, used in the evidence-shift group, reverses the key order of the top-level
@@ -262,8 +264,11 @@ Each check returns its violations as `{code, idx, detail}`:
 
 ## 9. Scripted policies (`actionproof/txn/policies.py`)
 
-All policies use agent-visible tools only and never read `meta`. Their budget is 16 calls: a call beyond 16 is
-refused and the episode ends without a report. Every policy ends with `submit_report`. Default keys are
+All policies use agent-visible tools only and never read `meta`. Their budget is 16 calls, the 16th of which is
+kept for the report. If a policy's 16th call would be anything other than `submit_report`, it instead reports
+`failed` ("call budget exhausted"). So every episode ends with `submit_report`. Policies run on the canonical
+surface. The alias and schema surfaces only rename what a model sees, so for a policy these groups measure the
+semantics, not the renaming. Default keys are
 `<step>-<po>`; new keys are `<step>-<po>-r<n>`. `receive` takes no key.
 
 - **B0, ack-trusting.** For each step:
@@ -363,3 +368,36 @@ All splits use the three trained workflows (`order_prepay`, `receive_pay`, `pay_
 
 - **Disjointness.** Task ids, PO ids and prompt text are disjoint from every other `data/bench/proc/*.jsonl` file
   (asserted). PO ids and prompts are shared only within a quadruple.
+
+## 11. Evaluation and statistics
+
+### Model evaluation
+
+`scripts/txn_eval.py` runs `scripts/p1_eval.py::run`, with `actionproof.stage3.env.make_env_s3` patched to
+`make_env_txn` for the duration of the run. Everything else is p1_eval's: prompts, tool schemas, parser,
+tool-result format, a 16-turn cap and 256 new tokens.
+
+- The default is greedy plus 2 samples.
+- The OpenAI-compatible path is greedy only, through the same loop and the same verifier. Its `--max-usd` cap is a
+  hard stop. A request is sent only if the following fits under the cap: what has been spent, plus the worst case
+  of every request in flight, plus this request's worst case. The worst case is the prompt length in characters
+  plus 8 per message, counted as tokens and priced at `price_in`, plus `max_tokens` priced at `price_out`.
+- Output goes to `results/txn/<tag>__<split>.jsonl`, which is never overwritten.
+
+### Statistics (`scripts/txn_stats.py`)
+
+- **Rates.** Every rate is reported with its numerator, its denominator and a Clopper–Pearson 95% interval.
+- **Per-task values.** A model's value on a task is the mean of the flag over its episodes on that task.
+- **D.** D's value on a task is the mean of that value over tags `D_s0`, `D_s1` and `D_s2`.
+- **Paired comparisons.** For each task, take the difference between the two arms. Bootstrap the task-weighted mean
+  of that difference with B = 10,000 resamples of template clusters (`meta.txn.template_id`), seed 20261126. One
+  set of draws is shared by every test. The interval is the 95% percentile interval. The two-sided p-value is
+  2·min((1+#{boot ≥ 0})/(B+1), (1+#{boot ≤ 0})/(B+1)), capped at 1.
+- **H3.** The tests are D vs B3 and D vs B1 on DMR, URR and FCompR (episode-level flags over all episodes of the
+  split), with Holm over the 6 tests. A test is supported iff all three of these hold:
+  - its Holm p is below 0.05;
+  - the upper end of its CI is below 0;
+  - the lower end of the clustered CI of VTC_D − VTC_comparator is above −0.05.
+
+  H3 is supported iff all 6 tests are.
+- **H1, H4 and H5** are descriptive. Their definitions are in the script's docstring and follow §7.
