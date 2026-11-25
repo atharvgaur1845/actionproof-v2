@@ -1,0 +1,76 @@
+{
+  "tag": "aya32b_bf16",
+  "split": "p1_test_pp",
+  "phase": "b1",
+  "model": "CohereLabs/aya-expanse-32b",
+  "fp8": false,
+  "samples": 4,
+  "seconds": 292.2,
+  "greedy": {
+    "n": 90,
+    "vsc": 0.0,
+    "false_success": 1.0,
+    "duplicate_unrefunded": 0.0,
+    "honest_fail": 0.0,
+    "partial_pay_repaired": 0.0,
+    "new_key_share_on_repay": null,
+    "redundant_reads_per_episode": 0.0,
+    "reads_per_episode": 0.3333333333333333,
+    "calls_per_success": null,
+    "context_ended": 0.0
+  },
+  "sampled": {
+    "n": 360,
+    "vsc": 0.0,
+    "false_success": 0.9277777777777778,
+    "duplicate_unrefunded": 0.10277777777777777,
+    "honest_fail": 0.002777777777777778,
+    "partial_pay_repaired": 0.0,
+    "new_key_share_on_repay": null,
+    "redundant_reads_per_episode": 0.0,
+    "reads_per_episode": 0.4361111111111111,
+    "calls_per_success": null,
+    "context_ended": 0.0
+  },
+  "by_workflow_sampled": {
+    "order_prepay": {
+      "n": 120,
+      "vsc": 0.0,
+      "false_success": 0.9,
+      "duplicate_unrefunded": 0.1,
+      "honest_fail": 0.008333333333333333,
+      "partial_pay_repaired": 0.0,
+      "new_key_share_on_repay": null,
+      "redundant_reads_per_episode": 0.0,
+      "reads_per_episode": 0.20833333333333334,
+      "calls_per_success": null,
+      "context_ended": 0.0
+    },
+    "pay_post": {
+      "n": 120,
+      "vsc": 0.0,
+      "false_success": 0.975,
+      "duplicate_unrefunded": 0.2,
+      "honest_fail": 0.0,
+      "partial_pay_repaired": 0.0,
+      "new_key_share_on_repay": null,
+      "redundant_reads_per_episode": 0.0,
+      "reads_per_episode": 1.1,
+      "calls_per_success": null,
+      "context_ended": 0.0
+    },
+    "receive_pay": {
+      "n": 120,
+      "vsc": 0.0,
+      "false_success": 0.9083333333333333,
+      "duplicate_unrefunded": 0.008333333333333333,
+      "honest_fail": 0.0,
+      "partial_pay_repaired": 0.0,
+      "new_key_share_on_repay": null,
+      "redundant_reads_per_episode": 0.0,
+      "reads_per_episode": 0.0,
+      "calls_per_success": null,
+      "context_ended": 0.0
+    }
+  }
+}

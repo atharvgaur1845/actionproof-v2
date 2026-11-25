@@ -1,0 +1,76 @@
+{
+  "tag": "tag_base",
+  "split": "p1_test_pp",
+  "phase": "b1",
+  "model": "CohereLabs/tiny-aya-global",
+  "fp8": false,
+  "samples": 4,
+  "seconds": 200.3,
+  "greedy": {
+    "n": 90,
+    "vsc": 0.0,
+    "false_success": 0.2777777777777778,
+    "duplicate_unrefunded": 0.7888888888888889,
+    "honest_fail": 0.03333333333333333,
+    "partial_pay_repaired": 0.0,
+    "new_key_share_on_repay": 1.0,
+    "redundant_reads_per_episode": 0.13333333333333333,
+    "reads_per_episode": 2.5444444444444443,
+    "calls_per_success": null,
+    "context_ended": 0.0
+  },
+  "sampled": {
+    "n": 360,
+    "vsc": 0.0,
+    "false_success": 0.2,
+    "duplicate_unrefunded": 0.4361111111111111,
+    "honest_fail": 0.08611111111111111,
+    "partial_pay_repaired": 0.0,
+    "new_key_share_on_repay": 1.0,
+    "redundant_reads_per_episode": 0.008333333333333333,
+    "reads_per_episode": 1.05,
+    "calls_per_success": null,
+    "context_ended": 0.0
+  },
+  "by_workflow_sampled": {
+    "order_prepay": {
+      "n": 120,
+      "vsc": 0.0,
+      "false_success": 0.16666666666666666,
+      "duplicate_unrefunded": 0.425,
+      "honest_fail": 0.10833333333333334,
+      "partial_pay_repaired": 0.0,
+      "new_key_share_on_repay": 1.0,
+      "redundant_reads_per_episode": 0.008333333333333333,
+      "reads_per_episode": 0.8166666666666667,
+      "calls_per_success": null,
+      "context_ended": 0.0
+    },
+    "pay_post": {
+      "n": 120,
+      "vsc": 0.0,
+      "false_success": 0.225,
+      "duplicate_unrefunded": 0.55,
+      "honest_fail": 0.10833333333333334,
+      "partial_pay_repaired": 0.0,
+      "new_key_share_on_repay": null,
+      "redundant_reads_per_episode": 0.016666666666666666,
+      "reads_per_episode": 1.65,
+      "calls_per_success": null,
+      "context_ended": 0.0
+    },
+    "receive_pay": {
+      "n": 120,
+      "vsc": 0.0,
+      "false_success": 0.20833333333333334,
+      "duplicate_unrefunded": 0.3333333333333333,
+      "honest_fail": 0.041666666666666664,
+      "partial_pay_repaired": 0.0,
+      "new_key_share_on_repay": 1.0,
+      "redundant_reads_per_episode": 0.0,
+      "reads_per_episode": 0.6833333333333333,
+      "calls_per_success": null,
+      "context_ended": 0.0
+    }
+  }
+}
