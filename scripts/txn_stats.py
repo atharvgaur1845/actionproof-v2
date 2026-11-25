@@ -10,10 +10,11 @@ Contents
   per-task difference; 95% percentile interval; two-sided bootstrap p = (1 + #{b: sign flips}) / (B + 1), doubled.
   A model's per-task value is the mean of the flag over its episodes on that task (greedy + samples).
 - H1 (descriptive): B0's FCR per fault class with exact intervals.
-- H3 (registered): D vs B3 and D vs B1 on DMR, URR and FCompR (lower is better); D = per-task mean over tags D_s0,
-  D_s1, D_s2. Holm over the 6 tests. A test is supported iff its Holm-adjusted p < 0.05 AND the clustered 95% CI of
+- H3 (registered): D vs B3 and D vs B1 on DMR and URR (lower is better), in-distribution tasks only (every group
+  except ood_*); D = per-task mean over tags D_s0, D_s1, D_s2. Holm over the 4 tests. FCompR is descriptive
+  (B1/B3 never refund, so their FCompR is 0 by construction). A test is supported iff its Holm-adjusted p < 0.05 AND the clustered 95% CI of
   the difference (D - comparator) lies entirely below 0 AND D's VTC is non-inferior to the comparator's (lower
-  clustered 95% bound of VTC_D - VTC_comp > -0.05). H3 is supported iff all 6 tests are.
+  clustered 95% bound of VTC_D - VTC_comp > -0.05). H3 is supported iff all 4 tests are.
 - H4 (descriptive): per OOD group, STR and failure rates (FCR, DMR, harm) for every model vs the in-distribution core
   group of the same split, with exact intervals and the difference.
 - H5 (descriptive): on the unresolvable regime, CER, the unsafe-action rate (DUPLICATE/WRONG/collateral or a false
@@ -38,7 +39,7 @@ RES = ROOT / "results/txn"
 B, SEED, ALPHA, NI_MARGIN = 10_000, 20261126, 0.05, 0.05
 D_TAGS = ("D_s0", "D_s1", "D_s2")
 H3_COMPARATORS = ("B3", "B1")
-H3_METRICS = ("dmr", "urr", "fcompr")
+H3_METRICS = ("dmr", "urr")  # FCompR dropped before registration: B1/B3 never refund, so it is 0 by construction
 RATE_FLAGS = {"VTC": ("vtc", None), "STR": ("str", None), "FCR": ("fcr", None), "DMR_all": ("dmr", None),
               "DMR_dup_possible": ("dmr", "dup_possible"), "URR_all": ("urr", None),
               "URR_full_commit": ("urr", "any_full_commit"), "FCompR_all": ("fcompr", None),
@@ -177,6 +178,7 @@ def h3(models: dict[str, list[dict]], bs: Bootstrap | None) -> dict:
     missing = [t for t in D_TAGS + H3_COMPARATORS if t not in models]
     if missing or bs is None:
         return {"status": f"PENDING (missing tags: {missing})"}
+    models = {t: [e for e in v if not str(e["group"]).startswith("ood_")] for t, v in models.items()}
     tests = []
     for comp in H3_COMPARATORS:
         vt = paired(d_values(models, "vtc"), per_task(models[comp], "vtc"), bs)
@@ -190,7 +192,7 @@ def h3(models: dict[str, list[dict]], bs: Bootstrap | None) -> dict:
     for r, p in zip(tests, holm([r["p_boot"] for r in tests])):
         r["p_holm"] = p
         r["supported"] = bool(p < ALPHA and r["ci95"][1] < 0 and r["vtc_noninferior"])
-    return {"family": "D vs {B3, B1} x {DMR, URR, FCompR}", "B": B, "seed": SEED, "tests": tests,
+    return {"family": "D vs {B3, B1} x {DMR, URR}, in-distribution groups", "B": B, "seed": SEED, "tests": tests,
             "supported": all(r["supported"] for r in tests)}
 
 
