@@ -89,7 +89,7 @@ def main() -> None:
     a = ap.parse_args()
     from vllm import LLM, SamplingParams
     cases = [json.loads(l) for l in (DATA / "cases.jsonl").read_text().splitlines()]
-    llm = LLM(model=a.model, tensor_parallel_size=a.tp, max_model_len=16384, gpu_memory_utilization=0.9)
+    llm = LLM(model=a.model, tensor_parallel_size=a.tp, max_model_len=8192, gpu_memory_utilization=0.9)
     sp = SamplingParams(temperature=0, max_tokens=700)
     OUT.mkdir(parents=True, exist_ok=True)
     configs = [("v1", v) for v in ("transcript", "ledger", "state")] + [("st", v) for v in ("transcript", "ledger", "state", "facts")]
