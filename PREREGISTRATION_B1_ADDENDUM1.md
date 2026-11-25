@@ -38,3 +38,8 @@ This is an infrastructure failure, not a model result. The files are moved, not 
 
 The model is rerun once, unquantised in bf16 (`--gpu-mem 0.95`, which fits on one 80 GB GPU), under the tag
 `aya32b_bf16`. Nothing else changes.
+
+## Budget change (2026-11-26, about 02:35 IST, before any API episode)
+
+The B1 API cap is lowered from $10 to $7. TXN1's API run (`--max-usd 3`) then keeps the combined spend within the
+author's $10. The first submission (job 470771) never started and was cancelled; job 470809 runs with `--cap 7`.
