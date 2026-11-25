@@ -1,14 +1,14 @@
 <!--
 Draft section for README.md (paste after "Deliverables"). It contains no result numbers on purpose: README.md is scanned
 by scripts/s2_numcheck.py, and every result-like number in it must resolve through claims/claims.yaml.
-Placeholders to fill before pasting: <LIVE_SPACE_URL>. The paper PDF is built from paper/main_v3.tex and is not tracked in git.
+Placeholders to fill before pasting: https://huggingface.co/spaces/atharvgaur18/actionproof-live. The paper PDF is built from paper/main_v3.tex and is not tracked in git.
 -->
 
 ## Public release
 
 | What | Link |
 |---|---|
-| Live Space (the recommended agent, running) | <LIVE_SPACE_URL> |
+| Live Space (the recommended agent, running) | https://huggingface.co/spaces/atharvgaur18/actionproof-live |
 | Replay Space (recorded episodes, no model calls) | https://huggingface.co/spaces/atharvgaur18/actionproof |
 | Recommended agent D (merged, seed 0) | https://huggingface.co/atharvgaur18/actionproof-agent-d |
 | D adapters (seeds 0 to 2) and the Dw adapter | https://huggingface.co/atharvgaur18/actionproof-agent-d-adapters |
