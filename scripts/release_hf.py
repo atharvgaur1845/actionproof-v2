@@ -72,7 +72,7 @@ ALL = ("merged-d", *ADAPTER_REPOS, "dataset")
 
 DATA_GLOBS = ("results/p1/**/*", "results/p2/**/*", "results/p3/**/*", "data/bench/proc/p1_*.jsonl",
               "data/bench/proc/s4_*.jsonl", "evaluation/judge_next/data/*.jsonl")
-EXTRA_DIRS = ("results/p4", "results/b1", "results/txn")  # to be added; included when they exist
+EXTRA_DIRS = ("results/p4", "results/p5", "results/b1", "results/txn")  # included when they exist
 SKIP_PARTS = {"smoke", "__pycache__", ".cache"}
 
 
