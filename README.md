@@ -1,14 +1,135 @@
 # ActionProof
 
-**Agents say "done". We check the database. Then we ask what RL taught them.**
+**ActionProof trains and evaluates tool-using agents to reconcile transaction evidence and recover safely when acknowledgements do not reliably describe execution.**
 
-ActionProof is an environment, a set of rewards and a controlled training study for tool-using agents whose tool acknowledgements can lie: phantom, partial, stale, timed-out and ambiguous writes. Every number is checked against the environment's database and receipt log, never against the transcript.
+> **For judges: one minute.** A tool can answer "ok" to a payment that never happened, or time out on one that did. ActionProof is a simulated procurement environment (ProcureSim) in which the agent must tell committed, missing, partial and ambiguous outcomes apart, then choose verified completion, safe continuation, retry or escalation. Every number is scored against the database, never the transcript.
+> - **Registered P1** (450 frozen tasks, 3 seeds per arm): verified-success completion rises from 0.513 (recovery-start agent) to 0.772 with recovery SFT and 0.819 with recovery SFT then GRPO. The two arms are not nested, so their gap is not GRPO's contribution.
+> - **TXN benchmark** (locked, 440 tasks): an acknowledgement-trusting policy falsely completes on every task where the "ok" hides a phantom write. Against blind retry and final-state checking, the trained agent duplicates far fewer mutations (registered, both tests pass), but its fewer unnecessary retries are not established (both tests fail), so the registered H3 family is **not supported**.
+> - **Registered P4:** randomising the recovery demonstrations lifts the warm start on renamed tools from 0.137 to 0.741 and on an unseen four-step workflow from 0.268 to 0.842, with no cost on the P1 test.
+> - **Limits we report:** when evidence cannot settle the outcome, the trained agent rarely escalates; healthcare transfer is negative; the no-std GRPO change (P3) is a null; an LLM judge cannot replace the verifier. This is transaction-aware recovery under ambiguous execution, not a new RL optimizer and not a claim of universal safety.
+>
+> Try it: [live Space](https://huggingface.co/spaces/atharvgaur18/actionproof-live) (a real model call per run) · [replay Space](https://huggingface.co/spaces/atharvgaur18/actionproof) (recorded episodes) · verify every number without a GPU: `bash scripts/verify_numbers.sh`.
 
-**Status (2026-11-26).** Canonical branch `submission-candidate`. The research site is deployed as a Hugging Face Space ([atharvgaur18/actionproof](https://huggingface.co/spaces/atharvgaur18/actionproof), deterministic replay of recorded episodes; last redeployed 2026-11-25 with P3). Final-round studies B1, P4 and TXN1 are registered and running; their results appear here only from their result files. How the labels map:
+**Status (2026-11-26).** Canonical branch `submission-candidate`. Every number resolves through `claims/claims.yaml` (`python scripts/s2_numcheck.py`); every confirmatory result below names its registration, and every deviation is an addendum committed before the affected output existed.
+
+## Headline results
+
+### P1: recovery demonstrations (registered, `PREREGISTRATION_P1.md`)
+
+| Arm | Sampled VSC | vs A | Holm |
+|---|---|---|---|
+| A: recovery-start GRPO (reference) | 0.513 | — | — |
+| B: A + reconciliation line at inference | 0.483 | −0.030 [−0.041, −0.019] | not supported |
+| C: recovery SFT | 0.772 | +0.259 [+0.231, +0.287] | 0.0003, supported |
+| D: recovery SFT, then the same GRPO | 0.819 | +0.306 [+0.276, +0.337] | 0.0003, supported |
+
+What GRPO adds after SFT (R7, exploratory, D against its own warm start): +0.140 [+0.120, +0.161] over 450 tasks; 69 tasks improve by at least 0.5 and 0 get worse. D's most common failure is a false success on a goods receipt that never happened (266 of 976 failed episodes).
+
+### TXN: transaction integrity under ambiguous execution (registered, `PREREGISTRATION_TXN1.md` + addenda 1–2)
+
+The locked `txn_test` split holds 440 tasks: counterfactual quadruples (the same request, tool, arguments and "ok", with four hidden realities), eight fault classes, three evidence regimes and six OOD groups. Scripted baselines B0–B4 and ablations share tasks, tools, budgets and the evaluator with the trained and prompted models.
+
+| Agent (all episodes) | VTC | FCR |
+|---|---|---|
+| B0 acknowledgement-trusting | 0.136 | 0.864 |
+| B1 final-state only | 0.448 | 0.416 |
+| B3 bounded retry + idempotency | 0.491 | 0.509 |
+| B4 transaction-aware reconciliation (scripted reference) | 0.864 | 0.000 |
+| W (plain SFT warm start) | 0.445 | 0.475 |
+| Dw (recovery-SFT warm start) | 0.598 | 0.258 |
+| D seed 0 | 0.724 | 0.121 |
+| Dn seed 0 (no-std GRPO) | 0.717 | 0.127 |
+| Aya Expanse 32B (prompted) | 0.161 | 0.610 |
+
+VTC: verified transaction completion. FCR: false-completion rate.
+
+- **H1 (descriptive).** B0's FCR is 1.000 when the "ok" hides a phantom write and 0.000 when the "ok" is true: acknowledgement-following fails exactly where the acknowledgement and the state disagree.
+- **H3 (registered), D (3 seeds) vs B3 and B1, in-distribution tasks (n = 320, 48 template clusters), Holm over 4. Not supported as a family.**
+
+  | Test | D | Comparator | Difference [95% CI] | Holm p | Result |
+  |---|---|---|---|---|---|
+  | Duplicate mutations vs B3 | 0.024 | 0.191 | −0.167 [−0.271, −0.070] | 0.0012 | supported |
+  | Duplicate mutations vs B1 | 0.024 | 0.338 | −0.314 [−0.454, −0.176] | 0.0008 | supported |
+  | Unnecessary retries vs B3 | 0.008 | 0.034 | −0.027 [−0.067, +0.003] | 0.123 | not supported |
+  | Unnecessary retries vs B1 | 0.008 | 0.103 | −0.095 [−0.199, −0.015] | 0.064 | not supported |
+
+  D's VTC is non-inferior in every test (+0.205 vs B3, +0.289 vs B1).
+- **H5 (descriptive), unresolvable evidence.** Escalation is the safe action there. D escalates correctly in 0.050 of cases and Dw in 0.022, with unsafe-action rates of 0.044 each. Aya Expanse 32B escalates more (0.222) but acts unsafely in 0.400. B4 escalates on all of them (1.000, unsafe 0.000). Escalation never appeared in the training demonstrations.
+
+### P4: randomised demonstrations fix procedure replay (registered, `PREREGISTRATION_P4.md`)
+
+Dw_aug re-renders half of the recovery demonstrations on synonym tool surfaces (none shared with the held-out surface) and adds oracle demonstrations on five new step sequences (none is the test workflow). Three seeds per arm; sampled VSC; paired task bootstrap.
+
+| Test | Dw | Dw_aug | Difference [95% CI] | Seed differences | Result |
+|---|---|---|---|---|---|
+| H1 renamed tools (`s4_api`, 150 tasks) | 0.137 | 0.741 | +0.604 [+0.540, +0.666] | +0.612, +0.613, +0.587 | supported |
+| H2 unseen four-step workflow (160 tasks) | 0.268 | 0.842 | +0.574 [+0.536, +0.610] | +0.545, +0.623, +0.553 | supported |
+| H3 no canonical cost (P1 test, 450 tasks; bound > −0.03) | 0.666 | 0.714 | +0.048 [+0.026, +0.072] | +0.027, +0.027, +0.091 | supported |
+
+These are warm starts. GRPO was not run on top of Dw_aug, and the earlier attempt to randomise tool names during GRPO (SR1) failed.
+
+### Supplementary baselines (B1 addendum 1; not Cohere models)
+
+Greedy VSC on the frozen P1 test splits through HF Inference Providers (the P1 arms above are sampled).
+
+| Split | Qwen3-235B-A22B | gpt-oss-120b |
+|---|---|---|
+| full episodes | 0.383 | 0.250 |
+| partial payments | 0.000 | 0.000 |
+| fresh recovery | 0.475 | 0.550 |
+| four-step workflow | 0.300 | 0.267 |
+| two-fault episodes | 0.067 | 0.067 |
+
+Frontier models without recovery training never repair a partial payment here.
+
+## Public release
+
+| What | Link |
+|---|---|
+| Live Space (the recommended agent, running) | https://huggingface.co/spaces/atharvgaur18/actionproof-live |
+| Replay Space (recorded episodes, no model calls) | https://huggingface.co/spaces/atharvgaur18/actionproof |
+| Recommended agent D (merged, seed 0) | https://huggingface.co/atharvgaur18/actionproof-agent-d |
+| D adapters (seeds 0 to 2) and the Dw adapter | https://huggingface.co/atharvgaur18/actionproof-agent-d-adapters |
+| Recovery-SFT warm start Dw | https://huggingface.co/atharvgaur18/actionproof-warmstart-dw |
+| Reference agent A (recovery-start GRPO) | https://huggingface.co/atharvgaur18/actionproof-agent-a |
+| Dn, the no-std GRPO null result (P3), for reproducibility | https://huggingface.co/atharvgaur18/actionproof-agent-dn |
+| Episode traces, frozen splits, judge cases | https://huggingface.co/datasets/atharvgaur18/actionproof-traces |
+| Paper | `paper/main_v3.pdf` (source `paper/main_v3.tex`) |
+| Write-up | `docs/submission/WRITEUP.md` |
+| Code | https://github.com/atharvgaur1845/actionproof-v2 |
+
+All models are LoRA fine-tunes of `CohereLabs/tiny-aya-global` and carry CC-BY-NC-4.0: research use only, no production payments. Every result is on a simulator (ProcureSim). Arms C and D are not nested, P3 is a null result, and D itself does not generalise to renamed tools or to the four-step workflow (P4's fix is at the warm-start stage); each model card says so next to its numbers.
+
+### Verify the numbers without a GPU (about 10 minutes)
+
+```bash
+git clone https://github.com/atharvgaur1845/actionproof-v2 && cd actionproof-v2
+pip install numpy pyyaml huggingface_hub
+bash scripts/verify_numbers.sh
+```
+
+The script downloads the episode files from the traces dataset, reruns the registered analyses (fixed bootstrap seeds, so the output is deterministic), requires `git diff --exit-code results/` to be empty, and runs `python scripts/s2_numcheck.py`, which checks every number in the paper, write-up and README against `claims/claims.yaml`.
+
+### Toolkits actually used
+
+Checked against the code by import, not by intent.
+
+| Toolkit | What it does in the pipeline | Where |
+|---|---|---|
+| CuratorKIT | Exact and MinHash deduplication of the oracle recovery demonstrations before SFT (and of acknowledgement texts in Stage 1) | `actionproof/p1/build.py`, `actionproof/bench/naturalistic_acks.py` |
+| AgentTune | The tool-call format: system-prompt block, schema builder and `extract_tool_calls_from_text` parser, shared by training and evaluation; `TrlAgenticGrpo` trains every GRPO agent (A, D, Dn) | `actionproof.rollout.episode._agenttune`, `scripts/p1_eval.py`, `actionproof/stage3/train.py`, `actionproof/p3/train_nostd.py` |
+| Deterministic verifier (ours) | Scores every episode against the database; the authority for all results | `actionproof/integrity/sim/truth.py` |
+| AuditKIT | `TaskCompletion` LLM-judge scores of the P1 episodes, secondary and descriptive; it never decides an outcome | `scripts/p1_auditkit.py`, `actionproof/eval/judge_audit.py` |
+
+Not used for any result: AlignTune and SafeTune (never imported). CircuitKIT was attempted in the exploratory A16 analysis, failed in the job environment, and no result is claimed from it (`docs/upgrade/TOOLKITS.md`).
+
+## Earlier studies (Stages 1–4)
+
+How the labels map:
 - **Hackathon rounds.** "Stage 1" (Nov 1–15) is the preliminary round and "Stage 2" (Nov 20–28) the finalist round.
 - **Internal research phases.** "Stage 3" (`docs/stage3/`, `actionproof/stage3/`) and "Stage 4" (`docs/research/`, `actionproof/stage4/`, branch `stage4`) are internal phases run inside the Stage 2 window. They are not hackathon rounds.
 
-Every number resolves through `claims/claims.yaml` (`python scripts/s2_numcheck.py`). Contradictions found and fixed: `docs/CONSISTENCY_AUDIT.md`.
+Contradictions found and fixed: `docs/CONSISTENCY_AUDIT.md`.
 
 **What "GRPO" means here** (`research_audit/OPTIMIZER_AUDIT.md`):
 - TRL 1.7.1 takes one optimizer step per 32 rollouts, so the PPO clip never acts (`clip_ratio` is exactly zero at every logged step).
