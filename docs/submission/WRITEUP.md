@@ -1,6 +1,8 @@
 # ActionProof: what reinforcement learning teaches tool agents when "ok" does not mean it happened
 
-**One-line claim.** When a write tool's success reply cannot prove the write happened, a reward that reads the database makes a tool agent check its writes, and a reward that reads the reply does not (5 of 5 paired seeds). Checking, however, is not yet recovering, and a few hand-written checks still beat every trained agent we built.
+**One-line claim.** ActionProof trains and evaluates tool-using agents to reconcile transaction evidence and recover safely when acknowledgements do not reliably describe execution.
+
+**Earlier finding that motivated it.** When a write tool's success reply cannot prove the write happened, a reward that reads the database makes a tool agent check its writes, and a reward that reads the reply does not (5 of 5 paired seeds). Checking, however, is not yet recovering, and a few hand-written checks still beat every trained agent we built.
 
 | | |
 |---|---|
@@ -35,6 +37,18 @@ Tool-using agents increasingly write to systems of record: payments, goods recei
 
 Every experiment was registered and hashed before it ran. A checker re-reads every reported number from its result file.
 
+## 1a. Final-round results (Nov 25–28; all registered before any output unless labelled)
+
+1. **TXN benchmark (`PREREGISTRATION_TXN1.md`, addenda 1–2).** A locked split of 440 tasks built around counterfactual quadruples: the same request, tool, arguments and "ok", with four hidden realities (ok + phantom, ok + committed, timeout + committed, timeout + not committed), eight fault classes, three evidence regimes (resolvable, delayed or conflicting, unresolvable) and six OOD groups. Scripted baselines B0–B4 and ablations A1–A6 share tasks, tools, budgets and the evaluator with every model.
+   - **H1 (descriptive).** The acknowledgement-trusting policy B0 falsely completes on 1.000 of ok + phantom tasks and 0.000 of ok + committed tasks. Its overall verified transaction completion (VTC) is 0.136.
+   - **H3 (registered family of 4, Holm, template-clustered bootstrap, n = 320 in-distribution tasks in 48 clusters): not supported.** D (3 seeds) duplicates fewer mutations than bounded retry B3 (0.024 vs 0.191, −0.167 [−0.271, −0.070], Holm 0.0012) and final-state-only B1 (0.024 vs 0.338, −0.314 [−0.454, −0.176], Holm 0.0008), with VTC non-inferior (+0.205, +0.289). The unnecessary-retry tests fail: −0.027 [−0.067, +0.003] (Holm 0.123) and −0.095 [−0.199, −0.015] (Holm 0.064).
+   - **Descriptive VTC.** B4 (scripted reconciliation) 0.864, D seed 0 0.724, Dw 0.598, B3 0.491, B1 0.448, W 0.445, Aya Expanse 32B 0.161.
+   - **H5 (descriptive).** When evidence cannot settle the outcome, D escalates in 0.050 of cases (unsafe 0.044). Aya Expanse 32B escalates in 0.222 but acts unsafely in 0.400. B4 escalates in 1.000.
+2. **P4: randomised demonstrations (`PREREGISTRATION_P4.md`).** Re-rendering half of the recovery demonstrations on synonym tool surfaces and adding five new step sequences (Dw_aug, 3 seeds) against Dw (3 seeds): renamed tools 0.137 → 0.741 (+0.604 [+0.540, +0.666]), unseen four-step workflow 0.268 → 0.842 (+0.574 [+0.536, +0.610]), P1 test +0.048 [+0.026, +0.072]. All three are supported, with every seed delta positive. These are warm starts: GRPO was not run on top.
+3. **What GRPO adds after SFT (R7, exploratory).** D − Dw is +0.140 [+0.120, +0.161] on the P1 test; 69 tasks improve by at least 0.5 and none gets worse. D's most common remaining failure is a false success on a goods receipt that never happened (266 of 976 failed episodes).
+4. **Supplementary frontier baselines (B1 addendum 1, not Cohere).** Qwen3-235B-A22B and gpt-oss-120b, greedy, through HF Inference Providers: full episodes 0.383 and 0.250, partial payments 0.000 and 0.000.
+5. **Live inference.** A ZeroGPU Space runs D (and the base model) on curated test tasks, one real model call per step, with the hidden reality revealed only after the run: https://huggingface.co/spaces/atharvgaur18/actionproof-live.
+
 ## 2. Before and after (same base model)
 
 | Same model, `proc_conf` (300 confirmatory tasks) | Warm start (SFT) | After GRPO, acknowledgement reward | After GRPO, state reward |
@@ -50,8 +64,9 @@ Source: `results/s2/a12_summary.json` and `results/eval/a12/conf/*`. The two-met
 2. **The reward's information source decides whether the agent checks.** Database reward: checks in 5/5 seeds; reply reward: never. Same model, same data, one change (§2).
 3. **RL selects, it does not invent.** From a starting model that never reads, nothing changes (ID1): no read is ever sampled, so the reward has nothing to reinforce.
 4. **Checking is not recovering, until recovery is taught.** Agents read the shortfall and post anyway. Training from broken states helps (+0.21, 5/5). Recovery demonstrations then the same GRPO (P1 arm D) lift the frozen test from 0.513 to 0.819, and partial payments from 0.319 to 0.931. A hint at inference does not help (−0.030).
-5. **The skill does not transfer** to renamed tools or new workflows. The known fix (tool-name randomisation) failed here.
-6. **New:** capability retention (R1), a judge committee against database truth (J1), and a cost model whose honest answer is "write the checks; use ActionProof to find them and to train a second line".
+5. **Transfer is conditional.** The RL agents do not transfer to renamed tools or new workflows, and tool-name randomisation during GRPO failed. Randomising the *demonstrations* fixes both at the SFT stage (P4: 0.137 → 0.741 and 0.268 → 0.842, no cost on the P1 test).
+6. **Recovery is not blind retry, in part.** On the locked TXN benchmark the trained agent duplicates far fewer mutations than bounded retry or final-state checking (registered, both pass), but the unnecessary-retry tests fail, so the registered H3 family is not supported. When evidence is unresolvable it rarely escalates (0.050).
+7. **Also:** capability retention (R1), a judge committee against database truth (J1), and a cost model whose honest answer is "write the checks; use ActionProof to find them and to train a second line".
 
 ## 4. Real use case
 
@@ -287,6 +302,10 @@ Five independent training seeds per arm (0–4) for A12 R_V and R_A, RSC, the cl
    - **Scope.** The rule "verify iff p·s > 1/2" is exact only when repairability belongs to the shared state. In the trained agent, the registered AD-C1 test confirms the predicted direction: no-std GRPO beats GRPO by +0.120 in all five seeds. The mechanism evidence beyond that is development-level: groups share one fault plan in 800 of 800 logged groups, and std-normalised runs follow the early vote. One prediction failed: Dr. GRPO's rise in reading is not predicted by its starting value gap. In the practical recipe the fix does not help: the registered P3 test (D retrained without the std) gives −0.007 [−0.013, −0.001], not supported. The theory predicts a gain only where per-state stakes or read costs differ; in ProcureSim reads are free, so this is consistent with the theory's scope, but that reading was made after the result.
    - **Prior work.** Removing the std is Dr. GRPO's advantage (Liu et al., arXiv 2503.20783; our arm keeps TRL's token-level aggregation, so it is not full Dr. GRPO); the distortion under stochastic outcomes is studied by Bereket & Leskovec (arXiv 2508.11800). Ours is the exact consequence of a shared hidden state for a costed information action: a new consequence of a known mechanism, not a new mechanism. **No new algorithm is claimed.** AWRB and D3 passed development gates only, and D3's mechanism prediction failed.
 
+11. **Acknowledgement-following fails exactly where acknowledgement and state disagree** (TXN H1): B0's false-completion rate is 1.000 on ok + phantom and 0.000 on ok + committed.
+12. **Recovery training removes duplicate harm but not every unnecessary retry** (TXN H3, 2 of 4 registered tests).
+13. **Procedure replay is a demonstration problem** (P4): synonym surfaces and extra step sequences in the SFT data fix renamed tools and the four-step workflow, where GRPO-time randomisation (SR1) failed.
+
 ## 22. Negative results (kept and reported)
 
 - A12's composite C1 is not supported (H3 failed).
@@ -303,7 +322,10 @@ Five independent training seeds per arm (0–4) for A12 R_V and R_A, RSC, the cl
 - P2 H1, H3, H4 and S1–S3: the ledger (at inference or in training) and the action guard do not improve on P1's best agent; the guard lowers every arm.
 - P3: removing the group std from D's GRPO does not improve it (−0.007 [−0.013, −0.001], seeds −0.009, +0.005, −0.016).
 - P1 H1: the inference-time reconciliation line lowers sampled verified completion (−0.030 [−0.041, −0.019]).
-- P1 unseen workflow (order → receive → pay → post): the best arm reaches 0.486 (A 0.174), so recovery does not fully transfer to a new step order.
+- P1 unseen workflow (order → receive → pay → post): the best arm reaches 0.486 (A 0.174), so recovery does not fully transfer to a new step order. (P4's randomised demonstrations later fix this at the warm-start stage.)
+- TXN H3 as a family: the unnecessary-retry tests fail (Holm 0.123 and 0.064).
+- TXN H5: the trained agents almost never escalate on unresolvable evidence (D 0.050, Dw 0.022).
+- Frontier models without recovery training repair no partial payment (Qwen3-235B and gpt-oss-120b 0.000).
 
 ## 23. Sample inputs and outputs
 
@@ -333,15 +355,15 @@ See `docs/submission/TRACES.md`: two complete recorded episodes with the databas
 - One simulated domain for the main study.
 - Task-level intervals hold the models fixed.
 - Seed-level power is low (5 runs).
-- Trained skills do not transfer to new workflows or tool surfaces.
+- The RL agents do not transfer to new workflows or tool surfaces; P4's fix is shown at the warm-start stage only.
 - The policy licence is non-commercial.
 - ROI rests on assumed fault rates and costs.
 - One human annotator.
 - No mechanistic causal claim (A16 is not specific; CircuitKIT failed).
-- Missing baselines: no prompted or larger-model policy was run on ProcureSim, and dynamic sampling (DAPO-style) was not tested.
+- Prompted and larger models were run (Aya Expanse 8B/32B on ProcureSim and TXN; Qwen3-235B and gpt-oss-120b greedy on the P1 test) without prompt tuning; dynamic sampling (DAPO-style) was not tested.
 - Under greedy decoding several seeds give identical scores (for example AD GRPO 0.687 in all five), so sampled metrics carry the seed-level evidence.
 - The reference verifier was written from the same specification as the main verifier. Its 100% agreement is a consistency check, not independent ground truth.
-- The P1, P2 and AD-C1 adapters are on the cluster only, so a public clone reproduces the analyses from stored episodes, not the training.
+- The P1 (A, Dw, D), P3 (Dn) and P4 (Dw_aug) models are public on Hugging Face; the P2 and AD-C1 adapters are on the cluster only. A public clone reproduces the analyses from stored episodes, not the training.
 - ID1's null is scoped: no read was sampled in 200 steps from one warm start, so the reward had nothing to reinforce.
 
 ## 26. Dual use and ethics
