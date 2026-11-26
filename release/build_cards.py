@@ -231,11 +231,14 @@ HONESTY = """\n## Limitations
 - **Simulator, not production payments.** Every result is on ProcureSim, a SQLite procurement simulator with injected
   write faults (phantom, partial, lost-acknowledgement, duplicate, never-commit). No real payment system, real money
   or real supplier was involved, and nothing here shows the agent is safe to deploy.
-- **Generalisation fails on renamed tools and on the four-step workflow.** Recovery-start training with randomised
+- **The RL agents (A, D, Dn) fail on renamed tools and on the four-step workflow.** Recovery-start training with randomised
   tool names (registered SR1, `results/s4/sr1_summary.json`) did not help on the renamed API ({sr1_h1}) and cost VSC on
   the canonical tools ({sr1_h2}).
   On the unseen four-step workflow (`wf4`, order, receive, pay, post) the models run the trained three-step sequence
   and skip the new step; the table above shows the wf4 column far below the others.
+  Randomising the **demonstrations** instead (registered P4, `results/p4/p4_summary.json`; warm starts only, no GRPO
+  on top) does fix both at the SFT stage: renamed tools {p4_h1}, four-step workflow {p4_h2}, P1 test {p4_h3}
+  (Dw_aug vs Dw, 3 seeds each; [`{user}/actionproof-warmstart-dwaug`](https://huggingface.co/{user}/actionproof-warmstart-dwaug)).
 - **Arms C and D are not nested.** C is the recovery-start agent A plus recovery SFT. D starts from its own
   recovery-SFT warm start (Dw) and then runs GRPO. The C to D gap is therefore not GRPO's contribution; the
   exploratory 2x2 (`results/audit/dwarm_2x2.json`) is the right reading of what GRPO adds on top of SFT.
@@ -281,8 +284,16 @@ SR1_H1 = ci({"delta": SR1["SR-H1"]["seed_avg"]["est"], "ci95": SR1["SR-H1"]["see
 SR1_H2 = ci({"delta": SR1["SR-H2"]["seed_avg"]["est"], "ci95": SR1["SR-H2"]["seed_avg"]["ci95"]})
 
 
+P4 = J("results/p4/p4_summary.json")
+
+
+def p4ci(h: str) -> str:
+    return ci({"delta": P4[h]["delta"], "ci95": P4[h]["ci95"]})
+
+
 def honesty(repo: str) -> str:
-    return HONESTY.format(code=CODE, repo=repo, author="atharvgaur18", sr1_h1=SR1_H1, sr1_h2=SR1_H2)
+    return HONESTY.format(code=CODE, repo=repo, author="atharvgaur18", sr1_h1=SR1_H1, sr1_h2=SR1_H2, user=USER,
+                          p4_h1=p4ci("H1"), p4_h2=p4ci("H2"), p4_h3=p4ci("H3"))
 
 
 def card_d() -> str:
@@ -543,11 +554,47 @@ Per-seed union sampled VSC of Dn: {seed_line('Dn')}.
 {regen_note("results/p3/p3_summary.json, results/audit/dwarm_2x2.json, results/p1/test/Dn_s*__*.summary.json")}"""
 
 
+def card_dwaug() -> str:
+    repo = f"{USER}/actionproof-warmstart-dwaug"
+    rows = "\n".join(
+        f"| {name} | {f3(P4[h]['Dw'])} | {f3(P4[h]['Dwaug'])} | {p4ci(h)} | {', '.join(sg(x) for x in P4[h]['seed_deltas'])} | "
+        f"{'supported' if P4[h]['supported'] else 'not supported'} |"
+        for h, name in (("H1", "H1 renamed tools (`s4_api`, 150 tasks)"),
+                        ("H2", "H2 unseen four-step workflow (`s4_wf4` + `p1_test_wf4`, 160 tasks)"),
+                        ("H3", "H3 canonical P1 test (450 tasks; lower bound must exceed -0.03)")))
+    return FRONT.format(base=BASE, rel="adapter", lib="peft", user=USER,
+                        tags="\n".join(f"- {t}" for t in ["actionproof", "tool-use", "agents", "sft", "lora", "procuresim", "warm-start", "research-only"])) + f"""
+# ActionProof warm start Dw_aug (randomised recovery demonstrations, no RL)
+
+Three LoRA (r16) adapters on `{BASE}` (`s0/`, `s1/`, `s2/`; `runs/p4_dwaug_s{{0,1,2}}/final`), trained with exactly
+the recipe of [`{USER}/actionproof-warmstart-dw`](https://huggingface.co/{USER}/actionproof-warmstart-dw) (2 epochs,
+lr 1e-4) on augmented data (`actionproof/p4/build.py`, registered in `PREREGISTRATION_P4.md` before training):
+- every Dw row is kept, and half of the recovery episodes (fixed hash) are re-rendered on SR1's synonym tool
+  surfaces, none of which shares a name with the held-out renamed-tool surface;
+- about 21% more rows: oracle demonstrations on five new step sequences (order_receive, order_pay, pay_only,
+  receive_only, order_only), none of which is order, receive, pay or the four-step test workflow.
+
+**No RL was run on these adapters**, and no model selection was done. Each loads directly on the public base model.
+
+{HOW_TO_PROMPT}
+{ADAPTER_USAGE.format(code=CODE, repo=repo, base=BASE, sub="s0", chain=CHAIN_BASE.format(base=BASE))}
+## Results (registered P4; sampled VSC, arm = mean of 3 seed models, paired task bootstrap B = 10,000)
+
+| Test | Dw (3 seeds) | Dw_aug (3 seeds) | Delta [95% interval] | Seed deltas | Result |
+|---|---|---|---|---|---|
+{rows}
+
+H1 and H2 needed a Holm-adjusted one-sided p < 0.05 and all three seed deltas positive.
+{honesty(repo)}
+{EVAL.format(code=CODE, user=USER, model_arg="CohereLabs/tiny-aya-global", adapter_arg=" --adapter runs/p4_dwaug_s0/final")}
+{regen_note("results/p4/p4_summary.json")}"""
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     for name, fn in (("actionproof-agent-d", card_d), ("actionproof-agent-d-adapters", card_d_adapters),
                      ("actionproof-warmstart-dw", card_dw), ("actionproof-agent-a", card_a),
-                     ("actionproof-agent-dn", card_dn)):
+                     ("actionproof-agent-dn", card_dn), ("actionproof-warmstart-dwaug", card_dwaug)):
         (OUT / f"{name}.md").write_text(fn())
         print("wrote", OUT / f"{name}.md")
 

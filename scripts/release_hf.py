@@ -14,6 +14,7 @@ Repos, all under `atharvgaur18` and public:
 | actionproof-warmstart-dw | model | the Dw adapter at the repo root |
 | actionproof-agent-a | model | w/ (runs/rft_proc/final, the parent of A), s0..s2/ (runs/s3_rv_mix_s{k}/final) |
 | actionproof-agent-dn | model | s0..s2/ (runs/p3_dn_s{k}/final) |
+| actionproof-warmstart-dwaug | model | s0..s2/ (runs/p4_dwaug_s{k}/final), P4 |
 | actionproof-traces | dataset | results/{p1,p2,p3}/**, data/bench/proc/p1_*.jsonl (+ s4_*), evaluation/judge_next/data/*.jsonl, and results/{p4,b1,txn} if present |
 
 Each repo's README.md is release/model_cards/<repo>.md (dataset: release/dataset_card.md); regenerate the model cards
@@ -63,6 +64,7 @@ ADAPTER_REPOS: dict[str, tuple[str, list[tuple[str, str, str]]]] = {
     "dw": ("actionproof-warmstart-dw", [(".", "p1_dwarm", "base")]),
     "a": ("actionproof-agent-a", [("w", "rft_proc", "base")] + [(f"s{s}", f"s3_rv_mix_s{s}", W_PARENT) for s in SEEDS]),
     "dn": ("actionproof-agent-dn", [(f"s{s}", f"p3_dn_s{s}", DW_PARENT) for s in SEEDS]),
+    "dwaug": ("actionproof-warmstart-dwaug", [(f"s{s}", f"p4_dwaug_s{s}", "base") for s in SEEDS]),
 }
 MERGED_REPO = "actionproof-agent-d"
 DATASET_REPO = "actionproof-traces"

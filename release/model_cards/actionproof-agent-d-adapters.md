@@ -142,11 +142,14 @@ Per-seed union sampled VSC of D: s0 0.823, s1 0.806, s2 0.829. Dw (single checkp
 - **Simulator, not production payments.** Every result is on ProcureSim, a SQLite procurement simulator with injected
   write faults (phantom, partial, lost-acknowledgement, duplicate, never-commit). No real payment system, real money
   or real supplier was involved, and nothing here shows the agent is safe to deploy.
-- **Generalisation fails on renamed tools and on the four-step workflow.** Recovery-start training with randomised
+- **The RL agents (A, D, Dn) fail on renamed tools and on the four-step workflow.** Recovery-start training with randomised
   tool names (registered SR1, `results/s4/sr1_summary.json`) did not help on the renamed API (+0.000 [-0.040, +0.042]) and cost VSC on
   the canonical tools (-0.248 [-0.296, -0.201]).
   On the unseen four-step workflow (`wf4`, order, receive, pay, post) the models run the trained three-step sequence
   and skip the new step; the table above shows the wf4 column far below the others.
+  Randomising the **demonstrations** instead (registered P4, `results/p4/p4_summary.json`; warm starts only, no GRPO
+  on top) does fix both at the SFT stage: renamed tools +0.604 [+0.540, +0.666], four-step workflow +0.574 [+0.536, +0.610], P1 test +0.048 [+0.026, +0.072]
+  (Dw_aug vs Dw, 3 seeds each; [`atharvgaur18/actionproof-warmstart-dwaug`](https://huggingface.co/atharvgaur18/actionproof-warmstart-dwaug)).
 - **Arms C and D are not nested.** C is the recovery-start agent A plus recovery SFT. D starts from its own
   recovery-SFT warm start (Dw) and then runs GRPO. The C to D gap is therefore not GRPO's contribution; the
   exploratory 2x2 (`results/audit/dwarm_2x2.json`) is the right reading of what GRPO adds on top of SFT.
