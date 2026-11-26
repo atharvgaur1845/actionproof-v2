@@ -47,7 +47,9 @@ Every experiment was registered and hashed before it ran. A checker re-reads eve
 2. **P4: randomised demonstrations (`PREREGISTRATION_P4.md`).** Re-rendering half of the recovery demonstrations on synonym tool surfaces and adding five new step sequences (Dw_aug, 3 seeds) against Dw (3 seeds): renamed tools 0.137 → 0.741 (+0.604 [+0.540, +0.666]), unseen four-step workflow 0.268 → 0.842 (+0.574 [+0.536, +0.610]), P1 test +0.048 [+0.026, +0.072]. All three are supported, with every seed delta positive. These are warm starts: GRPO was not run on top.
 3. **What GRPO adds after SFT (R7, exploratory).** D − Dw is +0.140 [+0.120, +0.161] on the P1 test; 69 tasks improve by at least 0.5 and none gets worse. D's most common remaining failure is a false success on a goods receipt that never happened (266 of 976 failed episodes).
 4. **Supplementary frontier baselines (B1 addendum 1, not Cohere).** Qwen3-235B-A22B and gpt-oss-120b, greedy, through HF Inference Providers: full episodes 0.383 and 0.250, partial payments 0.000 and 0.000.
-5. **Live inference.** A ZeroGPU Space runs D (and the base model) on curated test tasks, one real model call per step, with the hidden reality revealed only after the run: https://huggingface.co/spaces/atharvgaur18/actionproof-live.
+5. **P5: the recipe on four other Cohere bases (`PREREGISTRATION_P5.md` + addendum 1).** Recovery SFT with Dw's data and settings, against each untrained base, on the P1 test (Holm over 4): Tiny Aya Fire 0.018 → 0.686 (+0.668 [+0.637, +0.699]), Water 0.011 → 0.639 (+0.628 [+0.592, +0.664]), Earth 0.012 → 0.704 (+0.693 [+0.662, +0.724]), Aya Expanse 8B 0.076 → 0.772 (+0.697 [+0.667, +0.727]). All four are supported.
+6. **Dw_aug on TXN (descriptive).** On the transaction benchmark, whose faults Dw_aug never saw, it improves VTC over Dw by +0.126, +0.085 and +0.089 per seed; on the unseen-workflow group its safe terminal resolution is 0.85 against 0.05 (Dw) and 0.08 (D seed 0).
+7. **Live inference.** A ZeroGPU Space runs D (and the base model) on curated test tasks, one real model call per step, with the hidden reality revealed only after the run: https://huggingface.co/spaces/atharvgaur18/actionproof-live.
 
 ## 2. Before and after (same base model)
 
@@ -351,7 +353,7 @@ See `docs/submission/TRACES.md`: two complete recorded episodes with the databas
 
 ## 25. Limitations
 
-- One base model, 3.35B, from one family.
+- RL was run on one base model (3.35B); the recovery-SFT recipe was replicated on four other Cohere Labs bases (P5), all from one family.
 - One simulated domain for the main study.
 - Task-level intervals hold the models fixed.
 - Seed-level power is low (5 runs).

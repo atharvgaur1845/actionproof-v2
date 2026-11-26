@@ -1433,6 +1433,66 @@ claims:
     commit: null
 
 
+  - id: P5
+    statement: "Registered P5 (PREREGISTRATION_P5.md + addendum 1; scripts/p5_stats.py run once as task 1729): the recovery-SFT recipe (Dw data, identical settings) on four other Cohere Labs bases (Tiny Aya Fire, Water, Earth; Aya Expanse 8B), Dw_m vs base_m on the 450-task frozen P1 test, sampled VSC, paired task bootstrap, Holm over 4. Supported for all four."
+    status: supported
+    prereg: PREREGISTRATION_P5.md
+    deviations:
+      - "D-P5-1 (addendum 1): an unhashable idempotency key crashed P1's behaviour-metric helper on the Earth base run; p5_eval.py canonicalises it before the helper, before any Earth result existed."
+    eval: [results/p5/p5_summary.json]
+    stats: scripts/p5_stats.py
+    numbers:
+      fire_base: {value: 0.018, file: results/p5/p5_summary.json, key: ["fire", "base"], shown: ["0.018"]}
+      fire_dw: {value: 0.686, file: results/p5/p5_summary.json, key: ["fire", "dw"], shown: ["0.686"]}
+      fire_delta: {value: 0.668, file: results/p5/p5_summary.json, key: ["fire", "delta"], shown: ["+0.668"]}
+      fire_lo: {value: 0.637, file: results/p5/p5_summary.json, key: ["fire", "ci95", 0], shown: ["+0.637"]}
+      fire_hi: {value: 0.699, file: results/p5/p5_summary.json, key: ["fire", "ci95", 1], shown: ["+0.699"]}
+      water_base: {value: 0.011, file: results/p5/p5_summary.json, key: ["water", "base"], shown: ["0.011"]}
+      water_dw: {value: 0.639, file: results/p5/p5_summary.json, key: ["water", "dw"], shown: ["0.639"]}
+      water_delta: {value: 0.628, file: results/p5/p5_summary.json, key: ["water", "delta"], shown: ["+0.628"]}
+      water_lo: {value: 0.592, file: results/p5/p5_summary.json, key: ["water", "ci95", 0], shown: ["+0.592"]}
+      water_hi: {value: 0.664, file: results/p5/p5_summary.json, key: ["water", "ci95", 1], shown: ["+0.664"]}
+      earth_base: {value: 0.012, file: results/p5/p5_summary.json, key: ["earth", "base"], shown: ["0.012"]}
+      earth_dw: {value: 0.704, file: results/p5/p5_summary.json, key: ["earth", "dw"], shown: ["0.704"]}
+      earth_delta: {value: 0.693, file: results/p5/p5_summary.json, key: ["earth", "delta"], shown: ["+0.693"]}
+      earth_lo: {value: 0.662, file: results/p5/p5_summary.json, key: ["earth", "ci95", 0], shown: ["+0.662"]}
+      earth_hi: {value: 0.724, file: results/p5/p5_summary.json, key: ["earth", "ci95", 1], shown: ["+0.724"]}
+      expanse8b_base: {value: 0.076, file: results/p5/p5_summary.json, key: ["expanse8b", "base"], shown: ["0.076"]}
+      expanse8b_dw: {value: 0.772, file: results/p5/p5_summary.json, key: ["expanse8b", "dw"], shown: ["0.772"]}
+      expanse8b_delta: {value: 0.697, file: results/p5/p5_summary.json, key: ["expanse8b", "delta"], shown: ["+0.697"]}
+      expanse8b_lo: {value: 0.667, file: results/p5/p5_summary.json, key: ["expanse8b", "ci95", 0], shown: ["+0.667"]}
+      expanse8b_hi: {value: 0.727, file: results/p5/p5_summary.json, key: ["expanse8b", "ci95", 1], shown: ["+0.727"]}
+      global_base: {value: 0.01, file: results/p5/p5_summary.json, key: ["reference_tiny_aya_global", "global_base"], shown: ["0.01"]}
+      global_dw: {value: 0.679, file: results/p5/p5_summary.json, key: ["reference_tiny_aya_global", "global_dw"], shown: ["0.679"]}
+    commit: null
+
+  - id: TXN-DESC2
+    statement: "TXN locked test, descriptive (not registered tests): the secondary models of TXN1 (Dw_aug s0-2, the P4 warm starts) and the supplementary API model (Qwen3-235B, greedy), from a rerun of scripts/txn_stats.py written to a separate file (task 1726; the registered 1739 output is untouched; H3 reproduces exactly). TXN faults were never in Dw_aug's training."
+    status: supported
+    prereg: PREREGISTRATION_TXN1.md
+    eval: [results/txn/compact_descriptive__txn_test.json]
+    stats: scripts/txn_stats.py
+    numbers:
+      vtc_qwen: {value: 0.261, file: results/txn/compact_descriptive__txn_test.json, key: ["models", "qwen", "VTC", "rate"], shown: ["0.261"]}
+      fcr_qwen: {value: 0.641, file: results/txn/compact_descriptive__txn_test.json, key: ["models", "qwen", "FCR", "rate"], shown: ["0.641"]}
+      vtc_dwaug_s0: {value: 0.723, file: results/txn/compact_descriptive__txn_test.json, key: ["models", "Dwaug_s0", "VTC", "rate"], shown: ["0.723"]}
+      fcr_dwaug_s0: {value: 0.180, file: results/txn/compact_descriptive__txn_test.json, key: ["models", "Dwaug_s0", "FCR", "rate"], shown: ["0.180"]}
+      vtc_dwaug_s1: {value: 0.683, file: results/txn/compact_descriptive__txn_test.json, key: ["models", "Dwaug_s1", "VTC", "rate"], shown: ["0.683"]}
+      fcr_dwaug_s1: {value: 0.245, file: results/txn/compact_descriptive__txn_test.json, key: ["models", "Dwaug_s1", "FCR", "rate"], shown: ["0.245"]}
+      vtc_dwaug_s2: {value: 0.686, file: results/txn/compact_descriptive__txn_test.json, key: ["models", "Dwaug_s2", "VTC", "rate"], shown: ["0.686"]}
+      fcr_dwaug_s2: {value: 0.236, file: results/txn/compact_descriptive__txn_test.json, key: ["models", "Dwaug_s2", "FCR", "rate"], shown: ["0.236"]}
+      dwaug_s0_minus_dw_vtc: {value: 0.126, file: results/txn/compact_descriptive__txn_test.json, key: ["pairs_descriptive", {'a': 'Dwaug_s0', 'flag': 'vtc'}, "diff"], shown: ["+0.126"]}
+      dwaug_s1_minus_dw_vtc: {value: 0.085, file: results/txn/compact_descriptive__txn_test.json, key: ["pairs_descriptive", {'a': 'Dwaug_s1', 'flag': 'vtc'}, "diff"], shown: ["+0.085"]}
+      dwaug_s2_minus_dw_vtc: {value: 0.089, file: results/txn/compact_descriptive__txn_test.json, key: ["pairs_descriptive", {'a': 'Dwaug_s2', 'flag': 'vtc'}, "diff"], shown: ["+0.089"]}
+      str_ood_workflow_dwaug_s0: {value: 0.85, file: results/txn/compact_descriptive__txn_test.json, key: ["H4_STR", "Dwaug_s0", "ood_workflow", "ood"], shown: ["0.85"]}
+      str_ood_alias_dwaug_s0: {value: 0.60, file: results/txn/compact_descriptive__txn_test.json, key: ["H4_STR", "Dwaug_s0", "ood_alias", "ood"], shown: ["0.60"]}
+      str_ood_workflow_dw: {value: 0.05, file: results/txn/compact_descriptive__txn_test.json, key: ["H4_STR", "Dw", "ood_workflow", "ood"], shown: ["0.05"]}
+      str_ood_alias_dw: {value: 0.18, file: results/txn/compact_descriptive__txn_test.json, key: ["H4_STR", "Dw", "ood_alias", "ood"], shown: ["0.18"]}
+      str_ood_workflow_d_s0: {value: 0.08, file: results/txn/compact_descriptive__txn_test.json, key: ["H4_STR", "D_s0", "ood_workflow", "ood"], shown: ["0.08"]}
+      str_ood_alias_d_s0: {value: 0.30, file: results/txn/compact_descriptive__txn_test.json, key: ["H4_STR", "D_s0", "ood_alias", "ood"], shown: ["0.30"]}
+    commit: null
+
+
 allow: ["0.95", "1.0", "2.0", "+0.05",  # paper v3: a stated pi threshold, cost and table parameters, Apache 2.0, a registered prediction bound
        "1,000", "10,000", "95%", "1e-4", "2e-5", "8,192", "2503.20783", "2508.11800", "62,892", "251,570", "87,180", "116,240", "2.0%", "0.90",  # write-up constants: sample sizes, hyperparameters, arXiv ids, task amounts, a cited survey range, a registered threshold
        "3.12", "2.11", "5.22", "1.7", "0.23", "0.8", "0.80", "0.30", "0.02", "0.5", "0.3"]  # 0.5, 0.3: registered H4 thresholds (PREREGISTRATION_A11 §9)

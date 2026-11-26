@@ -6,6 +6,7 @@
 > - **Registered P1** (450 frozen tasks, 3 seeds per arm): verified-success completion rises from 0.513 (recovery-start agent) to 0.772 with recovery SFT and 0.819 with recovery SFT then GRPO. The two arms are not nested, so their gap is not GRPO's contribution.
 > - **TXN benchmark** (locked, 440 tasks): an acknowledgement-trusting policy falsely completes on every task where the "ok" hides a phantom write. Against blind retry and final-state checking, the trained agent duplicates far fewer mutations (registered, both tests pass), but its fewer unnecessary retries are not established (both tests fail), so the registered H3 family is **not supported**.
 > - **Registered P4:** randomising the recovery demonstrations lifts the warm start on renamed tools from 0.137 to 0.741 and on an unseen four-step workflow from 0.268 to 0.842, with no cost on the P1 test.
+> - **Registered P5:** the same recovery-SFT recipe works on four other Cohere bases (Tiny Aya Fire, Water, Earth; Aya Expanse 8B): from at most 0.076 untrained to 0.639–0.772.
 > - **Limits we report:** when evidence cannot settle the outcome, the trained agent rarely escalates; healthcare transfer is negative; the no-std GRPO change (P3) is a null; an LLM judge cannot replace the verifier. This is transaction-aware recovery under ambiguous execution, not a new RL optimizer and not a claim of universal safety.
 >
 > Try it: [live Space](https://huggingface.co/spaces/atharvgaur18/actionproof-live) (a real model call per run) · [replay Space](https://huggingface.co/spaces/atharvgaur18/actionproof) (recorded episodes) · verify every number without a GPU: `bash scripts/verify_numbers.sh`.
@@ -40,6 +41,8 @@ The locked `txn_test` split holds 440 tasks: counterfactual quadruples (the same
 | D seed 0 | 0.724 | 0.121 |
 | Dn seed 0 (no-std GRPO) | 0.717 | 0.127 |
 | Aya Expanse 32B (prompted) | 0.161 | 0.610 |
+| Qwen3-235B-A22B (prompted, greedy; supplementary) | 0.261 | 0.641 |
+| Dw_aug seed 0 (P4 warm start; descriptive) | 0.723 | 0.180 |
 
 VTC: verified transaction completion. FCR: false-completion rate.
 
@@ -67,6 +70,21 @@ Dw_aug re-renders half of the recovery demonstrations on synonym tool surfaces (
 | H3 no canonical cost (P1 test, 450 tasks; bound > −0.03) | 0.666 | 0.714 | +0.048 [+0.026, +0.072] | +0.027, +0.027, +0.091 | supported |
 
 These are warm starts. GRPO was not run on top of Dw_aug, and the earlier attempt to randomise tool names during GRPO (SR1) failed.
+
+On the TXN benchmark, whose fault classes Dw_aug never saw in training, the gain carries over (descriptive): VTC +0.126, +0.085 and +0.089 over Dw across the three seeds. On TXN's unseen-workflow group, safe terminal resolution is 0.85 for Dw_aug seed 0 against 0.05 for Dw and 0.08 for D seed 0; on renamed tools, 0.60 against 0.18 and 0.30.
+
+### P5: the recipe on four other Cohere bases (registered, `PREREGISTRATION_P5.md` + addendum 1)
+
+The same recovery-SFT data and settings (Dw) applied to other bases; sampled VSC on the 450-task P1 test; paired task bootstrap, Holm over the four models.
+
+| Base model | Untrained | Recovery SFT | Difference [95% CI] | Result |
+|---|---|---|---|---|
+| Tiny Aya Fire | 0.018 | 0.686 | +0.668 [+0.637, +0.699] | supported |
+| Tiny Aya Water | 0.011 | 0.639 | +0.628 [+0.592, +0.664] | supported |
+| Tiny Aya Earth | 0.012 | 0.704 | +0.693 [+0.662, +0.724] | supported |
+| Aya Expanse 8B | 0.076 | 0.772 | +0.697 [+0.667, +0.727] | supported |
+
+For reference, Tiny Aya Global: 0.01 untrained, 0.679 with the same recipe.
 
 ### Supplementary baselines (B1 addendum 1; not Cohere models)
 

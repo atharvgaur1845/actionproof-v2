@@ -70,6 +70,9 @@ ok + paid tasks. It fails exactly where the reply and the state disagree.
 **Registered P4** (randomised demonstrations, 3 seeds per arm): renamed tools 0.137 → 0.741, unseen four-step
 workflow 0.268 → 0.842, no cost on the P1 test (+0.048).
 
+**Registered P5** (the recipe on four other Cohere bases): Tiny Aya Fire 0.018 → 0.686, Water 0.011 → 0.639,
+Earth 0.012 → 0.704, Aya Expanse 8B 0.076 → 0.772; all supported.
+
 ---
 
 ## 5. What did not work
