@@ -257,6 +257,19 @@ def p4() -> dict:
          "supported": d[h]["supported"]} for h in ("H1", "H2", "H3")]}
 
 
+def p5() -> dict:
+    """P5 (registered): Dw's recovery-SFT recipe on four other Cohere Labs bases."""
+    src = "results/p5/p5_summary.json"
+    d = _j(src)
+    if not d:
+        return {"status": "running", "source": src}
+    names = {"fire": "Tiny Aya Fire", "water": "Tiny Aya Water", "earth": "Tiny Aya Earth", "expanse8b": "Aya Expanse 8B"}
+    rows = [{"name": n, "base": _r(d[k]["base"]), "dw": _r(d[k]["dw"]), "delta": _r(d[k]["delta"]),
+             "ci95": [_r(c) for c in d[k]["ci95"]], "supported": d[k]["supported"]} for k, n in names.items() if k in d]
+    ref = d.get("reference_tiny_aya_global", {})
+    return {"status": "done", "source": src, "rows": rows, "ref": {"base": _r(ref.get("global_base")), "dw": _r(ref.get("global_dw"))}}
+
+
 def b1api() -> dict:
     """B1 addendum 1 (supplementary, greedy): frontier models on the frozen P1 test splits."""
     rows, splits = [], [("p1_test_full", "full episodes"), ("p1_test_pp", "partial payments"),
@@ -287,7 +300,7 @@ def theory() -> dict:
 
 def build() -> dict:
     return {"r1": r1(), "r1t": r1t(), "j1": j1(), "roi": roi(), "p1": p1(), "p2": p2(), "p3": p3(), "theory": theory(),
-            "txn": txn(), "p4": p4(), "b1api": b1api()}
+            "txn": txn(), "p4": p4(), "p5": p5(), "b1api": b1api()}
 
 
 if __name__ == "__main__":

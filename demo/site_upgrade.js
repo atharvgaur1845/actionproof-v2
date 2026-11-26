@@ -163,3 +163,8 @@
  $("#u-b1").innerHTML=`<tr><th>Model (greedy)</th>${B.splits.map(s=>`<th>${esc(s[1])}</th>`).join("")}</tr>`+
   B.rows.map(r=>`<tr><td>${esc(r.name)}</td>${B.splits.map(s=>`<td>${pc(r.vsc[s[0]])}</td>`).join("")}</tr>`).join("");
  $("#u-b1-src").innerHTML=`Source: <b>${esc(B.source)}</b> · scripts/b1_api_eval.py · hard spending stop in code; total cost in docs/stage2/HF_CREDITS.md.`})();
+(function(){const P=S.upgrade&&S.upgrade.p5;if(!P||P.status!=="done"||!document.getElementById("u-p5"))return;
+ document.getElementById("u-p5wrap").hidden=false;const pc=x=>x==null?"—":(x*100).toFixed(1)+"%",pp=x=>(x>=0?"+":"−")+Math.abs(x*100).toFixed(1);
+ $("#u-p5").innerHTML=`<tr><th>Base model</th><th>Verified success, untrained → recovery SFT</th><th>Change</th><th>Verdict</th></tr>`+
+  P.rows.map(r=>`<tr><td>${esc(r.name)}</td><td>${pc(r.base)} → ${pc(r.dw)}</td><td class="${r.ci95[0]>0?"up":""}">${pp(r.delta)}<small>[${pp(r.ci95[0])}, ${pp(r.ci95[1])}]</small></td><td>${r.supported?"<b>supported</b>":"not supported"}</td></tr>`).join("");
+ $("#u-p5-src").innerHTML=`Source: <b>${esc(P.source)}</b> · scripts/p5_stats.py · paired task bootstrap, one-sided, Holm over the four models. Reference, Tiny Aya Global with the same recipe: ${pc(P.ref.base)} → ${pc(P.ref.dw)}.`})();
