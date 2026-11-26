@@ -1,0 +1,170 @@
+### HEAD
+ea1b7fa6b16104d18344fab73540107484ac0633 2026-11-24 01:13:54 +0530 PDGamerSG
+### REMOTE BRANCHES
+  origin/feat/end-to-end-repair
+  origin/main
+### COMMITS (last 30)
+2026-11-24 01:13:54 +0530 docs(paper): remove half-empty appendix pages
+2026-11-24 00:41:19 +0530 docs(paper): fix layout of the EMNLP paper
+2026-11-23 07:11:20 +0530 docs: add Sriram's GitHub and Hugging Face handles to the README and the paper
+2026-11-23 06:57:10 +0530 feat: finish the final round, confirm on unseen prompts, and add the EMNLP paper
+2026-11-22 22:56:40 +0530 feat: add an NLLB-200 baseline on the adapter test rows, and summarise the follow-up
+2026-11-22 22:52:54 +0530 feat: check adapters at reduced strength and replay parent answers in training
+2026-11-22 22:49:55 +0530 feat: add composite epoch selection, beam scoring and back-translation
+2026-11-22 22:14:06 +0530 docs: record the results of the eight adapter runs
+2026-11-22 17:05:21 +0530 docs: describe the adapter tool and the run report
+2026-11-22 16:52:43 +0530 feat: add a command-line tool for trained adapters and a run comparison report
+2026-11-22 16:44:48 +0530 feat: let the adapter scripts start from another pinned checkpoint
+2026-11-22 16:43:36 +0530 fix: pin the safety check to the current main commit
+2026-11-22 16:30:34 +0530 fix: compute the training loss on response tokens only
+2026-11-22 16:16:42 +0530 docs: add the use-case survey, adapter design and run plan
+2026-11-22 16:16:42 +0530 feat: add multi-task Javanese adapter training and an adapter safety check
+2026-11-22 15:22:45 +0530 docs: record local checkpoint verification
+2026-11-22 13:49:27 +0530 feat: add private Javanese translation pilot
+2026-11-21 00:11:14 +0530 Judge check and article: Command A on Water
+2026-11-20 17:58:48 +0530 Article and logs: Command A on the repair and Fire, and its safety mode
+2026-11-20 17:52:37 +0530 Judge check: Command A on the repair and Fire, and its safety mode
+2026-11-20 17:03:09 +0530 Article, abstract, README, brief and logs: Command A confirms the Javanese gap
+2026-11-20 16:58:36 +0530 Judge check: Command A on every Global and Earth answer confirms the Javanese gap
+2026-11-20 15:22:04 +0530 Published article source, mentor brief and progress log: the 32B judge result
+2026-11-20 14:49:04 +0530 Article, abstract and README: the Javanese gap depends on the judges
+2026-11-20 10:10:15 +0530 Judge check: the report built on 32B verdicts for every answer, beside the 8B report
+2026-11-20 03:49:58 +0530 router_sample --cache-only: a full pass that can never bill
+2026-11-20 03:09:06 +0530 Build the report again from the 32B pair's full verdicts
+2026-11-20 03:04:57 +0530 Pre-fill: pin the provider, cap billed calls, go tag by tag
+2026-11-20 01:52:55 +0530 Pre-fill each 32B judge's cache separately for the full run
+2026-11-20 01:52:55 +0530 Judge every held-out answer with the 32B pair (--all), faster
+### FIRST COMMIT
+2026-11-03 19:03:28 +0530 Scaffold langsafe: data, judges, eval, CircuitKIT/SafeTune/AuditKIT/CuratorKIT stages, spec
+2026-11-03 19:03:37 +0530 Force LF line endings so shell scripts run on Colab/Kaggle
+### TREE (dirs, depth2, file counts)
+6 .
+1 ./article
+2 ./configs
+0 ./data
+1 ./data/processed
+11 ./docs
+4 ./docs/brief
+15 ./docs/judge_checks
+2 ./docs/proposal
+9 ./docs/submission
+7 ./docs/upstream_patches
+0 ./.github
+1 ./.github/workflows
+2 ./notebooks
+8 ./paper
+1 ./runs
+45 ./scripts
+7 ./space
+0 ./src
+9 ./src/langsafe
+32 ./tests
+### EXT COUNTS
+    115 py
+     42 json
+     36 md
+      7 patch
+      6 sh
+      5 pdf
+      2 yaml
+      2 txt
+      2 ipynb
+      1 yml
+      1 toml
+      1 tex
+      1 sty
+      1 ps1
+      1 jsonl
+### TOTAL FILES
+229
+### TOP-LEVEL MD
+README.md
+SPEC.md
+./space/README.md ./paper/README.md ./docs/upstream_patches/pr-bodies/safetune-multilingual-benchmarks.md ./docs/upstream_patches/pr-bodies/safetune-layer-ranking.md ./docs/upstream_patches/pr-bodies/curatorkit-group-split.md ./docs/upstream_patches/pr-bodies/circuitkit-multilingual-refusal-task.md ./docs/upstream_patches/pr-bodies/auditkit-multilingual-refusal.md ./docs/upstream_patches/pr-bodies/auditkit-benchmark-loaders.md ./docs/upstream_patches/README.md ./docs/submission/roi.md ./docs/submission/model_card_template.md ./docs/submission/filled/roi.md ./docs/submission/filled/remaining.md ./docs/submission/filled/model_card.md ./docs/submission/filled/dataset_card.md ./docs/submission/decisions.md ./docs/submission/dataset_card_template.md ./docs/submission/checklist.md ./docs/submission/article.md ./docs/submission/abstract.md ./docs/judge_checks/full-32b-vs-8b.md ./docs/judge_checks/command-a-full-gap.md ./docs/judge_checks/README.md ./docs/UPSTREAM.md ./docs/RUNBOOK.md ./docs/REVIEW_WORKFLOW.md ./docs/REMOTE_NF4.md ./docs/README.md ./docs/PROGRESS.md ./docs/MAC_STATUS.md ./docs/FOLLOWUP_USE_CASES.md ./docs/DEVELOPMENT_RESULTS.md ./docs/CUDA_EVALUATION.md ./article/README.md ./SPEC.md ./README.md 
+### RESULT-LIKE FILES
+docs/CUDA_EVALUATION.md
+docs/DEVELOPMENT_RESULTS.md
+space/results.json
+count: 1
+### HF / SPACE / VIDEO / SLIDES LINKS
+     10 https://huggingface.co/datasets/HydraOfMalice/tiny-aya-earth-langsafe-eval
+      7 https://huggingface.co/collections/HydraOfMalice/same-model-different-language-repair-checkpoints-6af426d1cac578d29e4805e5
+      7 https://huggingface.co/blog/HydraOfMalice/same-model-different-language-different-safety
+      7 https://huggingface.co/HydraOfMalice/tiny-aya-earth-langsafe-circuit-merge-0p5
+      6 https://huggingface.co/collections/HydraOfMalice/same-model-different-language-evaluation-data-6af426d23fff746c25ca1e1e
+      5 https://huggingface.co/datasets/DAMO-NLP-SG/MultiJail
+      5 https://huggingface.co/datasets/CohereLabs/aya_redteaming
+      5 https://huggingface.co/HydraOfMalice/tiny-aya-earth-langsafe-steer-1p0
+      5 https://huggingface.co/HydraOfMalice/tiny-aya-earth-langsafe-resta-0p1
+      5 https://huggingface.co/HydraOfMalice/tiny-aya-earth-langsafe-merge-back-0p5
+      5 https://huggingface.co/HydraOfMalice/tiny-aya-earth-langsafe-circuit-merge-0p5-gguf
+      5 https://huggingface.co/HydraOfMalice/tiny-aya-earth-langsafe-circuit-0p1
+      4 https://huggingface.co/docs/inference-endpoints/en/support/pricing
+      4 https://huggingface.co/datasets/HydraOfMalice/tiny-aya-earth-langsafe-eval/tree/main/reports
+      4 https://huggingface.co/CohereLabs/tiny-aya-global
+      4 https://huggingface.co/CohereLabs/tiny-aya-earth
+      3 https://huggingface.co/datasets/HydraOfMalice/tiny-aya-earth-langsafe-eval/tree/main/provenance
+      3 https://huggingface.co/datasets/HydraOfMalice/tiny-aya-earth-langsafe-eval/tree/main/circuits
+      2 https://huggingface.co/docs/hub/jobs-pricing
+      2 https://huggingface.co/docs/hub/en/jobs-quickstart
+      2 https://huggingface.co/datasets/natolambert/xstest-v2-copy
+      2 https://huggingface.co/datasets/indonlp/NusaX-MT
+      2 https://huggingface.co/datasets/facebook/flores
+      2 https://huggingface.co/datasets/CohereLabs/Global-MMLU-Lite
+      2 https://huggingface.co/datasets/
+      2 https://huggingface.co/PDGamerSG
+      2 https://huggingface.co/HydraOfMalice
+      2 https://huggingface.co/CohereLabs/tiny-aya-base
+      1 https://huggingface.co/team/full
+      1 https://huggingface.co/sriramdevs
+      1 https://huggingface.co/pricing
+      1 https://huggingface.co/models
+      1 https://huggingface.co/jobs/PDGamerSG/6b0204e6efaf5e14f4b66454
+      1 https://huggingface.co/jobs/PDGamerSG/6b0201034fdc5ab3c55e3bb8
+      1 https://huggingface.co/docs/peft/package_reference/helpers
+      1 https://huggingface.co/docs/inference-providers/pricing
+      1 https://huggingface.co/datasets/indonlp/nusaparagraph_topic
+      1 https://huggingface.co/datasets/indolem/IndoMMLU
+      1 https://huggingface.co/datasets/afrizalha/Gatra-1-Javanese
+      1 https://huggingface.co/datasets/JavaneseHonorifics/Unggah-Ungguh/resolve/
+### COHERE MODELS
+     85 tiny aya
+     41 coherelabs/tiny-aya-global
+     32 tiny-aya-earth-langsafe-eval
+     32 coherelabs/tiny-aya-earth
+     21 coherelabs/aya_redteaming
+     20 coherelabs/tiny-aya-fire
+     18 tiny-aya-earth-langsafe-circuit-merge-
+     18 tiny aya global
+     17 tiny aya token
+     14 tiny aya earth
+     14 coherelabs/c4ai-command-a-03-2025
+     14 coherelabs/aya-expanse-32b
+### TOOLKITS (py import/use count | md mention count)
+agenttune py:0 imports:0 md:2
+auditkit py:16 imports:0 md:18
+curatorkit py:15 imports:0 md:17
+circuitkit py:15 imports:0 md:19
+aligntune py:1 imports:0 md:2
+lexsi py:23 imports:0 md:28
+### TESTS
+33
+test fns: 596
+### CI
+tests.yml
+### DEPS
+pyproject.toml lines:55 pinned==:0
+### STATS KEYWORDS (files mentioning)
+bootstrap: 25
+confidence interval|95% CI|\bCI\b: 47
+wilson: 0
+mcnemar: 35
+holm|bonferroni|benjamini: 3
+p-value|p_value|p =|p<: 65
+seed: 65
+preregist|pre-regist: 17
+held-out|heldout|held out: 79
+ablation: 14
+negative result|limitation: 13
+cohen|effect size: 15
+kappa|inter-annotator|human label: 68

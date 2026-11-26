@@ -1,0 +1,249 @@
+### HEAD
+1ae260954feec146ce6e67dba16f78a8a624a7ed 2026-11-25 04:46:20 +0530 Ritankar Mondal
+### REMOTE BRANCHES
+  origin/contract/demo-space-ns
+  origin/contract/fmt-invalid-call
+  origin/contract/hf-ns-defaults
+  origin/f/F1-policy
+  origin/f/F2-sft-smoke
+  origin/f/F3-profile
+  origin/f/F3-sft-full
+  origin/f/F4-lab
+  origin/f/F4-lab-mobile
+  origin/f/F4-space
+  origin/f/F5-grpo
+  origin/f/S2-paper-body
+  origin/f/docs-submission
+  origin/f/eval-real-queries
+  origin/f/readme
+### COMMITS (last 30)
+2026-11-25 04:46:20 +0530 [R] GRPO job: --seed flag (prompt order + torch sampling seed) for a second-seed run; default 1234 = grpo-mt (#138
+2026-11-25 04:43:31 +0530 [K] Lab: GRPO seed 2 column and lead sentence (#142)
+2026-11-25 04:42:19 +0530 [K] Training appendix: GRPO seed 2 (seed 4321, 31 min A100, training-log stats) (#141)
+2026-11-25 04:41:33 +0530 README: Stage 2 results (#133)
+2026-11-24 15:49:39 +0530 [R] S6: list the seed-2 GRPO adapter in artifacts (#140)
+2026-11-24 15:49:02 +0530 [R] S6: GRPO seed 2 reproduces the gain (switch both 78.3, into-English 50.8, 36 fixed / 0 broken vs RFT2); second
+2026-11-24 13:02:28 +0530 [R] S6: blind second check of the language detector (56/60, kappa 0.85) + invented-action finding, in paper append
+2026-11-24 11:53:50 +0530 [R] S6: Stage 2 eval summaries (s2-rft2, s2-grpo-mt; traces on HF) + GRPO audit script used in the paper (#136)
+2026-11-24 11:50:45 +0530 [R] S6: dataset license CC-BY-NC-4.0 (Aya Expanse-written OOD set), matches the HF cards (#135)
+2026-11-24 11:22:26 +0530 [R] S6: Stage 2 paper body (K's #132) + GRPO audit (#134)
+2026-11-24 04:53:29 +0530 [F] Stage 2: GRPO + rft2 in the training appendix; Lab names GRPO, training-order columns, headline (#131)
+2026-11-24 03:00:53 +0530 [F] Stage 2: online multi-turn GRPO from rft2 (reward_lang, shared agent loop) as one HF Job (#130)
+2026-11-24 01:41:16 +0530 [F] Lab: accept tinyaya-rft2 (R's tag convention) as round 2 (#129)
+2026-11-24 01:40:11 +0530 [R] round-2 job: rename local 'train' so --train-from can call train() (UnboundLocalError in 6b045b58) (#128)
+2026-11-23 21:10:54 +0530 [R] S6: paper contributions spell out R's RL work, incl. the rft-a run (#127)
+2026-11-23 21:07:39 +0530 [R] S6: paper covers the submit-page checklist (at-a-glance box, kits section, more-credits forecasts, licenses, l
+2026-11-23 20:21:55 +0530 [R] S4: full-suite eval of any adapter in one HF Job + cross-tag compare table (#114)
+2026-11-23 19:40:53 +0530 [F] Paper: training section + appendix from run manifests (SFT, RFT r1, Stage 2 sampling) (#124)
+2026-11-23 19:39:58 +0530 [F] Round-2 job: grad_accum 16 on one GPU = rft-a's effective batch 16 (T4x2 DDP) (#123)
+2026-11-23 19:38:51 +0530 [F] Lab: Stage 2 tab (one table across models, eval_compare columns) + stage2/ runs in the explorer (#121)
+2026-11-23 19:35:35 +0530 [F] Round-2 job: install git for AgentTune (vLLM image has none); --train-from reuses a built train set (#120)
+2026-11-23 19:34:27 +0530 [R] S6: Stage 2 paper draft in the EMNLP/ACL template (docs/paper, compiles with tectonic, 4-page body) (#119)
+2026-11-23 19:31:56 +0530 [F] Stage 2: round-2 RFT job (sample rft-a on langswitch_train, + grounding gold, retrain) in one HF Job (#117)
+2026-11-23 19:27:13 +0530 [R] S5: round-2 RFT probe (rft-a adapter, HF Job) + RFT train set (#118)
+2026-11-23 19:03:24 +0530 [R] S3: round-2 RL training sets (grounding + language switch) (#115)
+2026-11-14 17:36:41 +0530 [F] HF adapter upload: name the run in the commit message instead of a fixed 'SFT adapter' (#104)
+2026-11-14 17:36:37 +0530 [F] README GIF re-cut from the fixed tour video (25.9-37.7 s): Bengali two-step episode, now with English translat
+2026-11-14 17:34:26 +0530 [R] Write-up: add the site's required items (claim line, license, metric direction, latency, more-compute plan, te
+2026-11-14 17:32:47 +0530 [R] Add translation script and RFT AuditKIT reports (were only on HF / an unmerged branch) (#103)
+2026-11-14 17:28:07 +0530 [F] README: 'no regressions' -> no overall regression, single-action dips 98.0 -> 96.0 (results/tinyaya-rft-a) (#9
+### FIRST COMMIT
+2026-11-12 12:47:27 +0530 Bootstrap repo: contracts, shared tools/fmt/api, seed data, collab CLI, plan
+2026-11-12 12:47:34 +0530 Normalize line endings to LF
+### TREE (dirs, depth2, file counts)
+7 .
+7 ./contracts
+10 ./data
+2 ./data/rl
+6 ./data/round2
+1 ./data/seed
+7 ./docs
+5 ./docs/assets
+6 ./docs/paper
+1 ./.github
+1 ./.github/workflows
+3 ./notebooks
+7 ./results
+4 ./results/human_check
+1 ./results/rl_signal
+2 ./results/rl_signal_round2
+2 ./results/s2-check-sft-a
+1 ./results/s2-check-sft-a-b77
+1 ./results/s2-check-sft-a-b77-banking77
+1 ./results/s2-check-sft-a-multiturn
+3 ./results/s2-check-sft-a-ood
+2 ./results/s2-check-sft-a-perturbed
+5 ./results/s2-grpo-mt
+1 ./results/s2-grpo-mt-banking77
+2 ./results/s2-grpo-mt-multiturn
+4 ./results/s2-grpo-mt-ood
+3 ./results/s2-grpo-mt-perturbed
+5 ./results/s2-grpo-mt-seed2
+1 ./results/s2-grpo-mt-seed2-banking77
+2 ./results/s2-grpo-mt-seed2-multiturn
+4 ./results/s2-grpo-mt-seed2-ood
+3 ./results/s2-grpo-mt-seed2-perturbed
+5 ./results/s2-rft2
+1 ./results/s2-rft2-banking77
+2 ./results/s2-rft2-multiturn
+4 ./results/s2-rft2-ood
+3 ./results/s2-rft2-perturbed
+2 ./results/teacher-qwen3-14b
+2 ./results/tinyaya-global-base
+1 ./results/tinyaya-global-base-multiturn
+2 ./results/tinyaya-global-base-ood
+2 ./results/tinyaya-global-base-perturbed
+2 ./results/tinyaya-rft-a
+1 ./results/tinyaya-rft-a-multiturn
+2 ./results/tinyaya-rft-a-ood
+2 ./results/tinyaya-sft-a-epoch1
+2 ./results/tinyaya-sft-a-final
+1 ./results/tinyaya-sft-a-final-multiturn
+2 ./results/tinyaya-sft-a-final-ood
+2 ./results/tinyaya-sft-a-final-perturbed
+35 ./scripts
+5 ./space
+6 ./space/lab
+0 ./src
+4 ./src/desi_agent
+15 ./tests
+### EXT COUNTS
+     83 json
+     80 py
+     20 md
+     15 log
+     12 jsonl
+      4 png
+      3 txt
+      3 tex
+      2 ipynb
+      2 gitkeep
+      2 csv
+      1 yml
+      1 vercelignore
+      1 toml
+      1 sty
+### TOTAL FILES
+240
+### TOP-LEVEL MD
+CLAUDE.md
+README.md
+./space/lab/README.md ./space/README.md ./results/human_check/README.md ./docs/paper/README.md ./docs/SUBMISSION.md ./docs/PLAN.md ./docs/ONBOARDING.md ./docs/HACKATHON.md ./docs/DECISIONS.md ./docs/COMPUTE.md ./docs/ARTICLE.md ./data/spotcheck.md ./contracts/NAMING.md ./contracts/MODEL_IO.md ./contracts/METRICS.md ./contracts/DATA_FORMAT.md ./contracts/API.md ./README.md ./CLAUDE.md ./.github/pull_request_template.md 
+### RESULT-LIKE FILES
+contracts/METRICS.md
+results/banking77.json
+results/guard.json
+results/human_check/README.md
+results/human_check/grpo_switch_sample.csv
+results/human_check/grpo_switch_sample.key.json
+results/human_check/grpo_switch_sample.llm_annotated.csv
+results/reward_audit.json
+results/rl_signal/summary.json
+results/rl_signal_round2/manifest.json
+results/rl_signal_round2/summary.json
+results/robustness.json
+results/roi.json
+results/s2-check-sft-a-b77-banking77/manifest.json
+results/s2-check-sft-a-b77/hfjob_manifest.json
+results/s2-check-sft-a-multiturn/multiturn.json
+results/s2-check-sft-a-ood/test.auditkit.json
+results/s2-check-sft-a-ood/test.json
+results/s2-check-sft-a-ood/validated.json
+results/s2-check-sft-a-perturbed/test.auditkit.json
+results/s2-check-sft-a-perturbed/test.json
+results/s2-check-sft-a/test.auditkit.json
+results/s2-check-sft-a/test.json
+results/s2-grpo-mt-banking77/manifest.json
+results/s2-grpo-mt-multiturn/multiturn.json
+results/s2-grpo-mt-ood/test.auditkit.json
+results/s2-grpo-mt-ood/test.json
+results/s2-grpo-mt-ood/validated.json
+results/s2-grpo-mt-perturbed/test.auditkit.json
+results/s2-grpo-mt-perturbed/test.json
+results/s2-grpo-mt-seed2-banking77/manifest.json
+results/s2-grpo-mt-seed2-multiturn/multiturn.json
+results/s2-grpo-mt-seed2-ood/test.auditkit.json
+results/s2-grpo-mt-seed2-ood/test.json
+results/s2-grpo-mt-seed2-ood/validated.json
+results/s2-grpo-mt-seed2-perturbed/test.auditkit.json
+results/s2-grpo-mt-seed2-perturbed/test.json
+results/s2-grpo-mt-seed2/hfjob_manifest.json
+results/s2-grpo-mt-seed2/test.auditkit.json
+results/s2-grpo-mt-seed2/test.json
+results/s2-grpo-mt/hfjob_manifest.json
+results/s2-grpo-mt/test.auditkit.json
+results/s2-grpo-mt/test.json
+results/s2-rft2-banking77/manifest.json
+results/s2-rft2-multiturn/multiturn.json
+results/s2-rft2-ood/test.auditkit.json
+results/s2-rft2-ood/test.json
+results/s2-rft2-ood/validated.json
+results/s2-rft2-perturbed/test.auditkit.json
+results/s2-rft2-perturbed/test.json
+count: 75
+### HF / SPACE / VIDEO / SLIDES LINKS
+      5 https://huggingface.co/spaces/ToolW/desi-agent-lab
+      3 https://huggingface.co/datasets/ToolW/desi-agent-eval-traces
+      3 https://huggingface.co/datasets/
+      3 https://huggingface.co/collections/ToolW/desi-agent-datasets-6af5e4ff1ceddc280ca38434
+      3 https://huggingface.co/CohereLabs/tiny-aya-global
+      2 https://huggingface.co/spaces/
+      2 https://huggingface.co/datasets/ToolW/desi-bank-toolcalls
+      2 https://huggingface.co/datasets/ToolW/desi-agent-training-logs/tree/main/round2
+      2 https://huggingface.co/datasets/ToolW/desi-agent-training-logs
+      2 https://huggingface.co/datasets/ToolW/desi-agent-eval-traces/blob/main/video/desi-agent-lab-tour.mp4
+      2 https://huggingface.co/collections/ToolW/desi-agent-models-6af5e4feb0b72f13ce2efec7
+      2 https://huggingface.co/ToolW/desi-agent-tinyaya-sft-lora
+      2 https://huggingface.co/ToolW/desi-agent-tinyaya-rft-lora
+      2 https://huggingface.co/ToolW/desi-agent-tinyaya-grpo-mt-lora
+      1 https://huggingface.co/datasets/ToolW/desi-agent-eval-traces/tree/main/stage2
+      1 https://huggingface.co/datasets/ToolW/desi-agent-eval-traces/tree/main/banking77
+      1 https://huggingface.co/datasets/PolyAI/banking77
+      1 https://huggingface.co/api/datasets/
+      1 https://huggingface.co/ToolW/desi-agent-tinyaya-rft2-lora
+      1 https://huggingface.co/ToolW/desi-agent-tinyaya-grpo-mt-seed2-lora
+      1 https://huggingface.co/Rik0411
+### COHERE MODELS
+     59 coherelabs/tiny-aya-global
+     32 tinyaya-sft-lora
+     29 tinyaya-global-base
+     25 tinyaya-sft-a-final
+     25 tiny aya
+     12 tiny aya global
+     11 tinyaya-rft-lora
+      9 tinyaya-rft
+      8 tinyaya-grpo-mt-lora
+      7 coherelabs/aya-expanse-8b
+      6 tinyaya-grpo-mt-seed
+      6 aya expanse 8b
+### TOOLKITS (py import/use count | md mention count)
+agenttune py:10 imports:1 md:11
+auditkit py:7 imports:1 md:8
+curatorkit py:5 imports:1 md:7
+circuitkit py:0 imports:0 md:0
+aligntune py:0 imports:0 md:0
+lexsi py:2 imports:0 md:5
+      1 from curatorkit.llm.base import BaseLLM, LLMResponse  # noqa: E402
+      1 from auditkit.agent_eval import AgentCase, AgentEvalRunner, AgentEvalSpec, episode_from_openai_messages
+      1 from agenttune.agentic import EventKind, Project  # noqa: E402
+### TESTS
+15
+test fns: 45
+### CI
+ci.yml
+### DEPS
+pyproject.toml lines:23 pinned==:0
+### STATS KEYWORDS (files mentioning)
+bootstrap: 2
+confidence interval|95% CI|\bCI\b: 1
+wilson: 0
+mcnemar: 2
+holm|bonferroni|benjamini: 0
+p-value|p_value|p =|p<: 53
+seed: 85
+preregist|pre-regist: 0
+held-out|heldout|held out: 4
+ablation: 0
+negative result|limitation: 1
+cohen|effect size: 1
+kappa|inter-annotator|human label: 1

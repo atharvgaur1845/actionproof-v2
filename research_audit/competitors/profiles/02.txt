@@ -1,0 +1,256 @@
+### HEAD
+c2a5da55a66d6122ac1e57048330cfd3b53b7d2c 2026-11-25 18:50:34 +0100 Ashish Soni
+### REMOTE BRANCHES
+  origin/build/escalation-agent
+  origin/claude/project-thread-6ab1d1
+  origin/claude/project-thread-cdz49h
+  origin/claude/project-thread-lfgx6r
+  origin/claude/project-thread-nbl4uy
+  origin/claude/project-thread-qv3tdb
+  origin/claude/project-thread-t9fy4r
+  origin/claude/project-thread-xhz561
+  origin/claude/project-thread-xuvq3m
+  origin/main
+### COMMITS (last 30)
+2026-11-25 18:50:34 +0100 Merge pull request #15 from Ashish-Soni08/claude/project-thread-cdz49h
+2026-11-25 17:50:07 +0000 Merge main (PR 14 README) into the submission branch; add GGUF, Stage 2 dataset and paper to the README
+2026-11-25 17:12:59 +0000 Submission: Stage 2 models, data and reproduce steps in README; job.sh scratch dataset defaults to the caller's ac
+2026-11-25 17:04:15 +0000 Merge remote-tracking branch 'origin/claude/project-thread-nbl4uy' into claude/project-thread-cdz49h
+2026-11-25 16:49:52 +0000 paper: checklist soft-reward analysis (Soft-SVeRL)
+2026-11-25 16:47:49 +0000 Soft-reward comparison, phase 1 results and report section
+2026-11-25 16:15:53 +0000 Soft-reward comparison, phase 1: checklist grading of saved episodes (not run yet)
+2026-11-25 15:18:03 +0000 paper: compare with Soft-SVeRL in related work
+2026-11-24 19:32:28 +0000 paper: tau-bench as an observation in results
+2026-11-24 19:03:04 +0000 paper: tau-bench pilot in limitations and appendix
+2026-11-24 19:02:07 +0000 tau-bench pilot with history trimming and a reference agent
+2026-11-24 18:26:41 +0000 tau-bench chain: history trimming, reference agent row, configurable output folder
+2026-11-23 21:24:10 +0000 paper: add GGUF row, tau-bench note, refreshed Stage 2 compute
+2026-11-23 21:23:01 +0000 Stage 2 report: GGUF rows, tau-bench retail, refreshed job costs
+2026-11-23 20:35:50 +0000 paper: redraw figures in TikZ at print size, rewrite prose in first person
+2026-11-23 20:29:12 +0000 GGUF chain: library path for the llama.cpp tools
+2026-11-23 21:20:48 +0100 Merge pull request #14 from Ashish-Soni08/claude/project-thread-6ab1d1
+2026-11-23 20:18:29 +0000 Stage 2: fix GGUF tokenizer class and tau-bench install without git
+2026-11-23 20:16:01 +0000 Scope the 8B claim like the paper: one seed, different model family
+2026-11-23 20:14:56 +0000 Model cards: run and reproduce sections for every Stage 2 model, Stage 2 section on v4.1
+2026-11-23 20:13:58 +0000 paper: apply reviewer fixes (numbers, scoped claims, citations, limitations)
+2026-11-23 20:13:10 +0000 README as the entry point for judges; no-GPU reproduction check
+2026-11-23 20:08:58 +0000 Stage 2: GGUF (llama.cpp) and tau-bench retail chains, job pre-command hook
+2026-11-22 17:52:10 +0000 Paper: compression section (F11), Stage 2 compute update, move tip table and endings figure to appendix
+2026-11-22 17:50:36 +0000 Stage 2 quantization, second pass: 3-bit arms with the working GPTQ settings, final compression table
+2026-11-22 15:53:05 +0000 Paper: second Stage 2 judge audit
+2026-11-22 15:52:10 +0000 Stage 2 quantization checks (bnb NF4, RTN, asymmetric GPTQ, packed vs dense), second-pass chain, judge audit of th
+2026-11-22 15:11:05 +0000 Paper: Water/Earth and seed study in F5, tip-source and hygiene table, closed-model comparison, Stage 2 compute
+2026-11-22 15:11:01 +0000 Stage 2: cards for the new models, lead-in dataset link, judge sample for the second batch
+2026-11-22 15:08:25 +0000 Stage 2 second batch: Water, Earth, seeds 5 and 6, data-source arms, quantization arms, report sections (seeds, so
+### FIRST COMMIT
+2026-11-10 18:35:15 +0100 Initial commit
+2026-11-11 08:21:52 +0100 Escalation-safe tool-using Tiny Aya: environment, SFT, AgentTune GRPO, AuditKIT audit (#1)
+### TREE (dirs, depth2, file counts)
+5 .
+2 ./assets
+32 ./data
+4 ./data/circuit
+8 ./data/judge
+1 ./data/soft
+3 ./docs
+2 ./docs/dashboard-screens
+19 ./docs/figures
+11 ./esa
+1 ./modal_jobs
+6 ./paper
+7 ./paper/figures
+46 ./results
+2 ./results/auditkit_fresh_neutral
+2 ./results/auditkit_neutral
+2 ./results/auditkit_rules
+2 ./results/auditkit_stress_neutral
+2 ./results/auditkit_unseen_neutral
+7 ./results/bfcl
+27 ./results/cards_s2
+13 ./results/circuit
+36 ./results/fresh
+0 ./results/guard
+1 ./results/judge
+4 ./results/judge_s2
+2 ./results/judge_s2b
+2 ./results/judge_v4
+2 ./results/judge_v4_1
+2 ./results/judge_v5
+3 ./results/judge_v6
+2 ./results/judge_v6_fable
+2 ./results/judge_v6_mistral
+2 ./results/judge_v6_seeds
+4 ./results/leadins
+13 ./results/long
+21 ./results/longchat
+15 ./results/longctl
+22 ./results/quant
+14 ./results/real
+0 ./results/s2
+11 ./results/s2_closed
+30 ./results/sealed
+60 ./results/seeds
+12 ./results/seeds_fresh
+3 ./results/seeds_long
+3 ./results/seeds_longchat
+3 ./results/seeds_longctl
+3 ./results/seeds_sealed
+36 ./results/seeds_stress
+21 ./results/seeds_unseen
+4 ./results/soft
+16 ./results/stress
+1 ./results/taubench
+1 ./results/taubench_pilot
+42 ./results/unseen
+11 ./results/v1
+38 ./scripts
+5 ./space
+1 ./tests
+### EXT COUNTS
+   1151 json
+    449 jsonl
+     48 md
+     42 py
+     18 svg
+      8 tex
+      8 sh
+      4 pt
+      3 html
+      2 png
+      2 jpg
+      2 gitkeep
+      1 xlsx
+      1 txt
+      1 sty
+### TOTAL FILES
+1747
+### TOP-LEVEL MD
+HANDOFF.md
+README.md
+./space/README.md ./results/v1/results_table.md ./results/v1/auditkit_rules/summary.md ./results/v1/auditkit_neutral/summary.md ./results/s2_closed/README.md ./results/results_table.md ./results/report_s2.md ./results/report_r6.md ./results/failure_analysis.md ./results/curatorkit_report.md ./results/cards_s2/tiny-aya-water-esa-sft.md ./results/cards_s2/tiny-aya-water-esa-sft-esc.md ./results/cards_s2/tiny-aya-water-esa-grpo-success-only.md ./results/cards_s2/tiny-aya-water-esa-grpo-safe.md ./results/cards_s2/tiny-aya-global-esa-s2-seed6-grpo-success-only.md ./results/cards_s2/tiny-aya-global-esa-s2-seed6-grpo-safe.md ./results/cards_s2/tiny-aya-global-esa-s2-seed5-grpo-success-only.md ./results/cards_s2/tiny-aya-global-esa-s2-seed5-grpo-safe.md ./results/cards_s2/tiny-aya-global-esa-s2-grpo-success-only.md ./results/cards_s2/tiny-aya-global-esa-s2-grpo-safe.md ./results/cards_s2/tiny-aya-global-esa-s2-cov6-grpo-safe.md ./results/cards_s2/tiny-aya-global-esa-s2-cov4-grpo-safe.md ./results/cards_s2/tiny-aya-global-esa-s2-cov2-grpo-safe.md ./results/cards_s2/tiny-aya-global-esa-s2-cov10_curatorkit-grpo-safe.md ./results/cards_s2/tiny-aya-global-esa-s2-cov10_adaption-grpo-safe.md ./results/cards_s2/tiny-aya-fire-esa-sft.md ./results/cards_s2/tiny-aya-fire-esa-sft-esc.md ./results/cards_s2/tiny-aya-fire-esa-grpo-success-only.md ./results/cards_s2/tiny-aya-fire-esa-grpo-safe.md ./results/cards_s2/tiny-aya-earth-esa-sft.md ./results/cards_s2/tiny-aya-earth-esa-sft-esc.md ./results/cards_s2/tiny-aya-earth-esa-grpo-success-only.md ./results/cards_s2/tiny-aya-earth-esa-grpo-safe.md ./results/cards_s2/aya-expanse-8b-esa-sft.md ./results/cards_s2/aya-expanse-8b-esa-sft-esc.md ./results/cards_s2/aya-expanse-8b-esa-grpo-success-only.md ./results/cards_s2/aya-expanse-8b-esa-grpo-safe.md ./results/auditkit_unseen_neutral/summary.md ./results/auditkit_stress_neutral/summary.md ./results/auditkit_rules/summary.md ./results/auditkit_neutral/summary.md ./results/auditkit_fresh_neutral/summary.md ./paper/README.md ./docs/writeup.md ./docs/model_card_v4_1.md ./docs/hf_article.md ./README.md ./HANDOFF.md 
+### RESULT-LIKE FILES
+data/circuit/gsafe_preview_scores.json
+data/circuit/gsafe_relay_scores.json
+results/abl_no_escalation_penalty_summary.json
+results/abl_no_fabrication_penalty_summary.json
+results/abl_no_honest_stop_bonus_summary.json
+results/auditkit_fresh_neutral/summary.json
+results/auditkit_fresh_neutral/summary.md
+results/auditkit_neutral/summary.json
+results/auditkit_neutral/summary.md
+results/auditkit_rules/summary.json
+results/auditkit_rules/summary.md
+results/auditkit_stress_neutral/summary.json
+results/auditkit_stress_neutral/summary.md
+results/auditkit_unseen_neutral/summary.json
+results/auditkit_unseen_neutral/summary.md
+results/base_summary.json
+results/bfcl/base.jsonl
+results/bfcl/grpo_esc_safe.jsonl
+results/bfcl/grpo_esc_success_only.jsonl
+results/bfcl/grpo_safe_v4_1.jsonl
+results/bfcl/sft.jsonl
+results/bfcl/sft_esc.jsonl
+results/bfcl/summary.json
+results/cards_s2/aya-expanse-8b-esa-grpo-safe.md
+results/cards_s2/aya-expanse-8b-esa-grpo-success-only.md
+results/cards_s2/aya-expanse-8b-esa-sft-esc.md
+results/cards_s2/aya-expanse-8b-esa-sft.md
+results/cards_s2/tiny-aya-earth-esa-grpo-safe.md
+results/cards_s2/tiny-aya-earth-esa-grpo-success-only.md
+results/cards_s2/tiny-aya-earth-esa-sft-esc.md
+results/cards_s2/tiny-aya-earth-esa-sft.md
+results/cards_s2/tiny-aya-fire-esa-grpo-safe.md
+results/cards_s2/tiny-aya-fire-esa-grpo-success-only.md
+results/cards_s2/tiny-aya-fire-esa-sft-esc.md
+results/cards_s2/tiny-aya-fire-esa-sft.md
+results/cards_s2/tiny-aya-global-esa-s2-cov10_adaption-grpo-safe.md
+results/cards_s2/tiny-aya-global-esa-s2-cov10_curatorkit-grpo-safe.md
+results/cards_s2/tiny-aya-global-esa-s2-cov2-grpo-safe.md
+results/cards_s2/tiny-aya-global-esa-s2-cov4-grpo-safe.md
+results/cards_s2/tiny-aya-global-esa-s2-cov6-grpo-safe.md
+results/cards_s2/tiny-aya-global-esa-s2-grpo-safe.md
+results/cards_s2/tiny-aya-global-esa-s2-grpo-success-only.md
+results/cards_s2/tiny-aya-global-esa-s2-seed5-grpo-safe.md
+results/cards_s2/tiny-aya-global-esa-s2-seed5-grpo-success-only.md
+results/cards_s2/tiny-aya-global-esa-s2-seed6-grpo-safe.md
+results/cards_s2/tiny-aya-global-esa-s2-seed6-grpo-success-only.md
+results/cards_s2/tiny-aya-water-esa-grpo-safe.md
+results/cards_s2/tiny-aya-water-esa-grpo-success-only.md
+results/cards_s2/tiny-aya-water-esa-sft-esc.md
+results/cards_s2/tiny-aya-water-esa-sft.md
+count: 1557
+### HF / SPACE / VIDEO / SLIDES LINKS
+     32 https://huggingface.co/ashish-soni08/tiny-aya-global-esa-grpo-safe-v4-1
+     12 https://huggingface.co/CohereLabs/tiny-aya-global
+      6 https://huggingface.co/datasets/ashish-soni08/esa-tip-leadins
+      4 https://huggingface.co/CohereLabs/tiny-aya-water
+      4 https://huggingface.co/CohereLabs/tiny-aya-fire
+      4 https://huggingface.co/CohereLabs/tiny-aya-earth
+      4 https://huggingface.co/CohereLabs/aya-expanse-8b
+      3 https://huggingface.co/spaces/ashish-soni08/escalation-safe-agent-dashboard
+      3 https://huggingface.co/datasets/ashish-soni08/escalation-safe-agent-data
+      3 https://huggingface.co/collections/ashish-soni08/escalation-safe-tiny-aya-models-6af4cf019348ef75b59f3860
+      2 https://huggingface.co/collections/ashish-soni08/escalation-safe-tiny-aya-data-and-traces-6af4cf027af257aee21af290
+      2 https://huggingface.co/ashish-soni08/tiny-aya-global-esa-sft-esc-v2
+      2 https://huggingface.co/ashish-soni08/tiny-aya-global-esa-grpo-safe-v4-1-seed24
+      2 https://huggingface.co/ashish-soni08/tiny-aya-global-esa-grpo-safe-v4-1-seed14
+      2 https://huggingface.co/ashish-soni08/tiny-aya-global-esa-grpo-safe-v3-1
+      2 https://huggingface.co/ashish-soni08/aya-expanse-8b-esa-grpo-safe
+      1 https://huggingface.co/docs/huggingface_hub/guides/jobs
+      1 https://huggingface.co/datasets/ashish-soni08/escalation-safe-agent-stage2
+      1 https://huggingface.co/datasets/ashish-soni08/escalation-safe-agent-data/blob/main/report_r6.md
+      1 https://huggingface.co/ashish-soni08/tiny-aya-global-esa-sft-v2
+      1 https://huggingface.co/ashish-soni08/tiny-aya-global-esa-s2-grpo-safe-GGUF
+      1 https://huggingface.co/ashish-soni08/tiny-aya-global-esa-grpo-safe-v5
+      1 https://huggingface.co/ashish-soni08/tiny-aya-global-esa-grpo-esc-success_only-v2
+      1 https://huggingface.co/ashish-soni08/tiny-aya-global-esa-abl-no-honest-stop-bonus
+      1 https://huggingface.co/ashish-soni08/tiny-aya-global-esa-abl-no-fabrication-penalty
+      1 https://huggingface.co/ashish-soni08/tiny-aya-global-esa-abl-no-escalation-penalty
+      1 https://huggingface.co/ashish-soni08/tiny-aya-global-esa-
+### COHERE MODELS
+    214 tiny-aya-global-esa-s
+    157 tiny-aya-global-esa-grpo-safe-v
+    123 tiny aya global
+     81 coherelabs/tiny-aya-global
+     73 aya expanse 8b
+     52 tiny-aya-global-esa-sft-v
+     51 tiny-aya-global-esa-sft-esc-v
+     49 tiny-aya-global-esa-grpo-esc-safe-v
+     46 tiny-aya-global-esa-grpo-esc-success
+     41 aya-expanse-8b-esa-grpo-safe
+     37 tiny-aya-water-esa-grpo-safe
+     37 tiny-aya-earth-esa-grpo-safe
+### TOOLKITS (py import/use count | md mention count)
+agenttune py:14 imports:0 md:33
+auditkit py:8 imports:2 md:6
+curatorkit py:7 imports:4 md:5
+circuitkit py:6 imports:0 md:6
+aligntune py:0 imports:0 md:0
+lexsi py:3 imports:0 md:33
+      1 from curatorkit.schema import DataSample
+      1 from curatorkit.normalizers.dedup import ExactDeduplicator, MinHashDeduplicator
+      1 from curatorkit.hygiene.secrets import SecretsGate
+      1 from curatorkit.hygiene.pii import PIIPseudonymizer
+      1 from auditkit.agent_eval import episodes_from_agenttune  # noqa: E402
+      1 from auditkit.agent_eval import (AgentCase, AgentEvalRunner, AgentEvalSpec, CustomPredicate,  # noqa: E402
+### TESTS
+1
+test fns: 16
+### CI
+### DEPS
+requirements.txt lines:6 pinned==:2
+### STATS KEYWORDS (files mentioning)
+bootstrap: 5
+confidence interval|95% CI|\bCI\b: 44
+wilson: 4
+mcnemar: 6
+holm|bonferroni|benjamini: 29
+p-value|p_value|p =|p<: 45
+seed: 120
+preregist|pre-regist: 0
+held-out|heldout|held out: 17
+ablation: 10
+negative result|limitation: 12
+cohen|effect size: 18
+kappa|inter-annotator|human label: 20
