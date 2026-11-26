@@ -19,14 +19,14 @@ datasets:
 - atharvgaur18/actionproof-traces
 ---
 
-# ActionProof agent Dn (no-std GRPO): the registered P3 null result
+# ActionProof agent Dn (no-std GRPO): registered P3, not supported
 
 **Published for reproducibility, not for use.** Dn is agent D with exactly one change: the group standard deviation is
 removed from the GRPO advantage (TRL `scale_rewards="none"`, Dr. GRPO's advantage without its length normalisation;
 `actionproof/p3/train_nostd.py`). Same warm start (merged Dw), pools, reward R_V, 200 steps, LoRA r16, lr 2e-5, beta 0.02,
 seeds 0-2. Three adapters: `s0`, `s1`, `s2` = `runs/p3_dn_s{0,1,2}/final`.
 
-**P3 is a null result.** Registered hypothesis P3-H1 (`PREREGISTRATION_P3.md`): Dn beats D. It does not
+**P3 is not supported.** Registered hypothesis P3-H1 (`PREREGISTRATION_P3.md`): Dn beats D. It does not
 (Dn - D -0.007 [-0.013, -0.001], one-sided p 0.988, seed deltas -0.009, +0.005, -0.016, **not supported**).
 The interval excludes zero on the negative side, so there is no gain and a very small loss. The authors' reading that this fits the theory, because reads are free in ProcureSim,
 was written after the result and is not a tested prediction.
@@ -119,15 +119,15 @@ Per-seed union sampled VSC of Dn: s0 0.814, s1 0.811, s2 0.813.
   tool names (registered SR1, `results/s4/sr1_summary.json`) did not help on the renamed API (+0.000 [-0.040, +0.042]) and cost VSC on
   the canonical tools (-0.248 [-0.296, -0.201]).
   On the unseen four-step workflow (`wf4`, order, receive, pay, post) the models run the trained three-step sequence
-  and skip the new step; the table above shows the wf4 column far below the others.
+  and skip the new step (the `p1_test_wf4` split of `results/p1/p1_summary.json`).
   Randomising the **demonstrations** instead (registered P4, `results/p4/p4_summary.json`; warm starts only, no GRPO
-  on top) does fix both at the SFT stage: renamed tools +0.604 [+0.540, +0.666], four-step workflow +0.574 [+0.536, +0.610], P1 test +0.048 [+0.026, +0.072]
+  on top) raises the warm start on the tested renamed-tool surface and four-step workflow: +0.604 [+0.540, +0.666] and +0.574 [+0.536, +0.610], P1 test +0.048 [+0.026, +0.072]
   (Dw_aug vs Dw, 3 seeds each; [`atharvgaur18/actionproof-warmstart-dwaug`](https://huggingface.co/atharvgaur18/actionproof-warmstart-dwaug)).
 - **Arms C and D are not nested.** C is the recovery-start agent A plus recovery SFT. D starts from its own
   recovery-SFT warm start (Dw) and then runs GRPO. The C to D gap is therefore not GRPO's contribution; the
   exploratory 2x2 (`results/audit/dwarm_2x2.json`) is the right reading of what GRPO adds on top of SFT.
-- **P3 is a null result.** Removing the group standard deviation from the GRPO advantage (no-std GRPO, agent Dn) did
-  not improve on D (registered P3-H1, `results/p3/p3_summary.json`).
+- **P3 is not supported.** Removing the group standard deviation from the GRPO advantage (no-std GRPO, agent Dn)
+  leaves it slightly below D (registered P3-H1, `results/p3/p3_summary.json`).
 - **Intervals are over tasks only.** Paired task bootstrap over 450 tasks (B = 10,000) holds the three trained
   models fixed; with three seeds, seed-level power is low. Per-split cells carry no stored interval.
 - One base model (3.35B), one simulated domain, English-language training; Hindi and Hinglish were evaluated as shifts

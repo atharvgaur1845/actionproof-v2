@@ -26,29 +26,29 @@ Tool-using agents increasingly write to systems of record: payments, goods recei
 
 **Checking is not recovering.** Agents that read a partial payment then posted the journal entry anyway. Training from faulted states (a recovery-start curriculum, a known technique) raised verified completion by +0.21 over the state-reward agent in five of five runs. Against a control trained on the same faults, the start-state effect held on recovery starts across five runs per arm (Holm p = 0.036). A partial-payment-specific effect was not established.
 
-**The gains held** under Hindi, Hinglish and two-fault episodes. **They failed** under renamed tools and a new workflow step, where agents replay the trained procedure. Randomising tool names did not help (+0.00) and cost a quarter of canonical performance. Our own counterfactual credit method (FCA) failed its pre-set test.
+**The gains held** under Hindi, Hinglish and two-fault episodes. **They failed** under renamed tools and a new workflow step, where agents replay the trained procedure. Randomising tool names during GRPO did not help (+0.00) and cost a quarter of canonical performance; randomising the SFT demonstrations instead (P4, below) does remove the failure in the warm start, though not in the RL agent D. Our own counterfactual credit method (FCA) failed its pre-set test.
 
 **New in this round:**
-1. Capability retention on BFCL and IFEval, registered before any output (R1): across 35 models, no trained arm loses measurable general ability. GRPO is non-inferior to its warm start within 0.03 on both benchmarks (all four Holm p < 0.001).
+1. Capability retention on BFCL and IFEval, registered before any output (R1): the GRPO arms tested (state reward, recovery start) are non-inferior to their warm start within 0.03 on both benchmarks (all four Holm p < 0.001). τ-bench drops slightly after SFT (−0.020), and R1 did not test the P1–P5 agents.
 2. A four-family LLM judge committee measured against the database (J1). Told that "ok" is not proof, judges abstain rather than accept unverifiable failures, so they cannot certify outcomes. Without that one sentence, three of four judges accept nearly all of them (exploratory). With a database snapshot, Qwen and DeepSeek reach only 0.889 and 0.886 accuracy, and majority voting (0.897) does not beat the best single judge (0.989).
 3. **A practical recovery agent (P1, registered, frozen test of 450 fresh tasks).** Recovery demonstrations followed by the same GRPO (D) raise sampled verified completion from 0.513 to 0.819 (+0.306 [+0.276, +0.337], all three seeds). Recovery SFT alone (C) reaches 0.772. On partial payments D reaches 0.931 against 0.319. A reconciliation line added at inference (B) hurts (−0.030). An unseen workflow stays hard (D 0.486).
 4. **Ledger and guard (P2, registered, same frozen test).** Neither helps. A structured ledger shown at inference lowers the recovery-start agent to 0.253, and training on it (E, 0.782) does not beat D. A deterministic action guard removes false successes (702 of 5,400 sampled episodes for E, against one with the guard), but it blocks the registered repair itself: replayed through the guard, the scripted oracle would be blocked on 90 of 90 partial-payment tasks. Blocked agents rarely recover, so the guard lowers every arm. The scripted oracle (0.924) still beats the best trained agent (D, 0.819).
 5. A cost model built from measured per-fault outcome rates. Recovery-start GRPO cuts projected losses from $10,261 to $2,106 per 1,000 workflows against the untrained agent (moderate scenario), but hand-written read-back-and-repair checks beat every trained agent. So we present ActionProof as fault-injection testing plus runtime verification, with training as a second line.
 
-Every experiment was registered and hashed before it ran. A checker re-reads every reported number from its result file.
+Every confirmatory test was registered and hashed before its outcome existed; exploratory and development analyses are labelled as such. A checker re-reads every reported number from its result file. The final-round results (TXN, P4, P5) are in §1a.
 
 ## 1a. Final-round results (Nov 25–28; all registered before any output unless labelled)
 
-1. **TXN benchmark (`PREREGISTRATION_TXN1.md`, addenda 1–2).** A locked split of 440 tasks built around counterfactual quadruples: the same request, tool, arguments and "ok", with four hidden realities (ok + phantom, ok + committed, timeout + committed, timeout + not committed), eight fault classes, three evidence regimes (resolvable, delayed or conflicting, unresolvable) and six OOD groups. Scripted baselines B0–B4 and ablations A1–A6 share tasks, tools, budgets and the evaluator with every model.
+1. **TXN benchmark (`PREREGISTRATION_TXN1.md`, addenda 1–2).** A locked split of 440 tasks built around counterfactual quadruples: the same request, tool and arguments, two replies ("ok", "timeout"), each hiding a committed and an uncommitted outcome (ok + phantom, ok + committed, timeout + committed, timeout + not committed), eight fault classes, three evidence regimes (resolvable, delayed or conflicting, unresolvable) and six OOD groups. Scripted baselines B0–B4 and ablations A1–A6 share tasks, tools, budgets and the evaluator with every model. TXN keeps ProcureSim's training faults and adds four new ones (log conflict, late commit, concurrent write, visibility lag) and the unresolvable regime.
    - **H1 (descriptive).** The acknowledgement-trusting policy B0 falsely completes on 1.000 of ok + phantom tasks and 0.000 of ok + committed tasks. Its overall verified transaction completion (VTC) is 0.136.
-   - **H3 (registered family of 4, Holm, template-clustered bootstrap, n = 320 in-distribution tasks in 48 clusters): not supported.** D (3 seeds) duplicates fewer mutations than bounded retry B3 (0.024 vs 0.191, −0.167 [−0.271, −0.070], Holm 0.0012) and final-state-only B1 (0.024 vs 0.338, −0.314 [−0.454, −0.176], Holm 0.0008), with VTC non-inferior (+0.205, +0.289). The unnecessary-retry tests fail: −0.027 [−0.067, +0.003] (Holm 0.123) and −0.095 [−0.199, −0.015] (Holm 0.064).
+   - **H3 (registered family of 4, Holm, template-clustered bootstrap, n = 320 in-distribution tasks in 48 clusters): not supported.** D (3 seeds) duplicates fewer mutations than scripted bounded retry with idempotency keys (B3) (0.024 vs 0.191, −0.167 [−0.271, −0.070], Holm 0.0012) and final-state-only B1 (0.024 vs 0.338, −0.314 [−0.454, −0.176], Holm 0.0008), with VTC non-inferior (+0.205, +0.289). The unnecessary-retry tests fail: −0.027 [−0.067, +0.003] (Holm 0.123) and −0.095 [−0.199, −0.015] (Holm 0.064).
    - **Descriptive VTC.** B4 (scripted reconciliation) 0.864, D seed 0 0.724, Dw 0.598, B3 0.491, B1 0.448, W 0.445, Aya Expanse 32B 0.161.
-   - **H5 (descriptive).** When evidence cannot settle the outcome, D escalates in 0.050 of cases (unsafe 0.044). Aya Expanse 32B escalates in 0.222 but acts unsafely in 0.400. B4 escalates in 1.000.
+   - **H5 (descriptive).** When evidence cannot settle the outcome, D escalates correctly in 15 of 540 cases over three seeds (seed 0: 0.050) and acts unsafely in 14 of 540. Aya Expanse 32B escalates in 0.222 but acts unsafely in 0.400. B4 escalates in 1.000.
 2. **P4: randomised demonstrations (`PREREGISTRATION_P4.md`).** Re-rendering half of the recovery demonstrations on synonym tool surfaces and adding five new step sequences (Dw_aug, 3 seeds) against Dw (3 seeds): renamed tools 0.137 → 0.741 (+0.604 [+0.540, +0.666]), unseen four-step workflow 0.268 → 0.842 (+0.574 [+0.536, +0.610]), P1 test +0.048 [+0.026, +0.072]. All three are supported, with every seed delta positive. These are warm starts: GRPO was not run on top.
-3. **What GRPO adds after SFT (R7, exploratory).** D − Dw is +0.140 [+0.120, +0.161] on the P1 test; 69 tasks improve by at least 0.5 and none gets worse. D's most common remaining failure is a false success on a goods receipt that never happened (266 of 976 failed episodes).
-4. **Supplementary frontier baselines (B1 addendum 1, not Cohere).** Qwen3-235B-A22B and gpt-oss-120b, greedy, through HF Inference Providers: full episodes 0.383 and 0.250, partial payments 0.000 and 0.000.
-5. **P5: the recipe on four other Cohere bases (`PREREGISTRATION_P5.md` + addendum 1).** Recovery SFT with Dw's data and settings, against each untrained base, on the P1 test (Holm over 4): Tiny Aya Fire 0.018 → 0.686 (+0.668 [+0.637, +0.699]), Water 0.011 → 0.639 (+0.628 [+0.592, +0.664]), Earth 0.012 → 0.704 (+0.693 [+0.662, +0.724]), Aya Expanse 8B 0.076 → 0.772 (+0.697 [+0.667, +0.727]). All four are supported.
-6. **Dw_aug on TXN (descriptive).** On the transaction benchmark, whose faults Dw_aug never saw, it improves VTC over Dw by +0.126, +0.085 and +0.089 per seed; on the unseen-workflow group its safe terminal resolution is 0.85 against 0.05 (Dw) and 0.08 (D seed 0).
+3. **What GRPO adds after SFT (R7, exploratory).** D − Dw is +0.140 [+0.120, +0.161] on the P1 test; 69 tasks improve by at least 0.5 and none gets worse by 0.5 or more. D's most common false success (266 of 976 failed episodes, 260 of them on the unseen four-step workflow) is reporting a goods receipt it skipped: the procedure-replay failure.
+4. **Supplementary large open-weight baselines (B1 addendum 1, not Cohere; descriptive).** Qwen3-235B-A22B and gpt-oss-120b (low reasoning effort), prompted, greedy, no recovery training, through HF Inference Providers: full episodes 0.383 and 0.250; none of the 90 partial-payment tasks completed (0.000 each); on fresh-recovery tasks gpt-oss repairs about half of the partial payments it meets (0.52), Qwen almost none (0.04).
+5. **P5: the recipe on four other Cohere bases (`PREREGISTRATION_P5.md` + addendum 1).** Recovery SFT with Dw's data and settings, against each untrained base, on the P1 test (Holm over 4): Tiny Aya Fire 0.018 → 0.686 (+0.668 [+0.637, +0.699]), Water 0.011 → 0.639 (+0.628 [+0.592, +0.664]), Earth 0.012 → 0.704 (+0.693 [+0.662, +0.724]), Aya Expanse 8B 0.076 → 0.772 (+0.697 [+0.667, +0.727]). All four are supported. One SFT seed per model, so each is a task-level test with the model fixed; the unseen four-step workflow stays hard (Water 0.017).
+6. **Dw_aug on TXN (descriptive).** Its VTC is above Dw's by +0.126, +0.085 and +0.089 per seed; on the unseen-workflow group its safe terminal resolution is 0.85 against 0.05 (Dw) and 0.083 (D seed 0). The cost: it never escalates on unresolvable evidence (0 of 180 in every seed) and acts unsafely there more often than Dw (11, 24 and 18 of 180, against 8).
 7. **Live inference.** A ZeroGPU Space runs D (and the base model) on curated test tasks, one real model call per step, with the hidden reality revealed only after the run: https://huggingface.co/spaces/atharvgaur18/actionproof-live.
 
 ## 2. Before and after (same base model)
@@ -66,8 +66,8 @@ Source: `results/s2/a12_summary.json` and `results/eval/a12/conf/*`. The two-met
 2. **The reward's information source decides whether the agent checks.** Database reward: checks in 5/5 seeds; reply reward: never. Same model, same data, one change (§2).
 3. **RL selects, it does not invent.** From a starting model that never reads, nothing changes (ID1): no read is ever sampled, so the reward has nothing to reinforce.
 4. **Checking is not recovering, until recovery is taught.** Agents read the shortfall and post anyway. Training from broken states helps (+0.21, 5/5). Recovery demonstrations then the same GRPO (P1 arm D) lift the frozen test from 0.513 to 0.819, and partial payments from 0.319 to 0.931. A hint at inference does not help (−0.030).
-5. **Transfer is conditional.** The RL agents do not transfer to renamed tools or new workflows, and tool-name randomisation during GRPO failed. Randomising the *demonstrations* fixes both at the SFT stage (P4: 0.137 → 0.741 and 0.268 → 0.842, no cost on the P1 test).
-6. **Recovery is not blind retry, in part.** On the locked TXN benchmark the trained agent duplicates far fewer mutations than bounded retry or final-state checking (registered, both pass), but the unnecessary-retry tests fail, so the registered H3 family is not supported. When evidence is unresolvable it rarely escalates (0.050).
+5. **Transfer is conditional.** The RL agents do not transfer to renamed tools or new workflows (D 0.20 on renamed tools), and tool-name randomisation during GRPO failed. Randomising the *demonstrations* removes both failures in the warm start on the tested surface and workflow (P4: 0.137 → 0.741 and 0.268 → 0.842, no cost on the P1 test); GRPO was not run on top.
+6. **Fewer duplicates, not fewer retries.** On the locked TXN benchmark the trained agent duplicates mutations less often than scripted bounded retry or final-state checking (registered, both pass), but the unnecessary-retry tests fail, so the registered H3 family is not supported. When evidence is unresolvable it rarely escalates (15 of 540).
 7. **Also:** capability retention (R1), a judge committee against database truth (J1), and a cost model whose honest answer is "write the checks; use ActionProof to find them and to train a second line".
 
 ## 4. Real use case
@@ -145,8 +145,8 @@ Traces of all 30 procurement-study models are published in the HF collection.
 | Kit | Use |
 |---|---|
 | **AgentTune** | Trains every GRPO policy (`TrlAgenticGrpo`); its parser and prompt are used in rollouts and evaluation |
-| **AuditKIT** | Stage 1 judge audit (`TaskCompletion`, `AgentEvalRunner`). With the ledger shown, Aya 32B still accepted 71% (213/298) of false completions |
-| **CuratorKIT** | Stage 1 deduplication of acknowledgement texts (`ExactDeduplicator`, `MinHashDeduplicator`) |
+| **AuditKIT** | Stage 1 judge audit (`TaskCompletion`, `AgentEvalRunner`; with the ledger shown, Aya 32B still accepted 71% (213/298) of false completions), and secondary `TaskCompletion` scores of the P1 episodes (`scripts/p1_auditkit.py`; descriptive, never an outcome) |
+| **CuratorKIT** | Exact and MinHash deduplication (`ExactDeduplicator`, `MinHashDeduplicator`) of the Stage 1 acknowledgement texts and of the 554 P1 recovery demonstrations before SFT (0 removed) |
 | **CircuitKIT** | Attempted; failed to run (D-A16-1); no claim |
 | **AlignTune, SafeTune** | Not used |
 
@@ -181,7 +181,7 @@ Traces of all 30 procurement-study models are published in the HF collection.
 
 ## 13. CuratorKIT filtering
 
-Used in Stage 1 only, on the naturalistic acknowledgement corpus (`actionproof/bench/naturalistic_acks.py`): exact and MinHash near-duplicate removal before the acknowledgement templates were frozen. The procurement study generates its tasks programmatically and needs no curation.
+Stage 1: on the naturalistic acknowledgement corpus (`actionproof/bench/naturalistic_acks.py`), exact and MinHash near-duplicate removal before the acknowledgement templates were frozen. P1: the same two filters ran on the 554 oracle recovery demonstrations before SFT (`actionproof/p1/build.py`) and removed none (`data/rft/p1_recovery_rows.stats.json`), because the oracle episodes were already distinct.
 
 ## 14. Metrics and why
 
@@ -216,7 +216,7 @@ Accuracy counts an abstention as wrong.
 
 Design (`PREREGISTRATION_J1.md`):
 - four families, temperature 0, seeded option order;
-- 76 stratified calibration cases, labelled by the author with the same rubric, and 660 main cases;
+- 76 stratified calibration cases, to be labelled by the author with the same rubric (labels pending), and 660 main cases;
 - two views: transcript only, and transcript plus database snapshot;
 - a prompt-paraphrase variant.
 
@@ -232,7 +232,7 @@ Full report: `docs/upgrade/CAPABILITY_RETENTION.md`, generated from `results/r1/
 | Recovery-start GRPO | −0.004 [−0.021, +0.012] | +0.001 [−0.008, +0.009] | +0.005 [−0.009, +0.021] |
 | SFT warm start vs base (base 0.760 / 0.471 / 0.079) | +0.011 [−0.020, +0.043] | +0.022 [−0.004, +0.048] | −0.017 [−0.050, +0.017] |
 
-- **No trained arm shows a measurable loss.** The most negative point estimate across all arms and endpoints is −0.012.
+- **No GRPO arm tested in R1 shows a measurable loss on IFEval or BFCL.** The most negative point estimate across these arms and endpoints is −0.012. R1 did not test the P1–P5 agents.
 - **Low abstention is the base model's own property** (0.079).
 - **τ-bench retail (R1-T, descriptive):** a floor regime for a 3B model (base pass^1 0.058). The SFT warm start lowers it by 0.020 [−0.038, −0.006]; GRPO adds no change (state reward −0.006, recovery-start −0.004, intervals include 0). Most successes involve no write action, so at this scale τ-bench measures hand-off behaviour more than state-changing competence. Two infrastructure deviations were fixed before any episode (D-R1T-1, D-R1T-2).
 
@@ -294,7 +294,7 @@ Five independent training seeds per arm (0–4) for A12 R_V and R_A, RSC, the cl
 3. **Start state matters, partial-specificity unproven** (S3 addenda).
 4. **Procedure replay** (S4, SR1).
 5. **Warned judges abstain; snapshot judges are not verifier-grade** (J1, `docs/upgrade/JUDGES.md`).
-6. **No capability cost** (R1, `docs/upgrade/CAPABILITY_RETENTION.md`).
+6. **No measurable IFEval/BFCL cost for the GRPO arms tested** (R1, `docs/upgrade/CAPABILITY_RETENTION.md`; τ-bench drops slightly after SFT; the P1–P5 agents were not tested).
 7. **Progress credit penalises evidence** (C5 diagnosis).
 8. **Recovery is learned from demonstrations, not from a hint** (P1). Recovery SFT (+0.259) and recovery SFT then GRPO (+0.306) pass the registered test; a reconciliation line at inference fails it (−0.030). C and D are not nested: D starts from its own recovery-SFT warm start, so the gap between them is not what GRPO adds (`research_audit/P1_DECOMPOSITION.md`). The development diagnosis (`docs/research/P1_DEV_DIAGNOSIS.md`) traces the hint's failure to same-key top-ups on short payments.
 9. **A guard that blocks the taught repair costs more than the false successes it removes** (P2, `docs/quality/PERFORMANCE_DIAGNOSIS.md` §6). A runtime check has to accept the repair sequence the agent was trained on.
@@ -305,8 +305,8 @@ Five independent training seeds per arm (0–4) for A12 R_V and R_A, RSC, the cl
    - **Prior work.** Removing the std is Dr. GRPO's advantage (Liu et al., arXiv 2503.20783; our arm keeps TRL's token-level aggregation, so it is not full Dr. GRPO); the distortion under stochastic outcomes is studied by Bereket & Leskovec (arXiv 2508.11800). Ours is the exact consequence of a shared hidden state for a costed information action: a new consequence of a known mechanism, not a new mechanism. **No new algorithm is claimed.** AWRB and D3 passed development gates only, and D3's mechanism prediction failed.
 
 11. **Acknowledgement-following fails exactly where acknowledgement and state disagree** (TXN H1): B0's false-completion rate is 1.000 on ok + phantom and 0.000 on ok + committed.
-12. **Recovery training removes duplicate harm but not every unnecessary retry** (TXN H3, 2 of 4 registered tests).
-13. **Procedure replay is a demonstration problem** (P4): synonym surfaces and extra step sequences in the SFT data fix renamed tools and the four-step workflow, where GRPO-time randomisation (SR1) failed.
+12. **The trained agent duplicates mutations less often than scripted bounded retry and final-state checking** (0.024 vs 0.191 and 0.338; 2 of 4 registered tests). Fewer unnecessary retries is not established, and the registered H3 family is not supported.
+13. **Procedure replay can be removed in the demonstrations** (P4): synonym surfaces and extra step sequences in the SFT data raise the warm start on the tested renamed-tool surface (0.137 → 0.741) and four-step workflow (0.268 → 0.842), where GRPO-time randomisation (SR1) failed. GRPO was not run on top, and D itself still fails there.
 
 ## 22. Negative results (kept and reported)
 
@@ -315,7 +315,7 @@ Five independent training seeds per arm (0–4) for A12 R_V and R_A, RSC, the cl
 - The partial-specific start-state effect is not supported.
 - Addendum 4 is inconclusive.
 - E1 sampled contrasts are not supported.
-- Renamed API and new workflow: no gain.
+- S4 (recovery-start agents): renamed API and new workflow, no gain. P4 later raises the warm start; D itself still fails.
 - SR1 hurts canonical tools by −0.248.
 - Negative transfer to healthcare administration (VSC 0.158 → 0.047).
 - FCA failed (−0.10).
@@ -324,10 +324,11 @@ Five independent training seeds per arm (0–4) for A12 R_V and R_A, RSC, the cl
 - P2 H1, H3, H4 and S1–S3: the ledger (at inference or in training) and the action guard do not improve on P1's best agent; the guard lowers every arm.
 - P3: removing the group std from D's GRPO does not improve it (−0.007 [−0.013, −0.001], seeds −0.009, +0.005, −0.016).
 - P1 H1: the inference-time reconciliation line lowers sampled verified completion (−0.030 [−0.041, −0.019]).
-- P1 unseen workflow (order → receive → pay → post): the best arm reaches 0.486 (A 0.174), so recovery does not fully transfer to a new step order. (P4's randomised demonstrations later fix this at the warm-start stage.)
+- P1 unseen workflow (order → receive → pay → post): the best arm reaches 0.486 (A 0.174), so recovery does not fully transfer to a new step order. (P4's randomised demonstrations later raise the warm start there; D itself is unchanged.)
 - TXN H3 as a family: the unnecessary-retry tests fail (Holm 0.123 and 0.064).
-- TXN H5: the trained agents almost never escalate on unresolvable evidence (D 0.050, Dw 0.022).
-- Frontier models without recovery training repair no partial payment (Qwen3-235B and gpt-oss-120b 0.000).
+- TXN H5: the trained agents almost never escalate on unresolvable evidence (D 15 of 540 over three seeds, Dw 4 of 180).
+- Two large open-weight models, prompted and greedy, complete none of the 90 partial-payment tasks (Qwen3-235B and gpt-oss-120b 0.000).
+- Dw_aug never escalates on unresolvable TXN evidence (0 of 180 per seed).
 
 ## 23. Sample inputs and outputs
 
@@ -357,7 +358,7 @@ See `docs/submission/TRACES.md`: two complete recorded episodes with the databas
 - One simulated domain for the main study.
 - Task-level intervals hold the models fixed.
 - Seed-level power is low (5 runs).
-- The RL agents do not transfer to new workflows or tool surfaces; P4's fix is shown at the warm-start stage only.
+- The RL agents do not transfer to new workflows or tool surfaces; P4's gain is shown at the warm-start stage only, on one held-out tool surface and one new workflow.
 - The policy licence is non-commercial.
 - ROI rests on assumed fault rates and costs.
 - One human annotator.
@@ -391,7 +392,7 @@ The environment injects benign faults; no real payment systems or personal data 
 
 | Step | Command |
 |---|---|
-| Numbers | `python scripts/s2_numcheck.py` (290 numbers, 0 failures) |
+| Numbers | `python scripts/s2_numcheck.py` (789 numbers, 0 failures) |
 | Inventory | `python scripts/build_inventory.py` |
 | Registrations | `python scripts/freeze_<id>.py --check` |
 | ROI | `python scripts/roi_model.py` |
@@ -405,7 +406,7 @@ Command reference: `docs/stage2/COMMANDS.md`.
 
 - **AUTHOR TO CONFIRM:** whether any part predates Nov 1, 2026.
 - **Stage 1** (Nov 1–15): SupportSim, PCSTR rewards, A4–A11.
-- **Stage 2** (Nov 20–27): ProcureSim, A12–SR1, E1/E2, and this round's R1, J1, ROI and C5/G.
+- **Stage 2** (Nov 20–28): ProcureSim, A12–SR1, E1/E2, and this round's R1, J1, ROI and C5/G.
 - The toolkits are the hackathon's own repositories, vendored at the stated revisions.
 
 ## 31. Author contributions
@@ -444,7 +445,9 @@ LLM judges (§15) are evaluation instruments whose outputs never replace the dat
   - Stage 5 development (C5, G);
   - a separate algorithm-discovery programme.
 - **Nov 24:** P1 frozen test reported (H2, H3 supported; H1 not supported). P2 reported (H2 supported; H1, H3, H4 and S1–S3 not supported), with a post-hoc guard diagnosis. Phase II theory merged (TH1 registered held-out simulation). The HF Space site was redeployed with sections 09 (P1, P2) and 10 (theory) on Nov 24 (Space commit acf4f79).
-- **Deviations:** `docs/stage2/DECISIONS.md` (this round: D-R1-1, D-P1-1).
+- **Nov 25:** P3 reported (not supported); replay Space redeployed.
+- **Nov 26–27 (final round):** TXN1 registered and run (H3 not supported as a family; addenda D-TXN1-1 and D-TXN1-2), P4 (all three tests supported), P5 (all four bases supported; addendum D-P5-1), R7 (exploratory), B1 addendum 1 (large open-weight baselines), the live ZeroGPU Space, Dw_aug models, replay Space redeployed with TXN, P4 and P5 sections. An independent adversarial review of every public surface was run before the freeze; its findings were fixed in the documents (wording, labels and omissions; no result changed).
+- **Deviations:** `docs/stage2/DECISIONS.md` (this round: D-R1-1, D-P1-1) and the addenda above.
 
 ## 35. Appendix pointers
 
@@ -457,4 +460,4 @@ LLM judges (§15) are evaluation instruments whose outputs never replace the dat
 | ROI | `docs/upgrade/ROI.md` |
 | Toolkits | `docs/upgrade/TOOLKITS.md` |
 | Traces | `docs/submission/TRACES.md` |
-| LaTeX paper | `paper/main.tex`, `paper/appendix.tex` |
+| LaTeX paper | `paper/main_v3.tex`, `paper/appendix_v3.tex` (earlier versions: `paper/main.tex`, `paper/main_v2.tex`) |

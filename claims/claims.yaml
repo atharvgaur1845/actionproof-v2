@@ -889,6 +889,7 @@ claims:
     eval: [results/p2/p2_summary.json]
     stats: scripts/p2_stats.py
     numbers:
+      api_D_vsc: {value: 0.202, file: results/p2/p2_summary.json, key: [shift, s4_api, D, sampled_vsc], shown: ["0.202", "0.20"]}
       hi_A: {value: 0.668, file: results/p2/p2_summary.json, key: [shift, s4_lang_hi, A, sampled_vsc], shown: ["0.668"]}
       hi_C: {value: 0.161, file: results/p2/p2_summary.json, key: [shift, s4_lang_hi, C, delta_vs_A], shown: ["+0.161"]}
       hi_C_lo: {value: 0.122, file: results/p2/p2_summary.json, key: [shift, s4_lang_hi, C, ci95, 0], shown: ["0.122"]}
@@ -1374,6 +1375,7 @@ claims:
     eval: [results/p4/p4_summary.json]
     stats: scripts/p4_stats.py
     numbers:
+      extra_rows_pct: {value: 21, file: PREREGISTRATION_P4.md, key: "about \\+(21)%", shown: ["21%"]}
       h1_dw: {value: 0.137, file: results/p4/p4_summary.json, key: ["H1", "Dw"], shown: ["0.137"]}
       h1_dwaug: {value: 0.741, file: results/p4/p4_summary.json, key: ["H1", "Dwaug"], shown: ["0.741"]}
       h1_delta: {value: 0.604, file: results/p4/p4_summary.json, key: ["H1", "delta"], shown: ["+0.604"]}
@@ -1416,6 +1418,8 @@ claims:
       gptoss_rec: {value: 0.550, file: results/b1/gptoss__p1_test_rec.summary.json, key: ["greedy", "vsc"], shown: ["0.550"]}
       gptoss_wf4: {value: 0.267, file: results/b1/gptoss__p1_test_wf4.summary.json, key: ["greedy", "vsc"], shown: ["0.267"]}
       gptoss_combo: {value: 0.067, file: results/b1/gptoss__p1_test_combo.summary.json, key: ["greedy", "vsc"], shown: ["0.067"]}
+      gptoss_rec_partial_repaired: {value: 0.52, file: results/b1/gptoss__p1_test_rec.summary.json, key: [greedy, partial_pay_repaired], shown: ["0.52"]}
+      qwen_rec_partial_repaired: {value: 0.04, file: results/b1/qwen__p1_test_rec.summary.json, key: [greedy, partial_pay_repaired], shown: ["0.04"]}
     commit: null
 
   - id: R7
@@ -1463,6 +1467,7 @@ claims:
       expanse8b_delta: {value: 0.697, file: results/p5/p5_summary.json, key: ["expanse8b", "delta"], shown: ["+0.697"]}
       expanse8b_lo: {value: 0.667, file: results/p5/p5_summary.json, key: ["expanse8b", "ci95", 0], shown: ["+0.667"]}
       expanse8b_hi: {value: 0.727, file: results/p5/p5_summary.json, key: ["expanse8b", "ci95", 1], shown: ["+0.727"]}
+      water_wf4_dw: {value: 0.017, file: results/p5/p5_summary.json, key: [water, per_split, p1_test_wf4, dw], shown: ["0.017"]}
       global_base: {value: 0.01, file: results/p5/p5_summary.json, key: ["reference_tiny_aya_global", "global_base"], shown: ["0.01"]}
       global_dw: {value: 0.679, file: results/p5/p5_summary.json, key: ["reference_tiny_aya_global", "global_dw"], shown: ["0.679"]}
     commit: null
@@ -1491,6 +1496,8 @@ claims:
       str_ood_alias_dw: {value: 0.18, file: results/txn/compact_descriptive__txn_test.json, key: ["H4_STR", "Dw", "ood_alias", "ood"], shown: ["0.18"]}
       str_ood_workflow_d_s0: {value: 0.08, file: results/txn/compact_descriptive__txn_test.json, key: ["H4_STR", "D_s0", "ood_workflow", "ood"], shown: ["0.08"]}
       str_ood_alias_d_s0: {value: 0.30, file: results/txn/compact_descriptive__txn_test.json, key: ["H4_STR", "D_s0", "ood_alias", "ood"], shown: ["0.30"]}
+      str_ood_workflow_d_s0_3dp: {value: 0.083, file: results/txn/compact_descriptive__txn_test.json, key: [H4_STR, D_s0, ood_workflow, ood], shown: ["0.083"]}
+      urr_dwaug_s0_minus_dw: {value: 0.019, file: results/txn/compact_descriptive__txn_test.json, key: [pairs_descriptive, {a: Dwaug_s0, flag: urr}, diff], shown: ["+0.019"]}
     commit: null
 
 

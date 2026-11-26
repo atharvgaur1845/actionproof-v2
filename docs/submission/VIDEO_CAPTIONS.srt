@@ -10,7 +10,7 @@ the database holds no payment.
 
 3
 00:00:12,000 --> 00:00:20,000
-Same request, same reply, four possible realities.
+Same request, two possible replies, four possible realities.
 The agent has to tell them apart.
 
 4
@@ -36,22 +36,22 @@ it reads back, finds it, and does not pay again.
 8
 00:01:15,000 --> 00:01:25,000
 Registered P1, 450 frozen tasks, three seeds:
-0.513 to 0.772 with recovery demonstrations, 0.819 with GRPO on top.
+recovery-start agent 0.513, recovery SFT 0.772, recovery SFT then GRPO 0.819.
 
 9
 00:01:25,000 --> 00:01:35,000
-Against blind retry, duplicate mutations fall from 0.191 to 0.024.
-Fewer unnecessary retries is not shown, so that registered test fails.
+Duplicate mutations: 0.024 for the agent, 0.191 for bounded retry.
+Fewer unnecessary retries is not shown, so the registered family is not supported.
 
 10
 00:01:35,000 --> 00:01:45,000
-Randomised demonstrations lift renamed tools from 0.137 to 0.741,
+Before any RL, randomised demonstrations lift renamed tools from 0.137 to 0.741,
 and an unseen workflow from 0.268 to 0.842.
 
 11
 00:01:45,000 --> 00:01:58,000
 What did not work: when evidence cannot settle the outcome,
-the agent rarely escalates (0.050).
+the agent rarely escalates (15 of 540 cases).
 
 12
 00:01:58,000 --> 00:02:15,000

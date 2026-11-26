@@ -9,7 +9,7 @@ Source of truth for the slides and the video. Every number resolves through `cla
 
 **"ok". Did the payment happen?**
 
-Same request, same tool, same arguments, same reply, four hidden realities:
+Same request, same tool, same arguments; two replies, each hiding two realities:
 
 | The tool said | What the payment system actually did |
 |---|---|
@@ -27,7 +27,7 @@ ok + paid tasks. It fails exactly where the reply and the state disagree.
 
 ## 2. Why retrying is dangerous
 
-- After "timeout", a blind retry pays twice when the first payment did commit.
+- After "timeout", retrying without checking pays twice when the first payment did commit.
 - After "ok", trusting the reply reports a payment that never happened.
 - Checking only the final state cannot tell a repair from a duplicate.
 
@@ -44,11 +44,11 @@ ok + paid tasks. It fails exactly where the reply and the state disagree.
 
 **Intent → tool call → evidence → reconciliation → safe disposition → post-action verification.**
 
-- ProcureSim: a SQLite procurement world (order, receive, pay, post) with phantom, partial, duplicate, lost-ack,
-  late-commit, conflicting-log, concurrent and visibility-lag faults.
+- ProcureSim: a SQLite procurement world (order, receive, pay, post). Training faults: phantom, partial, duplicate,
+  lost-ack, timeout. The TXN test adds late-commit, conflicting-log, concurrent and visibility-lag faults.
 - A deterministic verifier reads the database; the agent can see it only through read tools. Every number is scored
   against the database, never the transcript.
-- The agent: Cohere Labs Tiny Aya Global (3.35B), recovery demonstrations (SFT, CuratorKIT-deduplicated), then GRPO
+- The agent: Cohere Labs Tiny Aya Global (3.35B), recovery demonstrations (SFT, CuratorKIT dedup run, 0 removed), then GRPO
   (AgentTune `TrlAgenticGrpo`).
 
 ---
@@ -63,27 +63,29 @@ ok + paid tasks. It fails exactly where the reply and the state disagree.
 | C: recovery SFT | 0.772 (+0.259) |
 | D: recovery SFT, then GRPO | 0.819 (+0.306) |
 
-**Registered TXN H3** (D vs blind retry and final-state checking, 320 in-distribution tasks, Holm over 4):
+**Registered TXN H3** (D vs scripted bounded retry with idempotency keys and final-state checking, 320 in-distribution tasks, Holm over 4):
 - duplicate mutations 0.024 vs 0.191 (B3) and 0.338 (B1): **both pass**;
 - unnecessary retries: **both fail** (Holm 0.123, 0.064), so the registered family is **not supported**.
 
 **Registered P4** (randomised demonstrations, 3 seeds per arm): renamed tools 0.137 → 0.741, unseen four-step
-workflow 0.268 → 0.842, no cost on the P1 test (+0.048).
+workflow 0.268 → 0.842, no cost on the P1 test (+0.048). These are **warm starts** (no GRPO), on one held-out surface
+and one new workflow; the RL agent D itself still fails on renamed tools (0.20).
 
 **Registered P5** (the recipe on four other Cohere bases): Tiny Aya Fire 0.018 → 0.686, Water 0.011 → 0.639,
-Earth 0.012 → 0.704, Aya Expanse 8B 0.076 → 0.772; all supported.
+Earth 0.012 → 0.704, Aya Expanse 8B 0.076 → 0.772; all supported (one SFT seed per model).
 
 ---
 
 ## 5. What did not work
 
-- **Escalation.** When evidence cannot settle the outcome, D escalates in 0.050 of cases (the scripted reference
+- **Escalation.** When evidence cannot settle the outcome, D escalates in 15 of 540 cases over three seeds (the scripted reference
   in 1.000). Escalation was never demonstrated in training.
 - **P3.** Removing the group standard deviation from GRPO (no-std, Dn): 0.813 vs 0.819, not supported.
 - **Transfer of the RL agents.** Randomising tool names during GRPO (SR1) did not help; healthcare transfer is
   negative (0.158 → 0.047).
 - **LLM judges** are not verifier-grade: the best judge with a database snapshot reaches 0.989, the committee 0.897.
-- **Frontier models without recovery training** (Qwen3-235B, gpt-oss-120b) repair no partial payment (0.000).
+- **Large open-weight models, prompted** (Qwen3-235B, gpt-oss-120b, greedy) complete none of the 90 partial-payment
+  tasks (0.000).
 
 ---
 
@@ -101,12 +103,13 @@ Earth 0.012 → 0.704, Aya Expanse 8B 0.076 → 0.772; all supported.
 ## Appendix
 
 - **A1. What GRPO adds after SFT** (R7, exploratory): D − Dw +0.140 [+0.120, +0.161]; 69 tasks improve by at least
-  0.5, none worsens. D's top remaining failure: false success on a goods receipt that never happened (266 of 976).
+  0.5, none worsens by 0.5 or more. D's most common false success: reporting a goods receipt it skipped (266 of 976,
+  260 of them on the unseen four-step workflow).
 - **A2. TXN per-model table**: D seed 0 0.724, Dn seed 0 0.717, Dw 0.598, W 0.445, Aya Expanse 32B 0.161.
 - **A3. H3 test table** with intervals: −0.167 [−0.271, −0.070], −0.314 [−0.454, −0.176], −0.027 [−0.067, +0.003],
   −0.095 [−0.199, −0.015].
 - **A4. P4 seeds**: renamed tools +0.612, +0.613, +0.587; workflow +0.545, +0.623, +0.553.
-- **A5. Frontier baselines per split** (`results/b1/`), greedy: Qwen3-235B full 0.383, gpt-oss-120b full 0.250.
+- **A5. Large open-weight baselines per split** (`results/b1/`), greedy: Qwen3-235B full 0.383, gpt-oss-120b full 0.250.
 - **A6. Earlier studies**: reward source (A12), selection not invention (ID1), recovery starts (S3), shifts (S4),
   theory (TH1, AD-C1), judges (J1), capability retention (R1).
 - **A7. Negative-results table**: `docs/submission/WRITEUP.md` §22.

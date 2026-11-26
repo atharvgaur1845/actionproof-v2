@@ -3,15 +3,15 @@
 **ActionProof trains and evaluates tool-using agents to reconcile transaction evidence and recover safely when acknowledgements do not reliably describe execution.**
 
 > **For judges: one minute.** A tool can answer "ok" to a payment that never happened, or time out on one that did. ActionProof is a simulated procurement environment (ProcureSim) in which the agent must tell committed, missing, partial and ambiguous outcomes apart, then choose verified completion, safe continuation, retry or escalation. Every number is scored against the database, never the transcript.
-> - **Registered P1** (450 frozen tasks, 3 seeds per arm): verified-success completion rises from 0.513 (recovery-start agent) to 0.772 with recovery SFT and 0.819 with recovery SFT then GRPO. The two arms are not nested, so their gap is not GRPO's contribution.
-> - **TXN benchmark** (locked, 440 tasks): an acknowledgement-trusting policy falsely completes on every task where the "ok" hides a phantom write. Against blind retry and final-state checking, the trained agent duplicates far fewer mutations (registered, both tests pass), but its fewer unnecessary retries are not established (both tests fail), so the registered H3 family is **not supported**.
-> - **Registered P4:** randomising the recovery demonstrations lifts the warm start on renamed tools from 0.137 to 0.741 and on an unseen four-step workflow from 0.268 to 0.842, with no cost on the P1 test.
-> - **Registered P5:** the same recovery-SFT recipe works on four other Cohere bases (Tiny Aya Fire, Water, Earth; Aya Expanse 8B): from at most 0.076 untrained to 0.639–0.772.
-> - **Limits we report:** when evidence cannot settle the outcome, the trained agent rarely escalates; healthcare transfer is negative; the no-std GRPO change (P3) is a null; an LLM judge cannot replace the verifier. This is transaction-aware recovery under ambiguous execution, not a new RL optimizer and not a claim of universal safety.
+> - **Registered P1** (450 frozen tasks, 3 seeds per arm): verified-success completion is 0.513 for the recovery-start agent (A), 0.772 with recovery SFT (C) and 0.819 for recovery SFT then GRPO (D). The two arms are not nested, so their gap is not GRPO's contribution.
+> - **TXN benchmark** (locked, 440 tasks): an acknowledgement-trusting policy falsely completes on every task where the "ok" hides a phantom write. Against scripted bounded retry with idempotency keys (B3) and final-state checking (B1), the trained agent duplicates mutations less often (registered, both tests pass); fewer unnecessary retries is not established (both tests fail), so the registered H3 family is **not supported**.
+> - **Registered P4:** randomising the recovery demonstrations lifts the **warm start** (no GRPO) on the tested renamed-tool surface from 0.137 to 0.741 and on an unseen four-step workflow from 0.268 to 0.842, with no cost on the P1 test. The RL agent D itself still fails there (renamed tools 0.20).
+> - **Registered P5:** the same recovery-SFT recipe raises four other Cohere bases (Tiny Aya Fire, Water, Earth; Aya Expanse 8B; one SFT seed each) from at most 0.076 untrained to 0.639–0.772.
+> - **Limits we report:** when evidence cannot settle the outcome, the trained agent rarely escalates; healthcare transfer is negative; the no-std GRPO change (P3) is not supported (slightly below D); an LLM judge cannot replace the verifier. This is transaction-aware recovery under ambiguous execution, not a new RL optimizer and not a claim of universal safety.
 >
 > Try it: [live Space](https://huggingface.co/spaces/atharvgaur18/actionproof-live) (a real model call per run) · [replay Space](https://huggingface.co/spaces/atharvgaur18/actionproof) (recorded episodes) · verify every number without a GPU: `bash scripts/verify_numbers.sh`.
 
-**Status (2026-11-26).** Canonical branch `submission-candidate`. Every number resolves through `claims/claims.yaml` (`python scripts/s2_numcheck.py`); every confirmatory result below names its registration, and every deviation is an addendum committed before the affected output existed.
+**Status (2026-11-27).** Canonical branch `submission-candidate`. Every number resolves through `claims/claims.yaml` (`python scripts/s2_numcheck.py`); every confirmatory result below names its registration, exploratory and descriptive results are labelled, and every deviation is an addendum.
 
 ## Headline results
 
@@ -24,13 +24,13 @@
 | C: recovery SFT | 0.772 | +0.259 [+0.231, +0.287] | 0.0003, supported |
 | D: recovery SFT, then the same GRPO | 0.819 | +0.306 [+0.276, +0.337] | 0.0003, supported |
 
-What GRPO adds after SFT (R7, exploratory, D against its own warm start): +0.140 [+0.120, +0.161] over 450 tasks; 69 tasks improve by at least 0.5 and 0 get worse. D's most common failure is a false success on a goods receipt that never happened (266 of 976 failed episodes).
+What GRPO adds after SFT (R7, exploratory, D against its own warm start): +0.140 [+0.120, +0.161] over 450 tasks; 69 tasks improve by at least 0.5 and none gets worse by 0.5 or more. D's most common false success (266 of 976 failed episodes, 260 of them on the unseen four-step workflow) is reporting a goods receipt it skipped: the procedure-replay failure.
 
 ### TXN: transaction integrity under ambiguous execution (registered, `PREREGISTRATION_TXN1.md` + addenda 1–2)
 
-The locked `txn_test` split holds 440 tasks: counterfactual quadruples (the same request, tool, arguments and "ok", with four hidden realities), eight fault classes, three evidence regimes and six OOD groups. Scripted baselines B0–B4 and ablations share tasks, tools, budgets and the evaluator with the trained and prompted models.
+The locked `txn_test` split holds 440 tasks: counterfactual quadruples (the same request, tool and arguments; two replies, "ok" and "timeout", each hiding a committed and an uncommitted outcome), eight fault classes, three evidence regimes and six OOD groups. Scripted baselines B0–B4 and ablations share tasks, tools, budgets and the evaluator with the trained and prompted models.
 
-| Agent (all episodes) | VTC | FCR |
+| Agent (descriptive; all episodes) | VTC | FCR |
 |---|---|---|
 | B0 acknowledgement-trusting | 0.136 | 0.864 |
 | B1 final-state only | 0.448 | 0.416 |
@@ -42,9 +42,9 @@ The locked `txn_test` split holds 440 tasks: counterfactual quadruples (the same
 | Dn seed 0 (no-std GRPO) | 0.717 | 0.127 |
 | Aya Expanse 32B (prompted) | 0.161 | 0.610 |
 | Qwen3-235B-A22B (prompted, greedy; supplementary) | 0.261 | 0.641 |
-| Dw_aug seed 0 (P4 warm start; descriptive) | 0.723 | 0.180 |
+| Dw_aug seeds 0 / 1 / 2 (P4 warm starts) | 0.723 / 0.683 / 0.686 | 0.180 / 0.245 / 0.236 |
 
-VTC: verified transaction completion. FCR: false-completion rate.
+VTC: verified transaction completion. FCR: false-completion rate. Scripted rows: one deterministic episode per task. Local models: one greedy plus two sampled episodes per task (T = 1). Qwen: one greedy episode per task.
 
 - **H1 (descriptive).** B0's FCR is 1.000 when the "ok" hides a phantom write and 0.000 when the "ok" is true: acknowledgement-following fails exactly where the acknowledgement and the state disagree.
 - **H3 (registered), D (3 seeds) vs B3 and B1, in-distribution tasks (n = 320, 48 template clusters), Holm over 4. Not supported as a family.**
@@ -57,11 +57,11 @@ VTC: verified transaction completion. FCR: false-completion rate.
   | Unnecessary retries vs B1 | 0.008 | 0.103 | −0.095 [−0.199, −0.015] | 0.064 | not supported |
 
   D's VTC is non-inferior in every test (+0.205 vs B3, +0.289 vs B1).
-- **H5 (descriptive), unresolvable evidence.** Escalation is the safe action there. D escalates correctly in 0.050 of cases and Dw in 0.022, with unsafe-action rates of 0.044 each. Aya Expanse 32B escalates more (0.222) but acts unsafely in 0.400. B4 escalates on all of them (1.000, unsafe 0.000). Escalation never appeared in the training demonstrations.
+- **H5 (descriptive), unresolvable evidence.** Escalation is the safe action there. D escalates correctly in 15 of 540 cases over its three seeds (seed 0: 9 of 180, 0.050) and acts unsafely in 14 of 540; Dw escalates in 4 of 180 (0.022). Aya Expanse 32B escalates more (0.222) but acts unsafely in 0.400. B4 escalates on all of them (1.000, unsafe 0.000). Escalation never appeared in the training demonstrations.
 
-### P4: randomised demonstrations fix procedure replay (registered, `PREREGISTRATION_P4.md`)
+### P4: randomised demonstrations remove procedure replay in the warm start (registered, `PREREGISTRATION_P4.md`)
 
-Dw_aug re-renders half of the recovery demonstrations on synonym tool surfaces (none shared with the held-out surface) and adds oracle demonstrations on five new step sequences (none is the test workflow). Three seeds per arm; sampled VSC; paired task bootstrap.
+Dw_aug re-renders half of the recovery demonstrations on synonym tool surfaces (none shared with the held-out surface) and adds oracle demonstrations on five new step sequences (none is the test workflow), so it has about 21% more rows than Dw. One held-out tool surface and one new workflow were tested. Three seeds per arm; sampled VSC; paired task bootstrap.
 
 | Test | Dw | Dw_aug | Difference [95% CI] | Seed differences | Result |
 |---|---|---|---|---|---|
@@ -69,13 +69,13 @@ Dw_aug re-renders half of the recovery demonstrations on synonym tool surfaces (
 | H2 unseen four-step workflow (160 tasks) | 0.268 | 0.842 | +0.574 [+0.536, +0.610] | +0.545, +0.623, +0.553 | supported |
 | H3 no canonical cost (P1 test, 450 tasks; bound > −0.03) | 0.666 | 0.714 | +0.048 [+0.026, +0.072] | +0.027, +0.027, +0.091 | supported |
 
-These are warm starts. GRPO was not run on top of Dw_aug, and the earlier attempt to randomise tool names during GRPO (SR1) failed.
+These are warm starts. GRPO was not run on top of Dw_aug, the earlier attempt to randomise tool names during GRPO (SR1) failed, and the RL agent D itself still scores 0.20 on the renamed tools.
 
-On the TXN benchmark, whose fault classes Dw_aug never saw in training, the gain carries over (descriptive): VTC +0.126, +0.085 and +0.089 over Dw across the three seeds. On TXN's unseen-workflow group, safe terminal resolution is 0.85 for Dw_aug seed 0 against 0.05 for Dw and 0.08 for D seed 0; on renamed tools, 0.60 against 0.18 and 0.30.
+On the TXN benchmark (descriptive), which keeps ProcureSim's training faults and adds four new ones (log conflict, late commit, concurrent write, visibility lag) plus an unresolvable regime, Dw_aug's VTC is above Dw's by +0.126, +0.085 and +0.089 across the three seeds. On TXN's unseen-workflow group, safe terminal resolution is 0.85 for Dw_aug seed 0 against 0.05 for Dw and 0.083 for D seed 0; on renamed tools, 0.60 against 0.18 and 0.30. The cost: Dw_aug never escalates on unresolvable evidence (0 of 180 in every seed), acts unsafely there more often than Dw (11, 24 and 18 of 180, against 8), and retries unnecessarily slightly more (seed 0: +0.019).
 
 ### P5: the recipe on four other Cohere bases (registered, `PREREGISTRATION_P5.md` + addendum 1)
 
-The same recovery-SFT data and settings (Dw) applied to other bases; sampled VSC on the 450-task P1 test; paired task bootstrap, Holm over the four models.
+The same recovery-SFT data and settings (Dw) applied to other bases; sampled VSC on the 450-task P1 test; paired task bootstrap, Holm over the four models. One SFT seed per model, so this is a task-level test with each model fixed.
 
 | Base model | Untrained | Recovery SFT | Difference [95% CI] | Result |
 |---|---|---|---|---|
@@ -84,7 +84,7 @@ The same recovery-SFT data and settings (Dw) applied to other bases; sampled VSC
 | Tiny Aya Earth | 0.012 | 0.704 | +0.693 [+0.662, +0.724] | supported |
 | Aya Expanse 8B | 0.076 | 0.772 | +0.697 [+0.667, +0.727] | supported |
 
-For reference, Tiny Aya Global: 0.01 untrained, 0.679 with the same recipe.
+For reference, Tiny Aya Global: 0.01 untrained, 0.679 with the same recipe (seed 0). The unseen four-step workflow stays hard: Tiny Aya Water reaches only 0.017 there.
 
 ### Supplementary baselines (B1 addendum 1; not Cohere models)
 
@@ -98,7 +98,7 @@ Greedy VSC on the frozen P1 test splits through HF Inference Providers (the P1 a
 | four-step workflow | 0.300 | 0.267 |
 | two-fault episodes | 0.067 | 0.067 |
 
-Frontier models without recovery training never repair a partial payment here.
+Two large open-weight models, prompted, greedy, with no recovery training and no prompt tuning (gpt-oss at low reasoning effort), complete none of the 90 partial-payment tasks. On fresh-recovery tasks gpt-oss repairs about half of the partial payments it meets (0.52) and Qwen almost none (0.04). Descriptive. These are greedy single runs, so they are not compared with the sampled P1 arms.
 
 ## Public release
 
@@ -110,14 +110,14 @@ Frontier models without recovery training never repair a partial payment here.
 | D adapters (seeds 0 to 2) and the Dw adapter | https://huggingface.co/atharvgaur18/actionproof-agent-d-adapters |
 | Recovery-SFT warm start Dw | https://huggingface.co/atharvgaur18/actionproof-warmstart-dw |
 | Reference agent A (recovery-start GRPO) | https://huggingface.co/atharvgaur18/actionproof-agent-a |
-| Dn, the no-std GRPO null result (P3), for reproducibility | https://huggingface.co/atharvgaur18/actionproof-agent-dn |
+| Dn, the no-std GRPO variant (P3, not supported), for reproducibility | https://huggingface.co/atharvgaur18/actionproof-agent-dn |
 | Dw_aug warm starts (P4, seeds 0 to 2) | https://huggingface.co/atharvgaur18/actionproof-warmstart-dwaug |
 | Episode traces, frozen splits, judge cases | https://huggingface.co/datasets/atharvgaur18/actionproof-traces |
 | Paper | `paper/main_v3.pdf` (source `paper/main_v3.tex`) |
 | Write-up | `docs/submission/WRITEUP.md` |
 | Code | https://github.com/atharvgaur1845/actionproof-v2 |
 
-All models are LoRA fine-tunes of `CohereLabs/tiny-aya-global` and carry CC-BY-NC-4.0: research use only, no production payments. Every result is on a simulator (ProcureSim). Arms C and D are not nested, P3 is a null result, and D itself does not generalise to renamed tools or to the four-step workflow (P4's fix is at the warm-start stage); each model card says so next to its numbers.
+All released models derive from `CohereLabs/tiny-aya-global` (D as a merged model, the rest as LoRA adapters) and carry CC-BY-NC-4.0: research use only, no production payments. P5's SFT models on four other Cohere bases are not released. Every result is on a simulator (ProcureSim). Arms C and D are not nested, P3 is not supported (Dn slightly below D), and D itself does not generalise to renamed tools or to the four-step workflow (P4's gain is at the warm-start stage); each model card says so next to its numbers.
 
 ### Verify the numbers without a GPU (about 10 minutes)
 
@@ -135,7 +135,7 @@ Checked against the code by import, not by intent.
 
 | Toolkit | What it does in the pipeline | Where |
 |---|---|---|
-| CuratorKIT | Exact and MinHash deduplication of the oracle recovery demonstrations before SFT (and of acknowledgement texts in Stage 1) | `actionproof/p1/build.py`, `actionproof/bench/naturalistic_acks.py` |
+| CuratorKIT | Exact and MinHash deduplication run on the 554 oracle recovery demonstrations before SFT (0 removed: the oracle episodes were already distinct) and on the Stage 1 acknowledgement corpus | `actionproof/p1/build.py`, `actionproof/bench/naturalistic_acks.py` |
 | AgentTune | The tool-call format: system-prompt block, schema builder and `extract_tool_calls_from_text` parser, shared by training and evaluation; `TrlAgenticGrpo` trains every GRPO agent (A, D, Dn) | `actionproof.rollout.episode._agenttune`, `scripts/p1_eval.py`, `actionproof/stage3/train.py`, `actionproof/p3/train_nostd.py` |
 | Deterministic verifier (ours) | Scores every episode against the database; the authority for all results | `actionproof/integrity/sim/truth.py` |
 | AuditKIT | `TaskCompletion` LLM-judge scores of the P1 episodes, secondary and descriptive; it never decides an outcome | `scripts/p1_auditkit.py`, `actionproof/eval/judge_audit.py` |
@@ -219,7 +219,7 @@ Stage 4 (`docs/research/`):
 
 - **Track:** 3, Agentic Fine-tuning.
 - **Toolkit chain:** AgentTune → AuditKIT, plus CuratorKIT.
-- **Models:** Cohere Tiny Aya Global (policy) and Aya Expanse 8B / 32B (teacher and judges).
+- **Models:** Cohere Tiny Aya Global (policy), Tiny Aya Fire / Water / Earth and Aya Expanse 8B (P5 recipe replication), Aya Expanse 8B / 32B (teacher, judges and prompted baselines).
 - **Novelty and related work:** `docs/research/novelty_scouts_2026-11-11.md`.
 - **Environment v2** (`PREREGISTRATION_A10_ADDENDUM.md`, `results/a10/v2_env.md`): scoped idempotency and timeouts before the commit. Existing results unchanged on the same tasks. In the stress test with timeouts before the commit, PCSTR-d scores 0.176 and the state reward 0.118 VSC against 0.71 for the tool-trusting agent (34 tasks, seed 0): they read, then report success without retrying.
 - **Latest amendments:** `PREREGISTRATION_A10.md` (strict metric SVC: state arms SVC = VSC, PCSTR-d − tool_trust +41.9 pp on SVC; dependency-aware reward, offline: H-A10c holds, H-A10d fails, `results/a10/`), `PREREGISTRATION_A9.md` (grounded judge audit, `results/judge/grounded_audit.md`; task 421 not run), and an independently implemented verifier (pre-registered metric specification, no shared verification code) that reproduces our VSC on all 4,000 confirmatory episodes, 400 tasks × 10 runs (`results/reference_verifier.md`; strict VSC not re-implemented). Before them, `PREREGISTRATION_A8.md` and its addenda. X1 and the placebo are **completed** (`results/a8/x1_readback.md`); seed 1 of the A7 state arm (task 415) reproduces seed 0. Addendum 2 (`PREREGISTRATION_A8_ADDENDUM2.md`, registered 2026-11-14 before either run): task 417 (state reward on the X1 pool) and task 418 (A7 ack reward, seed 1); both finished: the state reward on the X1 pool reads back 152/152, interaction +0.678 [0.605, 0.750] (`results/a8/x1_interaction.md`); the ack arm's seed 1 reads back 0/162 like seed 0. All three registered predictions met. Before it, `PREREGISTRATION_A7.md` (results in `results/eval/a6/`, `results/eval/a7/`, corrected forced-prefix battery `results/a7/battery_v2.md`). Every deviation is logged in `docs/SPEC.md` §27.

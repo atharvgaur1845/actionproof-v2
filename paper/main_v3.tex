@@ -47,8 +47,10 @@ We ran a registered held-out testbed of 731 random problems, trained with an ind
 The exact theory predicts GRPO's learned decision in 721 of 721 decided cells, with median error 0.0003 in the
 learned read probability. GRPO follows the vote, not the value, in 77 of 77 cells where the two disagree. In a 3.35B tool agent, all 800 logged groups per run share their fault plan. Re-weighting fixed
 rollouts at a 20$\times$ higher read cost changes GRPO's clean-group update by 7\%. Every std-normalised run moves in
-the direction of the vote estimated from its first 20 steps. In the registered five-seed comparison on 300 unseen tasks, Dr.~GRPO beats GRPO by $+0.120$ verified completion
-(Holm $p=0.016$); every GRPO seed reads zero times, and all seven pre-stated theory predictions hold.
+the direction of the vote estimated from its first 20 steps. In the registered five-seed comparison on 300 unseen tasks, removing the group std (Dr.~GRPO's advantage, with token-level aggregation kept) beats GRPO by $+0.120$ verified
+completion (Holm $p=0.016$); every GRPO seed reads zero times, and all seven predictions frozen for this comparison
+(T1--T7) hold. In the held-out testbed, 5 of 7 registered hypotheses hold. On a practical recovery agent, where reads
+are free, the same change gives no gain ($-0.007$).
 \end{abstract}
 
 \section{Introduction}
@@ -285,7 +287,7 @@ Reads are free in that environment, so per-state costs do not differ; this readi
 quadruples (same request and acknowledgement, four hidden outcomes), the trained agent duplicates fewer mutations
 than bounded retry and final-state checking ($-0.167$ [$-0.271$, $-0.070$] and $-0.314$ [$-0.454$, $-0.176$], Holm
 0.0012 and 0.0008), but the unnecessary-retry tests fail (Holm 0.123 and 0.064), so the registered family is not
-supported (\path{results/txn/stats__txn_test.json}). When evidence is unresolvable it rarely escalates (0.050).
+supported (\path{results/txn/stats__txn_test.json}). When evidence is unresolvable it rarely escalates (15 of 540 cases over three seeds).
 \item \textbf{Procedure replay (P4, registered).} Randomising the SFT demonstrations (synonym tool surfaces, extra
 step sequences) lifts the warm start on renamed tools from 0.137 to 0.741 and on an unseen four-step workflow from
 0.268 to 0.842, with $+0.048$ [$+0.026$, $+0.072$] on the canonical test (\path{results/p4/p4_summary.json}).
