@@ -1,0 +1,69 @@
+1
+00:00:00,000 --> 00:00:06,000
+The payment tool says ok.
+Did the payment happen?
+
+2
+00:00:06,000 --> 00:00:12,000
+Here, it did not:
+the database holds no payment.
+
+3
+00:00:12,000 --> 00:00:20,000
+Same request, same reply, four possible realities.
+The agent has to tell them apart.
+
+4
+00:00:20,000 --> 00:00:32,000
+An agent that trusts the reply falsely completes
+on every task where the ok hides a missing payment.
+
+5
+00:00:32,000 --> 00:00:45,000
+One that retries blindly pays twice
+when the first payment did go through.
+
+6
+00:00:45,000 --> 00:01:00,000
+The trained agent pays, reads the payment back,
+finds nothing, and pays again with the same key.
+
+7
+00:01:00,000 --> 00:01:15,000
+When the reply was a timeout but the payment committed,
+it reads back, finds it, and does not pay again.
+
+8
+00:01:15,000 --> 00:01:25,000
+Registered P1, 450 frozen tasks, three seeds:
+0.513 to 0.772 with recovery demonstrations, 0.819 with GRPO on top.
+
+9
+00:01:25,000 --> 00:01:35,000
+Against blind retry, duplicate mutations fall from 0.191 to 0.024.
+Fewer unnecessary retries is not shown, so that registered test fails.
+
+10
+00:01:35,000 --> 00:01:45,000
+Randomised demonstrations lift renamed tools from 0.137 to 0.741,
+and an unseen workflow from 0.268 to 0.842.
+
+11
+00:01:45,000 --> 00:01:58,000
+What did not work: when evidence cannot settle the outcome,
+the agent rarely escalates (0.050).
+
+12
+00:01:58,000 --> 00:02:15,000
+No-std GRPO did not help. Healthcare transfer is negative.
+LLM judges are not verifier-grade.
+
+13
+00:02:15,000 --> 00:02:30,000
+Models, traces, the live demo and the code are public.
+Every number has one file and one command.
+
+14
+00:02:30,000 --> 00:02:45,000
+ActionProof: transaction-aware recovery under ambiguous execution.
+Not a new RL optimizer, and not a claim of universal safety.
