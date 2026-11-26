@@ -1279,6 +1279,158 @@ claims:
       pp_dn: {value: 0.911, file: results/p3/p3_summary.json, key: [descriptive_per_split_sampled_vsc, p1_test_pp, Dn], shown: ["0.911"]}
     commit: null
 
+  - id: TXN1-H3
+    statement: "Registered TXN1 H3 (PREREGISTRATION_TXN1.md + addenda 1-2; scripts/txn_stats.py run once as task 1739): D (P1 arm D, seeds 0-2) vs B3 (bounded retry) and B1 (final-state only) on DMR and URR, in-distribution txn_test tasks (n=320, 48 template clusters), clustered bootstrap, Holm over 4. Not supported as a family: both DMR tests pass with VTC non-inferior; both URR tests fail."
+    status: not_supported
+    prereg: PREREGISTRATION_TXN1.md
+    deviations:
+      - "D-TXN1-1 (addendum 1): invariant checker counted a colleague's commit as an agent replay; corrected before any model output was read. results/txn/invariants_recheck__txn_test.json"
+      - "D-TXN1-2 (addendum 2): H3 bootstrap restricted to in-distribution tasks after 1739 asserted, before any H3 number existed."
+    eval: [results/txn/stats__txn_test.json]
+    stats: scripts/txn_stats.py
+    numbers:
+      dmr_b3_d: {value: 0.024, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 0, "d_rate"], shown: ["0.024"]}
+      dmr_b3_comp: {value: 0.191, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 0, "comp_rate"], shown: ["0.191"]}
+      dmr_b3_diff: {value: -0.167, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 0, "diff"], shown: ["-0.167", "−0.167", "0.167"]}
+      dmr_b3_lo: {value: -0.271, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 0, "ci95", 0], shown: ["-0.271", "−0.271", "0.271"]}
+      dmr_b3_hi: {value: -0.070, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 0, "ci95", 1], shown: ["-0.070", "−0.070", "0.070"]}
+      dmr_b3_pholm: {value: 0.0012, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 0, "p_holm"], shown: ["0.0012"]}
+      dmr_b3_vtc_diff: {value: 0.205, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 0, "vtc_diff", "diff"], shown: ["+0.205"]}
+      urr_b3_d: {value: 0.008, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 1, "d_rate"], shown: ["0.008"]}
+      urr_b3_comp: {value: 0.034, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 1, "comp_rate"], shown: ["0.034"]}
+      urr_b3_diff: {value: -0.027, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 1, "diff"], shown: ["-0.027", "−0.027", "0.027"]}
+      urr_b3_lo: {value: -0.067, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 1, "ci95", 0], shown: ["-0.067", "−0.067", "0.067"]}
+      urr_b3_hi: {value: 0.003, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 1, "ci95", 1], shown: ["+0.003"]}
+      urr_b3_pholm: {value: 0.123, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 1, "p_holm"], shown: ["0.123"]}
+      dmr_b1_d: {value: 0.024, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 2, "d_rate"], shown: ["0.024"]}
+      dmr_b1_comp: {value: 0.338, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 2, "comp_rate"], shown: ["0.338"]}
+      dmr_b1_diff: {value: -0.314, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 2, "diff"], shown: ["-0.314", "−0.314", "0.314"]}
+      dmr_b1_lo: {value: -0.454, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 2, "ci95", 0], shown: ["-0.454", "−0.454", "0.454"]}
+      dmr_b1_hi: {value: -0.176, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 2, "ci95", 1], shown: ["-0.176", "−0.176", "0.176"]}
+      dmr_b1_pholm: {value: 0.0008, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 2, "p_holm"], shown: ["0.0008"]}
+      dmr_b1_vtc_diff: {value: 0.289, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 2, "vtc_diff", "diff"], shown: ["+0.289"]}
+      urr_b1_d: {value: 0.008, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 3, "d_rate"], shown: ["0.008"]}
+      urr_b1_comp: {value: 0.103, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 3, "comp_rate"], shown: ["0.103"]}
+      urr_b1_diff: {value: -0.095, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 3, "diff"], shown: ["-0.095", "−0.095", "0.095"]}
+      urr_b1_lo: {value: -0.199, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 3, "ci95", 0], shown: ["-0.199", "−0.199", "0.199"]}
+      urr_b1_hi: {value: -0.015, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 3, "ci95", 1], shown: ["-0.015", "−0.015", "0.015"]}
+      urr_b1_pholm: {value: 0.064, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 3, "p_holm"], shown: ["0.064"]}
+    commit: null
+
+  - id: TXN-DESC
+    statement: "TXN benchmark, locked txn_test (440 tasks), descriptive per-agent metrics (all episodes) and H1 (B0 FCR per fault class) from the registered analysis output."
+    status: supported
+    prereg: PREREGISTRATION_TXN1.md
+    eval: [results/txn/stats__txn_test.json]
+    stats: scripts/txn_stats.py
+    numbers:
+      n_in: {value: 320, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 0, "n_tasks"], shown: ["320"]}
+      clusters: {value: 48, file: results/txn/stats__txn_test.json, key: ["H3", "tests", 0, "n_clusters"], shown: ["48"]}
+      vtc_b0: {value: 0.136, file: results/txn/stats__txn_test.json, key: ["models", "B0", "all", "VTC", "rate"], shown: ["0.136"]}
+      fcr_b0: {value: 0.864, file: results/txn/stats__txn_test.json, key: ["models", "B0", "all", "FCR", "rate"], shown: ["0.864"]}
+      vtc_b1: {value: 0.448, file: results/txn/stats__txn_test.json, key: ["models", "B1", "all", "VTC", "rate"], shown: ["0.448"]}
+      fcr_b1: {value: 0.416, file: results/txn/stats__txn_test.json, key: ["models", "B1", "all", "FCR", "rate"], shown: ["0.416"]}
+      vtc_b3: {value: 0.491, file: results/txn/stats__txn_test.json, key: ["models", "B3", "all", "VTC", "rate"], shown: ["0.491"]}
+      fcr_b3: {value: 0.509, file: results/txn/stats__txn_test.json, key: ["models", "B3", "all", "FCR", "rate"], shown: ["0.509"]}
+      vtc_b4: {value: 0.864, file: results/txn/stats__txn_test.json, key: ["models", "B4", "all", "VTC", "rate"], shown: ["0.864"]}
+      fcr_b4: {value: 0.000, file: results/txn/stats__txn_test.json, key: ["models", "B4", "all", "FCR", "rate"], shown: ["0.000"]}
+      vtc_w: {value: 0.445, file: results/txn/stats__txn_test.json, key: ["models", "W", "all", "VTC", "rate"], shown: ["0.445"]}
+      fcr_w: {value: 0.475, file: results/txn/stats__txn_test.json, key: ["models", "W", "all", "FCR", "rate"], shown: ["0.475"]}
+      vtc_dw: {value: 0.598, file: results/txn/stats__txn_test.json, key: ["models", "Dw", "all", "VTC", "rate"], shown: ["0.598"]}
+      fcr_dw: {value: 0.258, file: results/txn/stats__txn_test.json, key: ["models", "Dw", "all", "FCR", "rate"], shown: ["0.258"]}
+      vtc_d_s0: {value: 0.724, file: results/txn/stats__txn_test.json, key: ["models", "D_s0", "all", "VTC", "rate"], shown: ["0.724"]}
+      fcr_d_s0: {value: 0.121, file: results/txn/stats__txn_test.json, key: ["models", "D_s0", "all", "FCR", "rate"], shown: ["0.121"]}
+      vtc_dn_s0: {value: 0.717, file: results/txn/stats__txn_test.json, key: ["models", "Dn_s0", "all", "VTC", "rate"], shown: ["0.717"]}
+      fcr_dn_s0: {value: 0.127, file: results/txn/stats__txn_test.json, key: ["models", "Dn_s0", "all", "FCR", "rate"], shown: ["0.127"]}
+      vtc_aya32b_bf16: {value: 0.161, file: results/txn/stats__txn_test.json, key: ["models", "aya32b_bf16", "all", "VTC", "rate"], shown: ["0.161"]}
+      fcr_aya32b_bf16: {value: 0.610, file: results/txn/stats__txn_test.json, key: ["models", "aya32b_bf16", "all", "FCR", "rate"], shown: ["0.610"]}
+      b0_fcr_ok_phantom: {value: 1.000, file: results/txn/stats__txn_test.json, key: ["H1", "by_class", "quad:ok_phantom", "rate"], shown: ["1.000"]}
+      b0_fcr_ok_committed: {value: 0.000, file: results/txn/stats__txn_test.json, key: ["H1", "by_class", "quad:ok_committed", "rate"], shown: ["0.000"]}
+    commit: null
+
+  - id: TXN-H5
+    statement: "TXN1 H5 (descriptive): on the unresolvable regime the trained agents rarely escalate (D_s0 CER 0.050) but act unsafely rarely; Aya Expanse 32B escalates more and acts unsafely more; B4 always escalates."
+    status: supported
+    prereg: PREREGISTRATION_TXN1.md
+    eval: [results/txn/stats__txn_test.json]
+    numbers:
+      cer_d_s0: {value: 0.050, file: results/txn/stats__txn_test.json, key: ["H5", "per_model", "D_s0", "CER", "rate"], shown: ["0.050"]}
+      unsafe_d_s0: {value: 0.044, file: results/txn/stats__txn_test.json, key: ["H5", "per_model", "D_s0", "unsafe", "rate"], shown: ["0.044"]}
+      cer_aya32b_bf16: {value: 0.222, file: results/txn/stats__txn_test.json, key: ["H5", "per_model", "aya32b_bf16", "CER", "rate"], shown: ["0.222"]}
+      unsafe_aya32b_bf16: {value: 0.400, file: results/txn/stats__txn_test.json, key: ["H5", "per_model", "aya32b_bf16", "unsafe", "rate"], shown: ["0.400"]}
+      cer_b4: {value: 1.000, file: results/txn/stats__txn_test.json, key: ["H5", "per_model", "B4", "CER", "rate"], shown: ["1.000"]}
+      unsafe_b4: {value: 0.000, file: results/txn/stats__txn_test.json, key: ["H5", "per_model", "B4", "unsafe", "rate"], shown: ["0.000"]}
+      cer_dw: {value: 0.022, file: results/txn/stats__txn_test.json, key: ["H5", "per_model", "Dw", "CER", "rate"], shown: ["0.022"]}
+      unsafe_dw: {value: 0.044, file: results/txn/stats__txn_test.json, key: ["H5", "per_model", "Dw", "unsafe", "rate"], shown: ["0.044"]}
+    commit: null
+
+  - id: P4
+    statement: "Registered P4 (PREREGISTRATION_P4.md; scripts/p4_stats.py run once as task 1719): demonstration-level randomisation (Dw_aug, 3 seeds) vs Dw (3 seeds), sampled VSC, paired task bootstrap. H1 renamed tools (s4_api, 150 tasks) supported; H2 unseen four-step workflow (s4_wf4 + p1_test_wf4, 160 tasks) supported; H3 no canonical cost on the P1 test (450 tasks, lower bound > -0.03) supported."
+    status: supported
+    prereg: PREREGISTRATION_P4.md
+    eval: [results/p4/p4_summary.json]
+    stats: scripts/p4_stats.py
+    numbers:
+      h1_dw: {value: 0.137, file: results/p4/p4_summary.json, key: ["H1", "Dw"], shown: ["0.137"]}
+      h1_dwaug: {value: 0.741, file: results/p4/p4_summary.json, key: ["H1", "Dwaug"], shown: ["0.741"]}
+      h1_delta: {value: 0.604, file: results/p4/p4_summary.json, key: ["H1", "delta"], shown: ["+0.604"]}
+      h1_lo: {value: 0.540, file: results/p4/p4_summary.json, key: ["H1", "ci95", 0], shown: ["+0.540"]}
+      h1_hi: {value: 0.666, file: results/p4/p4_summary.json, key: ["H1", "ci95", 1], shown: ["+0.666"]}
+      h1_s0: {value: 0.612, file: results/p4/p4_summary.json, key: ["H1", "seed_deltas", 0], shown: ["+0.612"]}
+      h1_s1: {value: 0.613, file: results/p4/p4_summary.json, key: ["H1", "seed_deltas", 1], shown: ["+0.613"]}
+      h1_s2: {value: 0.587, file: results/p4/p4_summary.json, key: ["H1", "seed_deltas", 2], shown: ["+0.587"]}
+      h2_dw: {value: 0.268, file: results/p4/p4_summary.json, key: ["H2", "Dw"], shown: ["0.268"]}
+      h2_dwaug: {value: 0.842, file: results/p4/p4_summary.json, key: ["H2", "Dwaug"], shown: ["0.842"]}
+      h2_delta: {value: 0.574, file: results/p4/p4_summary.json, key: ["H2", "delta"], shown: ["+0.574"]}
+      h2_lo: {value: 0.536, file: results/p4/p4_summary.json, key: ["H2", "ci95", 0], shown: ["+0.536"]}
+      h2_hi: {value: 0.610, file: results/p4/p4_summary.json, key: ["H2", "ci95", 1], shown: ["+0.610"]}
+      h2_s0: {value: 0.545, file: results/p4/p4_summary.json, key: ["H2", "seed_deltas", 0], shown: ["+0.545"]}
+      h2_s1: {value: 0.623, file: results/p4/p4_summary.json, key: ["H2", "seed_deltas", 1], shown: ["+0.623"]}
+      h2_s2: {value: 0.553, file: results/p4/p4_summary.json, key: ["H2", "seed_deltas", 2], shown: ["+0.553"]}
+      h3_dw: {value: 0.666, file: results/p4/p4_summary.json, key: ["H3", "Dw"], shown: ["0.666"]}
+      h3_dwaug: {value: 0.714, file: results/p4/p4_summary.json, key: ["H3", "Dwaug"], shown: ["0.714"]}
+      h3_delta: {value: 0.048, file: results/p4/p4_summary.json, key: ["H3", "delta"], shown: ["+0.048"]}
+      h3_lo: {value: 0.026, file: results/p4/p4_summary.json, key: ["H3", "ci95", 0], shown: ["+0.026"]}
+      h3_hi: {value: 0.072, file: results/p4/p4_summary.json, key: ["H3", "ci95", 1], shown: ["+0.072"]}
+      h3_s0: {value: 0.027, file: results/p4/p4_summary.json, key: ["H3", "seed_deltas", 0], shown: ["+0.027"]}
+      h3_s1: {value: 0.027, file: results/p4/p4_summary.json, key: ["H3", "seed_deltas", 1], shown: ["+0.027"]}
+      h3_s2: {value: 0.091, file: results/p4/p4_summary.json, key: ["H3", "seed_deltas", 2], shown: ["+0.091"]}
+    commit: null
+
+  - id: B1-API
+    statement: "B1 addendum 1 (supplementary baselines, not Cohere): Qwen3-235B-A22B-Instruct and gpt-oss-120b through HF Inference Providers, greedy, on the frozen P1 test splits; per-split greedy VSC. Descriptive; API models are greedy while P1 arms are sampled."
+    status: supported
+    prereg: PREREGISTRATION_B1_ADDENDUM1.md
+    eval: [results/b1/api_cost.jsonl]
+    numbers:
+      qwen_full: {value: 0.383, file: results/b1/qwen__p1_test_full.summary.json, key: ["greedy", "vsc"], shown: ["0.383"]}
+      qwen_pp: {value: 0.000, file: results/b1/qwen__p1_test_pp.summary.json, key: ["greedy", "vsc"], shown: ["0.000"]}
+      qwen_rec: {value: 0.475, file: results/b1/qwen__p1_test_rec.summary.json, key: ["greedy", "vsc"], shown: ["0.475"]}
+      qwen_wf4: {value: 0.300, file: results/b1/qwen__p1_test_wf4.summary.json, key: ["greedy", "vsc"], shown: ["0.300"]}
+      qwen_combo: {value: 0.067, file: results/b1/qwen__p1_test_combo.summary.json, key: ["greedy", "vsc"], shown: ["0.067"]}
+      gptoss_full: {value: 0.250, file: results/b1/gptoss__p1_test_full.summary.json, key: ["greedy", "vsc"], shown: ["0.250"]}
+      gptoss_pp: {value: 0.000, file: results/b1/gptoss__p1_test_pp.summary.json, key: ["greedy", "vsc"], shown: ["0.000"]}
+      gptoss_rec: {value: 0.550, file: results/b1/gptoss__p1_test_rec.summary.json, key: ["greedy", "vsc"], shown: ["0.550"]}
+      gptoss_wf4: {value: 0.267, file: results/b1/gptoss__p1_test_wf4.summary.json, key: ["greedy", "vsc"], shown: ["0.267"]}
+      gptoss_combo: {value: 0.067, file: results/b1/gptoss__p1_test_combo.summary.json, key: ["greedy", "vsc"], shown: ["0.067"]}
+    commit: null
+
+  - id: R7
+    statement: "R7 (exploratory, after the 2x2 was known): what GRPO adds after SFT (Dw -> D) on the 450 P1 test tasks, and D's failure taxonomy."
+    status: supported
+    prereg: null
+    eval: [results/audit/r7_grpo_increment.json]
+    numbers:
+      delta: {value: 0.140, file: results/audit/r7_grpo_increment.json, key: ["transitions_Dw_to_D", "overall", "delta"], shown: ["+0.140"]}
+      lo: {value: 0.120, file: results/audit/r7_grpo_increment.json, key: ["transitions_Dw_to_D", "overall", "ci95", 0], shown: ["+0.120"]}
+      hi: {value: 0.161, file: results/audit/r7_grpo_increment.json, key: ["transitions_Dw_to_D", "overall", "ci95", 1], shown: ["+0.161"]}
+      improved: {value: 69, file: results/audit/r7_grpo_increment.json, key: ["transitions_Dw_to_D", "improved_ge_0.5"], shown: ["69"]}
+      worsened: {value: 0, file: results/audit/r7_grpo_increment.json, key: ["transitions_Dw_to_D", "worsened_ge_0.5"], shown: ["0"]}
+      fail_eps: {value: 976, file: results/audit/r7_grpo_increment.json, key: ["D_failure_taxonomy", "n_failed_sampled_episodes"], shown: ["976"]}
+      fs_receive_absent: {value: 266, file: results/audit/r7_grpo_increment.json, key: ["D_failure_taxonomy", "overall", "false_success:receive:ABSENT"], shown: ["266"]}
+    commit: null
+
+
 allow: ["0.95", "1.0", "2.0", "+0.05",  # paper v3: a stated pi threshold, cost and table parameters, Apache 2.0, a registered prediction bound
        "1,000", "10,000", "95%", "1e-4", "2e-5", "8,192", "2503.20783", "2508.11800", "62,892", "251,570", "87,180", "116,240", "2.0%", "0.90",  # write-up constants: sample sizes, hyperparameters, arXiv ids, task amounts, a cited survey range, a registered threshold
        "3.12", "2.11", "5.22", "1.7", "0.23", "0.8", "0.80", "0.30", "0.02", "0.5", "0.3"]  # 0.5, 0.3: registered H4 thresholds (PREREGISTRATION_A11 §9)

@@ -20,6 +20,26 @@ _spec = importlib.util.spec_from_file_location("p1_eval", ROOT / "scripts/p1_eva
 P1 = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(P1)
 
+# P5 addendum 1 (D-P5-1): P1's behaviour-metric helper collects idempotency keys in a set, so a model that passes the
+# key as a JSON object or list crashed the episode loop (tiny-aya-earth base, p1_test_full). The helper now sees a copy
+# of the trace in which such a key is replaced by its canonical JSON text; the stored trace, the episode, the verifier
+# and VSC are untouched, and hashable keys are passed through unchanged.
+_episode_metrics = P1.episode_metrics
+
+
+def _hashable_key(c: dict) -> dict:
+    k = c.get("args", {}).get("idempotency_key") if isinstance(c.get("args"), dict) else None
+    if k is None or isinstance(k, (str, int, float, bool)):
+        return c
+    return {**c, "args": {**c["args"], "idempotency_key": json.dumps(k, sort_keys=True, default=str)}}
+
+
+def episode_metrics(r: dict, n0: int) -> dict:
+    return _episode_metrics({**r, "trace": [_hashable_key(c) for c in r["trace"]]}, n0)
+
+
+P1.episode_metrics = episode_metrics
+
 
 def main() -> None:
     ap = argparse.ArgumentParser()
