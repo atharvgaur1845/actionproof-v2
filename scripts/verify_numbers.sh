@@ -5,7 +5,7 @@
 #   SKIP_DOWNLOAD=1 bash scripts/verify_numbers.sh # episode files are already under results/ (e.g. copied from the cluster)
 #
 # What it does
-#   1. downloads the episode files (results/{p1,p2,p3}/**/*.jsonl) of the dataset atharvgaur18/actionproof-traces into
+#   1. downloads the episode files (results/{p1,p2,p3,p4,p5,b1,txn}/**/*.jsonl) of the dataset atharvgaur18/actionproof-traces into
 #      results/. Only *.jsonl: the summaries stay the ones committed in git, so step 3 compares a recomputation against
 #      the committed values. The frozen task splits (data/bench/proc/) are already in the clone.
 #   2. reruns the registered analyses, in place:
@@ -13,6 +13,11 @@
 #        scripts/p2_stats.py           -> results/p2/p2_summary.json     (P2: coverage gate, then the contrasts)
 #        scripts/p3_stats.py           -> results/p3/p3_summary.json     (P3: Dn versus D)
 #        scripts/audit/dwarm_2x2.py    -> results/audit/dwarm_2x2.json   (exploratory W / A / Dw / D / Dn 2x2)
+#        scripts/p4_stats.py           -> results/p4/p4_summary.json     (P4: Dw_aug versus Dw)
+#        scripts/p5_stats.py           -> results/p5/p5_summary.json     (P5: recovery SFT on four other bases)
+#        scripts/txn_stats.py          -> results/txn/stats__txn_test.*  (TXN1, with the 25 tags of the registered run)
+#        scripts/txn_invariants_recheck.py -> results/txn/invariants_recheck__txn_test.json (TXN1 addendum 1)
+#        scripts/txn_stats.py + txn_compact.py -> results/txn/compact_descriptive__txn_test.json (descriptive, all tags)
 #      None of these refuses to overwrite its output, so they write over the committed file and git is the comparison.
 #      Every bootstrap uses a fixed seed (20261124 or 20261125) and numpy's PCG64, so a rerun is deterministic.
 #      p2_stats.py also writes results/p2/p2_coverage.json (untracked). It stops with exit code 2 if any required
@@ -20,7 +25,7 @@
 #   3. git diff --exit-code results/        (byte-identical to the committed results, else FAIL)
 #   4. python scripts/s2_numcheck.py        (every number in the paper, write-up and README resolves through claims/claims.yaml)
 #
-# Needs: python >= 3.10 with numpy, pyyaml and huggingface_hub (pip install numpy pyyaml huggingface_hub), and git.
+# Needs: python >= 3.10 with numpy, scipy, pyyaml and huggingface_hub (pip install numpy scipy pyyaml huggingface_hub), and git.
 # Runtime: roughly 10 minutes, almost all of it the download (about 2 GB of episode files). The four analyses take a
 # couple of minutes on one CPU core (they read the 2,250 episodes per model once each; p1_stats.py and p3_stats.py were
 # timed at a few seconds with the files in the page cache). Memory: under 4 GB.
@@ -42,9 +47,9 @@ if ! git diff --quiet -- results/; then
 fi
 "$PY" - <<'EOF'
 import importlib.util, sys
-missing = [m for m in ("numpy", "yaml") if importlib.util.find_spec(m) is None]
+missing = [m for m in ("numpy", "scipy", "yaml") if importlib.util.find_spec(m) is None]
 if missing:
-    sys.exit(f"missing python packages: {missing} (pip install numpy pyyaml huggingface_hub)")
+    sys.exit(f"missing python packages: {missing} (pip install numpy scipy pyyaml huggingface_hub)")
 EOF
 
 step "1. download episode files from $REPO"
@@ -55,7 +60,8 @@ else
 import os
 from huggingface_hub import snapshot_download
 snapshot_download(repo_id=os.environ["REPO"], repo_type="dataset", local_dir=".",
-                  allow_patterns=["results/p1/**/*.jsonl", "results/p2/**/*.jsonl", "results/p3/**/*.jsonl"],
+                  allow_patterns=["results/p1/**/*.jsonl", "results/p2/**/*.jsonl", "results/p3/**/*.jsonl",
+                                  "results/p4/*.jsonl", "results/p5/*.jsonl", "results/b1/*.jsonl", "results/txn/*.jsonl"],
                   ignore_patterns=["**/smoke/**"])
 EOF
 fi
@@ -75,6 +81,19 @@ analyse scripts/p1_stats.py
 analyse scripts/p2_stats.py
 analyse scripts/p3_stats.py
 analyse scripts/audit/dwarm_2x2.py
+analyse scripts/p4_stats.py
+analyse scripts/p5_stats.py
+# TXN1: the registered analysis saw exactly these 25 tags (results/txn/stats__txn_test.json "tags"); Dw_aug and qwen
+# were evaluated later and appear only in the descriptive rerun below.
+TXN_TAGS=A1,A2,A3,A4,A5,A6,A_s0,A_s1,A_s2,B0,B1,B2,B3,B4,D_s0,D_s1,D_s2,Dn_s0,Dn_s1,Dn_s2,Dw,W,aya32b_bf16,aya8b,tag_base
+"$PY" scripts/txn_stats.py --split txn_test --tags "$TXN_TAGS" >/dev/null || { echo "FAIL: txn_stats.py"; exit 1; }
+echo "scripts/txn_stats.py (registered tags) ok"
+"$PY" scripts/txn_invariants_recheck.py --split txn_test >/dev/null || { echo "FAIL: txn_invariants_recheck.py"; exit 1; }
+echo "scripts/txn_invariants_recheck.py ok"
+"$PY" scripts/txn_stats.py --split txn_test --out results/txn/stats_all_descriptive__txn_test.json \
+  --pairs Dwaug_s0:Dw,Dwaug_s1:Dw,Dwaug_s2:Dw >/dev/null || { echo "FAIL: txn_stats.py (descriptive)"; exit 1; }
+"$PY" scripts/txn_compact.py results/txn/stats_all_descriptive__txn_test.json results/txn/compact_descriptive__txn_test.json >/dev/null
+echo "TXN descriptive rerun ok"
 
 step "3. recomputed summaries versus the committed ones (git diff --exit-code results/)"
 if git diff --exit-code --stat -- results/; then

@@ -123,7 +123,7 @@ All models are LoRA fine-tunes of `CohereLabs/tiny-aya-global` and carry CC-BY-N
 
 ```bash
 git clone https://github.com/atharvgaur1845/actionproof-v2 && cd actionproof-v2
-pip install numpy pyyaml huggingface_hub
+pip install numpy scipy pyyaml huggingface_hub
 bash scripts/verify_numbers.sh
 ```
 
