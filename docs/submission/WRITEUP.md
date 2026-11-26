@@ -404,7 +404,7 @@ Command reference: `docs/stage2/COMMANDS.md`.
 
 ## 30. Declaration of work done outside the hackathon
 
-- **AUTHOR TO CONFIRM:** whether any part predates Nov 1, 2026.
+- No part of this work predates Nov 1, 2026 (confirmed by the author).
 - **Stage 1** (Nov 1–15): SupportSim, PCSTR rewards, A4–A11.
 - **Stage 2** (Nov 20–28): ProcureSim, A12–SR1, E1/E2, and this round's R1, J1, ROI and C5/G.
 - The toolkits are the hackathon's own repositories, vendored at the stated revisions.
