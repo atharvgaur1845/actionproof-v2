@@ -137,3 +137,29 @@
  $$(".agents button",box).forEach(b=>b.addEventListener("click",()=>{filt=b.dataset.f;$$(".agents button",box).forEach(x=>x.setAttribute("aria-pressed",x===b));fill()}));
  fill();
 })();
+
+/* ---------- 09T: TXN1 (data: S.upgrade.txn), P4 and B1 API (S.upgrade.p4, S.upgrade.b1api; scripts/site_upgrade.py) ---------- */
+(function(){const T=S.upgrade&&S.upgrade.txn;if(!T||T.status!=="done"||!document.getElementById("txn"))return;
+ document.getElementById("txn").hidden=false;
+ const pc=x=>x==null?"—":(x*100).toFixed(1)+"%",pp=x=>x==null?"—":(x>=0?"+":"−")+Math.abs(x*100).toFixed(1);
+ $("#u-txnq").innerHTML=`<tr><th>The tool said</th><th>What really happened</th><th>Trust-the-reply agent (B0) reports success falsely</th></tr>`+
+  T.quads.map(q=>`<tr><td><b>${esc(q.ack)}</b></td><td>${esc(q.truth)}</td><td class="${q.fcr>0.5?"dn":""}">${pc(q.fcr)}<small>${q.num} of ${q.den}</small></td></tr>`).join("");
+ $("#u-txna").innerHTML=`<tr><th>Agent</th><th>Verified transaction completion</th><th>False completion</th></tr>`+
+  T.agents.map(a=>`<tr><td>${esc(a.name)} <small>${esc(a.kind)}</small></td><td>${pc(a.vtc)}</td><td>${pc(a.fcr)}</td></tr>`).join("");
+ $("#u-txnh3").innerHTML=`<tr><th>Registered test H3: D (3 seeds) vs</th><th>Rate, D → comparator</th><th>Difference</th><th>Holm p</th><th>Verdict</th></tr>`+
+  T.tests.map(r=>`<tr><td><b>${esc(r.comparator)}</b> on ${esc(r.metric)}</td><td>${pc(r.d)} vs ${pc(r.comp)}</td><td class="${r.ci95[1]<0?"up":""}">${pp(r.diff)}<small>[${pp(r.ci95[0])}, ${pp(r.ci95[1])}] · completion ${pp(r.vtc_diff)}</small></td><td>${r.p_holm.toFixed(4)}</td><td>${r.supported?"<b>supported</b>":"not supported"}</td></tr>`).join("")+
+  `<tr><td colspan="5"><b>H3 as a family: ${T.supported?"supported":"not supported"}</b> (all four tests had to pass; ${T.n_in} in-distribution tasks in ${T.clusters} template clusters).</td></tr>`;
+ $("#u-txnh5").innerHTML=`<tr><th>No read can settle the outcome</th><th>Escalates (the safe action)</th><th>Acts unsafely</th></tr>`+
+  T.h5.map(r=>`<tr><td>${esc(r.name)}</td><td>${pc(r.cer)}</td><td class="${r.unsafe>0.1?"dn":""}">${pc(r.unsafe)}</td></tr>`).join("");
+ $("#u-txn-src").innerHTML=`Source: <b>${esc(T.source)}</b> · scripts/txn_stats.py (run once, task 1739) · clustered bootstrap B = 10,000, Holm over 4 · supported only if the interval excludes 0 in D's favour and completion is non-inferior (margin 0.05). Escalation never appeared in the training demonstrations.`})();
+(function(){const P=S.upgrade&&S.upgrade.p4;if(!P||P.status!=="done"||!document.getElementById("u-p4"))return;
+ document.getElementById("u-p4wrap").hidden=false;
+ const pc=x=>(x*100).toFixed(1)+"%",pp=x=>(x>=0?"+":"−")+Math.abs(x*100).toFixed(1);
+ $("#u-p4").innerHTML=`<tr><th>Registered test</th><th>Verified success, Dw → Dw_aug</th><th>Change</th><th>Verdict</th></tr>`+
+  P.rows.map(r=>`<tr><td><b>${r.id}</b> ${esc(r.name)}</td><td>${pc(r.dw)} → ${pc(r.dwaug)}</td><td class="${r.ci95[0]>0?"up":""}">${pp(r.delta)}<small>[${pp(r.ci95[0])}, ${pp(r.ci95[1])}] · seeds ${r.seed_deltas.map(pp).join(" ")}</small></td><td>${r.supported?"<b>supported</b>":"not supported"}</td></tr>`).join("");
+ $("#u-p4-src").innerHTML=`Source: <b>${esc(P.source)}</b> · scripts/p4_stats.py · H1, H2: Holm one-sided p < 0.05 and all three seed differences positive; H3: lower bound above −3 points. Randomising tool names during RL instead (SR1) did not help.`})();
+(function(){const B=S.upgrade&&S.upgrade.b1api;if(!B||B.status!=="done"||!document.getElementById("u-b1"))return;
+ document.getElementById("u-b1wrap").hidden=false;const pc=x=>x==null?"—":(x*100).toFixed(1)+"%";
+ $("#u-b1").innerHTML=`<tr><th>Model (greedy)</th>${B.splits.map(s=>`<th>${esc(s[1])}</th>`).join("")}</tr>`+
+  B.rows.map(r=>`<tr><td>${esc(r.name)}</td>${B.splits.map(s=>`<td>${pc(r.vsc[s[0]])}</td>`).join("")}</tr>`).join("");
+ $("#u-b1-src").innerHTML=`Source: <b>${esc(B.source)}</b> · scripts/b1_api_eval.py · hard spending stop in code; total cost in docs/stage2/HF_CREDITS.md.`})();

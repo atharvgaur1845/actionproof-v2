@@ -607,6 +607,29 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  <table class="wft rv" id="u-p3"></table>
  <div class="src pad" id="u-p3-src"></div>
  </div>
+ <div id="u-p4wrap" hidden>
+ <div class="kind pad rv" style="margin-top:40px"><span class="kb m">Measured</span><span>Follow-up P4, registered before training (<span class="mono">PREREGISTRATION_P4.md</span>). The trained agents replay the trained procedure: renamed tools and a new workflow step break them. <b>Dw_aug</b> randomises the <b>demonstrations</b> instead: half of the recovery episodes are rewritten with synonym tool names (none shared with the test names), plus demonstrations of five new step orders (none of them the test workflow). Warm starts only; no RL on top. Three seeds per arm.</span></div>
+ <table class="wft rv" id="u-p4"></table>
+ <div class="src pad" id="u-p4-src"></div>
+ </div>
+ <div id="u-b1wrap" hidden>
+ <div class="kind pad rv" style="margin-top:40px"><span class="kb m">Measured</span><span>Supplementary baselines (<span class="mono">PREREGISTRATION_B1_ADDENDUM1.md</span>): two large non-Cohere models through Hugging Face Inference Providers on the same 450 tasks, one greedy run per task (the trained arms above are sampled). No recovery training, no prompt tuning.</span></div>
+ <table class="wft rv" id="u-b1"></table>
+ <div class="src pad" id="u-b1-src"></div>
+ </div>
+</section>
+
+<!-- ============ 09T TRANSACTION BENCHMARK (TXN1) ============ -->
+<section id="txn" hidden>
+ <div class="shead rv"><div class="snum">09T</div><div><div class="cap">Transaction benchmark · registered experiment TXN1</div>
+  <h2 class="stitle">Same "ok", <span class="ser">four realities.</span></h2>
+  <p class="lede">A locked set of 440 tasks built around counterfactual quadruples: the same request, tool, arguments and reply, with four hidden outcomes. Eight fault classes, three evidence regimes (an authoritative read exists; reads are stale or disagree; no read exists) and six shifted groups. Scripted policies, trained agents and a prompted model get identical tasks, tools, budgets and evaluator.</p></div></div>
+ <div class="kind pad rv"><span class="kb m">Measured</span><span>Registered before any locked-test output (<span class="mono">PREREGISTRATION_TXN1.md</span>, two addenda committed before the affected output existed). Rates are over all episodes; the registered test resamples whole task templates.</span></div>
+ <table class="wft rv" id="u-txnq"></table>
+ <table class="wft rv" id="u-txna"></table>
+ <table class="wft rv" id="u-txnh3"></table>
+ <table class="wft rv" id="u-txnh5"></table>
+ <div class="src pad" id="u-txn-src"></div>
 </section>
 
 <!-- ============ 10 WHY THE UPDATE CANNOT SEE THE STAKES (theory) ============ -->

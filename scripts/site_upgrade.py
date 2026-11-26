@@ -211,6 +211,64 @@ def p3() -> dict:
     return out
 
 
+TXN_AGENTS = [("B0", "B0 trust the acknowledgement", "scripted"), ("B1", "B1 final state only", "scripted"),
+              ("B3", "B3 bounded retry + idempotency key", "scripted"), ("B4", "B4 reconcile the evidence", "scripted"),
+              ("W", "W plain SFT warm start", "trained"), ("Dw", "Dw recovery-SFT warm start", "trained"),
+              ("D_s0", "D seed 0 (recovery SFT + GRPO)", "trained"), ("Dn_s0", "Dn seed 0 (no-std GRPO)", "trained"),
+              ("aya32b_bf16", "Aya Expanse 32B (prompted)", "prompted")]
+QUADS = [("quad:ok_phantom", "ok", "nothing was paid"), ("quad:ok_committed", "ok", "paid"),
+         ("quad:timeout_committed", "timeout", "paid"), ("quad:timeout_uncommitted", "timeout", "nothing was paid")]
+H3_NAMES = {"dmr": "duplicate mutations", "urr": "unnecessary retries"}
+
+
+def txn() -> dict:
+    """TXN1 (registered): H1 by quadruple reality, per-agent VTC/FCR, the H3 family and H5, from the 1739 output."""
+    src = "results/txn/stats__txn_test.json"
+    d = _j(src)
+    if not d or "tests" not in d.get("H3", {}):
+        return {"status": "running", "source": src}
+    m = d["models"]
+    agents = [{"tag": t, "name": n, "kind": k, "vtc": _r(m[t]["all"]["VTC"]["rate"]), "fcr": _r(m[t]["all"]["FCR"]["rate"]),
+               "n": m[t]["all"]["n_episodes"]} for t, n, k in TXN_AGENTS if t in m]
+    quads = [{"ack": a, "truth": tr, "fcr": _r(d["H1"]["by_class"][c]["rate"]), "num": d["H1"]["by_class"][c]["num"],
+              "den": d["H1"]["by_class"][c]["den"]} for c, a, tr in QUADS if c in d["H1"]["by_class"]]
+    tests = [{"metric": H3_NAMES[r["metric"]], "comparator": r["comparator"], "d": _r(r["d_rate"]), "comp": _r(r["comp_rate"]),
+              "diff": _r(r["diff"]), "ci95": [_r(c) for c in r["ci95"]], "p_holm": _r(r["p_holm"]),
+              "vtc_diff": _r(r["vtc_diff"]["diff"]), "supported": r["supported"]} for r in d["H3"]["tests"]]
+    h5 = d["H5"]["per_model"]
+    esc = [{"tag": t, "name": n, "cer": _r(h5[t]["CER"]["rate"]), "unsafe": _r(h5[t]["unsafe"]["rate"])}
+           for t, n, _ in TXN_AGENTS if t in h5 and t in ("B4", "Dw", "D_s0", "aya32b_bf16")]
+    return {"status": "done", "source": src, "n_tasks": 440, "agents": agents, "quads": quads, "tests": tests,
+            "n_in": d["H3"]["tests"][0]["n_tasks"], "clusters": d["H3"]["tests"][0]["n_clusters"],
+            "supported": d["H3"]["supported"], "h5": esc}
+
+
+def p4() -> dict:
+    """P4 (registered): Dw_aug vs Dw on renamed tools, the unseen four-step workflow and the canonical P1 test."""
+    src = "results/p4/p4_summary.json"
+    d = _j(src)
+    if not d or "H1" not in d:
+        return {"status": "running", "source": src}
+    names = {"H1": "Renamed tools (150 tasks)", "H2": "Unseen four-step workflow (160 tasks)",
+             "H3": "Canonical P1 test, no cost (450 tasks)"}
+    return {"status": "done", "source": src, "rows": [
+        {"id": h, "name": names[h], "dw": _r(d[h]["Dw"]), "dwaug": _r(d[h]["Dwaug"]), "delta": _r(d[h]["delta"]),
+         "ci95": [_r(c) for c in d[h]["ci95"]], "seed_deltas": [_r(x) for x in d[h]["seed_deltas"]],
+         "supported": d[h]["supported"]} for h in ("H1", "H2", "H3")]}
+
+
+def b1api() -> dict:
+    """B1 addendum 1 (supplementary, greedy): frontier models on the frozen P1 test splits."""
+    rows, splits = [], [("p1_test_full", "full episodes"), ("p1_test_pp", "partial payments"),
+                        ("p1_test_rec", "fresh recovery"), ("p1_test_wf4", "four-step workflow"),
+                        ("p1_test_combo", "two faults")]
+    for tag, name in (("qwen", "Qwen3-235B-A22B"), ("gptoss", "gpt-oss-120b")):
+        v = {sp: (_j(f"results/b1/{tag}__{sp}.summary.json") or {}).get("greedy", {}).get("vsc") for sp, _ in splits}
+        if any(x is not None for x in v.values()):
+            rows.append({"name": name, "vsc": {sp: _r(x) for sp, x in v.items()}})
+    return {"status": "done" if rows else "running", "source": "results/b1/", "splits": splits, "rows": rows}
+
+
 def theory() -> dict:
     """Section 10: exact-theory curves and the registered TH1 estimator comparison (results/theory/site_theory.json)."""
     src = "results/theory/site_theory.json"
@@ -228,7 +286,8 @@ def theory() -> dict:
 
 
 def build() -> dict:
-    return {"r1": r1(), "r1t": r1t(), "j1": j1(), "roi": roi(), "p1": p1(), "p2": p2(), "p3": p3(), "theory": theory()}
+    return {"r1": r1(), "r1t": r1t(), "j1": j1(), "roi": roi(), "p1": p1(), "p2": p2(), "p3": p3(), "theory": theory(),
+            "txn": txn(), "p4": p4(), "b1api": b1api()}
 
 
 if __name__ == "__main__":
