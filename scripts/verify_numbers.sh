@@ -88,12 +88,45 @@ analyse scripts/p5_stats.py
 TXN_TAGS=A1,A2,A3,A4,A5,A6,A_s0,A_s1,A_s2,B0,B1,B2,B3,B4,D_s0,D_s1,D_s2,Dn_s0,Dn_s1,Dn_s2,Dw,W,aya32b_bf16,aya8b,tag_base
 "$PY" scripts/txn_stats.py --split txn_test --tags "$TXN_TAGS" >/dev/null || { echo "FAIL: txn_stats.py"; exit 1; }
 echo "scripts/txn_stats.py (registered tags) ok"
-"$PY" scripts/txn_invariants_recheck.py --split txn_test >/dev/null || { echo "FAIL: txn_invariants_recheck.py"; exit 1; }
+# The recheck reads every *__txn_test.jsonl in --res-dir; give it only the registered tags.
+REG=$(mktemp -d)
+for t in ${TXN_TAGS//,/ }; do ln -s "$PWD/results/txn/${t}__txn_test.jsonl" "$REG/"; done
+"$PY" scripts/txn_invariants_recheck.py --split txn_test --res-dir "$REG" >/dev/null || { echo "FAIL: txn_invariants_recheck.py"; exit 1; }
+cp "$REG/invariants_recheck__txn_test.json" results/txn/ && rm -rf "$REG"
 echo "scripts/txn_invariants_recheck.py ok"
 "$PY" scripts/txn_stats.py --split txn_test --out results/txn/stats_all_descriptive__txn_test.json \
   --pairs Dwaug_s0:Dw,Dwaug_s1:Dw,Dwaug_s2:Dw >/dev/null || { echo "FAIL: txn_stats.py (descriptive)"; exit 1; }
 "$PY" scripts/txn_compact.py results/txn/stats_all_descriptive__txn_test.json results/txn/compact_descriptive__txn_test.json >/dev/null
 echo "TXN descriptive rerun ok"
+# txn_stats.py averages over a Python set of task ids, so its float sums depend on the per-process string-hash
+# order and can differ in the last bit between runs (seen: 0.023958333333333335 vs 0.02395833333333333). Compare
+# its two JSON outputs to the committed ones within 1e-9 relative, then restore the committed bytes so that step 3
+# stays exact for every other file. The Markdown report (3-4 decimals) is compared exactly in step 3.
+"$PY" - <<'PYEOF' || { echo "FAIL: TXN outputs differ beyond float noise"; exit 1; }
+import json, math, subprocess, sys
+def close(a, b):
+    if isinstance(a, float) or isinstance(b, float):
+        return math.isclose(a, b, rel_tol=1e-9, abs_tol=1e-12)
+    if isinstance(a, dict):
+        return a.keys() == b.keys() and all(close(a[k], b[k]) for k in a)
+    if isinstance(a, list):
+        return len(a) == len(b) and all(close(x, y) for x, y in zip(a, b))
+    return a == b
+def drop_desc_p(d):
+    # Descriptive pairs only (cited nowhere): a bootstrap mean that lands exactly on 0 can flip side with the
+    # last-bit noise above, moving p_boot by a resample or two (seen: 0.01720 vs 0.01740). diff and ci95 stay checked.
+    for r in d.get("pairs_descriptive", []):
+        r.pop("p_boot", None)
+    return d
+bad = []
+for f in ("results/txn/stats__txn_test.json", "results/txn/compact_descriptive__txn_test.json"):
+    old = json.loads(subprocess.check_output(["git", "show", f"HEAD:{f}"], text=True))
+    if not close(drop_desc_p(old), drop_desc_p(json.load(open(f)))):
+        bad.append(f)
+print("TXN JSON outputs: equal up to float noise" if not bad else f"real differences in {bad}")
+sys.exit(1 if bad else 0)
+PYEOF
+git checkout -- results/txn/stats__txn_test.json results/txn/compact_descriptive__txn_test.json
 
 step "3. recomputed summaries versus the committed ones (git diff --exit-code results/)"
 if git diff --exit-code --stat -- results/; then
