@@ -34,9 +34,12 @@ def main() -> None:
     if a.check:
         reg = json.loads(ref.read_text())
         want = {**reg["files"], **reg.get("data", {})}
-        bad = [f for f in want if not (ROOT / f).exists() or h(f) != want[f]]
-        print("OK: SEL1 matches the registration" if not bad else "MISMATCH: " + ", ".join(bad))
-        sys.exit(1 if bad else 0)
+        absent = [f for f in want if not (ROOT / f).exists()]
+        bad = [f for f in want if f not in absent and h(f) != want[f]]
+        if absent:  # the training rows (about 61 MB each) are in the traces dataset, not in git
+            print("ABSENT locally (download from atharvgaur18/actionproof-traces, then re-check): " + ", ".join(absent))
+        print("OK: every present SEL1 file matches the registration" if not bad else "MISMATCH: " + ", ".join(bad))
+        sys.exit(1 if bad or absent else 0)
     if a.add_data:
         reg = json.loads(ref.read_text())
         if reg.get("data"):
