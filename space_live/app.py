@@ -6,8 +6,23 @@ import os
 import tempfile
 import threading
 
-import gradio as gr
-import spaces
+import huggingface_hub
+
+if not hasattr(huggingface_hub, "HfFolder"):  # gradio 4.44.1 imports HfFolder, which huggingface_hub 1.x removed
+    class HfFolder:  # minimal shim: gradio's oauth module only reads or clears the stored token
+        get_token = staticmethod(huggingface_hub.get_token)
+
+        @staticmethod
+        def save_token(token: str) -> None:
+            huggingface_hub.login(token=token, add_to_git_credential=False)
+
+        @staticmethod
+        def delete_token() -> None:
+            huggingface_hub.logout()
+    huggingface_hub.HfFolder = HfFolder
+
+import gradio as gr  # noqa: E402
+import spaces  # noqa: E402
 
 import core
 from core import AGENTS, MODELS, REALITIES, REPLAY_URL, SESSION_CAP, run_session, task_choices
@@ -86,6 +101,12 @@ class HFGenerator:
 
 
 _GENS = {k: HFGenerator(repo) for k, repo in MODELS.items()}
+try:
+    import transformers as _tf
+    print(f"versions: gradio {gr.__version__}, huggingface_hub {huggingface_hub.__version__}, transformers {_tf.__version__}",
+          flush=True)
+except Exception as _e:  # diagnostics only
+    print("versions: unavailable", _e, flush=True)
 
 
 @spaces.GPU(duration=120)

@@ -1,41 +1,82 @@
-# ActionProof: what reinforcement learning teaches tool agents when "ok" does not mean it happened
+# ActionProof: training small agents to reconcile transactions when "ok" does not mean it happened
 
-**One-line claim.** ActionProof trains and evaluates tool-using agents to reconcile transaction evidence and recover safely when acknowledgements do not reliably describe execution.
+**One-line claim.** On a locked benchmark where identical "ok" and "timeout" replies hide committed and uncommitted
+payments:
+- recovery demonstrations followed by GRPO raise a 3.35B Cohere agent from 0.513 to 0.819 verified completion on 450
+  frozen tasks;
+- it duplicates mutations far less often than bounded retry with idempotency keys (0.024 against 0.191);
+- but it rarely hands off when the evidence cannot settle the outcome;
+- everything is in a procurement simulator.
 
-**Earlier finding that motivated it.** When a write tool's success reply cannot prove the write happened, a reward that reads the database makes a tool agent check its writes, and a reward that reads the reply does not (5 of 5 paired seeds). Checking, however, is not yet recovering, and a few hand-written checks still beat every trained agent we built.
+**Story, in short** (`docs/submission/FINAL_STORY_DECISION.md`).
+- **The spine:** the TXN benchmark and the trained recovery agent.
+- **Supporting findings:** selective escalation (SEL1, registered in this round) and the reward's information source
+  (Stage 2, §2).
+- **Separate claim:** the group-normalisation theory is a companion paper (`paper/main_v3.pdf`).
 
 | | |
 |---|---|
 | Track | Track 3: agentic fine-tuning (problem statement 9: Measure → Understand → Fix) |
 | Team | Atharv Gaur (BITS Pilani); author contributions in §31 |
-| Base model | Tiny Aya Global, 3.35B (CohereLabs, CC-BY-NC-4.0) |
-| Method in one line | LoRA SFT warm start, then GRPO (AgentTune `TrlAgenticGrpo`) on ProcureSim, a SQLite procurement world with silent write faults; rewards: database-state (R_V) vs acknowledgement (R_A); recovery-start curriculum |
-| Code, models, data | GitHub `atharvgaur1845/actionproof-v2`; HF collection `atharvgaur18/actionproof-procurement-study-6b0321cd11bad297aead6e81` (30 adapters, splits, traces); site https://atharvgaur18-actionproof.static.hf.space/index.html |
+| Base model | Tiny Aya Global, 3.35B (CohereLabs, CC-BY-NC-4.0); the recipe is also replicated on Tiny Aya Fire, Water, Earth and Aya Expanse 8B (P5) |
+| Method in one line | Recovery demonstrations (LoRA SFT) built by scripted reconciliation, then GRPO (AgentTune `TrlAgenticGrpo`) with a database-state reward, in ProcureSim, a SQLite procurement world with silent write faults; evaluated on the locked TXN benchmark |
+| Code, models, data | GitHub `atharvgaur1845/actionproof-v2`; models `atharvgaur18/actionproof-agent-d` and siblings; traces `atharvgaur18/actionproof-traces`; live Space `atharvgaur18/actionproof-live`; every artefact with its revision in `release/ARTIFACT_MANIFEST.json` |
 
 ---
 
 ## 1. Abstract (under 500 words)
 
-Tool-using agents increasingly write to systems of record: payments, goods receipts, journal entries. A write tool's reply ("ok") is usually treated as proof that the write happened. We built **ProcureSim**, a SQLite procurement environment in which the success reply is **byte-identical** whether the write stored everything, part of it, two copies, or nothing. A deterministic verifier reads the authoritative database, which the agent can query only through read tools.
+**The problem.** Tool-using agents increasingly write to systems of record: payments, goods receipts, journal
+entries. A write tool's reply is usually treated as proof that the write happened, yet the same "ok" can come back
+when nothing was stored, and a "timeout" can come back when the payment committed.
 
-**Same model, one change.** We trained Tiny Aya Global (3.35B) with GRPO from the same supervised warm start, changing only the reward's information source:
-- The state reward, which reads the database, produced read-back after every phantom write in all five seeds (1.00; idempotency-store replies, where nothing reached the database, are not counted).
-- The acknowledgement reward produced read-back in none (0.00).
-- Verified completion rose by +0.27 to +0.32 per seed.
-- A warm start that never reads stayed at zero reads under the same reward (ID1). No read was ever sampled during training, so the reward had nothing to reinforce. So the reward *selects* checking that the starting model already samples; within 200 steps from this warm start it did not create it.
+**The benchmark.** We built ProcureSim, a SQLite procurement world, and on it a locked benchmark (TXN, 440 tasks):
+- counterfactual quadruples: the same request, tool and arguments; two replies; each hiding a committed and an
+  uncommitted outcome;
+- eight fault classes, three evidence regimes and six out-of-distribution groups;
+- a deterministic verifier that reads the database, never the transcript.
 
-**Checking is not recovering.** Agents that read a partial payment then posted the journal entry anyway. Training from faulted states (a recovery-start curriculum, a known technique) raised verified completion by +0.21 over the state-reward agent in five of five runs. Against a control trained on the same faults, the start-state effect held on recovery starts across five runs per arm (Holm p = 0.036). A partial-payment-specific effect was not established.
+**Scripted baselines.** An acknowledgement-trusting policy falsely completes on 1.000 of ok-but-nothing tasks and
+0.000 of ok-and-paid ones. Bounded retry with idempotency keys reaches only 0.491 verified completion. A hand-written
+reconciliation reference reaches 0.864.
 
-**The gains held** under Hindi, Hinglish and two-fault episodes. **They failed** under renamed tools and a new workflow step, where agents replay the trained procedure. Randomising tool names during GRPO did not help (+0.00) and cost a quarter of canonical performance; randomising the SFT demonstrations instead (P4, below) does remove the failure in the warm start, though not in the RL agent D. Our own counterfactual credit method (FCA) failed its pre-set test.
+**Training (registered P1, 450 frozen tasks, three seeds per arm, Tiny Aya Global 3.35B).**
+- Recovery demonstrations raise sampled verified completion from 0.513 (a recovery-start GRPO agent) to 0.772 (C).
+- Recovery demonstrations followed by GRPO reach 0.819 (D). The two arms are not nested, so their gap is not GRPO's
+  contribution.
 
-**New in this round:**
-1. Capability retention on BFCL and IFEval, registered before any output (R1): the GRPO arms tested (state reward, recovery start) are non-inferior to their warm start within 0.03 on both benchmarks (all four Holm p < 0.001). τ-bench drops slightly after SFT (−0.020), and R1 did not test the P1–P5 agents.
-2. A four-family LLM judge committee measured against the database (J1). Told that "ok" is not proof, judges abstain rather than accept unverifiable failures, so they cannot certify outcomes. Without that one sentence, three of four judges accept nearly all of them (exploratory). With a database snapshot, Qwen and DeepSeek reach only 0.889 and 0.886 accuracy, and majority voting (0.897) does not beat the best single judge (0.989).
-3. **A practical recovery agent (P1, registered, frozen test of 450 fresh tasks).** Recovery demonstrations followed by the same GRPO (D) raise sampled verified completion from 0.513 to 0.819 (+0.306 [+0.276, +0.337], all three seeds). Recovery SFT alone (C) reaches 0.772. On partial payments D reaches 0.931 against 0.319. A reconciliation line added at inference (B) hurts (−0.030). An unseen workflow stays hard (D 0.486).
-4. **Ledger and guard (P2, registered, same frozen test).** Neither helps. A structured ledger shown at inference lowers the recovery-start agent to 0.253, and training on it (E, 0.782) does not beat D. A deterministic action guard removes false successes (702 of 5,400 sampled episodes for E, against one with the guard), but it blocks the registered repair itself: replayed through the guard, the scripted oracle would be blocked on 90 of 90 partial-payment tasks. Blocked agents rarely recover, so the guard lowers every arm. The scripted oracle (0.924) still beats the best trained agent (D, 0.819).
-5. A cost model built from measured per-fault outcome rates. Recovery-start GRPO cuts projected losses from $10,261 to $2,106 per 1,000 workflows against the untrained agent (moderate scenario), but hand-written read-back-and-repair checks beat every trained agent. So we present ActionProof as fault-injection testing plus runtime verification, with training as a second line.
+**On TXN.**
+- D duplicates mutations less often than bounded retry with idempotency keys (0.024 against 0.191) and than
+  final-state checking (registered; both tests pass).
+- Fewer unnecessary retries is not established, so the registered H3 family is not supported.
 
-Every confirmatory test was registered and hashed before its outcome existed; exploratory and development analyses are labelled as such. A checker re-reads every reported number from its result file. The final-round results (TXN, P4, P5) are in §1a.
+**Generalisation.**
+- Randomising the demonstrations (P4) removes procedure replay in the warm start: renamed tools 0.137 → 0.741, an
+  unseen four-step workflow 0.268 → 0.842, no cost on the P1 test.
+- The RL agent D itself still scores 0.20 on renamed tools.
+- The same recipe lifts four other Cohere bases (P5, one SFT seed each) from at most 0.076 to 0.639–0.772.
+
+**What fails.**
+- When the evidence cannot settle a write's outcome, D escalates in only 15 of 540 cases.
+- The scripted reference still beats every learned agent.
+- No-std GRPO (P3) is not supported.
+- Healthcare transfer is negative.
+- LLM judges are not verifier-grade.
+
+**SEL1.** It was registered in this round before any training. It tests whether outage demonstrations teach
+*selective* hand-off on a sealed split: hand off when the outcome is irreducibly unobservable, re-read through a
+transient outage. It is measured against a matched-volume control and against always-escalate references (§1a).
+
+**The reward's information source** (Stage 2, registered). A database reward makes read-back the default in 5 of 5
+seeds where an acknowledgement reward of identical form never does. From a warm start that never reads, nothing
+changes. The reward selects checking; it does not create it.
+
+**Impact.**
+- A projection from TXN's measured rates puts trusting the reply at about ten times the trained agent's projected
+  exposure.
+- Hand-written reconciliation checks remove most of the rest. The practical answer is both.
+- Every confirmatory test was registered and hashed before its outcome existed.
+- A checker re-reads every reported number from its result file.
 
 ## 1a. Final-round results (Nov 25–28; all registered before any output unless labelled)
 
