@@ -7,7 +7,7 @@
 <div class="qcard bad"><p class="chip">pay_supplier → “timeout”</p><h3>Paid anyway (the reply was lost)</h3><p class="mut">Retry without checking: the supplier is paid twice.</p></div>
 <div class="qcard"><p class="chip">pay_supplier → “timeout”</p><h3>Nothing was paid</h3><p class="mut">Retrying is right.</p></div>
 </div>
-<p class="kicker">Same request, same tool, same arguments, same reply. An agent that trusts the reply falsely completes on 1.000 of “ok”-but-nothing tasks and on 0.000 of “ok”-and-paid ones.</p>
+<p class="kicker">Same request, same tool, same arguments: two replies, four realities. An agent that trusts the reply falsely completes on 1.000 of “ok”-but-nothing tasks and on 0.000 of “ok”-and-paid ones.</p>
 <p class="footer">Locked TXN benchmark, 440 tasks (PREREGISTRATION_TXN1.md). All tools simulated (ProcureSim); no real payments.</p>
 <aside>Open on the concrete failure. A payment tool answers ok, or times out. The reply is byte-identical across two different realities, so nothing in the transcript tells the agent what happened. An agent that believes the reply is wrong exactly where the reply and the database disagree: every ok-but-nothing task, and none of the ok-and-paid ones. That single fact is the whole problem.</aside>
 </section>

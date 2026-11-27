@@ -20,7 +20,7 @@ slide = 1,493,182 here).
 | timeout | paid (the acknowledgement was lost) | retrying without checking pays twice |
 | timeout | nothing | retrying is right |
 
-- Same request, same tool, same arguments, same reply.
+- Same request, same tool, same arguments: two possible replies, four possible realities.
 - An agent that trusts the reply falsely completes on 1.000 of ok-but-nothing tasks and on 0.000 of ok-and-paid ones.
 
 *Source: locked TXN benchmark, 440 tasks (`PREREGISTRATION_TXN1.md`). All tools are simulated (ProcureSim).*
@@ -37,7 +37,8 @@ slide = 1,493,182 here).
 | B4: reconcile the evidence (scripted reference) | 0.864 | 0.000 |
 
 - Trusting the reply reports payments that never happened.
-- Retrying blindly pays twice when the first attempt went through.
+- Retrying with idempotency keys avoids double payment but never checks what happened, so it reports phantom
+  payments as done and leaves injected duplicates in place.
 - Checking only the end state cannot tell a repair from a duplicate.
 - One deterministic episode per task, with the same tools, budget and verifier for every policy. B4 is hand-written,
   not learned.
@@ -50,12 +51,16 @@ slide = 1,493,182 here).
 |---|---|
 | Agent (sees) | Tiny Aya Global (3.35B). It sees the request, the tool schemas and every reply. Recovery demonstrations (SFT), then GRPO through AgentTune. |
 | Tools (simulated) | `place_supplier_order`, `pay_supplier`, `record_goods_receipt`, `post_journal_entry`; five reads with `consistent=true`; `get_audit_log`; `escalate_to_human` |
-| Database (hidden) | ProcureSim (SQLite). Faults: phantom, partial, duplicate, lost acknowledgement, late commit, conflicting log, concurrent write, visibility lag |
+| Database (hidden) | ProcureSim (in-memory tables). Faults: phantom, partial, duplicate, lost acknowledgement, late commit, conflicting log, concurrent write, visibility lag |
 
-- A deterministic verifier reads the database after the run. It scores verified completion, false completion,
-  duplicate mutation and unnecessary retry, and never reads the transcript.
+- A deterministic verifier reads the final state after the run and checks the agent's report against it. It
+  scores verified completion, false completion, duplicate mutation and unnecessary retry.
 - The benchmark: 440 locked TXN test tasks built around counterfactual quadruples; 8 fault classes, 3 evidence regimes,
-  6 OOD groups; 25 of 25 mutants of the scoring code killed by its tests.
+  6 OOD groups; 25 of 25 mutants of the TXN scoring code killed by its tests (ProcureSim's verdict code is not
+  mutation-tested).
+- **Limits found by our own review (TXN1 addendum 3).** A read-free same-key double send reaches 308 of 440 verified
+  completions. "Unresolvable" tasks on keyed steps can be settled by a same-key resend. The duplicate metric counts
+  injected duplicates. Repeated refunds are credited (3 of 74,000 episodes).
 - The paired, observation-equivalent design is not new (cf. "Did It Happen?", LIMBO). The composition, the scripted
   ladder B0–B4 and the released episodes are ours.
 - The reference verifier shares an author and a specification with the main one, so it is a consistency check, not
@@ -77,7 +82,9 @@ C and D each beat A (Holm 0.0003, every seed positive). C and D start from diffe
 GRPO's contribution.
 
 **Registered TXN H3** (320 in-distribution tasks):
-- Duplicate mutations: D 0.024 against 0.191 for bounded retry with idempotency keys. This test passes.
+- Duplicate mutations: D 0.024 against 0.191 for bounded retry with idempotency keys. This test passes. Most of
+  B3's duplicates are injected by the environment and never read back (50 of 50 in those classes; D leaves 54 of
+  450). Among those it could cause, D leaves 15 of 2430 and B3 11 of 270.
 - Fewer unnecessary retries fails, so the registered family is not supported.
 
 **Registered P4** (warm start, no GRPO, 3 seeds): randomised demonstrations lift
@@ -95,30 +102,36 @@ The RL agent D itself still scores 0.20 on renamed tools.
 
 ---
 
-## 5. It repairs well. Hand-off had to be taught.
+## 5. What still fails, and what SEL1 did
 
-- **Escalation when the evidence cannot settle it.** D escalates in 15 of 540 unresolvable cases (three seeds), and
-  Dw_aug in 0 of 540. The scripted reference escalates in all of them.
-- **Unnecessary retries.** The registered H3 family is not supported: fewer duplicates, but not fewer retries.
+- **Hand-off.**
+  - Under the unresolvable regime D escalates in 15 of 540 cases (three seeds) and Dw_aug in 0 of 540; mostly D
+    reports failure.
+  - Post hoc: every one of those tasks could have been settled by a same-key resend.
+- **Unnecessary retries.** The registered H3 family is not supported: fewer duplicates, not fewer retries.
 - **Transfer of the RL agent.** D scores 0.20 on renamed tools. SR1 did not help. Healthcare transfer is negative.
-- **The scripted reference still wins where evidence is observable.** On TXN, B4 reaches 0.864 against D's 0.724.
-  The SEL1 arms reach 0.830 and 0.871, but pass B4 only by completing unresolvable quadruples without the evidence;
-  B4 completes every other task, and they do not. No-std GRPO (P3) gives 0.813
-  against 0.819: not supported.
-- **Registered SEL1: selective hand-off can be taught, and it is supported.** Scripted demonstrations escalate when a
-  write's outcome is irreducibly unobservable, and re-read through a transient outage. They are compared with a
-  matched-volume control from the same parents (3 seeds).
-  - Locked test, unresolvable: escalation 0.972 against 0.002 (+0.970 [+0.952, +0.987]).
-  - Selectivity J: 0.740 against 0.007. No escalation on a transient outage of held-out length (0 of 360) or on an
-    audit-log-only outage (0 of 360). The scripted rule reaches 1.
-  - No cost on resolvable tasks: VTC +0.002 [−0.006, +0.010].
-  - Fragile: on a held-out step, one seed escalates in 2 of 120 episodes.
+- **The scripted reference still wins.**
+  - On TXN, B4 reaches 0.864 against D's 0.724.
+  - SEL1's arms reach 0.830 (below B4) and 0.871. CTL passes B4 only on the quadruples, by same-key resends where B4
+    hands off.
+  - B4 completes every other task; no learned agent does.
+  - No-std GRPO (P3): 0.813 against 0.819, not supported.
+- **Registered SEL1: supported, with a narrower meaning than designed.** Scripted demonstrations taught the agent to
+  hand off after repeated outage errors.
+  - Locked test, unresolvable: escalation 0.972 against 0.002 (+0.970 [+0.952, +0.987]). It mostly replaced an
+    honest "failed" report; unsafe actions fell from 12 to 7 of 540.
+  - No hand-off on a 2-read outage (0 of 360), which is inside the demonstrated budget. No VTC cost on resolvable
+    tasks: +0.002 [−0.006, +0.010].
+  - Where hand-off is the only safe action (unkeyed receive steps), it happens in 164 of 432 episodes: seed-fragile
+    (one seed: 3 of 144).
 
 ---
 
-## 6. Training removes most of the exposure. Checks remove the rest.
+## 6. Training cuts most of the exposure. The script cuts more.
 
-Projected cost per 1,000 workflows that meet an ambiguous fault (moderate scenario; `results/impact/impact_txn.json`):
+Projected cost per 1,000 workflows **that meet an ambiguous fault** (moderate scenario;
+`results/impact/impact_txn.json`). Per 1,000 workflows in all, at the assumed 2% fault incidence: B0 $29,864,
+D $2,902, B4 $164.
 
 | Agent | Projected cost |
 |---|---|
@@ -128,8 +141,9 @@ Projected cost per 1,000 workflows that meet an ambiguous fault (moderate scenar
 | B4: scripted reconciliation checks | $8,182 |
 
 - **Rates vs dollars.** The rates are measured on the locked TXN test. The dollars are projections from stated
-  assumptions: 2% fault incidence, a $5,000 payment, a $60 exception, 3× cost for late discovery, 60% duplicate
-  recovery. Low and high scenarios are in the appendix. This is a simulator, so there are no observed savings.
+  assumptions: a $5,000 payment, a $60 exception, 3× cost for late discovery, 60% duplicate recovery (and 2% fault
+  incidence for the per-workflow figures). Low and high scenarios are in the appendix. This is a simulator, so there
+  are no observed savings. Checks and agent together were never measured.
 - **Links.**
   - Run it live: https://huggingface.co/spaces/atharvgaur18/actionproof-live (a real Cohere model per run; the
     database is revealed after the run).
@@ -160,9 +174,14 @@ Projected cost per 1,000 workflows that meet an ambiguous fault (moderate scenar
   - Registered (Holm over H1–H3; all three seed differences > 0): H1 +0.970 [+0.952, +0.987], H2 +0.618
     [+0.486, +0.754], H3 +0.732 [+0.625, +0.836], each Holm p 0.0003. H4 non-inferiority: +0.002 [−0.006, +0.010]
     against a −0.03 bound. **Supported.**
-  - Descriptive: on held-out `receive` steps SEL escalates in 146 of 360 episodes and is unsafe in 188 (CTL 275);
-    seed 2 escalates in 2 of 120 and is unsafe in 112 (its control 83). Overall txn_test VTC: 3285 against 3451 of
-    3960, because CTL completes 173 of 540 unresolvable episodes without the evidence to know it.
+  - Post-hoc scope (`PREREGISTRATION_SEL1_ADDENDUM1.md`):
+    - H1's tasks match the training construction, and each could be settled by a same-key resend. CTL's 173
+      verified completions there were same-key resends (168).
+    - The audit-log-only outage cannot fire.
+    - The 2-read transient outage sits inside the demonstrated budget.
+    - On unkeyed receive steps SEL escalates in 164 of 432 episodes (by seed: 55, 106, 3 of 144) and is unsafe in
+      215, against CTL's 293.
+    - Overall txn_test VTC: 3285 against 3451 of 3960.
 - **A5. Earlier studies and non-claims.**
   - Reward information (A12, ID1): a database reward makes read-back the default in 5 of 5 seeds; it selects
     checking, it does not create it.

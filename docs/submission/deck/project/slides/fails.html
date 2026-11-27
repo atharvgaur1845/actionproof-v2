@@ -1,22 +1,21 @@
 <section id="fails" class="foot">
-<p class="eyebrow">WHAT STILL FAILS</p>
-<h2>It repairs well. Hand-off had to be taught.</h2>
+<p class="eyebrow">WHAT STILL FAILS · WHAT OUR OWN REVIEW FOUND</p>
+<h2>It beats the naive fixes, not the script.</h2>
 <div class="row">
 <div class="fl grow">
-<div class="it"><h3>Escalation when the evidence cannot settle it</h3><p class="mut">D: 15 of 540 unresolvable cases (3 seeds). Dw_aug: 0 of 540. Scripted reference: all.</p></div>
+<div class="it"><h3>The scripted reference still wins</h3><p class="mut">B4 0.864 against D 0.724 on TXN, with no false completion. B4 completes every task outside the quadruples; no learned agent does.</p></div>
 <div class="it"><h3>Unnecessary retries</h3><p class="mut">The registered H3 family is not supported: fewer duplicates, not fewer retries.</p></div>
 <div class="it"><h3>Transfer of the RL agent</h3><p class="mut">D: 0.20 on renamed tools; SR1 did not help; healthcare transfer is negative.</p></div>
-<div class="it"><h3>The scripted reference still wins where evidence is observable</h3><p class="mut">B4 0.864 against D 0.724 on TXN. SEL1 arms pass it only by completing unresolvable tasks blind. No-std GRPO (P3): not supported.</p></div>
+<div class="it"><h3>The benchmark’s own limits (post hoc)</h3><p class="mut">A read-free same-key double send reaches 308 of 440 verified completions. “Unresolvable” keyed tasks can be settled by a same-key resend.</p></div>
 </div>
 <div class="sel" style="width:640px">
-<p class="eyebrow">REGISTERED SEL1 · SUPPORTED</p>
-<h3>Selective hand-off can be taught</h3>
-<p>Demonstrations: escalate when a write’s outcome is irreducibly unobservable; re-read through a transient outage.</p>
-<p><span class="big">0.972</span> <span class="mut">vs 0.002 control: escalation, locked test, unresolvable</span></p>
-<p class="sm">Transient outage: 0 of 360 escalated. Resolvable VTC: +0.002 [−0.006, +0.010].</p>
-<p class="mut sm">Fragile: on a held-out step, one seed of three escalates in 2 of 120. Selectivity J 0.740; the scripted rule reaches 1.</p>
+<p class="eyebrow">REGISTERED SEL1 · SUPPORTED · NARROWER THAN DESIGNED</p>
+<h3>Hand-off after repeated outage errors</h3>
+<p><span class="big">0.972</span> <span class="mut">vs 0.002 control on the locked test’s unresolvable tasks</span></p>
+<p class="sm">No VTC cost on resolvable tasks: +0.002 [−0.006, +0.010]. Mostly it replaced an honest “failed” report; unsafe 12 → 7 of 540.</p>
+<p class="mut sm">Where hand-off is the only safe action (receive steps): 164 of 432 episodes, seed-fragile.</p>
 </div>
 </div>
-<p class="footer">All failures are registered or descriptive results on the same locked splits; full table in the appendix and WRITEUP §22.</p>
-<aside>Be direct about the limits. The trained agent seldom acts unsafely when evidence is unavailable, but it almost never takes the correct disposition, which is to hand the case to a person. The renamed-tool and workflow failures of the RL agent remain. The scripted reconciliation reference still beats every learned model. The right column is the one gap we attacked in this round, with an experiment registered before training. It is supported: on the locked test the demonstration arm hands off in nearly every unresolvable case, never on a transient outage, and loses nothing on resolvable work. Say the limit too: on a held-out step one seed barely escalates.</aside>
+<p class="footer">Registered or descriptive results on the locked splits; post-hoc scope in PREREGISTRATION_TXN1_ADDENDUM3.md and PREREGISTRATION_SEL1_ADDENDUM1.md.</p>
+<aside>Be direct. The hand-written reconciliation script still beats every learned agent. Our own hostile review then found that the benchmark is weaker than designed: a policy that never reads, but sends each keyed write twice with the same key, gets close on verified completion, though not on false completion. And on keyed steps the "unresolvable" tasks can be settled by a same-key resend. SEL1 passed its registered tests, but what it shows is narrower: the agent learned to call for a human after repeated outage errors. Where nothing else settles the outcome, it does so in only about four of ten episodes, and one seed barely does.</aside>
 </section>

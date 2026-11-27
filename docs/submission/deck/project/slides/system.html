@@ -6,14 +6,14 @@
 <x-connector style="width:56px;color:#171815" head="end"></x-connector>
 <div class="box" style="width:520px"><p class="tag">TOOLS (simulated)</p><h3>Write, read, hand off</h3><p class="mono sm">place_supplier_order · pay_supplier · record_goods_receipt · post_journal_entry</p><p class="mono sm">5 reads (consistent=true) · get_audit_log · escalate_to_human</p></div>
 <x-connector style="width:56px;color:#171815" head="end"></x-connector>
-<div class="box dkbox grow"><p class="tag">DATABASE (hidden)</p><h3>ProcureSim, SQLite</h3><p class="mut">Phantom, partial, duplicate, lost acknowledgement, late commit, conflicting log, concurrent write, visibility lag.</p></div>
+<div class="box dkbox grow"><p class="tag">DATABASE (hidden)</p><h3>ProcureSim, in-memory state</h3><p class="mut">Phantom, partial, duplicate, lost acknowledgement, late commit, conflicting log, concurrent write, visibility lag.</p></div>
 </div>
-<p style="margin-top:22px" class="sm">A <b>deterministic verifier</b> reads the database after the run and scores verified completion, false completion, duplicate mutation and unnecessary retry. It never reads the transcript.</p>
+<p style="margin-top:22px" class="sm">A <b>deterministic verifier</b> reads the final state after the run, checks the agent’s report against it, and scores verified completion, false completion, duplicate mutation and unnecessary retry.</p>
 <div class="facts">
 <div class="fact"><p class="big">440</p><p class="sm">locked TXN test tasks, built around counterfactual quadruples</p></div>
 <div class="fact"><p class="big">8 · 3 · 6</p><p class="sm">fault classes · evidence regimes · OOD groups</p></div>
-<div class="fact"><p class="big">25 / 25</p><p class="sm">mutants of the scoring code killed by its tests</p></div>
+<div class="fact"><p class="big">25 / 25</p><p class="sm">mutants of the TXN scoring code killed by its tests (the ProcureSim verdict code is not mutation-tested)</p></div>
 </div>
-<p class="footer">The paired, observation-equivalent design is not new (cf. “Did It Happen?”, LIMBO); the composition, scripted ladder B0–B4 and released episodes are ours. Reference verifier = same author and spec: a consistency check, not independent ground truth.</p>
+<p class="footer">The paired, observation-equivalent design is not new (cf. “Did It Happen?”, LIMBO); the composition, scripted ladder B0–B4 and released episodes are ours. Reference verifier = same author and spec: a consistency check. Benchmark limits we found ourselves: slide 5.</p>
 <aside>What the agent sees versus what the evaluator knows. The model only ever observes replies and whatever its own reads return. The hidden fault plan lives in the database. Every number in this talk comes from the verifier reading that database. Be explicit that the paired design follows prior evaluation work; what we add is training inside it, plus a reusable locked benchmark with a ladder of scripted baselines.</aside>
 </section>

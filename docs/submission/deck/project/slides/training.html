@@ -10,7 +10,7 @@
 <div class="bar"><p class="lab">D · recovery SFT, then GRPO</p><div class="fill hi" style="width:737px"></div><p class="val">0.819</p></div>
 </div>
 <p class="sm mut">Verified completion. C and D each beat A (Holm 0.0003, every seed positive). C and D start from different checkpoints, so their gap is not GRPO’s contribution.</p>
-<div class="card"><p class="status">REGISTERED TXN H3 · 320 IN-DISTRIBUTION TASKS</p><p>Duplicate mutations: D 0.024 against 0.191 for bounded retry with idempotency keys. <b>Passes.</b> Fewer unnecessary retries: <b>fails</b>, so the registered family is not supported.</p></div>
+<div class="card"><p class="status">REGISTERED TXN H3 · 320 IN-DISTRIBUTION TASKS</p><p>Duplicate mutations: D 0.024 against 0.191 for bounded retry with idempotency keys. <b>Passes.</b> Fewer unnecessary retries: <b>fails</b>, so the registered family is not supported.</p><p class="sm mut">Most of B3’s duplicates are injected by the environment, and it never reads them back. Among those it could cause: D 15 of 2430 episodes, B3 11 of 270.</p></div>
 </div>
 <div class="col" style="width:600px">
 <div class="card"><p class="status">REGISTERED P4 · WARM START, NO GRPO · 3 SEEDS</p><p>Randomised demonstrations: renamed tools 0.137 → 0.741; unseen four-step workflow 0.268 → 0.842; no cost on the P1 test (+0.048).</p><p class="sm mut">The RL agent D itself still scores 0.20 on renamed tools.</p></div>
@@ -18,5 +18,5 @@
 </div>
 </div>
 <p class="footer">Sampled VSC, paired task bootstrap. One SFT seed per P5 base: a task-level test with each model fixed, not training-seed robustness.</p>
-<aside>Recovery demonstrations are what work. The registered P1 test: the recovery-start agent completes about half; recovery SFT reaches 0.772; recovery SFT then GRPO reaches 0.819. Do not read the 0.772 to 0.819 gap as GRPO's effect: the arms are not nested. On the transaction benchmark the trained agent duplicates mutations far less than bounded retry, but the registered family fails on unnecessary retries. Randomised demonstrations fix procedure replay in the warm start, not in the RL agent. Four more Cohere bases learn the same recipe.</aside>
+<aside>Recovery demonstrations are what work. The registered P1 test: the recovery-start agent completes about half; recovery SFT reaches 0.772; recovery SFT then GRPO reaches 0.819. Do not read the 0.772 to 0.819 gap as GRPO's effect: the arms are not nested. On the transaction benchmark the trained agent leaves far fewer duplicates than bounded retry, both injected ones it repairs and ones it could cause, but the registered family fails on unnecessary retries. Randomised demonstrations fix procedure replay in the warm start, not in the RL agent. Four more Cohere bases learn the same recipe.</aside>
 </section>

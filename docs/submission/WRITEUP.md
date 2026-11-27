@@ -434,6 +434,22 @@ See `docs/submission/TRACES.md`: two complete recorded episodes with the databas
 - Inference is under $0.50 per 1,000 workflows.
 - **Projections, not savings.**
 
+**The final-round projection** (`scripts/impact_txn.py`, `results/impact/impact_txn.json`). It is a separate model
+from the one above: locked-TXN rates (false completion, duplicates, false refunds) priced with ROI.md's moderate
+assumptions. It is stated in two units. The deck's headline is the first; the second multiplies by the assumed 2%
+fault incidence.
+
+| Agent | Per 1,000 workflows that meet an ambiguous fault | Per 1,000 workflows in all |
+|---|---|---|
+| B0: trust the reply | $1,493,182 | $29,864 |
+| B3: bounded retry with idempotency keys | $621,773 | $12,435 |
+| D: trained agent (3 seeds) | $145,111 | $2,902 |
+| SEL1 SEL arm (3 seeds) | $42,939 | $859 |
+| B4: scripted reconciliation checks | $8,182 | $164 |
+
+Against trusting the reply, the trained agent removes about nine-tenths of the projected exposure. The scripted
+checks remove more than any learned agent. Running checks and agent together was never measured.
+
 ## 25. Limitations
 
 - RL was run on one base model (3.35B); the recovery-SFT recipe was replicated on four other Cohere Labs bases (P5), all from one family.

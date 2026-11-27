@@ -1,6 +1,6 @@
 <section id="a-sel1" class="foot">
 <p class="eyebrow">APPENDIX A4 · SEL1 (REGISTERED 2026-11-27, BEFORE TRAINING)</p>
-<h2>Selective escalation: supported, fragile on one step</h2>
+<h2>SEL1: supported as registered, narrower than designed</h2>
 <div class="row">
 <div class="col grow">
 <p class="sm">Sealed test, 240 tasks: unresolvable outages (training construction, a held-out step, held-out workflows), a transient outage of held-out length, an audit-log-only outage, and standard tasks.</p>
@@ -15,6 +15,6 @@
 <tr><td>H3 selectivity J (200)</td><td>0.740</td><td>0.007</td><td>+0.732 [+0.625, +0.836]</td><td>0.0003</td><td>supported</td></tr>
 <tr><td>H4 VTC, txn_test resolvable (380)</td><td>0.960</td><td>0.958</td><td>+0.002 [−0.006, +0.010]</td><td>bound −0.03</td><td>supported</td></tr>
 </table>
-<p class="sm mut" style="margin-top:16px">Descriptive: held-out receive step, SEL escalates in 146 of 360 and is unsafe in 188 (CTL 275); seed 2 escalates in 2 of 120. Overall txn_test VTC 3285 vs 3451 of 3960: CTL completes 173 of 540 unresolvable episodes without the evidence to know it.</p>
+<p class="sm mut" style="margin-top:16px">Post hoc (SEL1 addendum 1): every H1 task could be settled by a same-key resend; the audit-log-only outage cannot fire; the 2-read outage is inside the demonstrated budget. On unkeyed receive steps, where hand-off is the only safe action, SEL escalates in 164 of 432 episodes (by seed: 55, 106, 3 of 144) and is unsafe in 215 (CTL 293).</p>
 <p class="footer">PREREGISTRATION_SEL1.md; scripts/sel1_stats.py (task 1812); results/sel1/sel1_summary.json.</p>
 </section>

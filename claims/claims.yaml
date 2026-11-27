@@ -1518,6 +1518,12 @@ claims:
       a_f: {value: 0.02, file: results/impact/impact_txn.json, key: ["scenarios", "moderate", "f"], shown: ["2%"]}
       a_value: {value: 5000, file: results/impact/impact_txn.json, key: ["scenarios", "moderate", "value"], shown: ["5,000", "$5,000"]}
       a_recovery: {value: 0.60, file: results/impact/impact_txn.json, key: ["scenarios", "moderate", "recovery"], shown: ["60%"]}
+      w_b0: {value: 29864, file: results/impact/impact_txn.json, key: ["agents", "B0 trust the acknowledgement (scripted)", "per_1000_workflows", "moderate"], shown: ["29,864", "$29,864"]}
+      w_b3: {value: 12435, file: results/impact/impact_txn.json, key: ["agents", "B3 bounded retry + idempotency key (scripted)", "per_1000_workflows", "moderate"], shown: ["12,435", "$12,435"]}
+      w_d: {value: 2902, file: results/impact/impact_txn.json, key: ["agents", "D recovery SFT + GRPO (3 seeds)", "per_1000_workflows", "moderate"], shown: ["2,902", "$2,902"]}
+      w_sel: {value: 859, file: results/impact/impact_txn.json, key: ["agents", "SEL1 SEL (3 seeds)", "per_1000_workflows", "moderate"], shown: ["859", "$859"]}
+      w_b4: {value: 164, file: results/impact/impact_txn.json, key: ["agents", "B4 transaction-aware reconciliation (scripted reference)", "per_1000_workflows", "moderate"], shown: ["164", "$164"]}
+      cost_sel: {value: 42939, file: results/impact/impact_txn.json, key: ["agents", "SEL1 SEL (3 seeds)", "projected_cost_per_1000_faulted", "moderate", "mean"], shown: ["42,939", "$42,939"]}
 
   - id: SEL1
     statement: "Registered SEL1 (PREREGISTRATION_SEL1.md, registered 2026-11-27 05:39 IST before any training; scripts/sel1_stats.py run once as task 1812 after the freeze check). SEL (B5 selective-escalation demonstrations + replay) vs CTL (matched-volume replay), each continuing from Dw_aug seed k, 3 seeds, 3 episodes per task. SUPPORTED: H1, H3 (Holm over H1-H3, all seed differences > 0) and H4 (non-inferiority, bound -0.03). H2 (held-out compositions) also passes as registered, but is seed-fragile: on held-out step receive, SEL seed 2 escalates in 2 of 120 episodes and is unsafe in 112."
