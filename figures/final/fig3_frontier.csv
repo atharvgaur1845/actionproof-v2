@@ -1,0 +1,69 @@
+arm,label,family,tags,metric,num,den,rate,wilson_lo,wilson_hi,per_seed_rates
+B0,B0 trust the acknowledgement,scripted,B0,VTC,60,440,0.136364,0.107429,0.171593,0.136364
+B0,B0 trust the acknowledgement,scripted,B0,selective_risk,380,440,0.863636,0.828407,0.892571,0.863636
+B0,B0 trust the acknowledgement,scripted,B0,FCR,380,440,0.863636,0.828407,0.892571,0.863636
+B0,B0 trust the acknowledgement,scripted,B0,DMR_all,270,440,0.613636,0.567342,0.657963,0.613636
+B1,B1 final-state check only,scripted,B1,VTC,197,440,0.447727,0.401915,0.494444,0.447727
+B1,B1 final-state check only,scripted,B1,selective_risk,183,440,0.415909,0.370777,0.462497,0.415909
+B1,B1 final-state check only,scripted,B1,FCR,183,440,0.415909,0.370777,0.462497,0.415909
+B1,B1 final-state check only,scripted,B1,DMR_all,183,440,0.415909,0.370777,0.462497,0.415909
+B2,B2 audit-log check only,scripted,B2,VTC,60,440,0.136364,0.107429,0.171593,0.136364
+B2,B2 audit-log check only,scripted,B2,selective_risk,380,440,0.863636,0.828407,0.892571,0.863636
+B2,B2 audit-log check only,scripted,B2,FCR,380,440,0.863636,0.828407,0.892571,0.863636
+B2,B2 audit-log check only,scripted,B2,DMR_all,270,440,0.613636,0.567342,0.657963,0.613636
+B3,B3 bounded retry + idempotency key,scripted,B3,VTC,216,440,0.490909,0.444478,0.537497,0.490909
+B3,B3 bounded retry + idempotency key,scripted,B3,selective_risk,224,440,0.509091,0.462503,0.555522,0.509091
+B3,B3 bounded retry + idempotency key,scripted,B3,FCR,224,440,0.509091,0.462503,0.555522,0.509091
+B3,B3 bounded retry + idempotency key,scripted,B3,DMR_all,107,440,0.243182,0.205431,0.285379,0.243182
+A1,A1: B4 without read-back after ok,ablation,A1,VTC,211,440,0.479545,0.433244,0.526201,0.479545
+A1,A1: B4 without read-back after ok,ablation,A1,selective_risk,199,410,0.485366,0.437349,0.533655,0.485366
+A1,A1: B4 without read-back after ok,ablation,A1,FCR,199,440,0.452273,0.406379,0.498992,0.452273
+A1,A1: B4 without read-back after ok,ablation,A1,DMR_all,82,440,0.186364,0.152749,0.225407,0.186364
+A2,A2: B4 reading without consistent,ablation,A2,VTC,346,440,0.786364,0.745672,0.822098,0.786364
+A2,A2: B4 reading without consistent,ablation,A2,selective_risk,21,380,0.055263,0.036426,0.083002,0.055263
+A2,A2: B4 reading without consistent,ablation,A2,FCR,7,440,0.015909,0.007727,0.032471,0.015909
+A2,A2: B4 reading without consistent,ablation,A2,DMR_all,21,440,0.047727,0.031425,0.071858,0.047727
+A3,A3: B4 with a new key on every retry,ablation,A3,VTC,366,440,0.831818,0.794031,0.863862,0.831818
+A3,A3: B4 with a new key on every retry,ablation,A3,selective_risk,14,380,0.036842,0.022071,0.060884,0.036842
+A3,A3: B4 with a new key on every retry,ablation,A3,FCR,0,440,0.000000,0.000000,0.008655,0.000000
+A3,A3: B4 with a new key on every retry,ablation,A3,DMR_all,14,440,0.031818,0.019046,0.052695,0.031818
+A4,A4: B4 rewriting the full amount on partials,ablation,A4,VTC,333,440,0.756818,0.714621,0.794569,0.756818
+A4,A4: B4 rewriting the full amount on partials,ablation,A4,selective_risk,23,380,0.060526,0.040667,0.089183,0.060526
+A4,A4: B4 rewriting the full amount on partials,ablation,A4,FCR,0,440,0.000000,0.000000,0.008655,0.000000
+A4,A4: B4 rewriting the full amount on partials,ablation,A4,DMR_all,23,440,0.052273,0.035081,0.077215,0.052273
+A5,A5: B4 that never escalates,ablation,A5,VTC,425,440,0.965909,0.944519,0.979234,0.965909
+A5,A5: B4 that never escalates,ablation,A5,selective_risk,15,440,0.034091,0.020766,0.055481,0.034091
+A5,A5: B4 that never escalates,ablation,A5,FCR,15,440,0.034091,0.020766,0.055481,0.034091
+A5,A5: B4 that never escalates,ablation,A5,DMR_all,0,440,0.000000,0.000000,0.008655,0.000000
+A6,A6 (identical flags to B4),ablation,A6,VTC,380,440,0.863636,0.828407,0.892571,0.863636
+A6,A6 (identical flags to B4),ablation,A6,selective_risk,0,380,0.000000,0.000000,0.010008,0.000000
+A6,A6 (identical flags to B4),ablation,A6,FCR,0,440,0.000000,0.000000,0.008655,0.000000
+A6,A6 (identical flags to B4),ablation,A6,DMR_all,0,440,0.000000,0.000000,0.008655,0.000000
+B4,B4 transaction-aware reconciliation (scripted reference),reference,B4,VTC,380,440,0.863636,0.828407,0.892571,0.863636
+B4,B4 transaction-aware reconciliation (scripted reference),reference,B4,selective_risk,0,380,0.000000,0.000000,0.010008,0.000000
+B4,B4 transaction-aware reconciliation (scripted reference),reference,B4,FCR,0,440,0.000000,0.000000,0.008655,0.000000
+B4,B4 transaction-aware reconciliation (scripted reference),reference,B4,DMR_all,0,440,0.000000,0.000000,0.008655,0.000000
+base,"Base Tiny Aya Global, prompted",learned,tag_base,VTC,19,1320,0.014394,0.009234,0.022372,0.014394
+base,"Base Tiny Aya Global, prompted",learned,tag_base,selective_risk,634,1121,0.565566,0.536374,0.594311,0.565566
+base,"Base Tiny Aya Global, prompted",learned,tag_base,FCR,215,1320,0.162879,0.143942,0.183772,0.162879
+base,"Base Tiny Aya Global, prompted",learned,tag_base,DMR_all,331,1320,0.250758,0.228120,0.274841,0.250758
+Dw,Dw recovery SFT warm start,learned,Dw,VTC,789,1320,0.597727,0.571027,0.623860,0.597727
+Dw,Dw recovery SFT warm start,learned,Dw,selective_risk,360,1315,0.273764,0.250349,0.298497,0.273764
+Dw,Dw recovery SFT warm start,learned,Dw,FCR,341,1320,0.258333,0.235445,0.282624,0.258333
+Dw,Dw recovery SFT warm start,learned,Dw,DMR_all,195,1320,0.147727,0.129608,0.167891,0.147727
+Dw_aug,Dw_aug randomised recovery SFT (3 seeds),learned,Dwaug_s0 Dwaug_s1 Dwaug_s2,VTC,2762,3960,0.697475,0.682982,0.711585,0.723485 0.682576 0.686364
+Dw_aug,Dw_aug randomised recovery SFT (3 seeds),learned,Dwaug_s0 Dwaug_s1 Dwaug_s2,selective_risk,898,3960,0.226768,0.213994,0.240071,0.187121 0.255303 0.237879
+Dw_aug,Dw_aug randomised recovery SFT (3 seeds),learned,Dwaug_s0 Dwaug_s1 Dwaug_s2,FCR,873,3960,0.220455,0.207817,0.233634,0.180303 0.245455 0.235606
+Dw_aug,Dw_aug randomised recovery SFT (3 seeds),learned,Dwaug_s0 Dwaug_s1 Dwaug_s2,DMR_all,502,3960,0.126768,0.116765,0.137494,0.108333 0.123485 0.148485
+D,D recovery SFT + GRPO (3 seeds),learned,D_s0 D_s1 D_s2,VTC,2864,3960,0.723232,0.709086,0.736946,0.724242 0.718182 0.727273
+D,D recovery SFT + GRPO (3 seeds),learned,D_s0 D_s1 D_s2,selective_risk,511,3941,0.129663,0.119534,0.140513,0.132824 0.137983 0.118140
+D,D recovery SFT + GRPO (3 seeds),learned,D_s0 D_s1 D_s2,FCR,462,3960,0.116667,0.107037,0.127039,0.121212 0.124242 0.104545
+D,D recovery SFT + GRPO (3 seeds),learned,D_s0 D_s1 D_s2,DMR_all,208,3960,0.052525,0.046001,0.059917,0.052273 0.059848 0.045455
+SEL,SEL1 SEL: escalation demonstrations (3 seeds),sel1,sel1:SEL_s0 sel1:SEL_s1 sel1:SEL_s2,VTC,3285,3960,0.829545,0.817515,0.840937,0.833333 0.822727 0.832576
+SEL,SEL1 SEL: escalation demonstrations (3 seeds),sel1,sel1:SEL_s0 sel1:SEL_s1 sel1:SEL_s2,selective_risk,95,3422,0.027762,0.022764,0.033818,0.024476 0.033363 0.025461
+SEL,SEL1 SEL: escalation demonstrations (3 seeds),sel1,sel1:SEL_s0 sel1:SEL_s1 sel1:SEL_s2,FCR,79,3960,0.019949,0.016037,0.024793,0.016667 0.022727 0.020455
+SEL,SEL1 SEL: escalation demonstrations (3 seeds),sel1,sel1:SEL_s0 sel1:SEL_s1 sel1:SEL_s2,DMR_all,54,3960,0.013636,0.010467,0.017749,0.015152 0.018182 0.007576
+CTL,SEL1 CTL: matched replay (3 seeds),sel1,sel1:CTL_s0 sel1:CTL_s1 sel1:CTL_s2,VTC,3451,3960,0.871465,0.860679,0.881530,0.859848 0.884848 0.869697
+CTL,SEL1 CTL: matched replay (3 seeds),sel1,sel1:CTL_s0 sel1:CTL_s1 sel1:CTL_s2,selective_risk,106,3959,0.026774,0.022186,0.032280,0.020455 0.034875 0.025000
+CTL,SEL1 CTL: matched replay (3 seeds),sel1,sel1:CTL_s0 sel1:CTL_s1 sel1:CTL_s2,FCR,88,3960,0.022222,0.018073,0.027298,0.018939 0.024242 0.023485
+CTL,SEL1 CTL: matched replay (3 seeds),sel1,sel1:CTL_s0 sel1:CTL_s1 sel1:CTL_s2,DMR_all,69,3960,0.017424,0.013792,0.021992,0.011364 0.022727 0.018182

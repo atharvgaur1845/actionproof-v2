@@ -1,4 +1,4 @@
-"""Smoke check: a few minutes on one CPU core, no download, no GPU, no token. A SMOKE TEST, not result reproduction:
+"""Smoke check: about 15-30 s on one CPU core (27 s in both clean rooms), no download, no GPU, no token. A SMOKE TEST, not result reproduction:
 it re-derives the benchmark and the scripted baselines from code and checks every published number's ledger, but it
 does not recompute any model result (that is `bash scripts/verify_numbers.sh`, which downloads the episode files).
 

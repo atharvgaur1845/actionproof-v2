@@ -532,6 +532,15 @@ Claude (Anthropic) implemented the code, ran the experiments and drafted the doc
 
 Lexsi Labs for the hackathon, its toolkits and HF credits; BITS Pilani HPC (sharanga) for GPU time; Cohere Labs for the Aya models.
 
+Citations for the toolkits and models used (arXiv IDs and titles checked on 2026-11-28):
+
+- AgentTune: R. E. Z. M. Lyngkhoi, A. Gupta, V. Vats et al. *AgentTune: A Unified Training Lifecycle for Tool-Using LLM Agents.* arXiv:2610.13335.
+- AuditKIT: S. Arora, U. Avaiya, Z. Lyngkhoi et al. *AuditKIT: A Unified Evaluation Spine for Benchmarking, Judging, and Comparing Large Language Models and Agentic Systems.* arXiv:2610.22511.
+- CuratorKIT: S. Bhattacharjee, K. Sharma, V. K. Sankarapu et al. *CuratorKIT: Data Curation and Synthetic Data Generation for LLM Post-Training.* arXiv:2606.21631.
+- CircuitKIT (attempted only; no result): P. Seth, H. Gosalia, A. Kasliwal et al. *CircuitKIT: Circuit Discovery, Evaluation, and Application Toolkit for Mechanistic Interpretability.* arXiv:2607.19317.
+- Tiny Aya (the base model of every trained agent): A. R. Salamanca, D. Abagyan, D. D'souza et al. *Tiny Aya: Bridging Scale and Multilingual Depth.* arXiv:2603.11510.
+- Aya Expanse (8B and 32B, untrained comparison agents): J. Dang, S. Singh, D. D'souza et al. *Aya Expanse: Combining Research Breakthroughs for a New Multilingual Frontier.* arXiv:2412.04261.
+
 ## 33. LLM usage statement
 
 Claude (Anthropic) was used throughout, under human review of every registration and claim:

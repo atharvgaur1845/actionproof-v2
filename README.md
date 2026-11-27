@@ -253,7 +253,8 @@ What the supported tests show, and what they do not (scope from `PREREGISTRATION
 - **Optimizer changes.** No-std GRPO (P3) is not supported: 0.813 against 0.819.
 - **The scripted reference wins.** B4 reaches 0.864 TXN verified completion with no false completion and no duplicate.
   It completes every task outside the counterfactual quadruples; no learned agent does (renamed tools: SEL 139 and
-  CTL 124 of 180 episodes).
+  CTL 124 of 180 episodes). B4, like every scripted policy, always calls the canonical tool names, also in the
+  renamed-tool groups, so those groups do not test it.
   - D reaches 0.724.
   - SEL1's SEL arm reaches 0.830, below B4.
   - Its CTL arm (0.871) passes B4's overall VTC only on the quadruples, by settling unresolvable tasks with same-key
@@ -308,6 +309,17 @@ Checked against the code by import, not by intent.
 | AuditKIT | `TaskCompletion` LLM-judge scores of the P1 episodes, secondary and descriptive; it never decides an outcome | `scripts/p1_auditkit.py`, `actionproof/eval/judge_audit.py` |
 
 Not used for any result: AlignTune and SafeTune (never imported). CircuitKIT was attempted in the exploratory A16 analysis, failed in the job environment, and no result is claimed from it (`docs/upgrade/TOOLKITS.md`).
+
+### Citations
+
+The toolkits and models above (arXiv IDs and titles checked on 2026-11-28):
+
+- AgentTune: R. E. Z. M. Lyngkhoi, A. Gupta, V. Vats et al. *AgentTune: A Unified Training Lifecycle for Tool-Using LLM Agents.* arXiv:2610.13335.
+- AuditKIT: S. Arora, U. Avaiya, Z. Lyngkhoi et al. *AuditKIT: A Unified Evaluation Spine for Benchmarking, Judging, and Comparing Large Language Models and Agentic Systems.* arXiv:2610.22511.
+- CuratorKIT: S. Bhattacharjee, K. Sharma, V. K. Sankarapu et al. *CuratorKIT: Data Curation and Synthetic Data Generation for LLM Post-Training.* arXiv:2606.21631.
+- CircuitKIT (attempted only; no result): P. Seth, H. Gosalia, A. Kasliwal et al. *CircuitKIT: Circuit Discovery, Evaluation, and Application Toolkit for Mechanistic Interpretability.* arXiv:2607.19317.
+- Tiny Aya (the base model of every trained agent): A. R. Salamanca, D. Abagyan, D. D'souza et al. *Tiny Aya: Bridging Scale and Multilingual Depth.* arXiv:2603.11510.
+- Aya Expanse (8B and 32B, untrained comparison agents): J. Dang, S. Singh, D. D'souza et al. *Aya Expanse: Combining Research Breakthroughs for a New Multilingual Frontier.* arXiv:2412.04261.
 
 ## Reproduce
 

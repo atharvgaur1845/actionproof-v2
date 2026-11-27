@@ -87,8 +87,9 @@ warmstart-dwaug), and so does the dataset card.
 
 ## Known reproduction limits
 
-- **The code is not yet on GitHub.** `github.com/atharvgaur1845/actionproof-v2` holds an older state until the author
-  approves the push. Both runs cloned from a bundle of the local branch.
+- **Clones came from a bundle.** Both runs cloned a git bundle of the local branch. Branch `stage2-superiority-sprint`
+  was pushed to `github.com/atharvgaur1845/actionproof-v2` afterwards (at 85657de); until the author fast-forwards
+  `submission-candidate`, that branch still shows the older 7ae863f.
 - **Inference and training were not rerun in a clean room.** Only the analyses from released episodes were.
 - **Float noise.** `txn_stats.py` sums over a Python set; `verify_numbers.sh` compares its two JSON outputs within
   1e-9 relative, then restores them.

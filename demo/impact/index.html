@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ActionProof: what do wrong writes cost? (scenario calculator)</title>
+<style>
+:root{color-scheme:light;--bg:#ffffff;--panel:#f6f6f4;--line:#dddddb;--text:#191919;--muted:#5c5c5c;
+ --accent:#1b64be;--warn-bg:#fff4d6;--warn-line:#d28e05;--focus:#1757ac;
+ --f-scripted:#9a9a9a;--f-reference:#3d3d3d;--f-learned:#257de0;--f-sel1:#00b894;--f-gate:#f47230}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#191919;--panel:#222222;--line:#3a3a3a;--text:#efefef;
+ --muted:#a8a8a8;--accent:#6aabf1;--warn-bg:#3a2e10;--warn-line:#d28e05;--focus:#84b9f3;
+ --f-scripted:#8a8a8a;--f-reference:#d6d6d6;--f-learned:#338ced;--f-sel1:#00a888;--f-gate:#e76624}}
+*{box-sizing:border-box}
+html{font-size:16px}
+body{margin:0;background:var(--bg);color:var(--text);font:400 15px/1.5 system-ui,-apple-system,"Segoe UI",Inter,"Noto Sans",Roboto,Arial,sans-serif}
+.banner{position:sticky;top:0;z-index:5;background:var(--warn-bg);border-bottom:2px solid var(--warn-line);
+ padding:10px 20px;font-weight:600;font-size:14px}
+.banner span{font-weight:400;color:var(--text)}
+main{max-width:1240px;margin:0 auto;padding:28px 20px 60px}
+h1{font-size:28px;line-height:1.2;margin:0 0 8px;letter-spacing:-0.01em}
+h2{font-size:19px;margin:40px 0 10px}
+p{margin:0 0 10px;max-width:78ch}
+.lede{color:var(--muted);font-size:16px}
+code{font:13px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--panel);padding:1px 4px;border-radius:3px}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px}
+button{font:inherit;font-size:14px;padding:6px 14px;border:1px solid var(--line);background:var(--bg);color:var(--text);
+ border-radius:6px;cursor:pointer}
+button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);font-weight:600}
+button:focus-visible,input:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px 18px;margin-top:10px}
+.field{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.field label{display:block;font-weight:600;font-size:14px}
+.field .row{display:flex;align-items:center;gap:8px;margin:6px 0 4px}
+.field input{width:9.5em;font:inherit;font-size:15px;padding:4px 8px;border:1px solid var(--line);border-radius:5px;
+ background:var(--bg);color:var(--text)}
+.field .unit{color:var(--muted);font-size:13px}
+.field .src{color:var(--muted);font-size:12.5px;line-height:1.35}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin-top:10px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top;white-space:nowrap}
+th{background:var(--panel);font-weight:600;font-size:12.5px;color:var(--muted);position:sticky;top:0}
+td.l,th.l{text-align:left;white-space:normal;min-width:17em}
+tr:last-child td{border-bottom:0}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:7px;vertical-align:baseline}
+.fam{display:block;color:var(--muted);font-size:12px}
+.src-list{margin-top:4px;font-size:11.5px;overflow-wrap:anywhere}
+.src-list code{font-size:11px;padding:0 2px}
+.bar{height:8px;border-radius:0 4px 4px 0;min-width:1px;margin-top:5px}
+.big{font-size:15px;font-weight:600}
+.muted{color:var(--muted)}
+.small{font-size:12.5px}
+.note{border-left:3px solid var(--line);padding:2px 12px;color:var(--muted);margin:10px 0}
+footer{margin-top:44px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:700px){h1{font-size:23px}main{padding:20px 14px 48px}.grid{grid-template-columns:1fr}
+ .banner{font-size:13px;padding:8px 14px}.banner span{display:none}}
+</style>
+</head>
+<body>
+<div class="banner" role="note">Scenario model from measured simulator rates; not validated real-world ROI.
+<span>Rates are measured on ProcureSim's locked txn_test; every dollar figure depends on the assumptions below.</span></div>
+<main>
+<h1>What does a wrong write cost?</h1>
+<p class="lede">A tool can reply <code>ok</code> when nothing was stored, or time out after the write committed. Each agent
+below was measured on the same 440 locked tasks. Change the assumptions to price its mistakes for your own workflow.</p>
+
+<h2 id="assumptions">Assumptions</h2>
+<p class="small muted">Presets are the three brackets of <code>docs/upgrade/ROI.md</code> §3. The defaults (moderate) reproduce
+<code>results/impact/impact_txn.json</code> exactly.</p>
+<div class="presets" role="group" aria-label="Scenario presets">
+ <button type="button" data-preset="conservative">Conservative</button>
+ <button type="button" data-preset="moderate" aria-pressed="true">Moderate</button>
+ <button type="button" data-preset="optimistic">Optimistic</button>
+</div>
+<div class="grid" id="fields"></div>
+
+<h2 id="results">Projected cost of each agent's mistakes</h2>
+<p class="small muted">Two units, as in write-up §24: per 1,000 workflows that meet an ambiguous-execution fault (the
+benchmark's mix), and per 1,000 workflows in all (the first, times the fault incidence). Clean workflows are assumed
+handled correctly by every agent, which favours the acknowledgement-trusting agent. Hover a rate for its count.</p>
+<div class="tablewrap"><table id="results-table" aria-live="polite"></table></div>
+<p class="note small">Compute and agent time are shown apart from the total: they are small next to the error costs and
+use separate assumptions (GPU price, seconds per call).</p>
+
+<h2 id="rates">Measured rates and their sources</h2>
+<p class="small muted">Counts are pooled over seeds. Model arms run each task once greedily and twice sampled. Scripted
+policies run each task once. Every count is in the named summary file, which is in the repository and on the
+Hugging Face traces dataset.</p>
+<div class="tablewrap"><table id="rates-table"></table></div>
+
+<h2 id="sensitivity">Sensitivity: low, base and high brackets</h2>
+<p class="small muted">Each column uses one bracket of ROI.md §3 in full (fault incidence, value, exception cost,
+late-discovery multiplier, recovery rate). The range over seeds is in brackets.</p>
+<div class="tablewrap"><table id="sens-table"></table></div>
+
+<h2 id="model">How the cost is computed</h2>
+<p>Per 1,000 faulted workflows, for each episode outcome measured on the simulator:</p>
+<ul>
+<li><b>False completion</b> (reported done, not done): exception cost x late-discovery multiplier.</li>
+<li><b>Duplicate mutation</b>: value x (1 - recovery rate) + exception cost x multiplier.</li>
+<li><b>False refund</b> (a committed payment refunded): exception cost x multiplier.</li>
+<li><b>Every other episode that is not a verified completion</b> (failed report, escalation, stall): the flagged-exception
+cost, because a person sees it at once.</li>
+<li><b>Optional:</b> an extra loss per partial transaction left unrepaired (default 0; the IMPACT1 model charges it only
+as an exception).</li>
+</ul>
+<p>Per 1,000 workflows in all = the above x fault incidence. Per year = that x volume / 1,000. Seed arms: the mean over
+seeds, with the range. This is <code>scripts/impact_txn.py</code>'s model; the build checks the defaults against its output.</p>
+<p class="note">What this page cannot tell you: the real fault incidence of your systems, how an agent behaves outside a
+simulator, or the cost of building the scripted reconciliation checks (B4), which need the fault taxonomy written down
+in advance. B4 is a reference, not a trained agent.</p>
+<footer id="foot"></footer>
+</main>
+<script type="application/json" id="data">{"agents":[{"label":"B0 trust the acknowledgement (scripted)","family":"scripted","family_label":"Scripted baseline","tags":["B0"],"split":"txn_test","scope":"deterministic scripted policy; 1 episode per task; 440 episodes","n":440,"pooled":{"VTC":{"num":60,"den":440},"FCR":{"num":380,"den":440},"DMR_all":{"num":270,"den":440},"FCompR_all":{"num":0,"den":440},"URR_all":{"num":153,"den":440},"CER":{"num":0,"den":60},"unsafe_unresolvable":{"num":30,"den":60},"PRS":{"num":0,"den":47},"coverage":{"num":440,"den":440},"STR":{"num":60,"den":440}},"per_tag":[{"tag":"B0","path":"results/txn/B0__txn_test.summary.json","sha256":"0572929888e337cf4f57222af2bbd6cef1ba6b9bfa355c6de1e08f17453aca7d","n":440,"rates":{"VTC":0.13636363636363635,"FCR":0.8636363636363636,"DMR_all":0.6136363636363636,"FCompR_all":0.0,"URR_all":0.3477272727272727,"CER":0.0,"unsafe_unresolvable":0.5,"PRS":0.0,"coverage":1.0,"STR":0.13636363636363635,"partial_unrepaired":0.10681818181818181,"escalated":0.0},"calls":4.2295454545454545}],"calls_mean":4.2295454545454545,"sensitivity":{"conservative":{"faulted_mean":442045.45454545465,"faulted_min":442045.45454545465,"faulted_max":442045.45454545465,"workflows":2210.2272727272734},"moderate":{"faulted_mean":1493181.8181818184,"faulted_min":1493181.8181818184,"faulted_max":1493181.8181818184,"workflows":29863.636363636368},"optimistic":{"faulted_mean":4360795.454545455,"faulted_min":4360795.454545455,"faulted_max":4360795.454545455,"workflows":218039.77272727276}}},{"label":"B1 final-state check only (scripted)","family":"scripted","family_label":"Scripted baseline","tags":["B1"],"split":"txn_test","scope":"deterministic scripted policy; 1 episode per task; 440 episodes","n":440,"pooled":{"VTC":{"num":197,"den":440},"FCR":{"num":183,"den":440},"DMR_all":{"num":183,"den":440},"FCompR_all":{"num":0,"den":440},"URR_all":{"num":65,"den":440},"CER":{"num":0,"den":60},"unsafe_unresolvable":{"num":0,"den":60},"PRS":{"num":0,"den":47},"coverage":{"num":440,"den":440},"STR":{"num":197,"den":440}},"per_tag":[{"tag":"B1","path":"results/txn/B1__txn_test.summary.json","sha256":"f7ebb8e614e8f5cbee31c142707a8a4f136d0ff4f2ae03fed801cd1f199c9d4c","n":440,"rates":{"VTC":0.44772727272727275,"FCR":0.4159090909090909,"DMR_all":0.4159090909090909,"FCompR_all":0.0,"URR_all":0.14772727272727273,"CER":0.0,"unsafe_unresolvable":0.0,"PRS":0.0,"coverage":1.0,"STR":0.44772727272727275,"partial_unrepaired":0.10681818181818181,"escalated":0.0},"calls":7.002272727272727}],"calls_mean":7.002272727272727,"sensitivity":{"conservative":{"faulted_mean":294545.45454545465,"faulted_min":294545.45454545465,"faulted_max":294545.45454545465,"workflows":1472.7272727272732},"moderate":{"faulted_mean":989727.2727272726,"faulted_min":989727.2727272726,"faulted_max":989727.2727272726,"workflows":19794.545454545452},"optimistic":{"faulted_mean":2831250.0,"faulted_min":2831250.0,"faulted_max":2831250.0,"workflows":141562.5}}},{"label":"B3 bounded retry + idempotency key (scripted)","family":"scripted","family_label":"Scripted baseline","tags":["B3"],"split":"txn_test","scope":"deterministic scripted policy; 1 episode per task; 440 episodes","n":440,"pooled":{"VTC":{"num":216,"den":440},"FCR":{"num":224,"den":440},"DMR_all":{"num":107,"den":440},"FCompR_all":{"num":0,"den":440},"URR_all":{"num":25,"den":440},"CER":{"num":0,"den":60},"unsafe_unresolvable":{"num":15,"den":60},"PRS":{"num":0,"den":47},"coverage":{"num":440,"den":440},"STR":{"num":216,"den":440}},"per_tag":[{"tag":"B3","path":"results/txn/B3__txn_test.summary.json","sha256":"a2abcc8b357552ad8bb019f7d1aa54930a15e614d868e9e4632a8f158c8e16ba","n":440,"rates":{"VTC":0.4909090909090909,"FCR":0.509090909090909,"DMR_all":0.2431818181818182,"FCompR_all":0.0,"URR_all":0.056818181818181816,"CER":0.0,"unsafe_unresolvable":0.25,"PRS":0.0,"coverage":1.0,"STR":0.4909090909090909,"partial_unrepaired":0.10681818181818181,"escalated":0.0},"calls":4.2295454545454545}],"calls_mean":4.2295454545454545,"sensitivity":{"conservative":{"faulted_mean":183522.72727272732,"faulted_min":183522.72727272732,"faulted_max":183522.72727272732,"workflows":917.6136363636366},"moderate":{"faulted_mean":621772.7272727273,"faulted_min":621772.7272727273,"faulted_max":621772.7272727273,"workflows":12435.454545454546},"optimistic":{"faulted_mean":1874147.7272727275,"faulted_min":1874147.7272727275,"faulted_max":1874147.7272727275,"workflows":93707.38636363638}}},{"label":"Base Tiny Aya Global, prompted","family":"learned","family_label":"Model (Tiny Aya Global, 3.35B)","tags":["tag_base"],"split":"txn_test","scope":"1 seed x 440 tasks x 3 episodes (1 greedy + 2 sampled) = 1320 episodes","n":1320,"pooled":{"VTC":{"num":19,"den":1320},"FCR":{"num":215,"den":1320},"DMR_all":{"num":331,"den":1320},"FCompR_all":{"num":16,"den":1320},"URR_all":{"num":253,"den":1320},"CER":{"num":31,"den":180},"unsafe_unresolvable":{"num":91,"den":180},"PRS":{"num":0,"den":141},"coverage":{"num":1121,"den":1320},"STR":{"num":24,"den":1320}},"per_tag":[{"tag":"tag_base","path":"results/txn/tag_base__txn_test.summary.json","sha256":"cbe30051c8d6433efef346286ba08667cae1367e85cb2cfd1aa62b11c1f7e23a","n":1320,"rates":{"VTC":0.014393939393939395,"FCR":0.16287878787878787,"DMR_all":0.25075757575757573,"FCompR_all":0.012121212121212121,"URR_all":0.19166666666666668,"CER":0.17222222222222222,"unsafe_unresolvable":0.5055555555555555,"PRS":0.0,"coverage":0.8492424242424242,"STR":0.01818181818181818,"partial_unrepaired":0.10681818181818181,"escalated":0.15075757575757576},"calls":6.442424242424242}],"calls_mean":6.442424242424242,"sensitivity":{"conservative":{"faulted_mean":192310.60606060605,"faulted_min":192310.60606060605,"faulted_max":192310.60606060605,"workflows":961.5530303030303},"moderate":{"faulted_mean":627515.1515151515,"faulted_min":627515.1515151515,"faulted_max":627515.1515151515,"workflows":12550.30303030303},"optimistic":{"faulted_mean":1770303.0303030303,"faulted_min":1770303.0303030303,"faulted_max":1770303.0303030303,"workflows":88515.15151515152}}},{"label":"W plain SFT warm start","family":"learned","family_label":"Model (Tiny Aya Global, 3.35B)","tags":["W"],"split":"txn_test","scope":"1 seed x 440 tasks x 3 episodes (1 greedy + 2 sampled) = 1320 episodes","n":1320,"pooled":{"VTC":{"num":587,"den":1320},"FCR":{"num":627,"den":1320},"DMR_all":{"num":313,"den":1320},"FCompR_all":{"num":12,"den":1320},"URR_all":{"num":87,"den":1320},"CER":{"num":6,"den":180},"unsafe_unresolvable":{"num":49,"den":180},"PRS":{"num":3,"den":141},"coverage":{"num":1312,"den":1320},"STR":{"num":592,"den":1320}},"per_tag":[{"tag":"W","path":"results/txn/W__txn_test.summary.json","sha256":"27fbdc7a3ba9c72ff022bb4775ad7eb5063b5f3dd7a0767a1a561dd720cae158","n":1320,"rates":{"VTC":0.4446969696969697,"FCR":0.475,"DMR_all":0.23712121212121212,"FCompR_all":0.00909090909090909,"URR_all":0.0659090909090909,"CER":0.03333333333333333,"unsafe_unresolvable":0.2722222222222222,"PRS":0.02127659574468085,"coverage":0.9939393939393939,"STR":0.4484848484848485,"partial_unrepaired":0.10454545454545454,"escalated":0.0060606060606061},"calls":5.431818181818182}],"calls_mean":5.431818181818182,"sensitivity":{"conservative":{"faulted_mean":180340.90909090912,"faulted_min":180340.90909090912,"faulted_max":180340.90909090912,"workflows":901.7045454545456},"moderate":{"faulted_mean":608878.7878787878,"faulted_min":608878.7878787878,"faulted_max":608878.7878787878,"workflows":12177.575757575758},"optimistic":{"faulted_mean":1830719.696969697,"faulted_min":1830719.696969697,"faulted_max":1830719.696969697,"workflows":91535.98484848486}}},{"label":"Dw_aug randomised recovery SFT (3 seeds)","family":"learned","family_label":"Model (Tiny Aya Global, 3.35B)","tags":["Dwaug_s0","Dwaug_s1","Dwaug_s2"],"split":"txn_test","scope":"3 seeds x 440 tasks x 3 episodes (1 greedy + 2 sampled) = 3960 episodes","n":3960,"pooled":{"VTC":{"num":2762,"den":3960},"FCR":{"num":873,"den":3960},"DMR_all":{"num":502,"den":3960},"FCompR_all":{"num":5,"den":3960},"URR_all":{"num":193,"den":3960},"CER":{"num":0,"den":540},"unsafe_unresolvable":{"num":53,"den":540},"PRS":{"num":260,"den":423},"coverage":{"num":3960,"den":3960},"STR":{"num":2762,"den":3960}},"per_tag":[{"tag":"Dwaug_s0","path":"results/txn/Dwaug_s0__txn_test.summary.json","sha256":"d875499034866b0788c864a9d2c85ec4b1f687fe67b7a5568d21baae0d3482d6","n":1320,"rates":{"VTC":0.7234848484848485,"FCR":0.1803030303030303,"DMR_all":0.10833333333333334,"FCompR_all":0.003787878787878788,"URR_all":0.05303030303030303,"CER":0.0,"unsafe_unresolvable":0.06111111111111111,"PRS":0.6737588652482269,"coverage":1.0,"STR":0.7234848484848485,"partial_unrepaired":0.03484848484848485,"escalated":0.0},"calls":6.818939393939394},{"tag":"Dwaug_s1","path":"results/txn/Dwaug_s1__txn_test.summary.json","sha256":"a3889089141e2af06414f6908af4baf50df99adf0532f452994ca51f54d9b4dc","n":1320,"rates":{"VTC":0.6825757575757576,"FCR":0.24545454545454545,"DMR_all":0.12348484848484849,"FCompR_all":0.0,"URR_all":0.03409090909090909,"CER":0.0,"unsafe_unresolvable":0.13333333333333333,"PRS":0.5319148936170213,"coverage":1.0,"STR":0.6825757575757576,"partial_unrepaired":0.05,"escalated":0.0},"calls":6.40530303030303},{"tag":"Dwaug_s2","path":"results/txn/Dwaug_s2__txn_test.summary.json","sha256":"6151ebbbb6247eaede73f681607d659496b84aed6d0045302d9c0e64ca0b252c","n":1320,"rates":{"VTC":0.6863636363636364,"FCR":0.2356060606060606,"DMR_all":0.1484848484848485,"FCompR_all":0.0,"URR_all":0.05909090909090909,"CER":0.0,"unsafe_unresolvable":0.1,"PRS":0.6382978723404256,"coverage":1.0,"STR":0.6863636363636364,"partial_unrepaired":0.038636363636363635,"escalated":0.0},"calls":6.681060606060606}],"calls_mean":6.63510101010101,"sensitivity":{"conservative":{"faulted_mean":95536.61616161618,"faulted_min":82026.51515151517,"faulted_max":110246.21212121216,"workflows":477.683080808081},"moderate":{"faulted_mean":321186.86868686863,"faulted_min":275075.75757575757,"faulted_max":370787.8787878788,"workflows":6423.737373737374},"optimistic":{"faulted_mean":953125.0000000001,"faulted_min":814375.0000000001,"faulted_max":1092159.090909091,"workflows":47656.25000000001}}},{"label":"D recovery SFT + GRPO (3 seeds)","family":"learned","family_label":"Model (Tiny Aya Global, 3.35B)","tags":["D_s0","D_s1","D_s2"],"split":"txn_test","scope":"3 seeds x 440 tasks x 3 episodes (1 greedy + 2 sampled) = 3960 episodes","n":3960,"pooled":{"VTC":{"num":2864,"den":3960},"FCR":{"num":462,"den":3960},"DMR_all":{"num":208,"den":3960},"FCompR_all":{"num":0,"den":3960},"URR_all":{"num":68,"den":3960},"CER":{"num":15,"den":540},"unsafe_unresolvable":{"num":14,"den":540},"PRS":{"num":331,"den":423},"coverage":{"num":3941,"den":3960},"STR":{"num":2878,"den":3960}},"per_tag":[{"tag":"D_s0","path":"results/txn/D_s0__txn_test.summary.json","sha256":"58bd24639f2710a2829d671aabf9fcce6b632028b337c6d587a490244a41dae8","n":1320,"rates":{"VTC":0.7242424242424242,"FCR":0.12121212121212122,"DMR_all":0.05227272727272727,"FCompR_all":0.0,"URR_all":0.021212121212121213,"CER":0.05,"unsafe_unresolvable":0.044444444444444446,"PRS":0.7872340425531915,"coverage":0.9924242424242424,"STR":0.7303030303030303,"partial_unrepaired":0.022727272727272728,"escalated":0.007575757575757569},"calls":7.715909090909091},{"tag":"D_s1","path":"results/txn/D_s1__txn_test.summary.json","sha256":"4525906f706a30f58ce4161f32ee9ee763c8733afe33f8c6539b49056099c8fd","n":1320,"rates":{"VTC":0.7181818181818181,"FCR":0.12424242424242424,"DMR_all":0.059848484848484845,"FCompR_all":0.0,"URR_all":0.015151515151515152,"CER":0.005555555555555556,"unsafe_unresolvable":0.016666666666666666,"PRS":0.7801418439716312,"coverage":0.9992424242424243,"STR":0.718939393939394,"partial_unrepaired":0.023484848484848483,"escalated":0.0007575757575757347},"calls":7.806818181818182},{"tag":"D_s2","path":"results/txn/D_s2__txn_test.summary.json","sha256":"8c22d4dfec1fb525cc532b8067b173e15a975be1545275c7b2404f505c4ad8e4","n":1320,"rates":{"VTC":0.7272727272727273,"FCR":0.10454545454545454,"DMR_all":0.045454545454545456,"FCompR_all":0.0,"URR_all":0.015151515151515152,"CER":0.027777777777777776,"unsafe_unresolvable":0.016666666666666666,"PRS":0.7801418439716312,"coverage":0.9939393939393939,"STR":0.7310606060606061,"partial_unrepaired":0.023484848484848483,"escalated":0.0060606060606061},"calls":7.824242424242424}],"calls_mean":7.7823232323232325,"sensitivity":{"conservative":{"faulted_mean":43977.272727272735,"faulted_min":38977.272727272735,"faulted_max":49053.030303030304,"workflows":219.88636363636365},"moderate":{"faulted_mean":145111.11111111112,"faulted_min":128000.0,"faulted_max":162287.8787878788,"workflows":2902.2222222222226},"optimistic":{"faulted_mean":438686.86868686863,"faulted_min":387954.5454545454,"faulted_max":487897.7272727272,"workflows":21934.343434343435}}},{"label":"SEL1 CTL (3 seeds)","family":"sel1","family_label":"Model, SEL1 continuation","tags":["sel1:CTL_s0","sel1:CTL_s1","sel1:CTL_s2"],"split":"txn_test","scope":"3 seeds x 440 tasks x 3 episodes (1 greedy + 2 sampled) = 3960 episodes","n":3960,"pooled":{"VTC":{"num":3451,"den":3960},"FCR":{"num":88,"den":3960},"DMR_all":{"num":69,"den":3960},"FCompR_all":{"num":4,"den":3960},"URR_all":{"num":52,"den":3960},"CER":{"num":1,"den":540},"unsafe_unresolvable":{"num":12,"den":540},"PRS":{"num":402,"den":423},"coverage":{"num":3959,"den":3960},"STR":{"num":3452,"den":3960}},"per_tag":[{"tag":"sel1:CTL_s0","path":"results/sel1/CTL_s0__txn_test.summary.json","sha256":"3657085a4ff8ee9ceb0db574cdc0327407f87cc4bdda3ad1fba4b8e77b813e0b","n":1320,"rates":{"VTC":0.8598484848484849,"FCR":0.01893939393939394,"DMR_all":0.011363636363636364,"FCompR_all":0.0030303030303030303,"URR_all":0.009848484848484848,"CER":0.0,"unsafe_unresolvable":0.03333333333333333,"PRS":0.9432624113475178,"coverage":1.0,"STR":0.8598484848484849,"partial_unrepaired":0.006060606060606061,"escalated":0.0},"calls":7.7318181818181815},{"tag":"sel1:CTL_s1","path":"results/sel1/CTL_s1__txn_test.summary.json","sha256":"926682eeddeb1da32a5315a5d0df889448828208792b2203f9496718810a2fa5","n":1320,"rates":{"VTC":0.8848484848484849,"FCR":0.024242424242424242,"DMR_all":0.022727272727272728,"FCompR_all":0.0,"URR_all":0.015151515151515152,"CER":0.005555555555555556,"unsafe_unresolvable":0.016666666666666666,"PRS":0.9361702127659575,"coverage":0.9992424242424243,"STR":0.8856060606060606,"partial_unrepaired":0.006818181818181818,"escalated":0.0007575757575757347},"calls":7.743181818181818},{"tag":"sel1:CTL_s2","path":"results/sel1/CTL_s2__txn_test.summary.json","sha256":"55725ab738a03822efa8713470bc2b19885d1ea6c90cf7cbf108bd58eeba42db","n":1320,"rates":{"VTC":0.8696969696969697,"FCR":0.023484848484848483,"DMR_all":0.01818181818181818,"FCompR_all":0.0,"URR_all":0.014393939393939395,"CER":0.0,"unsafe_unresolvable":0.016666666666666666,"PRS":0.9716312056737588,"coverage":1.0,"STR":0.8696969696969697,"partial_unrepaired":0.0030303030303030303,"escalated":0.0},"calls":7.7704545454545455}],"calls_mean":7.748484848484849,"sensitivity":{"conservative":{"faulted_mean":15145.202020202021,"faulted_min":11515.151515151516,"faulted_max":18257.575757575756,"workflows":75.7260101010101},"moderate":{"faulted_mean":48545.45454545454,"faulted_min":36000.0,"faulted_max":59363.63636363636,"workflows":970.9090909090909},"optimistic":{"faulted_mean":141300.50505050505,"faulted_min":107196.96969696971,"faulted_max":170643.9393939394,"workflows":7065.025252525254}}},{"label":"SEL1 SEL (3 seeds)","family":"sel1","family_label":"Model, SEL1 continuation","tags":["sel1:SEL_s0","sel1:SEL_s1","sel1:SEL_s2"],"split":"txn_test","scope":"3 seeds x 440 tasks x 3 episodes (1 greedy + 2 sampled) = 3960 episodes","n":3960,"pooled":{"VTC":{"num":3285,"den":3960},"FCR":{"num":79,"den":3960},"DMR_all":{"num":54,"den":3960},"FCompR_all":{"num":13,"den":3960},"URR_all":{"num":50,"den":3960},"CER":{"num":525,"den":540},"unsafe_unresolvable":{"num":7,"den":540},"PRS":{"num":394,"den":423},"coverage":{"num":3422,"den":3960},"STR":{"num":3810,"den":3960}},"per_tag":[{"tag":"sel1:SEL_s0","path":"results/sel1/SEL_s0__txn_test.summary.json","sha256":"1886ce1553e243701d20349051bf6491f2cac587f0c89e86789f7452c4cad058","n":1320,"rates":{"VTC":0.8333333333333334,"FCR":0.016666666666666666,"DMR_all":0.015151515151515152,"FCompR_all":0.005303030303030303,"URR_all":0.015151515151515152,"CER":0.9666666666666667,"unsafe_unresolvable":0.016666666666666666,"PRS":0.950354609929078,"coverage":0.8666666666666667,"STR":0.9651515151515152,"partial_unrepaired":0.005303030303030303,"escalated":0.1333333333333333},"calls":7.956060606060606},{"tag":"sel1:SEL_s1","path":"results/sel1/SEL_s1__txn_test.summary.json","sha256":"a325508166004872bc8bff001bd5ae19e43246c29ae15946afbdbdde8ac05252","n":1320,"rates":{"VTC":0.8227272727272728,"FCR":0.022727272727272728,"DMR_all":0.01818181818181818,"FCompR_all":0.0,"URR_all":0.012878787878787878,"CER":0.9666666666666667,"unsafe_unresolvable":0.016666666666666666,"PRS":0.9290780141843972,"coverage":0.8628787878787879,"STR":0.9545454545454546,"partial_unrepaired":0.007575757575757576,"escalated":0.1371212121212121},"calls":7.898484848484848},{"tag":"sel1:SEL_s2","path":"results/sel1/SEL_s2__txn_test.summary.json","sha256":"7fcec85686576a829f42668b49e280bfed527862e694c7f0bcabeeed68e8d63f","n":1320,"rates":{"VTC":0.8325757575757575,"FCR":0.020454545454545454,"DMR_all":0.007575757575757576,"FCompR_all":0.004545454545454545,"URR_all":0.009848484848484848,"CER":0.9833333333333333,"unsafe_unresolvable":0.005555555555555556,"PRS":0.9148936170212766,"coverage":0.8628787878787879,"STR":0.9666666666666667,"partial_unrepaired":0.00909090909090909,"escalated":0.1371212121212121},"calls":7.993181818181818}],"calls_mean":7.949242424242424,"sensitivity":{"conservative":{"faulted_mean":13787.87878787879,"faulted_min":9848.484848484852,"faulted_max":16818.18181818182,"workflows":68.93939393939395},"moderate":{"faulted_mean":42939.39393939394,"faulted_min":29833.333333333336,"faulted_max":53000.0,"workflows":858.7878787878789},"optimistic":{"faulted_mean":126780.30303030304,"faulted_min":92102.27272727275,"faulted_max":153750.0,"workflows":6339.015151515152}}},{"label":"B4 transaction-aware reconciliation (scripted reference)","family":"reference","family_label":"Scripted reference (knows the fault taxonomy)","tags":["B4"],"split":"txn_test","scope":"deterministic scripted policy; 1 episode per task; 440 episodes","n":440,"pooled":{"VTC":{"num":380,"den":440},"FCR":{"num":0,"den":440},"DMR_all":{"num":0,"den":440},"FCompR_all":{"num":0,"den":440},"URR_all":{"num":0,"den":440},"CER":{"num":60,"den":60},"unsafe_unresolvable":{"num":0,"den":60},"PRS":{"num":47,"den":47},"coverage":{"num":380,"den":440},"STR":{"num":440,"den":440}},"per_tag":[{"tag":"B4","path":"results/txn/B4__txn_test.summary.json","sha256":"5d229b21a5923607cdaa35ab51de24f5c9685243edeb8359f72b76251f1aa76f","n":440,"rates":{"VTC":0.8636363636363636,"FCR":0.0,"DMR_all":0.0,"FCompR_all":0.0,"URR_all":0.0,"CER":1.0,"unsafe_unresolvable":0.0,"PRS":1.0,"coverage":0.8636363636363636,"STR":1.0,"partial_unrepaired":0.0,"escalated":0.13636363636363635},"calls":7.6022727272727275}],"calls_mean":7.6022727272727275,"sensitivity":{"conservative":{"faulted_mean":3409.0909090909086,"faulted_min":3409.0909090909086,"faulted_max":3409.0909090909086,"workflows":17.045454545454543},"moderate":{"faulted_mean":8181.818181818182,"faulted_min":8181.818181818182,"faulted_max":8181.818181818182,"workflows":163.63636363636365},"optimistic":{"faulted_mean":23863.636363636364,"faulted_min":23863.636363636364,"faulted_max":23863.636363636364,"workflows":1193.1818181818182}}}],"scenarios":{"conservative":{"f":0.005,"value":2000,"exception":25,"mult":2,"recovery":0.7,"gpu":2.5},"moderate":{"f":0.02,"value":5000,"exception":60,"mult":3,"recovery":0.6,"gpu":5.0},"optimistic":{"f":0.05,"value":10000,"exception":175,"mult":5,"recovery":0.5,"gpu":5.0}},"calls_per_gpu_hour":72000,"defaults":{"f":0.02,"value":5000,"exception":60,"mult":3,"recovery":0.6,"gpu":5.0,"flagged":60,"partial":0.0,"seconds_per_call":2.0,"volume":100000},"check":{"reproduces":["B0 trust the acknowledgement (scripted)","B1 final-state check only (scripted)","B3 bounded retry + idempotency key (scripted)","W plain SFT warm start (Tiny Aya Global)","Dw_aug randomised recovery SFT (3 seeds)","D recovery SFT + GRPO (3 seeds)","SEL1 CTL (3 seeds)","SEL1 SEL (3 seeds)","B4 transaction-aware reconciliation (scripted reference)"],"of":9},"built":{"commit":"5323aef","utc":"2026-11-27 20:42 UTC","impact_json_sha256":"7c75fe7acd8bbd1378a04649c0b19afdfae1abaf24cf42a968fa8c159c238e2b"}}</script>
+<script>
+(function(){
+"use strict";
+var D=JSON.parse(document.getElementById("data").textContent);
+var FIELDS=[
+ {k:"f",label:"Fault incidence per workflow",unit:"%",pct:true,step:0.1,min:0,max:100,
+  src:"Assumption, bracketed by APQC's 0.8-2.0% duplicate-or-erroneous disbursement rate (ROI.md §3)."},
+ {k:"value",label:"Transaction value",unit:"$",step:100,min:0,src:"Illustrative; no source."},
+ {k:"exception",label:"Cost to resolve one exception by hand",unit:"$",step:5,min:0,
+  src:"Weak: AP per-invoice cost benchmarks and one vendor estimate (ROI.md §3)."},
+ {k:"mult",label:"Late-discovery multiplier",unit:"x",step:0.5,min:1,src:"Assumption: an error found late costs this many exceptions."},
+ {k:"recovery",label:"Duplicate payment recovery rate",unit:"%",pct:true,step:5,min:0,max:100,
+  src:"Weak: an unsourced 60-70% blog estimate (ROI.md §3)."},
+ {k:"flagged",label:"Cost of a flagged exception (failed report, escalation, stall)",unit:"$",step:5,min:0,
+  src:"Defaults to the exception cost, as in IMPACT1."},
+ {k:"partial",label:"Extra loss per unrepaired partial transaction",unit:"$",step:10,min:0,
+  src:"Default 0 (IMPACT1 charges it only as an exception)."},
+ {k:"volume",label:"Workflows per year",unit:"",step:1000,min:0,src:"Illustrative; scales the yearly column only."},
+ {k:"gpu",label:"GPU price",unit:"$/hour",step:0.5,min:0,src:"HF Jobs H200 listing (ROI.md §3)."},
+ {k:"seconds_per_call",label:"Seconds per tool call",unit:"s",step:0.5,min:0,
+  src:"Assumption, no source: tool latency plus generation."}
+];
+var A=Object.assign({},D.defaults);
+var fmt0=new Intl.NumberFormat("en-US",{maximumFractionDigits:0});
+var fmt2=new Intl.NumberFormat("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+function money(x){return "$"+fmt0.format(Math.round(x));}
+function rate(x){return (x).toFixed(3);}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
+function cost(r,a){
+ var e=a.exception,m=a.mult,other=Math.max(0,1-r.VTC-r.FCR);
+ return 1000*(r.FCR*e*m+r.DMR_all*(a.value*(1-a.recovery)+e*m)+r.FCompR_all*e*m+other*a.flagged+r.partial_unrepaired*a.partial);
+}
+function sw(f){return '<span class="sw" style="background:var(--f-'+f+')" aria-hidden="true"></span>';}
+function buildFields(){
+ var g=document.getElementById("fields");
+ g.innerHTML=FIELDS.map(function(f){
+  var v=f.pct?A[f.k]*100:A[f.k];
+  return '<div class="field"><label for="in-'+f.k+'">'+esc(f.label)+'</label><div class="row">'+
+   '<input id="in-'+f.k+'" type="number" inputmode="decimal" step="'+f.step+'" min="'+f.min+'"'+(f.max!=null?' max="'+f.max+'"':'')+
+   ' value="'+(+v.toFixed(4))+'"><span class="unit">'+esc(f.unit)+'</span></div><div class="src">'+esc(f.src)+'</div></div>';
+ }).join("");
+ FIELDS.forEach(function(f){
+  document.getElementById("in-"+f.k).addEventListener("input",function(ev){
+   var x=parseFloat(ev.target.value);if(!isFinite(x))return;
+   A[f.k]=f.pct?x/100:x;
+   if(f.k==="exception"&&!flaggedEdited){A.flagged=x;document.getElementById("in-flagged").value=x;}
+   if(f.k==="flagged")flaggedEdited=true;
+   setPressed(null);render();
+  });
+ });
+}
+var flaggedEdited=false;
+function setPressed(name){
+ document.querySelectorAll("[data-preset]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.preset===name));});
+}
+document.querySelectorAll("[data-preset]").forEach(function(b){
+ b.addEventListener("click",function(){
+  var s=D.scenarios[b.dataset.preset];
+  ["f","value","exception","mult","recovery","gpu"].forEach(function(k){A[k]=s[k];});
+  A.flagged=s.exception;A.partial=0;flaggedEdited=false;
+  buildFields();setPressed(b.dataset.preset);render();
+ });
+});
+function render(){
+ var rows=D.agents.map(function(ag){
+  var cs=ag.per_tag.map(function(t){return cost(t.rates,A);});
+  var mean=cs.reduce(function(s,x){return s+x;},0)/cs.length;
+  return {ag:ag,mean:mean,min:Math.min.apply(null,cs),max:Math.max.apply(null,cs),wf:A.f*mean};
+ });
+ var top=Math.max.apply(null,rows.map(function(r){return r.wf;}))||1;
+ var h='<thead><tr><th class="l" scope="col">Agent</th><th scope="col">Verified<br>completion</th><th scope="col">False<br>completion</th>'+
+  '<th scope="col">Duplicate<br>mutation</th><th scope="col">False<br>refund</th><th scope="col">Flagged<br>(not verified)</th>'+
+  '<th scope="col">Per 1,000<br>faulted workflows</th><th scope="col">Per 1,000<br>workflows</th><th scope="col">Per year</th>'+
+  '<th scope="col">Compute per 1,000<br>workflows; agent time</th></tr></thead><tbody>';
+ rows.forEach(function(r){
+  var ag=r.ag,p=ag.pooled,n=ag.n;
+  function cell(k){var c=p[k];return '<td title="'+c.num+' of '+c.den+' episodes">'+rate(c.num/c.den)+'</td>';}
+  var flagged=n-p.VTC.num-p.FCR.num;
+  var range=ag.per_tag.length>1?'<div class="small muted">'+money(r.min)+' to '+money(r.max)+'</div>':'';
+  var compute=ag.calls_mean*1000/D.calls_per_gpu_hour*A.gpu;
+  h+='<tr><td class="l">'+sw(ag.family)+esc(ag.label)+'<span class="fam">'+esc(ag.family_label)+'</span></td>'+
+   cell("VTC")+cell("FCR")+cell("DMR_all")+cell("FCompR_all")+
+   '<td title="'+Math.max(0,flagged)+' of '+n+' episodes">'+rate(Math.max(0,flagged)/n)+'</td>'+
+   '<td><span class="big">'+money(r.mean)+'</span>'+range+'</td>'+
+   '<td><span class="big">'+money(r.wf)+'</span><div class="bar" style="width:'+Math.max(1,Math.round(110*r.wf/top))+'px;background:var(--f-'+ag.family+')"></div></td>'+
+   '<td>'+money(r.wf*A.volume/1000)+'</td>'+
+   '<td>$'+fmt2.format(compute)+'<div class="small muted">'+(ag.calls_mean*A.seconds_per_call).toFixed(1)+' s; '+ag.calls_mean.toFixed(2)+' calls</div></td></tr>';
+ });
+ document.getElementById("results-table").innerHTML=h+"</tbody>";
+}
+function ratesTable(){
+ var K=[["VTC","Verified completion"],["FCR","False completion"],["DMR_all","Duplicate mutation"],["FCompR_all","False refund"],
+  ["URR_all","Unsafe re-execution"],["CER","Escalation when it is the safe action"],["unsafe_unresolvable","Unsafe when evidence is unresolvable"],
+  ["PRS","Partial transaction repaired"]];
+ var h='<thead><tr><th class="l" scope="col">Agent, split, seed scope and source (sha256, first 12)</th>'+K.map(function(k){return '<th scope="col">'+k[1].replace(/ (?=\S+$)/,"<br>")+'</th>';}).join("")+
+  '</tr></thead><tbody>';
+ D.agents.forEach(function(ag){
+  h+='<tr><td class="l">'+sw(ag.family)+esc(ag.label)+'<span class="fam">'+esc(ag.split)+'; '+esc(ag.scope)+'</span>'+
+   '<span class="fam src-list">'+ag.per_tag.map(function(t){return '<code>'+esc(t.path)+'</code> <span style="white-space:nowrap">sha256 '+t.sha256.slice(0,12)+'</span>';}).join("<br>")+'</span></td>'+
+   K.map(function(k){var c=ag.pooled[k[0]];return '<td>'+c.num+' / '+c.den+'<div class="small muted">'+(c.den?rate(c.num/c.den):"n/a")+'</div></td>';}).join("")+'</tr>';
+ });
+ document.getElementById("rates-table").innerHTML=h+"</tbody>";
+}
+function sensTable(){
+ var S=["conservative","moderate","optimistic"];
+ var h='<thead><tr><th class="l" scope="col">Agent</th>'+S.map(function(s){return '<th scope="col">Per 1,000 faulted<br>'+s+'</th>';}).join("")+
+  S.map(function(s){return '<th scope="col">Per 1,000 workflows<br>'+s+'</th>';}).join("")+'</tr></thead><tbody>';
+ D.agents.forEach(function(ag){
+  h+='<tr><td class="l">'+sw(ag.family)+esc(ag.label)+'</td>'+S.map(function(s){var x=ag.sensitivity[s];
+   return '<td>'+money(x.faulted_mean)+(ag.per_tag.length>1?'<div class="small muted">['+money(x.faulted_min)+', '+money(x.faulted_max)+']</div>':'')+'</td>';}).join("")+
+   S.map(function(s){return '<td>'+money(ag.sensitivity[s].workflows)+'</td>';}).join("")+'</tr>';
+ });
+ document.getElementById("sens-table").innerHTML=h+"</tbody>";
+}
+function foot(){
+ var b=D.built;
+ document.getElementById("foot").innerHTML='Built by <code>scripts/build_impact_page.py</code> at commit '+esc(b.commit)+', '+esc(b.utc)+
+  '. Build check: with the moderate defaults this page reproduces <code>results/impact/impact_txn.json</code> (sha256 '+b.impact_json_sha256.slice(0,12)+
+  ') for '+D.check.reproduces.length+' of its '+D.check.of+' agents, in all three brackets. Calls per GPU-hour: '+fmt0.format(D.calls_per_gpu_hour)+
+  ' (measured, ROI.md §3). Simulator: ProcureSim, an in-memory procurement simulator; no customer deployment exists.';
+}
+buildFields();render();ratesTable();sensTable();foot();
+})();
+</script>
+</body>
+</html>
