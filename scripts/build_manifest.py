@@ -40,6 +40,7 @@ RESULTS = {  # file -> (registration or status, script)
     "results/p4_hashes.json": ("P4 registration hashes", "scripts/freeze_p4.py"),
     "results/sel1_hashes.json": ("SEL1 registration hashes", "scripts/freeze_sel1.py"),
 }
+COLLECTION = "atharvgaur18/actionproof-final-round-stage-2-6b090c4faec34bf64ccdb0f0"
 SPLIT_MANIFESTS = ["data/bench/proc/txn_manifest.json", "data/bench/proc/sel1_manifest.json"]
 ENV = {"python": "3.12", "torch": "2.11.0+cu130", "transformers": "5.22.1", "trl": "1.7.1", "vllm": "0.23.0",
        "peft": "0.21.2", "AgentTune": "d4db4c12d523", "AuditKIT": "71316da34578", "CuratorKIT": "dd9e835301fc",
@@ -78,6 +79,14 @@ def main() -> None:
              "P2 and AD-C1 adapters (cluster only)"]}
     for kind, repo, what in HUB:
         m["hub"][repo] = {"kind": kind, "what": what, **hub(kind, repo)}
+    try:  # the Hugging Face collection of the final-round artefacts (anonymous request)
+        with urllib.request.urlopen(urllib.request.Request(f"https://huggingface.co/api/collections/{COLLECTION}",
+                                                           headers={"User-Agent": "manifest-check"}), timeout=30) as r:
+            c = json.loads(r.read().decode())
+        m["collection"] = {"url": f"https://huggingface.co/collections/{COLLECTION}", "status": "private" if c.get("private") else "public",
+                           "items": [i.get("id") for i in c.get("items", [])]}
+    except Exception as e:  # noqa: BLE001
+        m["collection"] = {"url": f"https://huggingface.co/collections/{COLLECTION}", "status": f"not verified ({type(e).__name__})"}
     for f in SPLIT_MANIFESTS:
         d = json.loads((ROOT / f).read_text())
         for name, v in d["files"].items():
