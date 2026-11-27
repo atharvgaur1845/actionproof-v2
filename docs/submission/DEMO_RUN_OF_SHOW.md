@@ -44,8 +44,12 @@ surfaces exist. They are never conflated, and each one carries its label on scre
 ## Checklist (staging, then live; 2026-11-27)
 
 Checked through the Space's API with `gradio_client` from the cluster, staging first (commit 61b1c77), then live
-(cf90ad3; the previous live commit, 3bb0dc8, is the rollback). A human check in a browser is still needed for the
-layout items.
+(cf90ad3; the previous live commit, 3bb0dc8, is the rollback). After the final hostile review, the wording changes
+were redeployed the same way:
+- staging 51db97c: scripted oracle, recorded trained and judge mode all passed, judge in 69 s;
+- live bac5889 (rollback cf90ad3).
+
+A human check in a browser is still needed for the layout items.
 
 - [x] Judge mode, Task 0004, Reality C: left `SCRIPTED: acknowledgement-trusting` (VSC 0, false success), right
       `LIVE MODEL RUN · atharvgaur18/actionproof-agent-d` (VSC 1). The JSON export lists both sides, with run id,

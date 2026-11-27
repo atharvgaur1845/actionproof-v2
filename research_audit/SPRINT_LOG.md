@@ -58,3 +58,39 @@ Branch `stage2-superiority-sprint` (from `submission-candidate` @ `7ae863f`). Lo
 - Companion label added to `paper/main_v3.tex`; PDF rebuilt and committed.
 - Release tables and write-up §28 now come from `release/ARTIFACT_MANIFEST.json`: 11 Hub entries public
   anonymously, 6 splits match, 13 of 13 result files present.
+
+## Correction to the Phase C entry above (10:55 IST)
+- The Phase C entry says "both SEL1 arms pass B4's overall TXN VTC (0.830 and 0.871 against 0.864)". That is false:
+  SEL's 0.830 is below 0.864, and only CTL passes. I wrote it, and the hostile review caught it on five surfaces;
+  all are corrected.
+- CTL's completions on unresolvable tasks were same-key resends, not completions "without the evidence".
+- The entry is left as written, with this correction.
+
+## Phase F (part 1): clean room, hostile reviews and their resolution (10:05–10:55 IST)
+- **Clean room (task 1830).** A fresh clone of 9750f73, a fresh virtualenv and an anonymous HF download.
+  `smoke_check` passed in 27 s. `verify_numbers.sh` passed in 367 s: every registered analysis recomputed
+  byte-identically, and 0 tracked files changed (`research_audit/cleanroom/`).
+- **Three independent hostile reviews** (ML research, systems, hackathon judge). All returned FAIL. The arithmetic
+  was clean; the failures were in what the numbers were said to mean and in the benchmark's construction.
+- **Every factual claim re-checked** (probes rerun, counts recomputed). Then exploratory task 1840
+  (`scripts/audit/txn_validity.py`) sized each finding over all recorded episodes:
+  - keyed "unresolvable" tasks settle by a same-key resend;
+  - SEL1's H1 mostly replaces honest "failed" reports;
+  - the `audit_down` control cannot fire;
+  - where hand-off is the only safe action, SEL hands off in 164 of 432 episodes, seed-fragile;
+  - DMR mixes injected duplicates with caused ones (D's advantage holds in both parts);
+  - read-free BD reaches 308 of 440;
+  - over-refunds: 3 of 74,000 episodes.
+- **Post-hoc addenda.** `PREREGISTRATION_TXN1_ADDENDUM3.md` and `PREREGISTRATION_SEL1_ADDENDUM1.md`, both committed at
+  10:32 IST. Their in-text stamps first said 10:35 and 10:40, times I had not checked; corrected. No registered
+  verdict changed.
+- **Surfaces rewritten to that scope:**
+  - README, write-up (abstract 496 words), SLIDES and deck (version 1795756118-dd8d), story decision, novelty
+    addendum 2;
+  - video script, captions and run of show (one timeline);
+  - Space texts (staging 51db97c, then live bac5889), model and dataset cards (dataset viewer off), replay site
+    (db7fc43).
+- **Recovered evidence.** The SEL1 data hashes were found on the cluster, recorded at 05:42, before the first training
+  run at 05:44. They are now committed; the training rows are released in the traces dataset (task 1850).
+- `research_audit/FINAL_REDTEAM_REVIEW.md`: the three reviews and a 35-row resolution table.
+- **Open, author only:** push and merge; share or export the deck; record the video; set the `HF_TOKEN` secret.
