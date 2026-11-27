@@ -157,7 +157,7 @@ Per-seed union sampled VSC of D: s0 0.823, s1 0.806, s2 0.829. Dw (single checkp
   leaves it slightly below D (registered P3-H1, `results/p3/p3_summary.json`).
 - **Intervals are over tasks only.** Paired task bootstrap over 450 tasks (B = 10,000) holds the three trained
   models fixed; with three seeds, seed-level power is low. Per-split cells carry no stored interval.
-- One base model (3.35B), one simulated domain, English-language training; Hindi and Hinglish were evaluated as shifts
+- RL on one base model (3.35B); the recovery-SFT recipe alone was replicated on four more Cohere bases (P5). One simulated domain, English-language training; Hindi and Hinglish were evaluated as shifts
   only (`docs/submission/WRITEUP.md` section 25).
 - Non-commercial licence inherited from the base model.
 

@@ -153,7 +153,7 @@ Also recorded:
 
 These are v2 work.
 
-### P4: randomised demonstrations remove procedure replay in the warm start (registered, `PREREGISTRATION_P4.md`)
+### P4: randomised demonstrations reduce procedure replay in the warm start, on the tested surface and workflow (registered, `PREREGISTRATION_P4.md`)
 
 Dw_aug re-renders half of the recovery demonstrations on synonym tool surfaces (none shared with the held-out surface) and adds oracle demonstrations on five new step sequences (none is the test workflow), so it has about 21% more rows than Dw. One held-out tool surface and one new workflow were tested. Three seeds per arm; sampled VSC; paired task bootstrap.
 
