@@ -1,0 +1,22 @@
+<section id="naive" class="foot">
+<p class="eyebrow">WHY THE USUAL FIXES FAIL</p>
+<h2>Trusting, retrying and end-state checks each break somewhere</h2>
+<div class="row">
+<div class="grow">
+<table>
+<tr><th style="width:46%">Scripted policy, locked TXN test</th><th>Verified completion</th><th>False completion</th></tr>
+<tr><td>B0 trust the acknowledgement</td><td>0.136</td><td>0.864</td></tr>
+<tr><td>B1 check only the final state</td><td>0.448</td><td>0.416</td></tr>
+<tr><td>B3 bounded retry with idempotency keys</td><td>0.491</td><td>0.509</td></tr>
+<tr><td>B4 reconcile the evidence (scripted reference)</td><td>0.864</td><td>0.000</td></tr>
+</table>
+</div>
+<div class="why" style="width:560px">
+<div class="note"><h3>Trust the reply</h3><p class="mut">reports payments that never happened</p></div>
+<div class="note"><h3>Retry blindly</h3><p class="mut">pays twice when the first attempt went through</p></div>
+<div class="note"><h3>Check only the end state</h3><p class="mut">cannot tell a repair from a duplicate</p></div>
+</div>
+</div>
+<p class="footer">One deterministic episode per task; 440 locked tasks, the same tools, budget and verifier for every policy. B4 reads the record with consistent reads before any retry and is a hand-written reference, not a learned model.</p>
+<aside>The obvious engineering fixes each fail on a different reality. Idempotency keys help, but bounded retry still falsely completes on about half the tasks because it never reads the record. Only reconciliation, reading the authoritative record before deciding, gets false completion to zero. That reference is scripted. The question is whether a small model can learn it.</aside>
+</section>

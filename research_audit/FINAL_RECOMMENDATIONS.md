@@ -1,3 +1,5 @@
+> **Superseded (2026-11-27, Stage 2 sprint).** This file is kept as history (last updated 2026-11-25) and is not current. The current source is `docs/submission/FINAL_STORY_DECISION.md`. See `research_audit/STALE_SURFACES_AUDIT.md`.
+
 # Final recommendations
 
 2026-11-25. Branch `submission-candidate`. Deadline Nov 28, 2026, 23:59 IST (confirmed by the author).

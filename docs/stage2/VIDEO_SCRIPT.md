@@ -1,3 +1,5 @@
+> **Superseded (2026-11-27, Stage 2 sprint).** This file is kept as history (last updated 2026-11-24) and is not current. The current source is `docs/submission/VIDEO_SCRIPT.md`. See `research_audit/STALE_SURFACES_AUDIT.md`.
+
 # Stage 2 video script (draft; target 6 to 7 minutes)
 
 Narrator: the user. Driver: Claude (commands in `docs/stage2/COMMANDS.md`, written at M6). Every number on screen resolves through `claims/claims.yaml`. Anything marked PENDING is filled only from a result file; if the file does not exist at the freeze (Tue Nov 24 12:00 IST), the segment says "not finished" instead.

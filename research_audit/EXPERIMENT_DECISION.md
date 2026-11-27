@@ -1,8 +1,8 @@
 # Experiment value / time matrix and keep-drop list (Phase B)
 
-2026-11-27 ~07:30 IST.
+2026-11-27 ~05:30 IST (times from `date`).
 
-**Time available.** The conservative freeze is Nov 28, 23:59 IST: about 40 h. The author must record the video,
+**Time available.** The conservative freeze is Nov 28, 23:59 IST: about 42 h (from 05:30 IST). The author must record the video,
 so slides and demo must be final by about Nov 28, 12:00 IST. An experiment therefore has to finish, *including
 statistics and the write-up*, by about Nov 28, 06:00 IST.
 
@@ -32,7 +32,7 @@ statistics and the write-up*, by about Nov 28, 06:00 IST.
 | GPU wall time | 3 × (2 h GRPO + 1 h eval) on 2 lanes: about 5 h | 6 × (0.8 h SFT + 0.6 h eval) on 2 lanes: **about 4–5 h** | 0 (CPU on the cluster) |
 | Implementation risk | Low | Medium: a demo renderer, a policy, a split generator, the eval wiring | Medium |
 | Risk of an uninformative null | Medium | Low: either outcome (escalation learned, or a shortcut that over-escalates) is reportable and decision-relevant | Medium |
-| Fits the deadline | Yes | Yes, if launched by about 13:00 IST today | Yes |
+| Fits the deadline | Yes | Yes, if launched by about 13:00 IST today (it is 05:30 now) | Yes |
 
 **Decision: B (SEL1) is the single primary experiment.**
 

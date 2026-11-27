@@ -1,32 +1,13 @@
----
-title: ActionProof
-emoji: 🧾
-colorFrom: indigo
-colorTo: green
-sdk: gradio
-python_version: "3.12"
-app_file: app.py
-pinned: false
-license: cc-by-nc-4.0
-short_description: Tool agents that check whether their writes landed
----
+# demo/: sources of the replay site (not a Space README)
 
-# ActionProof demo
+This folder holds the *sources* of the replay website: `site_template.html`, `site_upgrade.js`, `data.json`,
+`replays/`, `theme.css` and the build helpers. The built page is `demo/static/index.html`, deployed as the static
+Space https://huggingface.co/spaces/atharvgaur18/actionproof. It contains recorded episodes only: no model call
+happens there.
 
-Tools sometimes acknowledge writes that never committed. ActionProof is a SQLite customer-support simulator in which a
-phantom write returns a success acknowledgement byte-identical to a real one. A deterministic verifier scores each
-episode from the database, not from the transcript.
+The **live** Space (a real Cohere model per run) is `space_live/`, deployed as
+https://huggingface.co/spaces/atharvgaur18/actionproof-live.
 
-Tabs:
+`app.py` here is the Stage 1 Gradio demo (Nov 13), kept for history. It is not deployed.
 
-- **Replays (real eval episodes).** Recorded evaluation episodes, replayed deterministically against the simulator.
-  Each write shows what the tool *claimed* next to what the database *actually* holds, and the episode is scored under
-  every reward.
-- **Same task, three templates.** One held-out store-credit task handled three ways: a void credit call, a refund
-  substituted for the credit, a committed credit.
-- **Leaderboard** and **Findings.** Headline numbers, each with its source file in the code repository.
-- **Live.** Two agents run the same episode with a chosen injected fault. This tab needs a GPU and access to the
-  gated base model (`HF_TOKEN` secret). Without them it says so; the Replays tab shows real episodes instead.
-
-Base model: CohereLabs/tiny-aya-global (CC-BY-NC-4.0). Adapters and data: the ActionProof collections on the Hub.
-Code: https://github.com/atharvgaur1845/actionproof-v2
+How the demo is run for judges: `docs/submission/DEMO_RUN_OF_SHOW.md`.

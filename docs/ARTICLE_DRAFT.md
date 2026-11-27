@@ -1,3 +1,5 @@
+> **Superseded (2026-11-27, Stage 2 sprint).** This file is kept as history (last updated 2026-11-24) and is not current. The current source is `docs/submission/WRITEUP.md`. See `research_audit/STALE_SURFACES_AUDIT.md`.
+
 # ActionProof: what the reward can see decides whether a tool agent checks its writes
 
 > **Superseded (2026-11-24).** This is an earlier draft, kept for history. The current write-up is `docs/submission/WRITEUP.md`, whose numbers are enforced by `scripts/s2_numcheck.py`. Numbers here are not maintained.

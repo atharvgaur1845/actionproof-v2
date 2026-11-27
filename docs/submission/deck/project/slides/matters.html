@@ -1,0 +1,23 @@
+<section id="matters" class="alt foot">
+<p class="eyebrow">WHY IT MATTERS · HOW TO CHECK US</p>
+<h2>Training removes most of the exposure. Checks remove the rest.</h2>
+<div class="row">
+<div class="col grow">
+<p class="status">PROJECTED COST PER 1,000 WORKFLOWS THAT MEET AN AMBIGUOUS FAULT (MODERATE SCENARIO)</p>
+<div class="bars">
+<div class="bar"><p class="lab">B0 trust the reply</p><div class="fill" style="width:640px"></div><p class="val">$1.49M</p></div>
+<div class="bar"><p class="lab">B3 bounded retry + keys</p><div class="fill" style="width:267px"></div><p class="val">$0.62M</p></div>
+<div class="bar"><p class="lab">D trained agent</p><div class="fill hi" style="width:62px"></div><p class="val">$0.15M</p></div>
+<div class="bar"><p class="lab">B4 scripted checks</p><div class="fill" style="width:4px"></div><p class="val">$8k</p></div>
+</div>
+<p class="sm mut">Rates measured on the locked TXN test; dollars are projections from stated assumptions (2% fault incidence, $5,000 payment, $60 exception, 3× late discovery, 60% duplicate recovery; low and high scenarios in the appendix). Simulator only: no observed savings.</p>
+</div>
+<div class="col links" style="width:600px">
+<div class="card"><h3>Run it live</h3><p class="mono">huggingface.co/spaces/atharvgaur18/actionproof-live</p><p class="sm mut">A real Cohere model per run; the database is revealed after.</p></div>
+<div class="card"><h3>Inspect every episode</h3><p class="mono">huggingface.co/datasets/atharvgaur18/actionproof-traces</p></div>
+<div class="card"><h3>Re-derive every number, no GPU</h3><p class="mono">bash scripts/verify_numbers.sh</p></div>
+</div>
+</div>
+<p class="footer">Use: accounts payable, refunds, payouts, any write whose “ok” can be wrong. Models: CC-BY-NC-4.0, research use only.</p>
+<aside>What it is worth, honestly. On the benchmark's own measured rates, trusting the reply is the expensive failure; the trained agent cuts the projected cost by about an order of magnitude; hand-written reconciliation checks still cut it further. So the product answer is a deterministic reconciliation layer plus a trained agent as the second line, and ActionProof as the test bench that finds where each breaks. Close on the links and the one command.</aside>
+</section>

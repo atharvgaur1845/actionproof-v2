@@ -1,0 +1,291 @@
+{
+ "unit": "per 1,000 faulted workflows (TXN mix); x f for per 1,000 workflows",
+ "scenarios": {
+  "conservative": {
+   "f": 0.005,
+   "value": 2000,
+   "exception": 25,
+   "mult": 2,
+   "recovery": 0.7
+  },
+  "moderate": {
+   "f": 0.02,
+   "value": 5000,
+   "exception": 60,
+   "mult": 3,
+   "recovery": 0.6
+  },
+  "optimistic": {
+   "f": 0.05,
+   "value": 10000,
+   "exception": 175,
+   "mult": 5,
+   "recovery": 0.5
+  }
+ },
+ "agents": {
+  "B0 trust the acknowledgement (scripted)": {
+   "tags": [
+    "B0"
+   ],
+   "rates": {
+    "VTC": 0.13636363636363635,
+    "FCR": 0.8636363636363636,
+    "DMR_all": 0.6136363636363636,
+    "FCompR_all": 0.0,
+    "URR_all": 0.3477272727272727,
+    "escalated": 0.0,
+    "episodes": 440.0,
+    "calls": 4.2295454545454545
+   },
+   "projected_cost_per_1000_faulted": {
+    "conservative": {
+     "mean": 442045.45454545465,
+     "min": 442045.45454545465,
+     "max": 442045.45454545465
+    },
+    "moderate": {
+     "mean": 1493181.8181818184,
+     "min": 1493181.8181818184,
+     "max": 1493181.8181818184
+    },
+    "optimistic": {
+     "mean": 4360795.454545455,
+     "min": 4360795.454545455,
+     "max": 4360795.454545455
+    }
+   },
+   "per_1000_workflows": {
+    "conservative": 2210.2272727272734,
+    "moderate": 29863.636363636368,
+    "optimistic": 218039.77272727276
+   }
+  },
+  "B1 final-state check only (scripted)": {
+   "tags": [
+    "B1"
+   ],
+   "rates": {
+    "VTC": 0.44772727272727275,
+    "FCR": 0.4159090909090909,
+    "DMR_all": 0.4159090909090909,
+    "FCompR_all": 0.0,
+    "URR_all": 0.14772727272727273,
+    "escalated": 0.0,
+    "episodes": 440.0,
+    "calls": 7.002272727272727
+   },
+   "projected_cost_per_1000_faulted": {
+    "conservative": {
+     "mean": 294545.45454545465,
+     "min": 294545.45454545465,
+     "max": 294545.45454545465
+    },
+    "moderate": {
+     "mean": 989727.2727272726,
+     "min": 989727.2727272726,
+     "max": 989727.2727272726
+    },
+    "optimistic": {
+     "mean": 2831250.0,
+     "min": 2831250.0,
+     "max": 2831250.0
+    }
+   },
+   "per_1000_workflows": {
+    "conservative": 1472.7272727272732,
+    "moderate": 19794.545454545452,
+    "optimistic": 141562.5
+   }
+  },
+  "B3 bounded retry + idempotency key (scripted)": {
+   "tags": [
+    "B3"
+   ],
+   "rates": {
+    "VTC": 0.4909090909090909,
+    "FCR": 0.509090909090909,
+    "DMR_all": 0.2431818181818182,
+    "FCompR_all": 0.0,
+    "URR_all": 0.056818181818181816,
+    "escalated": 0.0,
+    "episodes": 440.0,
+    "calls": 4.2295454545454545
+   },
+   "projected_cost_per_1000_faulted": {
+    "conservative": {
+     "mean": 183522.72727272732,
+     "min": 183522.72727272732,
+     "max": 183522.72727272732
+    },
+    "moderate": {
+     "mean": 621772.7272727273,
+     "min": 621772.7272727273,
+     "max": 621772.7272727273
+    },
+    "optimistic": {
+     "mean": 1874147.7272727275,
+     "min": 1874147.7272727275,
+     "max": 1874147.7272727275
+    }
+   },
+   "per_1000_workflows": {
+    "conservative": 917.6136363636366,
+    "moderate": 12435.454545454546,
+    "optimistic": 93707.38636363638
+   }
+  },
+  "W plain SFT warm start (Tiny Aya Global)": {
+   "tags": [
+    "W"
+   ],
+   "rates": {
+    "VTC": 0.4446969696969697,
+    "FCR": 0.475,
+    "DMR_all": 0.23712121212121212,
+    "FCompR_all": 0.00909090909090909,
+    "URR_all": 0.0659090909090909,
+    "escalated": 0.0060606060606061,
+    "episodes": 1320.0,
+    "calls": 5.431818181818182
+   },
+   "projected_cost_per_1000_faulted": {
+    "conservative": {
+     "mean": 180340.90909090912,
+     "min": 180340.90909090912,
+     "max": 180340.90909090912
+    },
+    "moderate": {
+     "mean": 608878.7878787878,
+     "min": 608878.7878787878,
+     "max": 608878.7878787878
+    },
+    "optimistic": {
+     "mean": 1830719.696969697,
+     "min": 1830719.696969697,
+     "max": 1830719.696969697
+    }
+   },
+   "per_1000_workflows": {
+    "conservative": 901.7045454545456,
+    "moderate": 12177.575757575758,
+    "optimistic": 91535.98484848486
+   }
+  },
+  "Dw_aug randomised recovery SFT (3 seeds)": {
+   "tags": [
+    "Dwaug_s0",
+    "Dwaug_s1",
+    "Dwaug_s2"
+   ],
+   "rates": {
+    "VTC": 0.6974747474747476,
+    "FCR": 0.22045454545454546,
+    "DMR_all": 0.12676767676767678,
+    "FCompR_all": 0.0012626262626262627,
+    "URR_all": 0.04873737373737374,
+    "escalated": 0.0,
+    "episodes": 1320.0,
+    "calls": 6.63510101010101
+   },
+   "projected_cost_per_1000_faulted": {
+    "conservative": {
+     "mean": 95536.61616161618,
+     "min": 82026.51515151517,
+     "max": 110246.21212121216
+    },
+    "moderate": {
+     "mean": 321186.86868686863,
+     "min": 275075.75757575757,
+     "max": 370787.8787878788
+    },
+    "optimistic": {
+     "mean": 953125.0000000001,
+     "min": 814375.0000000001,
+     "max": 1092159.090909091
+    }
+   },
+   "per_1000_workflows": {
+    "conservative": 477.683080808081,
+    "moderate": 6423.737373737374,
+    "optimistic": 47656.25000000001
+   }
+  },
+  "D recovery SFT + GRPO (3 seeds)": {
+   "tags": [
+    "D_s0",
+    "D_s1",
+    "D_s2"
+   ],
+   "rates": {
+    "VTC": 0.7232323232323233,
+    "FCR": 0.11666666666666665,
+    "DMR_all": 0.052525252525252523,
+    "FCompR_all": 0.0,
+    "URR_all": 0.01717171717171717,
+    "escalated": 0.004797979797979801,
+    "episodes": 1320.0,
+    "calls": 7.7823232323232325
+   },
+   "projected_cost_per_1000_faulted": {
+    "conservative": {
+     "mean": 43977.272727272735,
+     "min": 38977.272727272735,
+     "max": 49053.030303030304
+    },
+    "moderate": {
+     "mean": 145111.11111111112,
+     "min": 128000.0,
+     "max": 162287.8787878788
+    },
+    "optimistic": {
+     "mean": 438686.86868686863,
+     "min": 387954.5454545454,
+     "max": 487897.7272727272
+    }
+   },
+   "per_1000_workflows": {
+    "conservative": 219.88636363636365,
+    "moderate": 2902.2222222222226,
+    "optimistic": 21934.343434343435
+   }
+  },
+  "B4 transaction-aware reconciliation (scripted reference)": {
+   "tags": [
+    "B4"
+   ],
+   "rates": {
+    "VTC": 0.8636363636363636,
+    "FCR": 0.0,
+    "DMR_all": 0.0,
+    "FCompR_all": 0.0,
+    "URR_all": 0.0,
+    "escalated": 0.13636363636363635,
+    "episodes": 440.0,
+    "calls": 7.6022727272727275
+   },
+   "projected_cost_per_1000_faulted": {
+    "conservative": {
+     "mean": 3409.0909090909086,
+     "min": 3409.0909090909086,
+     "max": 3409.0909090909086
+    },
+    "moderate": {
+     "mean": 8181.818181818182,
+     "min": 8181.818181818182,
+     "max": 8181.818181818182
+    },
+    "optimistic": {
+     "mean": 23863.636363636364,
+     "min": 23863.636363636364,
+     "max": 23863.636363636364
+    }
+   },
+   "per_1000_workflows": {
+    "conservative": 17.045454545454543,
+    "moderate": 163.63636363636365,
+    "optimistic": 1193.1818181818182
+   }
+  }
+ }
+}

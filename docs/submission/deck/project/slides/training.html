@@ -1,0 +1,22 @@
+<section id="training" class="foot">
+<p class="eyebrow">WHAT TRAINING CHANGES</p>
+<h2>Recovery demonstrations carry the capability</h2>
+<div class="row">
+<div class="col grow">
+<p class="status">REGISTERED P1 · 450 FROZEN TASKS · 3 SEEDS PER ARM · SAMPLED</p>
+<div class="bars">
+<div class="bar"><p class="lab">A · recovery-start GRPO</p><div class="fill" style="width:462px"></div><p class="val">0.513</p></div>
+<div class="bar"><p class="lab">C · recovery SFT</p><div class="fill" style="width:695px"></div><p class="val">0.772</p></div>
+<div class="bar"><p class="lab">D · recovery SFT, then GRPO</p><div class="fill hi" style="width:737px"></div><p class="val">0.819</p></div>
+</div>
+<p class="sm mut">Verified completion. C and D each beat A (Holm 0.0003, every seed positive). C and D start from different checkpoints, so their gap is not GRPO’s contribution.</p>
+<div class="card"><p class="status">REGISTERED TXN H3 · 320 IN-DISTRIBUTION TASKS</p><p>Duplicate mutations: D 0.024 against 0.191 for bounded retry with idempotency keys. <b>Passes.</b> Fewer unnecessary retries: <b>fails</b>, so the registered family is not supported.</p></div>
+</div>
+<div class="col" style="width:600px">
+<div class="card"><p class="status">REGISTERED P4 · WARM START, NO GRPO · 3 SEEDS</p><p>Randomised demonstrations: renamed tools 0.137 → 0.741; unseen four-step workflow 0.268 → 0.842; no cost on the P1 test (+0.048).</p><p class="sm mut">The RL agent D itself still scores 0.20 on renamed tools.</p></div>
+<div class="card"><p class="status">REGISTERED P5 · ONE SFT SEED PER BASE</p><p>The same recipe on four more Cohere bases: Fire 0.018 → 0.686, Water 0.011 → 0.639, Earth 0.012 → 0.704, Aya Expanse 8B 0.076 → 0.772.</p></div>
+</div>
+</div>
+<p class="footer">Sampled VSC, paired task bootstrap. One SFT seed per P5 base: a task-level test with each model fixed, not training-seed robustness.</p>
+<aside>Recovery demonstrations are what work. The registered P1 test: the recovery-start agent completes about half; recovery SFT reaches 0.772; recovery SFT then GRPO reaches 0.819. Do not read the 0.772 to 0.819 gap as GRPO's effect: the arms are not nested. On the transaction benchmark the trained agent duplicates mutations far less than bounded retry, but the registered family fails on unnecessary retries. Randomised demonstrations fix procedure replay in the warm start, not in the RL agent. Four more Cohere bases learn the same recipe.</aside>
+</section>

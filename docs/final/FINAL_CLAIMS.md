@@ -1,3 +1,5 @@
+> **Superseded (2026-11-27, Stage 2 sprint).** This file is kept as history (last updated 2026-11-23) and is not current. The current source is `claims/claims.yaml` (it is the only machine-checked ledger; this file is not the source of truth for any slide). See `research_audit/STALE_SURFACES_AUDIT.md`.
+
 # Final claims ledger (presentation, website, video)
 
 The source of truth for every claim on a slide, on the website or in the video. Created 2026-11-22 01:27 IST.

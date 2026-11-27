@@ -1,3 +1,5 @@
+> **Superseded (2026-11-27, Stage 2 sprint).** This file is kept as history (last updated 2026-11-25) and is not current. The current source is `research_audit/CURRENT_BRANCH_FORENSIC_REVIEW.md`. See `research_audit/STALE_SURFACES_AUDIT.md`.
+
 # Branch audit
 
 Run on 2026-11-25 at 07:40 IST against `origin` after `git fetch`. Commands: `git rev-list --count A..B` and `git diff --name-only origin/main...B`. Every hash below was read from the repository; none comes from a document.

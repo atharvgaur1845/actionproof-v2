@@ -1,3 +1,5 @@
+> **Superseded (2026-11-27, Stage 2 sprint).** This file is kept as history (last updated 2026-11-22) and is not current. The current source is `docs/submission/DEMO_RUN_OF_SHOW.md` (live Space plus replay Space). See `research_audit/STALE_SURFACES_AUDIT.md`.
+
 # Three-minute demonstration: run of show
 
 - **Screen:** the website at 1440 px (`demo/static/index.html`), built from commit stage4 HEAD. No live model inference: the simulator is real and precomputed at build time, and the model behaviour is real recorded evaluation episodes. Say so once, at 0:20.

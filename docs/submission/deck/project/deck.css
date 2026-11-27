@@ -1,0 +1,70 @@
+:root { --paper:#F1EFE7; --paper2:#E3E0D6; --ink:#171815; --dk:#171A18; --dk2:#242826; --ver:#F05236; --ver-t:#B8341C; --chr:#D5F36A; --mut:#4A4B45; --mut-d:#C9C7BD; }
+section { padding:128px; background:var(--paper); color:var(--ink); font-family:'DM Sans', Arial, sans-serif; font-size:30px; line-height:1.35; display:flex; flex-direction:column; box-sizing:border-box; counter-increment: page; }
+section.dark { background:var(--dk); color:var(--paper); }
+section.alt { background:var(--paper2); }
+section.foot { padding:128px 128px 160px 128px; }
+.eyebrow { font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; color:var(--ver-t); margin:0 0 20px 0; }
+.dark .eyebrow { color:var(--chr); }
+h1 { font-family:'Archivo Black', Arial, sans-serif; font-weight:400; font-size:96px; line-height:1.04; margin:0; }
+h2 { font-family:'Archivo Black', Arial, sans-serif; font-weight:400; font-size:60px; line-height:1.08; margin:0 0 36px 0; color:var(--ink); }
+.dark h2 { color:var(--paper); }
+h3 { font-family:'DM Sans', Arial, sans-serif; font-weight:700; font-size:30px; line-height:1.25; margin:0 0 8px 0; }
+p { font-size:30px; margin:0; }
+.mut { color:var(--mut); }
+.dark .mut { color:var(--mut-d); }
+.sm { font-size:24px; }
+.mono { font-family:'JetBrains Mono', 'Courier New', monospace; }
+.footer { position:absolute; left:128px; bottom:64px; width:1664px; font-size:24px; color:#5E6058; }
+.dark .footer { color:#A9A79D; }
+.row { display:flex; flex-direction:row; gap:40px; }
+.col { display:flex; flex-direction:column; gap:20px; }
+.grow { flex:1; }
+/* hook */
+.quad { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:32px; }
+.qcard { background:var(--dk2); padding:22px 28px; border-left:6px solid var(--chr); display:flex; flex-direction:column; gap:6px; }
+.qcard.bad { border-left:6px solid var(--ver); }
+.chip { font-family:'JetBrains Mono', 'Courier New', monospace; font-size:28px; color:var(--chr); }
+.qcard.bad .chip { color:var(--ver); }
+.qcard h3 { color:var(--paper); margin:0; }
+.qcard .mut { font-size:26px; }
+.kicker { margin-top:24px; font-size:28px; color:var(--mut-d); }
+h1.hook { font-size:84px; }
+/* tables */
+table { font-size:28px; width:100%; color:var(--ink); }
+.dark table { color:var(--paper); }
+.note { background:var(--paper2); padding:24px 28px; border-left:6px solid var(--ver); }
+.alt .note { background:var(--paper); }
+.why { display:flex; flex-direction:column; gap:14px; }
+.why p { font-size:28px; }
+/* system diagram */
+.box { background:#FBFAF5; border:2px solid var(--ink); padding:24px 26px; display:flex; flex-direction:column; gap:8px; }
+.box.dkbox { background:var(--dk); color:var(--paper); border:2px solid var(--dk); }
+.box.dkbox .mut { color:var(--mut-d); }
+.box h3 { margin:0; }
+.box p { font-size:24px; }
+.tag { font-family:'JetBrains Mono', 'Courier New', monospace; font-size:22px; color:var(--ver-t); }
+.dkbox .tag { color:var(--chr); }
+.facts { display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; margin-top:28px; }
+.fact { border-top:4px solid var(--ink); padding-top:12px; display:flex; flex-direction:column; gap:4px; }
+.big { font-family:'Archivo Black', Arial, sans-serif; font-size:56px; line-height:1.0; }
+.fact .sm { color:var(--mut); }
+/* bars */
+.bars { display:flex; flex-direction:column; gap:22px; }
+.bar { display:flex; flex-direction:row; align-items:center; gap:20px; }
+.bar .lab { width:330px; font-size:26px; }
+.bar .fill { height:56px; background:var(--ink); }
+.bar .fill.hi { background:var(--ver); }
+.bar .val { font-family:'JetBrains Mono', 'Courier New', monospace; font-size:28px; font-weight:600; }
+.card { background:#FBFAF5; border:2px solid var(--ink); padding:24px 28px; display:flex; flex-direction:column; gap:8px; }
+.card p { font-size:26px; }
+.status { font-family:'JetBrains Mono', 'Courier New', monospace; font-size:22px; color:var(--ver-t); }
+/* fails */
+.fl { display:flex; flex-direction:column; gap:12px; }
+.fl .it { display:flex; flex-direction:column; gap:2px; border-left:6px solid var(--ver); padding-left:20px; }
+.fl .it p { font-size:26px; }
+.sel { background:var(--dk); color:var(--paper); padding:32px 36px; display:flex; flex-direction:column; gap:14px; }
+.sel .mut { color:var(--mut-d); }
+.sel h3 { color:var(--chr); }
+/* matters */
+.links p { font-size:26px; }
+.links .mono { font-size:22px; }

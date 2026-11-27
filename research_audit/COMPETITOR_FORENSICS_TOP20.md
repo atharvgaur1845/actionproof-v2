@@ -1,6 +1,6 @@
 # Competitor forensics: 20 public Lexsi 2026 repositories
 
-Audited 2026-11-27, 05:10–06:30 IST, by the ActionProof sprint (branch `stage2-superiority-sprint`, base `7ae863f`).
+Audited 2026-11-27, 05:06–05:25 IST, by the ActionProof sprint (branch `stage2-superiority-sprint`, base `7ae863f`).
 
 ## Scope and method
 
@@ -31,7 +31,7 @@ limitations were read. "Medium" means the README only.
 
 **Scores.** No score from the earlier snapshot is reused. The rankings are in `COMPETITIVE_THREAT_RANKING.md`.
 
-**Hub status (API, 2026-11-27 ~06:20 IST).**
+**Hub status (API, 2026-11-27 ~05:20 IST).**
 
 | Space | SDK | Runtime | Hardware | What it is |
 |---|---|---|---|---|

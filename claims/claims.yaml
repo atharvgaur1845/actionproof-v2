@@ -1501,6 +1501,23 @@ claims:
     commit: null
 
 
+  - id: IMPACT1
+    statement: "Descriptive impact projection (scripts/impact_txn.py): measured locked-txn_test rates (FCR, DMR, FCompR, VTC) priced with the assumption brackets of docs/upgrade/ROI.md §3; per 1,000 workflows that meet an ambiguous-execution fault. Rates measured; dollars are projections, not observed savings."
+    status: supported
+    prereg: null
+    eval: [results/impact/impact_txn.json]
+    stats: scripts/impact_txn.py
+    numbers:
+      cost_b0: {value: 1493182, file: results/impact/impact_txn.json, key: ["agents", "B0 trust the acknowledgement (scripted)", "projected_cost_per_1000_faulted", "moderate", "mean"], shown: ["1,493,182"]}
+      cost_b3: {value: 621773, file: results/impact/impact_txn.json, key: ["agents", "B3 bounded retry + idempotency key (scripted)", "projected_cost_per_1000_faulted", "moderate", "mean"], shown: ["621,773"]}
+      cost_d: {value: 145111, file: results/impact/impact_txn.json, key: ["agents", "D recovery SFT + GRPO (3 seeds)", "projected_cost_per_1000_faulted", "moderate", "mean"], shown: ["145,111"]}
+      cost_b4: {value: 8182, file: results/impact/impact_txn.json, key: ["agents", "B4 transaction-aware reconciliation (scripted reference)", "projected_cost_per_1000_faulted", "moderate", "mean"], shown: ["8,182"]}
+      cost_d_min: {value: 128000, file: results/impact/impact_txn.json, key: ["agents", "D recovery SFT + GRPO (3 seeds)", "projected_cost_per_1000_faulted", "moderate", "min"], shown: ["128,000"]}
+      cost_d_max: {value: 162288, file: results/impact/impact_txn.json, key: ["agents", "D recovery SFT + GRPO (3 seeds)", "projected_cost_per_1000_faulted", "moderate", "max"], shown: ["162,288"]}
+      a_f: {value: 0.02, file: results/impact/impact_txn.json, key: ["scenarios", "moderate", "f"], shown: ["2%"]}
+      a_value: {value: 5000, file: results/impact/impact_txn.json, key: ["scenarios", "moderate", "value"], shown: ["5,000", "$5,000"]}
+      a_recovery: {value: 0.60, file: results/impact/impact_txn.json, key: ["scenarios", "moderate", "recovery"], shown: ["60%"]}
+
 allow: ["0.95", "1.0", "2.0", "+0.05",  # paper v3: a stated pi threshold, cost and table parameters, Apache 2.0, a registered prediction bound
        "1,000", "10,000", "95%", "1e-4", "2e-5", "8,192", "2503.20783", "2508.11800", "62,892", "251,570", "87,180", "116,240", "2.0%", "0.90",  # write-up constants: sample sizes, hyperparameters, arXiv ids, task amounts, a cited survey range, a registered threshold
        "3.12", "2.11", "5.22", "1.7", "0.23", "0.8", "0.80", "0.30", "0.02", "0.5", "0.3"]  # 0.5, 0.3: registered H4 thresholds (PREREGISTRATION_A11 §9)

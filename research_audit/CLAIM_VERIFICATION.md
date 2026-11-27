@@ -1,3 +1,5 @@
+> **Superseded (2026-11-27, Stage 2 sprint).** This file is kept as history (last updated 2026-11-25) and is not current. The current source is `claims/claims.yaml`, checked by `scripts/s2_numcheck.py`. See `research_audit/STALE_SURFACES_AUDIT.md`.
+
 # Claim verification
 
 2026-11-25, branch `submission-candidate`.

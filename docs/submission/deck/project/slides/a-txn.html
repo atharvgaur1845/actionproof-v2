@@ -1,0 +1,18 @@
+<section id="a-txn" class="foot">
+<p class="eyebrow">APPENDIX A1 · TXN BENCHMARK, ALL AGENTS (DESCRIPTIVE)</p>
+<h2>Verified and false completion on the locked test</h2>
+<table style="font-size:26px">
+<tr><th style="width:52%">Agent</th><th>VTC</th><th>FCR</th></tr>
+<tr><td>B0 acknowledgement-trusting</td><td>0.136</td><td>0.864</td></tr>
+<tr><td>B1 final state only</td><td>0.448</td><td>0.416</td></tr>
+<tr><td>B3 bounded retry + idempotency</td><td>0.491</td><td>0.509</td></tr>
+<tr><td>B4 transaction-aware reconciliation (scripted reference)</td><td>0.864</td><td>0.000</td></tr>
+<tr><td>W plain SFT warm start</td><td>0.445</td><td>0.475</td></tr>
+<tr><td>Dw recovery-SFT warm start</td><td>0.598</td><td>0.258</td></tr>
+<tr><td>D seed 0</td><td>0.724</td><td>0.121</td></tr>
+<tr><td>Dw_aug seeds 0 / 1 / 2</td><td>0.723 / 0.683 / 0.686</td><td>0.180 / 0.245 / 0.236</td></tr>
+<tr><td>Aya Expanse 32B, prompted</td><td>0.161</td><td>0.610</td></tr>
+<tr><td>Qwen3-235B-A22B, prompted (supplementary)</td><td>0.261</td><td>0.641</td></tr>
+</table>
+<p class="footer">Scripted rows: one deterministic episode per task. Local models: one greedy and two sampled episodes per task (T = 1). Qwen: one greedy episode per task.</p>
+</section>

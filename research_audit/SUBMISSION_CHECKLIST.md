@@ -1,3 +1,5 @@
+> **Superseded (2026-11-27, Stage 2 sprint).** This file is kept as history (last updated 2026-11-25) and is not current. The current source is `research_audit/FINAL_FREEZE_CHECKLIST.md`. See `research_audit/STALE_SURFACES_AUDIT.md`.
+
 # Submission checklist
 
 2026-11-25. Branch `submission-candidate`. **Deadline confirmed by the author: Nov 28, 2026, 23:59 IST.**
