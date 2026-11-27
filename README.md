@@ -204,6 +204,7 @@ What it means, and what it does not:
 | Reference agent A (recovery-start GRPO) | https://huggingface.co/atharvgaur18/actionproof-agent-a |
 | Dn, the no-std GRPO variant (P3, not supported), for reproducibility | https://huggingface.co/atharvgaur18/actionproof-agent-dn |
 | Dw_aug warm starts (P4, seeds 0 to 2) | https://huggingface.co/atharvgaur18/actionproof-warmstart-dwaug |
+| SEL1 adapters (SEL and CTL, seeds 0 to 2; registered SEL1) | https://huggingface.co/atharvgaur18/actionproof-sel1-adapters |
 | Episode traces, frozen splits, judge cases | https://huggingface.co/datasets/atharvgaur18/actionproof-traces |
 | Companion theory paper (a separate claim: group normalisation under a shared hidden state) | `paper/main_v3.pdf` (source `paper/main_v3.tex`) |
 | Write-up | `docs/submission/WRITEUP.md` |

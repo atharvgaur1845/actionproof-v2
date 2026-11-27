@@ -20,6 +20,7 @@ HUB = [("model", "atharvgaur18/actionproof-agent-d", "Recommended agent D (merge
        ("model", "atharvgaur18/actionproof-warmstart-dwaug", "P4 warm starts Dw_aug (seeds 0-2)"),
        ("model", "atharvgaur18/actionproof-agent-a", "Reference agent A (recovery-start GRPO)"),
        ("model", "atharvgaur18/actionproof-agent-dn", "Dn, no-std GRPO (P3, not supported)"),
+       ("model", "atharvgaur18/actionproof-sel1-adapters", "SEL1 arms SEL and CTL (seeds 0-2), registered SEL1"),
        ("dataset", "atharvgaur18/actionproof-traces", "Episode traces, frozen splits, judge cases"),
        ("space", "atharvgaur18/actionproof-live", "Live Space (real model inference)"),
        ("space", "atharvgaur18/actionproof", "Replay Space (recorded episodes, no model calls)"),
@@ -34,6 +35,7 @@ RESULTS = {  # file -> (registration or status, script)
     "results/audit/r7_grpo_increment.json": ("exploratory", "scripts/audit/r7_grpo_increment.py"),
     "results/audit/dwarm_2x2.json": ("exploratory", "scripts/audit/dwarm_2x2.py"),
     "results/impact/impact_txn.json": ("descriptive projection", "scripts/impact_txn.py"),
+    "space_live/data/recorded.json": ("recorded real model runs for the live Space (task 1790)", "space_live/record_runs.py"),
     "results/sel1/sel1_summary.json": ("PREREGISTRATION_SEL1.md", "scripts/sel1_stats.py"),
     "results/p4_hashes.json": ("P4 registration hashes", "scripts/freeze_p4.py"),
     "results/sel1_hashes.json": ("SEL1 registration hashes", "scripts/freeze_sel1.py"),
@@ -73,7 +75,7 @@ def main() -> None:
          "licence": {"code": "Apache-2.0", "models": "CC-BY-NC-4.0 (derived from Cohere Aya; research use only)"},
          "environment": ENV, "hub": {}, "splits": {}, "results": {}, "not_released": [
              "P5 SFT models on Tiny Aya Fire, Water, Earth and Aya Expanse 8B (results and episodes only)",
-             "SEL1 adapters (until the registered analysis has run)"]}
+             "P2 and AD-C1 adapters (cluster only)"]}
     for kind, repo, what in HUB:
         m["hub"][repo] = {"kind": kind, "what": what, **hub(kind, repo)}
     for f in SPLIT_MANIFESTS:

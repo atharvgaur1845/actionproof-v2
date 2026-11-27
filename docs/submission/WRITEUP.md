@@ -435,10 +435,16 @@ The environment injects benign faults; no real payment systems or personal data 
 
 ## 28. Artefacts
 
-- The GitHub repository.
-- The HF collection: 30 adapters with cards, ProcureSim splits and evaluation traces.
-- The website.
-- New this round: J1 cases, rubric and all judge replies; R1 frozen inputs and generations.
+Every artefact, with its immutable revision and the sha256 of every frozen split and headline result file, is listed
+in `release/ARTIFACT_MANIFEST.json` (`scripts/build_manifest.py`; Hub visibility checked without credentials).
+- Code: the GitHub repository.
+- Models (public, CC-BY-NC-4.0): `atharvgaur18/actionproof-agent-d` (merged D), `-agent-d-adapters`,
+  `-warmstart-dw`, `-warmstart-dwaug`, `-agent-a`, `-agent-dn`, `-sel1-adapters`.
+- Data: `atharvgaur18/actionproof-traces` (every episode behind a reported number, the frozen splits, the judge
+  cases; failed runs kept under `failed_*`).
+- Spaces: the live Space (`actionproof-live`, real model calls) and the replay Space (`actionproof`, recorded
+  episodes only).
+- Not released: the P5 models (results and episodes only) and the P2 and AD-C1 adapters (cluster only).
 
 ## 29. Reproduction
 

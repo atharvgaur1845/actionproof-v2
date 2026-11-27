@@ -16,6 +16,7 @@ No placeholders left. The paper PDF is built from paper/main_v3.tex and is not t
 | Reference agent A (recovery-start GRPO) | https://huggingface.co/atharvgaur18/actionproof-agent-a |
 | Dn, the no-std GRPO null result (P3), for reproducibility | https://huggingface.co/atharvgaur18/actionproof-agent-dn |
 | Dw_aug warm starts (P4, seeds 0 to 2) | https://huggingface.co/atharvgaur18/actionproof-warmstart-dwaug |
+| SEL1 adapters (SEL and CTL, seeds 0 to 2; registered SEL1) | https://huggingface.co/atharvgaur18/actionproof-sel1-adapters |
 | Episode traces, frozen splits, judge cases | https://huggingface.co/datasets/atharvgaur18/actionproof-traces |
 | Paper | `paper/main_v3.pdf` (source `paper/main_v3.tex`) |
 | Write-up | `docs/submission/WRITEUP.md` |
