@@ -1,6 +1,6 @@
 # PREREGISTRATION RG1: does an evidence-only Recovery Gate make the trained agent safe without costing completion?
 
-Registered: REGISTERED_AT (the commit that adds this file; `results/rg1_hashes.json` records the hashes of the code,
+Registered: written 2026-11-28 02:37 IST; the registration is the commit that adds `results/rg1_hashes.json` ( `results/rg1_hashes.json` records the hashes of the code,
 the analysis and the sealed split at the same time). No RG1 output on a sealed split (rg1_test, txn_test) exists at
 registration; `scripts/freeze_rg1.py` refuses to register otherwise.
 
@@ -84,12 +84,13 @@ events.
 - **The dev pilot (task 1900), on txn_dev only.**
   - D seed 0 with the gate and without it, and the base model with the gate, 120 tasks each; its results are in
     §6.
-  - Scripted baselines with the gate on txn_dev and txn_val (CPU), used to test the rules:
-    - B0: false completion 200/240 → 0/240, VTC 40 → 10;
-    - B1: false completion 86 → 0, VTC 114 → 134;
+  - Scripted baselines with the final gate on txn_dev and txn_val together (CPU, 240 tasks), used to test the rules:
+    - B0: false completion 200/240 → 0/240, VTC 40 → 11;
+    - B1: false completion 86 → 0, VTC 114 → 131;
     - B3: false completion 113 → 0, VTC 127 → 40;
     - B4: unchanged (VTC 200/240, false completion 0).
-- **Tests.** The 20 tests in `tests/recovery_gate/test_gate.py`: no-gate equivalence, no hidden-state access, intent
+    The gate cannot complete for a script that ignores its replies; it removes the false completions.
+- **Tests.** The 23 tests in `tests/recovery_gate/test_gate.py`: no-gate equivalence, no hidden-state access, intent
   in the prompt, counterfactual blindness, one golden case per rule.
 
 ## 5. Run order, exclusions, deviations
@@ -110,4 +111,39 @@ events.
 
 ## 6. Changes to the gate after the dev pilot
 
-PILOT_CHANGES
+**Pilot 1** (task 1900, txn_dev, D seed 0, 3 episodes per task; first gate version, `gate.py` sha256 `870996e5…`):
+
+| | VTC | STR | FCR | DMR | escalation (unresolvable) |
+|---|---|---|---|---|---|
+| no gate | 285/360 | 285/360 | 18/360 | 13/360 | 0/60 |
+| gate v1 | 277/360 | 337/360 | 0/360 | 4/360 | 60/60 |
+| base model, gate v1 | 35/360 | 95/360 | 0/360 | 25/360 | 60/60 |
+
+**What it showed.**
+- All 15 gated episodes that hit the turn limit were partial-payment tasks. D refunded the partial payment and
+  repaid with a new key. The refund reset the gate's view of the payment record, so gate v1 read the record and
+  returned it instead of sending the repay; D did not recover.
+- The duplicate episodes were injected duplicates (double delivery, a colleague's concurrent payment). D could not
+  act on a rejection that said only "list_payments shows other".
+
+**Changes** (final `gate.py`, sha256 `55eba881…`; recorded in `results/rg1_hashes.json`):
+1. **Read first, then decide.** Read-before-retry makes the read, then judges the proposed write with the other
+   rules: it is sent if the record allows it, and blocked otherwise. It no longer returns the record in place of the
+   write.
+2. **Concrete messages.** Rejections and blocks describe each failing record in words the agent can act on, for
+   example the live payment ids and which one to refund, instead of a label.
+3. **Stable key after a non-ok reply.** A retry after a reply other than ok must reuse that request's idempotency
+   key. Added because, with change 1, B0 behind the gate went from 40 to 60 duplicates in 240 scripted dev/val
+   episodes: a new-key resend after a timeout let a late commit land twice. It went back to 40, the injected
+   duplicates that the script never repairs.
+
+**Pilot 2** (task 1901, final gate, D seed 0; txn_val had not been run with any gate version before):
+
+| | VTC | STR | FCR | DMR | escalation (unresolvable) |
+|---|---|---|---|---|---|
+| txn_dev, gate | 295/360 | 355/360 | 0/360 | 1/360 | 60/60 |
+| txn_val, no gate | 285/360 | 285/360 | 19/360 | 18/360 | 0/60 |
+| txn_val, gate | 297/360 | 356/360 | 0/360 | 1/360 | 59/60 |
+
+No change after pilot 2. The one threshold (two rejected reports before a hand-off) was never varied. Pilot outputs:
+`results/rg1/dev_*`, `dev2_*`, `val_*`.
