@@ -1,6 +1,6 @@
 # Official rules and compliance audit (prompt §10)
 
-2026-11-27, about 11:00 IST. Source: https://hackathon.lexsi.ai/, re-read today (rules, FAQ, Structure, Prizes).
+2026-11-27, 10:25 IST. Source: https://hackathon.lexsi.ai/, re-read today (rules, FAQ, Structure, Prizes).
 Each row is checked against an artefact or file, not a README sentence.
 
 **Deadline.** Finalists submit a video presentation or slides by **Nov 28, 11:59 PM AoE** (= Nov 29, 17:29 IST),
