@@ -19,6 +19,7 @@ documents:   # scanned by s2_numcheck.py
   - docs/submission/VIDEO_SCRIPT.md
   - docs/submission/VIDEO_CAPTIONS.srt
   - README.md
+  - docs/HISTORY.md
   - paper/main.tex
   - paper/appendix.tex
   - paper/main_v2.tex
@@ -1518,6 +1519,6 @@ claims:
       a_value: {value: 5000, file: results/impact/impact_txn.json, key: ["scenarios", "moderate", "value"], shown: ["5,000", "$5,000"]}
       a_recovery: {value: 0.60, file: results/impact/impact_txn.json, key: ["scenarios", "moderate", "recovery"], shown: ["60%"]}
 
-allow: ["0.95", "1.0", "2.0", "+0.05",  # paper v3: a stated pi threshold, cost and table parameters, Apache 2.0, a registered prediction bound
+allow: ["0.95", "1.0", "1e-9", "2.0", "+0.05",  # paper v3: a stated pi threshold, cost and table parameters, Apache 2.0, a registered prediction bound
        "1,000", "10,000", "95%", "1e-4", "2e-5", "8,192", "2503.20783", "2508.11800", "62,892", "251,570", "87,180", "116,240", "2.0%", "0.90",  # write-up constants: sample sizes, hyperparameters, arXiv ids, task amounts, a cited survey range, a registered threshold
        "3.12", "2.11", "5.22", "1.7", "0.23", "0.8", "0.80", "0.30", "0.02", "0.5", "0.3"]  # 0.5, 0.3: registered H4 thresholds (PREREGISTRATION_A11 §9)

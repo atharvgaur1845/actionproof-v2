@@ -1,17 +1,37 @@
 # ActionProof
 
-**ActionProof trains and evaluates tool-using agents to reconcile transaction evidence and recover safely when acknowledgements do not reliably describe execution.**
+**Training small agents to reconcile transactions when “ok” does not mean it happened.** A payment tool can answer
+“ok” to a payment that never happened, or time out on one that did. ActionProof is a locked benchmark (TXN) and a
+trained Cohere agent that must tell committed, missing, partial and ambiguous outcomes apart, and then complete,
+repair, retry or hand off. Every number is scored by a deterministic verifier that reads the database, never the
+transcript. Everything runs in a procurement simulator (ProcureSim); nothing touches a real payment system.
 
-> **For judges: one minute.** A tool can answer "ok" to a payment that never happened, or time out on one that did. ActionProof is a simulated procurement environment (ProcureSim) in which the agent must tell committed, missing, partial and ambiguous outcomes apart, then choose verified completion, safe continuation, retry or escalation. Every number is scored against the database, never the transcript.
-> - **Registered P1** (450 frozen tasks, 3 seeds per arm): verified-success completion is 0.513 for the recovery-start agent (A), 0.772 with recovery SFT (C) and 0.819 for recovery SFT then GRPO (D). The two arms are not nested, so their gap is not GRPO's contribution.
-> - **TXN benchmark** (locked, 440 tasks): an acknowledgement-trusting policy falsely completes on every task where the "ok" hides a phantom write. Against scripted bounded retry with idempotency keys (B3) and final-state checking (B1), the trained agent duplicates mutations less often (registered, both tests pass); fewer unnecessary retries is not established (both tests fail), so the registered H3 family is **not supported**.
-> - **Registered P4:** randomising the recovery demonstrations lifts the **warm start** (no GRPO) on the tested renamed-tool surface from 0.137 to 0.741 and on an unseen four-step workflow from 0.268 to 0.842, with no cost on the P1 test. The RL agent D itself still fails there (renamed tools 0.20).
-> - **Registered P5:** the same recovery-SFT recipe raises four other Cohere bases (Tiny Aya Fire, Water, Earth; Aya Expanse 8B; one SFT seed each) from at most 0.076 untrained to 0.639–0.772.
-> - **Limits we report:** when evidence cannot settle the outcome, the trained agent rarely escalates; healthcare transfer is negative; the no-std GRPO change (P3) is not supported (slightly below D); an LLM judge cannot replace the verifier. This is transaction-aware recovery under ambiguous execution, not a new RL optimizer and not a claim of universal safety.
+> **Judge’s 60-second path**
+> 1. **See the failure, live.** Open the [live Space](https://huggingface.co/spaces/atharvgaur18/actionproof-live).
+>    Pick Reality C (phantom) and the agent “SCRIPTED: acknowledgement-trusting”: the tool says ok, and the revealed database
+>    holds no payment. No GPU is used.
+> 2. **See the trained model on the same task.** Switch to “Trained agent (live)”: a real Cohere model call per step.
+>    In the recorded check (commit `096eaf0`) it read the payment back, found it missing and paid again before reporting. Greedy decoding, one run: an illustration, not the benchmark. If the GPU queue is busy,
+>    the [replay Space](https://huggingface.co/spaces/atharvgaur18/actionproof) shows recorded episodes, labelled as
+>    such.
+> 3. **Check the claim.** The headline tables below each carry their evidence status, and their numbers resolve
+>    through `claims/claims.yaml`. `python scripts/smoke_check.py` takes about 15 seconds on a CPU, with no download
+>    and no token. `bash scripts/verify_numbers.sh` (about 2 GB) recomputes every registered model analysis.
 >
-> Try it: [live Space](https://huggingface.co/spaces/atharvgaur18/actionproof-live) (a real model call per run) · [replay Space](https://huggingface.co/spaces/atharvgaur18/actionproof) (recorded episodes) · verify every number without a GPU: `bash scripts/verify_numbers.sh`.
+> **In one paragraph.** Registered P1 (450 frozen tasks, 3 seeds per arm): recovery demonstrations then GRPO raise
+> verified completion from 0.513 to 0.819. On the locked TXN test the trained agent duplicates mutations far less
+> often than bounded retry with idempotency keys (0.024 against 0.191). But the registered H3 family is not
+> supported, it rarely hands off when the evidence cannot settle the outcome (15 of 540), and a hand-written
+> reconciliation reference still beats it. This is transaction-aware recovery under ambiguous execution: not a new RL
+> optimizer, and not a claim of safety.
 
-**Status (2026-11-27).** Canonical branch `submission-candidate`. Every number resolves through `claims/claims.yaml` (`python scripts/s2_numcheck.py`); every confirmatory result below names its registration, exploratory and descriptive results are labelled, and every deviation is an addendum.
+**Status (2026-11-27).** Canonical branch `submission-candidate`; this sprint’s branch is `stage2-superiority-sprint`.
+How to read a status:
+- *registered, supported / not supported*: a test decided by a preregistered rule;
+- *descriptive*: no test;
+- *exploratory*: decided after the data were seen.
+
+Every deviation is an addendum.
 
 ## Headline results
 
@@ -100,6 +120,47 @@ Greedy VSC on the frozen P1 test splits through HF Inference Providers (the P1 a
 
 Two large open-weight models, prompted, greedy, with no recovery training and no prompt tuning (gpt-oss at low reasoning effort), complete none of the 90 partial-payment tasks. On fresh-recovery tasks gpt-oss repairs about half of the partial payments it meets (0.52) and Qwen almost none (0.04). Descriptive. These are greedy single runs, so they are not compared with the sampled P1 arms.
 
+### SEL1: selective escalation (registered 2026-11-27, `PREREGISTRATION_SEL1.md`; running)
+
+**Why.** When the evidence cannot settle a write’s outcome, the trained agents rarely hand off: D in 15 of 540
+episodes, Dw_aug in 0 of 540.
+
+**Design.**
+- Two arms continue from the same Dw_aug parents (3 seeds), with a new LoRA each.
+- SEL sees B5 demonstrations that escalate under a permanent evidence outage and re-read through a transient one.
+- CTL sees the same number of resolvable demonstrations.
+- They are scored on the locked txn_test and on a sealed 240-task split. That split holds an unresolvable outage on a
+  held-out step and held-out workflows, a transient outage of held-out length, and an audit-log-only outage.
+
+**Why selectivity is measured.** On unresolvable tasks an always-escalate policy already scores perfectly. The
+registered selectivity statistic J is escalation on unresolvable tasks minus escalation on degraded-but-resolvable
+ones. Its scripted reference values are exact by construction: selective B5 1, escalate-on-first-error B4 0.5,
+always-escalate 0, never-escalate 0.
+
+**Result.** No result is stated until `scripts/sel1_stats.py` has run on every arm.
+
+## What does not work (registered or descriptive; full list in `docs/submission/WRITEUP.md` §22)
+
+- **Escalation.** D escalates in 15 of 540 unresolvable cases (3 seeds); Dw_aug never does and acts unsafely in 53 of
+  540. SEL1 tests a fix.
+- **Retries.** Fewer unnecessary retries than scripted baselines is not established: the H3 family is not supported.
+- **The RL agent’s transfer.** D fails renamed tools (0.20) and the unseen four-step workflow. Randomising tool names
+  during GRPO (SR1) did not help. Healthcare transfer is negative.
+- **Optimizer changes.** No-std GRPO (P3) is not supported: 0.813 against 0.819.
+- **The scripted reference wins.** B4 reaches 0.864 TXN verified completion against D’s 0.724.
+- **LLM judges are not verifier-grade.** The best judge with a database snapshot reaches 0.989; the committee 0.897.
+
+## Why these numbers cannot be gamed
+
+| Shortcut an agent could take | What blocks it | Where |
+|---|---|---|
+| Report success without doing the work | Success is the database state against the requested postconditions, read by a deterministic verifier; the report is checked against it | `actionproof/integrity/sim/truth.py`, `actionproof/txn/truth.py` |
+| Read the answer from the task | Fault plans and realities live in `task.meta`; the model sees the request, the tool schemas and the tool replies only | `scripts/p1_eval.py` (`start`, `tool_text`) |
+| Escalate everything to look safe | Escalation counts as success only where the outcome is truly unobservable; SEL1 also measures escalation on degraded-but-resolvable tasks (J) | `actionproof/txn/truth.py` (STR), `scripts/sel1_stats.py` |
+| Pay twice “to be sure” | Duplicate mutations and unnecessary retries are their own metrics | TXN metrics (`docs/txn/TXN_SPEC.md` §7) |
+| Tune on the test | Every test split is hashed and registered before training; each tag and split is evaluated once (the scripts refuse to overwrite) | `scripts/freeze_*.py`, `results/*_hashes.json` |
+| A buggy scorer | 25 mutants of the TXN scoring code are all killed by its tests; goldens; a reference verifier (a consistency check: same author and spec) | `tests/txn/` |
+
 ## Public release
 
 | What | Link |
@@ -113,21 +174,13 @@ Two large open-weight models, prompted, greedy, with no recovery training and no
 | Dn, the no-std GRPO variant (P3, not supported), for reproducibility | https://huggingface.co/atharvgaur18/actionproof-agent-dn |
 | Dw_aug warm starts (P4, seeds 0 to 2) | https://huggingface.co/atharvgaur18/actionproof-warmstart-dwaug |
 | Episode traces, frozen splits, judge cases | https://huggingface.co/datasets/atharvgaur18/actionproof-traces |
-| Paper | `paper/main_v3.pdf` (source `paper/main_v3.tex`) |
+| Companion theory paper (a separate claim: group normalisation under a shared hidden state) | `paper/main_v3.pdf` (source `paper/main_v3.tex`) |
 | Write-up | `docs/submission/WRITEUP.md` |
+| Final-round deck (PDF/PPTX export) | source `docs/submission/deck/`, mirrored by `docs/submission/SLIDES.md` |
 | Code | https://github.com/atharvgaur1845/actionproof-v2 |
+| Every artefact with its revision and sha256 | `release/ARTIFACT_MANIFEST.json` |
 
 All released models derive from `CohereLabs/tiny-aya-global` (D as a merged model, the rest as LoRA adapters) and carry CC-BY-NC-4.0: research use only, no production payments. P5's SFT models on four other Cohere bases are not released. Every result is on a simulator (ProcureSim). Arms C and D are not nested, P3 is not supported (Dn slightly below D), and D itself does not generalise to renamed tools or to the four-step workflow (P4's gain is at the warm-start stage); each model card says so next to its numbers.
-
-### Verify the numbers without a GPU (about 10 minutes)
-
-```bash
-git clone https://github.com/atharvgaur1845/actionproof-v2 && cd actionproof-v2
-pip install numpy scipy pyyaml huggingface_hub
-bash scripts/verify_numbers.sh
-```
-
-The script downloads the episode files from the traces dataset, reruns the registered analyses (fixed bootstrap seeds, so the output is deterministic), requires `git diff --exit-code results/` to be empty, and runs `python scripts/s2_numcheck.py`, which checks every number in the paper, write-up and README against `claims/claims.yaml`.
 
 ### Toolkits actually used
 
@@ -142,164 +195,48 @@ Checked against the code by import, not by intent.
 
 Not used for any result: AlignTune and SafeTune (never imported). CircuitKIT was attempted in the exploratory A16 analysis, failed in the job environment, and no result is claimed from it (`docs/upgrade/TOOLKITS.md`).
 
-## Earlier studies (Stages 1–4)
+## Reproduce
 
-How the labels map:
-- **Hackathon rounds.** "Stage 1" (Nov 1–15) is the preliminary round and "Stage 2" (Nov 20–28) the finalist round.
-- **Internal research phases.** "Stage 3" (`docs/stage3/`, `actionproof/stage3/`) and "Stage 4" (`docs/research/`, `actionproof/stage4/`, branch `stage4`) are internal phases run inside the Stage 2 window. They are not hackathon rounds.
+| What | Command | Needs | Time |
+|---|---|---|---|
+| Smoke test (**not** result reproduction): benchmark regenerates, scripted baselines, tests, the number ledger | `pip install -e ".[dev]" && python scripts/smoke_check.py` | CPU, no download, no token | about 15 s |
+| Every registered model analysis from the released episodes | `pip install numpy scipy pyyaml huggingface_hub && bash scripts/verify_numbers.sh` | CPU, about 2 GB download, `git` | about 10 min |
+| Run the trained agent (inference) on the TXN dev split (use `--split txn_test` with a new tag for the locked test) | `python scripts/txn_eval.py --model atharvgaur18/actionproof-agent-d --tag mine_D --split txn_dev --samples 2` | 1 GPU with 24 GB or more, vLLM, the GPU stack below | about 10 min |
+| Train the registered arm D (recovery SFT, then GRPO) | `slurm/tasks/1153_p1_dwarm.sh`, then `slurm/tasks/1154_p1_d_s0.sh` | 1 H100/H200, the pinned stack | about 4–5 h |
 
-Contradictions found and fixed: `docs/CONSISTENCY_AUDIT.md`.
+**What each route proves.**
+- `verify_numbers.sh` verifies the stored results: it recomputes every registered statistic from the released
+  episodes, and `git diff --exit-code results/` must be empty.
+- Inference and training reproduce the episodes themselves. On different hardware, sampled decoding can differ.
 
-**What "GRPO" means here** (`research_audit/OPTIMIZER_AUDIT.md`):
-- TRL 1.7.1 takes one optimizer step per 32 rollouts, so the PPO clip never acts (`clip_ratio` is exactly zero at every logged step).
-- The update is a group-baselined, std-scaled policy gradient, with token-level loss aggregation, a KL penalty and a vLLM mismatch weight.
-- "No-std GRPO" removes only the std division (Dr. GRPO's advantage).
+**The GPU stack.**
+- Python 3.12, `bash slurm/setup_env.sh`.
+- `requirements.lock`: torch 2.11.0+cu130, transformers 5.22.1, trl 1.7.1, vLLM 0.23.0, peft 0.21.2.
+- AgentTune `d4db4c12d523`, AuditKIT `71316da34578`, CuratorKIT `dd9e835301fc`.
 
-Stage 2 results (finalist round):
-- **A12.** Training with a state reward (R_V) made read-back after phantom writes the default (1.00), while an acknowledgement reward (R_A) of identical form left the warm start's behaviour unchanged (0.00), in 5 of 5 seeds from one warm start. R_A's greedy behaviour equals the untrained warm start's.
-- **ID1 (registered, 2 seeds).** From a warm start whose demonstrations never read, R_V never samples a read in 200 steps and read-back stays 0/153: the reward selects checking from the starting model's repertoire; it does not create it.
-- **A14, A15.** Given forced evidence, every model handles present and absent payments. Partial-payment repair appears almost only under R_V. It generalises across ratios, but only within the pay-first workflow: about 0% after a goods receipt, and 5–55% after an order (seeds 0–2).
-- **A16.** All models encode partial vs complete. Training changes the action margin. The ablation that lowers it is not specific to R_V.
-- **A17.** In healthcare administration, R_V reads back more than R_A, mainly because R_A reads less than the warm start. R_V vs warm start is not established, and IT operations shows no difference.
-- **K1.** Training-pool composition explains part of R_A's drift away from reading, not its zero read-back.
-
-Stage 3 (`PREREGISTRATION_S3.md`; corrected by `PREREGISTRATION_S3_ADDENDUM1.md`, because the pool also added fault types):
-- **Against A12 R_V (a recipe comparison).** The recovery-start training recipe (RSC) raises VSC by +0.21 on fresh recovery and full-episode splits. Every one of its 5 runs beats every A12 R_V run. Of the full-episode gain, 0.12 is duplicate delivery, a fault type A12 never trained on.
-- **Against a class-matched control (the start-state comparison).** With five runs per arm (two control seeds added by a registered extension, `PREREGISTRATION_S3_ADDENDUM2.md`), recovery starts improve completion from faulted states across training runs (+0.107, unpaired seed permutation p 0.012). The partial-payment gain on full episodes does not reach the registered rule (p 0.056): partial repair was learned in 5 of 5 RSC runs and 2 of 5 control runs. The three-seed safety trade-off reversed with five control seeds (violations -0.021).
-- **Still unsolved.** Partial payments after a goods receipt are repaired by no arm (RSC 5 of 60 episodes). Raising them from 6 to 21 of 400 training tasks did not help (0.005 on 100 targeted tasks; registered, 2 runs), so pool frequency is not the explanation.
-- **Transfer is negative.** In healthcare administration, VSC falls from 0.158 (warm start) to 0.080 (A12 R_V) to 0.047 (RSC).
-
-Stage 4 (`docs/research/`):
-- **Shifts** (`PREREGISTRATION_S4_EVAL.md` and its addendum). The RSC gain survives Hindi (+0.13), Hinglish (+0.07) and two-fault episodes (+0.07), each in 5 of 5 seeds. It vanishes under renamed tools and in an unseen four-step workflow, where every model runs the trained three-step sequence and skips the new step.
-- **No new algorithm.** The novelty audit found every candidate published. FCA, a forked counterfactual credit estimator, failed its pre-set development criterion and was dropped (`docs/research/algorithm/FCA_RESULT.md`).
-- **Addendum 4 (registered): inconclusive.** Recovery starts that end at the acknowledgement, without the handed read, learn partial repair in 4 of 5 runs (control 2 of 5, recovery starts 5 of 5). Neither contrast meets the registered rule (Holm 0.206 and 0.262), so whether the handed evidence matters is not settled.
-- **E1/E2 (registered, fresh splits): what the agent does with evidence.** Under sampled decoding, recovery-start runs lead the control by +0.098, short of the registered rule (Holm 0.103). Greedy decoding exaggerates the gaps between runs (ρ 0.92). One line that reconciles amounts the agent can already see raises correct refunds after a goods receipt by +0.48. Two development candidates built on this (verified-progress credit and hint-guided sampling) are training. See `docs/research/E1E2_RESULT.md`.
-- **SR1 (registered): the known fix does not work here.** Recovery-start training with randomised tool names gives +0.00 on the renamed API and costs −0.25 VSC on the canonical tools (three runs).
-
-**Product (`product/`).** The operator console runs locally with `python -m product.app` (port 7860); it is separate from the deployed research Space above.
-- **Live, deterministic and CPU-only** (the real ProcureSim simulator and verifier; no model calls):
-  - *Incident simulator.* Choose a workflow, a fault, the faulted step, the partial ratio and the agent. It shows an execution-truth timeline that separates what the agent saw, what the database did, and the evaluator-only verdict.
-  - *Reward lab.* The same trajectory scored by R_V, R_A, the exploratory safety-first reward and VSC.
-  - *Recovery arena.* Step through a faulted workflow, choosing read, retry with the same or a new key, compensate, continue, escalate or stop.
-- **Recorded:** the policy comparison replays real greedy evaluation episodes (warm start, R_A, R_V, class-matched control, RSC) on the same fresh task. It is not live inference.
-- **Generated:** the research dashboard is built from result files by `python -m product.build_data`.
-
-**In one paragraph (Stage 1, Nov 1–15).** When tool acknowledgements can contradict execution state, does the information source of a reinforcement-learning reward change whether an agent checks its own writes? **Registered confirmatory result** (400 untouched tasks, `PREREGISTRATION.md` H1): PCSTR-d (state-grounded, two training seeds) reaches verified-success completion (VSC) 0.8425 against 0.8275 for the best baseline, a state reward without report terms (+1.5 pp [0.6, 2.6]; the effect rests on a few tasks, and both PCSTR-d seeds give identical outcomes on all 400). Not registered, and between rewards of different form: the warm start scores 0.6425 and a tool-trusting reward 0.640 (PCSTR-d − tool-trusting +20.25 pp [16.4, 24.3]); on strict VSC, which also forbids unrequested writes, the tool-trusting reward falls to 0.424. With two rewards of identical form from one warm start (exploratory, development split), test-IID VSC is 0.825 against 0.605, and sampled refund read-back rises from 0.25 to 0.71 (state reward) and 0.72 (PCSTR-d) but falls to 0.10 under the acknowledgement reward. In a pre-registered intervention, removing refund timeouts and unrecoverable refunds restores read-back to 0.669, removing 60 random tasks leaves it at 0.000, and the state reward reads back 1.000 on both pools (interaction +0.678 [0.605, 0.750]; interval over tasks, one training seed per cell). An LLM judge (Aya Expanse 32B with the AuditKIT TaskCompletion prompt) given the database's receipt ledger still accepts 71% (213 of 298) of the false completions the ledger exposes. The behaviour is fragile: when a timeout can fail before the commit, PCSTR-d scores 0.176 and the state reward 0.118 VSC against 0.71 for the tool-trusting agent (stress test, 34 tasks, seed 0). Read-back was present in the supervised demonstrations, so these results show GRPO selecting or suppressing an existing behaviour; we do not claim that GRPO learns verification.
-
-**Research upgrade (Nov 23; branch `actionproof-research-upgrade`; `docs/upgrade/`).**
-- **Capability retention** (R1, registered; `docs/upgrade/CAPABILITY_RETENTION.md`): on IFEval and BFCL v4, GRPO is non-inferior to its warm start within 0.03 for both registered arms. Changes: state reward 0.000 (IFEval) and −0.002 (BFCL); recovery-start −0.004 and +0.001. The base model itself abstains on only 7.9% of BFCL irrelevance items. τ-bench retail (descriptive) is at the floor for this model: base pass^1 0.058, SFT −0.020, GRPO −0.006 and −0.004.
-- **LLM judges** (J1, registered; `docs/upgrade/JUDGES.md`): four families, 660 blinded episodes.
-  - Told that "ok" is not proof, judges abstain rather than accept unverifiable failures (Qwen 1 of 120; others none).
-  - Without that one sentence (exploratory addendum), the same judges accept 120 of 120, 120 of 120, 115 of 120 and 9 of 120.
-  - With a database snapshot, accuracy is 0.989 (Gemma), 0.933 (gpt-oss), 0.889 (Qwen) and 0.886 (DeepSeek). A majority committee reaches 0.897, so the verifier stays authoritative.
-- **Stage 5 C5** (verified-progress turn credit) was dropped by its kill criteria (−0.32, −0.37), and **G** (hint-guided sampling) was dropped too (−0.11, −0.033). State-progress credit penalises read turns by construction (`docs/research/algorithm/C5_RESULT.md`).
-- **A practical recovery agent** (P1, registered, `PREREGISTRATION_P1.md`; frozen test of 450 fresh tasks with unseen payment fractions, an unseen workflow and two-fault episodes; 3 seeds per arm, sampled). Against the recovery-start agent (0.513):
-  - recovery SFT 0.772 (+0.259 [+0.231, +0.287]) and recovery SFT then the same GRPO 0.819 (+0.306 [+0.276, +0.337]) are **supported** (Holm 0.0003, every seed positive). The two arms are not nested (D starts from its own recovery-SFT warm start), so their gap is not GRPO's contribution;
-  - a reconciliation line at inference is **not**: 0.483 (−0.030);
-  - partial payments rise from 0.319 to 0.931 (descriptive), which closes the gap Stage 3 left unsolved;
-  - the unseen workflow stays hard: 0.486, against 0.174 for the recovery-start agent.
-
-  Tables: `paper/tables/p1.tex`; diagnosis: `docs/quality/diagnosis_tables.md`.
-- **Ledger and guard** (P2, registered, `PREREGISTRATION_P2.md`; same frozen test). Training on a structured ledger (E) beats the recovery-start agent (0.782, +0.269 [+0.238, +0.301], **supported**), but not P1's best agent (−0.038). The ledger at inference lowers the recovery-start agent to 0.253. A deterministic action guard lowers every arm (−0.122 to −0.273). It removes false successes, but it also blocks the registered refund-then-re-pay repair (the scripted oracle would be blocked on 90 of 90 partial-payment tasks), and blocked agents rarely recover. The scripted oracle reaches 0.924 on the same tasks. Diagnosis: `docs/quality/PERFORMANCE_DIAGNOSIS.md`.
-- **Why GRPO cannot see the stakes** (Phase II theory, `docs/theory/`; registered held-out simulation `PREREGISTRATION_TH1.md`). When every rollout in a group meets the same hidden fault, GRPO's expected update ignores per-state stakes and read costs. For a single read-or-not decision it becomes a stake-free vote, while centred estimators (Dr. GRPO) follow the value gap. On 731 held-out problems GRPO's decision was predicted in 721 of 721 cells. One registered prediction (H6) failed. In the trained language agent, the registered confirmatory test AD-C1 agrees: removing the std (no-std GRPO) beats GRPO by +0.120 [+0.088, +0.153] in every seed, and all five GRPO seeds stop reading at the same score (0.687). The fix is Dr. GRPO's; AWRB without std does not beat it (−0.088). No new algorithm is claimed. The registered follow-up P3 applies the same fix to the practical agent D and finds no gain (Dn 0.813 vs D 0.819, −0.007 [−0.013, −0.001], not supported). That fits the theory's scope, since reads are free in ProcureSim, but this reading was made after the result.
-- **Operational model** (`docs/upgrade/ROI.md`): projections, not savings. Hand-written read-back-and-repair checks beat every trained agent in ProcureSim.
-
-## Deliverables
-
-| PS9 deliverable | Where |
-|---|---|
-| Interactive write-up (website) | https://atharvgaur18-actionproof.static.hf.space/index.html (Space: https://huggingface.co/spaces/atharvgaur18/actionproof) |
-| Code (this repository) | https://github.com/atharvgaur1845/actionproof-v2 |
-| HF procurement-study collection (30 LoRA adapters, ProcureSim splits, evaluation traces) | https://huggingface.co/collections/atharvgaur18/actionproof-procurement-study-6b0321cd11bad297aead6e81 |
-| HF models collection (29 LoRA adapters) | https://huggingface.co/collections/atharvgaur18/actionproof-adapters-6af7fb12592ac424c2086c04 |
-| HF datasets collection (benchmark, tool-call logs and traces) | https://huggingface.co/collections/atharvgaur18/actionproof-benchmark-traces-demo-6af7fb25037f3d7eaf294e22 |
-| Write-up: metrics, methods, results, limitations | `docs/ARTICLE_DRAFT.md` (abstract `docs/ABSTRACT.md`) |
-| Agentic trajectory metrics (task success, tool-call accuracy, average latency) | `results/agentic_metrics.md` (`scripts/agentic_metrics.py`); latency there is batched seconds per episode; single-request p50 / p95 per episode in `results/latency_single.md` (A100, batch 1) |
-| Reproduction | Section "Reproduce" below |
-
-- **Track:** 3, Agentic Fine-tuning.
-- **Toolkit chain:** AgentTune → AuditKIT, plus CuratorKIT.
-- **Models:** Cohere Tiny Aya Global (policy), Tiny Aya Fire / Water / Earth and Aya Expanse 8B (P5 recipe replication), Aya Expanse 8B / 32B (teacher, judges and prompted baselines).
-- **Novelty and related work:** `docs/research/novelty_scouts_2026-11-11.md`.
-- **Environment v2** (`PREREGISTRATION_A10_ADDENDUM.md`, `results/a10/v2_env.md`): scoped idempotency and timeouts before the commit. Existing results unchanged on the same tasks. In the stress test with timeouts before the commit, PCSTR-d scores 0.176 and the state reward 0.118 VSC against 0.71 for the tool-trusting agent (34 tasks, seed 0): they read, then report success without retrying.
-- **Latest amendments:** `PREREGISTRATION_A10.md` (strict metric SVC: state arms SVC = VSC, PCSTR-d − tool_trust +41.9 pp on SVC; dependency-aware reward, offline: H-A10c holds, H-A10d fails, `results/a10/`), `PREREGISTRATION_A9.md` (grounded judge audit, `results/judge/grounded_audit.md`; task 421 not run), and an independently implemented verifier (pre-registered metric specification, no shared verification code) that reproduces our VSC on all 4,000 confirmatory episodes, 400 tasks × 10 runs (`results/reference_verifier.md`; strict VSC not re-implemented). Before them, `PREREGISTRATION_A8.md` and its addenda. X1 and the placebo are **completed** (`results/a8/x1_readback.md`); seed 1 of the A7 state arm (task 415) reproduces seed 0. Addendum 2 (`PREREGISTRATION_A8_ADDENDUM2.md`, registered 2026-11-14 before either run): task 417 (state reward on the X1 pool) and task 418 (A7 ack reward, seed 1); both finished: the state reward on the X1 pool reads back 152/152, interaction +0.678 [0.605, 0.750] (`results/a8/x1_interaction.md`); the ack arm's seed 1 reads back 0/162 like seed 0. All three registered predictions met. Before it, `PREREGISTRATION_A7.md` (results in `results/eval/a6/`, `results/eval/a7/`, corrected forced-prefix battery `results/a7/battery_v2.md`). Every deviation is logged in `docs/SPEC.md` §27.
-- **Pre-registration:** `PREREGISTRATION.md`. **Full spec and deviation log:** `docs/SPEC.md`.
+**Common failures.**
+- *"results/ has uncommitted changes"*: use a fresh clone.
+- *Gated base model*: accept the Tiny Aya terms on the Hub and set `HF_TOKEN`.
+- *A float difference below 1e-9 in the TXN statistics JSON* (set order): run with `ALLOW_FLOAT_NOISE=1`.
 
 ## Repository map
 
 | Path | What |
 |---|---|
-| `actionproof/env/` | SQLite environments (e-commerce `tools_ecom.py`, banking `tools_bank.py`), fault schedule, receipt ledger, verifiers, counterfactual footprint |
-| `actionproof/bench/` | Task generators (all splits), prompts, HI/Hinglish/pressure variants, naturalistic F8 acks |
-| `actionproof/rewards/` | PCSTR / PCSTR-d, baselines (`tool_trust`, `outcome`), LLM judge, scripted agents (oracle, lean expert) |
-| `actionproof/rollout/` | AgentTune Cohere-format episodes, batched multi-turn vLLM rollouts |
-| `actionproof/train/` | RFT data and training, DPO, GRPO (AgentTune `TrlAgenticGrpo`), curriculum, expert demos |
-| `actionproof/eval/` | Batched evaluation, stats, per-fault breakdown, calibration, footprint, AuditKIT bridge, judge audit, ROI |
-| `actionproof/interp/` | Activation extraction, linear probes, text baseline, probe guard, knowing-liar analysis |
-| `slurm/` | Cluster worker queue (`worker.sh`, `tasks/*.sh`), env setup, HF Jobs scripts |
-| `demo/` | Gradio Space (live ZeroGPU runs and replays of real evaluation episodes) |
-| `scripts/freeze_bench.py` | Writes `data/bench/*.jsonl` and checks every split and scoring-code hash against the pre-registration |
-
-## Reproduce
-
-### 1. Environment
-
-Python 3.12, CUDA 13 driver (≥ 580). Toolkits are pinned to these commits: AgentTune `d4db4c12d523`, AuditKIT `71316da34578`, CuratorKIT `dd9e835301fc`.
-
-```bash
-bash slurm/setup_env.sh
-```
-
-This clones the toolkits at those SHAs, creates `.venv` with uv and installs everything. `requirements.lock` holds the exact resolved versions: torch 2.11.0+cu130, transformers 5.22.1, trl 1.7.1, vLLM 0.23.0, peft 0.21.2.
-
-### 2. Tests and benchmark integrity (CPU only)
-
-```bash
-.venv/bin/python -m pytest -q tests/
-for f in freeze_bench freeze_a4 freeze_a5 freeze_a6 freeze_a7 freeze_a8 freeze_a8b freeze_a8c freeze_a9 freeze_a10 freeze_a10b; do .venv/bin/python scripts/$f.py --check; done
-```
-
-The tests cover:
-- fault semantics;
-- the PCSTR ordering property (property-based);
-- the reward sanity matrix;
-- an oracle that solves 100% of every split;
-- deterministic replay;
-- the banking domain and the language variants.
-
-Every check must print `OK`, except `freeze_a9` (D-A9-1, `judge_audit.py`) and `freeze_a5`, which reports `verifier_a5.py` and `a5_rewards.py`. That mismatch is the logged deviation D-A5-3 (a parsing fix after registration; SPEC §27, 2026-11-10). It was not re-registered on purpose. Checked from a fresh GitHub clone of `df25b8b` on 2026-11-15 19:10 IST (tests run with the project's existing `.venv`, not a fresh `setup_env.sh`; no CI is configured): 509 tests passed, 4 skipped; all eleven freeze checks OK except `freeze_a5` (D-A5-3) and `freeze_a9`, which reports `judge_audit.py` (D-A9-1, a one-line FP8 fix after registration; SPEC §27). Later commits change documents, result files and the rebuilt site only. Results on the website and in the paper are the files in this repository; the site footer names the commit it was built from.
-
-### 3. Pipeline (each step is a queue task in `slurm/tasks/`)
-
-| Step | Task | Command core |
-|---|---|---|
-| Teacher trajectories (Aya 32B, verify prompt) | `070` | `actionproof.eval.run_eval --model CohereLabs/aya-expanse-32b --prompt verify_a --split train --samples 8` |
-| RFT v2 data + training | `087` | `actionproof.train.expert_demos` → `actionproof.train.rft_data --expert …` → `actionproof.train.rft` |
-| Learnable-band curriculum | `091` | `run_eval --samples 8 --temperature 1.0` → `actionproof.train.curriculum` |
-| GRPO arms (shared init, only the reward differs) | `150` to `157` | `slurm/grpo_arm.sh <arm> runs/rft_tiny_v2 data/curriculum/band_tiny_v2.jsonl v2` |
-| Leaderboard | `300` to `302` | `run_eval` over 7 Cohere models × prompts × splits → `actionproof.eval.leaderboard` |
-| Judge-fooling audit | `170` | `actionproof.eval.judge_audit build/judge` |
-| ROI | `175` | timed `run_eval` → `actionproof.eval.roi` |
-
-Run tasks on a SLURM cluster with `sbatch slurm/worker.sh <pool>`. Workers claim tasks from `queue/<pool>/pending` in order, respect `# after:` dependencies, recover tasks stranded by preemption, and pause after 2 consecutive failures.
-
-If no cluster GPU is free, the same commands run on HF Jobs: `slurm/hfjob_rft_v2.sh` and `slurm/hfjob_curriculum_v2.sh` reproduce the exact `requirements.lock` environment.
-
-### 4. Analysis
-
-```bash
-.venv/bin/python -m actionproof.eval.by_fault results/eval/r3/<run>__val.jsonl        # VSC / FCR / post-ack check per fault
-.venv/bin/python -m actionproof.eval.calibration results/eval/r3/<run>__test_iid.jsonl  # per-service verification vs fault rate
-.venv/bin/python -m actionproof.eval.footprint_report results/eval/r3/<run>__val.jsonl  # unnecessary side effects, NWCG
-.venv/bin/python -m actionproof.eval.auditkit_bridge results/eval/r3/<run>__test_iid.jsonl  # AuditKIT verified outcomes
-```
-
-## Determinism
-
-- Greedy evaluation of a saved adapter is deterministic. The env seed depends only on the task.
-- Sampled evaluation uses a reproducible per-(task, sample, turn) seed (see PREREGISTRATION, Amendment 3).
+| `actionproof/txn/` | TXN benchmark: proc3 env, evaluator, invariants, scripted policies B0–B4 and A1–A6, task generator |
+| `actionproof/sel1/` | SEL1: transient-outage env, B5 policy, splits, demonstration builder |
+| `actionproof/integrity/sim/` | ProcureSim and its deterministic verifier |
+| `actionproof/p1/`, `actionproof/p4/`, `actionproof/stage3/` | Recovery demonstrations, randomised demonstrations, GRPO training |
+| `scripts/` | Evaluation (`p1_eval.py`, `txn_eval.py`, `sel1_eval.py`), registered analyses (`*_stats.py`), checks (`smoke_check.py`, `verify_numbers.sh`, `s2_numcheck.py`), freezes |
+| `space_live/` | The live Space (real model inference) |
+| `demo/` | Sources of the replay site (`demo/static/index.html` is the built page) |
+| `release/` | Model and dataset cards, artefact manifest |
+| `research_audit/` | This round’s audits (competitors, branch, stale surfaces, red team) |
+| `docs/submission/` | Write-up, deck source, video script, captions, run of show, story decision |
+| `docs/HISTORY.md` | Earlier studies (Stages 1–4) and the original reproduction notes |
+| `PREREGISTRATION_*.md` | 53 registrations and addenda |
 
 ## License
 
 - Code: Apache-2.0 (`LICENSE`).
-- Models and adapters derived from Cohere Aya are CC-BY-NC-4.0, with Cohere attribution.
+- Models and adapters derived from Cohere Aya: CC-BY-NC-4.0, with Cohere attribution; research use only.
