@@ -22,7 +22,9 @@ transcript. Everything runs in a procurement simulator (ProcureSim); nothing tou
 > verified completion from 0.513 to 0.819. On the locked TXN test the trained agent duplicates mutations far less
 > often than bounded retry with idempotency keys (0.024 against 0.191). But the registered H3 family is not
 > supported, it rarely hands off when the evidence cannot settle the outcome (15 of 540), and a hand-written
-> reconciliation reference still beats it. This is transaction-aware recovery under ambiguous execution: not a new RL
+> reconciliation reference still beats it. Registered SEL1 then teaches *selective* hand-off with scripted
+> demonstrations: escalation on the locked test's unresolvable tasks rises to 525 of 540 episodes, against 1 of 540
+> for a matched control, with no cost on resolvable tasks. Transfer to a held-out step is seed-fragile. This is transaction-aware recovery under ambiguous execution: not a new RL
 > optimizer, and not a claim of safety.
 
 **Status (2026-11-27).** Canonical branch `submission-candidate`; this sprint’s branch is `stage2-superiority-sprint`.
@@ -120,7 +122,7 @@ Greedy VSC on the frozen P1 test splits through HF Inference Providers (the P1 a
 
 Two large open-weight models, prompted, greedy, with no recovery training and no prompt tuning (gpt-oss at low reasoning effort), complete none of the 90 partial-payment tasks. On fresh-recovery tasks gpt-oss repairs about half of the partial payments it meets (0.52) and Qwen almost none (0.04). Descriptive. These are greedy single runs, so they are not compared with the sampled P1 arms.
 
-### SEL1: selective escalation (registered 2026-11-27, `PREREGISTRATION_SEL1.md`; running)
+### SEL1: selective escalation (registered 2026-11-27, `PREREGISTRATION_SEL1.md`; supported)
 
 **Why.** When the evidence cannot settle a write’s outcome, the trained agents rarely hand off: D in 15 of 540
 episodes, Dw_aug in 0 of 540.
@@ -137,12 +139,36 @@ registered selectivity statistic J is escalation on unresolvable tasks minus esc
 ones. Its scripted reference values are exact by construction: selective B5 1, escalate-on-first-error B4 0.5,
 always-escalate 0, never-escalate 0.
 
-**Result.** No result is stated until `scripts/sel1_stats.py` has run on every arm.
+**Result (registered, supported; `results/sel1/sel1_summary.json`, task 1812).** Every run finished on its first
+attempt. Rates are means over 3 seeds × 3 episodes per task; intervals are 95% cluster bootstrap; p is Holm-adjusted
+over H1–H3.
+
+| Test | Tasks | SEL | CTL | SEL − CTL [95% CI] | Rule | Result |
+|---|---|---|---|---|---|---|
+| H1 escalation, locked txn_test unresolvable | 60 | 0.972 | 0.002 | +0.970 [+0.952, +0.987], p 0.0003 | p < 0.05 and 3/3 seeds > 0 | supported |
+| H2 escalation, held-out step and workflows | 80 | 0.624 | 0.006 | +0.618 [+0.486, +0.754], p 0.0003 | same (reported on its own) | passes |
+| H3 selectivity J | 200 | 0.740 | 0.007 | +0.732 [+0.625, +0.836], p 0.0003 | same | supported |
+| H4 VTC, txn_test resolvable | 380 | 0.960 | 0.958 | +0.002 [−0.006, +0.010] | lower bound > −0.03 | supported |
+
+What it means, and what it does not:
+- **Selective, not blanket.** SEL never escalates on a transient outage of held-out length (0 of 360 episodes) or
+  when only the audit log is down (0 of 360). Through the transient outage it re-reads and finishes safely in 350 of
+  360, against 264 of 360 for CTL. On txn_test's resolvable tasks it escalates in 13 of 3420.
+- **Below the scripted rule.** J is 0.740 against the scripted B5's 1.
+- **Seed-fragile on the held-out step.** On unresolvable `receive` steps SEL escalates in 146 of 360 (CTL 0) and is
+  unsafe in 188 of 360 (CTL 275). Seed 2 escalates in only 2 of 120 and is unsafe in 112, more than its control
+  (83). H2 passes as registered only because the held-out workflows carry it.
+- **The price of handing off.** Overall txn_test VTC is 3285 of 3960 for SEL against 3451 for CTL. CTL completes
+  173 of the 540 unresolvable episodes correctly without the evidence to know it; SEL hands those off (VTC 1 of 540).
+  H4 registered the cost on resolvable tasks only.
+- **The method is supervised.** These are scripted demonstrations plus replay on a LoRA. It is not a new RL
+  algorithm, and not a claim that the agent is safe.
 
 ## What does not work (registered or descriptive; full list in `docs/submission/WRITEUP.md` §22)
 
 - **Escalation.** D escalates in 15 of 540 unresolvable cases (3 seeds); Dw_aug never does and acts unsafely in 53 of
-  540. SEL1 tests a fix.
+  540. SEL1's demonstrations fix this on the locked test (525 of 540), but transfer to a held-out step is
+  seed-fragile (one seed: 2 of 120).
 - **Retries.** Fewer unnecessary retries than scripted baselines is not established: the H3 family is not supported.
 - **The RL agent’s transfer.** D fails renamed tools (0.20) and the unseen four-step workflow. Randomising tool names
   during GRPO (SR1) did not help. Healthcare transfer is negative.

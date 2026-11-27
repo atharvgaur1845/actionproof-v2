@@ -5,8 +5,9 @@
 - `research_audit/NOVELTY_POSITIONING_FINAL.md`
 - `research_audit/COMPETITIVE_THREAT_RANKING.md`
 
-**Placeholders.** Sections that depend on SEL1 say so. They are filled only from `results/sel1/` after its
-registered analysis runs.
+**SEL1 filled (2026-11-27, 09:57 IST).** The SEL1-dependent parts below were filled from
+`results/sel1/sel1_summary.json` after task 1812 ran the registered analysis. SEL1 is supported (H1, H3, H4); H2
+passes; transfer to a held-out step is seed-fragile.
 
 ## The five candidate stories and the choice
 
@@ -14,7 +15,7 @@ registered analysis runs.
 |---|---|
 | C: transaction-integrity benchmark (identical replies hide different database states; acknowledgement trust and retries fail) | **Primary spine**, together with B |
 | B: recovery learning (demonstrations carry the capability; GRPO adds an exploratory increment after SFT) | **Primary spine**: the trained agent that the benchmark measures |
-| D: selective recovery and safe escalation | **Supporting finding 1.** It is the open problem the benchmark exposes (H5), and SEL1 tests a fix |
+| D: selective recovery and safe escalation | **Supporting finding 1.** It is the open problem the benchmark exposes (H5); registered SEL1 fixes it on the locked test (supported), with seed-fragile transfer to a held-out step |
 | A: the reward's information source selects read-back but does not create it (A12, ID1) | **Supporting finding 2.** One line in the main text; detail in the appendix and website |
 | E: group-normalisation theory | **Companion theory paper** (`paper/main_v3.tex`). It is not part of the main narrative |
 
@@ -35,13 +36,15 @@ to reconcile the evidence? That means:
 - hand off when the outcome cannot be established;
 - and do this measurably better than the scripted baselines engineers use today.
 
-## 2. Central claim (one sentence; SEL1-dependent part marked)
+## 2. Central claim (one sentence)
 
 On a locked benchmark where identical "ok" and "timeout" replies hide committed and uncommitted payments:
 - recovery demonstrations followed by GRPO raise a 3.35B Cohere agent from 0.513 to 0.819 verified completion on
   450 frozen tasks;
 - the agent duplicates mutations far less often than bounded retry with idempotency keys (0.024 against 0.191);
-- but it rarely hands off when evidence cannot settle the outcome, which `[SEL1: fixed / not fixed]`;
+- it rarely hands off when evidence cannot settle the outcome, which registered demonstrations of selective
+  hand-off fix on the locked test (SEL1: escalation 0.972 against 0.002, none on transient outages, no cost on
+  resolvable tasks), though transfer to a held-out step is seed-fragile;
 - every result comes from a procurement simulator.
 
 ## 3. Contributions
@@ -57,9 +60,14 @@ On a locked benchmark where identical "ok" and "timeout" replies hide committed 
    - P4: randomised demonstrations remove procedure replay **in the warm start**.
    - P5: the recipe on four other Cohere bases, one SFT seed each.
    - R7 (exploratory): GRPO adds +0.140 on top of its own warm start.
-3. **(Conditional) selective escalation (SEL1).** `[filled from results/sel1/ after the registered analysis]`.
-   If SEL1 fails, contribution 3 becomes "the escalation gap, measured", reported with always-escalate and
-   never-escalate references.
+3. **Selective escalation (SEL1, registered before training; supported).** Demonstrations from a scripted
+   selective rule (B5), against a matched-volume control from the same Dw_aug parents, 3 seeds:
+   - H1: escalation on the locked test's unresolvable tasks 0.972 against 0.002 (+0.970 [+0.952, +0.987]);
+   - H3: selectivity J 0.740 against 0.007 (+0.732 [+0.625, +0.836]); 0 of 360 escalations on a transient outage of
+     held-out length;
+   - H4: no VTC cost on resolvable tasks (+0.002 [−0.006, +0.010]);
+   - H2 (held-out compositions) passes, but on the held-out step one seed escalates in 2 of 120 episodes.
+   The gap is measured with always-escalate and never-escalate references beside it (J 0 for both).
 
 ## 4. Evidence file for every contribution
 

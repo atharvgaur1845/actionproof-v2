@@ -1,6 +1,6 @@
 <section id="fails" class="foot">
 <p class="eyebrow">WHAT STILL FAILS</p>
-<h2>It repairs well. It rarely hands off.</h2>
+<h2>It repairs well. Hand-off had to be taught.</h2>
 <div class="row">
 <div class="fl grow">
 <div class="it"><h3>Escalation when the evidence cannot settle it</h3><p class="mut">D: 15 of 540 unresolvable cases (3 seeds). Dw_aug: 0 of 540. Scripted reference: all.</p></div>
@@ -9,13 +9,14 @@
 <div class="it"><h3>The scripted reference still wins</h3><p class="mut">B4 0.864 against D 0.724 on TXN. No-std GRPO (P3) 0.813 against 0.819: not supported.</p></div>
 </div>
 <div class="sel" style="width:640px">
-<p class="eyebrow">REGISTERED SEL1 · SEALED TEST</p>
-<h3>Can demonstrations teach selective hand-off?</h3>
-<p>Escalate when a write’s outcome is irreducibly unobservable; re-read and continue when the outage is transient.</p>
-<p class="mut">[SEL1 result: filled only from results/sel1/sel1_summary.json after the registered analysis]</p>
-<p class="mut sm">Against a matched-volume control from the same parents, 3 seeds; always-escalate and never-escalate references reported beside it.</p>
+<p class="eyebrow">REGISTERED SEL1 · SUPPORTED</p>
+<h3>Selective hand-off can be taught</h3>
+<p>Demonstrations: escalate when a write’s outcome is irreducibly unobservable; re-read through a transient outage.</p>
+<p><span class="big">0.972</span> <span class="mut">vs 0.002 control: escalation, locked test, unresolvable</span></p>
+<p class="sm">Transient outage: 0 of 360 escalated. Resolvable VTC: +0.002 [−0.006, +0.010].</p>
+<p class="mut sm">Fragile: on a held-out step, one seed of three escalates in 2 of 120. Selectivity J 0.740; the scripted rule reaches 1.</p>
 </div>
 </div>
 <p class="footer">All failures are registered or descriptive results on the same locked splits; full table in the appendix and WRITEUP §22.</p>
-<aside>Be direct about the limits. The trained agent seldom acts unsafely when evidence is unavailable, but it almost never takes the correct disposition, which is to hand the case to a person. The renamed-tool and workflow failures of the RL agent remain. The scripted reconciliation reference still beats every learned model. The right column is the one gap we attacked in this round with a registered experiment; read its result exactly as the summary file states it.</aside>
+<aside>Be direct about the limits. The trained agent seldom acts unsafely when evidence is unavailable, but it almost never takes the correct disposition, which is to hand the case to a person. The renamed-tool and workflow failures of the RL agent remain. The scripted reconciliation reference still beats every learned model. The right column is the one gap we attacked in this round, with an experiment registered before training. It is supported: on the locked test the demonstration arm hands off in nearly every unresolvable case, never on a transient outage, and loses nothing on resolvable work. Say the limit too: on a held-out step one seed barely escalates.</aside>
 </section>

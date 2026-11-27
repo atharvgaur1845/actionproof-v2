@@ -5,7 +5,8 @@ payments:
 - recovery demonstrations followed by GRPO raise a 3.35B Cohere agent from 0.513 to 0.819 verified completion on 450
   frozen tasks;
 - it duplicates mutations far less often than bounded retry with idempotency keys (0.024 against 0.191);
-- but it rarely hands off when the evidence cannot settle the outcome;
+- it rarely hands off when the evidence cannot settle the outcome, until registered demonstrations of selective
+  hand-off (SEL1) fix that on the locked test;
 - everything is in a procurement simulator.
 
 **Story, in short** (`docs/submission/FINAL_STORY_DECISION.md`).
@@ -63,9 +64,9 @@ reconciliation reference reaches 0.864.
 - Healthcare transfer is negative.
 - LLM judges are not verifier-grade.
 
-**SEL1.** It was registered in this round before any training. It tests whether outage demonstrations teach
-*selective* hand-off on a sealed split: hand off when the outcome is irreducibly unobservable, re-read through a
-transient outage. It is measured against a matched-volume control and against always-escalate references (§1a).
+**SEL1 (registered before training; supported).** Scripted demonstrations teach *selective* hand-off. On the locked
+test's unresolvable tasks escalation reaches 0.972 against 0.002 for a matched control. It never escalates on a
+transient outage, at no cost on resolvable tasks. On a held-out step one seed barely escalates (§1a).
 
 **The reward's information source** (Stage 2, registered). A database reward makes read-back the default in 5 of 5
 seeds where an acknowledgement reward of identical form never does. From a warm start that never reads, nothing
@@ -90,7 +91,14 @@ changes. The reward selects checking; it does not create it.
 4. **Supplementary large open-weight baselines (B1 addendum 1, not Cohere; descriptive).** Qwen3-235B-A22B and gpt-oss-120b (low reasoning effort), prompted, greedy, no recovery training, through HF Inference Providers: full episodes 0.383 and 0.250; none of the 90 partial-payment tasks completed (0.000 each); on fresh-recovery tasks gpt-oss repairs about half of the partial payments it meets (0.52), Qwen almost none (0.04).
 5. **P5: the recipe on four other Cohere bases (`PREREGISTRATION_P5.md` + addendum 1).** Recovery SFT with Dw's data and settings, against each untrained base, on the P1 test (Holm over 4): Tiny Aya Fire 0.018 → 0.686 (+0.668 [+0.637, +0.699]), Water 0.011 → 0.639 (+0.628 [+0.592, +0.664]), Earth 0.012 → 0.704 (+0.693 [+0.662, +0.724]), Aya Expanse 8B 0.076 → 0.772 (+0.697 [+0.667, +0.727]). All four are supported. One SFT seed per model, so each is a task-level test with the model fixed; the unseen four-step workflow stays hard (Water 0.017).
 6. **Dw_aug on TXN (descriptive).** Its VTC is above Dw's by +0.126, +0.085 and +0.089 per seed; on the unseen-workflow group its safe terminal resolution is 0.85 against 0.05 (Dw) and 0.083 (D seed 0). The cost: it never escalates on unresolvable evidence (0 of 180 in every seed) and acts unsafely there more often than Dw (11, 24 and 18 of 180, against 8).
-7. **Live inference.** A ZeroGPU Space runs D (and the base model) on curated test tasks, one real model call per step, with the hidden reality revealed only after the run: https://huggingface.co/spaces/atharvgaur18/actionproof-live.
+7. **SEL1: selective escalation (`PREREGISTRATION_SEL1.md`, registered 2026-11-27 05:39 IST before any training; `scripts/sel1_stats.py` run once as task 1812). Supported.** Two arms continue from the same Dw_aug parents with a new LoRA each (3 seeds; 3 episodes per task). SEL sees scripted B5 demonstrations that escalate under a permanent evidence outage and re-read through a transient one, plus replay; CTL sees the same volume of resolvable demonstrations and replay. Every run finished on its first attempt.
+   - **H1, locked txn_test unresolvable (60 tasks):** escalation 0.972 vs 0.002, +0.970 [+0.952, +0.987], Holm p 0.0003, all seeds positive: supported.
+   - **H2, held-out step `receive` and held-out workflows (80 tasks, sealed `sel1_test`):** 0.624 vs 0.006, +0.618 [+0.486, +0.754], Holm p 0.0003: passes (reported on its own, not part of the SEL1 decision).
+   - **H3, selectivity J (200 tasks):** 0.740 vs 0.007, +0.732 [+0.625, +0.836], Holm p 0.0003: supported. Scripted J: B5 1, B4 0.5, always-escalate 0, never-escalate 0.
+   - **H4, VTC on txn_test resolvable (380 tasks):** 0.960 vs 0.958, +0.002 [−0.006, +0.010] against a −0.03 bound: supported.
+   - **Descriptive.** SEL escalates in 0 of 360 episodes on a transient outage of held-out length and in 0 of 360 on an audit-log-only outage; through the transient outage it finishes safely in 350 of 360 (CTL 264). On txn_test's resolvable tasks it escalates in 13 of 3420.
+   - **Limits.** On the held-out `receive` step SEL escalates in 146 of 360 and is unsafe in 188 (CTL 275); seed 2 escalates in 2 of 120 and is unsafe in 112, more than its control (83), so H2's seed-2 difference is carried by the held-out workflows. Overall txn_test VTC is 3285 vs 3451 of 3960: CTL completes 173 of the 540 unresolvable episodes without the evidence to know it, and SEL hands them off. The method is supervised demonstrations on a LoRA, not a new RL algorithm.
+8. **Live inference.** A ZeroGPU Space runs D (and the base model) on curated test tasks, one real model call per step, with the hidden reality revealed only after the run: https://huggingface.co/spaces/atharvgaur18/actionproof-live.
 
 ## 2. Before and after (same base model)
 
@@ -370,6 +378,7 @@ Five independent training seeds per arm (0–4) for A12 R_V and R_A, RSC, the cl
 - TXN H5: the trained agents almost never escalate on unresolvable evidence (D 15 of 540 over three seeds, Dw 4 of 180).
 - Two large open-weight models, prompted and greedy, complete none of the 90 partial-payment tasks (Qwen3-235B and gpt-oss-120b 0.000).
 - Dw_aug never escalates on unresolvable TXN evidence (0 of 180 per seed).
+- SEL1, held-out step `receive`: SEL seed 2 escalates in 2 of 120 episodes and is unsafe in 112, more than its matched control (83). SEL1 is supported on its registered tests; this transfer is not robust.
 
 ## 23. Sample inputs and outputs
 
@@ -409,6 +418,7 @@ See `docs/submission/TRACES.md`: two complete recorded episodes with the databas
 - The reference verifier was written from the same specification as the main verifier. Its 100% agreement is a consistency check, not independent ground truth.
 - The P1 (A, Dw, D), P3 (Dn) and P4 (Dw_aug) models are public on Hugging Face; the P2 and AD-C1 adapters are on the cluster only. A public clone reproduces the analyses from stored episodes, not the training.
 - ID1's null is scoped: no read was sampled in 200 steps from one warm start, so the reward had nothing to reinforce.
+- SEL1 teaches escalation by supervised demonstrations from a scripted rule (B5), on Dw_aug warm starts; GRPO was not run on top. Its transfer to a held-out step is seed-fragile (one seed: 2 of 120). Escalation is scored as safe only where the outcome is truly unobservable; the cost of a human review is priced in the ROI model, not measured.
 
 ## 26. Dual use and ethics
 
@@ -419,6 +429,7 @@ The environment injects benign faults; no real payment systems or personal data 
 - A second model family and a commercially licensed base.
 - Own-history recovery starts.
 - A runtime gateway evaluated with trained agents on ProcureSim.
+- GRPO from the SEL1 arms with an escalation-aware reward, and held-out-step demonstrations, to make selective hand-off robust across seeds.
 - Retention mitigations, if R1 shows a loss.
 - The candidate algorithms from the separate discovery programme (`docs/research/algorithm_discovery/`), which go to a confirmatory test only if they pass development gates.
 
@@ -488,6 +499,7 @@ LLM judges (§15) are evaluation instruments whose outputs never replace the dat
 - **Nov 24:** P1 frozen test reported (H2, H3 supported; H1 not supported). P2 reported (H2 supported; H1, H3, H4 and S1–S3 not supported), with a post-hoc guard diagnosis. Phase II theory merged (TH1 registered held-out simulation). The HF Space site was redeployed with sections 09 (P1, P2) and 10 (theory) on Nov 24 (Space commit acf4f79).
 - **Nov 25:** P3 reported (not supported); replay Space redeployed.
 - **Nov 26–27 (final round):** TXN1 registered and run (H3 not supported as a family; addenda D-TXN1-1 and D-TXN1-2), P4 (all three tests supported), P5 (all four bases supported; addendum D-P5-1), R7 (exploratory), B1 addendum 1 (large open-weight baselines), the live ZeroGPU Space, Dw_aug models, replay Space redeployed with TXN, P4 and P5 sections. An independent adversarial review of every public surface was run before the freeze; its findings were fixed in the documents (wording, labels and omissions; no result changed).
+- **Nov 27 (superiority sprint, branch `stage2-superiority-sprint`):** competitor forensics; SEL1 registered (05:39 IST) before any training and run (H1, H3, H4 supported; H2 passes; held-out-step transfer seed-fragile); README rebuilt as the landing page; deck; live Space judge mode, labelled recorded fallback and run export; impact projection from TXN rates.
 - **Deviations:** `docs/stage2/DECISIONS.md` (this round: D-R1-1, D-P1-1) and the addenda above.
 
 ## 35. Appendix pointers

@@ -1,0 +1,1628 @@
+{
+  "tag": "D_s0",
+  "split": "sel1_test",
+  "model": "runs/p1_dwarm/merged",
+  "adapter": "runs/p1_d_s0/final",
+  "samples": 2,
+  "n_tasks": 240,
+  "seconds": 186.5,
+  "greedy": {
+    "n": 240,
+    "vsc": 0.49583333333333335,
+    "false_success": 0.0375,
+    "duplicate_unrefunded": 0.075,
+    "honest_fail": 0.4583333333333333,
+    "partial_pay_repaired": null,
+    "new_key_share_on_repay": null,
+    "redundant_reads_per_episode": 1.2333333333333334,
+    "reads_per_episode": 4.029166666666667,
+    "calls_per_success": 8.084033613445378,
+    "context_ended": 0.0
+  },
+  "sampled": {
+    "n": 480,
+    "vsc": 0.49375,
+    "false_success": 0.11458333333333333,
+    "duplicate_unrefunded": 0.10833333333333334,
+    "honest_fail": 0.37916666666666665,
+    "partial_pay_repaired": null,
+    "new_key_share_on_repay": null,
+    "redundant_reads_per_episode": 0.9270833333333334,
+    "reads_per_episode": 3.504166666666667,
+    "calls_per_success": 7.5738396624472575,
+    "context_ended": 0.0
+  },
+  "by_workflow_sampled": {
+    "order_pay_receive": {
+      "n": 40,
+      "vsc": 0.0,
+      "false_success": 0.2,
+      "duplicate_unrefunded": 0.225,
+      "honest_fail": 0.725,
+      "partial_pay_repaired": null,
+      "new_key_share_on_repay": null,
+      "redundant_reads_per_episode": 1.5,
+      "reads_per_episode": 3.625,
+      "calls_per_success": null,
+      "context_ended": 0.0
+    },
+    "order_prepay": {
+      "n": 128,
+      "vsc": 0.7421875,
+      "false_success": 0.078125,
+      "duplicate_unrefunded": 0.0,
+      "honest_fail": 0.1796875,
+      "partial_pay_repaired": null,
+      "new_key_share_on_repay": null,
+      "redundant_reads_per_episode": 0.53125,
+      "reads_per_episode": 3.15625,
+      "calls_per_success": 7.968421052631579,
+      "context_ended": 0.0
+    },
+    "order_receive_pay_post": {
+      "n": 40,
+      "vsc": 0.0,
+      "false_success": 0.475,
+      "duplicate_unrefunded": 0.025,
+      "honest_fail": 0.525,
+      "partial_pay_repaired": null,
+      "new_key_share_on_repay": null,
+      "redundant_reads_per_episode": 1.225,
+      "reads_per_episode": 4.55,
+      "calls_per_success": null,
+      "context_ended": 0.0
+    },
+    "pay_post": {
+      "n": 96,
+      "vsc": 0.7604166666666666,
+      "false_success": 0.010416666666666666,
+      "duplicate_unrefunded": 0.0,
+      "honest_fail": 0.19791666666666666,
+      "partial_pay_repaired": null,
+      "new_key_share_on_repay": null,
+      "redundant_reads_per_episode": 0.9583333333333334,
+      "reads_per_episode": 2.8958333333333335,
+      "calls_per_success": 6.095890410958904,
+      "context_ended": 0.0
+    },
+    "receive_pay": {
+      "n": 176,
+      "vsc": 0.39204545454545453,
+      "false_success": 0.09659090909090909,
+      "duplicate_unrefunded": 0.23863636363636365,
+      "honest_fail": 0.5113636363636364,
+      "partial_pay_repaired": null,
+      "new_key_share_on_repay": null,
+      "redundant_reads_per_episode": 1.0,
+      "reads_per_episode": 3.8238636363636362,
+      "calls_per_success": 8.594202898550725,
+      "context_ended": 0.0
+    }
+  },
+  "txn": {
+    "all": {
+      "n": 720,
+      "VTC": {
+        "num": 356,
+        "den": 720,
+        "rate": 0.49444444444444446
+      },
+      "STR": {
+        "num": 363,
+        "den": 720,
+        "rate": 0.5041666666666667
+      },
+      "FCR": {
+        "num": 64,
+        "den": 720,
+        "rate": 0.08888888888888889
+      },
+      "DMR_all": {
+        "num": 64,
+        "den": 720,
+        "rate": 0.08888888888888889
+      },
+      "DMR_dup_possible": {
+        "num": 25,
+        "den": 360,
+        "rate": 0.06944444444444445
+      },
+      "URR_all": {
+        "num": 65,
+        "den": 720,
+        "rate": 0.09027777777777778
+      },
+      "URR_full_commit": {
+        "num": 65,
+        "den": 669,
+        "rate": 0.09715994020926756
+      },
+      "FCompR_all": {
+        "num": 0,
+        "den": 720,
+        "rate": 0.0
+      },
+      "FCompR_refund": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "PRS": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "CER": {
+        "num": 7,
+        "den": 360,
+        "rate": 0.019444444444444445
+      },
+      "escalation_precision": {
+        "num": 7,
+        "den": 8,
+        "rate": 0.875
+      },
+      "unverified_claim": {
+        "num": 12,
+        "den": 360,
+        "rate": 0.03333333333333333
+      },
+      "unsafe_unresolvable": {
+        "num": 107,
+        "den": 360,
+        "rate": 0.2972222222222222
+      },
+      "coverage": {
+        "num": 712,
+        "den": 720,
+        "rate": 0.9888888888888889
+      },
+      "selective_risk": {
+        "num": 113,
+        "den": 712,
+        "rate": 0.15870786516853932
+      },
+      "cost": {
+        "calls": 7.666666666666667,
+        "reads": 3.6555555555555554,
+        "writes": 2.9625,
+        "retries": 0.7875
+      }
+    },
+    "greedy": {
+      "n": 240,
+      "VTC": {
+        "num": 119,
+        "den": 240,
+        "rate": 0.49583333333333335
+      },
+      "STR": {
+        "num": 119,
+        "den": 240,
+        "rate": 0.49583333333333335
+      },
+      "FCR": {
+        "num": 9,
+        "den": 240,
+        "rate": 0.0375
+      },
+      "DMR_all": {
+        "num": 18,
+        "den": 240,
+        "rate": 0.075
+      },
+      "DMR_dup_possible": {
+        "num": 3,
+        "den": 120,
+        "rate": 0.025
+      },
+      "URR_all": {
+        "num": 18,
+        "den": 240,
+        "rate": 0.075
+      },
+      "URR_full_commit": {
+        "num": 18,
+        "den": 218,
+        "rate": 0.08256880733944955
+      },
+      "FCompR_all": {
+        "num": 0,
+        "den": 240,
+        "rate": 0.0
+      },
+      "FCompR_refund": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "PRS": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "CER": {
+        "num": 0,
+        "den": 120,
+        "rate": 0.0
+      },
+      "escalation_precision": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "unverified_claim": {
+        "num": 0,
+        "den": 120,
+        "rate": 0.0
+      },
+      "unsafe_unresolvable": {
+        "num": 25,
+        "den": 120,
+        "rate": 0.20833333333333334
+      },
+      "coverage": {
+        "num": 240,
+        "den": 240,
+        "rate": 1.0
+      },
+      "selective_risk": {
+        "num": 26,
+        "den": 240,
+        "rate": 0.10833333333333334
+      },
+      "cost": {
+        "calls": 7.85,
+        "reads": 4.029166666666667,
+        "writes": 2.8208333333333333,
+        "retries": 0.7375
+      }
+    },
+    "sampled": {
+      "n": 480,
+      "VTC": {
+        "num": 237,
+        "den": 480,
+        "rate": 0.49375
+      },
+      "STR": {
+        "num": 244,
+        "den": 480,
+        "rate": 0.5083333333333333
+      },
+      "FCR": {
+        "num": 55,
+        "den": 480,
+        "rate": 0.11458333333333333
+      },
+      "DMR_all": {
+        "num": 46,
+        "den": 480,
+        "rate": 0.09583333333333334
+      },
+      "DMR_dup_possible": {
+        "num": 22,
+        "den": 240,
+        "rate": 0.09166666666666666
+      },
+      "URR_all": {
+        "num": 47,
+        "den": 480,
+        "rate": 0.09791666666666667
+      },
+      "URR_full_commit": {
+        "num": 47,
+        "den": 451,
+        "rate": 0.10421286031042129
+      },
+      "FCompR_all": {
+        "num": 0,
+        "den": 480,
+        "rate": 0.0
+      },
+      "FCompR_refund": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "PRS": {
+        "num": 0,
+        "den": 0,
+        "rate": null
+      },
+      "CER": {
+        "num": 7,
+        "den": 240,
+        "rate": 0.029166666666666667
+      },
+      "escalation_precision": {
+        "num": 7,
+        "den": 8,
+        "rate": 0.875
+      },
+      "unverified_claim": {
+        "num": 12,
+        "den": 240,
+        "rate": 0.05
+      },
+      "unsafe_unresolvable": {
+        "num": 82,
+        "den": 240,
+        "rate": 0.3416666666666667
+      },
+      "coverage": {
+        "num": 472,
+        "den": 480,
+        "rate": 0.9833333333333333
+      },
+      "selective_risk": {
+        "num": 87,
+        "den": 472,
+        "rate": 0.1843220338983051
+      },
+      "cost": {
+        "calls": 7.575,
+        "reads": 3.46875,
+        "writes": 3.033333333333333,
+        "retries": 0.8125
+      }
+    },
+    "by_group": {
+      "audit_down": {
+        "n": 120,
+        "VTC": {
+          "num": 112,
+          "den": 120,
+          "rate": 0.9333333333333333
+        },
+        "STR": {
+          "num": 112,
+          "den": 120,
+          "rate": 0.9333333333333333
+        },
+        "FCR": {
+          "num": 6,
+          "den": 120,
+          "rate": 0.05
+        },
+        "DMR_all": {
+          "num": 1,
+          "den": 120,
+          "rate": 0.008333333333333333
+        },
+        "DMR_dup_possible": {
+          "num": 0,
+          "den": 60,
+          "rate": 0.0
+        },
+        "URR_all": {
+          "num": 1,
+          "den": 120,
+          "rate": 0.008333333333333333
+        },
+        "URR_full_commit": {
+          "num": 1,
+          "den": 119,
+          "rate": 0.008403361344537815
+        },
+        "FCompR_all": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "FCompR_refund": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "PRS": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "CER": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "escalation_precision": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "unverified_claim": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "unsafe_unresolvable": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "coverage": {
+          "num": 120,
+          "den": 120,
+          "rate": 1.0
+        },
+        "selective_risk": {
+          "num": 7,
+          "den": 120,
+          "rate": 0.058333333333333334
+        },
+        "cost": {
+          "calls": 6.908333333333333,
+          "reads": 2.7416666666666667,
+          "writes": 3.175,
+          "retries": 0.5
+        }
+      },
+      "std": {
+        "n": 120,
+        "VTC": {
+          "num": 119,
+          "den": 120,
+          "rate": 0.9916666666666667
+        },
+        "STR": {
+          "num": 119,
+          "den": 120,
+          "rate": 0.9916666666666667
+        },
+        "FCR": {
+          "num": 1,
+          "den": 120,
+          "rate": 0.008333333333333333
+        },
+        "DMR_all": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "DMR_dup_possible": {
+          "num": 0,
+          "den": 60,
+          "rate": 0.0
+        },
+        "URR_all": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "URR_full_commit": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "FCompR_all": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "FCompR_refund": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "PRS": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "CER": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "escalation_precision": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "unverified_claim": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "unsafe_unresolvable": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "coverage": {
+          "num": 120,
+          "den": 120,
+          "rate": 1.0
+        },
+        "selective_risk": {
+          "num": 1,
+          "den": 120,
+          "rate": 0.008333333333333333
+        },
+        "cost": {
+          "calls": 7.316666666666666,
+          "reads": 3.05,
+          "writes": 3.2083333333333335,
+          "retries": 0.5083333333333333
+        }
+      },
+      "t2": {
+        "n": 120,
+        "VTC": {
+          "num": 113,
+          "den": 120,
+          "rate": 0.9416666666666667
+        },
+        "STR": {
+          "num": 113,
+          "den": 120,
+          "rate": 0.9416666666666667
+        },
+        "FCR": {
+          "num": 4,
+          "den": 120,
+          "rate": 0.03333333333333333
+        },
+        "DMR_all": {
+          "num": 3,
+          "den": 120,
+          "rate": 0.025
+        },
+        "DMR_dup_possible": {
+          "num": 1,
+          "den": 60,
+          "rate": 0.016666666666666666
+        },
+        "URR_all": {
+          "num": 3,
+          "den": 120,
+          "rate": 0.025
+        },
+        "URR_full_commit": {
+          "num": 3,
+          "den": 120,
+          "rate": 0.025
+        },
+        "FCompR_all": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "FCompR_refund": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "PRS": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "CER": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "escalation_precision": {
+          "num": 0,
+          "den": 1,
+          "rate": 0.0
+        },
+        "unverified_claim": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "unsafe_unresolvable": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "coverage": {
+          "num": 119,
+          "den": 120,
+          "rate": 0.9916666666666667
+        },
+        "selective_risk": {
+          "num": 4,
+          "den": 119,
+          "rate": 0.03361344537815126
+        },
+        "cost": {
+          "calls": 8.983333333333333,
+          "reads": 4.333333333333333,
+          "writes": 3.625,
+          "retries": 0.95
+        }
+      },
+      "u_in": {
+        "n": 120,
+        "VTC": {
+          "num": 9,
+          "den": 120,
+          "rate": 0.075
+        },
+        "STR": {
+          "num": 11,
+          "den": 120,
+          "rate": 0.09166666666666666
+        },
+        "FCR": {
+          "num": 6,
+          "den": 120,
+          "rate": 0.05
+        },
+        "DMR_all": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "DMR_dup_possible": {
+          "num": 0,
+          "den": 60,
+          "rate": 0.0
+        },
+        "URR_all": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "URR_full_commit": {
+          "num": 0,
+          "den": 104,
+          "rate": 0.0
+        },
+        "FCompR_all": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "FCompR_refund": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "PRS": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "CER": {
+          "num": 2,
+          "den": 120,
+          "rate": 0.016666666666666666
+        },
+        "escalation_precision": {
+          "num": 2,
+          "den": 2,
+          "rate": 1.0
+        },
+        "unverified_claim": {
+          "num": 9,
+          "den": 120,
+          "rate": 0.075
+        },
+        "unsafe_unresolvable": {
+          "num": 6,
+          "den": 120,
+          "rate": 0.05
+        },
+        "coverage": {
+          "num": 118,
+          "den": 120,
+          "rate": 0.9833333333333333
+        },
+        "selective_risk": {
+          "num": 5,
+          "den": 118,
+          "rate": 0.0423728813559322
+        },
+        "cost": {
+          "calls": 7.816666666666666,
+          "reads": 4.016666666666667,
+          "writes": 2.7583333333333333,
+          "retries": 1.2
+        }
+      },
+      "u_ood_wf": {
+        "n": 120,
+        "VTC": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "STR": {
+          "num": 4,
+          "den": 120,
+          "rate": 0.03333333333333333
+        },
+        "FCR": {
+          "num": 35,
+          "den": 120,
+          "rate": 0.2916666666666667
+        },
+        "DMR_all": {
+          "num": 5,
+          "den": 120,
+          "rate": 0.041666666666666664
+        },
+        "DMR_dup_possible": {
+          "num": 3,
+          "den": 60,
+          "rate": 0.05
+        },
+        "URR_all": {
+          "num": 6,
+          "den": 120,
+          "rate": 0.05
+        },
+        "URR_full_commit": {
+          "num": 6,
+          "den": 106,
+          "rate": 0.05660377358490566
+        },
+        "FCompR_all": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "FCompR_refund": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "PRS": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "CER": {
+          "num": 4,
+          "den": 120,
+          "rate": 0.03333333333333333
+        },
+        "escalation_precision": {
+          "num": 4,
+          "den": 4,
+          "rate": 1.0
+        },
+        "unverified_claim": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "unsafe_unresolvable": {
+          "num": 40,
+          "den": 120,
+          "rate": 0.3333333333333333
+        },
+        "coverage": {
+          "num": 116,
+          "den": 120,
+          "rate": 0.9666666666666667
+        },
+        "selective_risk": {
+          "num": 36,
+          "den": 116,
+          "rate": 0.3103448275862069
+        },
+        "cost": {
+          "calls": 8.1,
+          "reads": 4.075,
+          "writes": 2.9,
+          "retries": 0.6916666666666667
+        }
+      },
+      "u_receive": {
+        "n": 120,
+        "VTC": {
+          "num": 3,
+          "den": 120,
+          "rate": 0.025
+        },
+        "STR": {
+          "num": 4,
+          "den": 120,
+          "rate": 0.03333333333333333
+        },
+        "FCR": {
+          "num": 12,
+          "den": 120,
+          "rate": 0.1
+        },
+        "DMR_all": {
+          "num": 55,
+          "den": 120,
+          "rate": 0.4583333333333333
+        },
+        "DMR_dup_possible": {
+          "num": 21,
+          "den": 60,
+          "rate": 0.35
+        },
+        "URR_all": {
+          "num": 55,
+          "den": 120,
+          "rate": 0.4583333333333333
+        },
+        "URR_full_commit": {
+          "num": 55,
+          "den": 100,
+          "rate": 0.55
+        },
+        "FCompR_all": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "FCompR_refund": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "PRS": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "CER": {
+          "num": 1,
+          "den": 120,
+          "rate": 0.008333333333333333
+        },
+        "escalation_precision": {
+          "num": 1,
+          "den": 1,
+          "rate": 1.0
+        },
+        "unverified_claim": {
+          "num": 3,
+          "den": 120,
+          "rate": 0.025
+        },
+        "unsafe_unresolvable": {
+          "num": 61,
+          "den": 120,
+          "rate": 0.5083333333333333
+        },
+        "coverage": {
+          "num": 119,
+          "den": 120,
+          "rate": 0.9916666666666667
+        },
+        "selective_risk": {
+          "num": 60,
+          "den": 119,
+          "rate": 0.5042016806722689
+        },
+        "cost": {
+          "calls": 6.875,
+          "reads": 3.716666666666667,
+          "writes": 2.1083333333333334,
+          "retries": 0.875
+        }
+      }
+    },
+    "by_class": {
+      "quad:ok_committed": {
+        "n": 180,
+        "VTC": {
+          "num": 88,
+          "den": 180,
+          "rate": 0.4888888888888889
+        },
+        "STR": {
+          "num": 89,
+          "den": 180,
+          "rate": 0.49444444444444446
+        },
+        "FCR": {
+          "num": 11,
+          "den": 180,
+          "rate": 0.06111111111111111
+        },
+        "DMR_all": {
+          "num": 28,
+          "den": 180,
+          "rate": 0.15555555555555556
+        },
+        "DMR_dup_possible": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "URR_all": {
+          "num": 29,
+          "den": 180,
+          "rate": 0.16111111111111112
+        },
+        "URR_full_commit": {
+          "num": 29,
+          "den": 180,
+          "rate": 0.16111111111111112
+        },
+        "FCompR_all": {
+          "num": 0,
+          "den": 180,
+          "rate": 0.0
+        },
+        "FCompR_refund": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "PRS": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "CER": {
+          "num": 1,
+          "den": 90,
+          "rate": 0.011111111111111112
+        },
+        "escalation_precision": {
+          "num": 1,
+          "den": 2,
+          "rate": 0.5
+        },
+        "unverified_claim": {
+          "num": 4,
+          "den": 90,
+          "rate": 0.044444444444444446
+        },
+        "unsafe_unresolvable": {
+          "num": 34,
+          "den": 90,
+          "rate": 0.37777777777777777
+        },
+        "coverage": {
+          "num": 178,
+          "den": 180,
+          "rate": 0.9888888888888889
+        },
+        "selective_risk": {
+          "num": 36,
+          "den": 178,
+          "rate": 0.20224719101123595
+        },
+        "cost": {
+          "calls": 7.372222222222222,
+          "reads": 3.488888888888889,
+          "writes": 2.838888888888889,
+          "retries": 0.6944444444444444
+        }
+      },
+      "quad:ok_phantom": {
+        "n": 180,
+        "VTC": {
+          "num": 81,
+          "den": 180,
+          "rate": 0.45
+        },
+        "STR": {
+          "num": 83,
+          "den": 180,
+          "rate": 0.46111111111111114
+        },
+        "FCR": {
+          "num": 26,
+          "den": 180,
+          "rate": 0.14444444444444443
+        },
+        "DMR_all": {
+          "num": 11,
+          "den": 180,
+          "rate": 0.06111111111111111
+        },
+        "DMR_dup_possible": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "URR_all": {
+          "num": 11,
+          "den": 180,
+          "rate": 0.06111111111111111
+        },
+        "URR_full_commit": {
+          "num": 11,
+          "den": 170,
+          "rate": 0.06470588235294118
+        },
+        "FCompR_all": {
+          "num": 0,
+          "den": 180,
+          "rate": 0.0
+        },
+        "FCompR_refund": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "PRS": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "CER": {
+          "num": 2,
+          "den": 90,
+          "rate": 0.022222222222222223
+        },
+        "escalation_precision": {
+          "num": 2,
+          "den": 2,
+          "rate": 1.0
+        },
+        "unverified_claim": {
+          "num": 0,
+          "den": 90,
+          "rate": 0.0
+        },
+        "unsafe_unresolvable": {
+          "num": 29,
+          "den": 90,
+          "rate": 0.32222222222222224
+        },
+        "coverage": {
+          "num": 178,
+          "den": 180,
+          "rate": 0.9888888888888889
+        },
+        "selective_risk": {
+          "num": 36,
+          "den": 178,
+          "rate": 0.20224719101123595
+        },
+        "cost": {
+          "calls": 7.955555555555556,
+          "reads": 3.7666666666666666,
+          "writes": 3.161111111111111,
+          "retries": 0.9388888888888889
+        }
+      },
+      "quad:timeout_committed": {
+        "n": 180,
+        "VTC": {
+          "num": 95,
+          "den": 180,
+          "rate": 0.5277777777777778
+        },
+        "STR": {
+          "num": 97,
+          "den": 180,
+          "rate": 0.5388888888888889
+        },
+        "FCR": {
+          "num": 16,
+          "den": 180,
+          "rate": 0.08888888888888889
+        },
+        "DMR_all": {
+          "num": 16,
+          "den": 180,
+          "rate": 0.08888888888888889
+        },
+        "DMR_dup_possible": {
+          "num": 16,
+          "den": 180,
+          "rate": 0.08888888888888889
+        },
+        "URR_all": {
+          "num": 16,
+          "den": 180,
+          "rate": 0.08888888888888889
+        },
+        "URR_full_commit": {
+          "num": 16,
+          "den": 180,
+          "rate": 0.08888888888888889
+        },
+        "FCompR_all": {
+          "num": 0,
+          "den": 180,
+          "rate": 0.0
+        },
+        "FCompR_refund": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "PRS": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "CER": {
+          "num": 2,
+          "den": 90,
+          "rate": 0.022222222222222223
+        },
+        "escalation_precision": {
+          "num": 2,
+          "den": 2,
+          "rate": 1.0
+        },
+        "unverified_claim": {
+          "num": 6,
+          "den": 90,
+          "rate": 0.06666666666666667
+        },
+        "unsafe_unresolvable": {
+          "num": 25,
+          "den": 90,
+          "rate": 0.2777777777777778
+        },
+        "coverage": {
+          "num": 178,
+          "den": 180,
+          "rate": 0.9888888888888889
+        },
+        "selective_risk": {
+          "num": 24,
+          "den": 178,
+          "rate": 0.1348314606741573
+        },
+        "cost": {
+          "calls": 7.2555555555555555,
+          "reads": 3.4166666666666665,
+          "writes": 2.7777777777777777,
+          "retries": 0.5722222222222222
+        }
+      },
+      "quad:timeout_uncommitted": {
+        "n": 180,
+        "VTC": {
+          "num": 92,
+          "den": 180,
+          "rate": 0.5111111111111111
+        },
+        "STR": {
+          "num": 94,
+          "den": 180,
+          "rate": 0.5222222222222223
+        },
+        "FCR": {
+          "num": 11,
+          "den": 180,
+          "rate": 0.06111111111111111
+        },
+        "DMR_all": {
+          "num": 9,
+          "den": 180,
+          "rate": 0.05
+        },
+        "DMR_dup_possible": {
+          "num": 9,
+          "den": 180,
+          "rate": 0.05
+        },
+        "URR_all": {
+          "num": 9,
+          "den": 180,
+          "rate": 0.05
+        },
+        "URR_full_commit": {
+          "num": 9,
+          "den": 139,
+          "rate": 0.06474820143884892
+        },
+        "FCompR_all": {
+          "num": 0,
+          "den": 180,
+          "rate": 0.0
+        },
+        "FCompR_refund": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "PRS": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "CER": {
+          "num": 2,
+          "den": 90,
+          "rate": 0.022222222222222223
+        },
+        "escalation_precision": {
+          "num": 2,
+          "den": 2,
+          "rate": 1.0
+        },
+        "unverified_claim": {
+          "num": 2,
+          "den": 90,
+          "rate": 0.022222222222222223
+        },
+        "unsafe_unresolvable": {
+          "num": 19,
+          "den": 90,
+          "rate": 0.2111111111111111
+        },
+        "coverage": {
+          "num": 178,
+          "den": 180,
+          "rate": 0.9888888888888889
+        },
+        "selective_risk": {
+          "num": 17,
+          "den": 178,
+          "rate": 0.09550561797752809
+        },
+        "cost": {
+          "calls": 8.083333333333334,
+          "reads": 3.95,
+          "writes": 3.0722222222222224,
+          "retries": 0.9444444444444444
+        }
+      }
+    },
+    "by_regime": {
+      "audit_down": {
+        "n": 120,
+        "VTC": {
+          "num": 112,
+          "den": 120,
+          "rate": 0.9333333333333333
+        },
+        "STR": {
+          "num": 112,
+          "den": 120,
+          "rate": 0.9333333333333333
+        },
+        "FCR": {
+          "num": 6,
+          "den": 120,
+          "rate": 0.05
+        },
+        "DMR_all": {
+          "num": 1,
+          "den": 120,
+          "rate": 0.008333333333333333
+        },
+        "DMR_dup_possible": {
+          "num": 0,
+          "den": 60,
+          "rate": 0.0
+        },
+        "URR_all": {
+          "num": 1,
+          "den": 120,
+          "rate": 0.008333333333333333
+        },
+        "URR_full_commit": {
+          "num": 1,
+          "den": 119,
+          "rate": 0.008403361344537815
+        },
+        "FCompR_all": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "FCompR_refund": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "PRS": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "CER": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "escalation_precision": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "unverified_claim": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "unsafe_unresolvable": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "coverage": {
+          "num": 120,
+          "den": 120,
+          "rate": 1.0
+        },
+        "selective_risk": {
+          "num": 7,
+          "den": 120,
+          "rate": 0.058333333333333334
+        },
+        "cost": {
+          "calls": 6.908333333333333,
+          "reads": 2.7416666666666667,
+          "writes": 3.175,
+          "retries": 0.5
+        }
+      },
+      "standard": {
+        "n": 120,
+        "VTC": {
+          "num": 119,
+          "den": 120,
+          "rate": 0.9916666666666667
+        },
+        "STR": {
+          "num": 119,
+          "den": 120,
+          "rate": 0.9916666666666667
+        },
+        "FCR": {
+          "num": 1,
+          "den": 120,
+          "rate": 0.008333333333333333
+        },
+        "DMR_all": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "DMR_dup_possible": {
+          "num": 0,
+          "den": 60,
+          "rate": 0.0
+        },
+        "URR_all": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "URR_full_commit": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "FCompR_all": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "FCompR_refund": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "PRS": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "CER": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "escalation_precision": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "unverified_claim": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "unsafe_unresolvable": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "coverage": {
+          "num": 120,
+          "den": 120,
+          "rate": 1.0
+        },
+        "selective_risk": {
+          "num": 1,
+          "den": 120,
+          "rate": 0.008333333333333333
+        },
+        "cost": {
+          "calls": 7.316666666666666,
+          "reads": 3.05,
+          "writes": 3.2083333333333335,
+          "retries": 0.5083333333333333
+        }
+      },
+      "transient": {
+        "n": 120,
+        "VTC": {
+          "num": 113,
+          "den": 120,
+          "rate": 0.9416666666666667
+        },
+        "STR": {
+          "num": 113,
+          "den": 120,
+          "rate": 0.9416666666666667
+        },
+        "FCR": {
+          "num": 4,
+          "den": 120,
+          "rate": 0.03333333333333333
+        },
+        "DMR_all": {
+          "num": 3,
+          "den": 120,
+          "rate": 0.025
+        },
+        "DMR_dup_possible": {
+          "num": 1,
+          "den": 60,
+          "rate": 0.016666666666666666
+        },
+        "URR_all": {
+          "num": 3,
+          "den": 120,
+          "rate": 0.025
+        },
+        "URR_full_commit": {
+          "num": 3,
+          "den": 120,
+          "rate": 0.025
+        },
+        "FCompR_all": {
+          "num": 0,
+          "den": 120,
+          "rate": 0.0
+        },
+        "FCompR_refund": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "PRS": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "CER": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "escalation_precision": {
+          "num": 0,
+          "den": 1,
+          "rate": 0.0
+        },
+        "unverified_claim": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "unsafe_unresolvable": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "coverage": {
+          "num": 119,
+          "den": 120,
+          "rate": 0.9916666666666667
+        },
+        "selective_risk": {
+          "num": 4,
+          "den": 119,
+          "rate": 0.03361344537815126
+        },
+        "cost": {
+          "calls": 8.983333333333333,
+          "reads": 4.333333333333333,
+          "writes": 3.625,
+          "retries": 0.95
+        }
+      },
+      "unresolvable": {
+        "n": 360,
+        "VTC": {
+          "num": 12,
+          "den": 360,
+          "rate": 0.03333333333333333
+        },
+        "STR": {
+          "num": 19,
+          "den": 360,
+          "rate": 0.05277777777777778
+        },
+        "FCR": {
+          "num": 53,
+          "den": 360,
+          "rate": 0.14722222222222223
+        },
+        "DMR_all": {
+          "num": 60,
+          "den": 360,
+          "rate": 0.16666666666666666
+        },
+        "DMR_dup_possible": {
+          "num": 24,
+          "den": 180,
+          "rate": 0.13333333333333333
+        },
+        "URR_all": {
+          "num": 61,
+          "den": 360,
+          "rate": 0.16944444444444445
+        },
+        "URR_full_commit": {
+          "num": 61,
+          "den": 310,
+          "rate": 0.1967741935483871
+        },
+        "FCompR_all": {
+          "num": 0,
+          "den": 360,
+          "rate": 0.0
+        },
+        "FCompR_refund": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "PRS": {
+          "num": 0,
+          "den": 0,
+          "rate": null
+        },
+        "CER": {
+          "num": 7,
+          "den": 360,
+          "rate": 0.019444444444444445
+        },
+        "escalation_precision": {
+          "num": 7,
+          "den": 7,
+          "rate": 1.0
+        },
+        "unverified_claim": {
+          "num": 12,
+          "den": 360,
+          "rate": 0.03333333333333333
+        },
+        "unsafe_unresolvable": {
+          "num": 107,
+          "den": 360,
+          "rate": 0.2972222222222222
+        },
+        "coverage": {
+          "num": 353,
+          "den": 360,
+          "rate": 0.9805555555555555
+        },
+        "selective_risk": {
+          "num": 101,
+          "den": 353,
+          "rate": 0.28611898016997167
+        },
+        "cost": {
+          "calls": 7.597222222222222,
+          "reads": 3.936111111111111,
+          "writes": 2.588888888888889,
+          "retries": 0.9222222222222223
+        }
+      }
+    },
+    "invariant_violations": {
+      "claim_without_postconditions": 64,
+      "unresolved_second_mutation": 13
+    },
+    "episodes_with_violation": 70
+  }
+}

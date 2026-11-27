@@ -80,6 +80,14 @@ Practice grounding (not a paper). Stripe's API documentation (`docs.stripe.com/e
    This is the only claim here that would be new against the evaluation-only escalation literature (items 4,
    7–10). Until SEL1 reports, it is a hypothesis.
 
+   **Addendum (2026-11-27 09:57 IST, after task 1812).** SEL1 passed its registered tests (H1, H3, H4 supported;
+   H2 passes): escalation on the locked test's unresolvable tasks 0.972 against 0.002 for a matched control,
+   selectivity J 0.740 against 0.007, no VTC cost on resolvable tasks. The claim is therefore made, scoped as
+   follows. (a) It is taught by supervised demonstrations of a scripted rule; it is not an RL result. (b) Transfer to
+   a held-out step is seed-fragile (one seed: 2 of 120). (c) Escalation-Safe Aya (competitor 02) also trains
+   stopping; the difference is that ActionProof's outage is hidden behind identical replies and the test separates
+   transient from permanent outages. The text above is kept as written.
+
 ## 5. Claims that must be abandoned or kept abandoned
 
 - Any new optimizer or credit estimator (FCA dropped; C5 and G dropped; AWRB not better; the P3 no-std change is
@@ -115,4 +123,4 @@ The final version is written in `docs/submission/FINAL_STORY_DECISION.md` after 
 | Warm-start generalisation (P4) | `PREREGISTRATION_P4.md`, `results/p4/p4_summary.json` |
 | TXN benchmark and H3 | `PREREGISTRATION_TXN1.md` + addenda, `docs/txn/TXN_SPEC.md`, `results/txn/stats__txn_test.json`, `tests/txn/` |
 | H5 escalation gap | `results/txn/stats__txn_test.json` (`H5.per_model`) |
-| SEL1 (pending) | `PREREGISTRATION_SEL1.md` (to be written before any training) |
+| SEL1 (supported; held-out-step transfer seed-fragile) | `PREREGISTRATION_SEL1.md`, `results/sel1/sel1_summary.json`, `scripts/sel1_stats.py`, `results/sel1_hashes.json` |

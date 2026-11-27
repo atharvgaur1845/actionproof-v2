@@ -1,13 +1,20 @@
 <section id="a-sel1" class="foot">
 <p class="eyebrow">APPENDIX A4 · SEL1 (REGISTERED 2026-11-27, BEFORE TRAINING)</p>
-<h2>Selective escalation: design and result</h2>
+<h2>Selective escalation: supported, fragile on one step</h2>
 <div class="row">
 <div class="col grow">
 <p class="sm">Sealed test, 240 tasks: unresolvable outages (training construction, a held-out step, held-out workflows), a transient outage of held-out length, an audit-log-only outage, and standard tasks.</p>
 <p class="sm">Arms from the same Dw_aug parents, 3 seeds: SEL sees outage demonstrations; CTL sees the same number of resolvable ones.</p>
 <p class="sm">Selectivity J = escalation on unresolvable minus escalation on degraded-but-resolvable tasks. Scripted: selective 1, escalate-on-first-error 0.5, always-escalate 0, never-escalate 0.</p>
 </div>
-<div class="sel" style="width:620px"><h3>Result</h3><p class="mut">[filled only from results/sel1/sel1_summary.json]</p></div>
 </div>
-<p class="footer">PREREGISTRATION_SEL1.md; scripts/sel1_stats.py; results/sel1/.</p>
+<table style="font-size:24px;margin-top:20px">
+<tr><th style="width:34%">Registered test (SEL vs CTL, 3 seeds)</th><th>SEL</th><th>CTL</th><th>Difference [95% CI]</th><th>Holm p</th><th>Result</th></tr>
+<tr><td>H1 escalation, txn_test unresolvable (60)</td><td>0.972</td><td>0.002</td><td>+0.970 [+0.952, +0.987]</td><td>0.0003</td><td>supported</td></tr>
+<tr><td>H2 escalation, held-out step and workflows (80)</td><td>0.624</td><td>0.006</td><td>+0.618 [+0.486, +0.754]</td><td>0.0003</td><td>passes</td></tr>
+<tr><td>H3 selectivity J (200)</td><td>0.740</td><td>0.007</td><td>+0.732 [+0.625, +0.836]</td><td>0.0003</td><td>supported</td></tr>
+<tr><td>H4 VTC, txn_test resolvable (380)</td><td>0.960</td><td>0.958</td><td>+0.002 [−0.006, +0.010]</td><td>bound −0.03</td><td>supported</td></tr>
+</table>
+<p class="sm mut" style="margin-top:16px">Descriptive: held-out receive step, SEL escalates in 146 of 360 and is unsafe in 188 (CTL 275); seed 2 escalates in 2 of 120. Overall txn_test VTC 3285 vs 3451 of 3960: CTL completes 173 of 540 unresolvable episodes without the evidence to know it.</p>
+<p class="footer">PREREGISTRATION_SEL1.md; scripts/sel1_stats.py (task 1812); results/sel1/sel1_summary.json.</p>
 </section>

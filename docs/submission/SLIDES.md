@@ -95,7 +95,7 @@ The RL agent D itself still scores 0.20 on renamed tools.
 
 ---
 
-## 5. It repairs well. It rarely hands off.
+## 5. It repairs well. Hand-off had to be taught.
 
 - **Escalation when the evidence cannot settle it.** D escalates in 15 of 540 unresolvable cases (three seeds), and
   Dw_aug in 0 of 540. The scripted reference escalates in all of them.
@@ -103,10 +103,14 @@ The RL agent D itself still scores 0.20 on renamed tools.
 - **Transfer of the RL agent.** D scores 0.20 on renamed tools. SR1 did not help. Healthcare transfer is negative.
 - **The scripted reference still wins.** On TXN, B4 reaches 0.864 against D's 0.724. No-std GRPO (P3) gives 0.813
   against 0.819: not supported.
-- **Registered SEL1 (sealed test): can demonstrations teach selective hand-off?** The target behaviour: escalate when a
-  write's outcome is irreducibly unobservable; re-read and continue when the outage is transient. The test runs
-  against a matched-volume control from the same parents (3 seeds), with always-escalate and never-escalate
-  references beside it. `[result: filled only from results/sel1/sel1_summary.json after the registered analysis]`
+- **Registered SEL1: selective hand-off can be taught, and it is supported.** Scripted demonstrations escalate when a
+  write's outcome is irreducibly unobservable, and re-read through a transient outage. They are compared with a
+  matched-volume control from the same parents (3 seeds).
+  - Locked test, unresolvable: escalation 0.972 against 0.002 (+0.970 [+0.952, +0.987]).
+  - Selectivity J: 0.740 against 0.007. No escalation on a transient outage of held-out length (0 of 360) or on an
+    audit-log-only outage (0 of 360). The scripted rule reaches 1.
+  - No cost on resolvable tasks: VTC +0.002 [−0.006, +0.010].
+  - Fragile: on a held-out step, one seed escalates in 2 of 120 episodes.
 
 ---
 
@@ -150,7 +154,13 @@ Projected cost per 1,000 workflows that meet an ambiguous fault (moderate scenar
   - P5: Tiny Aya Water reaches only 0.017 on the unseen workflow.
 - **A4. SEL1 design and result** (`PREREGISTRATION_SEL1.md`). Selectivity J = escalation on unresolvable tasks minus
   escalation on degraded-but-resolvable ones. Scripted references: selective (B5) 1, escalate-on-first-error (B4)
-  0.5, always-escalate 0, never-escalate 0 (exact by construction; `tests/sel1/test_sel1.py`). `[result: filled from results/sel1/]`
+  0.5, always-escalate 0, never-escalate 0 (exact by construction; `tests/sel1/test_sel1.py`).
+  - Registered (Holm over H1–H3; all three seed differences > 0): H1 +0.970 [+0.952, +0.987], H2 +0.618
+    [+0.486, +0.754], H3 +0.732 [+0.625, +0.836], each Holm p 0.0003. H4 non-inferiority: +0.002 [−0.006, +0.010]
+    against a −0.03 bound. **Supported.**
+  - Descriptive: on held-out `receive` steps SEL escalates in 146 of 360 episodes and is unsafe in 188 (CTL 275);
+    seed 2 escalates in 2 of 120 and is unsafe in 112 (its control 83). Overall txn_test VTC: 3285 against 3451 of
+    3960, because CTL completes 173 of 540 unresolvable episodes without the evidence to know it.
 - **A5. Earlier studies and non-claims.**
   - Reward information (A12, ID1): a database reward makes read-back the default in 5 of 5 seeds; it selects
     checking, it does not create it.

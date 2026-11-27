@@ -1519,6 +1519,55 @@ claims:
       a_value: {value: 5000, file: results/impact/impact_txn.json, key: ["scenarios", "moderate", "value"], shown: ["5,000", "$5,000"]}
       a_recovery: {value: 0.60, file: results/impact/impact_txn.json, key: ["scenarios", "moderate", "recovery"], shown: ["60%"]}
 
+  - id: SEL1
+    statement: "Registered SEL1 (PREREGISTRATION_SEL1.md, registered 2026-11-27 05:39 IST before any training; scripts/sel1_stats.py run once as task 1812 after the freeze check). SEL (B5 selective-escalation demonstrations + replay) vs CTL (matched-volume replay), each continuing from Dw_aug seed k, 3 seeds, 3 episodes per task. SUPPORTED: H1, H3 (Holm over H1-H3, all seed differences > 0) and H4 (non-inferiority, bound -0.03). H2 (held-out compositions) also passes as registered, but is seed-fragile: on held-out step receive, SEL seed 2 escalates in 2 of 120 episodes and is unsafe in 112."
+    status: supported
+    prereg: PREREGISTRATION_SEL1.md
+    eval: [results/sel1/sel1_summary.json, results/sel1_hashes.json]
+    stats: scripts/sel1_stats.py
+    numbers:
+      h1_sel: {value: 0.972, file: results/sel1/sel1_summary.json, key: ["H1", "SEL"], shown: ["0.972"]}
+      h1_ctl: {value: 0.002, file: results/sel1/sel1_summary.json, key: ["H1", "CTL"], shown: ["0.002"]}
+      h1_diff: {value: 0.970, file: results/sel1/sel1_summary.json, key: ["H1", "diff"], shown: ["+0.970", "0.970"]}
+      h1_lo: {value: 0.952, file: results/sel1/sel1_summary.json, key: ["H1", "ci95", 0], shown: ["+0.952", "0.952"]}
+      h1_hi: {value: 0.987, file: results/sel1/sel1_summary.json, key: ["H1", "ci95", 1], shown: ["+0.987", "0.987"]}
+      h1_p: {value: 0.0003, file: results/sel1/sel1_summary.json, key: ["H1", "p_holm"], shown: ["0.0003"]}
+      h2_sel: {value: 0.624, file: results/sel1/sel1_summary.json, key: ["H2", "SEL"], shown: ["0.624"]}
+      h2_ctl: {value: 0.006, file: results/sel1/sel1_summary.json, key: ["H2", "CTL"], shown: ["0.006"]}
+      h2_diff: {value: 0.618, file: results/sel1/sel1_summary.json, key: ["H2", "diff"], shown: ["+0.618", "0.618"]}
+      h2_lo: {value: 0.486, file: results/sel1/sel1_summary.json, key: ["H2", "ci95", 0], shown: ["+0.486", "0.486"]}
+      h2_hi: {value: 0.754, file: results/sel1/sel1_summary.json, key: ["H2", "ci95", 1], shown: ["+0.754", "0.754"]}
+      h3_jsel: {value: 0.740, file: results/sel1/sel1_summary.json, key: ["H3", "J_SEL"], shown: ["0.740", "0.74"]}
+      h3_jctl: {value: 0.007, file: results/sel1/sel1_summary.json, key: ["H3", "J_CTL"], shown: ["0.007"]}
+      h3_diff: {value: 0.732, file: results/sel1/sel1_summary.json, key: ["H3", "diff"], shown: ["+0.732", "0.732"]}
+      h3_lo: {value: 0.625, file: results/sel1/sel1_summary.json, key: ["H3", "ci95", 0], shown: ["+0.625", "0.625"]}
+      h3_hi: {value: 0.836, file: results/sel1/sel1_summary.json, key: ["H3", "ci95", 1], shown: ["+0.836", "0.836"]}
+      h4_sel: {value: 0.960, file: results/sel1/sel1_summary.json, key: ["H4", "SEL"], shown: ["0.960"]}
+      h4_ctl: {value: 0.958, file: results/sel1/sel1_summary.json, key: ["H4", "CTL"], shown: ["0.958"]}
+      h4_diff: {value: 0.002, file: results/sel1/sel1_summary.json, key: ["H4", "diff"], shown: ["+0.002"]}
+      h4_lo: {value: -0.006, file: results/sel1/sel1_summary.json, key: ["H4", "ci95", 0], shown: ["-0.006", "−0.006", "0.006"]}
+      h4_hi: {value: 0.010, file: results/sel1/sel1_summary.json, key: ["H4", "ci95", 1], shown: ["+0.010", "0.010"]}
+      h4_bound: {value: -0.03, file: results/sel1/sel1_summary.json, key: ["H4", "bound"], shown: ["-0.03", "−0.03", "0.03"]}
+      esc_unres_sel: {value: 525, file: results/sel1/sel1_summary.json, key: [["descriptive", "txn_test", "SEL_s0", "unresolvable", "escalated", "num"], ["descriptive", "txn_test", "SEL_s1", "unresolvable", "escalated", "num"], ["descriptive", "txn_test", "SEL_s2", "unresolvable", "escalated", "num"]], agg: sum}
+      esc_unres_ctl: {value: 1, file: results/sel1/sel1_summary.json, key: [["descriptive", "txn_test", "CTL_s0", "unresolvable", "escalated", "num"], ["descriptive", "txn_test", "CTL_s1", "unresolvable", "escalated", "num"], ["descriptive", "txn_test", "CTL_s2", "unresolvable", "escalated", "num"]], agg: sum}
+      vtc_unres_sel: {value: 1, file: results/sel1/sel1_summary.json, key: [["descriptive", "txn_test", "SEL_s0", "unresolvable", "vtc", "num"], ["descriptive", "txn_test", "SEL_s1", "unresolvable", "vtc", "num"], ["descriptive", "txn_test", "SEL_s2", "unresolvable", "vtc", "num"]], agg: sum}
+      vtc_unres_ctl: {value: 173, file: results/sel1/sel1_summary.json, key: [["descriptive", "txn_test", "CTL_s0", "unresolvable", "vtc", "num"], ["descriptive", "txn_test", "CTL_s1", "unresolvable", "vtc", "num"], ["descriptive", "txn_test", "CTL_s2", "unresolvable", "vtc", "num"]], agg: sum}
+      vtc_all_sel: {value: 3285, file: results/sel1/sel1_summary.json, key: [["descriptive", "txn_test", "SEL_s0", "all", "vtc", "num"], ["descriptive", "txn_test", "SEL_s1", "all", "vtc", "num"], ["descriptive", "txn_test", "SEL_s2", "all", "vtc", "num"]], agg: sum}
+      vtc_all_ctl: {value: 3451, file: results/sel1/sel1_summary.json, key: [["descriptive", "txn_test", "CTL_s0", "all", "vtc", "num"], ["descriptive", "txn_test", "CTL_s1", "all", "vtc", "num"], ["descriptive", "txn_test", "CTL_s2", "all", "vtc", "num"]], agg: sum}
+      esc_res_sel: {value: 13, file: results/sel1/sel1_summary.json, key: [["descriptive", "txn_test", "SEL_s0", "resolvable", "escalated", "num"], ["descriptive", "txn_test", "SEL_s1", "resolvable", "escalated", "num"], ["descriptive", "txn_test", "SEL_s2", "resolvable", "escalated", "num"]], agg: sum}
+      esc_t2_sel: {value: 0, file: results/sel1/sel1_summary.json, key: [["descriptive", "sel1_test", "SEL_s0", "t2", "escalated", "num"], ["descriptive", "sel1_test", "SEL_s1", "t2", "escalated", "num"], ["descriptive", "sel1_test", "SEL_s2", "t2", "escalated", "num"]], agg: sum}
+      esc_audit_sel: {value: 0, file: results/sel1/sel1_summary.json, key: [["descriptive", "sel1_test", "SEL_s0", "audit_down", "escalated", "num"], ["descriptive", "sel1_test", "SEL_s1", "audit_down", "escalated", "num"], ["descriptive", "sel1_test", "SEL_s2", "audit_down", "escalated", "num"]], agg: sum}
+      str_t2_sel: {value: 350, file: results/sel1/sel1_summary.json, key: [["descriptive", "sel1_test", "SEL_s0", "t2", "str", "num"], ["descriptive", "sel1_test", "SEL_s1", "t2", "str", "num"], ["descriptive", "sel1_test", "SEL_s2", "t2", "str", "num"]], agg: sum}
+      str_t2_ctl: {value: 264, file: results/sel1/sel1_summary.json, key: [["descriptive", "sel1_test", "CTL_s0", "t2", "str", "num"], ["descriptive", "sel1_test", "CTL_s1", "t2", "str", "num"], ["descriptive", "sel1_test", "CTL_s2", "t2", "str", "num"]], agg: sum}
+      esc_uin_sel: {value: 350, file: results/sel1/sel1_summary.json, key: [["descriptive", "sel1_test", "SEL_s0", "u_in", "escalated", "num"], ["descriptive", "sel1_test", "SEL_s1", "u_in", "escalated", "num"], ["descriptive", "sel1_test", "SEL_s2", "u_in", "escalated", "num"]], agg: sum}
+      esc_ood_sel: {value: 303, file: results/sel1/sel1_summary.json, key: [["descriptive", "sel1_test", "SEL_s0", "u_ood_wf", "escalated", "num"], ["descriptive", "sel1_test", "SEL_s1", "u_ood_wf", "escalated", "num"], ["descriptive", "sel1_test", "SEL_s2", "u_ood_wf", "escalated", "num"]], agg: sum}
+      esc_rcv_sel: {value: 146, file: results/sel1/sel1_summary.json, key: [["descriptive", "sel1_test", "SEL_s0", "u_receive", "escalated", "num"], ["descriptive", "sel1_test", "SEL_s1", "u_receive", "escalated", "num"], ["descriptive", "sel1_test", "SEL_s2", "u_receive", "escalated", "num"]], agg: sum}
+      unsafe_rcv_sel: {value: 188, file: results/sel1/sel1_summary.json, key: [["descriptive", "sel1_test", "SEL_s0", "u_receive", "unsafe", "num"], ["descriptive", "sel1_test", "SEL_s1", "u_receive", "unsafe", "num"], ["descriptive", "sel1_test", "SEL_s2", "u_receive", "unsafe", "num"]], agg: sum}
+      unsafe_rcv_ctl: {value: 275, file: results/sel1/sel1_summary.json, key: [["descriptive", "sel1_test", "CTL_s0", "u_receive", "unsafe", "num"], ["descriptive", "sel1_test", "CTL_s1", "u_receive", "unsafe", "num"], ["descriptive", "sel1_test", "CTL_s2", "u_receive", "unsafe", "num"]], agg: sum}
+      esc_rcv_sel_s2: {value: 2, file: results/sel1/sel1_summary.json, key: ["descriptive", "sel1_test", "SEL_s2", "u_receive", "escalated", "num"]}
+      unsafe_rcv_sel_s2: {value: 112, file: results/sel1/sel1_summary.json, key: ["descriptive", "sel1_test", "SEL_s2", "u_receive", "unsafe", "num"]}
+      unsafe_rcv_ctl_s2: {value: 83, file: results/sel1/sel1_summary.json, key: ["descriptive", "sel1_test", "CTL_s2", "u_receive", "unsafe", "num"]}
+
 allow: ["0.95", "1.0", "1e-9", "2.0", "+0.05",  # paper v3: a stated pi threshold, cost and table parameters, Apache 2.0, a registered prediction bound
        "1,000", "10,000", "95%", "1e-4", "2e-5", "8,192", "2503.20783", "2508.11800", "62,892", "251,570", "87,180", "116,240", "2.0%", "0.90",  # write-up constants: sample sizes, hyperparameters, arXiv ids, task amounts, a cited survey range, a registered threshold
        "3.12", "2.11", "5.22", "1.7", "0.23", "0.8", "0.80", "0.30", "0.02", "0.5", "0.3"]  # 0.5, 0.3: registered H4 thresholds (PREREGISTRATION_A11 §9)
