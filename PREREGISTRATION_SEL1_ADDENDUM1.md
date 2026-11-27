@@ -1,6 +1,6 @@
 # SEL1 addendum 1: what the registered tests measure (post hoc)
 
-Written 2026-11-27, 10:40 IST, **after the registered analysis (task 1812) and every SEL1 result had been seen**. It
+Written 2026-11-27 and committed at 10:32 IST (c62f92f; an earlier draft stated 10:40, which was wrong), **after the registered analysis (task 1812) and every SEL1 result had been seen**. It
 changes no registered test, file or verdict: SEL1 is supported as registered (H1, H3, H4), and H2 passes. It records
 what an independent hostile review found about the tests' construct validity (`research_audit/FINAL_REDTEAM_REVIEW.md`,
 Reviewers 1 and 2; `PREREGISTRATION_TXN1_ADDENDUM3.md`), sized by the exploratory analysis

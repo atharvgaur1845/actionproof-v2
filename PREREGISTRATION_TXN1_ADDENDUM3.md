@@ -1,6 +1,6 @@
 # TXN1 addendum 3: construct-validity findings from the final hostile review (post hoc)
 
-Written 2026-11-27, 10:35 IST, **after every TXN1 result had been seen** (registered analysis task 1739; the
+Written 2026-11-27 and committed at 10:32 IST (c62f92f; an earlier draft stated 10:35, which was wrong), **after every TXN1 result had been seen** (registered analysis task 1739; the
 descriptive reruns; the SEL1 results of task 1812). It is not a new hypothesis and changes no registered test, file
 or verdict. It records four problems an independent hostile review found in the benchmark's construction
 (`research_audit/FINAL_REDTEAM_REVIEW.md`, Reviewers 1 and 2), and the exploratory analysis written to size them:

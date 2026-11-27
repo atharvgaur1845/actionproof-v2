@@ -88,6 +88,17 @@ Practice grounding (not a paper). Stripe's API documentation (`docs.stripe.com/e
    stopping; the difference is that ActionProof's outage is hidden behind identical replies and the test separates
    transient from permanent outages. The text above is kept as written.
 
+   **Addendum 2 (2026-11-27 10:40 IST, after the final hostile review; `PREREGISTRATION_SEL1_ADDENDUM1.md`).**
+   - Point (c) of addendum 1 is withdrawn. SEL1's trigger is an explicit `service_unavailable` read error, not an
+     outage hidden behind identical replies.
+   - Every locked-test H1 task could be settled by a same-key resend.
+   - Where hand-off is the only safe action, the arm hands off in 164 of 432 episodes, seed-fragile.
+   - The claim is therefore narrowed to "supervised demonstrations taught a 3B agent to hand off after repeated
+     outage errors, without cost on resolvable work". That is not new against learned stopping or escalation
+     controllers (competitor 02; SURE-Act, item 10).
+   - Two prior works do train: Bench2Robust (item 12, DAPO) and NoisyAgent (item 13, GRPO). The sentence "The prior work in
+     this setting is evaluation-only" is too broad; read it as "most of the prior escalation work".
+
 ## 5. Claims that must be abandoned or kept abandoned
 
 - Any new optimizer or credit estimator (FCA dropped; C5 and G dropped; AWRB not better; the P3 no-std change is

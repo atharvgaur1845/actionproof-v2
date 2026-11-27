@@ -5,6 +5,14 @@
 - `research_audit/NOVELTY_POSITIONING_FINAL.md`
 - `research_audit/COMPETITIVE_THREAT_RANKING.md`
 
+**Revision after the final hostile review (2026-11-27, 10:40 IST).** Three independent reviews (Reviewer 1: ML
+research; 2: systems; 3: hackathon judge; `research_audit/FINAL_REDTEAM_REVIEW.md`) found construct problems in the
+TXN benchmark and in what SEL1's tests measure. They are recorded in `PREREGISTRATION_TXN1_ADDENDUM3.md` and
+`PREREGISTRATION_SEL1_ADDENDUM1.md`. The spine does not change. What changes:
+- SEL1 is described as "taught hand-off after repeated outage errors", not "fixed selective hand-off".
+- The benchmark's limits are stated next to its results.
+- A false statement that both SEL1 arms pass B4's VTC is corrected (only CTL does; SEL's 0.830 is below 0.864).
+
 **SEL1 filled (2026-11-27, 09:57 IST).** The SEL1-dependent parts below were filled from
 `results/sel1/sel1_summary.json` after task 1812 ran the registered analysis. SEL1 is supported (H1, H3, H4); H2
 passes; transfer to a held-out step is seed-fragile.
@@ -15,7 +23,7 @@ passes; transfer to a held-out step is seed-fragile.
 |---|---|
 | C: transaction-integrity benchmark (identical replies hide different database states; acknowledgement trust and retries fail) | **Primary spine**, together with B |
 | B: recovery learning (demonstrations carry the capability; GRPO adds an exploratory increment after SFT) | **Primary spine**: the trained agent that the benchmark measures |
-| D: selective recovery and safe escalation | **Supporting finding 1.** It is the open problem the benchmark exposes (H5); registered SEL1 fixes it on the locked test (supported), with seed-fragile transfer to a held-out step |
+| D: selective recovery and safe escalation | **Supporting finding 1.** It is the open problem the benchmark exposes (H5); registered SEL1 (supported) taught hand-off after repeated outage errors; where hand-off is the only safe action it happens in 164 of 432 episodes, seed-fragile (SEL1 addendum 1), with seed-fragile transfer to a held-out step |
 | A: the reward's information source selects read-back but does not create it (A12, ID1) | **Supporting finding 2.** One line in the main text; detail in the appendix and website |
 | E: group-normalisation theory | **Companion theory paper** (`paper/main_v3.tex`). It is not part of the main narrative |
 
@@ -41,10 +49,12 @@ to reconcile the evidence? That means:
 On a locked benchmark where identical "ok" and "timeout" replies hide committed and uncommitted payments:
 - recovery demonstrations followed by GRPO raise a 3.35B Cohere agent from 0.513 to 0.819 verified completion on
   450 frozen tasks;
-- the agent duplicates mutations far less often than bounded retry with idempotency keys (0.024 against 0.191);
-- it rarely hands off when evidence cannot settle the outcome, which registered demonstrations of selective
-  hand-off fix on the locked test (SEL1: escalation 0.972 against 0.002, none on transient outages, no cost on
-  resolvable tasks), though transfer to a held-out step is seed-fragile;
+- the agent falsely completes far less often than one that trusts the reply (0.121 against 0.864), and leaves fewer
+  duplicates than bounded retry with idempotency keys, both those it could cause and those the environment injects;
+- a hand-written reconciliation script still beats it, and the benchmark has construct limits found by our own
+  review (TXN1 addendum 3);
+- registered SEL1 taught hand-off after repeated outage errors at no cost on resolvable tasks; where hand-off is the
+  only safe action it happens in 164 of 432 episodes, seed-fragile;
 - every result comes from a procurement simulator.
 
 ## 3. Contributions
@@ -68,6 +78,9 @@ On a locked benchmark where identical "ok" and "timeout" replies hide committed 
    - H4: no VTC cost on resolvable tasks (+0.002 [−0.006, +0.010]);
    - H2 (held-out compositions) passes, but on the held-out step one seed escalates in 2 of 120 episodes.
    The gap is measured with always-escalate and never-escalate references beside it (J 0 for both).
+   - Post-hoc scope (SEL1 addendum 1). Every H1 task could be settled by a same-key resend. The audit-log-only
+     control cannot fire, and the 2-read outage is inside the demonstrated budget. Where hand-off is the only safe
+     action, 164 of 432 episodes.
 
 ## 4. Evidence file for every contribution
 
@@ -90,8 +103,9 @@ On a locked benchmark where identical "ok" and "timeout" replies hide committed 
 - Healthcare transfer is negative.
 - LLM judges are not verifier-grade.
 - The scripted reference B4 still beats every learned agent on TXN wherever the evidence is observable (VTC 0.864
-  against D's 0.724). The SEL1 arms' overall 0.830 and 0.871 pass it only on unresolvable quadruples, by completing
-  without the evidence (descriptive; added 2026-11-27 after `scripts/impact_txn.py` was rerun).
+  against D's 0.724). SEL1's SEL arm (0.830) is below it. Its CTL arm (0.871) passes its overall VTC only on the
+  quadruples, by settling unresolvable tasks with same-key resends where B4 hands off (descriptive; corrected after the
+  hostile review, which caught an earlier "both arms pass").
 
 ## 6. What the project does not claim
 
