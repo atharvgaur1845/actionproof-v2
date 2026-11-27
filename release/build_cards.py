@@ -590,11 +590,103 @@ H1 and H2 needed a Holm-adjusted one-sided p < 0.05 and all three seed deltas po
 {regen_note("results/p4/p4_summary.json")}"""
 
 
+SEL = J("results/sel1/sel1_summary.json")
+CHAIN_DWAUG = """# parent = the base model with the Dw_aug seed-k adapter merged in (k = the seed of the sub-folder)
+k = 0
+parent = AutoModelForCausalLM.from_pretrained("{base}", torch_dtype=torch.bfloat16, device_map="auto")
+parent = PeftModel.from_pretrained(parent, f"{{snapshot_download('{user}/actionproof-warmstart-dwaug')}}/s{{k}}").merge_and_unload()"""
+
+
+def sel_count(arm: str, split: str, sub: str, metric: str) -> str:
+    d = SEL["descriptive"][split]
+    num = sum(d[f"{arm}_s{k}"][sub][metric]["num"] for k in range(3))
+    den = sum(d[f"{arm}_s{k}"][sub][metric]["den"] for k in range(3))
+    return f"{num} of {den}"
+
+
+def card_sel1() -> str:
+    repo = f"{USER}/actionproof-sel1-adapters"
+    def row(h: str, name: str, sel: str, ctl: str) -> str:
+        x = SEL[h]
+        rule = ("passes" if h == "H2" else "supported") if x["supported"] else ("fails" if h == "H2" else "not supported")
+        p = f"{x['p_holm']:.4f}" if x.get("p_holm") is not None else f"bound {x['bound']}"
+        return (f"| {name} | {f3(x[sel])} | {f3(x[ctl])} | {sg(x['diff'])} [{sg(x['ci95'][0])}, {sg(x['ci95'][1])}] | "
+                f"{p} | {', '.join(sg(v) for v in x['seed_diffs'])} | {rule} |")
+    rows = "\n".join([row("H1", "H1 escalation, txn_test unresolvable (60 tasks)", "SEL", "CTL"),
+                      row("H2", "H2 escalation, held-out step and workflows (80; reported on its own)", "SEL", "CTL"),
+                      row("H3", "H3 selectivity J (200)", "J_SEL", "J_CTL"),
+                      row("H4", "H4 VTC, txn_test resolvable (380; non-inferiority)", "SEL", "CTL")])
+    rcv = SEL["descriptive"]["sel1_test"]
+    s2e, s2u, c2u = (rcv["SEL_s2"]["u_receive"]["escalated"]["num"], rcv["SEL_s2"]["u_receive"]["unsafe"]["num"],
+                     rcv["CTL_s2"]["u_receive"]["unsafe"]["num"])
+    return FRONT.format(base=BASE, rel="adapter", lib="peft", user=USER,
+                        tags="\n".join(f"- {t}" for t in ["actionproof", "tool-use", "agents", "sft", "lora", "procuresim", "escalation", "research-only"])) + f"""
+# ActionProof SEL1: selective-escalation adapters (registered experiment, SFT only)
+
+Six LoRA (r16) adapters from the registered SEL1 experiment (`PREREGISTRATION_SEL1.md`, registered before any
+training): `sel/s0..s2` (arm SEL) and `ctl/s0..s2` (arm CTL; `runs/sel1_{{SEL,CTL}}_s{{k}}/final`). Each continues
+from the merged Dw_aug seed-k warm start
+([`{USER}/actionproof-warmstart-dwaug`](https://huggingface.co/{USER}/actionproof-warmstart-dwaug) `s{{k}}/`), with a
+new LoRA, 1 epoch, lr 1e-4, batch 2 × 8, max length 6144 (`actionproof.train.rft`).
+- **SEL** sees demonstrations from the scripted selective rule B5: escalate to a person when the faulted write's
+  outcome cannot be read back for the whole episode; re-read up to three times through a transient outage. Plus
+  2,000 replay rows from Dw_aug's data.
+- **CTL** sees the same number of resolvable demonstrations plus the same replay.
+
+**No RL was run on these adapters**, and no model selection was done.
+
+{HOW_TO_PROMPT}
+The SEL1 environments add `escalate_to_human` outcomes and transient read outages: `actionproof/sel1/env.py`.
+
+{ADAPTER_USAGE.format(code=CODE, repo=repo, base=BASE, sub="sel/s0", chain=CHAIN_DWAUG.format(base=BASE, user=USER))}
+## Results (registered SEL1; arm = mean of 3 seed models, 3 episodes per task, cluster bootstrap B = 10,000)
+
+| Test | SEL | CTL | SEL − CTL [95% CI] | Holm p | Seed differences | Result |
+|---|---|---|---|---|---|---|
+{rows}
+
+**SEL1 is {'supported' if SEL['SEL1_supported'] else 'not supported'}** (the rule: H1, H3 and H4). Scripted
+selectivity J: B5 1, escalate-on-first-error B4 0.5, always-escalate 0, never-escalate 0.
+
+**Descriptive** (episodes, 3 seeds pooled):
+- Transient outage of held-out length: SEL escalates in {sel_count('SEL', 'sel1_test', 't2', 'escalated')} and finishes
+  safely in {sel_count('SEL', 'sel1_test', 't2', 'str')} (CTL {sel_count('CTL', 'sel1_test', 't2', 'str')}).
+- Audit-log-only outage: SEL escalates in {sel_count('SEL', 'sel1_test', 'audit_down', 'escalated')}.
+- **Held-out step `receive`, the weak spot:** SEL escalates in {sel_count('SEL', 'sel1_test', 'u_receive', 'escalated')}
+  and is unsafe in {sel_count('SEL', 'sel1_test', 'u_receive', 'unsafe')} (CTL {sel_count('CTL', 'sel1_test', 'u_receive', 'unsafe')}).
+  Seed 2 escalates in {s2e} of 120 and is unsafe in {s2u}, more than its control ({c2u}).
+- txn_test VTC over all 440 tasks: SEL {sel_count('SEL', 'txn_test', 'all', 'vtc')}, CTL
+  {sel_count('CTL', 'txn_test', 'all', 'vtc')}. CTL completes {sel_count('CTL', 'txn_test', 'unresolvable', 'vtc')}
+  unresolvable episodes without the evidence to know it; SEL hands them off.
+
+## Limitations
+
+- **Simulator, not production payments.** ProcureSim is a SQLite procurement simulator; nothing here shows the agent is
+  safe to deploy.
+- **Supervised, from a scripted rule.** The behaviour is taught by demonstrations of B5; it is not an RL result, and
+  the scripted rule itself still scores higher on selectivity.
+- **Seed-fragile transfer to a held-out step** (above).
+- The cost of a human review is not measured; escalation is scored as safe only where the outcome is truly
+  unobservable (`actionproof/txn/truth.py`).
+- Non-commercial licence inherited from the base model. Research use only.
+
+## How to evaluate
+
+```bash
+git clone {CODE} && cd actionproof-v2
+python scripts/sel1_eval.py --model <merged Dw_aug s0 dir> --adapter <dir>/sel/s0 --tag SEL_s0 --split sel1_test
+python scripts/sel1_eval.py --model <merged Dw_aug s0 dir> --adapter <dir>/sel/s0 --tag SEL_s0 --split txn_test
+python scripts/sel1_stats.py      # the registered analysis, from results/sel1/
+```
+{regen_note("results/sel1/sel1_summary.json")}"""
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     for name, fn in (("actionproof-agent-d", card_d), ("actionproof-agent-d-adapters", card_d_adapters),
                      ("actionproof-warmstart-dw", card_dw), ("actionproof-agent-a", card_a),
-                     ("actionproof-agent-dn", card_dn), ("actionproof-warmstart-dwaug", card_dwaug)):
+                     ("actionproof-agent-dn", card_dn), ("actionproof-warmstart-dwaug", card_dwaug),
+                     ("actionproof-sel1-adapters", card_sel1)):
         (OUT / f"{name}.md").write_text(fn())
         print("wrote", OUT / f"{name}.md")
 

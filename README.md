@@ -173,7 +173,12 @@ What it means, and what it does not:
 - **The RL agent’s transfer.** D fails renamed tools (0.20) and the unseen four-step workflow. Randomising tool names
   during GRPO (SR1) did not help. Healthcare transfer is negative.
 - **Optimizer changes.** No-std GRPO (P3) is not supported: 0.813 against 0.819.
-- **The scripted reference wins.** B4 reaches 0.864 TXN verified completion against D’s 0.724.
+- **The scripted reference wins wherever the evidence is observable.** B4 completes every TXN task outside the
+  counterfactual quadruples, with no false completion and no duplicate; D reaches 0.724 overall. The SEL1 arms,
+  trained on scripted demonstrations from the TXN generator (disjoint tasks), reach 0.830 and 0.871 overall, above
+  B4’s 0.864, but only on the quadruples: there they sometimes complete an unresolvable task without the evidence to
+  know it, where B4 hands off. On renamed tools they complete 139 and 124 of 180 episodes, and they still falsely
+  complete 0.020 and 0.022 (descriptive).
 - **LLM judges are not verifier-grade.** The best judge with a database snapshot reaches 0.989; the committee 0.897.
 
 ## Why these numbers cannot be gamed

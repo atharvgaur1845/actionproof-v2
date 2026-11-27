@@ -27,7 +27,7 @@ payments:
 
 ## 1. Abstract (under 500 words)
 
-**The problem.** Tool-using agents increasingly write to systems of record: payments, goods receipts, journal
+**The problem.** Tool-using agents write to systems of record: payments, goods receipts, journal
 entries. A write tool's reply is usually treated as proof that the write happened, yet the same "ok" can come back
 when nothing was stored, and a "timeout" can come back when the payment committed.
 
@@ -38,7 +38,7 @@ when nothing was stored, and a "timeout" can come back when the payment committe
 - a deterministic verifier that reads the database, never the transcript.
 
 **Scripted baselines.** An acknowledgement-trusting policy falsely completes on 1.000 of ok-but-nothing tasks and
-0.000 of ok-and-paid ones. Bounded retry with idempotency keys reaches only 0.491 verified completion. A hand-written
+0.000 of ok-and-paid ones. Bounded retry with idempotency keys reaches 0.491 verified completion. A hand-written
 reconciliation reference reaches 0.864.
 
 **Training (registered P1, 450 frozen tasks, three seeds per arm, Tiny Aya Global 3.35B).**
@@ -59,7 +59,7 @@ reconciliation reference reaches 0.864.
 
 **What fails.**
 - When the evidence cannot settle a write's outcome, D escalates in only 15 of 540 cases.
-- The scripted reference still beats every learned agent.
+- Where evidence is observable, the scripted reference still beats every learned agent.
 - No-std GRPO (P3) is not supported.
 - Healthcare transfer is negative.
 - LLM judges are not verifier-grade.
@@ -73,11 +73,10 @@ seeds where an acknowledgement reward of identical form never does. From a warm 
 changes. The reward selects checking; it does not create it.
 
 **Impact.**
-- A projection from TXN's measured rates puts trusting the reply at about ten times the trained agent's projected
-  exposure.
+- A projection from TXN's measured rates puts trusting the reply at about ten times the trained agent's exposure.
 - Hand-written reconciliation checks remove most of the rest. The practical answer is both.
 - Every confirmatory test was registered and hashed before its outcome existed.
-- A checker re-reads every reported number from its result file.
+- A checker re-reads every reported number from its file.
 
 ## 1a. Final-round results (Nov 25–28; all registered before any output unless labelled)
 
@@ -97,6 +96,7 @@ changes. The reward selects checking; it does not create it.
    - **H3, selectivity J (200 tasks):** 0.740 vs 0.007, +0.732 [+0.625, +0.836], Holm p 0.0003: supported. Scripted J: B5 1, B4 0.5, always-escalate 0, never-escalate 0.
    - **H4, VTC on txn_test resolvable (380 tasks):** 0.960 vs 0.958, +0.002 [−0.006, +0.010] against a −0.03 bound: supported.
    - **Descriptive.** SEL escalates in 0 of 360 episodes on a transient outage of held-out length and in 0 of 360 on an audit-log-only outage; through the transient outage it finishes safely in 350 of 360 (CTL 264). On txn_test's resolvable tasks it escalates in 13 of 3420.
+   - **Against the scripted reference (descriptive).** Overall txn_test VTC is 0.830 (SEL) and 0.871 (CTL) against B4's 0.864, but the arms pass B4 only on the counterfactual quadruples, where they sometimes complete an unresolvable task without the evidence to know it and B4 hands off. B4 completes every task outside the quadruples; the arms do not (renamed tools: 139 and 124 of 180 episodes), and they falsely complete 0.020 and 0.022 (B4 none). The arms were trained on tasks from the TXN generator (disjoint from txn_test), so this is closer to in-distribution than D's 0.724.
    - **Limits.** On the held-out `receive` step SEL escalates in 146 of 360 and is unsafe in 188 (CTL 275); seed 2 escalates in 2 of 120 and is unsafe in 112, more than its control (83), so H2's seed-2 difference is carried by the held-out workflows. Overall txn_test VTC is 3285 vs 3451 of 3960: CTL completes 173 of the 540 unresolvable episodes without the evidence to know it, and SEL hands them off. The method is supervised demonstrations on a LoRA, not a new RL algorithm.
 8. **Live inference.** A ZeroGPU Space runs D (and the base model) on curated test tasks, one real model call per step, with the hidden reality revealed only after the run: https://huggingface.co/spaces/atharvgaur18/actionproof-live.
 

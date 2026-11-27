@@ -101,7 +101,9 @@ The RL agent D itself still scores 0.20 on renamed tools.
   Dw_aug in 0 of 540. The scripted reference escalates in all of them.
 - **Unnecessary retries.** The registered H3 family is not supported: fewer duplicates, but not fewer retries.
 - **Transfer of the RL agent.** D scores 0.20 on renamed tools. SR1 did not help. Healthcare transfer is negative.
-- **The scripted reference still wins.** On TXN, B4 reaches 0.864 against D's 0.724. No-std GRPO (P3) gives 0.813
+- **The scripted reference still wins where evidence is observable.** On TXN, B4 reaches 0.864 against D's 0.724.
+  The SEL1 arms reach 0.830 and 0.871, but pass B4 only by completing unresolvable quadruples without the evidence;
+  B4 completes every other task, and they do not. No-std GRPO (P3) gives 0.813
   against 0.819: not supported.
 - **Registered SEL1: selective hand-off can be taught, and it is supported.** Scripted demonstrations escalate when a
   write's outcome is irreducibly unobservable, and re-read through a transient outage. They are compared with a

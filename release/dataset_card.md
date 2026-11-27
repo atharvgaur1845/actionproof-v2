@@ -43,7 +43,10 @@ huggingface-cli download atharvgaur18/actionproof-traces --repo-type dataset --l
 | `results/p3/p3_summary.json` | Registered P3 analysis (Dn versus D): a null result | `scripts/p3_stats.py` (inputs are the Dn and D files above) |
 | `data/bench/proc/p1_*.jsonl`, `s4_*.jsonl` | The frozen task splits: `p1_train_{full,pp,rec}`, `p1_dev_{full,rec}`, `p1_test_{full,pp,rec,wf4,combo}`; shift splits `s4_*` used by P2 | `actionproof/p1/build.py`, `scripts/freeze_p1.py`; hashes in `results/p1_hashes.json` |
 | `evaluation/judge_next/data/{cases,truth}.jsonl` | 497 judge-reliability cases (genuine and false completions, plus documented perturbations) and their ground truth | `evaluation/judge_next/build.py` from recorded P1 test episodes of D/A/B/C seed 0; labels follow from the verifier or the perturbation, never from a model |
-| `results/p4/`, `results/b1/`, `results/txn/` | *To be added*: P4, B1 (prompted untrained models on the P1 test) and TXN folders | Added by `scripts/release_hf.py` when the folders exist |
+| `results/p4/`, `results/p5/` | P4 (Dw_aug against Dw) and P5 (recovery SFT on four other Cohere bases) episodes and registered summaries | `scripts/p1_eval.py`; `scripts/p4_stats.py`, `scripts/p5_stats.py` |
+| `results/b1/` | B1: prompted, untrained models on the P1 test (Aya Expanse 8B/32B; supplementary Qwen3-235B-A22B and gpt-oss-120b) | `scripts/b1_eval.py`, `scripts/b1_api_eval.py` |
+| `results/txn/` | The locked TXN test (440 tasks): every scripted policy, prompted and trained agent; registered `stats__txn_test.json` | `scripts/txn_eval.py`, `scripts/txn_stats.py` |
+| `results/sel1/`, `data/bench/proc/sel1_*.jsonl` | SEL1 (selective escalation, registered): SEL and CTL seeds 0-2, their parents and scripted references on `sel1_test` and `txn_test`; the registered `sel1_summary.json`; the SEL1 splits (hashes in `results/sel1_hashes.json`) | `scripts/sel1_eval.py`, `scripts/sel1_policies_eval.py`, `scripts/sel1_stats.py` |
 
 Splits (task counts): train full 240, pp 90, rec 300; dev full 90, rec 90; test full 120, pp 90 (unseen payment
 fractions 0.4 and 0.6), rec 120, wf4 60 (an unseen four-step workflow), combo 60 (two faults) = 450 test tasks.

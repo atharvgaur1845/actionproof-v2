@@ -89,7 +89,9 @@ On a locked benchmark where identical "ok" and "timeout" replies hide committed 
 - SR1 (renaming tools during GRPO) failed.
 - Healthcare transfer is negative.
 - LLM judges are not verifier-grade.
-- The scripted reference B4 still beats every learned agent on TXN (VTC 0.864 against 0.724).
+- The scripted reference B4 still beats every learned agent on TXN wherever the evidence is observable (VTC 0.864
+  against D's 0.724). The SEL1 arms' overall 0.830 and 0.871 pass it only on unresolvable quadruples, by completing
+  without the evidence (descriptive; added 2026-11-27 after `scripts/impact_txn.py` was rerun).
 
 ## 6. What the project does not claim
 

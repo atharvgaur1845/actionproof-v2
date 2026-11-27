@@ -15,6 +15,7 @@ Repos, all under `atharvgaur18` and public:
 | actionproof-agent-a | model | w/ (runs/rft_proc/final, the parent of A), s0..s2/ (runs/s3_rv_mix_s{k}/final) |
 | actionproof-agent-dn | model | s0..s2/ (runs/p3_dn_s{k}/final) |
 | actionproof-warmstart-dwaug | model | s0..s2/ (runs/p4_dwaug_s{k}/final), P4 |
+| actionproof-sel1-adapters | model | sel/s0..s2, ctl/s0..s2 (runs/sel1_{SEL,CTL}_s{k}/final), SEL1 |
 | actionproof-traces | dataset | results/{p1,p2,p3}/**, data/bench/proc/p1_*.jsonl (+ s4_*), evaluation/judge_next/data/*.jsonl, and results/{p4,b1,txn} if present |
 
 Each repo's README.md is release/model_cards/<repo>.md (dataset: release/dataset_card.md); regenerate the model cards
@@ -65,14 +66,18 @@ ADAPTER_REPOS: dict[str, tuple[str, list[tuple[str, str, str]]]] = {
     "a": ("actionproof-agent-a", [("w", "rft_proc", "base")] + [(f"s{s}", f"s3_rv_mix_s{s}", W_PARENT) for s in SEEDS]),
     "dn": ("actionproof-agent-dn", [(f"s{s}", f"p3_dn_s{s}", DW_PARENT) for s in SEEDS]),
     "dwaug": ("actionproof-warmstart-dwaug", [(f"s{s}", f"p4_dwaug_s{s}", "base") for s in SEEDS]),
+    "sel1": ("actionproof-sel1-adapters",
+             [(f"{arm.lower()}/s{s}", f"sel1_{arm}_s{s}",
+               f"merged Dw_aug s{s} = base + s{s}/ adapter of actionproof-warmstart-dwaug (runs/p4_dwaug_s{s}/merged)")
+              for arm in ("SEL", "CTL") for s in SEEDS]),
 }
 MERGED_REPO = "actionproof-agent-d"
 DATASET_REPO = "actionproof-traces"
 ALL = ("merged-d", *ADAPTER_REPOS, "dataset")
 
 DATA_GLOBS = ("results/p1/**/*", "results/p2/**/*", "results/p3/**/*", "data/bench/proc/p1_*.jsonl",
-              "data/bench/proc/s4_*.jsonl", "evaluation/judge_next/data/*.jsonl")
-EXTRA_DIRS = ("results/p4", "results/p5", "results/b1", "results/txn")  # included when they exist
+              "data/bench/proc/s4_*.jsonl", "data/bench/proc/sel1_*.jsonl", "evaluation/judge_next/data/*.jsonl")
+EXTRA_DIRS = ("results/p4", "results/p5", "results/b1", "results/txn", "results/sel1")  # included when they exist
 SKIP_PARTS = {"smoke", "__pycache__", ".cache"}
 
 

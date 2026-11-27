@@ -10,4 +10,6 @@ Rates measured on the locked txn_test (all episodes). Dollars are projections (d
 | W plain SFT warm start (Tiny Aya Global) | 0.445 | 0.475 | 0.237 | 0.009 | 0.006 | 608,879 | 608,879–608,879 | 180,341 | 1,830,720 |
 | Dw_aug randomised recovery SFT (3 seeds) | 0.697 | 0.220 | 0.127 | 0.001 | 0.000 | 321,187 | 275,076–370,788 | 95,537 | 953,125 |
 | D recovery SFT + GRPO (3 seeds) | 0.723 | 0.117 | 0.053 | 0.000 | 0.005 | 145,111 | 128,000–162,288 | 43,977 | 438,687 |
+| SEL1 CTL (3 seeds) | 0.871 | 0.022 | 0.017 | 0.001 | 0.000 | 48,545 | 36,000–59,364 | 15,145 | 141,301 |
+| SEL1 SEL (3 seeds) | 0.830 | 0.020 | 0.014 | 0.003 | 0.136 | 42,939 | 29,833–53,000 | 13,788 | 126,780 |
 | B4 transaction-aware reconciliation (scripted reference) | 0.864 | 0.000 | 0.000 | 0.000 | 0.136 | 8,182 | 8,182–8,182 | 3,409 | 23,864 |
