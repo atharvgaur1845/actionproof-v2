@@ -41,9 +41,20 @@ Deterministic replays of recorded runs: https://huggingface.co/spaces/atharvgaur
 | Compare | base and trained, one after the other, same task and reality, two columns | yes |
 | SCRIPTED: acknowledgement-trusting | a fixed program: write, trust "ok", report completed | no |
 | SCRIPTED: transaction-aware oracle | a fixed program: write, read the authoritative record, repair or retry, report honestly | no |
+| **Judge mode** (default) | left: SCRIPTED acknowledgement-trusting; right: the trained agent, live; same task and reality | yes (one run) |
+| RECORDED: trained agent / base model | a real run of that model recorded earlier through this Space's own episode loop (`record_runs.py`), replayed | no |
 
 Every model run carries a banner `LIVE MODEL RUN · <model id> · <UTC timestamp> · greedy, max 16 turns`. Scripted runs
-are labelled SCRIPTED. The scripted policies are the repo's own reference policies; they never see the reality.
+are labelled SCRIPTED. Recorded runs carry `RECORDED MODEL RUN · <model id> · recorded <UTC> on <hardware> · greedy · no
+model is called now`.
+
+**If a live run fails** (ZeroGPU quota, queue timeout, model download), the banner says `LIVE RUN FAILED (<reason>)` and
+shows the recorded run of the same model, task and reality; a replay is never shown as a live run. The recordings were
+made from `runs/p1_d_s0/merged`, whose `model.safetensors` sha256 equals that of the Hub revision `5418df5`
+(checked in `slurm/tasks/1790_space_record.sh`).
+
+**Export.** Every finished run can be downloaded as JSON: run id, agent option, model id and revision, decoding, task
+id, reality, every call and raw reply, the report, the verifier's score and the decision record. The scripted policies are the repo's own reference policies; they never see the reality.
 
 Live runs are not replays: they are one greedy run of the model on this task and reality, scored by the same
 deterministic verifier used in the study. One run says nothing about a rate. Rates come from the full frozen

@@ -1,7 +1,9 @@
 """ActionProof live: run a real Cohere Labs model as a tool-using agent in ProcureSim (simulated tools only)."""
 from __future__ import annotations
 
+import json
 import os
+import tempfile
 import threading
 
 import gradio as gr
@@ -107,6 +109,10 @@ h1 { font-weight: 650; letter-spacing: -0.01em; margin-bottom: 4px; }
 .banner { padding: 8px 12px; border-radius: 6px; font-family: ui-monospace, Menlo, monospace; font-size: 13px; }
 .banner.live { background: var(--accent); color: #fff; }
 .banner.scripted { background: #fff; color: var(--ink); border: 1.5px solid var(--ink); }
+.banner.recorded { background: #fdf1d6; color: #5a3d00; border: 1.5px dashed #8a5a00; }
+.guide { border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 6px; padding: 10px 14px; margin: 6px 0 12px 0; background: var(--soft); }
+.guide ol { margin: 4px 0 4px 18px; padding: 0; } .guide li { margin: 2px 0; }
+.legend span { display: inline-block; padding: 1px 8px; margin-right: 8px; border-radius: 4px; font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
 .req, .step, .tbl, .note { border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; margin: 8px 0; background: #fff; }
 .req { background: var(--soft); }
 .hd, .tt { font-size: 12px; font-weight: 650; color: var(--muted); margin-bottom: 4px; }
@@ -137,7 +143,14 @@ INTRO = f"""
 # ActionProof live
 <p class="lede">The same request and the same "ok" can hide different realities. Pick a task and a reality, run an agent,
 and only after the run see what the databases actually hold. All tools are simulated; nothing touches a real system.
-Deterministic replays of recorded runs: <a href="{REPLAY_URL}" target="_blank">{REPLAY_URL}</a></p>
+Full registered study (440 locked tasks, every episode): <a href="{REPLAY_URL}" target="_blank">replay site</a>. This page is a
+curated live illustration of one task and one reality at a time, not the benchmark.</p>
+<div class="guide"><b>Judge mode (preselected): 60 seconds.</b>
+<ol><li>Press <b>Run</b>. Left: a script that trusts the reply. Right: the trained Cohere agent, a real model call per step.</li>
+<li>Watch the timeline: the same request and the same <code>"status": "ok"</code> reply for both.</li>
+<li>Read the reveal below: the database rows, the verifier's verdict per step, and each agent's decision record. Download the run as JSON.</li></ol>
+<div class="legend"><span style="background:#1f5fbf;color:#fff">LIVE MODEL RUN</span><span style="border:1.5px solid #1c2330">SCRIPTED</span><span style="background:#fdf1d6;border:1.5px dashed #8a5a00">RECORDED MODEL RUN</span>
+If the GPU is unavailable, the banner says so and shows the recorded run of the same model, task and reality.</div></div>
 """
 
 
@@ -148,9 +161,9 @@ def build_ui(stream=model_stream) -> gr.Blocks:
         state = gr.State({"runs": 0})
         with gr.Row():
             task = gr.Dropdown(list(tasks), value=list(tasks)[0], label="Task (curated test tasks with a pay step)")
-            reality = gr.Dropdown(list(REALITIES), value="Reality A",
+            reality = gr.Dropdown(list(REALITIES), value="Reality C",
                                   label="Reality (what the payment system really does; revealed after the run)")
-            agent = gr.Dropdown([(v, k) for k, v in AGENTS.items()], value="scripted_naive", label="Agent")
+            agent = gr.Dropdown([(v, k) for k, v in AGENTS.items()], value="judge", label="Agent")
         with gr.Row():
             run = gr.Button("Run", variant="primary")
             status = gr.Markdown(f"Live model runs are limited to {SESSION_CAP} per session and run one at a time. "
@@ -163,15 +176,22 @@ def build_ui(stream=model_stream) -> gr.Blocks:
                 ban_r = gr.HTML()
                 right = gr.HTML()
         reveal = gr.HTML()
+        export = gr.File(label="This run as JSON (run id, model, revision, decoding, calls, replies, verdicts)")
 
         def go(agent_key, task_label, reality_key, st):
             try:
                 for ui in run_session(agent_key, tasks[task_label], reality_key, st, stream):
-                    yield (ui["banner_l"], ui["left"], ui["banner_r"], ui["right"], ui["reveal"], ui["status"], st)
-            except Exception as e:  # GPU quota, model download failure, etc.
-                yield ("", "", "", "", "", f"Run failed: {type(e).__name__}: {e}", st)
+                    path = None
+                    if ui.get("export"):
+                        fd, path = tempfile.mkstemp(prefix=f"actionproof-{ui['export']['run_id']}-", suffix=".json")
+                        with os.fdopen(fd, "w") as f:
+                            json.dump(ui["export"], f, indent=1, default=str)
+                    yield (ui["banner_l"], ui["left"], ui["banner_r"], ui["right"], ui["reveal"], ui["status"], st, path)
+            except Exception as e:  # a failure with no recording to fall back on
+                yield ("", "", "", "", "", f"Run failed: {type(e).__name__}: {e}. Scripted agents need no GPU; "
+                       f"the replay site has every recorded episode.", st, None)
 
-        run.click(go, [agent, task, reality, state], [ban_l, left, ban_r, right, reveal, status, state],
+        run.click(go, [agent, task, reality, state], [ban_l, left, ban_r, right, reveal, status, state, export],
                   concurrency_limit=1, concurrency_id="run")
     return demo
 

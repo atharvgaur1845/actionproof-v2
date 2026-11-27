@@ -11,6 +11,7 @@ import html
 import json
 import re
 import time
+import uuid
 from pathlib import Path
 from typing import Any, Callable, Iterator
 
@@ -27,6 +28,8 @@ TRAINED_REPO = "atharvgaur18/actionproof-agent-d"
 MODELS = {"base": BASE_REPO, "trained": TRAINED_REPO}
 SESSION_CAP = 10
 DATA = Path(__file__).resolve().parent / "data" / "tasks.json"
+RECORDED = Path(__file__).resolve().parent / "data" / "recorded.json"
+TRAINED_REVISION = "5418df563fc3"  # atharvgaur18/actionproof-agent-d on the Hub (release/ARTIFACT_MANIFEST.json)
 
 # Fixed, deliberately not in the order a reader would guess; the key is shown only after a run.
 REALITIES = {
@@ -41,8 +44,27 @@ REALITIES = {
 }
 SCRIPTED = {"scripted_naive": ("SCRIPTED: acknowledgement-trusting", naive),
             "scripted_oracle": ("SCRIPTED: transaction-aware oracle", oracle)}
-AGENTS = {"base": "Base model: tiny-aya-global (live)", "trained": "Trained agent (live)",
-          "both": "Compare: base and trained (live)", **{k: v[0] for k, v in SCRIPTED.items()}}
+RECORDED_KEYS = {"recorded_base": "base", "recorded_trained": "trained"}
+AGENTS = {"judge": "Judge mode: acknowledgement-trusting script vs trained agent (live)",
+          "base": "Base model: tiny-aya-global (live)", "trained": "Trained agent (live)",
+          "both": "Compare: base and trained (live)", **{k: v[0] for k, v in SCRIPTED.items()},
+          "recorded_trained": "RECORDED: trained agent (no GPU)", "recorded_base": "RECORDED: base model (no GPU)"}
+SIDES = {"judge": ["scripted_naive", "trained"], "both": ["base", "trained"]}
+
+
+def load_recorded() -> dict:
+    """Real model runs recorded with space_live/record_runs.py (meta + runs keyed model|task_id|reality)."""
+    if not RECORDED.exists():
+        return {"meta": None, "runs": {}}
+    return json.loads(RECORDED.read_text())
+
+
+def has_recording(model_key: str, task_id: str, reality: str) -> bool:
+    return f"{model_key}|{task_id}|{reality}" in load_recorded()["runs"]
+
+
+def recorded_events(model_key: str, task_id: str, reality: str) -> Iterator[dict]:
+    yield from copy.deepcopy(load_recorded()["runs"][f"{model_key}|{task_id}|{reality}"])
 
 
 # ------------------------------------------------------------------ tasks and realities
@@ -132,6 +154,14 @@ def render_event(ev: dict) -> str:
         return (f'<div class="step raw"><div class="hd">Turn {ev["turn"]}: raw model output</div>'
                 f'<pre>{html.escape(raw[:1200], quote=False)}</pre></div>')
     return ""
+
+
+def recorded_banner(model_key: str, why: str | None = None) -> str:
+    meta = load_recorded()["meta"] or {}
+    head = (f'LIVE RUN FAILED ({_esc(why)}) · showing the RECORDED run of the same model, task and reality · '
+            if why else "")
+    return (f'<div class="banner recorded">{head}RECORDED MODEL RUN · {_esc(MODELS[model_key])} · recorded '
+            f'{_esc(meta.get("recorded_utc", "?"))} on {_esc(meta.get("hardware", "?"))} · greedy · no model is called now</div>')
 
 
 def banner(agent_key: str, model_id: str | None, stamp: str) -> str:
@@ -263,20 +293,37 @@ def run_side(side: str, agent_key: str, task: ProcTask, reality: str,
     stamp = utc_now()
     if agent_key in SCRIPTED:
         ban, events = banner(agent_key, None, stamp), scripted_events(agent_key, task, reality)
+    elif agent_key in RECORDED_KEYS:
+        ban, events = recorded_banner(RECORDED_KEYS[agent_key]), recorded_events(RECORDED_KEYS[agent_key], task.task_id, reality)
     else:
         ban, events = banner(agent_key, MODELS[agent_key], stamp), model_stream(agent_key, task.task_id, reality)
     t = apply_reality(task, reality)
-    body = f'<div class="req"><div class="hd">Request</div>{_esc(t.prompt)}</div>'
+    head = f'<div class="req"><div class="hd">Request</div>{_esc(t.prompt)}</div>'
+    body = head
     yield ban, body, None
-    for ev in events:
-        if ev["type"] == "end":
-            body += ended_note(ev)
-            yield ban, body, ev["rec"]
-            return
-        body += render_event(ev)
+    try:
+        for ev in events:
+            if ev["type"] == "end":
+                body += ended_note(ev)
+                yield ban, body, ev["rec"]
+                return
+            body += render_event(ev)
+            yield ban, body, None
+            if agent_key in SCRIPTED or agent_key in RECORDED_KEYS:
+                time.sleep(0.35)
+    except Exception as e:  # GPU quota, queue timeout, model download: never substitute silently
+        if agent_key not in MODELS or not has_recording(agent_key, task.task_id, reality):
+            raise
+        why = f"{type(e).__name__}: {str(e)[:120]}"
+        ban, body = recorded_banner(agent_key, why), head
         yield ban, body, None
-        if agent_key in SCRIPTED:
-            time.sleep(0.35)
+        for ev in recorded_events(agent_key, task.task_id, reality):
+            if ev["type"] == "end":
+                body += ended_note(ev)
+                yield ban, body, ev["rec"]
+                return
+            body += render_event(ev)
+            yield ban, body, None
 
 
 class Budget:
@@ -298,14 +345,15 @@ def run_session(agent: str, task_id: str, reality: str, state: dict,
     """Yield UI dicts: {banner_l, left, banner_r, right, reveal, status}. Reveal is empty until every side has ended."""
     budget = budget or Budget()
     task = get_task(task_id)
-    sides = ["base", "trained"] if agent == "both" else [agent]
-    live = [s for s in sides if s not in SCRIPTED]
+    sides = SIDES.get(agent, [agent])
+    live = [s for s in sides if s in MODELS]
     ui = {"banner_l": "", "left": "", "banner_r": "", "right": "", "reveal": "", "status": ""}
     if live and not budget.charge(state, len(live)):
         ui["status"] = f"Session cap reached: {budget.cap} live model runs per session. Scripted runs are unlimited."
         yield dict(ui)
         return
     recs: dict[str, dict] = {}
+    kinds: dict[str, str] = {}
     for i, s in enumerate(sides):
         bk, tk = ("banner_l", "left") if i == 0 else ("banner_r", "right")
         ui["status"] = f"Running {AGENTS[s]}"
@@ -313,11 +361,34 @@ def run_session(agent: str, task_id: str, reality: str, state: dict,
             ui[bk], ui[tk] = ban, body
             if rec is not None:
                 recs[s] = rec
+                kinds[s] = ("scripted" if s in SCRIPTED else "recorded" if (s in RECORDED_KEYS or "recorded" in ban)
+                            else "live")
             yield dict(ui)
     parts = []
     for s in sides:
         head = f'<h4>{_esc(AGENTS[s])}</h4>' if len(sides) > 1 else ""
         parts.append(f'<div class="side">{head}{render_reveal(recs[s], reality)}</div>')
     ui["reveal"] = '<div class="cmp">' + "".join(parts) + "</div>"
-    ui["status"] = "Run finished. Hidden state revealed below."
+    ui["export"] = export_record(agent, task, reality, sides, recs, kinds)
+    ui["status"] = f"Run finished. Hidden state revealed below. Run id {ui['export']['run_id']}."
     yield dict(ui)
+
+
+def export_record(agent: str, task: ProcTask, reality: str, sides: list[str], recs: dict, kinds: dict) -> dict:
+    """The run as a JSON-serialisable record: what ran, how, on what, and what the verifier found."""
+    meta = load_recorded()["meta"] or {}
+    out = {"run_id": uuid.uuid4().hex[:12], "exported_utc": utc_now(), "agent_option": AGENTS.get(agent, agent),
+           "task_id": task.task_id, "reality": reality, "reality_meaning": REALITIES[reality]["what"],
+           "decoding": f"greedy, max {MAX_TURNS} turns, {MAX_NEW_TOKENS} new tokens per turn", "sides": []}
+    for s in sides:
+        r = recs[s]
+        model_key = s if s in MODELS else RECORDED_KEYS.get(s)
+        out["sides"].append({
+            "agent": AGENTS.get(s, s), "kind": kinds.get(s), "model": MODELS.get(model_key) if model_key else None,
+            "revision": TRAINED_REVISION if model_key == "trained" else None,
+            "recorded": ({"utc": meta.get("recorded_utc"), "hardware": meta.get("hardware")}
+                         if kinds.get(s) == "recorded" else None),
+            "calls": [{"tool": x["tool"], "args": x["args"], "reply": x["obs"]} for x in r["trace"]
+                      if x.get("by", "agent") == "agent"],
+            "report": r.get("report"), "score": r["score"], "decision_record": decision_record(r, reality)})
+    return out

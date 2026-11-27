@@ -207,3 +207,71 @@ def test_curated_tasks_exist_in_main_p1_test_full():
     full = {json.loads(l)["task_id"]: json.loads(l) for l in p.read_text().splitlines() if l.strip()}
     for t in core.load_curated():
         assert full[t.task_id]["initial_state"] == t.initial_state and full[t.task_id]["prompt"] == t.prompt
+
+
+# ------------------------------------------------------------------ judge mode, recorded fallback, export
+@pytest.fixture()
+def recorded(tmp_path, monkeypatch):
+    """A recording made with the fake (ack-trusting) generator, in the format of space_live/record_runs.py."""
+    from actionproof_min.lite_format import build_schema  # noqa: F401  (import check only)
+    ms = _fake_stream_factory()
+    runs = {}
+    for key in ("base", "trained"):
+        for tid in TASK_IDS:
+            for r in REALITY_KEYS:
+                runs[f"{key}|{tid}|{r}"] = list(ms(key, tid, r))
+    f = tmp_path / "recorded.json"
+    f.write_text(json.dumps({"meta": {"recorded_utc": "2026-11-27 06:00Z", "hardware": "test"}, "runs": runs}, default=str))
+    monkeypatch.setattr(core, "RECORDED", f)
+    return f
+
+
+def test_judge_mode_script_left_trained_right_and_export():
+    frames = list(core.run_session("judge", "p1_test_full-0003", "Reality C", {}, _fake_stream_factory()))
+    last = frames[-1]
+    assert "SCRIPTED: acknowledgement-trusting" in last["banner_l"] and core.TRAINED_REPO in last["banner_r"]
+    assert last["reveal"].count("Transaction decision record") == 2
+    ex = last["export"]
+    assert [s["kind"] for s in ex["sides"]] == ["scripted", "live"]
+    assert ex["sides"][1]["model"] == core.TRAINED_REPO and ex["sides"][1]["revision"] == core.TRAINED_REVISION
+    assert ex["reality"] == "Reality C" and ex["run_id"] in last["status"]
+    json.dumps(ex)  # serialisable
+    assert ex["sides"][0]["score"]["false_success"]  # the ack-trusting script reports a phantom payment
+
+
+def test_live_failure_falls_back_to_labelled_recording(recorded):
+    def broken(model_key, task_id, reality):
+        yield {"type": "start", "system": None, "prompt": "x"}
+        raise RuntimeError("ZeroGPU quota exceeded")
+    frames = list(core.run_session("trained", "p1_test_full-0003", "Reality C", {}, broken))
+    last = frames[-1]
+    assert "LIVE RUN FAILED (RuntimeError: ZeroGPU quota exceeded)" in last["banner_l"]
+    assert "RECORDED MODEL RUN" in last["banner_l"] and "LIVE MODEL RUN" not in last["banner_l"]
+    assert last["export"]["sides"][0]["kind"] == "recorded"
+    assert "Transaction decision record" in last["reveal"]
+
+
+def test_live_failure_without_recording_is_an_error(tmp_path, monkeypatch):
+    monkeypatch.setattr(core, "RECORDED", tmp_path / "none.json")
+
+    def broken(model_key, task_id, reality):
+        raise RuntimeError("no GPU")
+        yield  # pragma: no cover
+    with pytest.raises(RuntimeError):
+        list(core.run_session("trained", "p1_test_full-0003", "Reality C", {}, broken))
+
+
+@pytest.mark.parametrize("reality", REALITY_KEYS)
+def test_recorded_option_is_labelled_and_hides_state_until_end(recorded, reality):
+    frames = list(core.run_session("recorded_trained", "p1_test_full-0003", reality, {}, None))
+    for f in frames[:-1]:
+        text = (f["banner_l"] + f["left"]).lower()
+        assert f["reveal"] == "" and "recorded model run" in text and "live model run" not in text
+        for w in HIDDEN_WORDS:
+            assert w.lower() not in f["left"].lower(), (w, reality)
+    assert frames[-1]["export"]["sides"][0]["kind"] == "recorded"
+
+
+def test_recorded_runs_need_no_budget(recorded):
+    state = {"runs": core.SESSION_CAP}
+    assert list(core.run_session("recorded_base", "p1_test_full-0003", "Reality A", state, None))[-1]["reveal"]
