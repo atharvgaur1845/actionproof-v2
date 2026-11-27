@@ -4,66 +4,77 @@ The payment tool says ok.
 Did the payment happen?
 
 2
-00:00:06,000 --> 00:00:12,000
-Here, it did not:
-the database holds no payment.
+00:00:06,000 --> 00:00:20,000
+Same request, same reply,
+different realities.
 
 3
-00:00:12,000 --> 00:00:20,000
-Same request, two possible replies, four possible realities.
-The agent has to tell them apart.
+00:00:20,000 --> 00:00:30,000
+Left: a program that trusts the reply.
+Write, see ok, report done.
 
 4
-00:00:20,000 --> 00:00:32,000
-An agent that trusts the reply falsely completes
-on every task where the ok hides a missing payment.
+00:00:30,000 --> 00:00:45,000
+Right: the trained agent, live.
+It reads the payment back, finds none,
+and pays before it reports.
 
 5
-00:00:32,000 --> 00:00:45,000
-One that retries blindly pays twice
-when the first payment did go through.
+00:00:45,000 --> 00:00:56,000
+The reveal: one payment for the trained agent,
+none for the script.
 
 6
-00:00:45,000 --> 00:01:00,000
-The trained agent pays, reads the payment back,
-finds nothing, and pays again with the same key.
+00:00:56,000 --> 00:01:15,000
+Every verdict comes from the database,
+never the transcript. Each run can be downloaded.
 
 7
-00:01:00,000 --> 00:01:15,000
-When the reply was a timeout but the payment committed,
-it reads back, finds it, and does not pay again.
+00:01:15,000 --> 00:01:24,000
+On 440 locked tasks, trusting the reply
+falsely completes 0.864 of the time.
 
 8
-00:01:15,000 --> 00:01:25,000
-Registered P1, 450 frozen tasks, three seeds:
-recovery-start agent 0.513, recovery SFT 0.772, recovery SFT then GRPO 0.819.
+00:01:24,000 --> 00:01:34,000
+Recovery demonstrations then GRPO:
+0.513 to 0.819 on 450 frozen tasks, three seeds.
 
 9
-00:01:25,000 --> 00:01:35,000
-Duplicate mutations: 0.024 for the agent, 0.191 for bounded retry.
-Fewer unnecessary retries is not shown, so the registered family is not supported.
+00:01:34,000 --> 00:01:45,000
+Duplicate payments: 0.024 against 0.191 for bounded retry.
+The retry test fails, and we say so.
 
 10
-00:01:35,000 --> 00:01:45,000
-Before any RL, randomised demonstrations lift renamed tools from 0.137 to 0.741,
-and an unseen workflow from 0.268 to 0.842.
+00:01:45,000 --> 00:01:53,000
+It rarely handed a case to a person
+when the evidence could not settle it: 15 of 540.
 
 11
-00:01:45,000 --> 00:01:58,000
-What did not work: when evidence cannot settle the outcome,
-the agent rarely escalates (15 of 540 cases).
+00:01:53,000 --> 00:02:02,000
+Registered before training: teach selective hand-off.
+Locked test: 0.972 against 0.002 for a matched control.
 
 12
-00:01:58,000 --> 00:02:15,000
-No-std GRPO did not help. Healthcare transfer is negative.
-LLM judges are not verifier-grade.
+00:02:02,000 --> 00:02:10,000
+Never on a transient outage; nothing lost on resolvable work.
+Fragile: on a held-out step, one seed barely escalates.
 
 13
-00:02:15,000 --> 00:02:30,000
-Models, traces, the live demo and the code are public.
-Every number has one file and one command.
+00:02:10,000 --> 00:02:15,000
+Where the evidence is observable,
+the hand-written script still beats every learned agent.
 
 14
-00:02:30,000 --> 00:02:45,000
-ActionProof: transaction-aware recovery under ambiguous execution.
-Not a new RL optimizer, and not a claim of universal safety.
+00:02:15,000 --> 00:02:27,000
+Projected: trusting the reply costs about ten times
+the trained agent's exposure. Checks remove most of the rest.
+
+15
+00:02:27,000 --> 00:02:37,000
+A simulator: the dollars are a projection, not savings.
+Every number has one file and one command.
+
+16
+00:02:37,000 --> 00:02:45,000
+Transaction-aware recovery under ambiguous execution.
+Not a new RL optimizer, not a claim of safety.

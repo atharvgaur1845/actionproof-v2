@@ -5,7 +5,7 @@
 #   SKIP_DOWNLOAD=1 bash scripts/verify_numbers.sh # episode files are already under results/ (e.g. copied from the cluster)
 #
 # What it does
-#   1. downloads the episode files (results/{p1,p2,p3,p4,p5,b1,txn}/**/*.jsonl) of the dataset atharvgaur18/actionproof-traces into
+#   1. downloads the episode files (results/{p1,p2,p3,p4,p5,b1,txn,sel1}/**/*.jsonl) of the dataset atharvgaur18/actionproof-traces into
 #      results/. Only *.jsonl: the summaries stay the ones committed in git, so step 3 compares a recomputation against
 #      the committed values. The frozen task splits (data/bench/proc/) are already in the clone.
 #   2. reruns the registered analyses, in place:
@@ -18,6 +18,8 @@
 #        scripts/txn_stats.py          -> results/txn/stats__txn_test.*  (TXN1, with the 25 tags of the registered run)
 #        scripts/txn_invariants_recheck.py -> results/txn/invariants_recheck__txn_test.json (TXN1 addendum 1)
 #        scripts/txn_stats.py + txn_compact.py -> results/txn/compact_descriptive__txn_test.json (descriptive, all tags)
+#        scripts/sel1_stats.py         -> results/sel1/sel1_summary.{json,md} (SEL1: SEL versus CTL, registered)
+#        scripts/impact_txn.py         -> results/impact/impact_txn.{json,md} (descriptive projection from the summaries)
 #      None of these refuses to overwrite its output, so they write over the committed file and git is the comparison.
 #      Every bootstrap uses a fixed seed (20261124 or 20261125) and numpy's PCG64, so a rerun is deterministic.
 #      p2_stats.py also writes results/p2/p2_coverage.json (untracked). It stops with exit code 2 if any required
@@ -61,7 +63,8 @@ import os
 from huggingface_hub import snapshot_download
 snapshot_download(repo_id=os.environ["REPO"], repo_type="dataset", local_dir=".",
                   allow_patterns=["results/p1/**/*.jsonl", "results/p2/**/*.jsonl", "results/p3/**/*.jsonl",
-                                  "results/p4/*.jsonl", "results/p5/*.jsonl", "results/b1/*.jsonl", "results/txn/*.jsonl"],
+                                  "results/p4/*.jsonl", "results/p5/*.jsonl", "results/b1/*.jsonl", "results/txn/*.jsonl",
+                                  "results/sel1/*.jsonl"],
                   ignore_patterns=["**/smoke/**"])
 EOF
 fi
@@ -127,6 +130,11 @@ print("TXN JSON outputs: equal up to float noise" if not bad else f"real differe
 sys.exit(1 if bad else 0)
 PYEOF
 git checkout -- results/txn/stats__txn_test.json results/txn/compact_descriptive__txn_test.json
+n=$(find results/sel1 -name '*.jsonl' | wc -l)
+echo "results/sel1: $n episode files (expected 28: SEL and CTL x 3 seeds x 2 splits, 4 parents on sel1_test, 6 scripted policies x 2 splits)"
+[ "$n" -ge 28 ] || { echo "FAIL: SEL1 episode files missing"; exit 1; }
+analyse scripts/sel1_stats.py
+analyse scripts/impact_txn.py
 
 step "3. recomputed summaries versus the committed ones (git diff --exit-code results/)"
 if git diff --exit-code --stat -- results/; then
