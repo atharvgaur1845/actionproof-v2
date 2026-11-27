@@ -88,7 +88,7 @@ Practice grounding (not a paper). Stripe's API documentation (`docs.stripe.com/e
    stopping; the difference is that ActionProof's outage is hidden behind identical replies and the test separates
    transient from permanent outages. The text above is kept as written.
 
-   **Addendum 2 (2026-11-27 10:40 IST, after the final hostile review; `PREREGISTRATION_SEL1_ADDENDUM1.md`).**
+   **Addendum 2 (2026-11-27, committed 10:39 IST, after the final hostile review; `PREREGISTRATION_SEL1_ADDENDUM1.md`).**
    - Point (c) of addendum 1 is withdrawn. SEL1's trigger is an explicit `service_unavailable` read error, not an
      outage hidden behind identical replies.
    - Every locked-test H1 task could be settled by a same-key resend.

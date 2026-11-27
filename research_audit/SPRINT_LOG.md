@@ -59,14 +59,14 @@ Branch `stage2-superiority-sprint` (from `submission-candidate` @ `7ae863f`). Lo
 - Release tables and write-up §28 now come from `release/ARTIFACT_MANIFEST.json`: 11 Hub entries public
   anonymously, 6 splits match, 13 of 13 result files present.
 
-## Correction to the Phase C entry above (10:55 IST)
+## Correction to the Phase C entry above (10:45 IST)
 - The Phase C entry says "both SEL1 arms pass B4's overall TXN VTC (0.830 and 0.871 against 0.864)". That is false:
   SEL's 0.830 is below 0.864, and only CTL passes. I wrote it, and the hostile review caught it on five surfaces;
   all are corrected.
 - CTL's completions on unresolvable tasks were same-key resends, not completions "without the evidence".
 - The entry is left as written, with this correction.
 
-## Phase F (part 1): clean room, hostile reviews and their resolution (10:05–10:55 IST)
+## Phase F (part 1): clean room, hostile reviews and their resolution (10:05–10:45 IST)
 - **Clean room (task 1830).** A fresh clone of 9750f73, a fresh virtualenv and an anonymous HF download.
   `smoke_check` passed in 27 s. `verify_numbers.sh` passed in 367 s: every registered analysis recomputed
   byte-identically, and 0 tracked files changed (`research_audit/cleanroom/`).

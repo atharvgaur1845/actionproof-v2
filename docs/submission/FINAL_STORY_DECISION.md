@@ -5,7 +5,7 @@
 - `research_audit/NOVELTY_POSITIONING_FINAL.md`
 - `research_audit/COMPETITIVE_THREAT_RANKING.md`
 
-**Revision after the final hostile review (2026-11-27, 10:40 IST).** Three independent reviews (Reviewer 1: ML
+**Revision after the final hostile review (2026-11-27, committed 10:39 IST).** Three independent reviews (Reviewer 1: ML
 research; 2: systems; 3: hackathon judge; `research_audit/FINAL_REDTEAM_REVIEW.md`) found construct problems in the
 TXN benchmark and in what SEL1's tests measure. They are recorded in `PREREGISTRATION_TXN1_ADDENDUM3.md` and
 `PREREGISTRATION_SEL1_ADDENDUM1.md`. The spine does not change. What changes:
