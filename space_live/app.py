@@ -67,7 +67,7 @@ class HFGenerator:
                 return
             import torch
             from transformers import AutoConfig, AutoModelForCausalLM
-            token = os.environ.get("HF_TOKEN")  # optional: the models are public
+            token = os.environ.get("HF_TOKEN")  # needed for the gated base model; the trained agent is public
             self.tok = _load_tokenizer(self.repo, token)
             config = AutoConfig.from_pretrained(self.repo, token=token)
             # Checkpoints saved by transformers 5 keep rope_theta inside rope_parameters; 4.x reads only the
@@ -164,9 +164,11 @@ INTRO = f"""
 # ActionProof live
 <p class="lede">The same request and the same "ok" can hide different realities. Pick a task and a reality, run an agent,
 and only after the run see what the databases actually hold. All tools are simulated; nothing touches a real system.
-Full registered study (440 locked tasks, every episode): <a href="{REPLAY_URL}" target="_blank">replay site</a>. This page is a
-curated live illustration of one task and one reality at a time, not the benchmark.</p>
-<div class="guide"><b>Judge mode (preselected): 60 seconds.</b>
+The registered study, with every recorded episode and result: <a href="{REPLAY_URL}" target="_blank">replay site</a>. This page is a
+curated live illustration of one task and one reality at a time, on ProcureSim tasks from the P1 test; it is not the benchmark.
+The hand-written reconciliation script (<i>SCRIPTED: transaction-aware oracle</i>) also gets these tasks right, and on the
+benchmark it still beats every learned agent.</p>
+<div class="guide"><b>Judge mode (preselected): about 70 seconds once the GPU is warm; the first run after a sleep takes longer.</b>
 <ol><li>Press <b>Run</b>. Left: a script that trusts the reply. Right: the trained Cohere agent, a real model call per step.</li>
 <li>Watch the timeline: the same request and the same <code>"status": "ok"</code> reply for both.</li>
 <li>Read the reveal below: the database rows, the verifier's verdict per step, and each agent's decision record. Download the run as JSON.</li></ol>

@@ -9,6 +9,7 @@ import copy
 import datetime as dt
 import html
 import json
+import os
 import re
 import time
 import uuid
@@ -45,9 +46,11 @@ REALITIES = {
 SCRIPTED = {"scripted_naive": ("SCRIPTED: acknowledgement-trusting", naive),
             "scripted_oracle": ("SCRIPTED: transaction-aware oracle", oracle)}
 RECORDED_KEYS = {"recorded_base": "base", "recorded_trained": "trained"}
+# The base model is gated: without an HF_TOKEN secret its live runs always fall back to the recording, so say so.
+_BASE_LIVE = "live" if os.environ.get("HF_TOKEN") else "live if the Space has a token; else the labelled recording"
 AGENTS = {"judge": "Judge mode: acknowledgement-trusting script vs trained agent (live)",
-          "base": "Base model: tiny-aya-global (live)", "trained": "Trained agent (live)",
-          "both": "Compare: base and trained (live)", **{k: v[0] for k, v in SCRIPTED.items()},
+          "base": f"Base model: tiny-aya-global ({_BASE_LIVE})", "trained": "Trained agent (live)",
+          "both": f"Compare: base and trained ({_BASE_LIVE})", **{k: v[0] for k, v in SCRIPTED.items()},
           "recorded_trained": "RECORDED: trained agent (no GPU)", "recorded_base": "RECORDED: base model (no GPU)"}
 SIDES = {"judge": ["scripted_naive", "trained"], "both": ["base", "trained"]}
 

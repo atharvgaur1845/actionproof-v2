@@ -228,7 +228,7 @@ recomputes the summaries from them on a CPU.
 
 HONESTY = """\n## Limitations
 
-- **Simulator, not production payments.** Every result is on ProcureSim, a SQLite procurement simulator with injected
+- **Simulator, not production payments.** Every result is on ProcureSim, an in-memory procurement simulator with injected
   write faults (phantom, partial, lost-acknowledgement, duplicate, never-commit). No real payment system, real money
   or real supplier was involved, and nothing here shows the agent is safe to deploy.
 - **The RL agents (A, D, Dn) fail on renamed tools and on the four-step workflow.** Recovery-start training with randomised
@@ -621,7 +621,7 @@ def card_sel1() -> str:
                      rcv["CTL_s2"]["u_receive"]["unsafe"]["num"])
     return FRONT.format(base=BASE, rel="adapter", lib="peft", user=USER,
                         tags="\n".join(f"- {t}" for t in ["actionproof", "tool-use", "agents", "sft", "lora", "procuresim", "escalation", "research-only"])) + f"""
-# ActionProof SEL1: selective-escalation adapters (registered experiment, SFT only)
+# ActionProof SEL1: escalation adapters (registered experiment, SFT only)
 
 Six LoRA (r16) adapters from the registered SEL1 experiment (`PREREGISTRATION_SEL1.md`, registered before any
 training): `sel/s0..s2` (arm SEL) and `ctl/s0..s2` (arm CTL; `runs/sel1_{{SEL,CTL}}_s{{k}}/final`). Each continues
@@ -661,11 +661,19 @@ selectivity J: B5 1, escalate-on-first-error B4 0.5, always-escalate 0, never-es
 
 ## Limitations
 
-- **Simulator, not production payments.** ProcureSim is a SQLite procurement simulator; nothing here shows the agent is
+- **Simulator, not production payments.** ProcureSim is an in-memory procurement simulator; nothing here shows the agent is
   safe to deploy.
 - **Supervised, from a scripted rule.** The behaviour is taught by demonstrations of B5; it is not an RL result, and
   the scripted rule itself still scores higher on selectivity.
 - **Seed-fragile transfer to a held-out step** (above).
+- **Narrower than designed (post hoc, `PREREGISTRATION_SEL1_ADDENDUM1.md`).**
+  - Every locked-test H1 task faults a keyed step, which a same-key resend settles. SEL's escalations there mostly
+    replace an honest "failed" report; unsafe actions fall from 12 to 7 of 540.
+  - The audit-log-only control cannot fire, and the 2-read outage is inside the demonstrated 3-read budget.
+  - Where hand-off is the only safe action (unkeyed receive steps), SEL hands off in 164 of 432 episodes (by seed: 55,
+    106, 3 of 144).
+  - The trigger is an explicit `service_unavailable` read error.
+  - The benchmark's own limits are in `PREREGISTRATION_TXN1_ADDENDUM3.md`.
 - The cost of a human review is not measured; escalation is scored as safe only where the outcome is truly
   unobservable (`actionproof/txn/truth.py`).
 - Non-commercial licence inherited from the base model. Research use only.

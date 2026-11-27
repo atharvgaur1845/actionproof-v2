@@ -133,7 +133,7 @@ four-step workflow (`wf4`) and two-fault episodes (`combo`) remain hard, and fal
 
 ## Limitations
 
-- **Simulator, not production payments.** Every result is on ProcureSim, a SQLite procurement simulator with injected
+- **Simulator, not production payments.** Every result is on ProcureSim, an in-memory procurement simulator with injected
   write faults (phantom, partial, lost-acknowledgement, duplicate, never-commit). No real payment system, real money
   or real supplier was involved, and nothing here shows the agent is safe to deploy.
 - **The RL agents (A, D, Dn) fail on renamed tools and on the four-step workflow.** Recovery-start training with randomised

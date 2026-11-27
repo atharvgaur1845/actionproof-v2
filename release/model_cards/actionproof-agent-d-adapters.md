@@ -139,7 +139,7 @@ Per-seed union sampled VSC of D: s0 0.823, s1 0.806, s2 0.829. Dw (single checkp
 
 ## Limitations
 
-- **Simulator, not production payments.** Every result is on ProcureSim, a SQLite procurement simulator with injected
+- **Simulator, not production payments.** Every result is on ProcureSim, an in-memory procurement simulator with injected
   write faults (phantom, partial, lost-acknowledgement, duplicate, never-commit). No real payment system, real money
   or real supplier was involved, and nothing here shows the agent is safe to deploy.
 - **The RL agents (A, D, Dn) fail on renamed tools and on the four-step workflow.** Recovery-start training with randomised

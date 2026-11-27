@@ -10,12 +10,17 @@ tags:
 - reinforcement-learning
 - procuresim
 - actionproof
+viewer: false
 ---
 
 # ActionProof traces
 
+The Hub's table viewer is switched off: the files mix several record schemas (episodes, summaries, splits, judge
+cases), which it cannot combine. Browse them under *Files and versions*, or in the replay Space's episode explorer
+(https://huggingface.co/spaces/atharvgaur18/actionproof).
+
 Per-episode records, summaries, frozen task splits and judge-reliability cases behind the ActionProof results. Every
-episode was run in **ProcureSim**, a simulated procurement back office (SQLite database, ten tools, injected write
+episode was run in **ProcureSim**, a simulated procurement back office (in-memory tables, ten tools, injected write
 faults) and scored by a deterministic verifier. Nothing here comes from a real payment system or real suppliers.
 
 - Code, pre-registrations, claims ledger: https://github.com/atharvgaur1845/actionproof-v2
@@ -46,6 +51,7 @@ huggingface-cli download atharvgaur18/actionproof-traces --repo-type dataset --l
 | `results/p4/`, `results/p5/` | P4 (Dw_aug against Dw) and P5 (recovery SFT on four other Cohere bases) episodes and registered summaries | `scripts/p1_eval.py`; `scripts/p4_stats.py`, `scripts/p5_stats.py` |
 | `results/b1/` | B1: prompted, untrained models on the P1 test (Aya Expanse 8B/32B; supplementary Qwen3-235B-A22B and gpt-oss-120b) | `scripts/b1_eval.py`, `scripts/b1_api_eval.py` |
 | `results/txn/` | The locked TXN test (440 tasks): every scripted policy, prompted and trained agent; registered `stats__txn_test.json` | `scripts/txn_eval.py`, `scripts/txn_stats.py` |
+| `data/rft/sel1_{sel,ctl}_rows.jsonl`, `data/rft/sel1_rows.stats.json` | The SEL1 training rows of both arms, as hashed before training (`results/sel1_hashes.json`, key `data`) | `actionproof/sel1/build.py` (task 1800) |
 | `results/sel1/`, `data/bench/proc/sel1_*.jsonl` | SEL1 (selective escalation, registered): SEL and CTL seeds 0-2, their parents and scripted references on `sel1_test` and `txn_test`; the registered `sel1_summary.json`; the SEL1 splits (hashes in `results/sel1_hashes.json`) | `scripts/sel1_eval.py`, `scripts/sel1_policies_eval.py`, `scripts/sel1_stats.py` |
 
 Splits (task counts): train full 240, pp 90, rec 300; dev full 90, rec 90; test full 120, pp 90 (unseen payment

@@ -19,17 +19,15 @@ surfaces exist. They are never conflated, and each one carries its label on scre
    2026-11-27 the live Space had no token: a live base run failed with `GatedRepoError: 401` and fell back, labelled,
    to the recorded base run. Judge mode and the trained agent are unaffected (the trained agent is public).
 
-## Timeline (about 2:45; slides in brackets)
+## Timeline (about 2:45; identical to `docs/submission/VIDEO_SCRIPT.md`)
 
 | Time | Screen | Label | Action | Say |
 |---|---|---|---|---|
-| 0:00–0:20 | Deck slide 1 (hook) | — | Show the four realities | "The payment tool says ok. Did the payment happen? Same request, same reply, different realities." |
-| 0:20–0:45 | Live Space, judge mode, Task 0004, Reality C | `SCRIPTED` (left) | Press Run; the left column streams | "A program that trusts the reply: write, see ok, report done." |
-| 0:45–1:15 | Same run, right column | `LIVE MODEL RUN · atharvgaur18/actionproof-agent-d` | The trained agent reads the payment back; then the reveal | "Same task, same ok. The trained agent reads the record, finds no payment, and pays again before it reports. Below, the database: one payment for the trained agent, none for the script." |
-| 1:15–1:30 | The reveal: verifier verdict and decision record; click the JSON download | — | Point at the verdict and the run id | "Every number comes from the database, never the transcript. Each run can be downloaded." |
-| 1:30–1:50 | Deck slide 2, then 4 | `RECORDED RESULT` (deck) | Baselines; P1 bars; TXN H3 | "On 440 locked tasks, trusting the reply falsely completes 0.864. Recovery demonstrations then GRPO: 0.513 to 0.819 on 450 frozen tasks. Fewer duplicates than bounded retry; the retry test fails, and we say so." |
-| 1:50–2:15 | Deck slide 5 | `RECORDED RESULT` | What fails; the SEL1 box | "It rarely handed off when the evidence could not settle it: 15 of 540. Registered before training, demonstrations of selective hand-off: 0.972 against 0.002 on the locked test, never on a transient outage, no cost on resolvable work. Fragile: on a held-out step one seed barely escalates." |
-| 2:15–2:45 | Deck slide 6 | `RECORDED RESULT` (projection) | Impact bars; links | "Training removes most of the projected exposure; hand-written checks remove the rest, so ship both. Every number has one file and one command." |
+| 0:00–0:20 | Deck slide 1 (hook) | — | Show the four realities | "The payment tool says ok. Did the payment happen? Same request, two replies, four realities." |
+| 0:20–1:15 | Live Space, judge mode, Task 0004, Reality C | `SCRIPTED` (left), `LIVE MODEL RUN · atharvgaur18/actionproof-agent-d` (right) | Press Run. Cut the roughly 70 s wait, with an on-screen "shortened" note, then show the reveal and click the JSON download | "A program that trusts the reply reports done. The trained agent reads the record, finds no payment, and pays before it reports. Every verdict is read from the database." |
+| 1:15–1:45 | Deck slides 2 and 4 | `RECORDED RESULT` | Baselines; P1 bars; TXN H3 | "Trusting the reply falsely completes 0.864. Recovery demonstrations then GRPO: 0.513 to 0.819 on 450 frozen tasks. Far fewer duplicates than bounded retry; the retry test fails." |
+| 1:45–2:15 | Deck slide 5 | `RECORDED RESULT` | What fails; the benchmark's limits; SEL1 | "The script still beats every learned agent. Our review found the benchmark weaker than designed. SEL1 passed, but where hand-off is the only safe action it happens in about four of ten episodes." |
+| 2:15–2:45 | Deck slide 6 | `RECORDED RESULT` (projection) | Impact bars; links | "Trusting the reply costs about ten times the trained agent's projected exposure, and the script cuts it further. Every number has one file and one command." |
 
 ## Fallback paths
 
