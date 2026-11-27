@@ -20,6 +20,7 @@ from actionproof_min.agents import naive, oracle
 from actionproof_min.env import STEP_READ, STEP_TOOL, WRITE_TOOLS
 from actionproof_min.env_s3 import make_env_s3
 from actionproof_min.episode import MAX_NEW_TOKENS, MAX_TURNS, stream_episode
+from actionproof_min.gate_env import SPACE_RULES, gate_env, gate_record
 from actionproof_min.runtime import episode_record_proc
 from actionproof_min.tasks import ProcTask, load_tasks
 
@@ -44,15 +45,28 @@ REALITIES = {
                   "what": "The reply said ok, but only half the amount was committed."},
 }
 SCRIPTED = {"scripted_naive": ("SCRIPTED: acknowledgement-trusting", naive),
+            "scripted_naive_gate": ("SCRIPTED: acknowledgement-trusting, behind the RECOVERY GATE", naive),
             "scripted_oracle": ("SCRIPTED: transaction-aware oracle", oracle)}
 RECORDED_KEYS = {"recorded_base": "base", "recorded_trained": "trained"}
+# The Recovery Gate (RG1; actionproof_min/gate.py = actionproof/recovery_gate/gate.py). Gated live agents use the
+# model of MODEL_OF; gated agents of either kind are listed in GATED.
+MODEL_OF = {"trained_gate": "trained"}
+GATED = {"scripted_naive_gate", "trained_gate"}
+GATE_TAGS = {"gate_read": "read the record before a repeated write",
+             "gate_verify": "read the record before accepting a completed report",
+             "gate_escalate": "handed the purchase order to a human",
+             "gate_finalize": "finished the episode after verifying every step"}
 # The base model is gated: without an HF_TOKEN secret its live runs always fall back to the recording, so say so.
 _BASE_LIVE = "live" if os.environ.get("HF_TOKEN") else "live if the Space has a token; else the labelled recording"
 AGENTS = {"judge": "Judge mode: acknowledgement-trusting script vs trained agent (live)",
           "base": f"Base model: tiny-aya-global ({_BASE_LIVE})", "trained": "Trained agent (live)",
+          "gate_demo": "Gate demo: the acknowledgement-trusting script without and with the Recovery Gate (no GPU)",
+          "trained_gate": "Trained agent behind the Recovery Gate (live)",
+          "gate_compare": "Trained agent alone vs behind the Recovery Gate (2 live runs)",
           "both": f"Compare: base and trained ({_BASE_LIVE})", **{k: v[0] for k, v in SCRIPTED.items()},
           "recorded_trained": "RECORDED: trained agent (no GPU)", "recorded_base": "RECORDED: base model (no GPU)"}
-SIDES = {"judge": ["scripted_naive", "trained"], "both": ["base", "trained"]}
+SIDES = {"judge": ["scripted_naive", "trained"], "both": ["base", "trained"],
+         "gate_demo": ["scripted_naive", "scripted_naive_gate"], "gate_compare": ["trained", "trained_gate"]}
 
 
 def load_recorded() -> dict:
@@ -112,6 +126,28 @@ def scripted_events(policy_key: str, task: ProcTask, reality: str) -> Iterator[d
     t = apply_reality(task, reality)
     env = make_env_s3(t, f"live-{policy_key}-{task.task_id}")
     yield {"type": "start", "system": None, "prompt": t.prompt}
+    if policy_key in GATED:
+        # the policy's calls as it saw them (blocked ones included), with the gate's own calls after each
+        evs: list[dict] = []
+        gate_env(env, t, SPACE_RULES, evs)
+        gated = env.call
+
+        def logged(tool: str, args: dict | None = None, by: str = "agent") -> dict:
+            pos = len(evs)
+            obs = gated(tool, args, by)
+            evs.insert(pos, {"type": "call", "tool": tool, "args": args, "reply": obs})
+            return obs
+        env.call = logged
+        policy(env, t)
+        env.gate_finalize()
+        n = 0
+        for ev in evs:
+            n += ev["type"] == "call"
+            yield {**ev, "turn": max(n, 1)}
+        rec = episode_record_proc(t, env)
+        rec["gate"] = gate_record(env)
+        yield {"type": "end", "ended_by": "report", "rec": rec, "turns": n, "invalid": 0, "n0": 0}
+        return
     policy(env, t)
     for s in env.trace:
         if s.get("by", "agent") == "agent":
@@ -121,10 +157,13 @@ def scripted_events(policy_key: str, task: ProcTask, reality: str) -> Iterator[d
 
 
 def model_events(generate: Callable[[list[dict]], str], task: ProcTask, reality: str,
-                 system_fn: Callable | None = None) -> Iterator[dict]:
-    """The p1_eval episode loop on a reality of the task. `generate` is injectable."""
+                 system_fn: Callable | None = None, gate: bool = False) -> Iterator[dict]:
+    """The p1_eval episode loop on a reality of the task. `generate` is injectable. `gate` puts the Recovery Gate
+    in front of the tools (SPACE_RULES)."""
     t = apply_reality(task, reality)
-    kw = {"system_fn": system_fn} if system_fn else {}
+    kw: dict[str, Any] = {"system_fn": system_fn} if system_fn else {}
+    if gate:
+        kw["gate_rules"] = SPACE_RULES
     yield from stream_episode(t, generate, f"live-{task.task_id}", **kw)
 
 
@@ -141,14 +180,28 @@ def render_reply(obs: dict) -> str:
     return out.replace('"status": "ok"', '<mark class="ack">"status": "ok"</mark>')
 
 
+GATE_ERRORS = {"blocked_by_gate": "blocked, nothing was sent", "not_sent_by_gate": "not sent; the gate read the record instead",
+               "report_rejected_by_gate": "report not accepted"}
+
+
 def render_event(ev: dict) -> str:
     t = ev["type"]
     if t == "call":
         args = json.dumps(ev["args"]) if ev["args"] is not None else "(invalid JSON)"
         is_report = ev["tool"] == "submit_report"
+        gerr = GATE_ERRORS.get((ev["reply"] or {}).get("error"))
         cls = "step report" if is_report else "step"
+        cls += " blocked" if gerr else ""
         head = "Agent report" if is_report else f"Turn {ev['turn']}"
+        note = (f'<div class="gnote">RECOVERY GATE · {_esc(gerr)}: {_esc(ev["reply"].get("detail", ""))}</div>'
+                if gerr else "")
         return (f'<div class="{cls}"><div class="hd">{head}</div>'
+                f'<div class="call"><span class="lbl">call</span> <code>{_esc(ev["tool"])}</code> '
+                f'<code class="args">{html.escape(args, quote=False)}</code></div>{note}'
+                f'<div class="reply"><span class="lbl">reply</span> <code>{render_reply(ev["reply"])}</code></div></div>')
+    if t == "gate_call":
+        args = json.dumps(ev["args"])
+        return (f'<div class="step gate"><div class="hd">Recovery Gate: {_esc(GATE_TAGS.get(ev["tag"], ev["tag"]))}</div>'
                 f'<div class="call"><span class="lbl">call</span> <code>{_esc(ev["tool"])}</code> '
                 f'<code class="args">{html.escape(args, quote=False)}</code></div>'
                 f'<div class="reply"><span class="lbl">reply</span> <code>{render_reply(ev["reply"])}</code></div></div>')
@@ -169,7 +222,8 @@ def recorded_banner(model_key: str, why: str | None = None) -> str:
 
 def banner(agent_key: str, model_id: str | None, stamp: str) -> str:
     if model_id:
-        return (f'<div class="banner live">LIVE MODEL RUN · {_esc(model_id)} · {_esc(stamp)} · '
+        gate = " · behind the RECOVERY GATE" if agent_key in GATED else ""
+        return (f'<div class="banner live">LIVE MODEL RUN · {_esc(model_id)}{gate} · {_esc(stamp)} · '
                 f'greedy, max {MAX_TURNS} turns</div>')
     return f'<div class="banner scripted">{_esc(SCRIPTED[agent_key][0])} · no model, no GPU · {_esc(stamp)}</div>'
 
@@ -286,6 +340,15 @@ def render_reveal(rec: dict, reality: str, side: str = "") -> str:
              f'<div class="tbl"><div class="tt">Acknowledgement against effect, per write</div>'
              f'<table><tr><th>write</th><th>reply status</th><th>committed</th></tr>{att}</table></div>',
              render_decision_record(decision_record(rec, reality))]
+    if rec.get("gate"):
+        g = rec["gate"]
+        rows = "".join(f"<tr><td>{_esc(e['rule'])}</td><td>{_esc(e['action'])}</td><td>{_esc(e['detail'])}</td></tr>"
+                       for e in g.get("log") or [])
+        off = [k for k, v in g["rules"].items() if v is False]
+        parts.append(f'<div class="tbl"><div class="tt">Recovery Gate log ({g["gate_calls"]} calls made by the gate; '
+                     f'rules off here: {_esc(", ".join(off) or "none")}: this simulator has no replica flag)</div>'
+                     f'<table><tr><th>rule</th><th>action</th><th>detail</th></tr>'
+                     f'{rows or "<tr><td colspan=3>the gate let every call through</td></tr>"}</table></div>')
     return "".join(parts)
 
 
@@ -299,7 +362,8 @@ def run_side(side: str, agent_key: str, task: ProcTask, reality: str,
     elif agent_key in RECORDED_KEYS:
         ban, events = recorded_banner(RECORDED_KEYS[agent_key]), recorded_events(RECORDED_KEYS[agent_key], task.task_id, reality)
     else:
-        ban, events = banner(agent_key, MODELS[agent_key], stamp), model_stream(agent_key, task.task_id, reality)
+        ban = banner(agent_key, MODELS[MODEL_OF.get(agent_key, agent_key)], stamp)
+        events = model_stream(agent_key, task.task_id, reality)
     t = apply_reality(task, reality)
     head = f'<div class="req"><div class="hd">Request</div>{_esc(t.prompt)}</div>'
     body = head
@@ -349,7 +413,7 @@ def run_session(agent: str, task_id: str, reality: str, state: dict,
     budget = budget or Budget()
     task = get_task(task_id)
     sides = SIDES.get(agent, [agent])
-    live = [s for s in sides if s in MODELS]
+    live = [s for s in sides if s in MODELS or s in MODEL_OF]
     ui = {"banner_l": "", "left": "", "banner_r": "", "right": "", "reveal": "", "status": ""}
     if live and not budget.charge(state, len(live)):
         ui["status"] = f"Session cap reached: {budget.cap} live model runs per session. Scripted runs are unlimited."
@@ -385,7 +449,7 @@ def export_record(agent: str, task: ProcTask, reality: str, sides: list[str], re
            "decoding": f"greedy, max {MAX_TURNS} turns, {MAX_NEW_TOKENS} new tokens per turn", "sides": []}
     for s in sides:
         r = recs[s]
-        model_key = s if s in MODELS else RECORDED_KEYS.get(s)
+        model_key = s if s in MODELS else MODEL_OF.get(s) or RECORDED_KEYS.get(s)
         out["sides"].append({
             "agent": AGENTS.get(s, s), "kind": kinds.get(s), "model": MODELS.get(model_key) if model_key else None,
             "revision": TRAINED_REVISION if model_key == "trained" else None,
@@ -393,5 +457,6 @@ def export_record(agent: str, task: ProcTask, reality: str, sides: list[str], re
                          if kinds.get(s) == "recorded" else None),
             "calls": [{"tool": x["tool"], "args": x["args"], "reply": x["obs"]} for x in r["trace"]
                       if x.get("by", "agent") == "agent"],
-            "report": r.get("report"), "score": r["score"], "decision_record": decision_record(r, reality)})
+            "report": r.get("report"), "score": r["score"], "decision_record": decision_record(r, reality),
+            "recovery_gate": r.get("gate") or None})
     return out

@@ -15,6 +15,8 @@ and was identical.
 | `actionproof_min/lite_format.py` | `actionproof/rollout/lite_format.py` | none (verbatim) |
 | `actionproof_min/prompts.py` | `actionproof/bench/prompts.py` (`TOOL_RESULT_FORMAT`), `actionproof/integrity/sim/prompts.py` (`PROC_NEUTRAL`) | two constants only |
 | `actionproof_min/tasks.py` | `actionproof/bench/generator_proc.py` (`ProcTask`, `load_tasks`) | subset; also reads `.json` lists |
+| `actionproof_min/gate.py` | `actionproof/recovery_gate/gate.py` (RG1, final sprint) | import paths only; written by `scripts/vendor_gate.py`, checked by `tests/recovery_gate/test_space_vendor.py` |
+| `actionproof_min/gate_env.py` | `actionproof/recovery_gate/env.py` | instance-level wrapper for the proc2 env; freshness rule off (`SPACE_RULES`): this simulator's reads have no `consistent` flag |
 | `actionproof_min/episode.py` | `scripts/p1_eval.py` (`start`, `tool_text`, `run`) and `actionproof/rollout/episode.py` (`system_prompt`) | rewritten as a single-episode generator; see deviations |
 
 `scripts/p1_eval.py` is in the main checkout only (sha256 `5e230b42707853c2eda89e51802d0e3ea2aa5964570d36cb0001baa887efc3d8`).
@@ -42,3 +44,7 @@ Every workflow in the split includes `pay`. Selection used no model outputs.
 Built by replacing `meta.faults` (and clearing `never_commit`) with a single fault on the first `pay_supplier`
 call: none; `phantom`; `partial` with `ratio` 0.5; `lost_ack`. The environment is `S3ProcEnv` (`make_env_s3`), as in
 `p1_eval.run`.
+
+## Recovery Gate in `episode.py` (final sprint)
+
+`stream_episode(..., gate_rules=...)` puts the gate in front of the tools, yields a `gate_call` event for every call the gate makes itself, finalises an episode that ended without a report, and attaches `rec["gate"]`. With `gate_rules=None` (every pre-existing option) the loop is unchanged.

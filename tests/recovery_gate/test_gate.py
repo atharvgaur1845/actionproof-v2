@@ -155,11 +155,38 @@ def test_read_before_retry_and_no_resend_of_a_held_step():
              and not t.meta["txn"].get("surface"))
     e = env_for(t)
     assert e.call("pay_supplier", pay_args(t))["error"] == "timeout"
-    r = e.call("pay_supplier", pay_args(t, "K2"))
-    assert r["error"] == "not_sent_by_gate" and len(agent_attempts(e, "pay_supplier")) == 1
-    assert r["record"][0]["tool"] == "list_payments"
+    r = e.call("pay_supplier", pay_args(t, "K2"))  # the gate reads first: the lost-ack payment is in effect
+    assert r["error"] == "blocked_by_gate" and r["rule"] == "retry" and len(agent_attempts(e, "pay_supplier")) == 1
+    assert [s["tool"] for s in e.trace if s.get("gate") == "gate_read"] == ["list_payments"]
     r = e.call("pay_supplier", pay_args(t, "K3"))
     assert r["error"] == "blocked_by_gate" and r["rule"] == "retry" and len(agent_attempts(e, "pay_supplier")) == 1
+
+
+def test_read_before_retry_sends_the_write_when_the_record_shows_it_absent():
+    t = find(lambda t: fault(t).get("kind") == "phantom" and fault(t).get("tool") == "pay_supplier"
+             and t.meta["txn"]["regime"] == "standard" and not t.meta["txn"].get("surface"))
+    e = env_for(t)
+    assert e.call("pay_supplier", pay_args(t))["status"] == "ok"  # phantom
+    assert e.call("pay_supplier", pay_args(t))["status"] == "ok"  # read first (absent), then sent with the same key
+    assert len(agent_attempts(e, "pay_supplier")) == 2 and any(s.get("gate") == "gate_read" for s in e.trace)
+
+
+def test_partial_payment_refund_then_repay_with_a_new_key_completes():
+    """The dev-pilot failure (task 1900): after a refund the repay must not be bounced back to the agent."""
+    t = find(lambda t: fault(t).get("kind") == "partial" and fault(t).get("tool") == "pay_supplier"
+             and t.meta["txn"]["regime"] == "standard" and not t.meta["txn"].get("surface")
+             and t.meta["requested"] == ["pay", "post"])
+    i = po(t)
+    e = env_for(t)
+    e.call("pay_supplier", pay_args(t, "pay-1"))
+    obs = e.call("list_payments", {"po_id": i.po_id})
+    pid = obs["payments"][0]["payment_id"]
+    assert e.call("refund_payment", {"payment_id": pid})["status"] == "ok"
+    assert e.call("pay_supplier", pay_args(t, "pay-1"))["rule"] == "repair"  # acknowledged key: would pay nothing
+    assert e.call("pay_supplier", pay_args(t, "pay-2"))["status"] == "ok"
+    e.call("post_journal_entry", {"po_id": i.po_id, "amount_cents": i.amount_cents, "idempotency_key": "post-1"})
+    assert e.call("submit_report", {"status": "completed", "summary": "done"})["status"] == "ok"
+    assert e.reports[0]["status"] == "completed"
 
 
 def test_no_retry_ablation_sends_the_duplicate():
@@ -237,6 +264,6 @@ def test_alias_surface_messages_use_the_surface_names():
     args = pay_args(t)
     assert e.call(pay, args)["error"] == "timeout"
     r = e.call(pay, {**args, "idempotency_key": "K2"})
-    assert r["error"] == "not_sent_by_gate"
+    assert r["error"] == "blocked_by_gate"
     assert e.c2t["list_payments"] in r["detail"] and "list_payments" not in r["detail"]
-    assert r["record"][0]["tool"] == e.c2t["list_payments"] and len(agent_attempts(e, "pay_supplier")) == 1
+    assert e.c2t["pay_supplier"] in r["detail"] and len(agent_attempts(e, "pay_supplier")) == 1

@@ -10,9 +10,12 @@ Rules (each can be switched off for the ablations):
   verify    A "completed" report needs, for every requested step, a read after the step's last write that shows the
             step in effect. The gate makes the missing reads. A read that does not show it rejects the report, with
             the record attached; after `max_rejections` rejections the gate hands the PO to a human.
-  retry     A second write for a step is sent only after a read of that step's record since the last write; the gate
-            makes that read in place of the write. A write for a step that the current record shows in effect is
-            not sent.
+  retry     A second write for a step is sent only after a read of that step's record since the last write. If there
+            is none, the gate makes that read first and then decides on the proposed write with the other rules: it
+            is sent if the record allows it (for example, the step is absent) and blocked otherwise. A write for a
+            step that the current record shows in effect is not sent. After a reply other than ok (a timeout may
+            still take effect later), a retry must reuse that request's idempotency key, so that the service can
+            deduplicate a late commit.
   fresh     Reads are served from the primary copy (`consistent=true`), so stale replica views never count as
             evidence. Off: reads go as the agent sent them and the gate's own reads use the default (replica).
   repair    A partial receipt is topped up by the missing quantity only. A partial payment is refunded before a
@@ -140,6 +143,29 @@ class Gate:
         elif tool == "submit_report" and obs.get("status") == "ok":
             self.finished = True
 
+    def _describe(self, step: str) -> str:
+        """What the current record of a step shows, in words the agent can act on."""
+        r, I, N = self.steps[step].read, self.intent, self.N
+        if r is None:
+            return "not read"
+        seen, obs = r["seen"], r["obs"]
+        if seen == "unavailable":
+            return f"{N(STEP_READ[step])} is unavailable"
+        if seen == "held":
+            return "in effect"
+        if step == "pay":
+            live = _live(obs)
+            ids = ", ".join(f"{p.get('payment_id')} ({p.get('amount_cents')} cents)" for p in live)
+            if seen == "absent":
+                return "no live payment"
+            if seen == "partial":
+                return f"one live payment, {ids}, which is not the approved {I.amount_cents} cents: refund it, then pay"
+            return f"{len(live)} live payments: {ids}; keep one of {I.amount_cents} cents and refund the others"
+        if step == "receive":
+            net = _net_received(obs)
+            return f"{net} of {I.qty} received" + (f"; {I.qty - net} missing" if 0 <= net < I.qty else "")
+        return {"absent": "no record of it", "partial": "only part of it", "other": "more than one record"}.get(seen, seen)
+
     def _confirmed(self, step: str) -> bool:
         r = self.steps[step].read
         return r is not None and r["seen"] == "held"
@@ -222,16 +248,28 @@ class Gate:
                                f"a human with {N('escalate_to_human')}.")
         if R.retry and st.writes:
             if st.read is None:
-                obs = self._run(execute, STEP_READ[step], self._read_args(step), "gate_read")
-                detail = (f"{N(tool)} was already sent for {I.po_id} (last reply: {st.writes[-1]['ack']}), and its "
-                          f"record was not read since. The gate read {rd} instead of sending the request again. "
-                          f"Decide from this record.")
-                self._note("retry", "read_instead", (tool, args), detail)
-                return {"status": "error", "error": "not_sent_by_gate", "rule": "read_before_retry", "detail": detail,
-                        "record": [{"tool": STEP_READ[step], "result": obs}]}
+                # read first, then decide on the proposed write with the record in hand
+                self._run(execute, STEP_READ[step], self._read_args(step), "gate_read")
+                self._note("retry", "read_first", (tool, args), f"{N(tool)} was already sent (last reply: "
+                           f"{st.writes[-1]['ack']}) and its record was not read since; the gate read {rd} first: "
+                           f"{self._describe(step)}")
+                if R.escalate and self._unresolvable(step):
+                    return self._block("escalate", tool, args,
+                                       f"{N(tool)} was already sent (reply: {st.writes[-1]['ack']}) and {rd} is "
+                                       f"unavailable, so its effect cannot be confirmed. Do not send it again; hand "
+                                       f"the purchase order to a human with {N('escalate_to_human')}.")
+                if st.read is None:  # the read failed for another reason: nothing to decide from
+                    return self._block("retry", tool, args, f"{rd} could not be read, so the request was not sent "
+                                                            f"again.")
             if st.read["seen"] == "held":
                 return self._block("retry", tool, args, f"{rd} (call {st.read['n']}) shows this step in effect. "
                                                         f"{N(tool)} was not sent again.")
+            last = st.writes[-1]
+            if last["ack"] != "ok" and last["key"] is not None and args.get("idempotency_key") != last["key"]:
+                return self._block("retry", tool, args,
+                                   f"The earlier {N(tool)} (key {last['key']!r}) got no ok reply ({last['ack']}) and may "
+                                   f"still take effect. Resend it with the same {N('idempotency_key')} "
+                                   f"{last['key']!r}, so the service can deduplicate it. Nothing was sent.")
         if R.repair:
             seen = st.read["seen"] if st.read else None
             if step == "receive":
@@ -250,8 +288,8 @@ class Gate:
                                    f"the approved amount. Refund it with {N('refund_payment')} before paying the full "
                                    f"amount. Nothing was sent.")
             if step == "pay" and seen == "other":
-                return self._block("repair", tool, args, f"{rd} shows {len(_live(st.read['obs']))} live payments. "
-                                                         f"Refund the extra ones; do not pay again. Nothing was sent.")
+                return self._block("repair", tool, args, f"{rd} shows {self._describe('pay')}. Do not pay again. "
+                                                         f"Nothing was sent.")
             if step == "pay" and st.refunded and args.get("idempotency_key") is not None and any(
                     w["key"] == args.get("idempotency_key") and w["ack"] == "ok" for w in st.writes):
                 return self._block("repair", tool, args,
@@ -315,7 +353,7 @@ class Gate:
         bad = self._verify(execute)
         if not bad:
             return self._run(execute, "submit_report", args, "agent")
-        what = "; ".join(f"{N(STEP_READ[s])} shows {v}" for s, v in bad.items())
+        what = "; ".join(f"{N(STEP_TOOL[s])}: {N(STEP_READ[s])} shows {self._describe(s)}" for s in bad)
         if R.escalate and any(v == "unavailable" for v in bad.values()):
             return self._escalate(execute, f"completion cannot be confirmed ({what}).", ("submit_report", args))
         self.rejections += 1

@@ -111,13 +111,13 @@ except Exception as _e:  # diagnostics only
 
 @spaces.GPU(duration=120)
 def _gpu_episode(model_key: str, task_id: str, reality: str):
-    gen = _GENS[model_key]
+    gen = _GENS[core.MODEL_OF.get(model_key, model_key)]
     gen.cuda()
-    yield from core.model_events(gen, core.get_task(task_id), reality)
+    yield from core.model_events(gen, core.get_task(task_id), reality, gate=model_key in core.GATED)
 
 
 def model_stream(model_key: str, task_id: str, reality: str):
-    _GENS[model_key].load_cpu()  # CPU load happens outside the GPU window
+    _GENS[core.MODEL_OF.get(model_key, model_key)].load_cpu()  # CPU load happens outside the GPU window
     yield from _gpu_episode(model_key, task_id, reality)
 
 
@@ -153,6 +153,9 @@ table.kv th { width: 150px; color: var(--muted); font-weight: 600; }
 .cmp { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 16px; }
 .cmp h4 { margin: 8px 0 0 0; }
 .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.step.gate { border-left: 3px solid #0f766e; background: #f0faf8; }
+.step.blocked { border-left: 3px solid #b42318; }
+.gnote { color: #0f766e; font-size: 12.5px; font-weight: 600; margin: 2px 0; }
 @media (max-width: 760px) { .cols, .cmp, .grid2 { grid-template-columns: 1fr; grid-auto-flow: row; } }
 """
 
@@ -173,7 +176,10 @@ benchmark it still beats every learned agent.</p>
 <li>Watch the timeline: the same request and the same <code>"status": "ok"</code> reply for both.</li>
 <li>Read the reveal below: the database rows, the verifier's verdict per step, and each agent's decision record. Download the run as JSON.</li></ol>
 <div class="legend"><span style="background:#1f5fbf;color:#fff">LIVE MODEL RUN</span><span style="border:1.5px solid #1c2330">SCRIPTED</span><span style="background:#fdf1d6;border:1.5px dashed #8a5a00">RECORDED MODEL RUN</span>
-If the GPU is unavailable, the banner says so and shows the recorded run of the same model, task and reality.</div></div>
+If the GPU is unavailable, the banner says so and shows the recorded run of the same model, task and reality.</div>
+<b>New: the Recovery Gate.</b> A small evidence-only controller between an agent and the tools: it verifies before a
+report is accepted, reads before a repeated write, blocks wrong repairs and hands off when a record cannot be read.
+Pick <i>Gate demo</i> (no GPU, a few seconds) to see the same reply-trusting script without and with it.</div>
 """
 
 

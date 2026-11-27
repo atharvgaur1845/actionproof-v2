@@ -51,12 +51,18 @@ def start(env: Any, task: Any, system_fn: Callable[[Any, str], str] = system_pro
 
 def stream_episode(task: Any, generate: Callable[[list[dict]], str], rollout_id: str,
                    max_turns: int = MAX_TURNS, max_tokens: int = MAX_NEW_TOKENS, ctx: int = CTX,
-                   system_fn: Callable[[Any, str], str] = system_prompt) -> Iterator[dict]:
-    """Yield events: start, text (raw model output), call (tool, args, reply), end (carries the scored record).
+                   system_fn: Callable[[Any, str], str] = system_prompt, gate_rules: Any = None) -> Iterator[dict]:
+    """Yield events: start, text (raw model output), call (tool, args, reply), gate_call (a call the Recovery Gate
+    made itself; only with `gate_rules`), end (carries the scored record).
 
     Events are plain dicts (safe to pass out of a ZeroGPU worker). `system_fn` exists so tests can run without
-    transformers; the app always uses the default."""
+    transformers; the app always uses the default. With `gate_rules`, the Recovery Gate (actionproof_min/gate.py)
+    sits in front of the tools, and an episode that ends without a report is finalised by the gate."""
     env = make_env_s3(task, rollout_id)
+    gate_events: list[dict] = []
+    if gate_rules is not None:
+        from actionproof_min.gate_env import gate_env
+        gate_env(env, task, gate_rules, gate_events)
     conv = start(env, task, system_fn)
     n0 = len(env.trace)
     token_len = getattr(generate, "token_len", None)
@@ -86,9 +92,18 @@ def stream_episode(task: Any, generate: Callable[[list[dict]], str], rollout_id:
             invalid += obs.get("error") in ("unknown_tool", "invalid_arguments")
             res.append(tool_text(name, obs))
             yield {"type": "call", "turn": turns, "tool": name, "args": args, "reply": obs}
+            while gate_events:
+                yield {**gate_events.pop(0), "turn": turns}
         conv.append({"role": "user", "content": "\n\n".join(res)})
         if env.done:
             ended_by = "report"
             break
+    if gate_rules is not None:
+        env.gate_finalize()
+        while gate_events:
+            yield {**gate_events.pop(0), "turn": turns}
     rec = episode_record_proc(task, env)
+    if gate_rules is not None:
+        from actionproof_min.gate_env import gate_record
+        rec["gate"] = gate_record(env)
     yield {"type": "end", "ended_by": ended_by, "rec": rec, "turns": turns, "invalid": invalid, "n0": n0}

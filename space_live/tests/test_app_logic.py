@@ -275,3 +275,53 @@ def test_recorded_option_is_labelled_and_hides_state_until_end(recorded, reality
 def test_recorded_runs_need_no_budget(recorded):
     state = {"runs": core.SESSION_CAP}
     assert list(core.run_session("recorded_base", "p1_test_full-0003", "Reality A", state, None))[-1]["reveal"]
+
+
+# ------------------------------------------------------------------ Recovery Gate (RG1)
+def _final(agent: str, reality: str, stream=None):
+    last = None
+    for ui in core.run_session(agent, TASK_IDS[0], reality, {}, stream):
+        last = ui
+    return last
+
+
+@pytest.mark.parametrize("reality", ["Reality C", "Reality D"])
+def test_gate_demo_removes_the_false_success(reality):
+    sides = _final("gate_demo", reality)["export"]["sides"]
+    plain, gated = sides
+    assert plain["score"]["false_success"] and not gated["score"]["false_success"]
+    assert gated["report"]["status"] == "escalated" and gated["recovery_gate"]["log"]
+    assert plain["recovery_gate"] is None
+
+
+@pytest.mark.parametrize("reality", REALITY_KEYS)
+def test_gate_demo_never_loses_a_success(reality):
+    plain, gated = _final("gate_demo", reality)["export"]["sides"]
+    assert gated["score"]["vsc"] >= plain["score"]["vsc"]
+
+
+def test_gated_model_episode_streams_gate_calls_and_finalises():
+    """A model that pays once and claims completion on a phantom write: the gate reads, rejects, then hands off."""
+    task = core.get_task(TASK_IDS[0])
+    po = next(p for p in task.initial_state["pos"] if p["po_id"] == task.meta["po_id"])
+    script = iter([json.dumps([{"tool_name": "pay_supplier", "parameters": {"po_id": po["po_id"],
+                                "amount_cents": po["amount_cents"], "idempotency_key": "k1"}}])] +
+                  [json.dumps([{"tool_name": "submit_report", "parameters": {"status": "completed",
+                                                                            "summary": "paid"}}])] * 20)
+    evs = list(core.model_events(lambda conv: next(script), task, "Reality C", system_fn=lambda e, b: b, gate=True))
+    kinds = [e["type"] for e in evs]
+    assert "gate_call" in kinds
+    end = evs[-1]
+    assert end["rec"]["report"]["status"] == "escalated" and not end["rec"]["score"]["false_success"]
+    assert end["rec"]["gate"]["log"]
+    assert any(e["type"] == "call" and (e["reply"] or {}).get("error") == "report_rejected_by_gate" for e in evs)
+    html_ = "".join(core.render_event(e) for e in evs)
+    assert "Recovery Gate" in html_ and "RECOVERY GATE" in html_
+
+
+def test_gated_live_agent_has_no_recorded_fallback():
+    def broken(model_key, task_id, reality):
+        raise RuntimeError("no GPU")
+        yield  # pragma: no cover
+    with pytest.raises(RuntimeError):
+        _final("trained_gate", "Reality C", broken)

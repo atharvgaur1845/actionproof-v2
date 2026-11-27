@@ -9,7 +9,8 @@ The Recovery Gate is a small runtime controller between a tool-using agent and t
 agent proposes one call at a time. For each call, the gate does one of five things:
 - **send** the call as proposed;
 - **send it changed**: a read is sent with `consistent=true`;
-- **read instead**: it sends a read of the step's record in place of a repeated write, and returns that record;
+- **read first**: before a repeated write it sends a read of the step's record, then decides on the write with the
+  record in hand (send it, or block it with the reason);
 - **block** the call: nothing is sent, and the agent gets a reason;
 - **hand off**: it calls `escalate_to_human` with an evidence bundle, then reports `escalated`.
 
@@ -47,8 +48,9 @@ A request that was rejected before reaching a service (invalid arguments, unknow
 | Rule | Trigger | Action | Principle (prompt §4) |
 |---|---|---|---|
 | intent (always on) | A write names another PO, another amount, or a step the task does not ask for | Block | Intent binding |
-| retry | A second write for a step, with no read of its record since the last write | Read instead; return the record | Acknowledgement non-authority; read-before-retry |
+| retry | A second write for a step, with no read of its record since the last write | Read first, then apply the rules below to the write | Acknowledgement non-authority; read-before-retry |
 | retry | A write for a step whose current record shows it in effect | Block | Duplicate protection |
+| retry | A retry after a reply other than ok that uses a different idempotency key | Block: resend with the same key, so a late commit is deduplicated | Duplicate protection (stable keys) |
 | fresh | Any read | Send with `consistent=true` (the primary copy) | Evidence freshness |
 | repair | A receipt whose quantity is not the missing quantity (approved quantity minus net received) | Block, stating the missing quantity | Partial-commit reasoning |
 | repair | A payment while a live partial payment exists, or while two or more live payments exist | Block: refund first | Partial-commit reasoning; duplicate protection |
@@ -59,9 +61,9 @@ A request that was rejected before reaching a service (invalid arguments, unknow
 | verify | A `completed` report | Read every requested step not confirmed since its last write. All in effect: send the report. Otherwise reject it, with the records, at most twice; then hand off. Unavailable: hand off | Post-action verification |
 | escalate + verify | The agent stops without a report | Verify; complete if every step reads in effect, otherwise hand off | Post-action verification |
 
-The thresholds are the only free choices: two rejected reports before a hand-off; reads always consistent. Both were
-fixed before the dev pilot (task 1900) and not tuned afterwards. Any change after the pilot is listed in
-`PREREGISTRATION_RG1.md` §6.
+The thresholds are the only free choices: two rejected reports before a hand-off; reads always consistent. Neither
+was tuned. The dev pilot (task 1900, txn_dev) changed two behaviours and added one rule; all three are listed in
+`PREREGISTRATION_RG1.md` §6 with the evidence that motivated them.
 
 ## 4. Accounting
 
