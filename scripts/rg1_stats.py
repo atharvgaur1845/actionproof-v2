@@ -24,7 +24,8 @@ Registered secondary comparisons (estimates and 95% intervals, no test, no multi
 - S1 RG vs the scripted reference B4 (one episode per task) on rg1_test: VTC (resolvable), STR, unsafe, FCR; overall
   and by group (B4 runs on canonical tool names even in the renamed-surface groups).
 - S2 rule ablations, D seed 0 (AB_<rule>_D_s0 vs RG_D_s0): FCR, DMR, unsafe, VTC, STR, escalation (unresolvable).
-- S3 other agents with and without the gate: base model, Dw_aug seed 0, scripted B0, B1, B3.
+- S3 other agents with and without the gate: base model, Dw_aug seed 0, SEL1's SEL seed 0, Aya Expanse 8B
+  (untrained), scripted B0, B1, B3.
 - S4 txn_test replication: RG_D_s{k}__txn_test vs TXN1's D_s{k} episodes (results/txn); txn_test outcomes for D
   were known before RG1, so this is descriptive.
 Descriptive tables for every tag present: TXN metrics with numerators and denominators (truth.summarise), by group
@@ -201,7 +202,8 @@ def main() -> None:
                            "escalated_unresolvable": compare([ab], [full0], unres, "escalated", boots["U"])}
     # S3: other agents with and without the gate
     res["S3"] = {}
-    for gate_tag, plain_tag in (("RG_base", "NG_base"), ("RG_Dwaug_s0", "NG_Dwaug_s0"), ("B0_gate", "B0"),
+    for gate_tag, plain_tag in (("RG_base", "NG_base"), ("RG_Dwaug_s0", "NG_Dwaug_s0"), ("RG_SEL_s0", "NG_SEL_s0"),
+                                ("RG_aya8b", "NG_aya8b"), ("B0_gate", "B0"),
                                 ("B1_gate", "B1"), ("B3_gate", "B3")):
         a, b = load(gate_tag, split), load(plain_tag, split)
         if a is None or b is None or len(a) != len(meta) or len(b) != len(meta):
