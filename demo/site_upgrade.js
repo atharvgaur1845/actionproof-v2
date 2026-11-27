@@ -151,7 +151,17 @@
   `<tr><td colspan="5"><b>H3 as a family: ${T.supported?"supported":"not supported"}</b> (all four tests had to pass; ${T.n_in} in-distribution tasks in ${T.clusters} template clusters).</td></tr>`;
  $("#u-txnh5").innerHTML=`<tr><th>No read can settle the outcome</th><th>Escalates (the safe action)</th><th>Acts unsafely</th></tr>`+
   T.h5.map(r=>`<tr><td>${esc(r.name)}</td><td>${pc(r.cer)}</td><td class="${r.unsafe>0.1?"dn":""}">${pc(r.unsafe)}</td></tr>`).join("");
- $("#u-txn-src").innerHTML=`Source: <b>${esc(T.source)}</b> · scripts/txn_stats.py (run once, task 1739) · clustered bootstrap B = 10,000, Holm over 4 · supported only if the interval excludes 0 in D's favour and completion is non-inferior (margin 0.05). Escalation never appeared in the training demonstrations.`})();
+ $("#u-txn-src").innerHTML=`Source: <b>${esc(T.source)}</b> · scripts/txn_stats.py (run once, task 1739) · clustered bootstrap B = 10,000, Holm over 4 · supported only if the interval excludes 0 in D's favour and completion is non-inferior (margin 0.05). Escalation never appeared in D's training demonstrations; SEL1, the next section, adds them.`})();
+(function(){const L=S.upgrade&&S.upgrade.sel1;if(!L||L.status!=="done"||!document.getElementById("sel1"))return;
+ document.getElementById("sel1").hidden=false;
+ const pc=x=>x==null?"—":(x*100).toFixed(1)+"%",pp=x=>x==null?"—":(x>=0?"+":"−")+Math.abs(x).toFixed(3),f3=x=>x==null?"—":x.toFixed(3);
+ $("#u-sel1").innerHTML=`<tr><th>Registered test</th><th>SEL → CTL</th><th>Difference [95% CI]</th><th>Holm p</th><th>Verdict</th></tr>`+
+  L.rows.map(r=>`<tr><td>${esc(r.name)}</td><td>${f3(r.sel)} vs ${f3(r.ctl)}</td><td class="${r.ci95[0]>0?"up":""}">${pp(r.diff)}<small>[${pp(r.ci95[0])}, ${pp(r.ci95[1])}] · seeds ${r.seed_diffs.map(pp).join(", ")}</small></td><td>${r.p_holm==null?"bound "+r.bound:r.p_holm.toFixed(4)}</td><td>${r.supported?(r.id==="H2"?"passes":"<b>supported</b>"):"not supported"}</td></tr>`).join("")+
+  `<tr><td colspan="5"><b>SEL1 as registered (H1, H3 and H4 must all hold): ${L.supported?"supported":"not supported"}.</b> The scripted selective rule scores J = 1; always-escalate and never-escalate both score 0.</td></tr>`;
+ $("#u-sel1g").innerHTML=`<tr><th>Sealed test group (episodes, 3 seeds)</th><th>Should it hand off?</th><th>Hands off: SEL / CTL</th><th>Acts unsafely: SEL / CTL</th></tr>`+
+  L.groups.map(g=>`<tr><td>${esc(g.name)}</td><td>${g.should?"yes":"no"}</td><td>${pc(g.sel_esc.rate)} / ${pc(g.ctl_esc.rate)}<small>${g.sel_esc.num} / ${g.ctl_esc.num} of ${g.sel_esc.den}</small></td><td class="${g.sel_unsafe.rate>0.2?"dn":""}">${pc(g.sel_unsafe.rate)} / ${pc(g.ctl_unsafe.rate)}<small>${g.sel_unsafe.num} / ${g.ctl_unsafe.num} of ${g.sel_unsafe.den}</small></td></tr>`).join("");
+ const s2=L.seed2_receive;
+ $("#u-sel1-src").innerHTML=`Source: <b>${esc(L.source)}</b> · scripts/sel1_stats.py (run once, task 1812) · cluster bootstrap B = 10,000, Holm over H1–H3; H4 non-inferiority. <b>Weak spot:</b> on the held-out step, seed 2 hands off in ${s2.esc} of ${s2.den} episodes and acts unsafely in ${s2.unsafe} (its control: ${s2.ctl_unsafe}). The adapters: atharvgaur18/actionproof-sel1-adapters.`})();
 (function(){const P=S.upgrade&&S.upgrade.p4;if(!P||P.status!=="done"||!document.getElementById("u-p4"))return;
  document.getElementById("u-p4wrap").hidden=false;
  const pc=x=>(x*100).toFixed(1)+"%",pp=x=>(x>=0?"+":"−")+Math.abs(x*100).toFixed(1);

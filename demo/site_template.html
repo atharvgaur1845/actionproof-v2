@@ -637,6 +637,17 @@ pre.cmd{font:13px/22px var(--mono);background:var(--dk);color:#E9E7DF;padding:18
  <div class="src pad" id="u-txn-src"></div>
 </section>
 
+<!-- ============ 09S SELECTIVE ESCALATION (SEL1) ============ -->
+<section id="sel1" hidden>
+ <div class="shead rv"><div class="snum">09S</div><div><div class="cap">Selective escalation · registered experiment SEL1</div>
+  <h2 class="stitle">Hand off only when <span class="ser">nothing can tell.</span></h2>
+  <p class="lede">On the TXN test the trained agents almost never handed a case to a person when no read could settle the outcome. SEL1 asks whether demonstrations can teach that, selectively: hand off when the outcome stays unobservable, but re-read and finish when an outage is only transient. Two arms continue from the same Dw_aug warm starts (three seeds): <b>SEL</b> sees demonstrations of a scripted selective rule; <b>CTL</b> sees the same number of ordinary demonstrations. Supervised training only; no RL.</p></div></div>
+ <div class="kind pad rv"><span class="kb m">Measured</span><span>Registered before any training (<span class="mono">PREREGISTRATION_SEL1.md</span>); the sealed test split adds a held-out step, held-out workflows, a transient outage of held-out length and an audit-log-only outage. Run once (task 1812).</span></div>
+ <table class="wft rv" id="u-sel1"></table>
+ <table class="wft rv" id="u-sel1g"></table>
+ <div class="src pad" id="u-sel1-src"></div>
+</section>
+
 <!-- ============ 10 WHY THE UPDATE CANNOT SEE THE STAKES (theory) ============ -->
 <section id="theory">
  <div class="shead rv"><div class="snum">10</div><div><div class="cap">Why · exact theory and a registered simulation</div>

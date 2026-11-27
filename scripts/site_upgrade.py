@@ -298,9 +298,42 @@ def theory() -> dict:
                      "regret": _r(v["median_regret"])} for k, v in sorted(d["th1"].items(), key=lambda kv: -kv[1]["bayes_agreement"])]}
 
 
+def sel1() -> dict:
+    """SEL1 (registered): SEL vs CTL on escalation (H1, H2), selectivity J (H3) and resolvable VTC (H4), plus the
+    per-group escalation and unsafe rates (descriptive), from the task-1812 output."""
+    src = "results/sel1/sel1_summary.json"
+    d = _j(src)
+    if not d or "SEL1_supported" not in d:
+        return {"status": "running", "source": src}
+    names = {"H1": "Hands off when no read can settle it: locked TXN test (60 tasks)",
+             "H2": "Same, held-out step and workflows (80 tasks; reported on its own)",
+             "H3": "Selectivity J: hand-off on unresolvable minus hand-off on degraded-but-resolvable (200 tasks)",
+             "H4": "No cost: verified completion on resolvable TXN tasks (380 tasks; non-inferiority)"}
+    # 6 decimals: the page shows 3, and rounding twice (4 then 3) can differ from the documents (0.95848 -> 0.959)
+    rows = [{"id": h, "name": names[h], "sel": _r(d[h]["J_SEL" if h == "H3" else "SEL"], 6),
+             "ctl": _r(d[h]["J_CTL" if h == "H3" else "CTL"], 6), "diff": _r(d[h]["diff"], 6),
+             "ci95": [_r(c, 6) for c in d[h]["ci95"]], "p_holm": _r(d[h].get("p_holm")), "bound": d[h].get("bound"),
+             "seed_diffs": [_r(x, 6) for x in d[h]["seed_diffs"]], "supported": d[h]["supported"]} for h in ("H1", "H2", "H3", "H4")]
+    st = d["descriptive"]["sel1_test"]
+
+    def pooled(arm: str, g: str, m: str) -> dict:
+        num = sum(st[f"{arm}_s{k}"][g][m]["num"] for k in range(3))
+        den = sum(st[f"{arm}_s{k}"][g][m]["den"] for k in range(3))
+        return {"num": num, "den": den, "rate": _r(num / den)}
+    groups = [("u_in", "No read can settle it, as in training", True), ("u_receive", "Same, held-out step (receive)", True),
+              ("u_ood_wf", "Same, held-out workflows", True), ("t2", "Transient outage, held-out length", False),
+              ("audit_down", "Only the audit log is down", False)]
+    grp = [{"name": n, "should": should, "sel_esc": pooled("SEL", g, "escalated"), "ctl_esc": pooled("CTL", g, "escalated"),
+            "sel_unsafe": pooled("SEL", g, "unsafe"), "ctl_unsafe": pooled("CTL", g, "unsafe")} for g, n, should in groups]
+    s2 = st["SEL_s2"]["u_receive"]
+    return {"status": "done", "source": src, "rows": rows, "supported": d["SEL1_supported"], "groups": grp,
+            "seed2_receive": {"esc": s2["escalated"]["num"], "unsafe": s2["unsafe"]["num"], "den": s2["escalated"]["den"],
+                              "ctl_unsafe": st["CTL_s2"]["u_receive"]["unsafe"]["num"]}}
+
+
 def build() -> dict:
     return {"r1": r1(), "r1t": r1t(), "j1": j1(), "roi": roi(), "p1": p1(), "p2": p2(), "p3": p3(), "theory": theory(),
-            "txn": txn(), "p4": p4(), "p5": p5(), "b1api": b1api()}
+            "txn": txn(), "sel1": sel1(), "p4": p4(), "p5": p5(), "b1api": b1api()}
 
 
 if __name__ == "__main__":
