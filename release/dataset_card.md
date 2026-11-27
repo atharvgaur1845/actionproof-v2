@@ -52,6 +52,7 @@ huggingface-cli download atharvgaur18/actionproof-traces --repo-type dataset --l
 | `results/b1/` | B1: prompted, untrained models on the P1 test (Aya Expanse 8B/32B; supplementary Qwen3-235B-A22B and gpt-oss-120b) | `scripts/b1_eval.py`, `scripts/b1_api_eval.py` |
 | `results/txn/` | The locked TXN test (440 tasks): every scripted policy, prompted and trained agent; registered `stats__txn_test.json` | `scripts/txn_eval.py`, `scripts/txn_stats.py` |
 | `data/rft/sel1_{sel,ctl}_rows.jsonl`, `data/rft/sel1_rows.stats.json` | The SEL1 training rows of both arms, as hashed before training (`results/sel1_hashes.json`, key `data`) | `actionproof/sel1/build.py` (task 1800) |
+| `data/rft/p4_aug_rows.jsonl` | Dw_aug's training rows (P4), from which SEL1 samples its 2,000 replay rows (hash in `results/sel1_hashes.json`) | `actionproof/p4/build.py` (task 1710) |
 | `results/sel1/`, `data/bench/proc/sel1_*.jsonl` | SEL1 (selective escalation, registered): SEL and CTL seeds 0-2, their parents and scripted references on `sel1_test` and `txn_test`; the registered `sel1_summary.json`; the SEL1 splits (hashes in `results/sel1_hashes.json`) | `scripts/sel1_eval.py`, `scripts/sel1_policies_eval.py`, `scripts/sel1_stats.py` |
 
 Splits (task counts): train full 240, pp 90, rec 300; dev full 90, rec 90; test full 120, pp 90 (unseen payment

@@ -94,3 +94,14 @@ Branch `stage2-superiority-sprint` (from `submission-candidate` @ `7ae863f`). Lo
   run at 05:44. They are now committed; the training rows are released in the traces dataset (task 1850).
 - `research_audit/FINAL_REDTEAM_REVIEW.md`: the three reviews and a 35-row resolution table.
 - **Open, author only:** push and merge; share or export the deck; record the video; set the `HF_TOKEN` secret.
+
+## Phase F (part 2): final clean room and freeze (11:24 IST)
+- **Final clean room** (task 1860) at 319a383, after every hostile-review fix:
+  - smoke check PASS in 27 s;
+  - `verify_numbers.sh` PASS in 375 s, with identical results and 866 numbers (0 failures);
+  - the post-hoc validity analysis recomputed byte-identically.
+- **Task 1861.** It released `data/rft/p4_aug_rows.jsonl`, SEL1's replay source, which had never been released.
+  In the same clean clone, every SEL1-registered training file, downloaded anonymously, matches its pre-training hash.
+- **Delivered:** `docs/submission/REPRODUCIBILITY_FINAL.md`, `research_audit/FINAL_FREEZE_CHECKLIST.md`,
+  `research_audit/COMPLIANCE_AUDIT.md`; the manifest was regenerated (traces dataset 3d28cbf).
+- **Nothing was pushed or merged.** The open actions are the author's, listed in the freeze checklist.

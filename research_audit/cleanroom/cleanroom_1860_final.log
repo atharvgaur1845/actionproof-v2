@@ -1,0 +1,146 @@
+== smoke_check
+[PASS] TXN + SEL1 test suites: 152 passed in 18.98s
+[PASS] txn_dev regenerates from seed 26112601: f07c2a637fc7ad11
+[PASS] txn_val regenerates from seed 26112602: 3378d614af9c39e9
+[PASS] txn_test regenerates from seed 26112603: 01437c0b341828d0
+[PASS] sel1_train regenerates from seed 26112711: 696cfb26a92dc4c7
+[PASS] sel1_ctl_pool regenerates from seed 26112713: 6e6d40d4dad35974
+[PASS] sel1_test regenerates from seed 26112712: 644f7530a250f5c8
+[PASS] scripted B0 on txn_test: VTC 60/440, FCR 380/440
+[PASS] scripted B1 on txn_test: VTC 197/440, FCR 183/440
+[PASS] scripted B2 on txn_test: VTC 60/440, FCR 380/440
+[PASS] scripted B3 on txn_test: VTC 216/440, FCR 224/440
+[PASS] scripted B4 on txn_test: VTC 380/440, FCR 0/440
+[PASS] scripted A1 on txn_test: VTC 211/440, FCR 199/440
+[PASS] scripted A2 on txn_test: VTC 346/440, FCR 7/440
+[PASS] scripted A3 on txn_test: VTC 366/440, FCR 0/440
+[PASS] scripted A4 on txn_test: VTC 333/440, FCR 0/440
+[PASS] scripted A5 on txn_test: VTC 425/440, FCR 15/440
+[PASS] scripted A6 on txn_test: VTC 380/440, FCR 0/440
+[PASS] claims ledger (s2_numcheck): 866 numbers checked against files, 14 documents scanned, 0 failures
+ALL PASSED in 27 s (smoke test only; model results: bash scripts/verify_numbers.sh)
+smoke_check exit 0 in 27 s
+== verify_numbers (anonymous download)
+== 0. preconditions
+== 1. download episode files from atharvgaur18/actionproof-traces
+results/p1/test: 80 episode files (expected 80: A, B, C, D, Dn x 3 seeds + Dw, 5 splits each)
+== 2. rerun the analyses
+scripts/p1_stats.py ok
+scripts/p2_stats.py ok
+scripts/p3_stats.py ok
+scripts/audit/dwarm_2x2.py ok
+scripts/p4_stats.py ok
+scripts/p5_stats.py ok
+scripts/txn_stats.py (registered tags) ok
+scripts/txn_invariants_recheck.py ok
+TXN descriptive rerun ok
+TXN JSON outputs: equal up to float noise
+results/sel1: 28 episode files (expected 28: SEL and CTL x 3 seeds x 2 splits, 4 parents on sel1_test, 6 scripted policies x 2 splits)
+scripts/sel1_stats.py ok
+scripts/impact_txn.py ok
+== 3. recomputed summaries versus the committed ones (git diff --exit-code results/)
+identical to the committed results
+== 4. claims ledger (scripts/s2_numcheck.py)
+866 numbers checked against files, 14 documents scanned, 0 failures
+PASS: the recomputed analyses match the committed results and every claim resolves.
+verify_numbers exit 0 in 375 s
+== post-hoc validity analysis (exploratory) recomputed
+txn_validity identical (exit 0)
+== SEL1 training rows from the public dataset against the pre-training hashes
+Traceback (most recent call last):
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpx2/_transports/default.py", line 95, in map_httpcore_exceptions
+    yield
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpx2/_transports/default.py", line 242, in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpcore2/_sync/connection_pool.py", line 243, in handle_request
+    raise exc from None
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpcore2/_sync/connection_pool.py", line 225, in handle_request
+    response = connection.handle_request(pool_request.request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpcore2/_sync/connection.py", line 96, in handle_request
+    raise exc
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpcore2/_sync/connection.py", line 76, in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpcore2/_sync/connection.py", line 142, in _connect
+    stream = stream.start_tls(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpcore2/_backends/sync.py", line 155, in start_tls
+    with map_exceptions(exc_map):
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pabitra/.local/share/uv/python/cpython-3.12.15-linux-x86_64-gnu/lib/python3.12/contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpcore2/_exceptions.py", line 16, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore2.ConnectError: [Errno 104] Connection reset by peer
+The above exception was the direct cause of the following exception:
+Traceback (most recent call last):
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/huggingface_hub/_snapshot_download.py", line 280, in snapshot_download
+    repo_info = api.repo_info(repo_id=repo_id, repo_type=repo_type, revision=revision)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 89, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/huggingface_hub/hf_api.py", line 3551, in repo_info
+    return method(
+           ^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 89, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/huggingface_hub/hf_api.py", line 3300, in dataset_info
+    r = get_session().get(path, headers=headers, timeout=timeout, params=params)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpx2/_client.py", line 1107, in get
+    return self.request(
+           ^^^^^^^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpx2/_client.py", line 791, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpx2/_client.py", line 974, in send
+    response = self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpx2/_client.py", line 1002, in _send_handling_auth
+    response = self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpx2/_client.py", line 1037, in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpx2/_client.py", line 1070, in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpx2/_transports/default.py", line 241, in handle_request
+    with map_httpcore_exceptions():
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pabitra/.local/share/uv/python/cpython-3.12.15-linux-x86_64-gnu/lib/python3.12/contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/httpx2/_transports/default.py", line 112, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx2.ConnectError: [Errno 104] Connection reset by peer
+The above exception was the direct cause of the following exception:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 89, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 277, in _inner
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/huggingface_hub/_snapshot_download.py", line 370, in snapshot_download
+    _raise_if_incomplete_snapshot(
+  File "/scratch/pabitra/ap_cleanroom/final/venv/lib/python3.12/site-packages/huggingface_hub/_snapshot_download.py", line 599, in _raise_if_incomplete_snapshot
+    raise IncompleteSnapshotError(
+huggingface_hub.errors.IncompleteSnapshotError: The cached snapshot for 'atharvgaur18/actionproof-traces' (revision 'main', commit d6599d3fd6fffdfe8a9b5952517235170539ba07) is incomplete: 2 file(s) are missing (data/rft/sel1_ctl_rows.jsonl, data/rft/sel1_sel_rows.jsonl). The Hub could not be reached (ConnectError: [Errno 104] Connection reset by peer). Re-run the download with network access to complete the snapshot.
+ABSENT locally (download from atharvgaur18/actionproof-traces, then re-check): data/rft/p4_aug_rows.jsonl, data/rft/sel1_sel_rows.jsonl, data/rft/sel1_ctl_rows.jsonl
+OK: every present SEL1 file matches the registration
+freeze_sel1 exit 1
+git status after: 0 tracked files changed
+---
+clean clone HEAD 319a38356234bf0e8f5880a1b5c6d75bae3118aa; status: 0 changed files
+huggingface_hub==2.5.0
+hypothesis==6.170.17
+numpy==2.5.5
+pydantic==2.14.4
+pytest==9.2.0
+PyYAML==6.0.4
+scipy==1.18.1
