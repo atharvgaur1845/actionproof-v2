@@ -1,39 +1,67 @@
 # ActionProof
 
 **Training small agents to reconcile transactions when “ok” does not mean it happened.** A payment tool can answer
-“ok” to a payment that never happened, or time out on one that did. ActionProof is a locked benchmark (TXN) and a
-trained Cohere agent that must tell committed, missing, partial and ambiguous outcomes apart, and then complete,
-repair, retry or hand off. Every number is scored by a deterministic verifier that reads the database, never the
-transcript. Everything runs in a procurement simulator (ProcureSim); nothing touches a real payment system.
+“ok” to a payment that never happened, or time out on one that did. ActionProof is a benchmark of such ambiguous
+writes (TXN, 440 locked tasks) and a trained 3.35B Cohere agent that must tell committed, missing, partial and
+ambiguous outcomes apart, then complete, repair, retry or hand off. Outcomes are scored by a deterministic verifier
+from the simulator’s final state, and the agent’s report is checked against that state. Everything runs in a
+procurement simulator (ProcureSim); nothing touches a real payment system.
 
 > **Judge’s 60-second path**
-> 1. **See the failure, live.** Open the [live Space](https://huggingface.co/spaces/atharvgaur18/actionproof-live).
->    Pick Reality C (phantom) and the agent “SCRIPTED: acknowledgement-trusting”: the tool says ok, and the revealed database
->    holds no payment. No GPU is used.
-> 2. **See the trained model on the same task.** Switch to “Trained agent (live)”: a real Cohere model call per step.
->    In the recorded check (commit `096eaf0`) it read the payment back, found it missing and paid again before reporting. Greedy decoding, one run: an illustration, not the benchmark. If the GPU queue is busy,
->    the [replay Space](https://huggingface.co/spaces/atharvgaur18/actionproof) shows recorded episodes, labelled as
->    such.
-> 3. **Check the claim.** The headline tables below each carry their evidence status, and their numbers resolve
+> 1. **See the failure and the trained agent, live.** Open the
+>    [live Space](https://huggingface.co/spaces/atharvgaur18/actionproof-live) and press Run: judge mode is
+>    preselected (Task 0004, Reality C, a phantom payment). The left column is a script that trusts the reply: it sees
+>    ok and reports done. The right column is a live call to the trained agent: it reads the payment back, finds none,
+>    and pays before it reports. The database is revealed after the run. It takes about 70 s once the GPU is warm. This
+>    is one greedy run: an illustration, not a rate. If the GPU is busy, the Space says so and replays a recorded run
+>    under a `RECORDED MODEL RUN` banner. The [replay Space](https://huggingface.co/spaces/atharvgaur18/actionproof)
+>    holds the recorded study.
+> 2. **Check the claim.** The headline tables below each carry their evidence status, and their numbers resolve
 >    through `claims/claims.yaml`. `python scripts/smoke_check.py` takes about 15 seconds on a CPU, with no download
 >    and no token. `bash scripts/verify_numbers.sh` (about 2 GB) recomputes every registered model analysis.
+> 3. **Read what does not work** ([below](#what-does-not-work-registered-or-descriptive-full-list-in-docssubmissionwriteupmd-22)),
+>    including the limits of the benchmark itself.
 >
-> **In one paragraph.** Registered P1 (450 frozen tasks, 3 seeds per arm): recovery demonstrations then GRPO raise
-> verified completion from 0.513 to 0.819. On the locked TXN test the trained agent duplicates mutations far less
-> often than bounded retry with idempotency keys (0.024 against 0.191). But the registered H3 family is not
-> supported, it rarely hands off when the evidence cannot settle the outcome (15 of 540), and a hand-written
-> reconciliation reference still beats it. Registered SEL1 then teaches *selective* hand-off with scripted
-> demonstrations: escalation on the locked test's unresolvable tasks rises to 525 of 540 episodes, against 1 of 540
-> for a matched control, with no cost on resolvable tasks. Transfer to a held-out step is seed-fragile. This is transaction-aware recovery under ambiguous execution: not a new RL
-> optimizer, and not a claim of safety.
+> **In one paragraph.**
+> - **Training (registered P1, 450 frozen tasks, 3 seeds per arm).** Recovery demonstrations then GRPO raise
+>   verified completion from 0.513 to 0.819.
+> - **Acknowledgement trust fails.** On the locked TXN test, trusting the reply falsely completes 0.864 of tasks. The
+>   trained agent D falsely completes 0.121.
+> - **Duplicates.** D leaves far fewer duplicate payments than bounded retry with idempotency keys, both those it
+>   could cause (15 of 2430 episodes against 11 of 270) and those the environment injects (54 of 450 against 50 of
+>   50). But the registered H3 family is not supported (retries).
+> - **The scripted reference still wins.** A hand-written reconciliation script beats every learned agent.
+> - **The benchmark has limits.** Our final hostile review found TXN v1 weaker than designed. A read-free same-key
+>   double send reaches 308 of 440 verified completions (D seed 0: 0.724), and its “unresolvable” tasks can be
+>   settled by a same-key resend (`PREREGISTRATION_TXN1_ADDENDUM3.md`).
+> - **Hand-off (registered SEL1).** Demonstrations taught the agent to hand off after repeated outage errors, at no
+>   cost on resolvable tasks. Where nothing else settles the outcome, it hands off in only 164 of 432 episodes, and
+>   the effect is seed-fragile (`PREREGISTRATION_SEL1_ADDENDUM1.md`).
+>
+> This is transaction-aware recovery under ambiguous execution, in a simulator: not a new RL optimizer, and not a
+> claim of safety.
 
-**Status (2026-11-27).** Canonical branch `submission-candidate`; this sprint’s branch is `stage2-superiority-sprint`.
-How to read a status:
-- *registered, supported / not supported*: a test decided by a preregistered rule;
-- *descriptive*: no test;
-- *exploratory*: decided after the data were seen.
+**Terms.**
+- **Scores.**
+  - VSC (P1) and VTC (TXN): verified completion. Every requested write is in the final state exactly once, and the
+    report matches.
+  - FCR: false completion (success reported; the state disagrees).
+  - DMR: a duplicate mutation left in the final state.
+  - URR: an unnecessary retry.
+  - STR: safe terminal resolution (verified completion, or a hand-off on an unresolvable task).
+  - CER: correct escalation (a hand-off where the task is labelled unresolvable).
+- **Scripted baselines.** B0 trusts the reply; B1 checks the final state only; B3 is bounded retry with idempotency
+  keys; B4 is the transaction-aware reconciliation script.
+- **Agents.** A is recovery-start GRPO. D is recovery SFT then GRPO, and is the recommended agent. Dw is D’s SFT warm
+  start. Dw_aug is the P4 randomised warm start. SEL and CTL are SEL1’s two arms.
 
-Every deviation is an addendum.
+**Status (2026-11-27).**
+- This round’s work is on branch `stage2-superiority-sprint`, to be merged into `submission-candidate` at the freeze.
+- How to read a status:
+  - *registered, supported / not supported*: a test decided by a preregistered rule;
+  - *descriptive*: no test;
+  - *exploratory* or *post hoc*: decided after the data were seen.
+- Every deviation or later finding is a dated addendum; no registration is edited after its outcome.
 
 ## Headline results
 
@@ -79,7 +107,51 @@ VTC: verified transaction completion. FCR: false-completion rate. Scripted rows:
   | Unnecessary retries vs B1 | 0.008 | 0.103 | −0.095 [−0.199, −0.015] | 0.064 | not supported |
 
   D's VTC is non-inferior in every test (+0.205 vs B3, +0.289 vs B1).
-- **H5 (descriptive), unresolvable evidence.** Escalation is the safe action there. D escalates correctly in 15 of 540 cases over its three seeds (seed 0: 9 of 180, 0.050) and acts unsafely in 14 of 540; Dw escalates in 4 of 180 (0.022). Aya Expanse 32B escalates more (0.222) but acts unsafely in 0.400. B4 escalates on all of them (1.000, unsafe 0.000). Escalation never appeared in the training demonstrations.
+
+  *Post hoc (TXN1 addendum 3).* DMR counts every duplicate in the final state, whoever caused it. Two fault classes
+  inject the duplicate themselves: `dup_delivery` (a second delivery under one key) and `concurrent` (a colleague's
+  write). B3 never reads, so it cannot repair them. D's advantage holds in both parts:
+  - injected classes: D leaves 54 of 450 episodes, B3 50 of 50;
+  - other classes: D 15 of 2430, B3 11 of 270.
+- **H5 (descriptive), unresolvable evidence.** Here the faulted step's read and the audit log stay unavailable.
+  - D escalates in 15 of 540 episodes over its three seeds (seed 0: 9 of 180, 0.050) and acts unsafely in 14 of 540;
+    mostly it reports failure.
+  - Dw escalates in 4 of 180 (0.022).
+  - Aya Expanse 32B escalates more (0.222) but acts unsafely in 0.400.
+  - B4 escalates on all of them (1.000, unsafe 0.000).
+
+  Escalation never appeared in D's training demonstrations. *Post hoc (TXN1 addendum 3):* all 60 of these tasks
+  fault a keyed step (order or pay), which a same-key resend settles. So escalation is one safe disposition here, not
+  the only one.
+
+### TXN v1: limits found by the final hostile review (post hoc, `PREREGISTRATION_TXN1_ADDENDUM3.md`)
+
+An independent hostile review of the benchmark found four construct problems. `scripts/audit/txn_validity.py`
+(task 1840, `results/audit/txn_validity.json`) sizes them. No registered test or verdict changes.
+
+| Read-free reference policy (one episode per task) | VTC | FCR | DMR |
+|---|---|---|---|
+| Fire-and-forget: write once, ignore every reply | 211 of 440 | 229 | 82 |
+| Blind same-key double send: each keyed write twice, never read | 308 of 440 | 132 | 82 |
+| D seed 0 (for comparison) | 0.724 | 0.121 | see H3 |
+
+1. **VTC alone overstates the headroom.** The simulator absorbs a same-key resend, so a policy that never reads gets
+   close to D on VTC. Its false completions and duplicates are not close. TXN results are read with FCR and DMR.
+2. **"Unresolvable" means unreadable, not unresolvable.** All 60 unresolvable txn_test tasks fault a keyed step. A
+   same-key resend makes the final state correct in every hidden reality, and its returned id even reveals that
+   reality. Only unkeyed (receive) steps are unresolvable by any action, and txn_test has none.
+3. **DMR includes duplicates the environment injects** (see H3 above).
+4. **Repeated refunds of one payment are credited.** The verdict checks that one unrefunded payment remains, not net
+   money. Re-scoring every recorded episode with a net-money postcondition finds 3 credited-but-net-wrong episodes of
+   74,000, none of them D's.
+
+Also recorded:
+- The idempotency model is not Stripe's: a mismatched-parameter retry returns the original result, and keys never
+  expire.
+- "Concurrent write" is a scripted injection, not an interleaving.
+- The 25 scoring mutants do not cover ProcureSim's verdict code.
+
+These are v2 work.
 
 ### P4: randomised demonstrations remove procedure replay in the warm start (registered, `PREREGISTRATION_P4.md`)
 
@@ -122,17 +194,18 @@ Greedy VSC on the frozen P1 test splits through HF Inference Providers (the P1 a
 
 Two large open-weight models, prompted, greedy, with no recovery training and no prompt tuning (gpt-oss at low reasoning effort), complete none of the 90 partial-payment tasks. On fresh-recovery tasks gpt-oss repairs about half of the partial payments it meets (0.52) and Qwen almost none (0.04). Descriptive. These are greedy single runs, so they are not compared with the sampled P1 arms.
 
-### SEL1: selective escalation (registered 2026-11-27, `PREREGISTRATION_SEL1.md`; supported)
+### SEL1: selective escalation (registered 2026-11-27, `PREREGISTRATION_SEL1.md`; supported; post-hoc scope in `PREREGISTRATION_SEL1_ADDENDUM1.md`)
 
-**Why.** When the evidence cannot settle a write’s outcome, the trained agents rarely hand off: D in 15 of 540
-episodes, Dw_aug in 0 of 540.
+**Why.** Under the unresolvable regime, the trained agents rarely hand off: D in 15 of 540 episodes, Dw_aug in 0 of
+540.
 
 **Design.**
 - Two arms continue from the same Dw_aug parents (3 seeds), with a new LoRA each.
 - SEL sees B5 demonstrations that escalate under a permanent evidence outage and re-read through a transient one.
 - CTL sees the same number of resolvable demonstrations.
 - They are scored on the locked txn_test and on a sealed 240-task split. That split holds an unresolvable outage on a
-  held-out step and held-out workflows, a transient outage of held-out length, and an audit-log-only outage.
+  held-out step and held-out workflows, a 2-read transient outage (training had 1-read ones; the demonstrated rule
+  escalates after 3), and an audit-log-only outage.
 
 **Why selectivity is measured.** On unresolvable tasks an always-escalate policy already scores perfectly. The
 registered selectivity statistic J is escalation on unresolvable tasks minus escalation on degraded-but-resolvable
@@ -150,47 +223,56 @@ over H1–H3.
 | H3 selectivity J | 200 | 0.740 | 0.007 | +0.732 [+0.625, +0.836], p 0.0003 | same | supported |
 | H4 VTC, txn_test resolvable | 380 | 0.960 | 0.958 | +0.002 [−0.006, +0.010] | lower bound > −0.03 | supported |
 
-What it means, and what it does not:
-- **Selective, not blanket.** SEL never escalates on a transient outage of held-out length (0 of 360 episodes) or
-  when only the audit log is down (0 of 360). Through the transient outage it re-reads and finishes safely in 350 of
-  360, against 264 of 360 for CTL. On txn_test's resolvable tasks it escalates in 13 of 3420.
-- **Below the scripted rule.** J is 0.740 against the scripted B5's 1.
-- **Seed-fragile on the held-out step.** On unresolvable `receive` steps SEL escalates in 146 of 360 (CTL 0) and is
-  unsafe in 188 of 360 (CTL 275). Seed 2 escalates in only 2 of 120 and is unsafe in 112, more than its control
-  (83). H2 passes as registered only because the held-out workflows carry it.
-- **The price of handing off.** Overall txn_test VTC is 3285 of 3960 for SEL against 3451 for CTL. CTL completes
-  173 of the 540 unresolvable episodes correctly without the evidence to know it; SEL hands those off (VTC 1 of 540).
-  H4 registered the cost on resolvable tasks only.
-- **The method is supervised.** These are scripted demonstrations plus replay on a LoRA. It is not a new RL
-  algorithm, and not a claim that the agent is safe.
+What the supported tests show, and what they do not (scope from `PREREGISTRATION_SEL1_ADDENDUM1.md`, post hoc):
+- **Shown.** SEL learned to call `escalate_to_human` after repeated `service_unavailable` reads of the faulted step,
+  including on held-out workflows.
+  - It did not escalate on a 2-read outage (0 of 360 episodes); it re-reads and finishes safely in 350 of 360,
+    against 264 of 360 for CTL.
+  - On txn_test's resolvable tasks it escalates in 13 of 3420, with no VTC cost.
+- **What H1 measures.** All 60 locked-test tasks fault a keyed step that a same-key resend settles.
+  - SEL's escalations mostly replace an honest "failed" report (CTL: 354 of 540 such episodes).
+  - Unsafe actions fall from 12 to 7 of 540.
+  - CTL's 173 verified completions there were same-key resends (168), not luck.
+- **Not shown.**
+  - The audit-log-only outage cannot fire: the demonstrated rule reads the audit log only after its primary reads
+    fail, so the 0 of 360 there is not evidence of selectivity.
+  - The 2-read outage sits inside the demonstrated 3-read budget.
+- **Where hand-off is the only safe action** (unkeyed receive steps, 48 sel1_test tasks): SEL escalates in 164 of 432
+  episodes (by seed: 55, 106, 3 of 144) and is unsafe in 215, against 293 for CTL. Partial and seed-fragile.
+- **Supervised, from a scripted rule.** J is 0.740 against the scripted B5's 1. This is not an RL result, and not a
+  claim that the agent is safe.
 
 ## What does not work (registered or descriptive; full list in `docs/submission/WRITEUP.md` §22)
 
-- **Escalation.** D escalates in 15 of 540 unresolvable cases (3 seeds); Dw_aug never does and acts unsafely in 53 of
-  540. SEL1's demonstrations fix this on the locked test (525 of 540), but transfer to a held-out step is
-  seed-fragile (one seed: 2 of 120).
+- **Hand-off where it is the only safe action.** SEL1's arm hands off in 164 of 432 such episodes, seed-fragile (one
+  seed: 3 of 144). Without SEL1, D escalates in 15 of 540 unresolvable cases, and Dw_aug never does (unsafe in 53 of
+  540).
 - **Retries.** Fewer unnecessary retries than scripted baselines is not established: the H3 family is not supported.
 - **The RL agent’s transfer.** D fails renamed tools (0.20) and the unseen four-step workflow. Randomising tool names
   during GRPO (SR1) did not help. Healthcare transfer is negative.
 - **Optimizer changes.** No-std GRPO (P3) is not supported: 0.813 against 0.819.
-- **The scripted reference wins wherever the evidence is observable.** B4 completes every TXN task outside the
-  counterfactual quadruples, with no false completion and no duplicate; D reaches 0.724 overall. The SEL1 arms,
-  trained on scripted demonstrations from the TXN generator (disjoint tasks), reach 0.830 and 0.871 overall, above
-  B4’s 0.864, but only on the quadruples: there they sometimes complete an unresolvable task without the evidence to
-  know it, where B4 hands off. On renamed tools they complete 139 and 124 of 180 episodes, and they still falsely
-  complete 0.020 and 0.022 (descriptive).
-- **LLM judges are not verifier-grade.** The best judge with a database snapshot reaches 0.989; the committee 0.897.
+- **The scripted reference wins.** B4 reaches 0.864 TXN verified completion with no false completion and no duplicate.
+  It completes every task outside the counterfactual quadruples; no learned agent does (renamed tools: SEL 139 and
+  CTL 124 of 180 episodes).
+  - D reaches 0.724.
+  - SEL1's SEL arm reaches 0.830, below B4.
+  - Its CTL arm (0.871) passes B4's overall VTC only on the quadruples, by settling unresolvable tasks with same-key
+    resends where B4 hands off. Both still falsely complete (0.020 and 0.022). Descriptive.
+- **The benchmark's own limits.** Read-free policies get close on VTC; "unresolvable" tasks can be settled; DMR mixes
+  injected and caused duplicates; repeated refunds are credited. See [TXN v1: limits](#txn-v1-limits-found-by-the-final-hostile-review-post-hoc-preregistration_txn1_addendum3md).
+- **LLM judges are not verifier-grade.** The best judge with a database snapshot reaches 0.989 accuracy; the
+  committee 0.897.
 
-## Why these numbers cannot be gamed
+## Shortcuts: what blocks them, and what does not
 
-| Shortcut an agent could take | What blocks it | Where |
+| Shortcut an agent could take | What blocks it (and what does not) | Where |
 |---|---|---|
 | Report success without doing the work | Success is the database state against the requested postconditions, read by a deterministic verifier; the report is checked against it | `actionproof/integrity/sim/truth.py`, `actionproof/txn/truth.py` |
 | Read the answer from the task | Fault plans and realities live in `task.meta`; the model sees the request, the tool schemas and the tool replies only | `scripts/p1_eval.py` (`start`, `tool_text`) |
-| Escalate everything to look safe | Escalation counts as success only where the outcome is truly unobservable; SEL1 also measures escalation on degraded-but-resolvable tasks (J) | `actionproof/txn/truth.py` (STR), `scripts/sel1_stats.py` |
-| Pay twice “to be sure” | Duplicate mutations and unnecessary retries are their own metrics | TXN metrics (`docs/txn/TXN_SPEC.md` §7) |
+| Escalate everything to look safe | Partly blocked. Always-escalate scores no completions, and SEL1's J is 0 for it. But it gets perfect correct-escalation on unresolvable tasks, where a same-key resend would also be safe | `actionproof/txn/truth.py` (STR), `scripts/sel1_stats.py`, TXN1 addendum 3 |
+| Pay twice “to be sure” | Partly blocked. A second payment under a new key is a duplicate and counts. A same-key double send is absorbed by the simulator and not penalised: a read-free version reaches 308 of 440 verified completions | TXN metrics (`docs/txn/TXN_SPEC.md` §7), `results/audit/txn_validity.json` |
 | Tune on the test | Every test split is hashed and registered before training; each tag and split is evaluated once (the scripts refuse to overwrite) | `scripts/freeze_*.py`, `results/*_hashes.json` |
-| A buggy scorer | 25 mutants of the TXN scoring code are all killed by its tests; goldens; a reference verifier (a consistency check: same author and spec) | `tests/txn/` |
+| A buggy scorer | Partly blocked. All 25 mutants of the TXN scoring code (`actionproof/txn/`) are killed by its tests; there are goldens and a reference verifier (same author and spec, so only a consistency check). ProcureSim's verdict code is not mutation-tested, and it credits repeated refunds (3 such episodes of 74,000) | `tests/txn/`, TXN1 addendum 3 |
 
 ## Public release
 
@@ -266,7 +348,7 @@ Not used for any result: AlignTune and SafeTune (never imported). CircuitKIT was
 | `research_audit/` | This round’s audits (competitors, branch, stale surfaces, red team) |
 | `docs/submission/` | Write-up, deck source, video script, captions, run of show, story decision |
 | `docs/HISTORY.md` | Earlier studies (Stages 1–4) and the original reproduction notes |
-| `PREREGISTRATION_*.md` | 53 registrations and addenda |
+| `PREREGISTRATION_*.md` | 54 registrations and addenda (including the two post-hoc addenda of 2026-11-27) |
 
 ## License
 
