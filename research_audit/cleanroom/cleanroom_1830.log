@@ -1,0 +1,47 @@
+== smoke_check
+[PASS] TXN + SEL1 test suites: 152 passed in 19.10s
+[PASS] txn_dev regenerates from seed 26112601: f07c2a637fc7ad11
+[PASS] txn_val regenerates from seed 26112602: 3378d614af9c39e9
+[PASS] txn_test regenerates from seed 26112603: 01437c0b341828d0
+[PASS] sel1_train regenerates from seed 26112711: 696cfb26a92dc4c7
+[PASS] sel1_ctl_pool regenerates from seed 26112713: 6e6d40d4dad35974
+[PASS] sel1_test regenerates from seed 26112712: 644f7530a250f5c8
+[PASS] scripted B0 on txn_test: VTC 60/440, FCR 380/440
+[PASS] scripted B1 on txn_test: VTC 197/440, FCR 183/440
+[PASS] scripted B2 on txn_test: VTC 60/440, FCR 380/440
+[PASS] scripted B3 on txn_test: VTC 216/440, FCR 224/440
+[PASS] scripted B4 on txn_test: VTC 380/440, FCR 0/440
+[PASS] scripted A1 on txn_test: VTC 211/440, FCR 199/440
+[PASS] scripted A2 on txn_test: VTC 346/440, FCR 7/440
+[PASS] scripted A3 on txn_test: VTC 366/440, FCR 0/440
+[PASS] scripted A4 on txn_test: VTC 333/440, FCR 0/440
+[PASS] scripted A5 on txn_test: VTC 425/440, FCR 15/440
+[PASS] scripted A6 on txn_test: VTC 380/440, FCR 0/440
+[PASS] claims ledger (s2_numcheck): 843 numbers checked against files, 14 documents scanned, 0 failures
+ALL PASSED in 27 s (smoke test only; model results: bash scripts/verify_numbers.sh)
+smoke_check exit 0 in 27 s
+== verify_numbers (anonymous download)
+== 0. preconditions
+== 1. download episode files from atharvgaur18/actionproof-traces
+results/p1/test: 80 episode files (expected 80: A, B, C, D, Dn x 3 seeds + Dw, 5 splits each)
+== 2. rerun the analyses
+scripts/p1_stats.py ok
+scripts/p2_stats.py ok
+scripts/p3_stats.py ok
+scripts/audit/dwarm_2x2.py ok
+scripts/p4_stats.py ok
+scripts/p5_stats.py ok
+scripts/txn_stats.py (registered tags) ok
+scripts/txn_invariants_recheck.py ok
+TXN descriptive rerun ok
+TXN JSON outputs: equal up to float noise
+results/sel1: 28 episode files (expected 28: SEL and CTL x 3 seeds x 2 splits, 4 parents on sel1_test, 6 scripted policies x 2 splits)
+scripts/sel1_stats.py ok
+scripts/impact_txn.py ok
+== 3. recomputed summaries versus the committed ones (git diff --exit-code results/)
+identical to the committed results
+== 4. claims ledger (scripts/s2_numcheck.py)
+843 numbers checked against files, 14 documents scanned, 0 failures
+PASS: the recomputed analyses match the committed results and every claim resolves.
+verify_numbers exit 0 in 367 s
+git status after: 0 tracked files changed
