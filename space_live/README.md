@@ -43,6 +43,20 @@ Deterministic replays of recorded runs: https://huggingface.co/spaces/atharvgaur
 | SCRIPTED: transaction-aware oracle | a fixed program: write, read the authoritative record, repair or retry, report honestly | no |
 | **Judge mode** (default) | left: SCRIPTED acknowledgement-trusting; right: the trained agent, live; same task and reality | yes (one run) |
 | RECORDED: trained agent / base model | a real run of that model recorded earlier through this Space's own episode loop (`record_runs.py`), replayed | no |
+| **Gate demo** | left: SCRIPTED acknowledgement-trusting; right: the same script behind the Recovery Gate | no |
+| Trained agent behind the Recovery Gate | the trained agent, live, with the gate between it and the tools | yes |
+| Trained agent alone vs behind the gate | two live runs, same task and reality | yes (two runs) |
+
+**The Recovery Gate** (`actionproof_min/gate.py`, the repo's `actionproof/recovery_gate/gate.py` with two import
+paths changed). It is a small, evidence-only controller between an agent and the tools. It sees only what the agent
+sees: the request's PO, amount, quantity and steps, and each call's arguments and reply. It:
+- verifies every step before it accepts a "completed" report;
+- reads a step's record before a repeated write;
+- blocks wrong repairs, refunds of the only correct payment, and key changes after a timeout;
+- hands the order to a human when a written step's record cannot be read.
+Its own calls appear in the timeline as "Recovery Gate" steps, and its log is in the reveal. This simulator's reads
+have no `consistent` flag, so the freshness rule is off here. The registered evaluation of the gate is
+`PREREGISTRATION_RG1.md` in the repository.
 
 Every model run carries a banner `LIVE MODEL RUN · <model id> · <UTC timestamp> · greedy, max 16 turns`. Scripted runs
 are labelled SCRIPTED. Recorded runs carry `RECORDED MODEL RUN · <model id> · recorded <UTC> on <hardware> · greedy · no
