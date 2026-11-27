@@ -5,7 +5,7 @@
 #   SKIP_DOWNLOAD=1 bash scripts/verify_numbers.sh # episode files are already under results/ (e.g. copied from the cluster)
 #
 # What it does
-#   1. downloads the episode files (results/{p1,p2,p3,p4,p5,b1,txn,sel1}/**/*.jsonl) of the dataset atharvgaur18/actionproof-traces into
+#   1. downloads the episode files (results/{p1,p2,p3,p4,p5,b1,txn,sel1,rg1,rg2}/**/*.jsonl) of the dataset atharvgaur18/actionproof-traces into
 #      results/. Only *.jsonl: the summaries stay the ones committed in git, so step 3 compares a recomputation against
 #      the committed values. The frozen task splits (data/bench/proc/) are already in the clone.
 #   2. reruns the registered analyses, in place:
@@ -20,6 +20,9 @@
 #        scripts/txn_stats.py + txn_compact.py -> results/txn/compact_descriptive__txn_test.json (descriptive, all tags)
 #        scripts/sel1_stats.py         -> results/sel1/sel1_summary.{json,md} (SEL1: SEL versus CTL, registered)
 #        scripts/impact_txn.py         -> results/impact/impact_txn.{json,md} (descriptive projection from the summaries)
+#        scripts/rg1_stats.py          -> results/rg1/rg1_summary.{json,md} (RG1: the Recovery Gate around D, registered)
+#        scripts/rg1x_stats.py         -> results/rg1/rg1x_summary.{json,md} (RG1 addendum 1: transient outages, descriptive)
+#        scripts/rg2_stats.py          -> results/rg2/rg2_summary.{json,md} (RG2: gate v2 versus the RG1 gate, registered)
 #      None of these refuses to overwrite its output, so they write over the committed file and git is the comparison.
 #      Every bootstrap uses a fixed seed (20261124 or 20261125) and numpy's PCG64, so a rerun is deterministic.
 #      p2_stats.py also writes results/p2/p2_coverage.json (untracked). It stops with exit code 2 if any required
@@ -64,7 +67,7 @@ from huggingface_hub import snapshot_download
 snapshot_download(repo_id=os.environ["REPO"], repo_type="dataset", local_dir=".",
                   allow_patterns=["results/p1/**/*.jsonl", "results/p2/**/*.jsonl", "results/p3/**/*.jsonl",
                                   "results/p4/*.jsonl", "results/p5/*.jsonl", "results/b1/*.jsonl", "results/txn/*.jsonl",
-                                  "results/sel1/*.jsonl"],
+                                  "results/sel1/*.jsonl", "results/rg1/*.jsonl", "results/rg2/*.jsonl"],
                   ignore_patterns=["**/smoke/**"])
 EOF
 fi
@@ -135,6 +138,15 @@ echo "results/sel1: $n episode files (expected 28: SEL and CTL x 3 seeds x 2 spl
 [ "$n" -ge 28 ] || { echo "FAIL: SEL1 episode files missing"; exit 1; }
 analyse scripts/sel1_stats.py
 analyse scripts/impact_txn.py
+if [ -f results/rg1/rg1_summary.json ]; then  # the Recovery Gate studies (final sprint)
+  n=$(find results/rg1 -name '*__rg1_test.jsonl' | wc -l)
+  echo "results/rg1: $n rg1_test episode files"
+  analyse scripts/rg1_stats.py
+  analyse scripts/rg1x_stats.py
+fi
+if [ -f results/rg2/rg2_summary.json ]; then
+  analyse scripts/rg2_stats.py
+fi
 
 step "3. recomputed summaries versus the committed ones (git diff --exit-code results/)"
 if git diff --exit-code --stat -- results/; then
