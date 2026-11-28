@@ -16,6 +16,9 @@ procurement simulator (ProcureSim); nothing touches a real payment system.
 >    is one greedy run: an illustration, not a rate. If the GPU is busy, the Space says so and replays a recorded run
 >    under a `RECORDED MODEL RUN` banner. The [replay Space](https://huggingface.co/spaces/atharvgaur18/actionproof)
 >    holds the recorded study.
+>    Then pick **Gate demo** (no GPU, about 10 s): the same reply-trusting script runs again, behind the Recovery
+>    Gate, an evidence-only controller between the agent and the tools. The gate reads the payment record before it
+>    accepts "completed", finds nothing, and hands the order to a human instead of reporting a false success.
 > 2. **Check the claim.** The headline tables below each carry their evidence status, and their numbers resolve
 >    through `claims/claims.yaml`. `python scripts/smoke_check.py` takes about 15 seconds on a CPU, with no download
 >    and no token. `bash scripts/verify_numbers.sh` (about 2 GB) recomputes every registered model analysis.
