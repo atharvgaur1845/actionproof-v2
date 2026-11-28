@@ -36,7 +36,7 @@ Three lengths of the same story. They follow the thesis of `README.md`, `docs/su
 > where that is the only safe action works in about four of ten episodes. And our own review found limits in the
 > benchmark.
 >
-> <!-- RG1:PENDING -->
+> RG1 (registered, sealed 440 tasks, D 3 seeds): behind the Recovery Gate, D's false completion falls from 0.112 to 0.000 and its verified completion on resolvable tasks rises from 0.824 to 0.892 (+0.068 [+0.046, +0.091]); unsafe episodes there fall from 482 to 34 of 3420. The hand-off result (1.000 against 0.011) is mostly the gate relabelling honest "failed" reports, and zero false completion is close to guaranteed by design (PREREGISTRATION_RG1_ADDENDUM2.md). B4 still completes more (1.000 on resolvable tasks).
 >
 > The live Space runs the real model, and two clean-room runs reproduced every number.
 
@@ -80,7 +80,7 @@ Three lengths of the same story. They follow the thesis of `README.md`, `docs/su
 > write twice reaches 308 of 440 verified completions, though with 132 false completions. Each finding is in a dated
 > addendum; no registered verdict changed.
 >
-> <!-- RG1:PENDING -->
+> RG1 (registered, sealed 440 tasks, D 3 seeds): behind the Recovery Gate, D's false completion falls from 0.112 to 0.000 and its verified completion on resolvable tasks rises from 0.824 to 0.892 (+0.068 [+0.046, +0.091]); unsafe episodes there fall from 482 to 34 of 3420. The hand-off result (1.000 against 0.011) is mostly the gate relabelling honest "failed" reports, and zero false completion is close to guaranteed by design (PREREGISTRATION_RG1_ADDENDUM2.md). B4 still completes more (1.000 on resolvable tasks).
 
 **5. Why it matters, and how to check us (2:20–3:00).**
 > The same pattern appears in accounts payable, refunds and payouts. A projection from our measured

@@ -143,7 +143,10 @@ D $2,902, B4 $164.
 - **Rates vs dollars.** The rates are measured on the locked TXN test. The dollars are projections from stated
   assumptions: a $5,000 payment, a $60 exception, 3× cost for late discovery, 60% duplicate recovery (and 2% fault
   incidence for the per-workflow figures). Low and high scenarios are in the appendix. This is a simulator, so there
-  are no observed savings. Checks and agent together were never measured.
+  are no observed savings.
+- **Checks around the agent (registered RG1, sealed, 440 tasks, 3 seeds).** The Recovery Gate takes D's false
+  completion from 0.112 to 0.000 and its resolvable VTC from 0.824 to 0.892. Most of its hand-off gain is relabelling
+  honest failures (addendum 2), and B4 still completes more (1.000). Try the gate demo in the live Space.
 - **Links.**
   - Run it live: https://huggingface.co/spaces/atharvgaur18/actionproof-live (a real Cohere model per run; the
     database is revealed after the run).

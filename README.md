@@ -33,10 +33,20 @@ procurement simulator (ProcureSim); nothing touches a real payment system.
 > - **Duplicates.** D leaves far fewer duplicate payments than bounded retry with idempotency keys, both those it
 >   could cause (15 of 2430 episodes against 11 of 270) and those the environment injects (54 of 450 against 50 of
 >   50). But the registered H3 family is not supported (retries).
-> - **The scripted reference still wins.** A hand-written reconciliation script beats every learned agent.
+> - **The scripted reference still wins.** A hand-written reconciliation script beats every learned agent, with or without the gate.
 > - **The benchmark has limits.** Our final hostile review found TXN v1 weaker than designed. A read-free same-key
 >   double send reaches 308 of 440 verified completions (D seed 0: 0.724), and its “unresolvable” tasks can be
 >   settled by a same-key resend (`PREREGISTRATION_TXN1_ADDENDUM3.md`).
+> - **Checks around the agent (registered RG1, sealed split of 440 tasks, D 3 seeds, 3 episodes per task).** The
+>   Recovery Gate, an evidence-only controller between the agent and the tools, removes false completion (0.112 to
+>   0.000) and raises verified completion on resolvable tasks from 0.824 to 0.892 (+0.068 [+0.046, +0.091]); unsafe
+>   episodes there fall from 482 to 34 of 3420. Read with addendum 2: zero false completion is close to guaranteed
+>   by design (a consistent read here is a perfect oracle), and the hand-off result (1.000 against 0.011) is mostly the
+>   gate relabelling D's honest "failed" reports (468 of 540). Even with the gate, the script B4 completes more
+>   (1.000 on resolvable tasks; renamed tools 0.333, unseen workflows 0.289).
+> - **A selective gate (registered RG2).** The first gate hands off too early when a record returns after two reads
+>   (71 of 120 episodes, predicted in addendum 1). Re-reading up to three times raises selectivity from 0.660 to
+>   0.951 with no loss of correct hand-offs; the budget clears this outage length by design.
 > - **Hand-off (registered SEL1).** Demonstrations taught the agent to hand off after repeated outage errors, at no
 >   cost on resolvable tasks. Where nothing else settles the outcome, it hands off in only 164 of 432 episodes, and
 >   the effect is seed-fragile (`PREREGISTRATION_SEL1_ADDENDUM1.md`).

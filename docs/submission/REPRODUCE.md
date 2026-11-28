@@ -135,7 +135,7 @@ Training was not rerun in this round. Only the analyses were reproduced from a c
 
 ## 5. Recovery Gate (RG1)
 
-<!-- RG1:PENDING -->
+RG1 and RG2: `python scripts/rg1_stats.py`, `scripts/rg1x_stats.py`, `scripts/rg1_addendum2.py` and `scripts/rg2_stats.py` recompute the registered analyses from the released episodes (`results/rg1`, `results/rg2`); `bash scripts/verify_numbers.sh` runs the first, second and last.
 
 ## 6. Released artefacts
 

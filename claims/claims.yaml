@@ -1525,6 +1525,55 @@ claims:
       w_b4: {value: 164, file: results/impact/impact_txn.json, key: ["agents", "B4 transaction-aware reconciliation (scripted reference)", "per_1000_workflows", "moderate"], shown: ["164", "$164"]}
       cost_sel: {value: 42939, file: results/impact/impact_txn.json, key: ["agents", "SEL1 SEL (3 seeds)", "projected_cost_per_1000_faulted", "moderate", "mean"], shown: ["42,939", "$42,939"]}
 
+  - id: RG1
+    statement: "Registered RG1 (PREREGISTRATION_RG1.md, 43e000c, 2026-11-28 02:37 IST; addenda 1-2): the Recovery Gate around D (3 seeds) vs D alone on the sealed rg1_test (440 tasks, 3 episodes per task). H1-H4 supported. Addendum 2: H1 is largely by construction (a consistent read is a perfect oracle), most of the unresolvable STR gain is relabelling of honest failed reports, and the gate writes terminal reports."
+    status: supported
+    prereg: PREREGISTRATION_RG1.md
+    eval: [results/rg1/rg1_summary.json, results/rg1/rg1_addendum2.json]
+    stats: scripts/rg1_stats.py
+    numbers:
+      h1_a: {value: 0.112, file: results/rg1/rg1_summary.json, key: ["H1", "a"], shown: ["0.112", "+0.112"]}
+      h1_b: {value: 0.0, file: results/rg1/rg1_summary.json, key: ["H1", "b"], shown: ["0.000"]}
+      h1_diff: {value: 0.112, file: results/rg1/rg1_summary.json, key: ["H1", "diff"], shown: ["0.112", "+0.112"]}
+      h1_lo: {value: 0.084, file: results/rg1/rg1_summary.json, key: ["H1", "ci95", 0], shown: ["0.084", "+0.084"]}
+      h1_hi: {value: 0.148, file: results/rg1/rg1_summary.json, key: ["H1", "ci95", 1], shown: ["0.148", "+0.148"]}
+      h2_a: {value: 1.0, file: results/rg1/rg1_summary.json, key: ["H2", "a"], shown: ["1.000", "+1.000"]}
+      h2_b: {value: 0.011, file: results/rg1/rg1_summary.json, key: ["H2", "b"], shown: ["0.011", "+0.011"]}
+      h2_diff: {value: 0.989, file: results/rg1/rg1_summary.json, key: ["H2", "diff"], shown: ["0.989", "+0.989"]}
+      h2_lo: {value: 0.976, file: results/rg1/rg1_summary.json, key: ["H2", "ci95", 0], shown: ["0.976", "+0.976"]}
+      h2_hi: {value: 0.998, file: results/rg1/rg1_summary.json, key: ["H2", "ci95", 1], shown: ["0.998", "+0.998"]}
+      h3_a: {value: 0.907, file: results/rg1/rg1_summary.json, key: ["H3", "a"], shown: ["0.907", "+0.907"]}
+      h3_b: {value: 0.726, file: results/rg1/rg1_summary.json, key: ["H3", "b"], shown: ["0.726", "+0.726"]}
+      h3_diff: {value: 0.181, file: results/rg1/rg1_summary.json, key: ["H3", "diff"], shown: ["0.181", "+0.181"]}
+      h3_lo: {value: 0.129, file: results/rg1/rg1_summary.json, key: ["H3", "ci95", 0], shown: ["0.129", "+0.129"]}
+      h3_hi: {value: 0.231, file: results/rg1/rg1_summary.json, key: ["H3", "ci95", 1], shown: ["0.231", "+0.231"]}
+      h4_a: {value: 0.892, file: results/rg1/rg1_summary.json, key: ["H4", "a"], shown: ["0.892", "+0.892"]}
+      h4_b: {value: 0.824, file: results/rg1/rg1_summary.json, key: ["H4", "b"], shown: ["0.824", "+0.824"]}
+      h4_diff: {value: 0.068, file: results/rg1/rg1_summary.json, key: ["H4", "diff"], shown: ["0.068", "+0.068"]}
+      h4_lo: {value: 0.046, file: results/rg1/rg1_summary.json, key: ["H4", "ci95", 0], shown: ["0.046", "+0.046"]}
+      h4_hi: {value: 0.091, file: results/rg1/rg1_summary.json, key: ["H4", "ci95", 1], shown: ["0.091", "+0.091"]}
+      s1_b4_vtc: {value: 1.0, file: results/rg1/rg1_summary.json, key: ["S1", "vtc_resolvable", "b"], shown: ["1.000", "+1.000"]}
+      s1_vtc_diff: {value: -0.108, file: results/rg1/rg1_summary.json, key: ["S1", "vtc_resolvable", "diff"], shown: ["−0.108", "-0.108", "0.108"]}
+      s1_ood_alias_vtc: {value: 0.333, file: results/rg1/rg1_summary.json, key: ["S1", "by_group", "ood_alias", "vtc", "a"], shown: ["0.333", "+0.333"]}
+      s1_ood_workflow_vtc: {value: 0.289, file: results/rg1/rg1_summary.json, key: ["S1", "by_group", "ood_workflow", "vtc", "a"], shown: ["0.289", "+0.289"]}
+
+      ab_no_verify_fcr: {value: 0.064, file: results/rg1/rg1_summary.json, key: ["S2", "no_verify", "fcr", "diff"], shown: ["+0.064", "0.064"]}
+      ab_no_escalate_esc: {value: -0.967, file: results/rg1/rg1_summary.json, key: ["S2", "no_escalate", "escalated_unresolvable", "diff"], shown: ["−0.967", "-0.967", "0.967"]}
+  - id: RG2
+    statement: "Registered RG2 (PREREGISTRATION_RG2.md, 4b635d2): gate v2 (bounded re-read, budget 3) vs the RG1 gate around D (3 seeds) on the sealed rg2_test (240 tasks). H1-H3 supported; a mechanism check, since the budget clears the test's 2-read outage by design (RG1 addendum 2)."
+    status: supported
+    prereg: PREREGISTRATION_RG2.md
+    eval: [results/rg2/rg2_summary.json]
+    stats: scripts/rg2_stats.py
+    numbers:
+      rg2_h1_j_v2: {value: 0.951, file: results/rg2/rg2_summary.json, key: ["H1", "J_V2"], shown: ["0.951", "+0.951"]}
+      rg2_h1_j_v1: {value: 0.66, file: results/rg2/rg2_summary.json, key: ["H1", "J_V1"], shown: ["0.660", "+0.660"]}
+      rg2_h1_diff: {value: 0.291, file: results/rg2/rg2_summary.json, key: ["H1", "diff"], shown: ["0.291", "+0.291"]}
+      rg2_h2_a: {value: 0.981, file: results/rg2/rg2_summary.json, key: ["H2", "a"], shown: ["0.981", "+0.981"]}
+      rg2_h2_b: {value: 0.414, file: results/rg2/rg2_summary.json, key: ["H2", "b"], shown: ["0.414", "+0.414"]}
+      rg2_h2_diff: {value: 0.567, file: results/rg2/rg2_summary.json, key: ["H2", "diff"], shown: ["0.567", "+0.567"]}
+      rg2_h3_diff: {value: -0.001, file: results/rg2/rg2_summary.json, key: ["H3", "diff"], shown: ["−0.001", "-0.001"]}
+
   - id: SEL1
     statement: "Registered SEL1 (PREREGISTRATION_SEL1.md, registered 2026-11-27 05:39 IST before any training; scripts/sel1_stats.py run once as task 1812 after the freeze check). SEL (B5 selective-escalation demonstrations + replay) vs CTL (matched-volume replay), each continuing from Dw_aug seed k, 3 seeds, 3 episodes per task. SUPPORTED: H1, H3 (Holm over H1-H3, all seed differences > 0) and H4 (non-inferiority, bound -0.03). H2 (held-out compositions) also passes as registered, but is seed-fragile: on held-out step receive, SEL seed 2 escalates in 2 of 120 episodes and is unsafe in 112."
     status: supported

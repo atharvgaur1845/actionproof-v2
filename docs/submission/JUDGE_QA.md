@@ -57,7 +57,7 @@ What the verifier alone does not give you:
 
 The scripted reference B4 shows what a correct procedure can reach. Our trained agent D trails it (question 4).
 
-<!-- RG1:PENDING -->
+RG1 (registered, sealed 440 tasks, D 3 seeds): behind the Recovery Gate, D's false completion falls from 0.112 to 0.000 and its verified completion on resolvable tasks rises from 0.824 to 0.892 (+0.068 [+0.046, +0.091]); unsafe episodes there fall from 482 to 34 of 3420. The hand-off result (1.000 against 0.011) is mostly the gate relabelling honest "failed" reports, and zero false completion is close to guaranteed by design (PREREGISTRATION_RG1_ADDENDUM2.md). B4 still completes more (1.000 on resolvable tasks).
 
 ## 3. Why not simply use idempotency keys?
 
@@ -106,7 +106,7 @@ falsely completes 0.121 (160 of 1,320) (`results/txn/stats__txn_test.json`, `res
 SEL reaches 0.830, still below B4. CTL reaches 0.871, but only by settling unresolvable tasks with same-key resends
 where B4 hands off. Both still falsely complete (0.020 and 0.022) (`results/impact/impact_txn.json`, descriptive).
 
-<!-- RG1:PENDING -->
+RG1 (registered, sealed 440 tasks, D 3 seeds): behind the Recovery Gate, D's false completion falls from 0.112 to 0.000 and its verified completion on resolvable tasks rises from 0.824 to 0.892 (+0.068 [+0.046, +0.091]); unsafe episodes there fall from 482 to 34 of 3420. The hand-off result (1.000 against 0.011) is mostly the gate relabelling honest "failed" reports, and zero false completion is close to guaranteed by design (PREREGISTRATION_RG1_ADDENDUM2.md). B4 still completes more (1.000 on resolvable tasks).
 
 ## 5. What does RL add beyond SFT?
 
@@ -182,7 +182,7 @@ In the unresolvable regime, the faulted step's record and the audit log stay una
 
 **Verdict.** Safe abstention is not solved.
 
-<!-- RG1:PENDING -->
+RG1 (registered, sealed 440 tasks, D 3 seeds): behind the Recovery Gate, D's false completion falls from 0.112 to 0.000 and its verified completion on resolvable tasks rises from 0.824 to 0.892 (+0.068 [+0.046, +0.091]); unsafe episodes there fall from 482 to 34 of 3420. The hand-off result (1.000 against 0.011) is mostly the gate relabelling honest "failed" reports, and zero false completion is close to guaranteed by design (PREREGISTRATION_RG1_ADDENDUM2.md). B4 still completes more (1.000 on resolvable tasks).
 
 ## 9. Can the model inspect hidden state?
 
@@ -247,7 +247,7 @@ with the cited assumptions of `docs/upgrade/ROI.md` §3. The moderate scenario a
 - The value of ActionProof is in finding which checks matter and in training a second line of defence. It is not in
   replacing the checks.
 
-<!-- RG1:PENDING -->
+RG1 (registered, sealed 440 tasks, D 3 seeds): behind the Recovery Gate, D's false completion falls from 0.112 to 0.000 and its verified completion on resolvable tasks rises from 0.824 to 0.892 (+0.068 [+0.046, +0.091]); unsafe episodes there fall from 482 to 34 of 3420. The hand-off result (1.000 against 0.011) is mostly the gate relabelling honest "failed" reports, and zero false completion is close to guaranteed by design (PREREGISTRATION_RG1_ADDENDUM2.md). B4 still completes more (1.000 on resolvable tasks).
 
 ## 12. What can a reviewer reproduce without a GPU?
 
