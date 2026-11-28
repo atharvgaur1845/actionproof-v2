@@ -1,6 +1,6 @@
 # ActionProof — earlier video script (about 2:45; superseded)
 
-> **Superseded on 2026-11-29.** The submitted video (3:11, https://github.com/atharvgaur1845/actionproof-v2/releases/tag/video-v4)
+> **Superseded on 2026-11-29.** The submitted video (3:18, https://github.com/atharvgaur1845/actionproof-v2/releases/tag/video-v4)
 > follows `docs/submission/video/script.py`: a real screen-recorded live run on the L4 Space, then the research result.
 > This file is kept for the record.
 
