@@ -78,8 +78,9 @@ quadruples, B4 hands off in 60 of 60 episodes and D in 15 of 540. Source:
 (B0--B4, ablations A1--A6), a deterministic verifier, and a post-hoc account of its validity limits
 (\S\ref{sec:bench}). (2) Registered, multi-seed evidence that recovery demonstrations followed by GRPO train a 3.35B
 agent to reconcile such writes (\S\ref{sec:train}). (3) A registered test of supervised selective hand-off, with its
-narrowed scope (\S\ref{sec:sel1}). (4) A registered design for a runtime Recovery Gate that measures ``checks around
-the agent'', which our reviewers found missing (\S\ref{sec:rg1}). (5) Every number resolves through a claims ledger
+narrowed scope (\S\ref{sec:sel1}). (4) A registered test, on a fresh sealed split, of an evidence-only runtime Recovery Gate around the trained agent:
+the ``checks around the agent'' our reviewers found missing, with its decomposition and a registered follow-up (RG2;
+\S\ref{sec:rg1}, Appendices~\ref{app:rg1}--\ref{app:rg2}). (5) Every number resolves through a claims ledger
 and is recomputed from released episodes (\S\ref{sec:repro}). The paired evaluation design itself is not ours
 (the ``Did It Happen?'' preprint; \S\ref{sec:related}).\nocite{didithappen2026}
 
@@ -318,6 +319,13 @@ its replies it only converts false completions into failures or hand-offs. It en
 the prompt's intent, so a wrong prompt yields a correctly enforced wrong transaction. In the unresolvable regime it
 hands off as the specification asks, although a same-key resend would also be safe on keyed steps (\S\ref{sec:bench}).
 
+\paragraph{What the result is made of.} A dated addendum written before the results were read
+(\url{PREREGISTRATION_RG1_ADDENDUM2.md}; Appendix~\ref{app:rg1}) decomposes it. The system's own gain is on
+resolvable tasks: unsafe episodes fall from 482 to 34 of 3{,}420. On unresolvable tasks 468 of D's 540 ``failed''
+reports became hand-offs, and an agent that does nothing scores 60 of 60 behind the gate. D behind the gate also hands
+off too early when a record returns after a two-read outage (seed 0: 71 of 120 episodes, as predicted in addendum 1);
+a registered follow-up, RG2, lets the gate re-read up to three times and raises selectivity $J$ from 0.660 to 0.951 at no escalation cost (Appendix~\ref{app:rg2}).
+
 \section{What does not work}
 \label{sec:fails}
 
@@ -344,10 +352,11 @@ specification, so agreement is a consistency check, not independent ground truth
 
 Every split is hashed and registered before training, and every tag--split pair is evaluated once (the scripts refuse
 to overwrite). Every number in the README, write-up and slides resolves through \url{claims/claims.yaml}, which
-\url{scripts/s2_numcheck.py} checks against the result files (866 numbers, 0 failures). Two clean-room runs from a
-fresh clone with an empty cache and no token (commits \code{9750f73} and \code{319a383}) passed the CPU smoke check in
-27\,s and \url{bash scripts/verify_numbers.sh} in 367\,s and 375\,s, which recomputes every registered statistic from
-the released episodes; the recomputed \url{results/} were identical to the committed ones. Models, adapters, traces
+\url{scripts/s2_numcheck.py} checks against the result files (899 numbers, 0 failures). Clean-room runs from a
+fresh clone with an empty cache and no token (commits \code{9750f73} and \code{319a383}, then a public-GitHub clone
+after RG1 and RG2) passed \url{bash scripts/verify_numbers.sh} in 367\,s, 375\,s and 234\,s; it recomputes every
+registered statistic, including RG1 and RG2, from the released episodes, and the recomputed \url{results/} were
+identical to the committed ones. Models, adapters, traces
 and splits are public on the Hugging Face Hub (\url{atharvgaur18/actionproof-*}), with revisions and sha256 in
 \url{release/ARTIFACT_MANIFEST.json}; a live Space runs the trained agent against a reply-trusting script and reveals
 the database afterwards. Released models derive from Tiny Aya and carry CC-BY-NC-4.0.
@@ -420,11 +429,131 @@ P4 randomised demonstrations & \url{PREREGISTRATION_P4.md} & H1--H3 supported & 
 P5 other Cohere bases & \url{PREREGISTRATION_P5.md} & supported & \url{results/p5/p5_summary.json} \\
 TXN1 benchmark, H3 & \url{PREREGISTRATION_TXN1.md} + addenda 1--3 & H3 family not supported & \url{results/txn/stats__txn_test.json} \\
 SEL1 selective hand-off & \url{PREREGISTRATION_SEL1.md} + addendum 1 & H1, H3, H4 supported; H2 passes & \url{results/sel1/sel1_summary.json} \\
-RG1 Recovery Gate & \url{PREREGISTRATION_RG1.md} & supported (H1--H4) & \url{results/rg1/rg1_summary.json} \\
+RG1 Recovery Gate & \url{PREREGISTRATION_RG1.md} + addenda 1--2 & supported (H1--H4) & \url{results/rg1/rg1_summary.json} \\
+RG2 bounded re-read & \url{PREREGISTRATION_RG2.md} & supported (H1--H3) & \url{results/rg2/rg2_summary.json} \\
 Validity analysis & none (post hoc) & exploratory & \url{results/audit/txn_validity.json} \\
 \bottomrule
 \end{tabular}
 \end{center}
+
+\section{RG1 in detail: decomposition, groups, ablations, other agents}
+\label{app:rg1}
+
+\paragraph{Decomposition (addendum 2).} Counts over D's three seeds on rg1\_test (\url{results/rg1/rg1_addendum2.json}):
+
+\begin{center}\footnotesize
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+ & \multicolumn{2}{c}{Resolvable (3{,}420 ep.)} & \multicolumn{2}{c}{Unresolvable (540 ep.)} \\
+ & NG & RG & NG & RG \\
+\midrule
+Verified completion & 2{,}818 & 3{,}050 & 53 & 0 \\
+Unsafe & 482 & 34 & 24 & 0 \\
+Handed off & 6 & 180 & 6 & 540 \\
+Terminal report written by the gate & 0 & \multicolumn{3}{r}{780 of 3{,}960 RG episodes} \\
+\bottomrule
+\end{tabular}
+\end{center}
+Of D's 540 unresolvable episodes, 468 ended in an honest ``failed'' report without the gate and in a hand-off with it
+(467 of those hand-offs written by the gate). Reference policies behind the gate: one that does nothing and one that
+claims completion without acting both hand off on 60 of 60 unresolvable tasks (and on all 380 resolvable ones). The
+53 unresolvable completions without the gate are same-key resends, which the gate's escalate rule blocks. H1 is close to
+guaranteed by construction: a consistent read is a perfect oracle in this simulator, so the verify rule cannot accept a
+false completion. One ablation (no retry) produced 30 duplicate receipts that the full gate prevents.
+
+\paragraph{By group (S1; RG pooled over seeds, B4 one episode per task).} Verified completion on resolvable tasks:
+core 0.970, combined faults 0.928, new domain 0.900, lagging evidence 0.972, renamed arguments 0.844,
+\textbf{renamed tools 0.333}, \textbf{unseen workflows 0.289}; B4 1.000 everywhere (it uses canonical tool names even
+in the renamed groups). The gate cannot supply a skill the agent lacks.
+
+\paragraph{Rule ablations (S2, D seed 0; ablation minus full gate, 95\% CI).}
+\begin{center}\footnotesize
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Rule removed & FCR & DMR & STR & VTC (resolv.) & Hand-off (unres.) \\
+\midrule
+verify & +0.064 [.045, .089] & +0.027 & $-$0.062 & $-$0.070 & $-$0.033 \\
+retry & 0.000 & +0.027 [.017, .041] & $-$0.005 & $-$0.005 & 0.000 \\
+fresh & +0.006 [.001, .013] & +0.007 & $-$0.006 & $-$0.007 & 0.000 \\
+repair & 0.000 & +0.003 & $-$0.009 & $-$0.011 & 0.000 \\
+escalate & 0.000 & +0.006 & $-$0.131 & +0.001 & $-$0.967 \\
+\bottomrule
+\end{tabular}
+\end{center}
+Verification carries the false-completion result; escalation carries the hand-off; retry and fresh reads each prevent
+a small number of duplicates.
+
+\paragraph{Other agents (S3; gate minus no gate, 95\% CI).}
+\begin{center}\footnotesize
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Agent & FCR & STR & VTC (resolvable) \\
+\midrule
+Tiny Aya base (untrained) & $-$0.162 [$-$.188, $-$.137] & +0.214 [.165, .261] & +0.120 [.094, .147] \\
+Dw\_aug seed 0 & $-$0.177 [$-$.218, $-$.140] & +0.211 [.171, .250] & +0.150 [.117, .184] \\
+SEL seed 0 & $-$0.012 [$-$.022, $-$.005] & +0.019 [.006, .036] & +0.011 [.003, .020] \\
+Aya Expanse 8B (untrained) & $-$0.483 [$-$.548, $-$.420] & +0.351 [.311, .389] & +0.296 [.252, .340] \\
+B0 trust the reply (script) & $-$0.864 [$-$.920, $-$.808] & +0.039 [.022, .056] & $-$0.034 [$-$.053, $-$.018] \\
+B3 bounded retry (script) & $-$0.530 [$-$.632, $-$.436] & $-$0.186 [$-$.285, $-$.102] & $-$0.261 [$-$.359, $-$.167] \\
+\bottomrule
+\end{tabular}
+\end{center}
+The gate transfers to a model it was never developed on (Aya Expanse 8B), but in absolute terms an untrained model
+behind the gate stays far below the trained one (VTC 488 against 1{,}021 of 1{,}320 episodes for D seed 0). It adds
+little to the agent already trained to hand off (SEL), and it lowers completion for scripts that ignore its replies
+(B3): the gate blocks unsafe writes but cannot make a policy repair. On txn\_test (descriptive, S4) the RG1 effects
+replicate: FCR $-$0.117, VTC on resolvable tasks +0.068.
+
+\section{RG2: a bounded re-read}
+\label{app:rg2}
+RG1's gate hands off as soon as a written step's record is unavailable, so a record that comes back after a short
+outage is handed off too. \url{PREREGISTRATION_RG2.md} registered gate v2: the frozen RG1 gate plus one change, a step
+counts as unresolvable only after three unavailable reads since its last write (a value set before any outcome). The
+sealed split \code{rg2\_test} (240 tasks) has three hand-off-correct groups (U: an unreadable in-distribution step, an
+unreadable receipt, an unseen workflow) and resolvable outages (R: the record returns after two unavailable reads, $t2$;
+only the audit log is down), plus standard tasks. Arms: D seeds 0--2 behind v2 (V2) and behind the RG1 gate (V1), 3
+episodes per task.
+\begin{center}\footnotesize
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Hypothesis & V2 & V1 & Diff.\ [95\% CI] & Supported \\
+\midrule
+H1 selectivity $J$ (hand-off on U $-$ on R) & 0.951 & 0.660 & +0.291 [.146, .451] & yes (Holm $p=0.0002$) \\
+H2 STR on $t2$ (40 tasks) & 0.981 & 0.414 & +0.567 [.389, .744] & yes (Holm $p=0.0002$) \\
+H3 hand-off on U (bound $-0.03$) & 0.962 & 0.963 & $-$0.001 [$-$.003, .000] & yes \\
+\bottomrule
+\end{tabular}
+\end{center}
+\emph{Caveat:} the outage in $t2$ lasts two reads and v2 waits for three, so H2 is partly a mechanism check of the
+chosen limit rather than evidence about outages of unknown length. All three seed differences are positive for H1 and
+H2 (\url{results/rg2/rg2_summary.json}).
+
+\section{A worked episode: the live demonstration}
+\label{app:episode}
+Task 0004 (order, prepay, post; 166{,}090 cents) in Reality C, a phantom payment: the first \code{pay\_supplier} is
+answered \code{ok} but nothing is committed. Recorded in the live Space (greedy decoding, the released trained agent
+\url{atharvgaur18/actionproof-agent-d}); every verdict is read from the database after the run.
+\begin{center}\footnotesize
+\begin{tabular}{@{}rp{0.42\textwidth}p{0.42\textwidth}@{}}
+\toprule
+Turn & Reply-trusting script & Trained agent D \\
+\midrule
+1 & \code{place\_supplier\_order} $\to$ ok & \code{place\_supplier\_order} $\to$ ok \\
+2 & \code{pay\_supplier} $\to$ ok (\code{PAY-80A90E}) & \code{find\_supplier\_order} $\to$ order placed \\
+3 & \code{post\_journal\_entry} $\to$ ok & \code{pay\_supplier} $\to$ ok (\code{PAY-80A90E}) \\
+4 & report \code{completed} & \code{list\_payments} $\to$ \code{[]} (nothing was paid) \\
+5 & & \code{pay\_supplier}, same idempotency key $\to$ ok (\code{PAY-BEFAD4}) \\
+6 & & \code{list\_payments} $\to$ one payment of 166{,}090 \\
+7--8 & & \code{post\_journal\_entry}; \code{get\_journal\_entries} confirms \\
+9 & & report \code{completed}, ``each step confirmed in its system of record'' \\
+\midrule
+Verdict & false success; pay ABSENT & goal met; every step VERIFIED\_SUCCESS \\
+\bottomrule
+\end{tabular}
+\end{center}
+The same script behind the Recovery Gate (Space option ``Gate demo'') has its completed report rejected by the verify
+rule (``list\_payments shows no live payment''); the gate reads every step, finds no payment, and hands the order to a
+human with the evidence bundle. One episode illustrates the behaviour; the rates are in the tables above.
 
 \section{Caveats kept next to the numbers}
 \label{app:caveats}
