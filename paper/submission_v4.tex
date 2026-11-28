@@ -75,7 +75,14 @@ workflows (\path{docs/upgrade/ROI.md}).
 \paragraph{With more credits.} \emph{Plan:} 2 estimators $\times$ 3 costs $\times$ 2 group laws (shared, independent)
 $\times$ 5 runs, then a second Cohere model and a second simulator. \emph{Expected:} under shared groups GRPO's read
 rate stays nearly flat as cost changes, under independent groups it responds, and std-free follows cost under both.
-These are predictions, not results.
+These are predictions, not results. \emph{Next practical study (P6, registered, results after this submission):} GRPO was never run on top of the
+randomised-demonstration warm start of P4 (Appendix~\ref{app4:practical}), and randomising tool surfaces during GRPO from
+the older warm start (SR1) did not help. P6 continues GRPO from each P4 warm-start seed in two matched arms (canonical
+API, or six randomised tool surfaces) with 3 seeds each. It is scored on the held-out renamed-tool split (150 tasks), the
+unseen four-step workflow (160) and the canonical test splits (450). Success requires the surface arm to beat the
+canonical arm on the held-out API without losing the warm start's transfer, with false completion reported beside every
+score. It was registered before any training (\path{PREREGISTRATION_P6.md}, branch
+\path{research/p6-surface-randomized-grpo}) and will be reported in full whatever the outcome.
 
 \paragraph{Artifacts.} Code: \url{https://github.com/atharvgaur1845/actionproof-v2} (branch
 \texttt{submission-candidate}). Models: \texttt{atharvgaur18/actionproof-agent-d} and sibling adapters. Data and traces:
