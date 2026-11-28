@@ -29,9 +29,9 @@ out[n][sc]=apRoiProject(a,s,d.episodes_per_gpu_hour).cost_per_1000_ops.total_usd
 def test_upgrade_sections_read_only_result_files():
     import site_upgrade
     b = site_upgrade.build()
-    assert set(b) == {"r1", "r1t", "j1", "roi", "p1", "p2", "p3", "theory"}
-    for k in ("r1", "r1t", "j1", "p1"):
-        assert b[k]["source"].startswith("results/")
+    assert set(b) == {"r1", "r1t", "j1", "roi", "p1", "p2", "p3", "theory", "txn", "sel1", "p4", "p5", "b1api"}
+    for k in b:  # every section is built only from committed result files
+        assert b[k]["source"].startswith("results/"), k
     assert b["roi"]["source"] == "results/roi/roi_model.json" and len(b["roi"]["arms"]) == 7
 
 

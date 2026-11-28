@@ -1,6 +1,10 @@
-# ActionProof — final video script (about 2:45)
+# ActionProof — earlier video script (about 2:45; superseded)
 
-Narrator: the author. Screens: the live Space in judge mode, the deck (https://claude.ai/artifact/N5NxS6YHhbaGqGSUMqeYbW,
+> **Superseded on 2026-11-29.** The submitted video (3:11, https://github.com/atharvgaur1845/actionproof-v2/releases/tag/video-v4)
+> follows `docs/submission/video/script.py`: a real screen-recorded live run on the L4 Space, then the research result.
+> This file is kept for the record.
+
+Narrator: the author. Screens: the live Space in judge mode, the deck (`docs/submission/ActionProof_deck.pdf`,
 mirrored by `docs/submission/SLIDES.md`), and result files. The run of show, with fallbacks, is
 `docs/submission/DEMO_RUN_OF_SHOW.md`. Every number spoken or on screen resolves through `claims/claims.yaml`.
 

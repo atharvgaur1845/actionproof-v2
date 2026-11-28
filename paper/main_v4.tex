@@ -45,8 +45,10 @@ cells, including all 77 where the vote and the value disagree; one registered hy
 In a registered five-seed study of a 3.35B tool agent, every GRPO seed ends at the warm start's no-read behaviour while
 a std-free estimator reads and improves verified completion from 0.687 to 0.807, $+12.0$ points (registered
 task-bootstrap 95\% CI [8.8, 15.3]; [7.5, 16.7] when seeds are also resampled); the GRPO arm is
-degenerate, so this is the strongest result the test can return. A registered cost intervention on the language agent,
-one seed per arm, is reported with its limits in \S\ref{sec:llm}. We claim neither a new optimiser nor a universal GRPO failure: we identify a latent-state
+degenerate (all five seeds equal the warm start, and $p=0.016$ is the exact test's floor), so the result is that
+standard GRPO did not learn to read in this setup while the std-free estimator did, not five independent GRPO
+replications. No cost response of the language agent is claimed: a registered one-seed cost intervention had not
+finished when this version was frozen (\S\ref{sec:llm}). We claim neither a new optimiser nor a universal GRPO failure: we identify a latent-state
 regime in which group-local scaling misaligns learning with the value of information.
 \end{abstract}
 
@@ -243,8 +245,8 @@ reads have zero spread and the vote is carried by faulted states (P4). A dated a
 (\path{PREREGISTRATION_AD_C2_ADDENDUM1.md}) narrows P1's basis: with stochastic repair the theory predicts
 \emph{approximate} cost-blindness (a small GRPO response, far below std-free's), not exact invariance.
 \textbf{Status:} the runs had not completed when this version was frozen; no AD-C2 outcome is reported or implied
-here, and the paper's cost-blindness claim for the language agent rests on AD-C1 and the counterfactual re-score
-(\S\ref{sec:mech}). Results will be added from \path{results/ad/c2/c2_summary.json} without changing the analysis. One
+here, and the paper makes no trained cost-response claim for the language agent: AD-C1 used one cost, and the
+counterfactual re-score (\S\ref{sec:mech}) is descriptive. Results will be added from \path{results/ad/c2/c2_summary.json} without changing the analysis. One
 seed per arm and one group law: a limited intervention, not the planned factorial (2 estimators $\times$ 3 costs
 $\times$ 2 laws $\times$ seeds), which did not fit the time available.
 

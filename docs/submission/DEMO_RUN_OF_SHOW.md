@@ -5,9 +5,10 @@ surfaces exist. They are never conflated, and each one carries its label on scre
 
 | Surface | URL | What it is | Label on screen |
 |---|---|---|---|
-| Live Space | https://huggingface.co/spaces/atharvgaur18/actionproof-live | A real Cohere model per run (ZeroGPU), curated tasks, hidden reality revealed after the run | `LIVE MODEL RUN`, `SCRIPTED`, `RECORDED MODEL RUN` |
-| Replay Space | https://huggingface.co/spaces/atharvgaur18/actionproof | The full registered study: every result and recorded episode; no model is called | "recorded episodes" |
-| Deck | https://claude.ai/artifact/N5NxS6YHhbaGqGSUMqeYbW (export PDF or PPTX) | Six core slides and an appendix, mirrored by `docs/submission/SLIDES.md` | — |
+| Live Space | https://huggingface.co/spaces/atharvgaur18/actionproof-live | A real Cohere model per run (dedicated Nvidia L4 GPU since 2026-11-28 23:56 IST; ZeroGPU before), curated tasks, hidden reality revealed after the run | `LIVE MODEL RUN`, `SCRIPTED`, `RECORDED MODEL RUN` |
+| Replay Space | https://huggingface.co/spaces/atharvgaur18/actionproof (static; served at atharvgaur18-actionproof.static.hf.space) | The full registered study: every result and recorded episode; no model is called | "recorded episodes" |
+| Deck | `docs/submission/ActionProof_deck.pdf` (public, 12 slides) | Theory slide, six core slides and an appendix, mirrored by `docs/submission/SLIDES.md` | — |
+| Video | https://github.com/atharvgaur1845/actionproof-v2/releases/tag/video-v4 | A real screen-recorded live run on the L4 (sped up, freeze-frames labelled), the reveal of that run, then the research result | on-screen chips: `LIVE MODEL RUN`, `SAME LIVE RUN`, `RECORDED RESULT` |
 
 **Before recording (author).**
 1. Open the live Space and press Run once in judge mode. This wakes the GPU and loads the model, which can take about
@@ -15,11 +16,12 @@ surfaces exist. They are never conflated, and each one carries its label on scre
 2. If ZeroGPU refuses (quota or queue), the Space falls back to the recorded run of the same model, task and reality,
    under a `LIVE RUN FAILED … RECORDED MODEL RUN` banner. Record that honestly with its label, or retry later.
    Never edit the label out.
-3. **Set the base model's `HF_TOKEN` Space secret (author action, still open).** The base model is gated. On
+3. **Set the base model's `HF_TOKEN` Space secret (author action, still open; re-checked 2026-11-29 00:45 IST: the live
+   base run still fails with `GatedRepoError: 401` and falls back, labelled, in 4 s).** The base model is gated. On
    2026-11-27 the live Space had no token: a live base run failed with `GatedRepoError: 401` and fell back, labelled,
    to the recorded base run. Judge mode and the trained agent are unaffected (the trained agent is public).
 
-## Timeline (about 2:45; identical to `docs/submission/VIDEO_SCRIPT.md`)
+## Timeline of the earlier recorded-demo plan (about 2:45; superseded for the video by `docs/submission/video/script.py`, kept as a live-demo route)
 
 | Time | Screen | Label | Action | Say |
 |---|---|---|---|---|
@@ -60,6 +62,9 @@ A human check in a browser is still needed for the layout items.
 - [x] A real live failure falls back with the `LIVE RUN FAILED … RECORDED MODEL RUN` banner (the live base run,
       missing `HF_TOKEN`, above). Also covered by unit test `test_live_failure_falls_back_to_labelled_recording`.
 - [x] The session cap: unit test `test_session_cap_and_free_scripted_runs` (not exercised live, to save GPU quota).
-- [ ] Cold start from a sleeping Space: not measured (the Space was awake). Press Run once before recording.
-- [ ] Layout at 1280 px and on mobile (columns stack under 760 px, CSS `@media (max-width: 760px)`): needs a browser;
-      the headless browser in this environment does not start.
+- [x] First run after a restart (L4, 2026-11-28 23:57 IST, model not yet loaded): about 106 s from Run to finished;
+      warm runs about 85 s. A Space asleep for longer than its sleep time also needs the container to start: press Run
+      once before the call.
+- [x] Layout (Chrome, 2026-11-29 00:45 IST): no horizontal overflow at 1280 px or 390 px; columns stack on mobile;
+      light and dark colour schemes legible. Minor: on mobile the task dropdown truncates to "Task 0004 · ord…".
+      Screenshots kept locally in `judge_readiness/space_qa/`.

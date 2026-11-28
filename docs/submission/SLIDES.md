@@ -1,7 +1,7 @@
 # ActionProof: final-round deck (source)
 
-**The rendered deck** is a Slides artifact: https://claude.ai/artifact/N5NxS6YHhbaGqGSUMqeYbW (private until the
-author shares it). It exports to PDF and PPTX. Its source files are in `docs/submission/deck/`.
+**The rendered deck is `docs/submission/ActionProof_deck.pdf`** (12 slides, public in this repository). Its source
+files are in `docs/submission/deck/`; the PDF is rendered from them with Chrome.
 
 **This file mirrors every number and claim on it.** It is scanned by `python scripts/s2_numcheck.py`, so every number
 here resolves through `claims/claims.yaml`. The deck shows the same numbers, some rounded for display ($1.49M on a
