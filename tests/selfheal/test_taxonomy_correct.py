@@ -214,3 +214,15 @@ def test_teacher_uses_only_agent_visible_env_surface():
         ctx = Context(spec=spec_for(t), rep=rep)
         B4Teacher().continue_from(ctx)
         assert ctx.actions and '"submit_report"' in ctx.actions[-2]["content"]
+
+
+def test_corrections_on_keyed_steps_have_no_back_to_back_identical_reads():
+    for cls in ("phantom", "lost_ack", "partial", "precommit_timeout"):
+        t = p1_task(cls)
+        r = correct_episode(simulate(t, naive_calls(t)), B4Teacher())
+        if r["status"] == "skipped":
+            continue
+        assert r["status"] == "accepted"
+        acts = [m["content"] for m in r["conversation"][r["prefix_len"]::2]]
+        reads = [a for a in acts if any(x in a for x in ("list_payments", "find_supplier_order", "get_journal_entries"))]
+        assert all(a != b for a, b in zip(acts, acts[1:]) if a in reads), (cls, acts)

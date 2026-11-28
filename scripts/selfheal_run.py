@@ -152,7 +152,7 @@ def cmd_correct(a: argparse.Namespace) -> None:
                 rec.setdefault("tag", tag_of(path))
                 yield rec
     led = Ledger.load(a.ledger) if a.ledger else None
-    exclude = led.protected_task_ids() if led else set()
+    exclude = led.gate_task_ids() if led else set()  # gate tasks never become correction data
     out = Path(a.out)
     t0 = time.time()
     stats = correct.run(records(), make_teacher(a), out, max_cuts=a.max_cuts, exclude_task_ids=exclude)
@@ -183,6 +183,24 @@ def cmd_curate(a: argparse.Namespace) -> None:
     print(json.dumps({k: v for k, v in stats.items() if not k.endswith("_task_ids")}, indent=1))
 
 
+def cmd_mix(a: argparse.Namespace) -> None:
+    """Correction SFT rows plus a seeded sample of the incumbent's own warm-start rows (a replay buffer against
+    forgetting): n_replay = round(ratio x n_corrections), drawn without replacement."""
+    import random
+    rows = [l for l in Path(a.rows).read_text().splitlines() if l.strip()]
+    pool = [l for l in Path(a.replay).read_text().splitlines() if l.strip()]
+    k = min(len(pool), round(a.ratio * len(rows)))
+    rng = random.Random(a.seed)
+    picked = rng.sample(pool, k)
+    mixed = rows + picked
+    rng.shuffle(mixed)
+    Path(a.out).parent.mkdir(parents=True, exist_ok=True)
+    Path(a.out).write_text("\n".join(mixed) + "\n")
+    st = {"corrections_rows": len(rows), "replay_rows": k, "replay_source": a.replay, "ratio": a.ratio, "seed": a.seed}
+    Path(a.out).with_suffix(".stats.json").write_text(json.dumps(st, indent=1))
+    print(json.dumps(st))
+
+
 # ---------------------------------------------------------------------- gate
 def cmd_gate(a: argparse.Namespace) -> None:
     from actionproof.selfheal import gate
@@ -201,6 +219,18 @@ def cmd_splits(a: argparse.Namespace) -> None:
     if a.check:
         sys.exit(splits.check())
     print(json.dumps(splits.write(), indent=1))
+
+
+def cmd_register_gate(a: argparse.Namespace) -> None:
+    """Record the gate splits in the ledger, so `correct` skips their tasks and `use` refuses them as loop data."""
+    from actionproof.bench.generator_proc import DATA
+    from actionproof.selfheal import splits
+    from actionproof.selfheal.ledger import Ledger
+    led = Ledger.load(a.ledger)
+    for n in splits.GATE_PRIMARY + splits.GATE_RETENTION:
+        led.register_gate_split(n, DATA / f"{n}.jsonl")
+    led.save()
+    print(json.dumps({n: len(g["task_ids"]) for n, g in led.gate_splits.items()}))
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -230,6 +260,12 @@ def main(argv: list[str] | None = None) -> None:
     u.add_argument("--no-curatorkit", action="store_true")
     u.add_argument("--ledger")
     u.add_argument("--round", default="r1")
+    x = sub.add_parser("mix")
+    x.add_argument("--rows", required=True)
+    x.add_argument("--replay", required=True)
+    x.add_argument("--ratio", type=float, default=1.0)
+    x.add_argument("--seed", type=int, default=20261129)
+    x.add_argument("--out", required=True)
     g = sub.add_parser("gate")
     g.add_argument("--criteria", required=True)
     g.add_argument("--candidate", nargs="+", required=True)
@@ -238,8 +274,10 @@ def main(argv: list[str] | None = None) -> None:
     g.add_argument("--out", required=True)
     s = sub.add_parser("splits")
     s.add_argument("--check", action="store_true")
+    rg = sub.add_parser("register-gate")
+    rg.add_argument("--ledger", required=True)
     a = ap.parse_args(argv)
-    {"diagnose": cmd_diagnose, "correct": cmd_correct, "curate": cmd_curate, "gate": cmd_gate,
+    {"diagnose": cmd_diagnose, "correct": cmd_correct, "curate": cmd_curate, "gate": cmd_gate, "mix": cmd_mix, "register-gate": cmd_register_gate,
      "splits": cmd_splits}[a.cmd](a)
 
 

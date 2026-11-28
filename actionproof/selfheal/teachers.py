@@ -116,7 +116,8 @@ class B4Teacher:
     - an absent effect is retried with the last key this episode used for the step, unless the visible history
       shows that key's effect was already used up (its acknowledged id is visible but no longer live); otherwise a
       key this episode has not used;
-    - without consistent reads (P1 env) an absent or partial reading is confirmed by a second read before writing;
+    - without consistent reads (P1 env) an absent or partial goods receipt (the one unkeyed write) is confirmed by
+      a second read before writing again; keyed steps are resent with the same key, which is safe under a stale read;
     - a duplicate payment keeps one full live payment (the earliest) and refunds the others;
     - when retries are exhausted: escalate on TXN (B4), report "failed" on P1 (the P1 oracle).
     """
@@ -180,8 +181,11 @@ class B4Teacher:
                     return self._escalate(ctx, pid, f"cannot confirm {step} for {pid}: its records are unavailable")
                 return "failed"
             seen = _observed(step, obs, po)
-            if seen in ("absent", "partial") and not ctx.spec.consistent_reads:
-                again = self._read(ctx, step, pid)  # a replica may lag; trust two agreeing reads
+            if seen in ("absent", "partial") and step == "receive" and not ctx.spec.consistent_reads and any(
+                    h["tool"] == STEP_TOOL[step] for h in ctx.history()):
+                # an unkeyed write after an earlier one: a lagging replica would make it a duplicate, so the
+                # absence must be seen twice (keyed steps are safe to resend with the same key)
+                again = self._read(ctx, step, pid)
                 if not _ok(again):
                     return "failed"
                 obs, seen = again, _observed(step, again, po)

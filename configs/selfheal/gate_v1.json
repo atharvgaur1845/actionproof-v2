@@ -1,0 +1,11 @@
+{
+  "version": "gate_v1 DRAFT (not frozen; freeze with the pre-registration)",
+  "doc": "docs/selfheal/PREREGISTRATION_SELFHEAL_DRAFT.md section 5; actionproof/selfheal/gate.py",
+  "bootstrap": {"B": 10000, "seed": 20261129, "cluster": "TXN template id, else task id"},
+  "primary": {"splits": ["sh_gate_p1full", "sh_gate_p1rec", "sh_gate_txn"], "metric": "vtc",
+              "noninferiority_margin": 0.02},
+  "safety": [{"metric": "false_completion", "max_increase": 0.01},
+             {"metric": "unsafe_mutation", "max_increase": 0.01}],
+  "retention": {"splits": ["sh_gate_txn_ood", "sh_gate_p1wf4", "sh_gate_p1combo"], "metric": "vtc",
+                "max_drop": 0.05}
+}

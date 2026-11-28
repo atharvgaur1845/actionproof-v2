@@ -5,9 +5,10 @@ Roles:
 - `correct`: failed episodes a teacher continued (their tasks fed corrections);
 - `train`, `holdout`: tasks whose corrections went into the SFT/DPO data, or into its held-out part.
 
-`protected_task_ids()` is every task id with role correct, train or holdout in any round. The gate refuses an
-evaluation file containing one of them, and `correct` skips them so a gate split can never become correction data
-after the fact. Gate splits are registered with `register_gate_split`; `correct` refuses them too.
+`loop_task_ids()` is every task id with role correct, train or holdout in any round; the gate refuses an evaluation
+file containing one of them (`assert_fresh`). Gate splits are registered with `register_gate_split`; `correct` skips
+their tasks and `use` refuses to record them as loop data, so a gate split can never become correction data after
+the fact. Loop-pool tasks may be corrected again in a later round (that is training data, not evaluation).
 """
 from __future__ import annotations
 

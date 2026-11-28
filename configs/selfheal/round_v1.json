@@ -1,0 +1,16 @@
+{
+  "version": "round_v1 DRAFT (not frozen)",
+  "doc": "docs/selfheal/DESIGN.md; slurm/tasks/21xx_sh_*.sh implement these values",
+  "incumbent": {"tags": ["D_s0", "D_s1", "D_s2"], "models": "/scratch/pabitra/actionproof/runs/p1_d_s{k}/merged"},
+  "pool_eval": {"script": "scripts/selfheal_eval.py", "samples": 4, "turns": 16, "max_new_tokens": 256},
+  "teacher": {"backend": "b4", "alternative": "llm: CohereLabs/aya-expanse-32b via vLLM serve, temperature 0"},
+  "curate": {"holdout_frac": 0.2, "seed": 20261129, "per_task_cap": 2, "per_class_cap": 150, "minhash": 0.95,
+             "dedup": "CuratorKIT ExactDeduplicator + MinHashDeduplicator"},
+  "mix": {"replay": "data/rft/p1_dwarm_rows.jsonl (the incumbent's own warm-start rows)", "ratio": 1.0},
+  "sft": {"entry": "python -m actionproof.train.rft", "init": "incumbent merged model of the same seed",
+          "epochs": 1, "lr": 5e-5, "lora_r": 16, "batch": 2, "grad_accum": 8, "max_length": 6144,
+          "why": "P1 arm C settings (recovery SFT on top of a trained agent)"},
+  "dpo_optional": {"entry": "python -m actionproof.train.dpo", "init": "the SFT candidate's adapter",
+                   "beta": 0.1, "lr": 5e-6, "epochs": 1},
+  "rounds": 2
+}
