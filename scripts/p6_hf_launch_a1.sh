@@ -5,7 +5,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 REPO=atharvgaur18/actionproof-jobs
-FLAVOR=h200; TIMEOUT=2h30m   # addendum 1: four jobs, at most $50
+FLAVOR=h200; TIMEOUT=150m    # addendum 1: four jobs, at most $50
 VENV=/scratch/pabitra/actionproof/.venv   # read-only use of the main environment's Python and hf CLI
 export HF_HOME=/scratch/pabitra/.cache/huggingface HF_HUB_OFFLINE=0
 $VENV/bin/python scripts/freeze_p6.py --check
