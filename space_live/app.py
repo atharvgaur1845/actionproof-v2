@@ -130,6 +130,16 @@ CSS = """
   --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace; --sans:"DM Sans",system-ui,-apple-system,sans-serif;
   --accent: var(--ink); --muted: var(--gr); --line: var(--hair); --soft: var(--min); }
 body, gradio-app, .gradio-container { background: var(--paper) !important; }
+/* The page is always the light paper design: in a dark-mode browser Gradio would otherwise switch text to near-white. */
+.gradio-container, .gradio-container .prose, .gradio-container .prose *, .gradio-container .html-container *,
+.req, .req *, .step, .step *, .tbl, .tbl *, .note, .note *, .verdict, .verdict span, .lede, .lede *,
+.gradio-container input, .gradio-container label, .gradio-container .wrap, .gradio-container li { color: var(--ink) !important; }
+.dark .gradio-container .block, .dark .gradio-container input, .dark .gradio-container .wrap,
+.dark .gradio-container .secondary-wrap { background: var(--card) !important; color: var(--ink) !important; }
+.hd, .tt, .lbl, .empty, .fine, th, .args { color: var(--gr) !important; }
+.banner.live { color: var(--chr) !important; } .banner.recorded { color: var(--ver-t) !important; }
+.verdict b { color: var(--ver) !important; } mark.ack { color: var(--ink) !important; }
+.hero .red { color: var(--ver) !important; } .lede a { color: var(--ver-t) !important; }
 .gradio-container { max-width: 1240px !important; color: var(--ink); font-family: var(--sans) !important; }
 footer { display: none !important; }
 .topbar { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; letter-spacing: .08em;
@@ -144,10 +154,14 @@ footer { display: none !important; }
 .lede a { color: var(--ver-t); }
 .guide { background: var(--dk); color: var(--paper); border-radius: 2px; padding: 18px 22px; margin: 6px 0 18px; }
 .guide .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--chr); margin-bottom: 8px; }
-.guide, .guide li, .guide p, .guide i, .guide div, .guide span:not([class]) { color: var(--paper) !important; }
-.guide b { color: #fff !important; } .guide code { color: var(--chr) !important; background: transparent; }
-.guide .eyebrow { color: var(--chr) !important; } .guide .legend .l-live { color: var(--ink) !important; }
-.guide .legend .l-rec { color: var(--ver) !important; }
+.gradio-container .prose .guide, .gradio-container .prose .guide li, .gradio-container .prose .guide p,
+.gradio-container .prose .guide i, .gradio-container .prose .guide div, .gradio-container .prose .guide span,
+.gradio-container .guide, .gradio-container .guide * { color: var(--paper) !important; }
+.gradio-container .prose .guide b, .gradio-container .guide b { color: #fff !important; }
+.gradio-container .prose .guide code, .gradio-container .guide code { color: var(--chr) !important; background: transparent; }
+.gradio-container .prose .guide .eyebrow, .gradio-container .guide .eyebrow { color: var(--chr) !important; }
+.gradio-container .prose .guide .legend .l-live, .gradio-container .guide .legend .l-live { color: var(--ink) !important; }
+.gradio-container .prose .guide .legend .l-rec, .gradio-container .guide .legend .l-rec { color: var(--ver) !important; }
 .guide ol { margin: 6px 0 10px 18px; padding: 0; } .guide li { margin: 3px 0; }
 .guide li::marker { font-family: var(--mono); color: var(--chr); }
 .legend { margin: 6px 0; font-size: 13.5px; }
@@ -183,8 +197,9 @@ table.kv th { width: 150px; }
 .step.gate { border-left: 3px solid var(--ink); background: #EEF3D8; }
 .step.blocked { border-left: 3px solid var(--ver); }
 .gnote { color: var(--ink); font-size: 12.5px; font-weight: 700; margin: 2px 0; }
-.gradio-container label span, .gradio-container .label-wrap span { font-family: var(--mono) !important; font-size: 11px !important;
-  letter-spacing: .06em; text-transform: uppercase; color: var(--gr) !important; }
+.gradio-container label span, .gradio-container .label-wrap span, .gradio-container [data-testid="block-info"] {
+  font-family: var(--mono) !important; font-size: 11px !important; letter-spacing: .06em; text-transform: uppercase;
+  color: #4A4B45 !important; }
 button.primary { font-family: var(--mono) !important; text-transform: uppercase; letter-spacing: .12em; border-radius: 2px !important; }
 @media (max-width: 760px) { .cols, .cmp, .grid2 { grid-template-columns: 1fr; grid-auto-flow: row; } .topbar span:nth-child(2) { display: none; } }
 """
