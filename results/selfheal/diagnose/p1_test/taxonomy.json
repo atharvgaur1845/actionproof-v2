@@ -1,0 +1,1226 @@
+{
+ "label": "DESCRIPTIVE: failure taxonomy of existing recorded episodes; no hypothesis is tested and nothing here was used to choose any loop setting.",
+ "definitions": "actionproof/selfheal/taxonomy.py",
+ "inputs": {
+  "/scratch/pabitra/actionproof/results/p1/test/D_s0__p1_test_full.jsonl": {
+   "tag": "D_s0",
+   "episodes": 600,
+   "successes": 581,
+   "failures": 19,
+   "primary": {
+    "partial_commit": 1,
+    "phantom_write": 13,
+    "wrong_handoff": 4,
+    "invalid_call": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 14,
+    "unsafe_retry": 0,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 13,
+    "lost_ack_seen": 0,
+    "escalated": 0,
+    "harm": 0,
+    "any_invalid_call": 0
+   },
+   "vtc": 491,
+   "success": 581
+  },
+  "/scratch/pabitra/actionproof/results/p1/test/D_s0__p1_test_pp.jsonl": {
+   "tag": "D_s0",
+   "episodes": 450,
+   "successes": 428,
+   "failures": 22,
+   "primary": {
+    "partial_commit": 18,
+    "false_completion_report": 1,
+    "wrong_handoff": 3
+   },
+   "flags_among_failures": {
+    "false_completion": 18,
+    "unsafe_retry": 0,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 0,
+    "lost_ack_seen": 0,
+    "escalated": 0,
+    "harm": 0,
+    "any_invalid_call": 0
+   },
+   "vtc": 428,
+   "success": 428
+  },
+  "/scratch/pabitra/actionproof/results/p1/test/D_s0__p1_test_rec.jsonl": {
+   "tag": "D_s0",
+   "episodes": 600,
+   "successes": 586,
+   "failures": 14,
+   "primary": {
+    "unsafe_retry": 2,
+    "duplicate_mutation": 2,
+    "partial_commit": 2,
+    "phantom_write": 4,
+    "wrong_handoff": 4
+   },
+   "flags_among_failures": {
+    "false_completion": 10,
+    "unsafe_retry": 2,
+    "injected_duplicate": 4,
+    "phantom_ack_seen": 5,
+    "lost_ack_seen": 1,
+    "escalated": 0,
+    "harm": 4,
+    "any_invalid_call": 2
+   },
+   "vtc": 549,
+   "success": 586
+  },
+  "/scratch/pabitra/actionproof/results/p1/test/D_s0__p1_test_wf4.jsonl": {
+   "tag": "D_s0",
+   "episodes": 300,
+   "successes": 165,
+   "failures": 135,
+   "primary": {
+    "unsafe_retry": 21,
+    "partial_commit": 28,
+    "phantom_write": 1,
+    "false_completion_report": 78,
+    "wrong_handoff": 6,
+    "invalid_call": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 122,
+    "unsafe_retry": 34,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 8,
+    "lost_ack_seen": 40,
+    "escalated": 0,
+    "harm": 21,
+    "any_invalid_call": 12
+   },
+   "vtc": 165,
+   "success": 165
+  },
+  "/scratch/pabitra/actionproof/results/p1/test/D_s0__p1_test_combo.jsonl": {
+   "tag": "D_s0",
+   "episodes": 300,
+   "successes": 251,
+   "failures": 49,
+   "primary": {
+    "unsafe_retry": 2,
+    "duplicate_mutation": 1,
+    "partial_commit": 41,
+    "phantom_write": 4,
+    "wrong_handoff": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 47,
+    "unsafe_retry": 3,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 25,
+    "lost_ack_seen": 4,
+    "escalated": 0,
+    "harm": 3,
+    "any_invalid_call": 3
+   },
+   "vtc": 251,
+   "success": 251
+  },
+  "/scratch/pabitra/actionproof/results/p1/test/D_s1__p1_test_full.jsonl": {
+   "tag": "D_s1",
+   "episodes": 600,
+   "successes": 578,
+   "failures": 22,
+   "primary": {
+    "unsafe_retry": 2,
+    "partial_commit": 1,
+    "phantom_write": 12,
+    "false_completion_report": 2,
+    "wrong_handoff": 4,
+    "invalid_call": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 17,
+    "unsafe_retry": 2,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 13,
+    "lost_ack_seen": 1,
+    "escalated": 0,
+    "harm": 2,
+    "any_invalid_call": 0
+   },
+   "vtc": 487,
+   "success": 578
+  },
+  "/scratch/pabitra/actionproof/results/p1/test/D_s1__p1_test_pp.jsonl": {
+   "tag": "D_s1",
+   "episodes": 450,
+   "successes": 420,
+   "failures": 30,
+   "primary": {
+    "duplicate_mutation": 2,
+    "partial_commit": 23,
+    "false_completion_report": 1,
+    "wrong_handoff": 3,
+    "loop_or_timeout": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 26,
+    "unsafe_retry": 0,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 0,
+    "lost_ack_seen": 0,
+    "escalated": 0,
+    "harm": 2,
+    "any_invalid_call": 3
+   },
+   "vtc": 420,
+   "success": 420
+  },
+  "/scratch/pabitra/actionproof/results/p1/test/D_s1__p1_test_rec.jsonl": {
+   "tag": "D_s1",
+   "episodes": 600,
+   "successes": 586,
+   "failures": 14,
+   "primary": {
+    "unsafe_retry": 1,
+    "duplicate_mutation": 4,
+    "partial_commit": 2,
+    "phantom_write": 4,
+    "wrong_handoff": 3
+   },
+   "flags_among_failures": {
+    "false_completion": 11,
+    "unsafe_retry": 1,
+    "injected_duplicate": 3,
+    "phantom_ack_seen": 5,
+    "lost_ack_seen": 1,
+    "escalated": 0,
+    "harm": 5,
+    "any_invalid_call": 3
+   },
+   "vtc": 549,
+   "success": 586
+  },
+  "/scratch/pabitra/actionproof/results/p1/test/D_s1__p1_test_wf4.jsonl": {
+   "tag": "D_s1",
+   "episodes": 300,
+   "successes": 137,
+   "failures": 163,
+   "primary": {
+    "unsafe_retry": 8,
+    "partial_commit": 21,
+    "false_completion_report": 129,
+    "wrong_handoff": 4,
+    "invalid_call": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 155,
+    "unsafe_retry": 18,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 11,
+    "lost_ack_seen": 28,
+    "escalated": 0,
+    "harm": 8,
+    "any_invalid_call": 9
+   },
+   "vtc": 137,
+   "success": 137
+  },
+  "/scratch/pabitra/actionproof/results/p1/test/D_s1__p1_test_combo.jsonl": {
+   "tag": "D_s1",
+   "episodes": 300,
+   "successes": 253,
+   "failures": 47,
+   "primary": {
+    "unsafe_retry": 2,
+    "partial_commit": 40,
+    "phantom_write": 5
+   },
+   "flags_among_failures": {
+    "false_completion": 47,
+    "unsafe_retry": 2,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 24,
+    "lost_ack_seen": 4,
+    "escalated": 0,
+    "harm": 2,
+    "any_invalid_call": 1
+   },
+   "vtc": 253,
+   "success": 253
+  },
+  "/scratch/pabitra/actionproof/results/p1/test/D_s2__p1_test_full.jsonl": {
+   "tag": "D_s2",
+   "episodes": 600,
+   "successes": 585,
+   "failures": 15,
+   "primary": {
+    "unsafe_retry": 2,
+    "partial_commit": 1,
+    "phantom_write": 7,
+    "wrong_handoff": 4,
+    "invalid_call": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 9,
+    "unsafe_retry": 2,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 7,
+    "lost_ack_seen": 1,
+    "escalated": 0,
+    "harm": 2,
+    "any_invalid_call": 0
+   },
+   "vtc": 492,
+   "success": 585
+  },
+  "/scratch/pabitra/actionproof/results/p1/test/D_s2__p1_test_pp.jsonl": {
+   "tag": "D_s2",
+   "episodes": 450,
+   "successes": 427,
+   "failures": 23,
+   "primary": {
+    "duplicate_mutation": 1,
+    "partial_commit": 18,
+    "false_completion_report": 1,
+    "wrong_handoff": 3
+   },
+   "flags_among_failures": {
+    "false_completion": 19,
+    "unsafe_retry": 0,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 0,
+    "lost_ack_seen": 0,
+    "escalated": 0,
+    "harm": 1,
+    "any_invalid_call": 0
+   },
+   "vtc": 427,
+   "success": 427
+  },
+  "/scratch/pabitra/actionproof/results/p1/test/D_s2__p1_test_rec.jsonl": {
+   "tag": "D_s2",
+   "episodes": 600,
+   "successes": 584,
+   "failures": 16,
+   "primary": {
+    "unsafe_retry": 1,
+    "duplicate_mutation": 3,
+    "partial_commit": 1,
+    "phantom_write": 3,
+    "wrong_handoff": 7,
+    "invalid_call": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 8,
+    "unsafe_retry": 1,
+    "injected_duplicate": 5,
+    "phantom_ack_seen": 4,
+    "lost_ack_seen": 1,
+    "escalated": 0,
+    "harm": 4,
+    "any_invalid_call": 2
+   },
+   "vtc": 547,
+   "success": 584
+  },
+  "/scratch/pabitra/actionproof/results/p1/test/D_s2__p1_test_wf4.jsonl": {
+   "tag": "D_s2",
+   "episodes": 300,
+   "successes": 180,
+   "failures": 120,
+   "primary": {
+    "unsafe_retry": 23,
+    "partial_commit": 25,
+    "false_completion_report": 67,
+    "wrong_handoff": 4,
+    "invalid_call": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 112,
+    "unsafe_retry": 36,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 4,
+    "lost_ack_seen": 42,
+    "escalated": 0,
+    "harm": 23,
+    "any_invalid_call": 6
+   },
+   "vtc": 180,
+   "success": 180
+  },
+  "/scratch/pabitra/actionproof/results/p1/test/D_s2__p1_test_combo.jsonl": {
+   "tag": "D_s2",
+   "episodes": 300,
+   "successes": 247,
+   "failures": 53,
+   "primary": {
+    "unsafe_retry": 2,
+    "partial_commit": 40,
+    "phantom_write": 5,
+    "lost_acknowledgement": 5,
+    "wrong_handoff": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 47,
+    "unsafe_retry": 4,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 25,
+    "lost_ack_seen": 9,
+    "escalated": 0,
+    "harm": 2,
+    "any_invalid_call": 2
+   },
+   "vtc": 247,
+   "success": 247
+  },
+  "/scratch/pabitra/actionproof/results/p4/Dwaug_s0__p1_test_full.jsonl": {
+   "tag": "Dwaug_s0",
+   "episodes": 600,
+   "successes": 476,
+   "failures": 124,
+   "primary": {
+    "unsafe_retry": 10,
+    "partial_commit": 30,
+    "phantom_write": 81,
+    "false_completion_report": 1,
+    "wrong_handoff": 2
+   },
+   "flags_among_failures": {
+    "false_completion": 122,
+    "unsafe_retry": 10,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 82,
+    "lost_ack_seen": 9,
+    "escalated": 0,
+    "harm": 10,
+    "any_invalid_call": 0
+   },
+   "vtc": 418,
+   "success": 476
+  },
+  "/scratch/pabitra/actionproof/results/p4/Dwaug_s0__p1_test_pp.jsonl": {
+   "tag": "Dwaug_s0",
+   "episodes": 450,
+   "successes": 237,
+   "failures": 213,
+   "primary": {
+    "partial_commit": 206,
+    "false_completion_report": 2,
+    "wrong_handoff": 5
+   },
+   "flags_among_failures": {
+    "false_completion": 206,
+    "unsafe_retry": 0,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 0,
+    "lost_ack_seen": 0,
+    "escalated": 0,
+    "harm": 0,
+    "any_invalid_call": 0
+   },
+   "vtc": 237,
+   "success": 237
+  },
+  "/scratch/pabitra/actionproof/results/p4/Dwaug_s0__p1_test_rec.jsonl": {
+   "tag": "Dwaug_s0",
+   "episodes": 600,
+   "successes": 553,
+   "failures": 47,
+   "primary": {
+    "unsafe_retry": 4,
+    "duplicate_mutation": 6,
+    "partial_commit": 17,
+    "phantom_write": 12,
+    "false_completion_report": 2,
+    "wrong_handoff": 5,
+    "invalid_call": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 38,
+    "unsafe_retry": 4,
+    "injected_duplicate": 8,
+    "phantom_ack_seen": 13,
+    "lost_ack_seen": 3,
+    "escalated": 0,
+    "harm": 10,
+    "any_invalid_call": 3
+   },
+   "vtc": 519,
+   "success": 553
+  },
+  "/scratch/pabitra/actionproof/results/p4/Dwaug_s0__p1_test_wf4.jsonl": {
+   "tag": "Dwaug_s0",
+   "episodes": 300,
+   "successes": 277,
+   "failures": 23,
+   "primary": {
+    "unsafe_retry": 1,
+    "duplicate_mutation": 1,
+    "false_completion_report": 8,
+    "wrong_handoff": 13
+   },
+   "flags_among_failures": {
+    "false_completion": 10,
+    "unsafe_retry": 1,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 0,
+    "lost_ack_seen": 1,
+    "escalated": 0,
+    "harm": 2,
+    "any_invalid_call": 2
+   },
+   "vtc": 277,
+   "success": 277
+  },
+  "/scratch/pabitra/actionproof/results/p4/Dwaug_s0__p1_test_combo.jsonl": {
+   "tag": "Dwaug_s0",
+   "episodes": 300,
+   "successes": 184,
+   "failures": 116,
+   "primary": {
+    "unsafe_retry": 23,
+    "partial_commit": 61,
+    "phantom_write": 31,
+    "false_completion_report": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 110,
+    "unsafe_retry": 23,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 59,
+    "lost_ack_seen": 31,
+    "escalated": 0,
+    "harm": 23,
+    "any_invalid_call": 0
+   },
+   "vtc": 184,
+   "success": 184
+  },
+  "/scratch/pabitra/actionproof/results/p4/Dwaug_s1__p1_test_full.jsonl": {
+   "tag": "Dwaug_s1",
+   "episodes": 600,
+   "successes": 457,
+   "failures": 143,
+   "primary": {
+    "unsafe_retry": 6,
+    "partial_commit": 35,
+    "phantom_write": 99,
+    "false_completion_report": 1,
+    "wrong_handoff": 1,
+    "invalid_call": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 141,
+    "unsafe_retry": 6,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 100,
+    "lost_ack_seen": 5,
+    "escalated": 0,
+    "harm": 6,
+    "any_invalid_call": 0
+   },
+   "vtc": 409,
+   "success": 457
+  },
+  "/scratch/pabitra/actionproof/results/p4/Dwaug_s1__p1_test_pp.jsonl": {
+   "tag": "Dwaug_s1",
+   "episodes": 450,
+   "successes": 206,
+   "failures": 244,
+   "primary": {
+    "unsafe_retry": 1,
+    "duplicate_mutation": 1,
+    "wrong_or_collateral_write": 1,
+    "partial_commit": 238,
+    "wrong_handoff": 2,
+    "invalid_call": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 239,
+    "unsafe_retry": 1,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 0,
+    "lost_ack_seen": 0,
+    "escalated": 0,
+    "harm": 3,
+    "any_invalid_call": 1
+   },
+   "vtc": 206,
+   "success": 206
+  },
+  "/scratch/pabitra/actionproof/results/p4/Dwaug_s1__p1_test_rec.jsonl": {
+   "tag": "Dwaug_s1",
+   "episodes": 600,
+   "successes": 551,
+   "failures": 49,
+   "primary": {
+    "unsafe_retry": 3,
+    "duplicate_mutation": 8,
+    "partial_commit": 13,
+    "phantom_write": 10,
+    "false_completion_report": 7,
+    "wrong_handoff": 6,
+    "invalid_call": 2
+   },
+   "flags_among_failures": {
+    "false_completion": 39,
+    "unsafe_retry": 3,
+    "injected_duplicate": 8,
+    "phantom_ack_seen": 12,
+    "lost_ack_seen": 1,
+    "escalated": 0,
+    "harm": 11,
+    "any_invalid_call": 5
+   },
+   "vtc": 516,
+   "success": 551
+  },
+  "/scratch/pabitra/actionproof/results/p4/Dwaug_s1__p1_test_wf4.jsonl": {
+   "tag": "Dwaug_s1",
+   "episodes": 300,
+   "successes": 275,
+   "failures": 25,
+   "primary": {
+    "unsafe_retry": 2,
+    "duplicate_mutation": 1,
+    "partial_commit": 2,
+    "false_completion_report": 20
+   },
+   "flags_among_failures": {
+    "false_completion": 25,
+    "unsafe_retry": 2,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 0,
+    "lost_ack_seen": 2,
+    "escalated": 0,
+    "harm": 3,
+    "any_invalid_call": 1
+   },
+   "vtc": 275,
+   "success": 275
+  },
+  "/scratch/pabitra/actionproof/results/p4/Dwaug_s1__p1_test_combo.jsonl": {
+   "tag": "Dwaug_s1",
+   "episodes": 300,
+   "successes": 193,
+   "failures": 107,
+   "primary": {
+    "unsafe_retry": 13,
+    "partial_commit": 61,
+    "phantom_write": 33
+   },
+   "flags_among_failures": {
+    "false_completion": 106,
+    "unsafe_retry": 13,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 64,
+    "lost_ack_seen": 24,
+    "escalated": 0,
+    "harm": 13,
+    "any_invalid_call": 0
+   },
+   "vtc": 193,
+   "success": 193
+  },
+  "/scratch/pabitra/actionproof/results/p4/Dwaug_s2__p1_test_full.jsonl": {
+   "tag": "Dwaug_s2",
+   "episodes": 600,
+   "successes": 498,
+   "failures": 102,
+   "primary": {
+    "unsafe_retry": 9,
+    "partial_commit": 25,
+    "phantom_write": 63,
+    "false_completion_report": 1,
+    "wrong_handoff": 4
+   },
+   "flags_among_failures": {
+    "false_completion": 98,
+    "unsafe_retry": 9,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 63,
+    "lost_ack_seen": 9,
+    "escalated": 0,
+    "harm": 9,
+    "any_invalid_call": 0
+   },
+   "vtc": 431,
+   "success": 498
+  },
+  "/scratch/pabitra/actionproof/results/p4/Dwaug_s2__p1_test_pp.jsonl": {
+   "tag": "Dwaug_s2",
+   "episodes": 450,
+   "successes": 293,
+   "failures": 157,
+   "primary": {
+    "unsafe_retry": 1,
+    "wrong_or_collateral_write": 1,
+    "partial_commit": 150,
+    "wrong_handoff": 5
+   },
+   "flags_among_failures": {
+    "false_completion": 152,
+    "unsafe_retry": 1,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 0,
+    "lost_ack_seen": 0,
+    "escalated": 0,
+    "harm": 2,
+    "any_invalid_call": 0
+   },
+   "vtc": 293,
+   "success": 293
+  },
+  "/scratch/pabitra/actionproof/results/p4/Dwaug_s2__p1_test_rec.jsonl": {
+   "tag": "Dwaug_s2",
+   "episodes": 600,
+   "successes": 561,
+   "failures": 39,
+   "primary": {
+    "unsafe_retry": 3,
+    "duplicate_mutation": 7,
+    "partial_commit": 12,
+    "phantom_write": 8,
+    "false_completion_report": 3,
+    "wrong_handoff": 4,
+    "invalid_call": 1,
+    "loop_or_timeout": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 30,
+    "unsafe_retry": 3,
+    "injected_duplicate": 6,
+    "phantom_ack_seen": 10,
+    "lost_ack_seen": 3,
+    "escalated": 0,
+    "harm": 10,
+    "any_invalid_call": 4
+   },
+   "vtc": 525,
+   "success": 561
+  },
+  "/scratch/pabitra/actionproof/results/p4/Dwaug_s2__p1_test_wf4.jsonl": {
+   "tag": "Dwaug_s2",
+   "episodes": 300,
+   "successes": 273,
+   "failures": 27,
+   "primary": {
+    "unsafe_retry": 1,
+    "duplicate_mutation": 1,
+    "partial_commit": 4,
+    "phantom_write": 1,
+    "false_completion_report": 18,
+    "wrong_handoff": 2
+   },
+   "flags_among_failures": {
+    "false_completion": 25,
+    "unsafe_retry": 1,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 1,
+    "lost_ack_seen": 5,
+    "escalated": 0,
+    "harm": 2,
+    "any_invalid_call": 2
+   },
+   "vtc": 273,
+   "success": 273
+  },
+  "/scratch/pabitra/actionproof/results/p4/Dwaug_s2__p1_test_combo.jsonl": {
+   "tag": "Dwaug_s2",
+   "episodes": 300,
+   "successes": 198,
+   "failures": 102,
+   "primary": {
+    "unsafe_retry": 22,
+    "partial_commit": 58,
+    "phantom_write": 22
+   },
+   "flags_among_failures": {
+    "false_completion": 96,
+    "unsafe_retry": 25,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 49,
+    "lost_ack_seen": 28,
+    "escalated": 0,
+    "harm": 22,
+    "any_invalid_call": 0
+   },
+   "vtc": 198,
+   "success": 198
+  }
+ },
+ "groups": {
+  "D": {
+   "episodes": 6750,
+   "successes": 6008,
+   "failures": 742,
+   "primary": {
+    "unsafe_retry": 66,
+    "duplicate_mutation": 13,
+    "partial_commit": 262,
+    "phantom_write": 58,
+    "lost_acknowledgement": 5,
+    "false_completion_report": 279,
+    "wrong_handoff": 51,
+    "invalid_call": 7,
+    "loop_or_timeout": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 662,
+    "unsafe_retry": 105,
+    "injected_duplicate": 12,
+    "phantom_ack_seen": 144,
+    "lost_ack_seen": 132,
+    "escalated": 0,
+    "harm": 79,
+    "any_invalid_call": 43
+   },
+   "vtc": {
+    "num": 5623,
+    "den": 6750
+   },
+   "success": {
+    "num": 6008,
+    "den": 6750
+   },
+   "greedy": {
+    "episodes": 1350,
+    "successes": 1280,
+    "failures": 70,
+    "primary": {
+     "unsafe_retry": 10,
+     "partial_commit": 45,
+     "lost_acknowledgement": 1,
+     "false_completion_report": 14
+    },
+    "flags_among_failures": {
+     "false_completion": 69,
+     "unsafe_retry": 23,
+     "injected_duplicate": 0,
+     "phantom_ack_seen": 9,
+     "lost_ack_seen": 22,
+     "escalated": 0,
+     "harm": 10,
+     "any_invalid_call": 0
+    }
+   },
+   "sampled": {
+    "episodes": 5400,
+    "successes": 4728,
+    "failures": 672,
+    "primary": {
+     "unsafe_retry": 56,
+     "duplicate_mutation": 13,
+     "partial_commit": 217,
+     "phantom_write": 58,
+     "lost_acknowledgement": 4,
+     "false_completion_report": 265,
+     "wrong_handoff": 51,
+     "invalid_call": 7,
+     "loop_or_timeout": 1
+    },
+    "flags_among_failures": {
+     "false_completion": 593,
+     "unsafe_retry": 82,
+     "injected_duplicate": 12,
+     "phantom_ack_seen": 135,
+     "lost_ack_seen": 110,
+     "escalated": 0,
+     "harm": 69,
+     "any_invalid_call": 43
+    }
+   },
+   "primary_by_fault_class": {
+    "combo:lost_ack+lost_ack": {
+     "lost_acknowledgement": 4
+    },
+    "combo:lost_ack+partial": {
+     "unsafe_retry": 3
+    },
+    "combo:lost_ack+phantom": {
+     "phantom_write": 3
+    },
+    "combo:lost_ack+precommit_timeout": {
+     "unsafe_retry": 3,
+     "lost_acknowledgement": 1
+    },
+    "combo:partial+lost_ack": {
+     "partial_commit": 3
+    },
+    "combo:partial+partial": {
+     "partial_commit": 45
+    },
+    "combo:partial+phantom": {
+     "partial_commit": 16,
+     "wrong_handoff": 2,
+     "duplicate_mutation": 1
+    },
+    "combo:phantom+partial": {
+     "partial_commit": 42
+    },
+    "combo:phantom+phantom": {
+     "phantom_write": 3
+    },
+    "combo:phantom+precommit_timeout": {
+     "phantom_write": 2
+    },
+    "combo:precommit_timeout+partial": {
+     "partial_commit": 15
+    },
+    "combo:precommit_timeout+phantom": {
+     "phantom_write": 6
+    },
+    "lost_ack": {
+     "unsafe_retry": 2
+    },
+    "never_commit": {
+     "phantom_write": 11
+    },
+    "partial": {
+     "partial_commit": 62,
+     "false_completion_report": 4,
+     "wrong_handoff": 10,
+     "loop_or_timeout": 1,
+     "duplicate_mutation": 3
+    },
+    "phantom": {
+     "phantom_write": 21,
+     "unsafe_retry": 1
+    },
+    "precommit_timeout": {
+     "wrong_handoff": 11,
+     "invalid_call": 3,
+     "false_completion_report": 1,
+     "unsafe_retry": 1
+    },
+    "s3:complete:ack": {
+     "wrong_handoff": 4
+    },
+    "s3:done": {
+     "invalid_call": 1,
+     "wrong_handoff": 1
+    },
+    "s3:dup_delivery:ack": {
+     "duplicate_mutation": 5,
+     "wrong_handoff": 4
+    },
+    "s3:dup_delivery:read": {
+     "unsafe_retry": 1,
+     "duplicate_mutation": 2
+    },
+    "s3:lost_ack:ack": {
+     "unsafe_retry": 3
+    },
+    "s3:never_commit:ack": {
+     "phantom_write": 9
+    },
+    "s3:partial:ack": {
+     "wrong_handoff": 2,
+     "partial_commit": 5,
+     "duplicate_mutation": 2
+    },
+    "s3:phantom:ack": {
+     "phantom_write": 2
+    },
+    "s3:phantom:read": {
+     "wrong_handoff": 3
+    },
+    "wf4:lost_ack:pay": {
+     "false_completion_report": 31
+    },
+    "wf4:lost_ack:receive": {
+     "unsafe_retry": 47,
+     "false_completion_report": 39,
+     "partial_commit": 32
+    },
+    "wf4:partial:pay": {
+     "false_completion_report": 37,
+     "partial_commit": 7,
+     "wrong_handoff": 3
+    },
+    "wf4:partial:receive": {
+     "false_completion_report": 34,
+     "partial_commit": 29,
+     "wrong_handoff": 1
+    },
+    "wf4:phantom:pay": {
+     "false_completion_report": 22,
+     "wrong_handoff": 2
+    },
+    "wf4:phantom:receive": {
+     "false_completion_report": 48,
+     "wrong_handoff": 3,
+     "phantom_write": 1
+    },
+    "wf4:precommit_timeout:pay": {
+     "false_completion_report": 26,
+     "unsafe_retry": 1,
+     "partial_commit": 6,
+     "invalid_call": 3
+    },
+    "wf4:precommit_timeout:receive": {
+     "false_completion_report": 37,
+     "wrong_handoff": 5,
+     "unsafe_retry": 4
+    }
+   },
+   "primary_by_task_group": {
+    "None": {
+     "wrong_handoff": 51,
+     "phantom_write": 58,
+     "invalid_call": 7,
+     "partial_commit": 262,
+     "false_completion_report": 279,
+     "unsafe_retry": 66,
+     "duplicate_mutation": 13,
+     "loop_or_timeout": 1,
+     "lost_acknowledgement": 5
+    }
+   },
+   "tasks_with_any_failure": 140
+  },
+  "Dwaug": {
+   "episodes": 6750,
+   "successes": 5232,
+   "failures": 1518,
+   "primary": {
+    "unsafe_retry": 99,
+    "duplicate_mutation": 25,
+    "wrong_or_collateral_write": 2,
+    "partial_commit": 912,
+    "phantom_write": 360,
+    "false_completion_report": 64,
+    "wrong_handoff": 49,
+    "invalid_call": 6,
+    "loop_or_timeout": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 1437,
+    "unsafe_retry": 102,
+    "injected_duplicate": 22,
+    "phantom_ack_seen": 453,
+    "lost_ack_seen": 121,
+    "escalated": 0,
+    "harm": 126,
+    "any_invalid_call": 18
+   },
+   "vtc": {
+    "num": 4954,
+    "den": 6750
+   },
+   "success": {
+    "num": 5232,
+    "den": 6750
+   },
+   "greedy": {
+    "episodes": 1350,
+    "successes": 1166,
+    "failures": 184,
+    "primary": {
+     "unsafe_retry": 20,
+     "duplicate_mutation": 3,
+     "partial_commit": 120,
+     "phantom_write": 41
+    },
+    "flags_among_failures": {
+     "false_completion": 183,
+     "unsafe_retry": 21,
+     "injected_duplicate": 3,
+     "phantom_ack_seen": 53,
+     "lost_ack_seen": 23,
+     "escalated": 0,
+     "harm": 23,
+     "any_invalid_call": 0
+    }
+   },
+   "sampled": {
+    "episodes": 5400,
+    "successes": 4066,
+    "failures": 1334,
+    "primary": {
+     "unsafe_retry": 79,
+     "duplicate_mutation": 22,
+     "wrong_or_collateral_write": 2,
+     "partial_commit": 792,
+     "phantom_write": 319,
+     "false_completion_report": 64,
+     "wrong_handoff": 49,
+     "invalid_call": 6,
+     "loop_or_timeout": 1
+    },
+    "flags_among_failures": {
+     "false_completion": 1254,
+     "unsafe_retry": 81,
+     "injected_duplicate": 19,
+     "phantom_ack_seen": 400,
+     "lost_ack_seen": 98,
+     "escalated": 0,
+     "harm": 103,
+     "any_invalid_call": 18
+    }
+   },
+   "primary_by_fault_class": {
+    "combo:lost_ack+lost_ack": {
+     "unsafe_retry": 17
+    },
+    "combo:lost_ack+partial": {
+     "partial_commit": 7,
+     "unsafe_retry": 19
+    },
+    "combo:lost_ack+phantom": {
+     "unsafe_retry": 11,
+     "phantom_write": 11
+    },
+    "combo:lost_ack+precommit_timeout": {
+     "unsafe_retry": 11
+    },
+    "combo:partial+lost_ack": {
+     "partial_commit": 6
+    },
+    "combo:partial+partial": {
+     "partial_commit": 47
+    },
+    "combo:partial+phantom": {
+     "partial_commit": 30
+    },
+    "combo:partial+precommit_timeout": {
+     "partial_commit": 7
+    },
+    "combo:phantom+lost_ack": {
+     "phantom_write": 1
+    },
+    "combo:phantom+partial": {
+     "partial_commit": 50
+    },
+    "combo:phantom+phantom": {
+     "phantom_write": 18
+    },
+    "combo:phantom+precommit_timeout": {
+     "phantom_write": 32
+    },
+    "combo:precommit_timeout+partial": {
+     "partial_commit": 33,
+     "false_completion_report": 1
+    },
+    "combo:precommit_timeout+phantom": {
+     "phantom_write": 24
+    },
+    "lost_ack": {
+     "unsafe_retry": 23
+    },
+    "never_commit": {
+     "phantom_write": 110,
+     "unsafe_retry": 2
+    },
+    "partial": {
+     "partial_commit": 684,
+     "false_completion_report": 5,
+     "wrong_handoff": 12,
+     "unsafe_retry": 2,
+     "wrong_or_collateral_write": 2,
+     "invalid_call": 1,
+     "duplicate_mutation": 1
+    },
+    "phantom": {
+     "phantom_write": 133
+    },
+    "precommit_timeout": {
+     "wrong_handoff": 7,
+     "invalid_call": 1
+    },
+    "s3:complete:ack": {
+     "wrong_handoff": 6
+    },
+    "s3:complete:read": {
+     "wrong_handoff": 3
+    },
+    "s3:done": {
+     "invalid_call": 1,
+     "loop_or_timeout": 1
+    },
+    "s3:dup_delivery:ack": {
+     "duplicate_mutation": 15,
+     "wrong_handoff": 3
+    },
+    "s3:dup_delivery:read": {
+     "invalid_call": 3,
+     "unsafe_retry": 1
+    },
+    "s3:lost_ack:ack": {
+     "unsafe_retry": 7
+    },
+    "s3:never_commit:ack": {
+     "phantom_write": 15
+    },
+    "s3:partial:ack": {
+     "partial_commit": 42,
+     "false_completion_report": 4,
+     "unsafe_retry": 2,
+     "duplicate_mutation": 4
+    },
+    "s3:partial:read": {
+     "false_completion_report": 6,
+     "duplicate_mutation": 2
+    },
+    "s3:phantom:ack": {
+     "phantom_write": 13,
+     "false_completion_report": 2
+    },
+    "s3:phantom:read": {
+     "phantom_write": 2,
+     "wrong_handoff": 3
+    },
+    "wf4:lost_ack:pay": {
+     "false_completion_report": 3
+    },
+    "wf4:lost_ack:receive": {
+     "false_completion_report": 12,
+     "unsafe_retry": 3,
+     "wrong_handoff": 1
+    },
+    "wf4:partial:pay": {
+     "wrong_handoff": 4,
+     "partial_commit": 6,
+     "false_completion_report": 1
+    },
+    "wf4:partial:receive": {
+     "wrong_handoff": 2,
+     "duplicate_mutation": 3,
+     "false_completion_report": 7
+    },
+    "wf4:phantom:pay": {
+     "wrong_handoff": 5,
+     "false_completion_report": 3,
+     "phantom_write": 1
+    },
+    "wf4:phantom:receive": {
+     "false_completion_report": 6
+    },
+    "wf4:precommit_timeout:pay": {
+     "false_completion_report": 4,
+     "wrong_handoff": 1
+    },
+    "wf4:precommit_timeout:receive": {
+     "wrong_handoff": 2,
+     "false_completion_report": 10,
+     "unsafe_retry": 1
+    }
+   },
+   "primary_by_task_group": {
+    "None": {
+     "phantom_write": 360,
+     "partial_commit": 912,
+     "wrong_handoff": 49,
+     "false_completion_report": 64,
+     "unsafe_retry": 99,
+     "duplicate_mutation": 25,
+     "invalid_call": 6,
+     "wrong_or_collateral_write": 2,
+     "loop_or_timeout": 1
+    }
+   },
+   "tasks_with_any_failure": 262
+  }
+ }
+}

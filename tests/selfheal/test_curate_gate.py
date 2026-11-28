@@ -82,7 +82,8 @@ def test_gate_promotes_better_and_rejects_worse(tmp_path):
                                 "safety": [{"metric": "false_completion", "max_increase": 0.01},
                                            {"metric": "unsafe_mutation", "max_increase": 0.01}],
                                 "retention": {"splits": ["p1_dev_full"], "metric": "vtc", "max_drop": 0.05}}))
-    up = gate.decide(crit, [good], [bad], None)
+    up = gate.decide(crit, [good], [bad], None, reference=[good])
+    assert up["descriptive_gap_closed"]["share"] == pytest.approx(1.0)
     down = gate.decide(crit, [bad], [good], None)
     assert up["criteria"]["primary_noninferior"]["superior"] and up["decision"] == "promote"
     assert down["decision"] == "reject" and not down["criteria"]["primary_noninferior"]["pass"]

@@ -1,0 +1,169 @@
+{
+ "label": "DESCRIPTIVE: failure taxonomy of existing recorded episodes; no hypothesis is tested and nothing here was used to choose any loop setting.",
+ "definitions": "actionproof/selfheal/taxonomy.py",
+ "inputs": {
+  "/scratch/pabitra/actionproof/results/rg1/dev_D_s0_none__txn_dev.jsonl": {
+   "tag": "dev_D_s0_none",
+   "episodes": 360,
+   "successes": 285,
+   "failures": 75,
+   "primary": {
+    "unsafe_retry": 4,
+    "duplicate_mutation": 9,
+    "partial_commit": 1,
+    "phantom_write": 8,
+    "false_completion_report": 1,
+    "wrong_handoff": 49,
+    "invalid_call": 3
+   },
+   "flags_among_failures": {
+    "false_completion": 18,
+    "unsafe_retry": 4,
+    "injected_duplicate": 11,
+    "phantom_ack_seen": 20,
+    "lost_ack_seen": 17,
+    "escalated": 0,
+    "harm": 13,
+    "any_invalid_call": 2
+   },
+   "vtc": 285,
+   "success": 285
+  }
+ },
+ "groups": {
+  "dev_D_none": {
+   "episodes": 360,
+   "successes": 285,
+   "failures": 75,
+   "primary": {
+    "unsafe_retry": 4,
+    "duplicate_mutation": 9,
+    "partial_commit": 1,
+    "phantom_write": 8,
+    "false_completion_report": 1,
+    "wrong_handoff": 49,
+    "invalid_call": 3
+   },
+   "flags_among_failures": {
+    "false_completion": 18,
+    "unsafe_retry": 4,
+    "injected_duplicate": 11,
+    "phantom_ack_seen": 20,
+    "lost_ack_seen": 17,
+    "escalated": 0,
+    "harm": 13,
+    "any_invalid_call": 2
+   },
+   "vtc": {
+    "num": 285,
+    "den": 360
+   },
+   "success": {
+    "num": 285,
+    "den": 360
+   },
+   "greedy": {
+    "episodes": 120,
+    "successes": 99,
+    "failures": 21,
+    "primary": {
+     "unsafe_retry": 1,
+     "phantom_write": 1,
+     "wrong_handoff": 19
+    },
+    "flags_among_failures": {
+     "false_completion": 1,
+     "unsafe_retry": 1,
+     "injected_duplicate": 1,
+     "phantom_ack_seen": 5,
+     "lost_ack_seen": 5,
+     "escalated": 0,
+     "harm": 1,
+     "any_invalid_call": 0
+    }
+   },
+   "sampled": {
+    "episodes": 240,
+    "successes": 186,
+    "failures": 54,
+    "primary": {
+     "unsafe_retry": 3,
+     "duplicate_mutation": 9,
+     "partial_commit": 1,
+     "phantom_write": 7,
+     "false_completion_report": 1,
+     "wrong_handoff": 30,
+     "invalid_call": 3
+    },
+    "flags_among_failures": {
+     "false_completion": 17,
+     "unsafe_retry": 3,
+     "injected_duplicate": 10,
+     "phantom_ack_seen": 15,
+     "lost_ack_seen": 12,
+     "escalated": 0,
+     "harm": 12,
+     "any_invalid_call": 2
+    }
+   },
+   "primary_by_fault_class": {
+    "concurrent": {
+     "duplicate_mutation": 7,
+     "unsafe_retry": 2
+    },
+    "dup_delivery": {
+     "duplicate_mutation": 2
+    },
+    "late_commit": {
+     "wrong_handoff": 1
+    },
+    "lost_ack": {
+     "invalid_call": 1
+    },
+    "partial": {
+     "partial_commit": 1,
+     "unsafe_retry": 1,
+     "invalid_call": 1
+    },
+    "phantom": {
+     "phantom_write": 4
+    },
+    "quad:ok_committed": {
+     "wrong_handoff": 12
+    },
+    "quad:ok_phantom": {
+     "wrong_handoff": 12,
+     "phantom_write": 4
+    },
+    "quad:timeout_committed": {
+     "wrong_handoff": 14,
+     "invalid_call": 1
+    },
+    "quad:timeout_uncommitted": {
+     "wrong_handoff": 10,
+     "false_completion_report": 1
+    },
+    "visibility_lag": {
+     "unsafe_retry": 1
+    }
+   },
+   "primary_by_task_group": {
+    "core": {
+     "phantom_write": 4,
+     "partial_commit": 1,
+     "unsafe_retry": 4,
+     "invalid_call": 2,
+     "duplicate_mutation": 9,
+     "wrong_handoff": 1
+    },
+    "quad": {
+     "wrong_handoff": 48,
+     "phantom_write": 4,
+     "false_completion_report": 1,
+     "invalid_call": 1
+    }
+   },
+   "tasks_with_any_failure": 41
+  }
+ }
+}

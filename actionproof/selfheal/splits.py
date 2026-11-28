@@ -2,10 +2,10 @@
 
 Loop pools (the agent is run on them, failures are corrected, corrections are trained on):
 - `sh_pool_r{1,2}_p1full` (P1 full episodes, 40 per workflow), `sh_pool_r{1,2}_p1rec` (P1 recovery starts, 120),
-  `sh_pool_r{1,2}_txn` (TXN v1 core: 8 classes x 15, plus 8 quadruples = 64 tasks).
+  `sh_pool_r{1,2}_txn` (TXN v1: 8 core classes x 15, plus 8 counterfactual groups of 8 = 184 tasks).
 
 Gate splits (used only by the deployment gate; never by diagnose, correct or curate):
-- primary: `sh_gate_p1full` (120), `sh_gate_p1rec` (120), `sh_gate_txn` (core 8 x 20 + 15 quadruples = 280);
+- primary: `sh_gate_p1full` (120), `sh_gate_p1rec` (120), `sh_gate_txn` (8 core classes x 20, plus 15 counterfactual groups of 8 = 280);
 - retention (OOD): `sh_gate_txn_ood` (6 OOD groups x 20), `sh_gate_p1wf4` (unseen workflow, 60),
   `sh_gate_p1combo` (two faults, 60).
 

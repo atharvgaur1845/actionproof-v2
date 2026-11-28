@@ -73,9 +73,14 @@ gate_eval() {  # 6a. both arms on every gate split (1 greedy + 2 sampled episode
   done
 }
 
+reference() {  # B4 on the gate splits (scripted, CPU), for the descriptive share of the D-B4 gap closed
+  $PY scripts/selfheal_run.py reference --policy B4 --out-dir $EV \
+    --splits sh_gate_p1full sh_gate_p1rec sh_gate_txn sh_gate_txn_ood sh_gate_p1wf4 sh_gate_p1combo || exit 1
+}
+
 gate() {  # 6b. promote/reject under the frozen criteria
   local r=$1 C="" I=""
   for k in $SEEDS; do C="$C $(ls $EV/C_${r}_s${k}__sh_gate_*.jsonl)"; I="$I $(ls $EV/D_s${k}__sh_gate_*.jsonl)"; done
   $PY scripts/selfheal_run.py gate --criteria configs/selfheal/gate_v1.json --ledger $LEDGER \
-    --candidate $C --incumbent $I --out $SH/results/$r/gate_decision.json || exit 1
+    --candidate $C --incumbent $I --reference $(ls $EV/B4__sh_gate_*.jsonl) --out $SH/results/$r/gate_decision.json || exit 1
 }

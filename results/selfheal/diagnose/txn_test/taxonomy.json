@@ -1,0 +1,745 @@
+{
+ "label": "DESCRIPTIVE: failure taxonomy of existing recorded episodes; no hypothesis is tested and nothing here was used to choose any loop setting.",
+ "definitions": "actionproof/selfheal/taxonomy.py",
+ "inputs": {
+  "/scratch/pabitra/actionproof/results/txn/D_s0__txn_test.jsonl": {
+   "tag": "D_s0",
+   "episodes": 1320,
+   "successes": 964,
+   "failures": 356,
+   "primary": {
+    "unsafe_retry": 28,
+    "duplicate_mutation": 41,
+    "wrong_or_collateral_write": 41,
+    "partial_commit": 19,
+    "phantom_write": 27,
+    "false_completion_report": 25,
+    "wrong_handoff": 159,
+    "invalid_call": 11,
+    "loop_or_timeout": 5
+   },
+   "flags_among_failures": {
+    "false_completion": 157,
+    "unsafe_retry": 28,
+    "injected_duplicate": 66,
+    "phantom_ack_seen": 73,
+    "lost_ack_seen": 78,
+    "escalated": 0,
+    "harm": 110,
+    "any_invalid_call": 27
+   },
+   "vtc": 956,
+   "success": 964
+  },
+  "/scratch/pabitra/actionproof/results/txn/D_s1__txn_test.jsonl": {
+   "tag": "D_s1",
+   "episodes": 1320,
+   "successes": 949,
+   "failures": 371,
+   "primary": {
+    "unsafe_retry": 20,
+    "duplicate_mutation": 59,
+    "wrong_or_collateral_write": 38,
+    "partial_commit": 22,
+    "phantom_write": 30,
+    "lost_acknowledgement": 1,
+    "false_completion_report": 21,
+    "wrong_handoff": 158,
+    "invalid_call": 8,
+    "loop_or_timeout": 14
+   },
+   "flags_among_failures": {
+    "false_completion": 164,
+    "unsafe_retry": 20,
+    "injected_duplicate": 71,
+    "phantom_ack_seen": 73,
+    "lost_ack_seen": 89,
+    "escalated": 0,
+    "harm": 117,
+    "any_invalid_call": 29
+   },
+   "vtc": 948,
+   "success": 949
+  },
+  "/scratch/pabitra/actionproof/results/txn/D_s2__txn_test.jsonl": {
+   "tag": "D_s2",
+   "episodes": 1320,
+   "successes": 965,
+   "failures": 355,
+   "primary": {
+    "unsafe_retry": 20,
+    "duplicate_mutation": 40,
+    "wrong_or_collateral_write": 41,
+    "partial_commit": 23,
+    "phantom_write": 47,
+    "lost_acknowledgement": 1,
+    "false_completion_report": 17,
+    "wrong_handoff": 143,
+    "invalid_call": 10,
+    "loop_or_timeout": 13
+   },
+   "flags_among_failures": {
+    "false_completion": 138,
+    "unsafe_retry": 20,
+    "injected_duplicate": 52,
+    "phantom_ack_seen": 77,
+    "lost_ack_seen": 80,
+    "escalated": 2,
+    "harm": 101,
+    "any_invalid_call": 31
+   },
+   "vtc": 960,
+   "success": 965
+  },
+  "/scratch/pabitra/actionproof/results/txn/Dwaug_s0__txn_test.jsonl": {
+   "tag": "Dwaug_s0",
+   "episodes": 1320,
+   "successes": 955,
+   "failures": 365,
+   "primary": {
+    "unsafe_retry": 66,
+    "duplicate_mutation": 77,
+    "partial_commit": 39,
+    "phantom_write": 72,
+    "false_completion_report": 6,
+    "wrong_handoff": 103,
+    "invalid_call": 2
+   },
+   "flags_among_failures": {
+    "false_completion": 238,
+    "unsafe_retry": 66,
+    "injected_duplicate": 82,
+    "phantom_ack_seen": 95,
+    "lost_ack_seen": 89,
+    "escalated": 0,
+    "harm": 143,
+    "any_invalid_call": 26
+   },
+   "vtc": 955,
+   "success": 955
+  },
+  "/scratch/pabitra/actionproof/results/txn/Dwaug_s1__txn_test.jsonl": {
+   "tag": "Dwaug_s1",
+   "episodes": 1320,
+   "successes": 901,
+   "failures": 419,
+   "primary": {
+    "unsafe_retry": 45,
+    "duplicate_mutation": 118,
+    "partial_commit": 61,
+    "phantom_write": 110,
+    "false_completion_report": 4,
+    "wrong_handoff": 80,
+    "invalid_call": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 324,
+    "unsafe_retry": 45,
+    "injected_duplicate": 119,
+    "phantom_ack_seen": 128,
+    "lost_ack_seen": 65,
+    "escalated": 0,
+    "harm": 163,
+    "any_invalid_call": 21
+   },
+   "vtc": 901,
+   "success": 901
+  },
+  "/scratch/pabitra/actionproof/results/txn/Dwaug_s2__txn_test.jsonl": {
+   "tag": "Dwaug_s2",
+   "episodes": 1320,
+   "successes": 906,
+   "failures": 414,
+   "primary": {
+    "unsafe_retry": 78,
+    "duplicate_mutation": 118,
+    "partial_commit": 39,
+    "phantom_write": 76,
+    "lost_acknowledgement": 1,
+    "false_completion_report": 4,
+    "wrong_handoff": 96,
+    "invalid_call": 2
+   },
+   "flags_among_failures": {
+    "false_completion": 311,
+    "unsafe_retry": 78,
+    "injected_duplicate": 140,
+    "phantom_ack_seen": 104,
+    "lost_ack_seen": 94,
+    "escalated": 0,
+    "harm": 196,
+    "any_invalid_call": 12
+   },
+   "vtc": 906,
+   "success": 906
+  },
+  "/scratch/pabitra/actionproof/results/txn/B4__txn_test.jsonl": {
+   "tag": "B4",
+   "episodes": 440,
+   "successes": 440,
+   "failures": 0,
+   "primary": {},
+   "flags_among_failures": {
+    "false_completion": 0,
+    "unsafe_retry": 0,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 0,
+    "lost_ack_seen": 0,
+    "escalated": 0,
+    "harm": 0,
+    "any_invalid_call": 0
+   },
+   "vtc": 380,
+   "success": 440
+  }
+ },
+ "groups": {
+  "B4": {
+   "episodes": 440,
+   "successes": 440,
+   "failures": 0,
+   "primary": {},
+   "flags_among_failures": {
+    "false_completion": 0,
+    "unsafe_retry": 0,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 0,
+    "lost_ack_seen": 0,
+    "escalated": 0,
+    "harm": 0,
+    "any_invalid_call": 0
+   },
+   "vtc": {
+    "num": 380,
+    "den": 440
+   },
+   "success": {
+    "num": 440,
+    "den": 440
+   },
+   "greedy": {
+    "episodes": 440,
+    "successes": 440,
+    "failures": 0,
+    "primary": {},
+    "flags_among_failures": {
+     "false_completion": 0,
+     "unsafe_retry": 0,
+     "injected_duplicate": 0,
+     "phantom_ack_seen": 0,
+     "lost_ack_seen": 0,
+     "escalated": 0,
+     "harm": 0,
+     "any_invalid_call": 0
+    }
+   },
+   "sampled": {
+    "episodes": 0,
+    "successes": 0,
+    "failures": 0,
+    "primary": {},
+    "flags_among_failures": {
+     "false_completion": 0,
+     "unsafe_retry": 0,
+     "injected_duplicate": 0,
+     "phantom_ack_seen": 0,
+     "lost_ack_seen": 0,
+     "escalated": 0,
+     "harm": 0,
+     "any_invalid_call": 0
+    }
+   },
+   "primary_by_fault_class": {},
+   "primary_by_task_group": {},
+   "tasks_with_any_failure": 0
+  },
+  "D": {
+   "episodes": 3960,
+   "successes": 2878,
+   "failures": 1082,
+   "primary": {
+    "unsafe_retry": 68,
+    "duplicate_mutation": 140,
+    "wrong_or_collateral_write": 120,
+    "partial_commit": 64,
+    "phantom_write": 104,
+    "lost_acknowledgement": 2,
+    "false_completion_report": 63,
+    "wrong_handoff": 460,
+    "invalid_call": 29,
+    "loop_or_timeout": 32
+   },
+   "flags_among_failures": {
+    "false_completion": 459,
+    "unsafe_retry": 68,
+    "injected_duplicate": 189,
+    "phantom_ack_seen": 223,
+    "lost_ack_seen": 247,
+    "escalated": 2,
+    "harm": 328,
+    "any_invalid_call": 87
+   },
+   "vtc": {
+    "num": 2864,
+    "den": 3960
+   },
+   "success": {
+    "num": 2878,
+    "den": 3960
+   },
+   "greedy": {
+    "episodes": 1320,
+    "successes": 1014,
+    "failures": 306,
+    "primary": {
+     "unsafe_retry": 13,
+     "duplicate_mutation": 27,
+     "wrong_or_collateral_write": 43,
+     "partial_commit": 6,
+     "phantom_write": 21,
+     "false_completion_report": 26,
+     "wrong_handoff": 153,
+     "loop_or_timeout": 17
+    },
+    "flags_among_failures": {
+     "false_completion": 106,
+     "unsafe_retry": 13,
+     "injected_duplicate": 45,
+     "phantom_ack_seen": 62,
+     "lost_ack_seen": 75,
+     "escalated": 0,
+     "harm": 83,
+     "any_invalid_call": 18
+    }
+   },
+   "sampled": {
+    "episodes": 2640,
+    "successes": 1864,
+    "failures": 776,
+    "primary": {
+     "unsafe_retry": 55,
+     "duplicate_mutation": 113,
+     "wrong_or_collateral_write": 77,
+     "partial_commit": 58,
+     "phantom_write": 83,
+     "lost_acknowledgement": 2,
+     "false_completion_report": 37,
+     "wrong_handoff": 307,
+     "invalid_call": 29,
+     "loop_or_timeout": 15
+    },
+    "flags_among_failures": {
+     "false_completion": 353,
+     "unsafe_retry": 55,
+     "injected_duplicate": 144,
+     "phantom_ack_seen": 161,
+     "lost_ack_seen": 172,
+     "escalated": 2,
+     "harm": 245,
+     "any_invalid_call": 69
+    }
+   },
+   "primary_by_fault_class": {
+    "combo:order.late_commit+pay.partial": {
+     "partial_commit": 12
+    },
+    "combo:order.log_conflict+pay.concurrent": {
+     "unsafe_retry": 2,
+     "duplicate_mutation": 10
+    },
+    "combo:order.phantom+pay.log_conflict": {
+     "phantom_write": 5
+    },
+    "combo:receive.log_conflict+pay.late_commit": {
+     "unsafe_retry": 3
+    },
+    "combo:receive.lost_ack+pay.late_commit": {
+     "unsafe_retry": 3
+    },
+    "combo:receive.partial+pay.concurrent": {
+     "duplicate_mutation": 4
+    },
+    "concurrent": {
+     "wrong_handoff": 5,
+     "duplicate_mutation": 77,
+     "unsafe_retry": 10,
+     "invalid_call": 3,
+     "wrong_or_collateral_write": 6
+    },
+    "dup_delivery": {
+     "invalid_call": 6,
+     "duplicate_mutation": 49,
+     "unsafe_retry": 4,
+     "wrong_or_collateral_write": 17,
+     "false_completion_report": 4
+    },
+    "late_commit": {
+     "unsafe_retry": 3,
+     "invalid_call": 8,
+     "wrong_handoff": 4,
+     "wrong_or_collateral_write": 18,
+     "false_completion_report": 2
+    },
+    "log_conflict": {
+     "wrong_handoff": 8,
+     "loop_or_timeout": 6,
+     "unsafe_retry": 9,
+     "wrong_or_collateral_write": 6,
+     "invalid_call": 2,
+     "false_completion_report": 4,
+     "partial_commit": 2,
+     "lost_acknowledgement": 1
+    },
+    "lost_ack": {
+     "unsafe_retry": 11,
+     "wrong_handoff": 4,
+     "loop_or_timeout": 5,
+     "wrong_or_collateral_write": 18,
+     "false_completion_report": 7
+    },
+    "partial": {
+     "partial_commit": 49,
+     "loop_or_timeout": 3,
+     "false_completion_report": 31,
+     "invalid_call": 7,
+     "wrong_or_collateral_write": 22,
+     "unsafe_retry": 1
+    },
+    "phantom": {
+     "phantom_write": 48,
+     "invalid_call": 1,
+     "wrong_or_collateral_write": 24,
+     "unsafe_retry": 3,
+     "wrong_handoff": 1,
+     "false_completion_report": 6,
+     "loop_or_timeout": 1,
+     "partial_commit": 1
+    },
+    "quad:ok_committed": {
+     "wrong_handoff": 128,
+     "loop_or_timeout": 1
+    },
+    "quad:ok_phantom": {
+     "phantom_write": 51,
+     "wrong_handoff": 90
+    },
+    "quad:timeout_committed": {
+     "wrong_handoff": 105,
+     "false_completion_report": 1,
+     "loop_or_timeout": 7,
+     "invalid_call": 1
+    },
+    "quad:timeout_uncommitted": {
+     "wrong_handoff": 110,
+     "false_completion_report": 1,
+     "loop_or_timeout": 9,
+     "invalid_call": 1
+    },
+    "visibility_lag": {
+     "unsafe_retry": 19,
+     "wrong_handoff": 5,
+     "false_completion_report": 7,
+     "wrong_or_collateral_write": 9,
+     "lost_acknowledgement": 1
+    }
+   },
+   "primary_by_task_group": {
+    "core": {
+     "phantom_write": 31,
+     "invalid_call": 10,
+     "partial_commit": 16,
+     "loop_or_timeout": 3,
+     "false_completion_report": 8,
+     "unsafe_retry": 22,
+     "wrong_handoff": 22,
+     "duplicate_mutation": 47,
+     "lost_acknowledgement": 1
+    },
+    "ood_alias": {
+     "wrong_or_collateral_write": 8,
+     "partial_commit": 22,
+     "duplicate_mutation": 37,
+     "unsafe_retry": 31,
+     "loop_or_timeout": 12,
+     "phantom_write": 12,
+     "false_completion_report": 3,
+     "invalid_call": 3,
+     "wrong_handoff": 2
+    },
+    "ood_combo": {
+     "partial_commit": 12,
+     "unsafe_retry": 8,
+     "duplicate_mutation": 14,
+     "phantom_write": 5
+    },
+    "ood_domain": {
+     "invalid_call": 10,
+     "false_completion_report": 12,
+     "wrong_or_collateral_write": 2,
+     "unsafe_retry": 1,
+     "duplicate_mutation": 3,
+     "phantom_write": 1
+    },
+    "ood_evidence": {
+     "duplicate_mutation": 15,
+     "false_completion_report": 3,
+     "unsafe_retry": 1,
+     "partial_commit": 1
+    },
+    "ood_schema": {
+     "phantom_write": 4,
+     "partial_commit": 10,
+     "wrong_handoff": 3,
+     "false_completion_report": 4,
+     "duplicate_mutation": 6,
+     "invalid_call": 2,
+     "unsafe_retry": 1,
+     "lost_acknowledgement": 1
+    },
+    "ood_workflow": {
+     "wrong_or_collateral_write": 110,
+     "false_completion_report": 31,
+     "unsafe_retry": 4,
+     "invalid_call": 2,
+     "duplicate_mutation": 18,
+     "partial_commit": 3
+    },
+    "quad": {
+     "phantom_write": 51,
+     "wrong_handoff": 433,
+     "false_completion_report": 2,
+     "loop_or_timeout": 17,
+     "invalid_call": 2
+    }
+   },
+   "tasks_with_any_failure": 192
+  },
+  "Dwaug": {
+   "episodes": 3960,
+   "successes": 2762,
+   "failures": 1198,
+   "primary": {
+    "unsafe_retry": 189,
+    "duplicate_mutation": 313,
+    "partial_commit": 139,
+    "phantom_write": 258,
+    "lost_acknowledgement": 1,
+    "false_completion_report": 14,
+    "wrong_handoff": 279,
+    "invalid_call": 5
+   },
+   "flags_among_failures": {
+    "false_completion": 873,
+    "unsafe_retry": 189,
+    "injected_duplicate": 341,
+    "phantom_ack_seen": 327,
+    "lost_ack_seen": 248,
+    "escalated": 0,
+    "harm": 502,
+    "any_invalid_call": 59
+   },
+   "vtc": {
+    "num": 2762,
+    "den": 3960
+   },
+   "success": {
+    "num": 2762,
+    "den": 3960
+   },
+   "greedy": {
+    "episodes": 1320,
+    "successes": 968,
+    "failures": 352,
+    "primary": {
+     "unsafe_retry": 63,
+     "duplicate_mutation": 89,
+     "partial_commit": 34,
+     "phantom_write": 70,
+     "false_completion_report": 2,
+     "wrong_handoff": 94
+    },
+    "flags_among_failures": {
+     "false_completion": 246,
+     "unsafe_retry": 63,
+     "injected_duplicate": 98,
+     "phantom_ack_seen": 96,
+     "lost_ack_seen": 77,
+     "escalated": 0,
+     "harm": 152,
+     "any_invalid_call": 15
+    }
+   },
+   "sampled": {
+    "episodes": 2640,
+    "successes": 1794,
+    "failures": 846,
+    "primary": {
+     "unsafe_retry": 126,
+     "duplicate_mutation": 224,
+     "partial_commit": 105,
+     "phantom_write": 188,
+     "lost_acknowledgement": 1,
+     "false_completion_report": 12,
+     "wrong_handoff": 185,
+     "invalid_call": 5
+    },
+    "flags_among_failures": {
+     "false_completion": 627,
+     "unsafe_retry": 126,
+     "injected_duplicate": 243,
+     "phantom_ack_seen": 231,
+     "lost_ack_seen": 171,
+     "escalated": 0,
+     "harm": 350,
+     "any_invalid_call": 44
+    }
+   },
+   "primary_by_fault_class": {
+    "combo:order.late_commit+pay.partial": {
+     "partial_commit": 12,
+     "false_completion_report": 2
+    },
+    "combo:order.log_conflict+pay.concurrent": {
+     "duplicate_mutation": 10,
+     "false_completion_report": 2,
+     "unsafe_retry": 3
+    },
+    "combo:order.phantom+pay.log_conflict": {
+     "phantom_write": 14
+    },
+    "combo:receive.log_conflict+pay.late_commit": {
+     "unsafe_retry": 13
+    },
+    "combo:receive.lost_ack+pay.late_commit": {
+     "unsafe_retry": 20
+    },
+    "combo:receive.partial+pay.concurrent": {
+     "duplicate_mutation": 13
+    },
+    "concurrent": {
+     "duplicate_mutation": 151,
+     "wrong_handoff": 10,
+     "unsafe_retry": 11,
+     "false_completion_report": 1
+    },
+    "dup_delivery": {
+     "duplicate_mutation": 139,
+     "unsafe_retry": 15,
+     "wrong_handoff": 1,
+     "false_completion_report": 2
+    },
+    "late_commit": {
+     "unsafe_retry": 1,
+     "lost_acknowledgement": 1
+    },
+    "log_conflict": {
+     "unsafe_retry": 39,
+     "wrong_handoff": 6
+    },
+    "lost_ack": {
+     "unsafe_retry": 16,
+     "false_completion_report": 1,
+     "wrong_handoff": 5
+    },
+    "partial": {
+     "partial_commit": 126,
+     "unsafe_retry": 8,
+     "false_completion_report": 5,
+     "invalid_call": 3
+    },
+    "phantom": {
+     "phantom_write": 122,
+     "invalid_call": 1,
+     "unsafe_retry": 3,
+     "wrong_handoff": 2
+    },
+    "quad:ok_committed": {
+     "wrong_handoff": 56
+    },
+    "quad:ok_phantom": {
+     "phantom_write": 122,
+     "wrong_handoff": 68,
+     "unsafe_retry": 1
+    },
+    "quad:timeout_committed": {
+     "wrong_handoff": 63,
+     "unsafe_retry": 1,
+     "false_completion_report": 1
+    },
+    "quad:timeout_uncommitted": {
+     "wrong_handoff": 61,
+     "invalid_call": 1,
+     "unsafe_retry": 1
+    },
+    "visibility_lag": {
+     "unsafe_retry": 57,
+     "wrong_handoff": 7,
+     "partial_commit": 1
+    }
+   },
+   "primary_by_task_group": {
+    "core": {
+     "phantom_write": 98,
+     "invalid_call": 1,
+     "partial_commit": 93,
+     "unsafe_retry": 83,
+     "false_completion_report": 1,
+     "duplicate_mutation": 219,
+     "wrong_handoff": 22,
+     "lost_acknowledgement": 1
+    },
+    "ood_alias": {
+     "unsafe_retry": 44,
+     "duplicate_mutation": 8,
+     "false_completion_report": 2,
+     "partial_commit": 4,
+     "wrong_handoff": 6
+    },
+    "ood_combo": {
+     "partial_commit": 12,
+     "unsafe_retry": 36,
+     "false_completion_report": 4,
+     "duplicate_mutation": 23,
+     "phantom_write": 14
+    },
+    "ood_domain": {
+     "phantom_write": 3,
+     "partial_commit": 8,
+     "false_completion_report": 2,
+     "unsafe_retry": 8,
+     "duplicate_mutation": 6
+    },
+    "ood_evidence": {
+     "partial_commit": 10,
+     "duplicate_mutation": 29,
+     "phantom_write": 8,
+     "wrong_handoff": 1
+    },
+    "ood_schema": {
+     "phantom_write": 13,
+     "partial_commit": 10,
+     "duplicate_mutation": 16,
+     "unsafe_retry": 5,
+     "invalid_call": 3,
+     "wrong_handoff": 1,
+     "false_completion_report": 1
+    },
+    "ood_workflow": {
+     "duplicate_mutation": 12,
+     "unsafe_retry": 10,
+     "partial_commit": 2,
+     "wrong_handoff": 1,
+     "false_completion_report": 3
+    },
+    "quad": {
+     "phantom_write": 122,
+     "wrong_handoff": 248,
+     "unsafe_retry": 3,
+     "false_completion_report": 1,
+     "invalid_call": 1
+    }
+   },
+   "tasks_with_any_failure": 249
+  }
+ }
+}

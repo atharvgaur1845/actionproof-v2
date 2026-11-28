@@ -4,6 +4,7 @@
 set -uo pipefail
 source wt/slurm/claim.sh || exit 0
 source wt/slurm/selfheal/round.sh
+[ -f $EV/B4__sh_gate_txn.jsonl ] || reference
 gate r1
 cat $SH/results/r1/gate_decision.json | head -60
 echo SH_R1_GATE_OK

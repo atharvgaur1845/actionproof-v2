@@ -206,7 +206,7 @@ def cmd_gate(a: argparse.Namespace) -> None:
     from actionproof.selfheal import gate
     from actionproof.selfheal.ledger import Ledger
     led = Ledger.load(a.ledger) if a.ledger else None
-    d = gate.decide(Path(a.criteria), a.candidate, a.incumbent, led)
+    d = gate.decide(Path(a.criteria), a.candidate, a.incumbent, led, a.reference)
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(json.dumps(d, indent=1))
     print(json.dumps({"decision": d["decision"], "criteria": {k: v["pass"] for k, v in d["criteria"].items()}},
@@ -219,6 +219,21 @@ def cmd_splits(a: argparse.Namespace) -> None:
     if a.check:
         sys.exit(splits.check())
     print(json.dumps(splits.write(), indent=1))
+
+
+def cmd_reference(a: argparse.Namespace) -> None:
+    """A scripted TXN policy (B4 by default) on sh_* splits, for the descriptive gap-closed ratio. Canonical TXN env
+    (actionproof/txn/policies.py::run_policy); proc1/proc2 fault kinds behave there as in the P1 env."""
+    from actionproof.bench.generator_proc import DATA, load_tasks
+    from actionproof.txn.policies import run_policy
+    for split in a.splits:
+        if not split.startswith("sh_"):
+            raise SystemExit("reference runs sh_* splits only")
+        out = Path(a.out_dir) / f"{a.policy}__{split}.jsonl"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        rows = [run_policy(a.policy, t) for t in load_tasks(DATA / f"{split}.jsonl")]
+        out.write_text("".join(json.dumps(r, default=str) + "\n" for r in rows))
+        print(split, a.policy, "vsc", sum(r["score"]["vsc"] for r in rows), "/", len(rows))
 
 
 def cmd_register_gate(a: argparse.Namespace) -> None:
@@ -271,13 +286,18 @@ def main(argv: list[str] | None = None) -> None:
     g.add_argument("--candidate", nargs="+", required=True)
     g.add_argument("--incumbent", nargs="+", required=True)
     g.add_argument("--ledger")
+    g.add_argument("--reference", nargs="*", default=None, help="B4 records on the same splits (descriptive)")
     g.add_argument("--out", required=True)
     s = sub.add_parser("splits")
     s.add_argument("--check", action="store_true")
+    rf = sub.add_parser("reference")
+    rf.add_argument("--policy", default="B4")
+    rf.add_argument("--splits", nargs="+", required=True)
+    rf.add_argument("--out-dir", default="results/selfheal/eval")
     rg = sub.add_parser("register-gate")
     rg.add_argument("--ledger", required=True)
     a = ap.parse_args(argv)
-    {"diagnose": cmd_diagnose, "correct": cmd_correct, "curate": cmd_curate, "gate": cmd_gate, "mix": cmd_mix, "register-gate": cmd_register_gate,
+    {"diagnose": cmd_diagnose, "correct": cmd_correct, "curate": cmd_curate, "gate": cmd_gate, "mix": cmd_mix, "register-gate": cmd_register_gate, "reference": cmd_reference,
      "splits": cmd_splits}[a.cmd](a)
 
 

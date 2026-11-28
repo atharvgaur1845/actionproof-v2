@@ -1,0 +1,266 @@
+{
+ "label": "DESCRIPTIVE: failure taxonomy of existing recorded episodes; no hypothesis is tested and nothing here was used to choose any loop setting.",
+ "definitions": "actionproof/selfheal/taxonomy.py",
+ "inputs": {
+  "/scratch/pabitra/actionproof/results/p1/dev/D_s0__p1_dev_full.jsonl": {
+   "tag": "D_s0",
+   "episodes": 450,
+   "successes": 428,
+   "failures": 22,
+   "primary": {
+    "partial_commit": 5,
+    "phantom_write": 15,
+    "wrong_handoff": 2
+   },
+   "flags_among_failures": {
+    "false_completion": 20,
+    "unsafe_retry": 0,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 17,
+    "lost_ack_seen": 0,
+    "escalated": 0,
+    "harm": 0,
+    "any_invalid_call": 2
+   },
+   "vtc": 384,
+   "success": 428
+  },
+  "/scratch/pabitra/actionproof/results/p1/dev/D_s1__p1_dev_full.jsonl": {
+   "tag": "D_s1",
+   "episodes": 450,
+   "successes": 429,
+   "failures": 21,
+   "primary": {
+    "partial_commit": 5,
+    "phantom_write": 14,
+    "wrong_handoff": 2
+   },
+   "flags_among_failures": {
+    "false_completion": 19,
+    "unsafe_retry": 0,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 16,
+    "lost_ack_seen": 0,
+    "escalated": 0,
+    "harm": 0,
+    "any_invalid_call": 2
+   },
+   "vtc": 385,
+   "success": 429
+  },
+  "/scratch/pabitra/actionproof/results/p1/dev/D_s2__p1_dev_full.jsonl": {
+   "tag": "D_s2",
+   "episodes": 450,
+   "successes": 432,
+   "failures": 18,
+   "primary": {
+    "partial_commit": 4,
+    "phantom_write": 12,
+    "wrong_handoff": 2
+   },
+   "flags_among_failures": {
+    "false_completion": 15,
+    "unsafe_retry": 0,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 14,
+    "lost_ack_seen": 0,
+    "escalated": 0,
+    "harm": 0,
+    "any_invalid_call": 3
+   },
+   "vtc": 388,
+   "success": 432
+  },
+  "/scratch/pabitra/actionproof/results/p1/dev/D_s0__p1_dev_rec.jsonl": {
+   "tag": "D_s0",
+   "episodes": 450,
+   "successes": 440,
+   "failures": 10,
+   "primary": {
+    "unsafe_retry": 1,
+    "duplicate_mutation": 1,
+    "partial_commit": 2,
+    "phantom_write": 4,
+    "false_completion_report": 1,
+    "wrong_handoff": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 8,
+    "unsafe_retry": 1,
+    "injected_duplicate": 2,
+    "phantom_ack_seen": 4,
+    "lost_ack_seen": 1,
+    "escalated": 0,
+    "harm": 2,
+    "any_invalid_call": 2
+   },
+   "vtc": 405,
+   "success": 440
+  },
+  "/scratch/pabitra/actionproof/results/p1/dev/D_s1__p1_dev_rec.jsonl": {
+   "tag": "D_s1",
+   "episodes": 450,
+   "successes": 441,
+   "failures": 9,
+   "primary": {
+    "duplicate_mutation": 1,
+    "partial_commit": 2,
+    "phantom_write": 4,
+    "false_completion_report": 1,
+    "wrong_handoff": 1
+   },
+   "flags_among_failures": {
+    "false_completion": 8,
+    "unsafe_retry": 0,
+    "injected_duplicate": 1,
+    "phantom_ack_seen": 4,
+    "lost_ack_seen": 1,
+    "escalated": 0,
+    "harm": 1,
+    "any_invalid_call": 2
+   },
+   "vtc": 406,
+   "success": 441
+  },
+  "/scratch/pabitra/actionproof/results/p1/dev/D_s2__p1_dev_rec.jsonl": {
+   "tag": "D_s2",
+   "episodes": 450,
+   "successes": 439,
+   "failures": 11,
+   "primary": {
+    "duplicate_mutation": 1,
+    "partial_commit": 2,
+    "phantom_write": 4,
+    "wrong_handoff": 4
+   },
+   "flags_among_failures": {
+    "false_completion": 6,
+    "unsafe_retry": 0,
+    "injected_duplicate": 0,
+    "phantom_ack_seen": 4,
+    "lost_ack_seen": 1,
+    "escalated": 0,
+    "harm": 1,
+    "any_invalid_call": 1
+   },
+   "vtc": 404,
+   "success": 439
+  }
+ },
+ "groups": {
+  "D": {
+   "episodes": 2700,
+   "successes": 2609,
+   "failures": 91,
+   "primary": {
+    "unsafe_retry": 1,
+    "duplicate_mutation": 3,
+    "partial_commit": 20,
+    "phantom_write": 53,
+    "false_completion_report": 2,
+    "wrong_handoff": 12
+   },
+   "flags_among_failures": {
+    "false_completion": 76,
+    "unsafe_retry": 1,
+    "injected_duplicate": 3,
+    "phantom_ack_seen": 59,
+    "lost_ack_seen": 3,
+    "escalated": 0,
+    "harm": 4,
+    "any_invalid_call": 12
+   },
+   "vtc": {
+    "num": 2372,
+    "den": 2700
+   },
+   "success": {
+    "num": 2609,
+    "den": 2700
+   },
+   "greedy": {
+    "episodes": 540,
+    "successes": 540,
+    "failures": 0,
+    "primary": {},
+    "flags_among_failures": {
+     "false_completion": 0,
+     "unsafe_retry": 0,
+     "injected_duplicate": 0,
+     "phantom_ack_seen": 0,
+     "lost_ack_seen": 0,
+     "escalated": 0,
+     "harm": 0,
+     "any_invalid_call": 0
+    }
+   },
+   "sampled": {
+    "episodes": 2160,
+    "successes": 2069,
+    "failures": 91,
+    "primary": {
+     "unsafe_retry": 1,
+     "duplicate_mutation": 3,
+     "partial_commit": 20,
+     "phantom_write": 53,
+     "false_completion_report": 2,
+     "wrong_handoff": 12
+    },
+    "flags_among_failures": {
+     "false_completion": 76,
+     "unsafe_retry": 1,
+     "injected_duplicate": 3,
+     "phantom_ack_seen": 59,
+     "lost_ack_seen": 3,
+     "escalated": 0,
+     "harm": 4,
+     "any_invalid_call": 12
+    }
+   },
+   "primary_by_fault_class": {
+    "never_commit": {
+     "phantom_write": 18
+    },
+    "partial": {
+     "partial_commit": 8
+    },
+    "phantom": {
+     "phantom_write": 23,
+     "partial_commit": 6
+    },
+    "precommit_timeout": {
+     "wrong_handoff": 6
+    },
+    "s3:done": {
+     "wrong_handoff": 3
+    },
+    "s3:dup_delivery:ack": {
+     "unsafe_retry": 1,
+     "wrong_handoff": 2
+    },
+    "s3:lost_ack:read": {
+     "false_completion_report": 2,
+     "wrong_handoff": 1
+    },
+    "s3:partial:ack": {
+     "partial_commit": 6,
+     "duplicate_mutation": 3
+    },
+    "s3:phantom:ack": {
+     "phantom_write": 12
+    }
+   },
+   "primary_by_task_group": {
+    "None": {
+     "phantom_write": 53,
+     "partial_commit": 20,
+     "wrong_handoff": 12,
+     "false_completion_report": 2,
+     "duplicate_mutation": 3,
+     "unsafe_retry": 1
+    }
+   },
+   "tasks_with_any_failure": 30
+  }
+ }
+}

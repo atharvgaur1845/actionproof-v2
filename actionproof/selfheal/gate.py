@@ -101,7 +101,8 @@ def _sha(path: str | Path) -> str:
     return h.hexdigest()
 
 
-def decide(criteria_path: Path, candidate: list[str], incumbent: list[str], ledger: Any | None) -> dict[str, Any]:
+def decide(criteria_path: Path, candidate: list[str], incumbent: list[str], ledger: Any | None,
+           reference: list[str] | None = None) -> dict[str, Any]:
     cfg = json.loads(criteria_path.read_text())
     cand, inc = load_arm(candidate), load_arm(incumbent)
     ids = {e["task_id"] for e in cand + inc}
@@ -133,4 +134,12 @@ def decide(criteria_path: Path, candidate: list[str], incumbent: list[str], ledg
         d = cfg["retention"]["max_drop"]
         out["criteria"][f"retention_{sp}"] = {**r, "rule": f"lower95 > -{d}", "pass": r["ci95"][0] > -d}
     out["decision"] = "promote" if all(c["pass"] for c in out["criteria"].values()) else "reject"
+    if reference:  # descriptive, not a criterion: share of the incumbent-to-reference (B4) gap the candidate closes
+        ref = per_task(load_arm(reference), cfg["primary"]["metric"], prim)
+        a = per_task(cand, cfg["primary"]["metric"], prim)
+        b = per_task(inc, cfg["primary"]["metric"], prim)
+        common = sorted(set(ref) & set(a))
+        r_, c_, i_ = (float(np.mean([d[t] for t in common])) for d in (ref, a, b))
+        out["descriptive_gap_closed"] = {"reference": r_, "candidate": c_, "incumbent": i_, "n_tasks": len(common),
+                                         "share": (c_ - i_) / (r_ - i_) if r_ != i_ else None}
     return out
