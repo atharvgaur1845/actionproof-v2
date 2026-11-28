@@ -2,7 +2,7 @@
 # Attack suite ATK1: unit tests, then the scripted-policy development evaluation (CPU only, no model, no GPU).
 # Runs in a tar copy of the branch at /scratch/pabitra/attacks (never in the frozen /scratch/pabitra/actionproof).
 #SBATCH -p compute
-#SBATCH -c 2
+#SBATCH -c 4
 #SBATCH --mem=8G
 #SBATCH --time=00:30:00
 #SBATCH -J atk_dev
