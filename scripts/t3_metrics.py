@@ -33,6 +33,7 @@ import argparse
 import datetime as dt
 import json
 import os
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -40,7 +41,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 OUT = Path("results/t3_metrics")
 BAD = ("unknown_tool", "invalid_arguments")
-GPU = {"gpunode7": "H200", "gpunode4": "A100 80GB", "gpunode5": "H100"}
+GPU = {"gpunode7": "H200", "gpunode4": "A100 80GB", "gpunode5": "H100", "l40sx1": "L40S"}
 P1_SPLITS = ["p1_test_full", "p1_test_pp", "p1_test_rec", "p1_test_wf4", "p1_test_combo"]
 P4_SPLITS = ["s4_api", "s4_wf4"]
 AD_MODES = ["", ".t1_s0", ".t1_s1", ".t1_s2", ".t1_s3"]
@@ -70,6 +71,14 @@ TXN_ARMS = [("B0 (script: trust the reply)", [("B0", "1704_txn_policies")], True
                                          ("Dn_s2", "1707_txn_trained_d")], False),
             ("Dw_aug (augmented warm start)", [("Dwaug_s0", "1718_txn_dwaug"), ("Dwaug_s1", "1718_txn_dwaug"),
                                                ("Dwaug_s2", "1718_txn_dwaug")], True)]
+# Batch-1 latency: the only files that time single episodes (scripts/latency_proc.py, task 591; proc_dev, greedy,
+# one task at a time after a 2-task warm-up). (tag, model, file, task)
+LATENCY = [("warm_start", "warm start (runs/rft_proc/merged; the AD-C1 warm-start weights and arm A's base)",
+            "results/s2/latency_warm_start.json", "591_latency_proc"),
+           ("rv_s0", "A12 database-reward GRPO, seed 0 (adapter a12_proc_rv_s0)", "results/s2/latency_rv_s0.json",
+            "591_latency_proc"),
+           ("ra_s0", "A12 acknowledgement-reward GRPO, seed 0 (adapter a12_proc_ra_s0)", "results/s2/latency_ra_s0.json",
+            "591_latency_proc")]
 AD_ARMS = [("warm start", [("ad_base_warm", "1241_ad_c1_eval_b")], True),
            ("GRPO", [(f"ad_grpo_s{k}", "1240_ad_c1_eval_a") for k in range(5)], True),
            ("std-free", [(f"ad_nostd_s{k}", "1241_ad_c1_eval_b") for k in range(5)], True)]
@@ -201,41 +210,67 @@ SUBSET_TEX = {"p1_test_full": "full", "p1_test_pp": "partial pay", "p1_test_rec"
               "s4_wf4": "unseen 4-step", "txn_test": "txn\\_test", "cw_conf": "cw\\_conf"}
 CAPTION = (
     "Track~3 trajectory metrics, descriptive, not registered (\\texttt{scripts/t3\\_metrics.py}, from stored "
-    "evaluation episodes only; no new runs). Rows pool the arm's seeds (models column). \\emph{Success}: verified "
+    "evaluation episodes only; no new runs). Rows pool the arm's seeds (models column). Arms: Dw, the recovery-SFT "
+    "warm start; A, the RSC GRPO agent; D, Dw then GRPO; Dw\\_aug, the augmented warm start; B0 and B4, scripts. "
+    "\\emph{Success}: verified "
     "success VSC (P1, P4, AD-C1) or verified transaction completion VTC (TXN), greedy and sampled ($T=1$) episodes "
     "separately. \\emph{Tool acc.}: $1-$invalid$/$policy calls, pooled over all episodes; invalid = unknown tool, "
     "arguments that do not bind to the tool signature, or arguments that are not valid JSON; policy calls exclude "
     "the scripted start prefix. A turn without a parseable call ends the episode and is not a call. \\emph{Calls}, "
     "\\emph{turns}: per episode, all episodes. \\emph{Wall s/ep}: the run's evaluation wall time divided by its "
     "episodes (range over runs); each run is one batched vLLM job, so this is throughput time per episode on the "
-    "named GPU, not per-request latency, and it depends on the GPU, batch size and output length. No file records "
-    "per-request latency. Scripted policies (B0, B4) have no model turns or timed runs.")
+    "named GPU, not per-request latency, and it depends on the GPU, batch size and output length. Scripted policies "
+    "(B0, B4) have no model turns or timed runs. \\emph{Lower block}: the only measured per-episode latency (batch 1, "
+    "one task at a time, greedy, 40 \\texttt{proc\\_dev} episodes, \\texttt{scripts/latency\\_proc.py}); of the "
+    "models above, only the warm start's weights were timed this way (they are the AD-C1 warm start and arm A's "
+    "base). D, Dw and Dw\\_aug have no batch-1 measurement.")
 
 
-def tex(cells: list[dict[str, Any]]) -> str:
+LAT_SHORT = {"warm_start": "warm start (AD-C1 warm start weights)", "rv_s0": "A12 database-reward GRPO s0",
+             "ra_s0": "A12 ack-reward GRPO s0"}
+
+
+def lat_rows(lat: dict[str, Any], short: bool = False) -> list[list[str]]:
+    """model, GPU, mean, p50, p95 (s per episode), mean s per turn."""
+    out = []
+    for tag, v in lat.items():
+        e, t = v["per_episode"], v["per_turn"] or {}
+        out.append([LAT_SHORT.get(tag, tag) if short else v["model"], v["gpu"] or "?", f2(e["mean"]), f2(e["p50"]), f2(e["p95"]), f2(t.get("mean"))])
+    return out
+
+
+ARM_TEX = {"Dw (warm start)": "Dw", "A (RSC GRPO)": "A", "D (Dw + GRPO)": "D",
+           "Dw_aug (augmented warm start)": "Dw\\_aug", "B0 (script: trust the reply)": "B0 (script)",
+           "B4 (script: reconciliation)": "B4 (script)", "warm start": "warm start", "GRPO": "GRPO",
+           "std-free": "std-free"}
+
+
+def tex(cells: list[dict[str, Any]], lat: dict[str, Any]) -> str:
     lines = ["% Generated by scripts/t3_metrics.py from results/t3_metrics/t3_metrics.json; do not edit by hand.",
              "\\begin{table*}[t]", "\\centering", "\\small", "\\setlength{\\tabcolsep}{4pt}",
-             "\\begin{tabular}{lllrrrrrrl}", "\\toprule",
-             "Study & Subset & Arm & Models & Success (greedy) & Success (sampled) & Tool acc. & Calls & Turns & "
-             "Wall s/ep (GPU) \\\\", "\\midrule"]
+             "\\begin{tabular}{llrrrrrrrl}", "\\toprule",
+             " & & & \\multicolumn{2}{c}{Success} & Tool & Calls & Turns & Wall & \\\\",
+             "Subset & Arm & Models & greedy & sampled & acc. & /ep & /ep & s/ep & GPU \\\\"]
     prev = None
     for c in cells:
         if not c["in_table"]:
             continue
-        if prev and prev != c["study"]:
-            lines.append("\\midrule")
+        if prev != c["study"]:
+            lines += ["\\midrule", f"\\multicolumn{{10}}{{l}}{{\\emph{{{c['study']}}}}} \\\\"]
         prev = c["study"]
         v = row_values(c)
-        arm = c["arm"].replace("_", "\\_")
-        wall = "--" if v[5] == "--" else f"{v[5]} ({v[6]})"
-        lines.append(f"{c['study']} & {SUBSET_TEX[c['subset']]} & {arm} & {c['n_models']} & {v[0]} & {v[1]} & "
-                     f"{v[2]} & {v[3]} & {v[4]} & {wall} \\\\")
+        lines.append(f"{SUBSET_TEX[c['subset']]} & {ARM_TEX[c['arm']]} & {c['n_models']} & " + " & ".join(v) + " \\\\")
+    lines += ["\\bottomrule", "\\end{tabular}", "", "\\smallskip", "\\begin{tabular}{llrrrr}", "\\toprule",
+              "Batch-1 latency, \\texttt{proc\\_dev} (40 episodes) & GPU & s/ep mean & p50 & p95 & s/turn mean \\\\",
+              "\\midrule"]
+    for r in lat_rows(lat, short=True):
+        lines.append(" & ".join(r) + " \\\\")
     lines += ["\\bottomrule", "\\end{tabular}", f"\\caption{{{CAPTION}}}", "\\label{tab:t3metrics}",
               "\\end{table*}", ""]
     return "\n".join(lines)
 
 
-def markdown(cells: list[dict[str, Any]], sources: list[str]) -> str:
+def markdown(cells: list[dict[str, Any]], sources: list[str], lat: dict[str, Any]) -> str:
     out = ["# Track 3 trajectory metrics (descriptive, not registered)", "",
            "Generated by `scripts/t3_metrics.py` from stored evaluation episodes only (no new model runs). The LaTeX "
            "version is `paper/t3_metrics_table.tex`; all values, per-run times and per-mode breakdowns are in "
@@ -258,9 +293,14 @@ def markdown(cells: list[dict[str, Any]], sources: list[str]) -> str:
            "different GPUs are not comparable. The GPU comes from `queue/claims/<task>/owner` of the task that wrote "
            "the summary (gpunode7 H200, gpunode4 A100 80GB, gpunode5 H100), kept only when the summary was written "
            "after that task's claim time (`results/t3_metrics/gpu_provenance.json`).",
-           "- **Not supported by the files**: per-request or per-episode latency (no file records it). Scripted "
-           "policies B0 and B4 have no model turns and no timed run. The Stage 2 file `results/latency_single.json` "
-           "measured a different, older model and is not used.", "",
+           "- **Batch-1 latency**: the only per-episode latency in the files is `results/s2/latency_*.json` "
+           "(`scripts/latency_proc.py`, queue task 591 on one L40S via HF Jobs): one task at a time, greedy, 40 "
+           "`proc_dev` episodes after a 2-task warm-up, for three models. Of the models in the main table only the "
+           "warm start's weights were timed this way (they are the AD-C1 warm start and arm A's base).",
+           "- **Not supported by the files**: per-request latency for D, Dw, Dw_aug, A or the AD-C1 GRPO and "
+           "std-free models, and any latency on the test subsets. Scripted policies B0 and B4 have no model turns "
+           "and no timed run. The Stage 2 file `results/latency_single.json` measured a different, older model and "
+           "is not used.", "",
            "## Table", "",
            "| Study | Subset | Arm | Models | Success (greedy) | Success (sampled) | Tool acc. | Calls/ep | Turns/ep "
            "| Wall s/ep | GPU |", "|---|---|---|---|---|---|---|---|---|---|---|"]
@@ -270,6 +310,10 @@ def markdown(cells: list[dict[str, Any]], sources: list[str]) -> str:
         v = row_values(c, " to ")
         out.append(f"| {c['study']} | `{c['subset']}` | {c['arm']} | {c['n_models']} | " + " | ".join(v) + " |")
     out += ["", "Arms C and Dn (P1, TXN) and A (TXN) are in the JSON but not in the table.", "",
+            "## Batch-1 latency (`proc_dev`, 40 episodes)", "",
+            "| Model | GPU | s/episode mean | p50 | p95 | s/turn mean |", "|---|---|---|---|---|---|"]
+    out += ["| " + " | ".join(r) + " |" for r in lat_rows(lat)]
+    out += ["",
             "## Regenerate", "", "On sharanga, from a checkout of this branch (`--root` is only read; outputs, "
             "including the T3M block of `claims/claims.yaml`, are written into the checkout):", "",
             "```", "python scripts/t3_metrics.py provenance --root /scratch/pabitra/actionproof "
@@ -282,7 +326,7 @@ def markdown(cells: list[dict[str, Any]], sources: list[str]) -> str:
     return "\n".join(out)
 
 
-def claims_fragment(cells: list[dict[str, Any]]) -> str:
+def claims_fragment(cells: list[dict[str, Any]], lat: dict[str, Any]) -> str:
     """The T3M claim block for claims/claims.yaml: every number in the table, tied to t3_metrics.json."""
     f = "results/t3_metrics/t3_metrics.json"
     lines = ["  # >>> T3M (generated by scripts/t3_metrics.py; do not edit by hand)", "  - id: T3M",
@@ -309,6 +353,13 @@ def claims_fragment(cells: list[dict[str, Any]]) -> str:
         for name, key, val in items:
             lines.append(f"      r{i:02d}_{name}: {{value: {val}, file: {f}, key: {json.dumps(['cells'] + key)}, "
                          f"shown: [\"{val}\"]}}")
+    for tag, v in lat.items():
+        items = [(f"{tag}_ep_{q}", ["batch1_latency", tag, "per_episode", q], f2(v["per_episode"][q]))
+                 for q in ("mean", "p50", "p95")]
+        if v["per_turn"]:
+            items.append((f"{tag}_turn_mean", ["batch1_latency", tag, "per_turn", "mean"], f2(v["per_turn"]["mean"])))
+        for name, key, val in items:
+            lines.append(f"      lat_{name}: {{value: {val}, file: {f}, key: {json.dumps(key)}, shown: [\"{val}\"]}}")
     lines.append("  # <<< T3M")
     return "\n".join(lines) + "\n"
 
@@ -326,40 +377,63 @@ def sync_claims(fragment: str, path: Path) -> None:
 
 
 # ----------------------------------------------------------------------------------------------- commands
+def batch1(root: Path, prov: dict[str, Any]) -> dict[str, Any]:
+    out = {}
+    for tag, model, f, task in LATENCY:
+        d = json.loads((root / f).read_text())
+        p = prov.get(f) or {}
+        out[tag] = {"model": model, "file": f, "task": task, "split": d["split"], "batch": d["batch"],
+                    "per_episode": d["seconds_per_episode"], "per_turn": d.get("seconds_per_turn"),
+                    "gpu": p.get("gpu") if p.get("consistent") else None}
+    return out
+
+
 def build(root: Path, out_root: Path) -> dict[str, Any]:
     pf = out_root / OUT / "gpu_provenance.json"
     prov = json.loads(pf.read_text()) if pf.exists() else {}
     cells = [cell(g, root, prov) for g in groups()]
+    lat = batch1(root, prov)
     sources = sorted({p for c in cells for r in c["runs"] for p in (r["file"], r["summary"])})
+    sources += [v["file"] for v in lat.values()]
     data = {"description": "Track 3 trajectory metrics, descriptive, not registered; see scripts/t3_metrics.py "
-                           "for definitions", "cells": {key_of(c): c for c in cells}, "sources": sources}
+                           "for definitions", "cells": {key_of(c): c for c in cells}, "batch1_latency": lat,
+            "sources": sources}
     (out_root / OUT).mkdir(parents=True, exist_ok=True)
     (out_root / OUT / "t3_metrics.json").write_text(json.dumps(data, indent=1, sort_keys=True) + "\n")
     (out_root / "paper").mkdir(exist_ok=True)
-    (out_root / "paper/t3_metrics_table.tex").write_text(tex(cells))
+    (out_root / "paper/t3_metrics_table.tex").write_text(tex(cells, lat))
     (out_root / "docs/submission").mkdir(parents=True, exist_ok=True)
-    (out_root / "docs/submission/T3_METRICS.md").write_text(markdown(cells, sources))
-    frag = claims_fragment(cells)
+    (out_root / "docs/submission/T3_METRICS.md").write_text(markdown(cells, sources, lat))
+    frag = claims_fragment(cells, lat)
     (out_root / OUT / "t3_claims.yaml").write_text(frag)
     if (out_root / "claims/claims.yaml").exists():
         sync_claims(frag, out_root / "claims/claims.yaml")
     return data
 
 
+def parse_owner(owner: str) -> tuple[str, dt.datetime]:
+    """(node or hardware flavour, claim time) from a queue/claims/<task>/owner line (Slurm job or HF Job)."""
+    if owner.startswith("slurm:"):
+        _, _job, host, when = owner.split(":", 3)
+        return host.split(".")[0], dt.datetime.fromisoformat(when)
+    m = re.search(r":([a-z0-9]+x\d+):(\d{4}-\d\d-\d\dT[\d:]+[+-]\d\d:\d\d)$", owner)
+    if not (owner.startswith("hf:") and m):
+        raise ValueError(f"unknown owner format: {owner}")
+    return m.group(1), dt.datetime.fromisoformat(m.group(2))
+
+
 def provenance(root: Path, queue: Path, out_root: Path) -> dict[str, Any]:
     """Node and GPU of the task that wrote each summary file, kept only if the file was written after the claim."""
     out = {}
-    for g in groups():
-        for rel, task in g["runs"]:
-            s = summary_path(rel)
-            owner = (queue / "claims" / task / "owner").read_text().strip()
-            _, job, host, when = owner.split(":", 3)
-            node = host.split(".")[0]
-            claimed = dt.datetime.fromisoformat(when)
-            mtime = dt.datetime.fromtimestamp(os.stat(root / s).st_mtime, dt.timezone.utc)
-            out[s] = {"task": task, "owner": owner, "node": node, "gpu": GPU.get(node),
-                      "claimed": claimed.isoformat(), "summary_mtime_utc": mtime.isoformat(timespec="seconds"),
-                      "consistent": mtime >= claimed}
+    files = [(summary_path(rel), task) for g in groups() for rel, task in g["runs"]]
+    files += [(f, task) for _, _, f, task in LATENCY]
+    for s, task in files:
+        owner = (queue / "claims" / task / "owner").read_text().strip()
+        node, claimed = parse_owner(owner)
+        mtime = dt.datetime.fromtimestamp(os.stat(root / s).st_mtime, dt.timezone.utc)
+        out[s] = {"task": task, "owner": owner, "node": node, "gpu": GPU.get(node),
+                  "claimed": claimed.isoformat(), "summary_mtime_utc": mtime.isoformat(timespec="seconds"),
+                  "consistent": mtime >= claimed}
     (out_root / OUT).mkdir(parents=True, exist_ok=True)
     (out_root / OUT / "gpu_provenance.json").write_text(json.dumps(out, indent=1, sort_keys=True) + "\n")
     return out

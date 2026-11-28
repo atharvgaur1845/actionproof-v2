@@ -78,5 +78,14 @@ def test_cell_wall_time_and_gpu(tmp_path):
     assert (w["min"], w["max"], w["pooled"]) == (2.0, 4.0, 3.0)
     assert w["gpus"] == ["H200", "unattributed"]  # a summary older than its task's claim gets no GPU
     assert T3.row_values(c)[5:] == ["2.00--4.00", "H200/?"]
-    frag = T3.claims_fragment([c])
+    frag = T3.claims_fragment([c], {})
     assert '"P1|p1_test_full|X", "greedy", "success"' in frag and 'shown: ["2.00"]' in frag
+
+
+def test_parse_owner_slurm_and_hf():
+    node, when = T3.parse_owner("slurm:460633:gpunode7.sharanga.local:2026-11-24T13:30:01+05:30")
+    assert node == "gpunode7" and when.utcoffset().total_seconds() == 19800
+    node, when = T3.parse_owner("hf:  url: https://huggingface.co/jobs/u/abc:l40sx1:2026-11-20T12:56:25+05:30")
+    assert node == "l40sx1" and T3.GPU[node] == "L40S" and when.hour == 12
+    with pytest.raises(ValueError):
+        T3.parse_owner("local:me")

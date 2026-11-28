@@ -3,42 +3,58 @@
 \centering
 \small
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lllrrrrrrl}
+\begin{tabular}{llrrrrrrrl}
 \toprule
-Study & Subset & Arm & Models & Success (greedy) & Success (sampled) & Tool acc. & Calls & Turns & Wall s/ep (GPU) \\
+ & & & \multicolumn{2}{c}{Success} & Tool & Calls & Turns & Wall & \\
+Subset & Arm & Models & greedy & sampled & acc. & /ep & /ep & s/ep & GPU \\
 \midrule
-P1 test & full & Dw (warm start) & 1 & 0.842 & 0.706 & 1.000 & 6.5 & 6.5 & 0.11 (H100) \\
-P1 test & full & A (RSC GRPO) & 3 & 0.831 & 0.706 & 0.985 & 7.0 & 7.0 & 0.12--0.21 (A100/H100) \\
-P1 test & full & D (Dw + GRPO) & 3 & 0.842 & 0.810 & 1.000 & 7.4 & 7.4 & 0.08--0.22 (A100/H200) \\
-P1 test & partial pay & Dw (warm start) & 1 & 1.000 & 0.614 & 0.999 & 8.3 & 8.3 & 0.15 (H100) \\
-P1 test & partial pay & A (RSC GRPO) & 3 & 0.648 & 0.319 & 0.988 & 8.0 & 8.0 & 0.15--0.24 (A100/H100) \\
-P1 test & partial pay & D (Dw + GRPO) & 3 & 1.000 & 0.931 & 0.998 & 10.0 & 10.0 & 0.12--0.31 (A100/H200) \\
-P1 test & recovery start & Dw (warm start) & 1 & 0.925 & 0.881 & 0.997 & 5.1 & 5.1 & 0.10 (H100) \\
-P1 test & recovery start & A (RSC GRPO) & 3 & 0.828 & 0.624 & 0.949 & 5.1 & 5.1 & 0.10--0.17 (A100/H100) \\
-P1 test & recovery start & D (Dw + GRPO) & 3 & 0.933 & 0.909 & 0.998 & 5.4 & 5.4 & 0.07--0.17 (A100/H200) \\
-P1 test & 4-step workflow & Dw (warm start) & 1 & 0.067 & 0.325 & 0.993 & 8.2 & 8.2 & 0.16 (H100) \\
-P1 test & 4-step workflow & A (RSC GRPO) & 3 & 0.017 & 0.174 & 0.954 & 9.4 & 9.4 & 0.18--0.29 (A100/H100) \\
-P1 test & 4-step workflow & D (Dw + GRPO) & 3 & 0.733 & 0.486 & 0.991 & 10.4 & 10.4 & 0.13--0.32 (A100/H200) \\
-P1 test & combined faults & Dw (warm start) & 1 & 0.883 & 0.671 & 1.000 & 8.3 & 8.3 & 0.16 (H100) \\
-P1 test & combined faults & A (RSC GRPO) & 3 & 0.689 & 0.535 & 0.974 & 8.2 & 8.2 & 0.15--0.26 (A100/H100) \\
-P1 test & combined faults & D (Dw + GRPO) & 3 & 0.878 & 0.824 & 0.997 & 9.4 & 9.4 & 0.11--0.30 (A100/H200) \\
+\multicolumn{10}{l}{\emph{P1 test}} \\
+full & Dw & 1 & 0.842 & 0.706 & 1.000 & 6.5 & 6.5 & 0.11 & H100 \\
+full & A & 3 & 0.831 & 0.706 & 0.985 & 7.0 & 7.0 & 0.12--0.21 & A100/H100 \\
+full & D & 3 & 0.842 & 0.810 & 1.000 & 7.4 & 7.4 & 0.08--0.22 & A100/H200 \\
+partial pay & Dw & 1 & 1.000 & 0.614 & 0.999 & 8.3 & 8.3 & 0.15 & H100 \\
+partial pay & A & 3 & 0.648 & 0.319 & 0.988 & 8.0 & 8.0 & 0.15--0.24 & A100/H100 \\
+partial pay & D & 3 & 1.000 & 0.931 & 0.998 & 10.0 & 10.0 & 0.12--0.31 & A100/H200 \\
+recovery start & Dw & 1 & 0.925 & 0.881 & 0.997 & 5.1 & 5.1 & 0.10 & H100 \\
+recovery start & A & 3 & 0.828 & 0.624 & 0.949 & 5.1 & 5.1 & 0.10--0.17 & A100/H100 \\
+recovery start & D & 3 & 0.933 & 0.909 & 0.998 & 5.4 & 5.4 & 0.07--0.17 & A100/H200 \\
+4-step workflow & Dw & 1 & 0.067 & 0.325 & 0.993 & 8.2 & 8.2 & 0.16 & H100 \\
+4-step workflow & A & 3 & 0.017 & 0.174 & 0.954 & 9.4 & 9.4 & 0.18--0.29 & A100/H100 \\
+4-step workflow & D & 3 & 0.733 & 0.486 & 0.991 & 10.4 & 10.4 & 0.13--0.32 & A100/H200 \\
+combined faults & Dw & 1 & 0.883 & 0.671 & 1.000 & 8.3 & 8.3 & 0.16 & H100 \\
+combined faults & A & 3 & 0.689 & 0.535 & 0.974 & 8.2 & 8.2 & 0.15--0.26 & A100/H100 \\
+combined faults & D & 3 & 0.878 & 0.824 & 0.997 & 9.4 & 9.4 & 0.11--0.30 & A100/H200 \\
 \midrule
-P4 & renamed tools & Dw (warm start) & 3 & 0.184 & 0.137 & 0.416 & 10.0 & 10.1 & 0.17--0.36 (A100/H100) \\
-P4 & renamed tools & Dw\_aug (augmented warm start) & 3 & 0.793 & 0.741 & 0.990 & 8.1 & 8.1 & 0.24--0.25 (A100) \\
-P4 & unseen 4-step & Dw (warm start) & 3 & 0.343 & 0.261 & 0.991 & 8.3 & 8.3 & 0.15--0.27 (A100/H100) \\
-P4 & unseen 4-step & Dw\_aug (augmented warm start) & 3 & 0.910 & 0.809 & 0.996 & 10.1 & 10.1 & 0.31--0.32 (A100) \\
+\multicolumn{10}{l}{\emph{P4}} \\
+renamed tools & Dw & 3 & 0.184 & 0.137 & 0.416 & 10.0 & 10.1 & 0.17--0.36 & A100/H100 \\
+renamed tools & Dw\_aug & 3 & 0.793 & 0.741 & 0.990 & 8.1 & 8.1 & 0.24--0.25 & A100 \\
+unseen 4-step & Dw & 3 & 0.343 & 0.261 & 0.991 & 8.3 & 8.3 & 0.15--0.27 & A100/H100 \\
+unseen 4-step & Dw\_aug & 3 & 0.910 & 0.809 & 0.996 & 10.1 & 10.1 & 0.31--0.32 & A100 \\
 \midrule
-TXN & txn\_test & B0 (script: trust the reply) & 1 & 0.136 & -- & 1.000 & 4.2 & -- & -- \\
-TXN & txn\_test & B4 (script: reconciliation) & 1 & 0.864 & -- & 1.000 & 7.6 & -- & -- \\
-TXN & txn\_test & Dw (warm start) & 1 & 0.652 & 0.570 & 0.956 & 6.7 & 6.7 & 0.29 (A100) \\
-TXN & txn\_test & D (Dw + GRPO) & 3 & 0.767 & 0.702 & 0.978 & 7.8 & 7.8 & 0.21--0.43 (H100) \\
-TXN & txn\_test & Dw\_aug (augmented warm start) & 3 & 0.733 & 0.680 & 0.990 & 6.6 & 6.6 & 0.26--0.28 (A100) \\
+\multicolumn{10}{l}{\emph{TXN}} \\
+txn\_test & B0 (script) & 1 & 0.136 & -- & 1.000 & 4.2 & -- & -- & -- \\
+txn\_test & B4 (script) & 1 & 0.864 & -- & 1.000 & 7.6 & -- & -- & -- \\
+txn\_test & Dw & 1 & 0.652 & 0.570 & 0.956 & 6.7 & 6.7 & 0.29 & A100 \\
+txn\_test & D & 3 & 0.767 & 0.702 & 0.978 & 7.8 & 7.8 & 0.21--0.43 & H100 \\
+txn\_test & Dw\_aug & 3 & 0.733 & 0.680 & 0.990 & 6.6 & 6.6 & 0.26--0.28 & A100 \\
 \midrule
-AD-C1 & cw\_conf & warm start & 1 & 0.687 & 0.694 & 0.998 & 3.9 & 3.9 & 0.04--0.05 (H200) \\
-AD-C1 & cw\_conf & GRPO & 5 & 0.687 & 0.685 & 0.997 & 3.7 & 3.7 & 0.04--0.05 (H200) \\
-AD-C1 & cw\_conf & std-free & 5 & 0.807 & 0.738 & 0.970 & 5.3 & 5.3 & 0.05--0.09 (H200) \\
+\multicolumn{10}{l}{\emph{AD-C1}} \\
+cw\_conf & warm start & 1 & 0.687 & 0.694 & 0.998 & 3.9 & 3.9 & 0.04--0.05 & H200 \\
+cw\_conf & GRPO & 5 & 0.687 & 0.685 & 0.997 & 3.7 & 3.7 & 0.04--0.05 & H200 \\
+cw\_conf & std-free & 5 & 0.807 & 0.738 & 0.970 & 5.3 & 5.3 & 0.05--0.09 & H200 \\
 \bottomrule
 \end{tabular}
-\caption{Track~3 trajectory metrics, descriptive, not registered (\texttt{scripts/t3\_metrics.py}, from stored evaluation episodes only; no new runs). Rows pool the arm's seeds (models column). \emph{Success}: verified success VSC (P1, P4, AD-C1) or verified transaction completion VTC (TXN), greedy and sampled ($T=1$) episodes separately. \emph{Tool acc.}: $1-$invalid$/$policy calls, pooled over all episodes; invalid = unknown tool, arguments that do not bind to the tool signature, or arguments that are not valid JSON; policy calls exclude the scripted start prefix. A turn without a parseable call ends the episode and is not a call. \emph{Calls}, \emph{turns}: per episode, all episodes. \emph{Wall s/ep}: the run's evaluation wall time divided by its episodes (range over runs); each run is one batched vLLM job, so this is throughput time per episode on the named GPU, not per-request latency, and it depends on the GPU, batch size and output length. No file records per-request latency. Scripted policies (B0, B4) have no model turns or timed runs.}
+
+\smallskip
+\begin{tabular}{llrrrr}
+\toprule
+Batch-1 latency, \texttt{proc\_dev} (40 episodes) & GPU & s/ep mean & p50 & p95 & s/turn mean \\
+\midrule
+warm start (AD-C1 warm start weights) & L40S & 2.44 & 2.41 & 3.05 & 0.60 \\
+A12 database-reward GRPO s0 & L40S & 3.82 & 3.62 & 4.68 & 0.50 \\
+A12 ack-reward GRPO s0 & L40S & 2.44 & 2.40 & 3.05 & 0.60 \\
+\bottomrule
+\end{tabular}
+\caption{Track~3 trajectory metrics, descriptive, not registered (\texttt{scripts/t3\_metrics.py}, from stored evaluation episodes only; no new runs). Rows pool the arm's seeds (models column). Arms: Dw, the recovery-SFT warm start; A, the RSC GRPO agent; D, Dw then GRPO; Dw\_aug, the augmented warm start; B0 and B4, scripts. \emph{Success}: verified success VSC (P1, P4, AD-C1) or verified transaction completion VTC (TXN), greedy and sampled ($T=1$) episodes separately. \emph{Tool acc.}: $1-$invalid$/$policy calls, pooled over all episodes; invalid = unknown tool, arguments that do not bind to the tool signature, or arguments that are not valid JSON; policy calls exclude the scripted start prefix. A turn without a parseable call ends the episode and is not a call. \emph{Calls}, \emph{turns}: per episode, all episodes. \emph{Wall s/ep}: the run's evaluation wall time divided by its episodes (range over runs); each run is one batched vLLM job, so this is throughput time per episode on the named GPU, not per-request latency, and it depends on the GPU, batch size and output length. Scripted policies (B0, B4) have no model turns or timed runs. \emph{Lower block}: the only measured per-episode latency (batch 1, one task at a time, greedy, 40 \texttt{proc\_dev} episodes, \texttt{scripts/latency\_proc.py}); of the models above, only the warm start's weights were timed this way (they are the AD-C1 warm start and arm A's base). D, Dw and Dw\_aug have no batch-1 measurement.}
 \label{tab:t3metrics}
 \end{table*}

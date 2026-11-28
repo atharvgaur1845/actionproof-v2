@@ -1,4 +1,66 @@
 {
+ "batch1_latency": {
+  "ra_s0": {
+   "batch": 1,
+   "file": "results/s2/latency_ra_s0.json",
+   "gpu": "L40S",
+   "model": "A12 acknowledgement-reward GRPO, seed 0 (adapter a12_proc_ra_s0)",
+   "per_episode": {
+    "mean": 2.4436541962249065,
+    "n": 40,
+    "p50": 2.4005921269999817,
+    "p95": 3.047273635000238
+   },
+   "per_turn": {
+    "mean": 0.5974060677283106,
+    "n": 40,
+    "p50": 0.5958988104001037,
+    "p95": 0.6350307049997355
+   },
+   "split": "proc_dev",
+   "task": "591_latency_proc"
+  },
+  "rv_s0": {
+   "batch": 1,
+   "file": "results/s2/latency_rv_s0.json",
+   "gpu": "L40S",
+   "model": "A12 database-reward GRPO, seed 0 (adapter a12_proc_rv_s0)",
+   "per_episode": {
+    "mean": 3.8189291319998575,
+    "n": 40,
+    "p50": 3.6166050399988308,
+    "p95": 4.675096683000447
+   },
+   "per_turn": {
+    "mean": 0.5044643729082758,
+    "n": 40,
+    "p50": 0.5010439675713444,
+    "p95": 0.5430418368570307
+   },
+   "split": "proc_dev",
+   "task": "591_latency_proc"
+  },
+  "warm_start": {
+   "batch": 1,
+   "file": "results/s2/latency_warm_start.json",
+   "gpu": "L40S",
+   "model": "warm start (runs/rft_proc/merged; the AD-C1 warm-start weights and arm A's base)",
+   "per_episode": {
+    "mean": 2.442894735200025,
+    "n": 40,
+    "p50": 2.4068929459990613,
+    "p95": 3.0463613129995792
+   },
+   "per_turn": {
+    "mean": 0.5972240346054324,
+    "n": 40,
+    "p50": 0.5936526995999885,
+    "p95": 0.6390876356666316
+   },
+   "split": "proc_dev",
+   "task": "591_latency_proc"
+  }
+ },
  "cells": {
   "AD-C1|cw_conf|GRPO": {
    "all": {
@@ -3628,6 +3690,9 @@
   "results/txn/Dwaug_s1__txn_test.jsonl",
   "results/txn/Dwaug_s1__txn_test.summary.json",
   "results/txn/Dwaug_s2__txn_test.jsonl",
-  "results/txn/Dwaug_s2__txn_test.summary.json"
+  "results/txn/Dwaug_s2__txn_test.summary.json",
+  "results/s2/latency_warm_start.json",
+  "results/s2/latency_rv_s0.json",
+  "results/s2/latency_ra_s0.json"
  ]
 }
