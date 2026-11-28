@@ -28,7 +28,7 @@ law, small $\epsilon$, and, for the vote, deterministic within-state returns).
   (post hoc) show GRPO did suppress reading: warm start 0.189 reads per episode, GRPO 0.000–0.001.
 - **Not claimed:** a new optimiser (Dr. GRPO and RLOO already exist); priority for "GRPO normalisation biases
   learning" (Fontana et al., ACL 2026; Bay & Yearick; GDPO cover other forms); that the language agent is cost-blind
-  in general. AD-C2, the direct cost intervention, is one seed per arm (`PREREGISTRATION_AD_C2.md` and its addendum 1).
+  in general. AD-C2, the direct cost intervention, is one seed per arm (`PREREGISTRATION_AD_C2.md` and addenda 1–2); all five of its registered predictions held (`results/ad/c2/c2_summary.json`): GRPO never read at costs 0.05 and 0.01 and read at cost 0, while std-free read more as the cost fell.
 
 ## 1. What is genuinely new here?
 
