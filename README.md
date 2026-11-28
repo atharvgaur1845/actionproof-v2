@@ -8,8 +8,9 @@
 > vote of state-wise signs, not the value of checking. We prove this under stated assumptions, test it in a registered
 > held-out testbed of 731 problems (the theory predicts GRPO's decision in 721/721 cells; one registered hypothesis
 > fails, one is untestable), and in a registered five-seed study of a 3.35B Cohere tool agent (std-free +0.120 verified
-> completion; every GRPO seed ends at the warm start's no-read behaviour, so that arm is degenerate). No new optimiser
-> is claimed. The rest of this README describes the **instrument** that paper uses: the ActionProof benchmark, the
+> completion; every GRPO seed ends at the warm start's no-read behaviour, so that arm is degenerate). A registered
+> cost test (one run per arm) met all five predictions: GRPO never reads at read costs 0.05 and 0.01 but reads at cost 0,
+> while the std-free agent reads more as reads get cheaper. No new optimiser is claimed. The rest of this README describes the **instrument** that paper uses: the ActionProof benchmark, the
 > trained recovery agent and the live demo ([practical paper](paper/actionproof_main.pdf)).
 
 **The instrument: training small agents to reconcile transactions when “ok” does not mean it happened.** A payment tool can answer

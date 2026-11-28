@@ -1,0 +1,190 @@
+{
+  "split": "cw_c2",
+  "n_tasks": 300,
+  "episodes_per_task": 5,
+  "bootstrap": {
+    "B": 10000,
+    "seed": 20261128
+  },
+  "arms": {
+    "grpo_c005": {
+      "train_cost": 0.05,
+      "greedy_reads": 0.0,
+      "greedy_vsc": 0.7066666666666667,
+      "greedy_false_success": 0.29333333333333333,
+      "greedy_faulted_vsc": 0.26666666666666666,
+      "all5_reads": 0.0,
+      "all5_vsc": 0.7053333333333334,
+      "all5_false_success": 0.29333333333333333,
+      "net_utility_at_train_cost": 0.7053333333333334,
+      "verify_after": {
+        "order": [
+          0.0,
+          112
+        ],
+        "pay": [
+          0.0,
+          300
+        ],
+        "post": [
+          0.0,
+          300
+        ],
+        "receive": [
+          0.0,
+          84
+        ]
+      }
+    },
+    "nostd_c005": {
+      "train_cost": 0.05,
+      "greedy_reads": 1.81,
+      "greedy_vsc": 0.8033333333333333,
+      "greedy_false_success": 0.19666666666666666,
+      "greedy_faulted_vsc": 0.5083333333333333,
+      "all5_reads": 1.1633333333333333,
+      "all5_vsc": 0.758,
+      "all5_false_success": 0.22866666666666666,
+      "net_utility_at_train_cost": 0.6998333333333333,
+      "verify_after": {
+        "order": [
+          0.8151260504201681,
+          119
+        ],
+        "pay": [
+          0.5792880258899676,
+          309
+        ],
+        "post": [
+          0.5666666666666667,
+          300
+        ],
+        "receive": [
+          0.9578947368421052,
+          95
+        ]
+      }
+    },
+    "grpo_c001": {
+      "train_cost": 0.01,
+      "greedy_reads": 0.0,
+      "greedy_vsc": 0.7066666666666667,
+      "greedy_false_success": 0.29333333333333333,
+      "greedy_faulted_vsc": 0.26666666666666666,
+      "all5_reads": 0.0,
+      "all5_vsc": 0.7026666666666667,
+      "all5_false_success": 0.29333333333333333,
+      "net_utility_at_train_cost": 0.7026666666666667,
+      "verify_after": {
+        "order": [
+          0.0,
+          112
+        ],
+        "pay": [
+          0.0,
+          300
+        ],
+        "post": [
+          0.0,
+          300
+        ],
+        "receive": [
+          0.0,
+          84
+        ]
+      }
+    },
+    "nostd_c001": {
+      "train_cost": 0.01,
+      "greedy_reads": 2.63,
+      "greedy_vsc": 0.8833333333333333,
+      "greedy_false_success": 0.11666666666666667,
+      "greedy_faulted_vsc": 0.7083333333333334,
+      "all5_reads": 2.212,
+      "all5_vsc": 0.8160000000000001,
+      "all5_false_success": 0.12866666666666668,
+      "net_utility_at_train_cost": 0.79388,
+      "verify_after": {
+        "order": [
+          0.9083333333333333,
+          120
+        ],
+        "pay": [
+          0.9246987951807228,
+          332
+        ],
+        "post": [
+          0.9166666666666666,
+          300
+        ],
+        "receive": [
+          0.9578947368421052,
+          95
+        ]
+      }
+    },
+    "grpo_c000": {
+      "train_cost": 0.0,
+      "greedy_reads": 2.723333333333333,
+      "greedy_vsc": 0.8833333333333333,
+      "greedy_false_success": 0.11666666666666667,
+      "greedy_faulted_vsc": 0.7083333333333334,
+      "all5_reads": 2.6193333333333335,
+      "all5_vsc": 0.83,
+      "all5_false_success": 0.11600000000000002,
+      "net_utility_at_train_cost": 0.83,
+      "verify_after": {
+        "order": [
+          0.9083333333333333,
+          120
+        ],
+        "pay": [
+          0.9545454545454546,
+          330
+        ],
+        "post": [
+          0.95,
+          300
+        ],
+        "receive": [
+          0.9578947368421052,
+          95
+        ]
+      }
+    }
+  },
+  "differences": {
+    "D1_vsc_nostd_minus_grpo_c001": {
+      "diff": 0.11333333333333336,
+      "lo": 0.07666666666666667,
+      "hi": 0.152
+    },
+    "D2_reads_grpo_c001_minus_c005": {
+      "diff": 0.0,
+      "lo": 0.0,
+      "hi": 0.0
+    },
+    "D3_reads_nostd_c001_minus_c005": {
+      "diff": 1.0486666666666666,
+      "lo": 0.95,
+      "hi": 1.1453333333333333
+    },
+    "D4_reads_grpo_c000_minus_c001": {
+      "diff": 2.6193333333333335,
+      "lo": 2.533333333333333,
+      "hi": 2.704
+    },
+    "D5_vsc_grpo_c000_minus_c001": {
+      "diff": 0.12733333333333335,
+      "lo": 0.08666666666666668,
+      "hi": 0.17
+    }
+  },
+  "predictions": {
+    "P1_grpo_c001_cost_blind (greedy reads <= 0.2)": true,
+    "P2_nostd_c001_reads (greedy reads >= 0.8)": true,
+    "P3_vsc_nostd_gt_grpo_at_c001 (D1 lower bound > 0)": true,
+    "P4_boundary_grpo_c000_reads (greedy reads > 0.2) [secondary]": true,
+    "P5_nostd_reads_not_lower_at_c001 (D3 estimate >= 0) [secondary]": true
+  }
+}

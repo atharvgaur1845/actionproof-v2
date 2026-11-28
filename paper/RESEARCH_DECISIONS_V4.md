@@ -34,8 +34,10 @@ force-pushed; `main.tex`, `main_v2.tex`, `main_v3.tex` and `actionproof_main.tex
 - **Not run:** the full factorial (2 estimators × 3 costs × 2 group laws × seeds). The iid group law needs new rollout
   code that could not be built and checked before the cutoff; one H100 lease was available (a second H100 job is
   refused by QOS; H200 and A100 workers were submitted and stayed in the queue).
-- **Status:** see the AD-C2 section of the paper, which states that the runs were not complete when this version was
-  frozen; it will be filled from `results/ad/c2/c2_summary.json` exactly as registered.
+- **Status (2026-11-29 01:39 IST):** complete. Task 2003 failed in its runner after the first evaluation; addendum 2
+  (before any result was read) added task 2004 with a one-line fix. All five registered predictions are met
+  (`results/ad/c2/c2_summary.json`), recomputed from the greedy episodes: GRPO 0 reads at c = 0.05 and 0.01, 2.72 at
+  c = 0; std-free 1.81 and 2.63; D1 +0.113 [+0.077, +0.152]. One run per arm. Paper: Test 3, Table `tab:c2`.
 
 ## Not done, and why
 - **No new estimator.** No candidate met the directive's acceptance gate in the time available; the paper proposes none.

@@ -46,7 +46,10 @@ and one could not be tested, and we report both. We then trained a 3.35-billion-
 Global) five times with each method. With standard GRPO the agent never learned to check, in all five runs; with the
 group standard deviation removed (``std-free'', the Dr.~GRPO estimator) the same agent learned to check and its
 verified completion rose from 0.687 to 0.807. Because all five GRPO runs ended exactly where they started, that
-comparison is less informative than five varied runs would be, and we say so. We do not propose a new optimiser and do
+comparison is less informative than five varied runs would be, and we say so. A third registered test, one run per
+arm, changed the read cost: GRPO read nothing at costs 0.05 and 0.01 but read freely at cost 0, an all-or-nothing
+switch, while the std-free agent read more as reads got cheaper; all five registered predictions held. We do not
+propose a new optimiser and do
 not claim GRPO always fails.
 \end{abstract}
 
@@ -59,7 +62,9 @@ value; removing the group standard deviation brings the value back.
 \textbf{Base model and method.} Tiny Aya Global 3.35B, LoRA fine-tuning, then GRPO with and without the group
 standard deviation (AgentTune).
 \textbf{Content warning.} None: all tasks are synthetic purchase orders.
-\textbf{Not claimed.} A new optimiser, a universal GRPO failure, or a cost response of the language agent.}
+\textbf{Cost test (registered, one run per arm).} GRPO reads 0 at costs 0.05 and 0.01 and 2.7 per episode at cost
+0; std-free reads 1.8 then 2.6; 5 of 5 predictions held.
+\textbf{Not claimed.} A new optimiser, a universal GRPO failure, or a multi-run estimate of the cost response.}
 
 \section{The problem and why it matters}\label{sec:intro}
 A payment tool can answer ``ok'' when nothing was paid (a \emph{phantom write}), and it can time out on a payment that
@@ -210,7 +215,7 @@ correction across four comparisons.
 exactly the warm start. Std-free runs read 0.93 to 2.02 times per episode and scored 0.807 on average, $+0.120$ over
 GRPO (95\% interval [0.088, 0.153] as registered; [0.075, 0.167] when runs are also resampled; Holm $p=0.016$; better
 in all five pairs). The whole gain is on faulted tasks; on clean tasks both score 1.000. Seven of the eight frozen
-predictions held; the eighth, about cost, could not be tested with one cost.
+predictions held; the eighth, about cost, needs a second cost, which Test~3 supplies.
 
 \begin{figure}[t]\centering
 \includegraphics[width=\columnwidth]{figures_v4/fig_c1_seeds.pdf}
@@ -230,9 +235,34 @@ itself improved checking. One extra check, made after the registered analysis, s
 agent cannot distinguish) scores highest, $+0.192$ over GRPO, but reads 2.7 times per episode, far more than the faults
 require, again as its vote predicts. Calibrated checking, not maximal checking, is what the value asks for.
 
-\paragraph{The cost test is not finished.} A third registered test (\path{PREREGISTRATION_AD_C2.md}, AD-C2) retrains
-at lower costs to see whether GRPO ignores cost; its runs had not finished when this version was frozen, so we claim
-nothing about how the agent responds to cost. In a related setting where reads are free, removing the standard
+\paragraph{Test 3: does the agent respond to the cost of checking?} The third registered test
+(\path{PREREGISTRATION_AD_C2.md}, called AD-C2) retrained GRPO and std-free at a lower read cost, 0.01, and GRPO at
+cost 0, one run each, and scored them with the cost-0.05 runs on a new sealed split of 300 tasks (120 faulted), five
+episodes per task. The theory predicts that GRPO's vote only flips sign when reads become free (a clean world's
+$\beta=-c$ is negative for every $c>0$), so GRPO should switch from never reading to reading only at $c=0$, while
+std-free should read more as reads get cheaper. That is what happened (Table~\ref{tab:c2}): GRPO read 0.000 times per
+episode at both 0.05 and 0.01, with identical completion (0.707), and 2.72 times at cost 0 (completion 0.883); std-free
+read 1.81 times at 0.05 and 2.63 at 0.01 (+1.05 [+0.95, +1.15]), and beat GRPO at 0.01 by $+0.113$ [$+0.077$, $+0.152$].
+All three primary and both secondary registered predictions held. Two caveats: each arm is a single run, and GRPO's
+zero reads at 0.01 cannot by themselves tell ``ignores the cost'' from ``did not move''; the cost-0 run, where the same
+recipe does learn to read, is what shows GRPO can move. A dated addendum before any result recorded a runner bug and
+its one-line fix (\path{PREREGISTRATION_AD_C2_ADDENDUM2.md}); every model was still evaluated once.
+
+\begin{table}[t]\centering\small
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}lccccc@{}}\toprule
+Arm & read cost & reads/ep & VSC & faulted VSC & false success\\\midrule
+GRPO & 0.05 & 0.000 & 0.707 & 0.267 & 0.293\\
+GRPO & 0.01 & 0.000 & 0.707 & 0.267 & 0.293\\
+GRPO & 0 & 2.723 & 0.883 & 0.708 & 0.117\\
+std-free & 0.05 & 1.810 & 0.803 & 0.508 & 0.197\\
+std-free & 0.01 & 2.630 & 0.883 & 0.708 & 0.117\\\bottomrule
+\end{tabular}}
+\caption{Test 3 on the sealed split (300 tasks, 120 faulted; greedy decoding; one training run per arm). Source:
+\path{results/ad/c2/c2_summary.json}.}\label{tab:c2}
+\end{table}
+
+In a related setting where reads are free, removing the standard
 deviation did not help (0.813 against 0.819), which fits the theory: with free reads the worlds do not differ in
 cost, so there is nothing for the vote to lose.
 
@@ -279,7 +309,7 @@ training logs recorded, with that in mind.
 \section*{Limitations}
 The exact results cover one decision; for multi-step workflows the stakes-cancel theorem still holds but gives no
 numbers. The language-agent evidence is one model family and one simulator, the GRPO arm of Test~2 did not move, and
-the cost test has one run per arm and had not finished at freeze. The cost re-scoring of training logs is
+the cost test has one run per arm and one group law. The cost re-scoring of training logs is
 counterfactual, and the free-read explanation was made after the result. Reads are counted whether or not they were
 informative. No human-labelled evaluation exists. The novelty is incremental over known z-score invariances
 \citep{wang2026darkroom}: what is new is treating the hidden world as part of the group and working out its exact
