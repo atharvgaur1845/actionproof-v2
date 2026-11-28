@@ -1,0 +1,3698 @@
+{
+ "batch1_latency": {
+  "ra_s0": {
+   "batch": 1,
+   "file": "results/s2/latency_ra_s0.json",
+   "gpu": "L40S",
+   "model": "A12 acknowledgement-reward GRPO, seed 0 (adapter a12_proc_ra_s0)",
+   "per_episode": {
+    "mean": 2.4436541962249065,
+    "n": 40,
+    "p50": 2.4005921269999817,
+    "p95": 3.047273635000238
+   },
+   "per_turn": {
+    "mean": 0.5974060677283106,
+    "n": 40,
+    "p50": 0.5958988104001037,
+    "p95": 0.6350307049997355
+   },
+   "split": "proc_dev",
+   "task": "591_latency_proc"
+  },
+  "rv_s0": {
+   "batch": 1,
+   "file": "results/s2/latency_rv_s0.json",
+   "gpu": "L40S",
+   "model": "A12 database-reward GRPO, seed 0 (adapter a12_proc_rv_s0)",
+   "per_episode": {
+    "mean": 3.8189291319998575,
+    "n": 40,
+    "p50": 3.6166050399988308,
+    "p95": 4.675096683000447
+   },
+   "per_turn": {
+    "mean": 0.5044643729082758,
+    "n": 40,
+    "p50": 0.5010439675713444,
+    "p95": 0.5430418368570307
+   },
+   "split": "proc_dev",
+   "task": "591_latency_proc"
+  },
+  "warm_start": {
+   "batch": 1,
+   "file": "results/s2/latency_warm_start.json",
+   "gpu": "L40S",
+   "model": "warm start (runs/rft_proc/merged; the AD-C1 warm-start weights and arm A's base)",
+   "per_episode": {
+    "mean": 2.442894735200025,
+    "n": 40,
+    "p50": 2.4068929459990613,
+    "p95": 3.0463613129995792
+   },
+   "per_turn": {
+    "mean": 0.5972240346054324,
+    "n": 40,
+    "p50": 0.5936526995999885,
+    "p95": 0.6390876356666316
+   },
+   "split": "proc_dev",
+   "task": "591_latency_proc"
+  }
+ },
+ "cells": {
+  "AD-C1|cw_conf|GRPO": {
+   "all": {
+    "calls_per_episode": 3.7414666666666667,
+    "episodes": 7500,
+    "invalid_calls": 84,
+    "no_call_end_rate": 0.0013333333333333333,
+    "policy_calls": 28061,
+    "success": 0.6854666666666667,
+    "tool_call_accuracy": 0.9970065215067175,
+    "turns_per_episode": 3.7428
+   },
+   "arm": "GRPO",
+   "greedy": {
+    "calls_per_episode": 3.7333333333333334,
+    "episodes": 1500,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 5600,
+    "success": 0.6866666666666666,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 3.7333333333333334
+   },
+   "in_table": true,
+   "n_models": 5,
+   "runs": [
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s0__cw_conf.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 14,
+     "summary": "results/ad/conf/ad_grpo_s0__cw_conf.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.04666666666666667
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s0__cw_conf.t1_s0.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_grpo_s0__cw_conf.t1_s0.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s0__cw_conf.t1_s1.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_grpo_s0__cw_conf.t1_s1.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s0__cw_conf.t1_s2.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_grpo_s0__cw_conf.t1_s2.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s0__cw_conf.t1_s3.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_grpo_s0__cw_conf.t1_s3.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s1__cw_conf.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 14,
+     "summary": "results/ad/conf/ad_grpo_s1__cw_conf.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.04666666666666667
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s1__cw_conf.t1_s0.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_grpo_s1__cw_conf.t1_s0.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s1__cw_conf.t1_s1.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_grpo_s1__cw_conf.t1_s1.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s1__cw_conf.t1_s2.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 15,
+     "summary": "results/ad/conf/ad_grpo_s1__cw_conf.t1_s2.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.05
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s1__cw_conf.t1_s3.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_grpo_s1__cw_conf.t1_s3.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s2__cw_conf.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 14,
+     "summary": "results/ad/conf/ad_grpo_s2__cw_conf.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.04666666666666667
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s2__cw_conf.t1_s0.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_grpo_s2__cw_conf.t1_s0.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s2__cw_conf.t1_s1.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_grpo_s2__cw_conf.t1_s1.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s2__cw_conf.t1_s2.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 15,
+     "summary": "results/ad/conf/ad_grpo_s2__cw_conf.t1_s2.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.05
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s2__cw_conf.t1_s3.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 14,
+     "summary": "results/ad/conf/ad_grpo_s2__cw_conf.t1_s3.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.04666666666666667
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s3__cw_conf.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 14,
+     "summary": "results/ad/conf/ad_grpo_s3__cw_conf.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.04666666666666667
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s3__cw_conf.t1_s0.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_grpo_s3__cw_conf.t1_s0.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s3__cw_conf.t1_s1.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_grpo_s3__cw_conf.t1_s1.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s3__cw_conf.t1_s2.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 15,
+     "summary": "results/ad/conf/ad_grpo_s3__cw_conf.t1_s2.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.05
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s3__cw_conf.t1_s3.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_grpo_s3__cw_conf.t1_s3.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s4__cw_conf.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 14,
+     "summary": "results/ad/conf/ad_grpo_s4__cw_conf.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.04666666666666667
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s4__cw_conf.t1_s0.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_grpo_s4__cw_conf.t1_s0.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s4__cw_conf.t1_s1.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_grpo_s4__cw_conf.t1_s1.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s4__cw_conf.t1_s2.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_grpo_s4__cw_conf.t1_s2.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_grpo_s4__cw_conf.t1_s3.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_grpo_s4__cw_conf.t1_s3.summary.json",
+     "task": "1240_ad_c1_eval_a",
+     "wall_s_per_episode": 0.043333333333333335
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 3.7435,
+    "episodes": 6000,
+    "invalid_calls": 84,
+    "no_call_end_rate": 0.0016666666666666668,
+    "policy_calls": 22461,
+    "success": 0.6851666666666667,
+    "tool_call_accuracy": 0.9962601843194872,
+    "turns_per_episode": 3.7451666666666665
+   },
+   "study": "AD-C1",
+   "subset": "cw_conf",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "H200"
+    ],
+    "max": 0.05,
+    "min": 0.043333333333333335,
+    "pooled": 0.04493333333333333
+   }
+  },
+  "AD-C1|cw_conf|std-free": {
+   "all": {
+    "calls_per_episode": 5.315333333333333,
+    "episodes": 7500,
+    "invalid_calls": 1196,
+    "no_call_end_rate": 0.0092,
+    "policy_calls": 39865,
+    "success": 0.7513333333333333,
+    "tool_call_accuracy": 0.9699987457669635,
+    "turns_per_episode": 5.324533333333333
+   },
+   "arm": "std-free",
+   "greedy": {
+    "calls_per_episode": 5.460666666666667,
+    "episodes": 1500,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.002,
+    "policy_calls": 8191,
+    "success": 0.8066666666666666,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 5.462666666666666
+   },
+   "in_table": true,
+   "n_models": 5,
+   "runs": [
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s0__cw_conf.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 28,
+     "summary": "results/ad/conf/ad_nostd_s0__cw_conf.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.09333333333333334
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s0__cw_conf.t1_s0.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 17,
+     "summary": "results/ad/conf/ad_nostd_s0__cw_conf.t1_s0.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.056666666666666664
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s0__cw_conf.t1_s1.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 17,
+     "summary": "results/ad/conf/ad_nostd_s0__cw_conf.t1_s1.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.056666666666666664
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s0__cw_conf.t1_s2.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 17,
+     "summary": "results/ad/conf/ad_nostd_s0__cw_conf.t1_s2.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.056666666666666664
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s0__cw_conf.t1_s3.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 18,
+     "summary": "results/ad/conf/ad_nostd_s0__cw_conf.t1_s3.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.06
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s1__cw_conf.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 20,
+     "summary": "results/ad/conf/ad_nostd_s1__cw_conf.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.06666666666666667
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s1__cw_conf.t1_s0.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 18,
+     "summary": "results/ad/conf/ad_nostd_s1__cw_conf.t1_s0.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.06
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s1__cw_conf.t1_s1.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 18,
+     "summary": "results/ad/conf/ad_nostd_s1__cw_conf.t1_s1.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.06
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s1__cw_conf.t1_s2.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 18,
+     "summary": "results/ad/conf/ad_nostd_s1__cw_conf.t1_s2.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.06
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s1__cw_conf.t1_s3.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 19,
+     "summary": "results/ad/conf/ad_nostd_s1__cw_conf.t1_s3.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.06333333333333334
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s2__cw_conf.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 21,
+     "summary": "results/ad/conf/ad_nostd_s2__cw_conf.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.07
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s2__cw_conf.t1_s0.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 18,
+     "summary": "results/ad/conf/ad_nostd_s2__cw_conf.t1_s0.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.06
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s2__cw_conf.t1_s1.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 19,
+     "summary": "results/ad/conf/ad_nostd_s2__cw_conf.t1_s1.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.06333333333333334
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s2__cw_conf.t1_s2.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 19,
+     "summary": "results/ad/conf/ad_nostd_s2__cw_conf.t1_s2.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.06333333333333334
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s2__cw_conf.t1_s3.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 20,
+     "summary": "results/ad/conf/ad_nostd_s2__cw_conf.t1_s3.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.06666666666666667
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s3__cw_conf.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 18,
+     "summary": "results/ad/conf/ad_nostd_s3__cw_conf.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.06
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s3__cw_conf.t1_s0.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 17,
+     "summary": "results/ad/conf/ad_nostd_s3__cw_conf.t1_s0.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.056666666666666664
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s3__cw_conf.t1_s1.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 20,
+     "summary": "results/ad/conf/ad_nostd_s3__cw_conf.t1_s1.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.06666666666666667
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s3__cw_conf.t1_s2.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 16,
+     "summary": "results/ad/conf/ad_nostd_s3__cw_conf.t1_s2.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.05333333333333334
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s3__cw_conf.t1_s3.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 20,
+     "summary": "results/ad/conf/ad_nostd_s3__cw_conf.t1_s3.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.06666666666666667
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s4__cw_conf.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 21,
+     "summary": "results/ad/conf/ad_nostd_s4__cw_conf.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.07
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s4__cw_conf.t1_s0.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 22,
+     "summary": "results/ad/conf/ad_nostd_s4__cw_conf.t1_s0.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.07333333333333333
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s4__cw_conf.t1_s1.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 20,
+     "summary": "results/ad/conf/ad_nostd_s4__cw_conf.t1_s1.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.06666666666666667
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s4__cw_conf.t1_s2.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 20,
+     "summary": "results/ad/conf/ad_nostd_s4__cw_conf.t1_s2.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.06666666666666667
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_nostd_s4__cw_conf.t1_s3.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 20,
+     "summary": "results/ad/conf/ad_nostd_s4__cw_conf.t1_s3.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.06666666666666667
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 5.279,
+    "episodes": 6000,
+    "invalid_calls": 1196,
+    "no_call_end_rate": 0.011,
+    "policy_calls": 31674,
+    "success": 0.7375,
+    "tool_call_accuracy": 0.962240323293553,
+    "turns_per_episode": 5.29
+   },
+   "study": "AD-C1",
+   "subset": "cw_conf",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "H200"
+    ],
+    "max": 0.09333333333333334,
+    "min": 0.05333333333333334,
+    "pooled": 0.06413333333333333
+   }
+  },
+  "AD-C1|cw_conf|warm start": {
+   "all": {
+    "calls_per_episode": 3.8886666666666665,
+    "episodes": 1500,
+    "invalid_calls": 14,
+    "no_call_end_rate": 0.0026666666666666666,
+    "policy_calls": 5833,
+    "success": 0.6926666666666667,
+    "tool_call_accuracy": 0.9975998628493057,
+    "turns_per_episode": 3.8913333333333333
+   },
+   "arm": "warm start",
+   "greedy": {
+    "calls_per_episode": 3.7333333333333334,
+    "episodes": 300,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 1120,
+    "success": 0.6866666666666666,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 3.7333333333333334
+   },
+   "in_table": true,
+   "n_models": 1,
+   "runs": [
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_base_warm__cw_conf.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 14,
+     "summary": "results/ad/conf/ad_base_warm__cw_conf.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.04666666666666667
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_base_warm__cw_conf.t1_s0.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 15,
+     "summary": "results/ad/conf/ad_base_warm__cw_conf.t1_s0.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.05
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_base_warm__cw_conf.t1_s1.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_base_warm__cw_conf.t1_s1.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_base_warm__cw_conf.t1_s2.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 13,
+     "summary": "results/ad/conf/ad_base_warm__cw_conf.t1_s2.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.043333333333333335
+    },
+    {
+     "episodes": 300,
+     "file": "results/ad/conf/ad_base_warm__cw_conf.t1_s3.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 15,
+     "summary": "results/ad/conf/ad_base_warm__cw_conf.t1_s3.summary.json",
+     "task": "1241_ad_c1_eval_b",
+     "wall_s_per_episode": 0.05
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 3.9275,
+    "episodes": 1200,
+    "invalid_calls": 14,
+    "no_call_end_rate": 0.0033333333333333335,
+    "policy_calls": 4713,
+    "success": 0.6941666666666667,
+    "tool_call_accuracy": 0.9970294928920008,
+    "turns_per_episode": 3.930833333333333
+   },
+   "study": "AD-C1",
+   "subset": "cw_conf",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "H200"
+    ],
+    "max": 0.05,
+    "min": 0.043333333333333335,
+    "pooled": 0.04666666666666667
+   }
+  },
+  "P1|p1_test_combo|A": {
+   "all": {
+    "calls_per_episode": 8.158888888888889,
+    "episodes": 900,
+    "invalid_calls": 192,
+    "no_call_end_rate": 0.014444444444444444,
+    "policy_calls": 7343,
+    "success": 0.5655555555555556,
+    "tool_call_accuracy": 0.9738526487811521,
+    "turns_per_episode": 8.173333333333334
+   },
+   "arm": "A (RSC GRPO)",
+   "greedy": {
+    "calls_per_episode": 8.772222222222222,
+    "episodes": 180,
+    "invalid_calls": 7,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 1579,
+    "success": 0.6888888888888889,
+    "tool_call_accuracy": 0.9955668144395187,
+    "turns_per_episode": 8.772222222222222
+   },
+   "in_table": true,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 300,
+     "file": "results/p1/test/A_s0__p1_test_combo.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 47.5,
+     "summary": "results/p1/test/A_s0__p1_test_combo.summary.json",
+     "task": "1160_p1_test_A_s0",
+     "wall_s_per_episode": 0.15833333333333333
+    },
+    {
+     "episodes": 300,
+     "file": "results/p1/test/A_s1__p1_test_combo.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 45.9,
+     "summary": "results/p1/test/A_s1__p1_test_combo.summary.json",
+     "task": "1164_p1_test_A_s1",
+     "wall_s_per_episode": 0.153
+    },
+    {
+     "episodes": 300,
+     "file": "results/p1/test/A_s2__p1_test_combo.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 78.8,
+     "summary": "results/p1/test/A_s2__p1_test_combo.summary.json",
+     "task": "1168_p1_test_A_s2",
+     "wall_s_per_episode": 0.26266666666666666
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 8.005555555555556,
+    "episodes": 720,
+    "invalid_calls": 185,
+    "no_call_end_rate": 0.018055555555555554,
+    "policy_calls": 5764,
+    "success": 0.5347222222222222,
+    "tool_call_accuracy": 0.9679042331714087,
+    "turns_per_episode": 8.02361111111111
+   },
+   "study": "P1 test",
+   "subset": "p1_test_combo",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H100"
+    ],
+    "max": 0.26266666666666666,
+    "min": 0.153,
+    "pooled": 0.19133333333333333
+   }
+  },
+  "P1|p1_test_combo|C": {
+   "all": {
+    "calls_per_episode": 9.546666666666667,
+    "episodes": 900,
+    "invalid_calls": 83,
+    "no_call_end_rate": 0.006666666666666667,
+    "policy_calls": 8592,
+    "success": 0.8144444444444444,
+    "tool_call_accuracy": 0.9903398510242085,
+    "turns_per_episode": 9.553333333333333
+   },
+   "arm": "C (A + recovery SFT)",
+   "greedy": {
+    "calls_per_episode": 9.666666666666666,
+    "episodes": 180,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 1740,
+    "success": 0.8777777777777778,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 9.666666666666666
+   },
+   "in_table": false,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 300,
+     "file": "results/p1/test/C_s0__p1_test_combo.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 34.1,
+     "summary": "results/p1/test/C_s0__p1_test_combo.summary.json",
+     "task": "1162_p1_test_C_s0",
+     "wall_s_per_episode": 0.11366666666666667
+    },
+    {
+     "episodes": 300,
+     "file": "results/p1/test/C_s1__p1_test_combo.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 54.4,
+     "summary": "results/p1/test/C_s1__p1_test_combo.summary.json",
+     "task": "1166_p1_test_C_s1",
+     "wall_s_per_episode": 0.18133333333333332
+    },
+    {
+     "episodes": 300,
+     "file": "results/p1/test/C_s2__p1_test_combo.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 33.3,
+     "summary": "results/p1/test/C_s2__p1_test_combo.summary.json",
+     "task": "1170_p1_test_C_s2",
+     "wall_s_per_episode": 0.11099999999999999
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 9.516666666666667,
+    "episodes": 720,
+    "invalid_calls": 83,
+    "no_call_end_rate": 0.008333333333333333,
+    "policy_calls": 6852,
+    "success": 0.7986111111111112,
+    "tool_call_accuracy": 0.9878867483946293,
+    "turns_per_episode": 9.525
+   },
+   "study": "P1 test",
+   "subset": "p1_test_combo",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "H100",
+     "H200"
+    ],
+    "max": 0.18133333333333332,
+    "min": 0.11099999999999999,
+    "pooled": 0.13533333333333333
+   }
+  },
+  "P1|p1_test_combo|D": {
+   "all": {
+    "calls_per_episode": 9.445555555555556,
+    "episodes": 900,
+    "invalid_calls": 24,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 8501,
+    "success": 0.8344444444444444,
+    "tool_call_accuracy": 0.9971768027290907,
+    "turns_per_episode": 9.445555555555556
+   },
+   "arm": "D (Dw + GRPO)",
+   "greedy": {
+    "calls_per_episode": 9.683333333333334,
+    "episodes": 180,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 1743,
+    "success": 0.8777777777777778,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 9.683333333333334
+   },
+   "in_table": true,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 300,
+     "file": "results/p1/test/D_s0__p1_test_combo.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 34.3,
+     "summary": "results/p1/test/D_s0__p1_test_combo.summary.json",
+     "task": "1163_p1_test_D_s0",
+     "wall_s_per_episode": 0.11433333333333333
+    },
+    {
+     "episodes": 300,
+     "file": "results/p1/test/D_s1__p1_test_combo.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 89.8,
+     "summary": "results/p1/test/D_s1__p1_test_combo.summary.json",
+     "task": "1167_p1_test_D_s1",
+     "wall_s_per_episode": 0.29933333333333334
+    },
+    {
+     "episodes": 300,
+     "file": "results/p1/test/D_s2__p1_test_combo.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 34.4,
+     "summary": "results/p1/test/D_s2__p1_test_combo.summary.json",
+     "task": "1171_p1_test_D_s2",
+     "wall_s_per_episode": 0.11466666666666667
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 9.386111111111111,
+    "episodes": 720,
+    "invalid_calls": 24,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 6758,
+    "success": 0.8236111111111111,
+    "tool_call_accuracy": 0.9964486534477656,
+    "turns_per_episode": 9.386111111111111
+   },
+   "study": "P1 test",
+   "subset": "p1_test_combo",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H200"
+    ],
+    "max": 0.29933333333333334,
+    "min": 0.11433333333333333,
+    "pooled": 0.1761111111111111
+   }
+  },
+  "P1|p1_test_combo|Dn": {
+   "all": {
+    "calls_per_episode": 9.344444444444445,
+    "episodes": 900,
+    "invalid_calls": 10,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 8410,
+    "success": 0.8277777777777777,
+    "tool_call_accuracy": 0.9988109393579072,
+    "turns_per_episode": 9.344444444444445
+   },
+   "arm": "Dn (Dw + std-free GRPO)",
+   "greedy": {
+    "calls_per_episode": 9.644444444444444,
+    "episodes": 180,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 1736,
+    "success": 0.8722222222222222,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 9.644444444444444
+   },
+   "in_table": false,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 300,
+     "file": "results/p1/test/Dn_s0__p1_test_combo.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 90.1,
+     "summary": "results/p1/test/Dn_s0__p1_test_combo.summary.json",
+     "task": "1610_p3_dn_s0",
+     "wall_s_per_episode": 0.30033333333333334
+    },
+    {
+     "episodes": 300,
+     "file": "results/p1/test/Dn_s1__p1_test_combo.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 89.7,
+     "summary": "results/p1/test/Dn_s1__p1_test_combo.summary.json",
+     "task": "1611_p3_dn_s1",
+     "wall_s_per_episode": 0.299
+    },
+    {
+     "episodes": 300,
+     "file": "results/p1/test/Dn_s2__p1_test_combo.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 52.8,
+     "summary": "results/p1/test/Dn_s2__p1_test_combo.summary.json",
+     "task": "1612_p3_dn_s2",
+     "wall_s_per_episode": 0.176
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 9.269444444444444,
+    "episodes": 720,
+    "invalid_calls": 10,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 6674,
+    "success": 0.8166666666666667,
+    "tool_call_accuracy": 0.9985016481869943,
+    "turns_per_episode": 9.269444444444444
+   },
+   "study": "P1 test",
+   "subset": "p1_test_combo",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H100"
+    ],
+    "max": 0.30033333333333334,
+    "min": 0.176,
+    "pooled": 0.2584444444444444
+   }
+  },
+  "P1|p1_test_combo|Dw": {
+   "all": {
+    "calls_per_episode": 8.336666666666666,
+    "episodes": 300,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 2501,
+    "success": 0.7133333333333334,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 8.336666666666666
+   },
+   "arm": "Dw (warm start)",
+   "greedy": {
+    "calls_per_episode": 9.633333333333333,
+    "episodes": 60,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 578,
+    "success": 0.8833333333333333,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 9.633333333333333
+   },
+   "in_table": true,
+   "n_models": 1,
+   "runs": [
+    {
+     "episodes": 300,
+     "file": "results/p1/test/Dw__p1_test_combo.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 47.6,
+     "summary": "results/p1/test/Dw__p1_test_combo.summary.json",
+     "task": "1620_p1_dwarm_eval",
+     "wall_s_per_episode": 0.15866666666666668
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 8.0125,
+    "episodes": 240,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 1923,
+    "success": 0.6708333333333333,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 8.0125
+   },
+   "study": "P1 test",
+   "subset": "p1_test_combo",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "H100"
+    ],
+    "max": 0.15866666666666668,
+    "min": 0.15866666666666668,
+    "pooled": 0.15866666666666668
+   }
+  },
+  "P1|p1_test_full|A": {
+   "all": {
+    "calls_per_episode": 6.9816666666666665,
+    "episodes": 1800,
+    "invalid_calls": 191,
+    "no_call_end_rate": 0.0077777777777777776,
+    "policy_calls": 12567,
+    "success": 0.7311111111111112,
+    "tool_call_accuracy": 0.9848014641521445,
+    "turns_per_episode": 6.989444444444445
+   },
+   "arm": "A (RSC GRPO)",
+   "greedy": {
+    "calls_per_episode": 7.280555555555556,
+    "episodes": 360,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 2621,
+    "success": 0.8305555555555556,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 7.280555555555556
+   },
+   "in_table": true,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 600,
+     "file": "results/p1/test/A_s0__p1_test_full.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 76.1,
+     "summary": "results/p1/test/A_s0__p1_test_full.summary.json",
+     "task": "1160_p1_test_A_s0",
+     "wall_s_per_episode": 0.12683333333333333
+    },
+    {
+     "episodes": 600,
+     "file": "results/p1/test/A_s1__p1_test_full.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 74.2,
+     "summary": "results/p1/test/A_s1__p1_test_full.summary.json",
+     "task": "1164_p1_test_A_s1",
+     "wall_s_per_episode": 0.12366666666666667
+    },
+    {
+     "episodes": 600,
+     "file": "results/p1/test/A_s2__p1_test_full.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 124.9,
+     "summary": "results/p1/test/A_s2__p1_test_full.summary.json",
+     "task": "1168_p1_test_A_s2",
+     "wall_s_per_episode": 0.20816666666666667
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 6.906944444444444,
+    "episodes": 1440,
+    "invalid_calls": 191,
+    "no_call_end_rate": 0.009722222222222222,
+    "policy_calls": 9946,
+    "success": 0.70625,
+    "tool_call_accuracy": 0.9807963000201085,
+    "turns_per_episode": 6.916666666666667
+   },
+   "study": "P1 test",
+   "subset": "p1_test_full",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H100"
+    ],
+    "max": 0.20816666666666667,
+    "min": 0.12366666666666667,
+    "pooled": 0.15288888888888888
+   }
+  },
+  "P1|p1_test_full|C": {
+   "all": {
+    "calls_per_episode": 7.632777777777778,
+    "episodes": 1800,
+    "invalid_calls": 156,
+    "no_call_end_rate": 0.005,
+    "policy_calls": 13739,
+    "success": 0.8127777777777778,
+    "tool_call_accuracy": 0.9886454618240047,
+    "turns_per_episode": 7.637777777777778
+   },
+   "arm": "C (A + recovery SFT)",
+   "greedy": {
+    "calls_per_episode": 7.613888888888889,
+    "episodes": 360,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 2741,
+    "success": 0.8416666666666667,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 7.613888888888889
+   },
+   "in_table": false,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 600,
+     "file": "results/p1/test/C_s0__p1_test_full.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 49.6,
+     "summary": "results/p1/test/C_s0__p1_test_full.summary.json",
+     "task": "1162_p1_test_C_s0",
+     "wall_s_per_episode": 0.08266666666666667
+    },
+    {
+     "episodes": 600,
+     "file": "results/p1/test/C_s1__p1_test_full.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 81.5,
+     "summary": "results/p1/test/C_s1__p1_test_full.summary.json",
+     "task": "1166_p1_test_C_s1",
+     "wall_s_per_episode": 0.13583333333333333
+    },
+    {
+     "episodes": 600,
+     "file": "results/p1/test/C_s2__p1_test_full.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 49.8,
+     "summary": "results/p1/test/C_s2__p1_test_full.summary.json",
+     "task": "1170_p1_test_C_s2",
+     "wall_s_per_episode": 0.08299999999999999
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 7.6375,
+    "episodes": 1440,
+    "invalid_calls": 156,
+    "no_call_end_rate": 0.00625,
+    "policy_calls": 10998,
+    "success": 0.8055555555555556,
+    "tool_call_accuracy": 0.9858156028368794,
+    "turns_per_episode": 7.64375
+   },
+   "study": "P1 test",
+   "subset": "p1_test_full",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "H100",
+     "H200"
+    ],
+    "max": 0.13583333333333333,
+    "min": 0.08266666666666667,
+    "pooled": 0.1005
+   }
+  },
+  "P1|p1_test_full|D": {
+   "all": {
+    "calls_per_episode": 7.439444444444445,
+    "episodes": 1800,
+    "invalid_calls": 5,
+    "no_call_end_rate": 0.0016666666666666668,
+    "policy_calls": 13391,
+    "success": 0.8166666666666667,
+    "tool_call_accuracy": 0.9996266148905981,
+    "turns_per_episode": 7.441111111111111
+   },
+   "arm": "D (Dw + GRPO)",
+   "greedy": {
+    "calls_per_episode": 7.633333333333334,
+    "episodes": 360,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 2748,
+    "success": 0.8416666666666667,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 7.633333333333334
+   },
+   "in_table": true,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 600,
+     "file": "results/p1/test/D_s0__p1_test_full.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 47.3,
+     "summary": "results/p1/test/D_s0__p1_test_full.summary.json",
+     "task": "1163_p1_test_D_s0",
+     "wall_s_per_episode": 0.07883333333333332
+    },
+    {
+     "episodes": 600,
+     "file": "results/p1/test/D_s1__p1_test_full.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 133.2,
+     "summary": "results/p1/test/D_s1__p1_test_full.summary.json",
+     "task": "1167_p1_test_D_s1",
+     "wall_s_per_episode": 0.22199999999999998
+    },
+    {
+     "episodes": 600,
+     "file": "results/p1/test/D_s2__p1_test_full.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 48.5,
+     "summary": "results/p1/test/D_s2__p1_test_full.summary.json",
+     "task": "1171_p1_test_D_s2",
+     "wall_s_per_episode": 0.08083333333333333
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 7.3909722222222225,
+    "episodes": 1440,
+    "invalid_calls": 5,
+    "no_call_end_rate": 0.0020833333333333333,
+    "policy_calls": 10643,
+    "success": 0.8104166666666667,
+    "tool_call_accuracy": 0.9995302076482195,
+    "turns_per_episode": 7.393055555555556
+   },
+   "study": "P1 test",
+   "subset": "p1_test_full",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H200"
+    ],
+    "max": 0.22199999999999998,
+    "min": 0.07883333333333332,
+    "pooled": 0.1272222222222222
+   }
+  },
+  "P1|p1_test_full|Dn": {
+   "all": {
+    "calls_per_episode": 7.381666666666667,
+    "episodes": 1800,
+    "invalid_calls": 7,
+    "no_call_end_rate": 0.0016666666666666668,
+    "policy_calls": 13287,
+    "success": 0.8127777777777778,
+    "tool_call_accuracy": 0.9994731692631896,
+    "turns_per_episode": 7.383333333333334
+   },
+   "arm": "Dn (Dw + std-free GRPO)",
+   "greedy": {
+    "calls_per_episode": 7.633333333333334,
+    "episodes": 360,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 2748,
+    "success": 0.8416666666666667,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 7.633333333333334
+   },
+   "in_table": false,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 600,
+     "file": "results/p1/test/Dn_s0__p1_test_full.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 132.6,
+     "summary": "results/p1/test/Dn_s0__p1_test_full.summary.json",
+     "task": "1610_p3_dn_s0",
+     "wall_s_per_episode": 0.221
+    },
+    {
+     "episodes": 600,
+     "file": "results/p1/test/Dn_s1__p1_test_full.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 133.6,
+     "summary": "results/p1/test/Dn_s1__p1_test_full.summary.json",
+     "task": "1611_p3_dn_s1",
+     "wall_s_per_episode": 0.22266666666666665
+    },
+    {
+     "episodes": 600,
+     "file": "results/p1/test/Dn_s2__p1_test_full.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 77.2,
+     "summary": "results/p1/test/Dn_s2__p1_test_full.summary.json",
+     "task": "1612_p3_dn_s2",
+     "wall_s_per_episode": 0.12866666666666668
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 7.31875,
+    "episodes": 1440,
+    "invalid_calls": 7,
+    "no_call_end_rate": 0.0020833333333333333,
+    "policy_calls": 10539,
+    "success": 0.8055555555555556,
+    "tool_call_accuracy": 0.9993358003605656,
+    "turns_per_episode": 7.320833333333334
+   },
+   "study": "P1 test",
+   "subset": "p1_test_full",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H100"
+    ],
+    "max": 0.22266666666666665,
+    "min": 0.12866666666666668,
+    "pooled": 0.19077777777777777
+   }
+  },
+  "P1|p1_test_full|Dw": {
+   "all": {
+    "calls_per_episode": 6.515,
+    "episodes": 600,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0016666666666666668,
+    "policy_calls": 3909,
+    "success": 0.7333333333333333,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 6.516666666666667
+   },
+   "arm": "Dw (warm start)",
+   "greedy": {
+    "calls_per_episode": 7.616666666666666,
+    "episodes": 120,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 914,
+    "success": 0.8416666666666667,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 7.616666666666666
+   },
+   "in_table": true,
+   "n_models": 1,
+   "runs": [
+    {
+     "episodes": 600,
+     "file": "results/p1/test/Dw__p1_test_full.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 68.5,
+     "summary": "results/p1/test/Dw__p1_test_full.summary.json",
+     "task": "1620_p1_dwarm_eval",
+     "wall_s_per_episode": 0.11416666666666667
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 6.239583333333333,
+    "episodes": 480,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0020833333333333333,
+    "policy_calls": 2995,
+    "success": 0.70625,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 6.241666666666666
+   },
+   "study": "P1 test",
+   "subset": "p1_test_full",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "H100"
+    ],
+    "max": 0.11416666666666667,
+    "min": 0.11416666666666667,
+    "pooled": 0.11416666666666667
+   }
+  },
+  "P1|p1_test_pp|A": {
+   "all": {
+    "calls_per_episode": 8.01925925925926,
+    "episodes": 1350,
+    "invalid_calls": 129,
+    "no_call_end_rate": 0.005925925925925926,
+    "policy_calls": 10826,
+    "success": 0.3844444444444444,
+    "tool_call_accuracy": 0.9880842416404951,
+    "turns_per_episode": 8.025185185185185
+   },
+   "arm": "A (RSC GRPO)",
+   "greedy": {
+    "calls_per_episode": 8.925925925925926,
+    "episodes": 270,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 2410,
+    "success": 0.6481481481481481,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 8.925925925925926
+   },
+   "in_table": true,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 450,
+     "file": "results/p1/test/A_s0__p1_test_pp.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 69.7,
+     "summary": "results/p1/test/A_s0__p1_test_pp.summary.json",
+     "task": "1160_p1_test_A_s0",
+     "wall_s_per_episode": 0.15488888888888888
+    },
+    {
+     "episodes": 450,
+     "file": "results/p1/test/A_s1__p1_test_pp.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 65.7,
+     "summary": "results/p1/test/A_s1__p1_test_pp.summary.json",
+     "task": "1164_p1_test_A_s1",
+     "wall_s_per_episode": 0.14600000000000002
+    },
+    {
+     "episodes": 450,
+     "file": "results/p1/test/A_s2__p1_test_pp.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 107.6,
+     "summary": "results/p1/test/A_s2__p1_test_pp.summary.json",
+     "task": "1168_p1_test_A_s2",
+     "wall_s_per_episode": 0.2391111111111111
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 7.792592592592593,
+    "episodes": 1080,
+    "invalid_calls": 129,
+    "no_call_end_rate": 0.007407407407407408,
+    "policy_calls": 8416,
+    "success": 0.31851851851851853,
+    "tool_call_accuracy": 0.9846720532319392,
+    "turns_per_episode": 7.8
+   },
+   "study": "P1 test",
+   "subset": "p1_test_pp",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H100"
+    ],
+    "max": 0.2391111111111111,
+    "min": 0.14600000000000002,
+    "pooled": 0.18
+   }
+  },
+  "P1|p1_test_pp|C": {
+   "all": {
+    "calls_per_episode": 10.072592592592592,
+    "episodes": 1350,
+    "invalid_calls": 71,
+    "no_call_end_rate": 0.0014814814814814814,
+    "policy_calls": 13598,
+    "success": 0.8881481481481481,
+    "tool_call_accuracy": 0.9947786439182232,
+    "turns_per_episode": 10.074074074074074
+   },
+   "arm": "C (A + recovery SFT)",
+   "greedy": {
+    "calls_per_episode": 10.333333333333334,
+    "episodes": 270,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 2790,
+    "success": 1.0,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 10.333333333333334
+   },
+   "in_table": false,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 450,
+     "file": "results/p1/test/C_s0__p1_test_pp.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 53.2,
+     "summary": "results/p1/test/C_s0__p1_test_pp.summary.json",
+     "task": "1162_p1_test_C_s0",
+     "wall_s_per_episode": 0.11822222222222223
+    },
+    {
+     "episodes": 450,
+     "file": "results/p1/test/C_s1__p1_test_pp.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 83.7,
+     "summary": "results/p1/test/C_s1__p1_test_pp.summary.json",
+     "task": "1166_p1_test_C_s1",
+     "wall_s_per_episode": 0.186
+    },
+    {
+     "episodes": 450,
+     "file": "results/p1/test/C_s2__p1_test_pp.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 51.8,
+     "summary": "results/p1/test/C_s2__p1_test_pp.summary.json",
+     "task": "1170_p1_test_C_s2",
+     "wall_s_per_episode": 0.11511111111111111
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 10.007407407407408,
+    "episodes": 1080,
+    "invalid_calls": 71,
+    "no_call_end_rate": 0.001851851851851852,
+    "policy_calls": 10808,
+    "success": 0.8601851851851852,
+    "tool_call_accuracy": 0.9934307920059215,
+    "turns_per_episode": 10.00925925925926
+   },
+   "study": "P1 test",
+   "subset": "p1_test_pp",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "H100",
+     "H200"
+    ],
+    "max": 0.186,
+    "min": 0.11511111111111111,
+    "pooled": 0.13977777777777778
+   }
+  },
+  "P1|p1_test_pp|D": {
+   "all": {
+    "calls_per_episode": 10.011111111111111,
+    "episodes": 1350,
+    "invalid_calls": 23,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 13515,
+    "success": 0.9444444444444444,
+    "tool_call_accuracy": 0.9982981871994081,
+    "turns_per_episode": 10.011111111111111
+   },
+   "arm": "D (Dw + GRPO)",
+   "greedy": {
+    "calls_per_episode": 10.333333333333334,
+    "episodes": 270,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 2790,
+    "success": 1.0,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 10.333333333333334
+   },
+   "in_table": true,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 450,
+     "file": "results/p1/test/D_s0__p1_test_pp.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 52.8,
+     "summary": "results/p1/test/D_s0__p1_test_pp.summary.json",
+     "task": "1163_p1_test_D_s0",
+     "wall_s_per_episode": 0.11733333333333333
+    },
+    {
+     "episodes": 450,
+     "file": "results/p1/test/D_s1__p1_test_pp.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 138.8,
+     "summary": "results/p1/test/D_s1__p1_test_pp.summary.json",
+     "task": "1167_p1_test_D_s1",
+     "wall_s_per_episode": 0.30844444444444447
+    },
+    {
+     "episodes": 450,
+     "file": "results/p1/test/D_s2__p1_test_pp.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 52.2,
+     "summary": "results/p1/test/D_s2__p1_test_pp.summary.json",
+     "task": "1171_p1_test_D_s2",
+     "wall_s_per_episode": 0.116
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 9.930555555555555,
+    "episodes": 1080,
+    "invalid_calls": 23,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 10725,
+    "success": 0.9305555555555556,
+    "tool_call_accuracy": 0.9978554778554779,
+    "turns_per_episode": 9.930555555555555
+   },
+   "study": "P1 test",
+   "subset": "p1_test_pp",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H200"
+    ],
+    "max": 0.30844444444444447,
+    "min": 0.116,
+    "pooled": 0.1805925925925926
+   }
+  },
+  "P1|p1_test_pp|Dn": {
+   "all": {
+    "calls_per_episode": 9.897777777777778,
+    "episodes": 1350,
+    "invalid_calls": 17,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 13362,
+    "success": 0.9288888888888889,
+    "tool_call_accuracy": 0.9987277353689568,
+    "turns_per_episode": 9.897777777777778
+   },
+   "arm": "Dn (Dw + std-free GRPO)",
+   "greedy": {
+    "calls_per_episode": 10.333333333333334,
+    "episodes": 270,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 2790,
+    "success": 1.0,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 10.333333333333334
+   },
+   "in_table": false,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 450,
+     "file": "results/p1/test/Dn_s0__p1_test_pp.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 137.0,
+     "summary": "results/p1/test/Dn_s0__p1_test_pp.summary.json",
+     "task": "1610_p3_dn_s0",
+     "wall_s_per_episode": 0.30444444444444446
+    },
+    {
+     "episodes": 450,
+     "file": "results/p1/test/Dn_s1__p1_test_pp.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 138.0,
+     "summary": "results/p1/test/Dn_s1__p1_test_pp.summary.json",
+     "task": "1611_p3_dn_s1",
+     "wall_s_per_episode": 0.30666666666666664
+    },
+    {
+     "episodes": 450,
+     "file": "results/p1/test/Dn_s2__p1_test_pp.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 82.0,
+     "summary": "results/p1/test/Dn_s2__p1_test_pp.summary.json",
+     "task": "1612_p3_dn_s2",
+     "wall_s_per_episode": 0.18222222222222223
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 9.78888888888889,
+    "episodes": 1080,
+    "invalid_calls": 17,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 10572,
+    "success": 0.9111111111111111,
+    "tool_call_accuracy": 0.9983919788119561,
+    "turns_per_episode": 9.78888888888889
+   },
+   "study": "P1 test",
+   "subset": "p1_test_pp",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H100"
+    ],
+    "max": 0.30666666666666664,
+    "min": 0.18222222222222223,
+    "pooled": 0.2644444444444444
+   }
+  },
+  "P1|p1_test_pp|Dw": {
+   "all": {
+    "calls_per_episode": 8.335555555555555,
+    "episodes": 450,
+    "invalid_calls": 3,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 3751,
+    "success": 0.6911111111111111,
+    "tool_call_accuracy": 0.9992002132764596,
+    "turns_per_episode": 8.335555555555555
+   },
+   "arm": "Dw (warm start)",
+   "greedy": {
+    "calls_per_episode": 10.333333333333334,
+    "episodes": 90,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 930,
+    "success": 1.0,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 10.333333333333334
+   },
+   "in_table": true,
+   "n_models": 1,
+   "runs": [
+    {
+     "episodes": 450,
+     "file": "results/p1/test/Dw__p1_test_pp.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 69.3,
+     "summary": "results/p1/test/Dw__p1_test_pp.summary.json",
+     "task": "1620_p1_dwarm_eval",
+     "wall_s_per_episode": 0.154
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 7.836111111111111,
+    "episodes": 360,
+    "invalid_calls": 3,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 2821,
+    "success": 0.6138888888888889,
+    "tool_call_accuracy": 0.9989365473236441,
+    "turns_per_episode": 7.836111111111111
+   },
+   "study": "P1 test",
+   "subset": "p1_test_pp",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "H100"
+    ],
+    "max": 0.154,
+    "min": 0.154,
+    "pooled": 0.154
+   }
+  },
+  "P1|p1_test_rec|A": {
+   "all": {
+    "calls_per_episode": 5.077222222222222,
+    "episodes": 1800,
+    "invalid_calls": 466,
+    "no_call_end_rate": 0.015,
+    "policy_calls": 9139,
+    "success": 0.6644444444444444,
+    "tool_call_accuracy": 0.9490097384834227,
+    "turns_per_episode": 5.092222222222222
+   },
+   "arm": "A (RSC GRPO)",
+   "greedy": {
+    "calls_per_episode": 4.95,
+    "episodes": 360,
+    "invalid_calls": 27,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 1782,
+    "success": 0.8277777777777777,
+    "tool_call_accuracy": 0.9848484848484849,
+    "turns_per_episode": 4.95
+   },
+   "in_table": true,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 600,
+     "file": "results/p1/test/A_s0__p1_test_rec.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 65.0,
+     "summary": "results/p1/test/A_s0__p1_test_rec.summary.json",
+     "task": "1160_p1_test_A_s0",
+     "wall_s_per_episode": 0.10833333333333334
+    },
+    {
+     "episodes": 600,
+     "file": "results/p1/test/A_s1__p1_test_rec.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 59.9,
+     "summary": "results/p1/test/A_s1__p1_test_rec.summary.json",
+     "task": "1164_p1_test_A_s1",
+     "wall_s_per_episode": 0.09983333333333333
+    },
+    {
+     "episodes": 600,
+     "file": "results/p1/test/A_s2__p1_test_rec.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 105.0,
+     "summary": "results/p1/test/A_s2__p1_test_rec.summary.json",
+     "task": "1168_p1_test_A_s2",
+     "wall_s_per_episode": 0.175
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 5.1090277777777775,
+    "episodes": 1440,
+    "invalid_calls": 439,
+    "no_call_end_rate": 0.01875,
+    "policy_calls": 7357,
+    "success": 0.6236111111111111,
+    "tool_call_accuracy": 0.9403289384259889,
+    "turns_per_episode": 5.127777777777778
+   },
+   "study": "P1 test",
+   "subset": "p1_test_rec",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H100"
+    ],
+    "max": 0.175,
+    "min": 0.09983333333333333,
+    "pooled": 0.12772222222222224
+   }
+  },
+  "P1|p1_test_rec|C": {
+   "all": {
+    "calls_per_episode": 5.302222222222222,
+    "episodes": 1800,
+    "invalid_calls": 71,
+    "no_call_end_rate": 0.006111111111111111,
+    "policy_calls": 9544,
+    "success": 0.8627777777777778,
+    "tool_call_accuracy": 0.99256077116513,
+    "turns_per_episode": 5.308333333333334
+   },
+   "arm": "C (A + recovery SFT)",
+   "greedy": {
+    "calls_per_episode": 5.219444444444444,
+    "episodes": 360,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 1879,
+    "success": 0.9305555555555556,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 5.219444444444444
+   },
+   "in_table": false,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 600,
+     "file": "results/p1/test/C_s0__p1_test_rec.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 39.6,
+     "summary": "results/p1/test/C_s0__p1_test_rec.summary.json",
+     "task": "1162_p1_test_C_s0",
+     "wall_s_per_episode": 0.066
+    },
+    {
+     "episodes": 600,
+     "file": "results/p1/test/C_s1__p1_test_rec.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 61.9,
+     "summary": "results/p1/test/C_s1__p1_test_rec.summary.json",
+     "task": "1166_p1_test_C_s1",
+     "wall_s_per_episode": 0.10316666666666667
+    },
+    {
+     "episodes": 600,
+     "file": "results/p1/test/C_s2__p1_test_rec.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 39.0,
+     "summary": "results/p1/test/C_s2__p1_test_rec.summary.json",
+     "task": "1170_p1_test_C_s2",
+     "wall_s_per_episode": 0.065
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 5.322916666666667,
+    "episodes": 1440,
+    "invalid_calls": 71,
+    "no_call_end_rate": 0.007638888888888889,
+    "policy_calls": 7665,
+    "success": 0.8458333333333333,
+    "tool_call_accuracy": 0.990737116764514,
+    "turns_per_episode": 5.330555555555556
+   },
+   "study": "P1 test",
+   "subset": "p1_test_rec",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "H100",
+     "H200"
+    ],
+    "max": 0.10316666666666667,
+    "min": 0.065,
+    "pooled": 0.07805555555555556
+   }
+  },
+  "P1|p1_test_rec|D": {
+   "all": {
+    "calls_per_episode": 5.446111111111111,
+    "episodes": 1800,
+    "invalid_calls": 20,
+    "no_call_end_rate": 0.0005555555555555556,
+    "policy_calls": 9803,
+    "success": 0.9138888888888889,
+    "tool_call_accuracy": 0.9979598082219728,
+    "turns_per_episode": 5.446666666666666
+   },
+   "arm": "D (Dw + GRPO)",
+   "greedy": {
+    "calls_per_episode": 5.591666666666667,
+    "episodes": 360,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 2013,
+    "success": 0.9333333333333333,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 5.591666666666667
+   },
+   "in_table": true,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 600,
+     "file": "results/p1/test/D_s0__p1_test_rec.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 39.3,
+     "summary": "results/p1/test/D_s0__p1_test_rec.summary.json",
+     "task": "1163_p1_test_D_s0",
+     "wall_s_per_episode": 0.06549999999999999
+    },
+    {
+     "episodes": 600,
+     "file": "results/p1/test/D_s1__p1_test_rec.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 101.0,
+     "summary": "results/p1/test/D_s1__p1_test_rec.summary.json",
+     "task": "1167_p1_test_D_s1",
+     "wall_s_per_episode": 0.16833333333333333
+    },
+    {
+     "episodes": 600,
+     "file": "results/p1/test/D_s2__p1_test_rec.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 40.3,
+     "summary": "results/p1/test/D_s2__p1_test_rec.summary.json",
+     "task": "1171_p1_test_D_s2",
+     "wall_s_per_episode": 0.06716666666666667
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 5.409722222222222,
+    "episodes": 1440,
+    "invalid_calls": 20,
+    "no_call_end_rate": 0.0006944444444444445,
+    "policy_calls": 7790,
+    "success": 0.9090277777777778,
+    "tool_call_accuracy": 0.9974326059050064,
+    "turns_per_episode": 5.410416666666666
+   },
+   "study": "P1 test",
+   "subset": "p1_test_rec",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H200"
+    ],
+    "max": 0.16833333333333333,
+    "min": 0.06549999999999999,
+    "pooled": 0.10033333333333333
+   }
+  },
+  "P1|p1_test_rec|Dn": {
+   "all": {
+    "calls_per_episode": 5.339444444444444,
+    "episodes": 1800,
+    "invalid_calls": 18,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 9611,
+    "success": 0.9094444444444445,
+    "tool_call_accuracy": 0.9981271459785662,
+    "turns_per_episode": 5.339444444444444
+   },
+   "arm": "Dn (Dw + std-free GRPO)",
+   "greedy": {
+    "calls_per_episode": 5.436111111111111,
+    "episodes": 360,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 1957,
+    "success": 0.9277777777777778,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 5.436111111111111
+   },
+   "in_table": false,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 600,
+     "file": "results/p1/test/Dn_s0__p1_test_rec.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 99.8,
+     "summary": "results/p1/test/Dn_s0__p1_test_rec.summary.json",
+     "task": "1610_p3_dn_s0",
+     "wall_s_per_episode": 0.16633333333333333
+    },
+    {
+     "episodes": 600,
+     "file": "results/p1/test/Dn_s1__p1_test_rec.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 98.6,
+     "summary": "results/p1/test/Dn_s1__p1_test_rec.summary.json",
+     "task": "1611_p3_dn_s1",
+     "wall_s_per_episode": 0.16433333333333333
+    },
+    {
+     "episodes": 600,
+     "file": "results/p1/test/Dn_s2__p1_test_rec.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 61.9,
+     "summary": "results/p1/test/Dn_s2__p1_test_rec.summary.json",
+     "task": "1612_p3_dn_s2",
+     "wall_s_per_episode": 0.10316666666666667
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 5.315277777777778,
+    "episodes": 1440,
+    "invalid_calls": 18,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 7654,
+    "success": 0.9048611111111111,
+    "tool_call_accuracy": 0.9976482884766136,
+    "turns_per_episode": 5.315277777777778
+   },
+   "study": "P1 test",
+   "subset": "p1_test_rec",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H100"
+    ],
+    "max": 0.16633333333333333,
+    "min": 0.10316666666666667,
+    "pooled": 0.1446111111111111
+   }
+  },
+  "P1|p1_test_rec|Dw": {
+   "all": {
+    "calls_per_episode": 5.136666666666667,
+    "episodes": 600,
+    "invalid_calls": 10,
+    "no_call_end_rate": 0.0016666666666666668,
+    "policy_calls": 3082,
+    "success": 0.89,
+    "tool_call_accuracy": 0.9967553536664504,
+    "turns_per_episode": 5.138333333333334
+   },
+   "arm": "Dw (warm start)",
+   "greedy": {
+    "calls_per_episode": 5.233333333333333,
+    "episodes": 120,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 628,
+    "success": 0.925,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 5.233333333333333
+   },
+   "in_table": true,
+   "n_models": 1,
+   "runs": [
+    {
+     "episodes": 600,
+     "file": "results/p1/test/Dw__p1_test_rec.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 58.6,
+     "summary": "results/p1/test/Dw__p1_test_rec.summary.json",
+     "task": "1620_p1_dwarm_eval",
+     "wall_s_per_episode": 0.09766666666666667
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 5.1125,
+    "episodes": 480,
+    "invalid_calls": 10,
+    "no_call_end_rate": 0.0020833333333333333,
+    "policy_calls": 2454,
+    "success": 0.88125,
+    "tool_call_accuracy": 0.9959250203748982,
+    "turns_per_episode": 5.114583333333333
+   },
+   "study": "P1 test",
+   "subset": "p1_test_rec",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "H100"
+    ],
+    "max": 0.09766666666666667,
+    "min": 0.09766666666666667,
+    "pooled": 0.09766666666666667
+   }
+  },
+  "P1|p1_test_wf4|A": {
+   "all": {
+    "calls_per_episode": 9.376666666666667,
+    "episodes": 900,
+    "invalid_calls": 384,
+    "no_call_end_rate": 0.016666666666666666,
+    "policy_calls": 8439,
+    "success": 0.14222222222222222,
+    "tool_call_accuracy": 0.9544969783149663,
+    "turns_per_episode": 9.393333333333333
+   },
+   "arm": "A (RSC GRPO)",
+   "greedy": {
+    "calls_per_episode": 8.494444444444444,
+    "episodes": 180,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 1529,
+    "success": 0.016666666666666666,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 8.494444444444444
+   },
+   "in_table": true,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 300,
+     "file": "results/p1/test/A_s0__p1_test_wf4.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 54.5,
+     "summary": "results/p1/test/A_s0__p1_test_wf4.summary.json",
+     "task": "1160_p1_test_A_s0",
+     "wall_s_per_episode": 0.18166666666666667
+    },
+    {
+     "episodes": 300,
+     "file": "results/p1/test/A_s1__p1_test_wf4.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 54.6,
+     "summary": "results/p1/test/A_s1__p1_test_wf4.summary.json",
+     "task": "1164_p1_test_A_s1",
+     "wall_s_per_episode": 0.182
+    },
+    {
+     "episodes": 300,
+     "file": "results/p1/test/A_s2__p1_test_wf4.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 88.5,
+     "summary": "results/p1/test/A_s2__p1_test_wf4.summary.json",
+     "task": "1168_p1_test_A_s2",
+     "wall_s_per_episode": 0.295
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 9.597222222222221,
+    "episodes": 720,
+    "invalid_calls": 384,
+    "no_call_end_rate": 0.020833333333333332,
+    "policy_calls": 6910,
+    "success": 0.1736111111111111,
+    "tool_call_accuracy": 0.9444283646888567,
+    "turns_per_episode": 9.618055555555555
+   },
+   "study": "P1 test",
+   "subset": "p1_test_wf4",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H100"
+    ],
+    "max": 0.295,
+    "min": 0.18166666666666667,
+    "pooled": 0.21955555555555556
+   }
+  },
+  "P1|p1_test_wf4|C": {
+   "all": {
+    "calls_per_episode": 10.551111111111112,
+    "episodes": 900,
+    "invalid_calls": 410,
+    "no_call_end_rate": 0.008888888888888889,
+    "policy_calls": 9496,
+    "success": 0.4166666666666667,
+    "tool_call_accuracy": 0.9568239258635215,
+    "turns_per_episode": 10.56
+   },
+   "arm": "C (A + recovery SFT)",
+   "greedy": {
+    "calls_per_episode": 10.727777777777778,
+    "episodes": 180,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 1931,
+    "success": 0.49444444444444446,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 10.727777777777778
+   },
+   "in_table": false,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 300,
+     "file": "results/p1/test/C_s0__p1_test_wf4.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 41.0,
+     "summary": "results/p1/test/C_s0__p1_test_wf4.summary.json",
+     "task": "1162_p1_test_C_s0",
+     "wall_s_per_episode": 0.13666666666666666
+    },
+    {
+     "episodes": 300,
+     "file": "results/p1/test/C_s1__p1_test_wf4.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 57.6,
+     "summary": "results/p1/test/C_s1__p1_test_wf4.summary.json",
+     "task": "1166_p1_test_C_s1",
+     "wall_s_per_episode": 0.192
+    },
+    {
+     "episodes": 300,
+     "file": "results/p1/test/C_s2__p1_test_wf4.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 37.8,
+     "summary": "results/p1/test/C_s2__p1_test_wf4.summary.json",
+     "task": "1170_p1_test_C_s2",
+     "wall_s_per_episode": 0.126
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 10.506944444444445,
+    "episodes": 720,
+    "invalid_calls": 410,
+    "no_call_end_rate": 0.011111111111111112,
+    "policy_calls": 7565,
+    "success": 0.3972222222222222,
+    "tool_call_accuracy": 0.9458030403172505,
+    "turns_per_episode": 10.518055555555556
+   },
+   "study": "P1 test",
+   "subset": "p1_test_wf4",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "H100",
+     "H200"
+    ],
+    "max": 0.192,
+    "min": 0.126,
+    "pooled": 0.15155555555555555
+   }
+  },
+  "P1|p1_test_wf4|D": {
+   "all": {
+    "calls_per_episode": 10.411111111111111,
+    "episodes": 900,
+    "invalid_calls": 83,
+    "no_call_end_rate": 0.013333333333333334,
+    "policy_calls": 9370,
+    "success": 0.5355555555555556,
+    "tool_call_accuracy": 0.9911419423692636,
+    "turns_per_episode": 10.424444444444445
+   },
+   "arm": "D (Dw + GRPO)",
+   "greedy": {
+    "calls_per_episode": 11.572222222222223,
+    "episodes": 180,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 2083,
+    "success": 0.7333333333333333,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 11.572222222222223
+   },
+   "in_table": true,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 300,
+     "file": "results/p1/test/D_s0__p1_test_wf4.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 39.0,
+     "summary": "results/p1/test/D_s0__p1_test_wf4.summary.json",
+     "task": "1163_p1_test_D_s0",
+     "wall_s_per_episode": 0.13
+    },
+    {
+     "episodes": 300,
+     "file": "results/p1/test/D_s1__p1_test_wf4.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 95.8,
+     "summary": "results/p1/test/D_s1__p1_test_wf4.summary.json",
+     "task": "1167_p1_test_D_s1",
+     "wall_s_per_episode": 0.3193333333333333
+    },
+    {
+     "episodes": 300,
+     "file": "results/p1/test/D_s2__p1_test_wf4.jsonl",
+     "gpu": "H200",
+     "node": "gpunode7",
+     "seconds": 40.3,
+     "summary": "results/p1/test/D_s2__p1_test_wf4.summary.json",
+     "task": "1171_p1_test_D_s2",
+     "wall_s_per_episode": 0.13433333333333333
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 10.120833333333334,
+    "episodes": 720,
+    "invalid_calls": 83,
+    "no_call_end_rate": 0.016666666666666666,
+    "policy_calls": 7287,
+    "success": 0.4861111111111111,
+    "tool_call_accuracy": 0.9886098531631673,
+    "turns_per_episode": 10.1375
+   },
+   "study": "P1 test",
+   "subset": "p1_test_wf4",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H200"
+    ],
+    "max": 0.3193333333333333,
+    "min": 0.13,
+    "pooled": 0.19455555555555554
+   }
+  },
+  "P1|p1_test_wf4|Dn": {
+   "all": {
+    "calls_per_episode": 10.167777777777777,
+    "episodes": 900,
+    "invalid_calls": 56,
+    "no_call_end_rate": 0.01,
+    "policy_calls": 9151,
+    "success": 0.5522222222222222,
+    "tool_call_accuracy": 0.9938804502240193,
+    "turns_per_episode": 10.177777777777777
+   },
+   "arm": "Dn (Dw + std-free GRPO)",
+   "greedy": {
+    "calls_per_episode": 11.483333333333333,
+    "episodes": 180,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 2067,
+    "success": 0.8,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 11.483333333333333
+   },
+   "in_table": false,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 300,
+     "file": "results/p1/test/Dn_s0__p1_test_wf4.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 99.3,
+     "summary": "results/p1/test/Dn_s0__p1_test_wf4.summary.json",
+     "task": "1610_p3_dn_s0",
+     "wall_s_per_episode": 0.331
+    },
+    {
+     "episodes": 300,
+     "file": "results/p1/test/Dn_s1__p1_test_wf4.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 96.2,
+     "summary": "results/p1/test/Dn_s1__p1_test_wf4.summary.json",
+     "task": "1611_p3_dn_s1",
+     "wall_s_per_episode": 0.32066666666666666
+    },
+    {
+     "episodes": 300,
+     "file": "results/p1/test/Dn_s2__p1_test_wf4.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 58.1,
+     "summary": "results/p1/test/Dn_s2__p1_test_wf4.summary.json",
+     "task": "1612_p3_dn_s2",
+     "wall_s_per_episode": 0.19366666666666668
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 9.838888888888889,
+    "episodes": 720,
+    "invalid_calls": 56,
+    "no_call_end_rate": 0.0125,
+    "policy_calls": 7084,
+    "success": 0.49027777777777776,
+    "tool_call_accuracy": 0.9920948616600791,
+    "turns_per_episode": 9.85138888888889
+   },
+   "study": "P1 test",
+   "subset": "p1_test_wf4",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H100"
+    ],
+    "max": 0.331,
+    "min": 0.19366666666666668,
+    "pooled": 0.2817777777777778
+   }
+  },
+  "P1|p1_test_wf4|Dw": {
+   "all": {
+    "calls_per_episode": 8.226666666666667,
+    "episodes": 300,
+    "invalid_calls": 17,
+    "no_call_end_rate": 0.0033333333333333335,
+    "policy_calls": 2468,
+    "success": 0.2733333333333333,
+    "tool_call_accuracy": 0.9931118314424635,
+    "turns_per_episode": 8.226666666666667
+   },
+   "arm": "Dw (warm start)",
+   "greedy": {
+    "calls_per_episode": 8.016666666666667,
+    "episodes": 60,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 481,
+    "success": 0.06666666666666667,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 8.016666666666667
+   },
+   "in_table": true,
+   "n_models": 1,
+   "runs": [
+    {
+     "episodes": 300,
+     "file": "results/p1/test/Dw__p1_test_wf4.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 47.0,
+     "summary": "results/p1/test/Dw__p1_test_wf4.summary.json",
+     "task": "1620_p1_dwarm_eval",
+     "wall_s_per_episode": 0.15666666666666668
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 8.279166666666667,
+    "episodes": 240,
+    "invalid_calls": 17,
+    "no_call_end_rate": 0.004166666666666667,
+    "policy_calls": 1987,
+    "success": 0.325,
+    "tool_call_accuracy": 0.9914443885254152,
+    "turns_per_episode": 8.279166666666667
+   },
+   "study": "P1 test",
+   "subset": "p1_test_wf4",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "H100"
+    ],
+    "max": 0.15666666666666668,
+    "min": 0.15666666666666668,
+    "pooled": 0.15666666666666668
+   }
+  },
+  "P4|s4_api|Dw": {
+   "all": {
+    "calls_per_episode": 10.031555555555556,
+    "episodes": 2250,
+    "invalid_calls": 13173,
+    "no_call_end_rate": 0.020888888888888887,
+    "policy_calls": 22571,
+    "success": 0.14666666666666667,
+    "tool_call_accuracy": 0.41637499446192017,
+    "turns_per_episode": 10.052444444444445
+   },
+   "arm": "Dw (warm start)",
+   "greedy": {
+    "calls_per_episode": 10.146666666666667,
+    "episodes": 450,
+    "invalid_calls": 2739,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 4566,
+    "success": 0.18444444444444444,
+    "tool_call_accuracy": 0.400131406044678,
+    "turns_per_episode": 10.146666666666667
+   },
+   "in_table": true,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 750,
+     "file": "results/p4/Dw_s0__s4_api.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 130.8,
+     "summary": "results/p4/Dw_s0__s4_api.summary.json",
+     "task": "1716_p4_Dw_s0",
+     "wall_s_per_episode": 0.17440000000000003
+    },
+    {
+     "episodes": 750,
+     "file": "results/p4/Dw_s1__s4_api.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 269.8,
+     "summary": "results/p4/Dw_s1__s4_api.summary.json",
+     "task": "1714_p4_Dw_s1",
+     "wall_s_per_episode": 0.35973333333333335
+    },
+    {
+     "episodes": 750,
+     "file": "results/p4/Dw_s2__s4_api.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 246.4,
+     "summary": "results/p4/Dw_s2__s4_api.summary.json",
+     "task": "1715_p4_Dw_s2",
+     "wall_s_per_episode": 0.32853333333333334
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 10.002777777777778,
+    "episodes": 1800,
+    "invalid_calls": 10434,
+    "no_call_end_rate": 0.026111111111111113,
+    "policy_calls": 18005,
+    "success": 0.13722222222222222,
+    "tool_call_accuracy": 0.4204943071369064,
+    "turns_per_episode": 10.028888888888888
+   },
+   "study": "P4",
+   "subset": "s4_api",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H100"
+    ],
+    "max": 0.35973333333333335,
+    "min": 0.17440000000000003,
+    "pooled": 0.28755555555555556
+   }
+  },
+  "P4|s4_api|Dw_aug": {
+   "all": {
+    "calls_per_episode": 8.121333333333334,
+    "episodes": 2250,
+    "invalid_calls": 187,
+    "no_call_end_rate": 0.010222222222222223,
+    "policy_calls": 18273,
+    "success": 0.7515555555555555,
+    "tool_call_accuracy": 0.9897663218956931,
+    "turns_per_episode": 8.131555555555556
+   },
+   "arm": "Dw_aug (augmented warm start)",
+   "greedy": {
+    "calls_per_episode": 8.186666666666667,
+    "episodes": 450,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 3684,
+    "success": 0.7933333333333333,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 8.186666666666667
+   },
+   "in_table": true,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 750,
+     "file": "results/p4/Dwaug_s0__s4_api.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 188.2,
+     "summary": "results/p4/Dwaug_s0__s4_api.summary.json",
+     "task": "1711_p4_Dwaug_s0",
+     "wall_s_per_episode": 0.25093333333333334
+    },
+    {
+     "episodes": 750,
+     "file": "results/p4/Dwaug_s1__s4_api.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 189.5,
+     "summary": "results/p4/Dwaug_s1__s4_api.summary.json",
+     "task": "1712_p4_Dwaug_s1",
+     "wall_s_per_episode": 0.25266666666666665
+    },
+    {
+     "episodes": 750,
+     "file": "results/p4/Dwaug_s2__s4_api.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 180.2,
+     "summary": "results/p4/Dwaug_s2__s4_api.summary.json",
+     "task": "1713_p4_Dwaug_s2",
+     "wall_s_per_episode": 0.24026666666666666
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 8.105,
+    "episodes": 1800,
+    "invalid_calls": 187,
+    "no_call_end_rate": 0.012777777777777779,
+    "policy_calls": 14589,
+    "success": 0.7411111111111112,
+    "tool_call_accuracy": 0.9871821235177188,
+    "turns_per_episode": 8.117777777777778
+   },
+   "study": "P4",
+   "subset": "s4_api",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB"
+    ],
+    "max": 0.25266666666666665,
+    "min": 0.24026666666666666,
+    "pooled": 0.24795555555555554
+   }
+  },
+  "P4|s4_wf4|Dw": {
+   "all": {
+    "calls_per_episode": 8.263333333333334,
+    "episodes": 1500,
+    "invalid_calls": 110,
+    "no_call_end_rate": 0.0026666666666666666,
+    "policy_calls": 12395,
+    "success": 0.2773333333333333,
+    "tool_call_accuracy": 0.991125453812021,
+    "turns_per_episode": 8.266
+   },
+   "arm": "Dw (warm start)",
+   "greedy": {
+    "calls_per_episode": 9.173333333333334,
+    "episodes": 300,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 2752,
+    "success": 0.3433333333333333,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 9.173333333333334
+   },
+   "in_table": true,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 500,
+     "file": "results/p4/Dw_s0__s4_wf4.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 77.4,
+     "summary": "results/p4/Dw_s0__s4_wf4.summary.json",
+     "task": "1716_p4_Dw_s0",
+     "wall_s_per_episode": 0.15480000000000002
+    },
+    {
+     "episodes": 500,
+     "file": "results/p4/Dw_s1__s4_wf4.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 133.7,
+     "summary": "results/p4/Dw_s1__s4_wf4.summary.json",
+     "task": "1714_p4_Dw_s1",
+     "wall_s_per_episode": 0.26739999999999997
+    },
+    {
+     "episodes": 500,
+     "file": "results/p4/Dw_s2__s4_wf4.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 123.5,
+     "summary": "results/p4/Dw_s2__s4_wf4.summary.json",
+     "task": "1715_p4_Dw_s2",
+     "wall_s_per_episode": 0.247
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 8.035833333333333,
+    "episodes": 1200,
+    "invalid_calls": 110,
+    "no_call_end_rate": 0.0033333333333333335,
+    "policy_calls": 9643,
+    "success": 0.2608333333333333,
+    "tool_call_accuracy": 0.9885927615887172,
+    "turns_per_episode": 8.039166666666667
+   },
+   "study": "P4",
+   "subset": "s4_wf4",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB",
+     "H100"
+    ],
+    "max": 0.26739999999999997,
+    "min": 0.15480000000000002,
+    "pooled": 0.2230666666666667
+   }
+  },
+  "P4|s4_wf4|Dw_aug": {
+   "all": {
+    "calls_per_episode": 10.114,
+    "episodes": 1500,
+    "invalid_calls": 62,
+    "no_call_end_rate": 0.0026666666666666666,
+    "policy_calls": 15171,
+    "success": 0.8293333333333334,
+    "tool_call_accuracy": 0.9959132555533584,
+    "turns_per_episode": 10.116666666666667
+   },
+   "arm": "Dw_aug (augmented warm start)",
+   "greedy": {
+    "calls_per_episode": 10.593333333333334,
+    "episodes": 300,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 3178,
+    "success": 0.91,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": 10.593333333333334
+   },
+   "in_table": true,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 500,
+     "file": "results/p4/Dwaug_s0__s4_wf4.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 155.2,
+     "summary": "results/p4/Dwaug_s0__s4_wf4.summary.json",
+     "task": "1711_p4_Dwaug_s0",
+     "wall_s_per_episode": 0.31039999999999995
+    },
+    {
+     "episodes": 500,
+     "file": "results/p4/Dwaug_s1__s4_wf4.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 158.0,
+     "summary": "results/p4/Dwaug_s1__s4_wf4.summary.json",
+     "task": "1712_p4_Dwaug_s1",
+     "wall_s_per_episode": 0.316
+    },
+    {
+     "episodes": 500,
+     "file": "results/p4/Dwaug_s2__s4_wf4.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 153.6,
+     "summary": "results/p4/Dwaug_s2__s4_wf4.summary.json",
+     "task": "1713_p4_Dwaug_s2",
+     "wall_s_per_episode": 0.3072
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 9.994166666666667,
+    "episodes": 1200,
+    "invalid_calls": 62,
+    "no_call_end_rate": 0.0033333333333333335,
+    "policy_calls": 11993,
+    "success": 0.8091666666666667,
+    "tool_call_accuracy": 0.9948303176853164,
+    "turns_per_episode": 9.9975
+   },
+   "study": "P4",
+   "subset": "s4_wf4",
+   "success_metric": "vsc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB"
+    ],
+    "max": 0.316,
+    "min": 0.3072,
+    "pooled": 0.3112
+   }
+  },
+  "TXN|txn_test|A": {
+   "all": {
+    "calls_per_episode": 7.641666666666667,
+    "episodes": 3960,
+    "invalid_calls": 1689,
+    "no_call_end_rate": 0.010101010101010102,
+    "policy_calls": 30261,
+    "success": 0.579040404040404,
+    "tool_call_accuracy": 0.9441855854069594,
+    "turns_per_episode": 7.651262626262627
+   },
+   "arm": "A (RSC GRPO)",
+   "greedy": {
+    "calls_per_episode": 7.796212121212121,
+    "episodes": 1320,
+    "invalid_calls": 144,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 10291,
+    "success": 0.6643939393939394,
+    "tool_call_accuracy": 0.9860071907491983,
+    "turns_per_episode": 7.796212121212121
+   },
+   "in_table": false,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 1320,
+     "file": "results/txn/A_s0__txn_test.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 435.7,
+     "summary": "results/txn/A_s0__txn_test.summary.json",
+     "task": "1706_txn_trained_a",
+     "wall_s_per_episode": 0.3300757575757576
+    },
+    {
+     "episodes": 1320,
+     "file": "results/txn/A_s1__txn_test.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 406.5,
+     "summary": "results/txn/A_s1__txn_test.summary.json",
+     "task": "1706_txn_trained_a",
+     "wall_s_per_episode": 0.3079545454545455
+    },
+    {
+     "episodes": 1320,
+     "file": "results/txn/A_s2__txn_test.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 415.9,
+     "summary": "results/txn/A_s2__txn_test.summary.json",
+     "task": "1706_txn_trained_a",
+     "wall_s_per_episode": 0.31507575757575756
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 7.5643939393939394,
+    "episodes": 2640,
+    "invalid_calls": 1545,
+    "no_call_end_rate": 0.015151515151515152,
+    "policy_calls": 19970,
+    "success": 0.5363636363636364,
+    "tool_call_accuracy": 0.9226339509263896,
+    "turns_per_episode": 7.578787878787879
+   },
+   "study": "TXN",
+   "subset": "txn_test",
+   "success_metric": "vtc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB"
+    ],
+    "max": 0.3300757575757576,
+    "min": 0.3079545454545455,
+    "pooled": 0.31770202020202015
+   }
+  },
+  "TXN|txn_test|B0": {
+   "all": {
+    "calls_per_episode": 4.2295454545454545,
+    "episodes": 440,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 1861,
+    "success": 0.13636363636363635,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": null
+   },
+   "arm": "B0 (script: trust the reply)",
+   "greedy": {
+    "calls_per_episode": 4.2295454545454545,
+    "episodes": 440,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 1861,
+    "success": 0.13636363636363635,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": null
+   },
+   "in_table": true,
+   "n_models": 1,
+   "runs": [
+    {
+     "episodes": 440,
+     "file": "results/txn/B0__txn_test.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": null,
+     "summary": "results/txn/B0__txn_test.summary.json",
+     "task": "1704_txn_policies",
+     "wall_s_per_episode": null
+    }
+   ],
+   "sampled": null,
+   "study": "TXN",
+   "subset": "txn_test",
+   "success_metric": "vtc",
+   "wall_s_per_episode": null
+  },
+  "TXN|txn_test|B4": {
+   "all": {
+    "calls_per_episode": 7.6022727272727275,
+    "episodes": 440,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 3345,
+    "success": 0.8636363636363636,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": null
+   },
+   "arm": "B4 (script: reconciliation)",
+   "greedy": {
+    "calls_per_episode": 7.6022727272727275,
+    "episodes": 440,
+    "invalid_calls": 0,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 3345,
+    "success": 0.8636363636363636,
+    "tool_call_accuracy": 1.0,
+    "turns_per_episode": null
+   },
+   "in_table": true,
+   "n_models": 1,
+   "runs": [
+    {
+     "episodes": 440,
+     "file": "results/txn/B4__txn_test.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": null,
+     "summary": "results/txn/B4__txn_test.summary.json",
+     "task": "1704_txn_policies",
+     "wall_s_per_episode": null
+    }
+   ],
+   "sampled": null,
+   "study": "TXN",
+   "subset": "txn_test",
+   "success_metric": "vtc",
+   "wall_s_per_episode": null
+  },
+  "TXN|txn_test|D": {
+   "all": {
+    "calls_per_episode": 7.7823232323232325,
+    "episodes": 3960,
+    "invalid_calls": 692,
+    "no_call_end_rate": 0.013888888888888888,
+    "policy_calls": 30818,
+    "success": 0.7232323232323232,
+    "tool_call_accuracy": 0.9775455902394704,
+    "turns_per_episode": 7.796212121212121
+   },
+   "arm": "D (Dw + GRPO)",
+   "greedy": {
+    "calls_per_episode": 8.107575757575757,
+    "episodes": 1320,
+    "invalid_calls": 185,
+    "no_call_end_rate": 0.0015151515151515152,
+    "policy_calls": 10702,
+    "success": 0.7666666666666667,
+    "tool_call_accuracy": 0.9827135114931789,
+    "turns_per_episode": 8.10909090909091
+   },
+   "in_table": true,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 1320,
+     "file": "results/txn/D_s0__txn_test.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 563.0,
+     "summary": "results/txn/D_s0__txn_test.summary.json",
+     "task": "1707_txn_trained_d",
+     "wall_s_per_episode": 0.4265151515151515
+    },
+    {
+     "episodes": 1320,
+     "file": "results/txn/D_s1__txn_test.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 307.8,
+     "summary": "results/txn/D_s1__txn_test.summary.json",
+     "task": "1707_txn_trained_d",
+     "wall_s_per_episode": 0.23318181818181818
+    },
+    {
+     "episodes": 1320,
+     "file": "results/txn/D_s2__txn_test.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 274.3,
+     "summary": "results/txn/D_s2__txn_test.summary.json",
+     "task": "1707_txn_trained_d",
+     "wall_s_per_episode": 0.20780303030303032
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 7.61969696969697,
+    "episodes": 2640,
+    "invalid_calls": 507,
+    "no_call_end_rate": 0.020075757575757577,
+    "policy_calls": 20116,
+    "success": 0.7015151515151515,
+    "tool_call_accuracy": 0.9747961821435673,
+    "turns_per_episode": 7.639772727272727
+   },
+   "study": "TXN",
+   "subset": "txn_test",
+   "success_metric": "vtc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "H100"
+    ],
+    "max": 0.4265151515151515,
+    "min": 0.20780303030303032,
+    "pooled": 0.2891666666666666
+   }
+  },
+  "TXN|txn_test|Dn": {
+   "all": {
+    "calls_per_episode": 7.535858585858586,
+    "episodes": 3960,
+    "invalid_calls": 600,
+    "no_call_end_rate": 0.009848484848484848,
+    "policy_calls": 29842,
+    "success": 0.7035353535353536,
+    "tool_call_accuracy": 0.9798941089739294,
+    "turns_per_episode": 7.545707070707071
+   },
+   "arm": "Dn (Dw + std-free GRPO)",
+   "greedy": {
+    "calls_per_episode": 7.829545454545454,
+    "episodes": 1320,
+    "invalid_calls": 129,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 10335,
+    "success": 0.7515151515151515,
+    "tool_call_accuracy": 0.9875181422351234,
+    "turns_per_episode": 7.829545454545454
+   },
+   "in_table": false,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 1320,
+     "file": "results/txn/Dn_s0__txn_test.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 298.9,
+     "summary": "results/txn/Dn_s0__txn_test.summary.json",
+     "task": "1707_txn_trained_d",
+     "wall_s_per_episode": 0.2264393939393939
+    },
+    {
+     "episodes": 1320,
+     "file": "results/txn/Dn_s1__txn_test.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 292.4,
+     "summary": "results/txn/Dn_s1__txn_test.summary.json",
+     "task": "1707_txn_trained_d",
+     "wall_s_per_episode": 0.2215151515151515
+    },
+    {
+     "episodes": 1320,
+     "file": "results/txn/Dn_s2__txn_test.jsonl",
+     "gpu": "H100",
+     "node": "gpunode5",
+     "seconds": 264.1,
+     "summary": "results/txn/Dn_s2__txn_test.summary.json",
+     "task": "1707_txn_trained_d",
+     "wall_s_per_episode": 0.2000757575757576
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 7.389015151515151,
+    "episodes": 2640,
+    "invalid_calls": 471,
+    "no_call_end_rate": 0.014772727272727272,
+    "policy_calls": 19507,
+    "success": 0.6795454545454546,
+    "tool_call_accuracy": 0.9758548213461834,
+    "turns_per_episode": 7.403787878787878
+   },
+   "study": "TXN",
+   "subset": "txn_test",
+   "success_metric": "vtc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "H100"
+    ],
+    "max": 0.2264393939393939,
+    "min": 0.2000757575757576,
+    "pooled": 0.216010101010101
+   }
+  },
+  "TXN|txn_test|Dw": {
+   "all": {
+    "calls_per_episode": 6.718181818181818,
+    "episodes": 1320,
+    "invalid_calls": 386,
+    "no_call_end_rate": 0.010606060606060607,
+    "policy_calls": 8868,
+    "success": 0.5977272727272728,
+    "tool_call_accuracy": 0.9564727108705458,
+    "turns_per_episode": 6.7287878787878785
+   },
+   "arm": "Dw (warm start)",
+   "greedy": {
+    "calls_per_episode": 6.861363636363636,
+    "episodes": 440,
+    "invalid_calls": 91,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 3019,
+    "success": 0.6522727272727272,
+    "tool_call_accuracy": 0.969857568731368,
+    "turns_per_episode": 6.861363636363636
+   },
+   "in_table": true,
+   "n_models": 1,
+   "runs": [
+    {
+     "episodes": 1320,
+     "file": "results/txn/Dw__txn_test.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 380.9,
+     "summary": "results/txn/Dw__txn_test.summary.json",
+     "task": "1706_txn_trained_a",
+     "wall_s_per_episode": 0.288560606060606
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 6.646590909090909,
+    "episodes": 880,
+    "invalid_calls": 295,
+    "no_call_end_rate": 0.015909090909090907,
+    "policy_calls": 5849,
+    "success": 0.5704545454545454,
+    "tool_call_accuracy": 0.949564028038981,
+    "turns_per_episode": 6.6625
+   },
+   "study": "TXN",
+   "subset": "txn_test",
+   "success_metric": "vtc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB"
+    ],
+    "max": 0.288560606060606,
+    "min": 0.288560606060606,
+    "pooled": 0.288560606060606
+   }
+  },
+  "TXN|txn_test|Dw_aug": {
+   "all": {
+    "calls_per_episode": 6.63510101010101,
+    "episodes": 3960,
+    "invalid_calls": 259,
+    "no_call_end_rate": 0.0015151515151515152,
+    "policy_calls": 26275,
+    "success": 0.6974747474747475,
+    "tool_call_accuracy": 0.9901427212178877,
+    "turns_per_episode": 6.636616161616161
+   },
+   "arm": "Dw_aug (augmented warm start)",
+   "greedy": {
+    "calls_per_episode": 6.928787878787879,
+    "episodes": 1320,
+    "invalid_calls": 71,
+    "no_call_end_rate": 0.0,
+    "policy_calls": 9146,
+    "success": 0.7333333333333333,
+    "tool_call_accuracy": 0.9922370435162913,
+    "turns_per_episode": 6.928787878787879
+   },
+   "in_table": true,
+   "n_models": 3,
+   "runs": [
+    {
+     "episodes": 1320,
+     "file": "results/txn/Dwaug_s0__txn_test.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 371.9,
+     "summary": "results/txn/Dwaug_s0__txn_test.summary.json",
+     "task": "1718_txn_dwaug",
+     "wall_s_per_episode": 0.28174242424242424
+    },
+    {
+     "episodes": 1320,
+     "file": "results/txn/Dwaug_s1__txn_test.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 369.9,
+     "summary": "results/txn/Dwaug_s1__txn_test.summary.json",
+     "task": "1718_txn_dwaug",
+     "wall_s_per_episode": 0.2802272727272727
+    },
+    {
+     "episodes": 1320,
+     "file": "results/txn/Dwaug_s2__txn_test.jsonl",
+     "gpu": "A100 80GB",
+     "node": "gpunode4",
+     "seconds": 349.4,
+     "summary": "results/txn/Dwaug_s2__txn_test.summary.json",
+     "task": "1718_txn_dwaug",
+     "wall_s_per_episode": 0.26469696969696965
+    }
+   ],
+   "sampled": {
+    "calls_per_episode": 6.488257575757576,
+    "episodes": 2640,
+    "invalid_calls": 188,
+    "no_call_end_rate": 0.0022727272727272726,
+    "policy_calls": 17129,
+    "success": 0.6795454545454546,
+    "tool_call_accuracy": 0.9890244614396637,
+    "turns_per_episode": 6.490530303030303
+   },
+   "study": "TXN",
+   "subset": "txn_test",
+   "success_metric": "vtc",
+   "wall_s_per_episode": {
+    "gpus": [
+     "A100 80GB"
+    ],
+    "max": 0.28174242424242424,
+    "min": 0.26469696969696965,
+    "pooled": 0.2755555555555555
+   }
+  }
+ },
+ "description": "Track 3 trajectory metrics, descriptive, not registered; see scripts/t3_metrics.py for definitions",
+ "sources": [
+  "results/ad/conf/ad_base_warm__cw_conf.jsonl",
+  "results/ad/conf/ad_base_warm__cw_conf.summary.json",
+  "results/ad/conf/ad_base_warm__cw_conf.t1_s0.jsonl",
+  "results/ad/conf/ad_base_warm__cw_conf.t1_s0.summary.json",
+  "results/ad/conf/ad_base_warm__cw_conf.t1_s1.jsonl",
+  "results/ad/conf/ad_base_warm__cw_conf.t1_s1.summary.json",
+  "results/ad/conf/ad_base_warm__cw_conf.t1_s2.jsonl",
+  "results/ad/conf/ad_base_warm__cw_conf.t1_s2.summary.json",
+  "results/ad/conf/ad_base_warm__cw_conf.t1_s3.jsonl",
+  "results/ad/conf/ad_base_warm__cw_conf.t1_s3.summary.json",
+  "results/ad/conf/ad_grpo_s0__cw_conf.jsonl",
+  "results/ad/conf/ad_grpo_s0__cw_conf.summary.json",
+  "results/ad/conf/ad_grpo_s0__cw_conf.t1_s0.jsonl",
+  "results/ad/conf/ad_grpo_s0__cw_conf.t1_s0.summary.json",
+  "results/ad/conf/ad_grpo_s0__cw_conf.t1_s1.jsonl",
+  "results/ad/conf/ad_grpo_s0__cw_conf.t1_s1.summary.json",
+  "results/ad/conf/ad_grpo_s0__cw_conf.t1_s2.jsonl",
+  "results/ad/conf/ad_grpo_s0__cw_conf.t1_s2.summary.json",
+  "results/ad/conf/ad_grpo_s0__cw_conf.t1_s3.jsonl",
+  "results/ad/conf/ad_grpo_s0__cw_conf.t1_s3.summary.json",
+  "results/ad/conf/ad_grpo_s1__cw_conf.jsonl",
+  "results/ad/conf/ad_grpo_s1__cw_conf.summary.json",
+  "results/ad/conf/ad_grpo_s1__cw_conf.t1_s0.jsonl",
+  "results/ad/conf/ad_grpo_s1__cw_conf.t1_s0.summary.json",
+  "results/ad/conf/ad_grpo_s1__cw_conf.t1_s1.jsonl",
+  "results/ad/conf/ad_grpo_s1__cw_conf.t1_s1.summary.json",
+  "results/ad/conf/ad_grpo_s1__cw_conf.t1_s2.jsonl",
+  "results/ad/conf/ad_grpo_s1__cw_conf.t1_s2.summary.json",
+  "results/ad/conf/ad_grpo_s1__cw_conf.t1_s3.jsonl",
+  "results/ad/conf/ad_grpo_s1__cw_conf.t1_s3.summary.json",
+  "results/ad/conf/ad_grpo_s2__cw_conf.jsonl",
+  "results/ad/conf/ad_grpo_s2__cw_conf.summary.json",
+  "results/ad/conf/ad_grpo_s2__cw_conf.t1_s0.jsonl",
+  "results/ad/conf/ad_grpo_s2__cw_conf.t1_s0.summary.json",
+  "results/ad/conf/ad_grpo_s2__cw_conf.t1_s1.jsonl",
+  "results/ad/conf/ad_grpo_s2__cw_conf.t1_s1.summary.json",
+  "results/ad/conf/ad_grpo_s2__cw_conf.t1_s2.jsonl",
+  "results/ad/conf/ad_grpo_s2__cw_conf.t1_s2.summary.json",
+  "results/ad/conf/ad_grpo_s2__cw_conf.t1_s3.jsonl",
+  "results/ad/conf/ad_grpo_s2__cw_conf.t1_s3.summary.json",
+  "results/ad/conf/ad_grpo_s3__cw_conf.jsonl",
+  "results/ad/conf/ad_grpo_s3__cw_conf.summary.json",
+  "results/ad/conf/ad_grpo_s3__cw_conf.t1_s0.jsonl",
+  "results/ad/conf/ad_grpo_s3__cw_conf.t1_s0.summary.json",
+  "results/ad/conf/ad_grpo_s3__cw_conf.t1_s1.jsonl",
+  "results/ad/conf/ad_grpo_s3__cw_conf.t1_s1.summary.json",
+  "results/ad/conf/ad_grpo_s3__cw_conf.t1_s2.jsonl",
+  "results/ad/conf/ad_grpo_s3__cw_conf.t1_s2.summary.json",
+  "results/ad/conf/ad_grpo_s3__cw_conf.t1_s3.jsonl",
+  "results/ad/conf/ad_grpo_s3__cw_conf.t1_s3.summary.json",
+  "results/ad/conf/ad_grpo_s4__cw_conf.jsonl",
+  "results/ad/conf/ad_grpo_s4__cw_conf.summary.json",
+  "results/ad/conf/ad_grpo_s4__cw_conf.t1_s0.jsonl",
+  "results/ad/conf/ad_grpo_s4__cw_conf.t1_s0.summary.json",
+  "results/ad/conf/ad_grpo_s4__cw_conf.t1_s1.jsonl",
+  "results/ad/conf/ad_grpo_s4__cw_conf.t1_s1.summary.json",
+  "results/ad/conf/ad_grpo_s4__cw_conf.t1_s2.jsonl",
+  "results/ad/conf/ad_grpo_s4__cw_conf.t1_s2.summary.json",
+  "results/ad/conf/ad_grpo_s4__cw_conf.t1_s3.jsonl",
+  "results/ad/conf/ad_grpo_s4__cw_conf.t1_s3.summary.json",
+  "results/ad/conf/ad_nostd_s0__cw_conf.jsonl",
+  "results/ad/conf/ad_nostd_s0__cw_conf.summary.json",
+  "results/ad/conf/ad_nostd_s0__cw_conf.t1_s0.jsonl",
+  "results/ad/conf/ad_nostd_s0__cw_conf.t1_s0.summary.json",
+  "results/ad/conf/ad_nostd_s0__cw_conf.t1_s1.jsonl",
+  "results/ad/conf/ad_nostd_s0__cw_conf.t1_s1.summary.json",
+  "results/ad/conf/ad_nostd_s0__cw_conf.t1_s2.jsonl",
+  "results/ad/conf/ad_nostd_s0__cw_conf.t1_s2.summary.json",
+  "results/ad/conf/ad_nostd_s0__cw_conf.t1_s3.jsonl",
+  "results/ad/conf/ad_nostd_s0__cw_conf.t1_s3.summary.json",
+  "results/ad/conf/ad_nostd_s1__cw_conf.jsonl",
+  "results/ad/conf/ad_nostd_s1__cw_conf.summary.json",
+  "results/ad/conf/ad_nostd_s1__cw_conf.t1_s0.jsonl",
+  "results/ad/conf/ad_nostd_s1__cw_conf.t1_s0.summary.json",
+  "results/ad/conf/ad_nostd_s1__cw_conf.t1_s1.jsonl",
+  "results/ad/conf/ad_nostd_s1__cw_conf.t1_s1.summary.json",
+  "results/ad/conf/ad_nostd_s1__cw_conf.t1_s2.jsonl",
+  "results/ad/conf/ad_nostd_s1__cw_conf.t1_s2.summary.json",
+  "results/ad/conf/ad_nostd_s1__cw_conf.t1_s3.jsonl",
+  "results/ad/conf/ad_nostd_s1__cw_conf.t1_s3.summary.json",
+  "results/ad/conf/ad_nostd_s2__cw_conf.jsonl",
+  "results/ad/conf/ad_nostd_s2__cw_conf.summary.json",
+  "results/ad/conf/ad_nostd_s2__cw_conf.t1_s0.jsonl",
+  "results/ad/conf/ad_nostd_s2__cw_conf.t1_s0.summary.json",
+  "results/ad/conf/ad_nostd_s2__cw_conf.t1_s1.jsonl",
+  "results/ad/conf/ad_nostd_s2__cw_conf.t1_s1.summary.json",
+  "results/ad/conf/ad_nostd_s2__cw_conf.t1_s2.jsonl",
+  "results/ad/conf/ad_nostd_s2__cw_conf.t1_s2.summary.json",
+  "results/ad/conf/ad_nostd_s2__cw_conf.t1_s3.jsonl",
+  "results/ad/conf/ad_nostd_s2__cw_conf.t1_s3.summary.json",
+  "results/ad/conf/ad_nostd_s3__cw_conf.jsonl",
+  "results/ad/conf/ad_nostd_s3__cw_conf.summary.json",
+  "results/ad/conf/ad_nostd_s3__cw_conf.t1_s0.jsonl",
+  "results/ad/conf/ad_nostd_s3__cw_conf.t1_s0.summary.json",
+  "results/ad/conf/ad_nostd_s3__cw_conf.t1_s1.jsonl",
+  "results/ad/conf/ad_nostd_s3__cw_conf.t1_s1.summary.json",
+  "results/ad/conf/ad_nostd_s3__cw_conf.t1_s2.jsonl",
+  "results/ad/conf/ad_nostd_s3__cw_conf.t1_s2.summary.json",
+  "results/ad/conf/ad_nostd_s3__cw_conf.t1_s3.jsonl",
+  "results/ad/conf/ad_nostd_s3__cw_conf.t1_s3.summary.json",
+  "results/ad/conf/ad_nostd_s4__cw_conf.jsonl",
+  "results/ad/conf/ad_nostd_s4__cw_conf.summary.json",
+  "results/ad/conf/ad_nostd_s4__cw_conf.t1_s0.jsonl",
+  "results/ad/conf/ad_nostd_s4__cw_conf.t1_s0.summary.json",
+  "results/ad/conf/ad_nostd_s4__cw_conf.t1_s1.jsonl",
+  "results/ad/conf/ad_nostd_s4__cw_conf.t1_s1.summary.json",
+  "results/ad/conf/ad_nostd_s4__cw_conf.t1_s2.jsonl",
+  "results/ad/conf/ad_nostd_s4__cw_conf.t1_s2.summary.json",
+  "results/ad/conf/ad_nostd_s4__cw_conf.t1_s3.jsonl",
+  "results/ad/conf/ad_nostd_s4__cw_conf.t1_s3.summary.json",
+  "results/p1/test/A_s0__p1_test_combo.jsonl",
+  "results/p1/test/A_s0__p1_test_combo.summary.json",
+  "results/p1/test/A_s0__p1_test_full.jsonl",
+  "results/p1/test/A_s0__p1_test_full.summary.json",
+  "results/p1/test/A_s0__p1_test_pp.jsonl",
+  "results/p1/test/A_s0__p1_test_pp.summary.json",
+  "results/p1/test/A_s0__p1_test_rec.jsonl",
+  "results/p1/test/A_s0__p1_test_rec.summary.json",
+  "results/p1/test/A_s0__p1_test_wf4.jsonl",
+  "results/p1/test/A_s0__p1_test_wf4.summary.json",
+  "results/p1/test/A_s1__p1_test_combo.jsonl",
+  "results/p1/test/A_s1__p1_test_combo.summary.json",
+  "results/p1/test/A_s1__p1_test_full.jsonl",
+  "results/p1/test/A_s1__p1_test_full.summary.json",
+  "results/p1/test/A_s1__p1_test_pp.jsonl",
+  "results/p1/test/A_s1__p1_test_pp.summary.json",
+  "results/p1/test/A_s1__p1_test_rec.jsonl",
+  "results/p1/test/A_s1__p1_test_rec.summary.json",
+  "results/p1/test/A_s1__p1_test_wf4.jsonl",
+  "results/p1/test/A_s1__p1_test_wf4.summary.json",
+  "results/p1/test/A_s2__p1_test_combo.jsonl",
+  "results/p1/test/A_s2__p1_test_combo.summary.json",
+  "results/p1/test/A_s2__p1_test_full.jsonl",
+  "results/p1/test/A_s2__p1_test_full.summary.json",
+  "results/p1/test/A_s2__p1_test_pp.jsonl",
+  "results/p1/test/A_s2__p1_test_pp.summary.json",
+  "results/p1/test/A_s2__p1_test_rec.jsonl",
+  "results/p1/test/A_s2__p1_test_rec.summary.json",
+  "results/p1/test/A_s2__p1_test_wf4.jsonl",
+  "results/p1/test/A_s2__p1_test_wf4.summary.json",
+  "results/p1/test/C_s0__p1_test_combo.jsonl",
+  "results/p1/test/C_s0__p1_test_combo.summary.json",
+  "results/p1/test/C_s0__p1_test_full.jsonl",
+  "results/p1/test/C_s0__p1_test_full.summary.json",
+  "results/p1/test/C_s0__p1_test_pp.jsonl",
+  "results/p1/test/C_s0__p1_test_pp.summary.json",
+  "results/p1/test/C_s0__p1_test_rec.jsonl",
+  "results/p1/test/C_s0__p1_test_rec.summary.json",
+  "results/p1/test/C_s0__p1_test_wf4.jsonl",
+  "results/p1/test/C_s0__p1_test_wf4.summary.json",
+  "results/p1/test/C_s1__p1_test_combo.jsonl",
+  "results/p1/test/C_s1__p1_test_combo.summary.json",
+  "results/p1/test/C_s1__p1_test_full.jsonl",
+  "results/p1/test/C_s1__p1_test_full.summary.json",
+  "results/p1/test/C_s1__p1_test_pp.jsonl",
+  "results/p1/test/C_s1__p1_test_pp.summary.json",
+  "results/p1/test/C_s1__p1_test_rec.jsonl",
+  "results/p1/test/C_s1__p1_test_rec.summary.json",
+  "results/p1/test/C_s1__p1_test_wf4.jsonl",
+  "results/p1/test/C_s1__p1_test_wf4.summary.json",
+  "results/p1/test/C_s2__p1_test_combo.jsonl",
+  "results/p1/test/C_s2__p1_test_combo.summary.json",
+  "results/p1/test/C_s2__p1_test_full.jsonl",
+  "results/p1/test/C_s2__p1_test_full.summary.json",
+  "results/p1/test/C_s2__p1_test_pp.jsonl",
+  "results/p1/test/C_s2__p1_test_pp.summary.json",
+  "results/p1/test/C_s2__p1_test_rec.jsonl",
+  "results/p1/test/C_s2__p1_test_rec.summary.json",
+  "results/p1/test/C_s2__p1_test_wf4.jsonl",
+  "results/p1/test/C_s2__p1_test_wf4.summary.json",
+  "results/p1/test/D_s0__p1_test_combo.jsonl",
+  "results/p1/test/D_s0__p1_test_combo.summary.json",
+  "results/p1/test/D_s0__p1_test_full.jsonl",
+  "results/p1/test/D_s0__p1_test_full.summary.json",
+  "results/p1/test/D_s0__p1_test_pp.jsonl",
+  "results/p1/test/D_s0__p1_test_pp.summary.json",
+  "results/p1/test/D_s0__p1_test_rec.jsonl",
+  "results/p1/test/D_s0__p1_test_rec.summary.json",
+  "results/p1/test/D_s0__p1_test_wf4.jsonl",
+  "results/p1/test/D_s0__p1_test_wf4.summary.json",
+  "results/p1/test/D_s1__p1_test_combo.jsonl",
+  "results/p1/test/D_s1__p1_test_combo.summary.json",
+  "results/p1/test/D_s1__p1_test_full.jsonl",
+  "results/p1/test/D_s1__p1_test_full.summary.json",
+  "results/p1/test/D_s1__p1_test_pp.jsonl",
+  "results/p1/test/D_s1__p1_test_pp.summary.json",
+  "results/p1/test/D_s1__p1_test_rec.jsonl",
+  "results/p1/test/D_s1__p1_test_rec.summary.json",
+  "results/p1/test/D_s1__p1_test_wf4.jsonl",
+  "results/p1/test/D_s1__p1_test_wf4.summary.json",
+  "results/p1/test/D_s2__p1_test_combo.jsonl",
+  "results/p1/test/D_s2__p1_test_combo.summary.json",
+  "results/p1/test/D_s2__p1_test_full.jsonl",
+  "results/p1/test/D_s2__p1_test_full.summary.json",
+  "results/p1/test/D_s2__p1_test_pp.jsonl",
+  "results/p1/test/D_s2__p1_test_pp.summary.json",
+  "results/p1/test/D_s2__p1_test_rec.jsonl",
+  "results/p1/test/D_s2__p1_test_rec.summary.json",
+  "results/p1/test/D_s2__p1_test_wf4.jsonl",
+  "results/p1/test/D_s2__p1_test_wf4.summary.json",
+  "results/p1/test/Dn_s0__p1_test_combo.jsonl",
+  "results/p1/test/Dn_s0__p1_test_combo.summary.json",
+  "results/p1/test/Dn_s0__p1_test_full.jsonl",
+  "results/p1/test/Dn_s0__p1_test_full.summary.json",
+  "results/p1/test/Dn_s0__p1_test_pp.jsonl",
+  "results/p1/test/Dn_s0__p1_test_pp.summary.json",
+  "results/p1/test/Dn_s0__p1_test_rec.jsonl",
+  "results/p1/test/Dn_s0__p1_test_rec.summary.json",
+  "results/p1/test/Dn_s0__p1_test_wf4.jsonl",
+  "results/p1/test/Dn_s0__p1_test_wf4.summary.json",
+  "results/p1/test/Dn_s1__p1_test_combo.jsonl",
+  "results/p1/test/Dn_s1__p1_test_combo.summary.json",
+  "results/p1/test/Dn_s1__p1_test_full.jsonl",
+  "results/p1/test/Dn_s1__p1_test_full.summary.json",
+  "results/p1/test/Dn_s1__p1_test_pp.jsonl",
+  "results/p1/test/Dn_s1__p1_test_pp.summary.json",
+  "results/p1/test/Dn_s1__p1_test_rec.jsonl",
+  "results/p1/test/Dn_s1__p1_test_rec.summary.json",
+  "results/p1/test/Dn_s1__p1_test_wf4.jsonl",
+  "results/p1/test/Dn_s1__p1_test_wf4.summary.json",
+  "results/p1/test/Dn_s2__p1_test_combo.jsonl",
+  "results/p1/test/Dn_s2__p1_test_combo.summary.json",
+  "results/p1/test/Dn_s2__p1_test_full.jsonl",
+  "results/p1/test/Dn_s2__p1_test_full.summary.json",
+  "results/p1/test/Dn_s2__p1_test_pp.jsonl",
+  "results/p1/test/Dn_s2__p1_test_pp.summary.json",
+  "results/p1/test/Dn_s2__p1_test_rec.jsonl",
+  "results/p1/test/Dn_s2__p1_test_rec.summary.json",
+  "results/p1/test/Dn_s2__p1_test_wf4.jsonl",
+  "results/p1/test/Dn_s2__p1_test_wf4.summary.json",
+  "results/p1/test/Dw__p1_test_combo.jsonl",
+  "results/p1/test/Dw__p1_test_combo.summary.json",
+  "results/p1/test/Dw__p1_test_full.jsonl",
+  "results/p1/test/Dw__p1_test_full.summary.json",
+  "results/p1/test/Dw__p1_test_pp.jsonl",
+  "results/p1/test/Dw__p1_test_pp.summary.json",
+  "results/p1/test/Dw__p1_test_rec.jsonl",
+  "results/p1/test/Dw__p1_test_rec.summary.json",
+  "results/p1/test/Dw__p1_test_wf4.jsonl",
+  "results/p1/test/Dw__p1_test_wf4.summary.json",
+  "results/p4/Dw_s0__s4_api.jsonl",
+  "results/p4/Dw_s0__s4_api.summary.json",
+  "results/p4/Dw_s0__s4_wf4.jsonl",
+  "results/p4/Dw_s0__s4_wf4.summary.json",
+  "results/p4/Dw_s1__s4_api.jsonl",
+  "results/p4/Dw_s1__s4_api.summary.json",
+  "results/p4/Dw_s1__s4_wf4.jsonl",
+  "results/p4/Dw_s1__s4_wf4.summary.json",
+  "results/p4/Dw_s2__s4_api.jsonl",
+  "results/p4/Dw_s2__s4_api.summary.json",
+  "results/p4/Dw_s2__s4_wf4.jsonl",
+  "results/p4/Dw_s2__s4_wf4.summary.json",
+  "results/p4/Dwaug_s0__s4_api.jsonl",
+  "results/p4/Dwaug_s0__s4_api.summary.json",
+  "results/p4/Dwaug_s0__s4_wf4.jsonl",
+  "results/p4/Dwaug_s0__s4_wf4.summary.json",
+  "results/p4/Dwaug_s1__s4_api.jsonl",
+  "results/p4/Dwaug_s1__s4_api.summary.json",
+  "results/p4/Dwaug_s1__s4_wf4.jsonl",
+  "results/p4/Dwaug_s1__s4_wf4.summary.json",
+  "results/p4/Dwaug_s2__s4_api.jsonl",
+  "results/p4/Dwaug_s2__s4_api.summary.json",
+  "results/p4/Dwaug_s2__s4_wf4.jsonl",
+  "results/p4/Dwaug_s2__s4_wf4.summary.json",
+  "results/txn/A_s0__txn_test.jsonl",
+  "results/txn/A_s0__txn_test.summary.json",
+  "results/txn/A_s1__txn_test.jsonl",
+  "results/txn/A_s1__txn_test.summary.json",
+  "results/txn/A_s2__txn_test.jsonl",
+  "results/txn/A_s2__txn_test.summary.json",
+  "results/txn/B0__txn_test.jsonl",
+  "results/txn/B0__txn_test.summary.json",
+  "results/txn/B4__txn_test.jsonl",
+  "results/txn/B4__txn_test.summary.json",
+  "results/txn/D_s0__txn_test.jsonl",
+  "results/txn/D_s0__txn_test.summary.json",
+  "results/txn/D_s1__txn_test.jsonl",
+  "results/txn/D_s1__txn_test.summary.json",
+  "results/txn/D_s2__txn_test.jsonl",
+  "results/txn/D_s2__txn_test.summary.json",
+  "results/txn/Dn_s0__txn_test.jsonl",
+  "results/txn/Dn_s0__txn_test.summary.json",
+  "results/txn/Dn_s1__txn_test.jsonl",
+  "results/txn/Dn_s1__txn_test.summary.json",
+  "results/txn/Dn_s2__txn_test.jsonl",
+  "results/txn/Dn_s2__txn_test.summary.json",
+  "results/txn/Dw__txn_test.jsonl",
+  "results/txn/Dw__txn_test.summary.json",
+  "results/txn/Dwaug_s0__txn_test.jsonl",
+  "results/txn/Dwaug_s0__txn_test.summary.json",
+  "results/txn/Dwaug_s1__txn_test.jsonl",
+  "results/txn/Dwaug_s1__txn_test.summary.json",
+  "results/txn/Dwaug_s2__txn_test.jsonl",
+  "results/txn/Dwaug_s2__txn_test.summary.json",
+  "results/s2/latency_warm_start.json",
+  "results/s2/latency_rv_s0.json",
+  "results/s2/latency_ra_s0.json"
+ ]
+}
