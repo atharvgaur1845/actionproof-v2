@@ -1,0 +1,350 @@
+{
+ "disjointness": {
+  "attack_po_ids": 5979,
+  "existing_po_ids_checked": 34447
+ },
+ "generator": "actionproof/attacks/generate.py::make_split",
+ "seeds": {
+  "attack_dev": 29112601,
+  "attack_heldout": 29112602,
+  "attack_train": 29112603
+ },
+ "sizes": {
+  "attack_dev": {
+   "compound": 0,
+   "per_family": 30
+  },
+  "attack_heldout": {
+   "compound": 180,
+   "per_family": 135
+  }
+ },
+ "spec": "docs/attacks/SPEC.md",
+ "splits": {
+  "attack_dev": {
+   "attack_templates": 61,
+   "by_family_variant": {
+    "F1_payee/attack": 30,
+    "F1_payee/twin": 30,
+    "F2_cross_po/attack": 30,
+    "F2_cross_po/twin": 30,
+    "F3_amount/attack": 30,
+    "F3_amount/twin": 30,
+    "F4_replay/attack": 30,
+    "F4_replay/control": 30,
+    "F4_replay/twin": 30,
+    "F5_refund/attack": 30,
+    "F5_refund/twin": 30,
+    "F6_evidence/attack": 30,
+    "F6_evidence/control": 30,
+    "F6_evidence/twin": 30,
+    "F7_stale/attack": 30,
+    "F7_stale/twin": 30,
+    "F8_skip/attack": 30,
+    "F8_skip/twin": 30
+   },
+   "by_variant": {
+    "attack": 240,
+    "control": 60,
+    "twin": 240
+   },
+   "file": "data/attacks/attack_dev.jsonl",
+   "n": 540,
+   "sha256": "2f5e60c8f8b86cae7f101e03506a9363fb0ef908d516692f1c305ae82926f4f8"
+  },
+  "attack_heldout": {
+   "attack_templates": 302,
+   "by_family_variant": {
+    "F1_payee/attack": 135,
+    "F1_payee/twin": 135,
+    "F2_cross_po/attack": 135,
+    "F2_cross_po/twin": 135,
+    "F3_amount/attack": 135,
+    "F3_amount/twin": 135,
+    "F4_replay/attack": 135,
+    "F4_replay/control": 135,
+    "F4_replay/twin": 135,
+    "F5_refund/attack": 135,
+    "F5_refund/twin": 135,
+    "F6_evidence/attack": 135,
+    "F6_evidence/control": 135,
+    "F6_evidence/twin": 135,
+    "F7_stale/attack": 135,
+    "F7_stale/twin": 135,
+    "F8_skip/attack": 135,
+    "F8_skip/twin": 135,
+    "F9_compound/attack": 180,
+    "F9_compound/twin": 180
+   },
+   "by_variant": {
+    "attack": 1260,
+    "control": 270,
+    "twin": 1260
+   },
+   "file": null,
+   "n": 2790,
+   "sha256": "224b1403abbedafd8dc93cb9d8ac6d81250211ce62c59b0694f1ee2837e8b0b2"
+  }
+ },
+ "suite": "ATK1",
+ "templates": {
+  "compound_pairs": [
+   [
+    "F1_payee",
+    "F8_skip"
+   ],
+   [
+    "F3_amount",
+    "F8_skip"
+   ],
+   [
+    "F2_cross_po",
+    "F5_refund"
+   ],
+   [
+    "F4_replay",
+    "F2_cross_po"
+   ],
+   [
+    "F3_amount",
+    "F5_refund"
+   ],
+   [
+    "F1_payee",
+    "F4_replay"
+   ]
+  ],
+  "dev": {
+   "F1_payee": [
+    "F1_payee/po_note/p0",
+    "F1_payee/po_note/p1",
+    "F1_payee/po_note/p2",
+    "F1_payee/ack_note/p0",
+    "F1_payee/ack_note/p1",
+    "F1_payee/ack_note/p2",
+    "F1_payee/record_note/p0",
+    "F1_payee/record_note/p1",
+    "F1_payee/record_note/p2"
+   ],
+   "F2_cross_po": [
+    "F2_cross_po/po_note/p0",
+    "F2_cross_po/po_note/p1",
+    "F2_cross_po/po_note/p2",
+    "F2_cross_po/ack_note/p0",
+    "F2_cross_po/ack_note/p1",
+    "F2_cross_po/ack_note/p2",
+    "F2_cross_po/record_note/p0",
+    "F2_cross_po/record_note/p1",
+    "F2_cross_po/record_note/p2"
+   ],
+   "F3_amount": [
+    "F3_amount/po_note/p0",
+    "F3_amount/po_note/p1",
+    "F3_amount/po_note/p2",
+    "F3_amount/ack_note/p0",
+    "F3_amount/ack_note/p1",
+    "F3_amount/ack_note/p2",
+    "F3_amount/record_note/p0",
+    "F3_amount/record_note/p1",
+    "F3_amount/record_note/p2"
+   ],
+   "F4_replay": [
+    "F4_replay/po_note/p0",
+    "F4_replay/po_note/p1",
+    "F4_replay/po_note/p2",
+    "F4_replay/ack_note/p0",
+    "F4_replay/ack_note/p1",
+    "F4_replay/ack_note/p2",
+    "F4_replay/record_note/p0",
+    "F4_replay/record_note/p1",
+    "F4_replay/record_note/p2"
+   ],
+   "F5_refund": [
+    "F5_refund/po_note/p0",
+    "F5_refund/po_note/p1",
+    "F5_refund/po_note/p2",
+    "F5_refund/ack_note/p0",
+    "F5_refund/ack_note/p1",
+    "F5_refund/ack_note/p2",
+    "F5_refund/record_note/p0",
+    "F5_refund/record_note/p1",
+    "F5_refund/record_note/p2"
+   ],
+   "F6_evidence": [
+    "F6_evidence/audit_entry/p0",
+    "F6_evidence/audit_entry/p1",
+    "F6_evidence/audit_entry/p2"
+   ],
+   "F7_stale": [
+    "F7_stale/stale_plain/none",
+    "F7_stale/record_note/p0",
+    "F7_stale/record_note/p1",
+    "F7_stale/record_note/p2"
+   ],
+   "F8_skip": [
+    "F8_skip/po_note/p0",
+    "F8_skip/po_note/p1",
+    "F8_skip/po_note/p2",
+    "F8_skip/ack_note/p0",
+    "F8_skip/ack_note/p1",
+    "F8_skip/ack_note/p2",
+    "F8_skip/record_note/p0",
+    "F8_skip/record_note/p1",
+    "F8_skip/record_note/p2"
+   ]
+  },
+  "heldout": {
+   "F1_payee": [
+    "F1_payee/po_note/p3",
+    "F1_payee/po_note/p4",
+    "F1_payee/po_note/p5",
+    "F1_payee/ack_note/p3",
+    "F1_payee/ack_note/p4",
+    "F1_payee/ack_note/p5",
+    "F1_payee/record_note/p3",
+    "F1_payee/record_note/p4",
+    "F1_payee/record_note/p5",
+    "F1_payee/audit_note/p0",
+    "F1_payee/audit_note/p1",
+    "F1_payee/audit_note/p2",
+    "F1_payee/audit_note/p3",
+    "F1_payee/audit_note/p4",
+    "F1_payee/audit_note/p5",
+    "F1_payee/error_ack/p0",
+    "F1_payee/error_ack/p1",
+    "F1_payee/error_ack/p2",
+    "F1_payee/error_ack/p3",
+    "F1_payee/error_ack/p4",
+    "F1_payee/error_ack/p5"
+   ],
+   "F2_cross_po": [
+    "F2_cross_po/po_note/p3",
+    "F2_cross_po/po_note/p4",
+    "F2_cross_po/po_note/p5",
+    "F2_cross_po/ack_note/p3",
+    "F2_cross_po/ack_note/p4",
+    "F2_cross_po/ack_note/p5",
+    "F2_cross_po/record_note/p3",
+    "F2_cross_po/record_note/p4",
+    "F2_cross_po/record_note/p5",
+    "F2_cross_po/audit_note/p0",
+    "F2_cross_po/audit_note/p1",
+    "F2_cross_po/audit_note/p2",
+    "F2_cross_po/audit_note/p3",
+    "F2_cross_po/audit_note/p4",
+    "F2_cross_po/audit_note/p5"
+   ],
+   "F3_amount": [
+    "F3_amount/po_note/p3",
+    "F3_amount/po_note/p4",
+    "F3_amount/po_note/p5",
+    "F3_amount/ack_note/p3",
+    "F3_amount/ack_note/p4",
+    "F3_amount/ack_note/p5",
+    "F3_amount/record_note/p3",
+    "F3_amount/record_note/p4",
+    "F3_amount/record_note/p5",
+    "F3_amount/audit_note/p0",
+    "F3_amount/audit_note/p1",
+    "F3_amount/audit_note/p2",
+    "F3_amount/audit_note/p3",
+    "F3_amount/audit_note/p4",
+    "F3_amount/audit_note/p5",
+    "F3_amount/error_ack/p0",
+    "F3_amount/error_ack/p1",
+    "F3_amount/error_ack/p2",
+    "F3_amount/error_ack/p3",
+    "F3_amount/error_ack/p4",
+    "F3_amount/error_ack/p5"
+   ],
+   "F4_replay": [
+    "F4_replay/po_note/p3",
+    "F4_replay/po_note/p4",
+    "F4_replay/po_note/p5",
+    "F4_replay/ack_note/p3",
+    "F4_replay/ack_note/p4",
+    "F4_replay/ack_note/p5",
+    "F4_replay/record_note/p3",
+    "F4_replay/record_note/p4",
+    "F4_replay/record_note/p5",
+    "F4_replay/audit_note/p0",
+    "F4_replay/audit_note/p1",
+    "F4_replay/audit_note/p2",
+    "F4_replay/audit_note/p3",
+    "F4_replay/audit_note/p4",
+    "F4_replay/audit_note/p5"
+   ],
+   "F5_refund": [
+    "F5_refund/po_note/p3",
+    "F5_refund/po_note/p4",
+    "F5_refund/po_note/p5",
+    "F5_refund/ack_note/p3",
+    "F5_refund/ack_note/p4",
+    "F5_refund/ack_note/p5",
+    "F5_refund/record_note/p3",
+    "F5_refund/record_note/p4",
+    "F5_refund/record_note/p5",
+    "F5_refund/audit_note/p0",
+    "F5_refund/audit_note/p1",
+    "F5_refund/audit_note/p2",
+    "F5_refund/audit_note/p3",
+    "F5_refund/audit_note/p4",
+    "F5_refund/audit_note/p5"
+   ],
+   "F6_evidence": [
+    "F6_evidence/audit_entry/p3",
+    "F6_evidence/audit_entry/p4",
+    "F6_evidence/audit_entry/p5",
+    "F6_evidence/ack_pointer/p0",
+    "F6_evidence/ack_pointer/p1",
+    "F6_evidence/ack_pointer/p2",
+    "F6_evidence/ack_pointer/p3",
+    "F6_evidence/ack_pointer/p4",
+    "F6_evidence/ack_pointer/p5"
+   ],
+   "F7_stale": [
+    "F7_stale/record_note/p3",
+    "F7_stale/record_note/p4",
+    "F7_stale/record_note/p5",
+    "F7_stale/audit_note/p0",
+    "F7_stale/audit_note/p1",
+    "F7_stale/audit_note/p2",
+    "F7_stale/audit_note/p3",
+    "F7_stale/audit_note/p4",
+    "F7_stale/audit_note/p5",
+    "F7_stale/po_note/p0",
+    "F7_stale/po_note/p1",
+    "F7_stale/po_note/p2",
+    "F7_stale/po_note/p3",
+    "F7_stale/po_note/p4",
+    "F7_stale/po_note/p5"
+   ],
+   "F8_skip": [
+    "F8_skip/po_note/p3",
+    "F8_skip/po_note/p4",
+    "F8_skip/po_note/p5",
+    "F8_skip/ack_note/p3",
+    "F8_skip/ack_note/p4",
+    "F8_skip/ack_note/p5",
+    "F8_skip/record_note/p3",
+    "F8_skip/record_note/p4",
+    "F8_skip/record_note/p5",
+    "F8_skip/audit_note/p0",
+    "F8_skip/audit_note/p1",
+    "F8_skip/audit_note/p2",
+    "F8_skip/audit_note/p3",
+    "F8_skip/audit_note/p4",
+    "F8_skip/audit_note/p5",
+    "F8_skip/error_ack/p0",
+    "F8_skip/error_ack/p1",
+    "F8_skip/error_ack/p2",
+    "F8_skip/error_ack/p3",
+    "F8_skip/error_ack/p4",
+    "F8_skip/error_ack/p5"
+   ]
+  },
+  "heldout_only_families": [
+   "F9_compound"
+  ]
+ }
+}
