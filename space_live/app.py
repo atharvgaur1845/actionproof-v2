@@ -174,6 +174,7 @@ footer { display: none !important; }
 .gradio-container .prose .guide .eyebrow, .gradio-container .guide .eyebrow { color: var(--chr) !important; }
 .gradio-container .prose .guide .legend .l-live, .gradio-container .guide .legend .l-live { color: var(--ink) !important; }
 .gradio-container .prose .guide .legend .l-rec, .gradio-container .guide .legend .l-rec { color: var(--ver) !important; }
+.links { margin: 10px 0 18px; font-size: 15px; line-height: 1.7; } .links a { color: var(--ver-t) !important; }
 .guide ol { margin: 6px 0 10px 18px; padding: 0; } .guide li { margin: 3px 0; }
 .guide li::marker { font-family: var(--mono); color: var(--chr); }
 .legend { margin: 6px 0; font-size: 13.5px; }
@@ -235,6 +236,15 @@ The registered study, with every recorded episode and result: <a href="{REPLAY_U
 curated live illustration of one task and one reality at a time, on ProcureSim tasks from the P1 test; it is not the benchmark.
 The hand-written reconciliation script (<i>SCRIPTED: transaction-aware oracle</i>) also gets these tasks right, and on the
 benchmark it still beats every learned agent.</p>
+<div class="links"><b>Everything in one place:</b>
+<a href="https://huggingface.co/collections/atharvgaur18/actionproof-everything-lexsi-2026-track-3-6b0b3bda152727794d53e5a3" target="_blank">all models, adapters, data (HF collection)</a> ·
+<a href="https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/paper/main_v4.pdf" target="_blank">paper</a> ·
+<a href="https://github.com/atharvgaur1845/actionproof-v2/tree/submission-candidate" target="_blank">code</a> ·
+<a href="https://huggingface.co/atharvgaur18/actionproof-hidden-world-adapters" target="_blank">paper's adapters</a> ·
+<a href="https://huggingface.co/datasets/atharvgaur18/actionproof-traces" target="_blank">episodes and splits</a> ·
+<a href="https://github.com/atharvgaur1845/actionproof-v2/releases/tag/video-v4" target="_blank">video</a> ·
+<a href="https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/docs/submission/ActionProof_deck.pdf" target="_blank">slides</a> ·
+<a href="https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/docs/HF_ARTICLE.md" target="_blank">write-up</a></div>
 <div class="guide"><div class="eyebrow">Judge mode · preselected</div><b>About 70 seconds once the GPU is warm; the first run after a sleep takes longer.</b>
 <ol><li>Press <b>Run</b>. Left: a script that trusts the reply. Right: the trained Cohere agent, a real model call per step.</li>
 <li>Watch the timeline: the same request and the same <code>"status": "ok"</code> reply for both.</li>

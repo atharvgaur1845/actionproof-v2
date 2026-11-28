@@ -4,6 +4,16 @@
 agent to check its work by a vote instead of by what checking is worth; removing the group standard deviation brings
 the value back.
 
+**Links (everything in one place).**
+[HF collection: every model, adapter, dataset and Space](https://huggingface.co/collections/atharvgaur18/actionproof-everything-lexsi-2026-track-3-6b0b3bda152727794d53e5a3)
+· [live demo](https://huggingface.co/spaces/atharvgaur18/actionproof-live)
+· [paper (PDF)](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/paper/main_v4.pdf)
+· [code](https://github.com/atharvgaur1845/actionproof-v2/tree/submission-candidate)
+· [the paper's adapters](https://huggingface.co/atharvgaur18/actionproof-hidden-world-adapters)
+· [episodes, splits and results](https://huggingface.co/datasets/atharvgaur18/actionproof-traces/tree/main/hidden_world)
+· [video](https://github.com/atharvgaur1845/actionproof-v2/releases/tag/video-v4)
+· [slides](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/docs/submission/ActionProof_deck.pdf)
+
 **Tracks and problem statements covered**
 - Track 3 (agentic fine-tuning): problem statement 9, measure, understand, fix.
 
@@ -85,11 +95,11 @@ question is whether GRPO can learn it.
 Every experiment was registered in a dated file before any result existed, and changes were made only through dated
 addenda.
 
-- **Test 1** (`PREREGISTRATION_TH1.md`): seven hypotheses about which decision each estimator learns (listed with
+- **Test 1** ([`PREREGISTRATION_TH1.md`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/PREREGISTRATION_TH1.md)): seven hypotheses about which decision each estimator learns (listed with
   their results below).
-- **Test 2** (`PREREGISTRATION_AD_C1.md`): the method without the group standard deviation ("std-free") beats GRPO on
-  verified completion; eight theory predictions frozen in `docs/research/AD_C1_THEORY_PREDICTION.md`.
-- **Test 3** (`PREREGISTRATION_AD_C2.md`): at a lower read cost GRPO still does not read, std-free reads and wins, and
+- **Test 2** ([`PREREGISTRATION_AD_C1.md`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/PREREGISTRATION_AD_C1.md)): the method without the group standard deviation ("std-free") beats GRPO on
+  verified completion; eight theory predictions frozen in [`docs/research/AD_C1_THEORY_PREDICTION.md`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/docs/research/AD_C1_THEORY_PREDICTION.md).
+- **Test 3** ([`PREREGISTRATION_AD_C2.md`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/PREREGISTRATION_AD_C2.md)): at a lower read cost GRPO still does not read, std-free reads and wins, and
   GRPO reads when reads are free.
 
 ### Threat model [T3]
@@ -150,10 +160,10 @@ simulator → the database verifier scores every episode → AuditKIT cross-chec
   | `cw_c2` (sealed) | 300 tasks (120 faulted) | Test 3 evaluation |
   | Test 1 held-out suite | 731 analytical problems | Test 1, frozen by hash |
 
-  `scripts/ad/c2_split.py` asserts that no task identifier appears in two splits (a direct-match leak check).
+  [`scripts/ad/c2_split.py`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/scripts/ad/c2_split.py) asserts that no task identifier appears in two splits (a direct-match leak check).
 - **General capability benchmark [T3] (retention check).** For the earlier GRPO agents of this project we measured
   IFEval and BFCL (English): no measurable loss against the warm start, for example IFEval +0.000 [−0.016, +0.017]
-  (`results/r1/r1_summary.json`). The agents of this article were not re-tested on them.
+  ([`results/r1/r1_summary.json`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/results/r1/r1_summary.json)). The agents of this article were not re-tested on them.
 - **CuratorKIT filtering.** 554 demonstrations before, 554 after (no duplicates found).
 - **Tool / task environment, trajectories [T3].** ProcureSim exposes read tools (with an optional consistent read),
   write tools with idempotency keys, a hand-off to a human and a final report. Every training and evaluation episode
@@ -188,7 +198,7 @@ Test 2, 300 unseen tasks, greedy decoding, mean over runs:
 
 Eval seconds are wall time for the whole batched split on one GPU. Batch-1 latency on the same base model was 2.44 s
 per episode for the warm start (p95 3.05 s) and 3.82 s for an agent that checks (p95 4.68 s), on 40 simulator episodes
-(`results/s2/latency_*.json`). AWRB is an alternative return that averages over worlds the agent cannot tell apart.
+([`results/s2/latency_*.json`](https://github.com/atharvgaur1845/actionproof-v2/tree/submission-candidate/results/s2)). AWRB is an alternative return that averages over worlds the agent cannot tell apart.
 
 ## Method / experiments
 
@@ -284,9 +294,9 @@ stored):
 
 - **Compute used.** Training and evaluation ran on the BITS Pilani sharanga GPU cluster (one H100 or H200 per run;
   each training run up to about 2.5 to 5 hours), at no cost to us. Test 1 ran on CPU. Earlier project stages used HF
-  Jobs credits, logged in `docs/stage2/HF_CREDITS.md`; LLM-judge calls cost $3.20 and $2.82.
+  Jobs credits, logged in [`docs/stage2/HF_CREDITS.md`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/docs/stage2/HF_CREDITS.md); LLM-judge calls cost $3.20 and $2.82.
 - **Cost per 1k replies.** Serving the trained agent costs under $0.50 per 1,000 workflows on our own GPU
-  (`docs/upgrade/ROI.md`). No closed-model API was priced for this article.
+  ([`docs/upgrade/ROI.md`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/docs/upgrade/ROI.md)). No closed-model API was priced for this article.
 
 ## Limitations
 
@@ -309,31 +319,35 @@ stored):
 
 ## Artifacts
 
-- **HF datasets collection.** https://huggingface.co/collections/atharvgaur18/actionproof-benchmark-traces-demo
-  (traces of every episode, frozen splits, tool-call logs).
-- **HF models collection.** https://huggingface.co/collections/atharvgaur18/actionproof-adapters (earlier-stage LoRA
-  adapters) and the trained agent shown in the demo, https://huggingface.co/atharvgaur18/actionproof-agent-d. The 23
-  adapters trained for Tests 2 and 3 are not yet on the Hub; their per-run results are in the repository. No GGUF or
-  quantised builds were made.
+- **HF dataset.** [`actionproof-traces`](https://huggingface.co/datasets/atharvgaur18/actionproof-traces): folder
+  [`hidden_world/`](https://huggingface.co/datasets/atharvgaur18/actionproof-traces/tree/main/hidden_world) holds this
+  paper's evaluation episodes for Tests 2 and 3, training rollouts and logs, Test 1 results, the four splits, both
+  papers and the registrations; the rest of the dataset holds the earlier studies' traces.
+- **One collection with everything.** https://huggingface.co/collections/atharvgaur18/actionproof-everything-lexsi-2026-track-3-6b0b3bda152727794d53e5a3
+  (73 items: every model, adapter, dataset and Space of the project).
+- **HF models.** [`actionproof-hidden-world-adapters`](https://huggingface.co/atharvgaur18/actionproof-hidden-world-adapters):
+  the warm start and all 23 adapters of Tests 2 and 3, one folder per run, with training logs and a model card. The
+  trained agent shown in the demo: [`actionproof-agent-d`](https://huggingface.co/atharvgaur18/actionproof-agent-d).
+  No GGUF or quantised builds were made.
 - **GitHub repo.** https://github.com/atharvgaur1845/actionproof-v2 (branch `submission-candidate`).
-- **Demo / Space.** https://huggingface.co/spaces/atharvgaur18/actionproof-live (real model on an L4 GPU) and the replay
+- **Demo / Space.** [live demo](https://huggingface.co/spaces/atharvgaur18/actionproof-live) (real model on an L4 GPU) and the replay
   site https://huggingface.co/spaces/atharvgaur18/actionproof.
 - **Video / slides.** https://github.com/atharvgaur1845/actionproof-v2/releases/tag/video-v4 and
-  `docs/submission/ActionProof_deck.pdf`.
-- **Paper.** `paper/main_v4.pdf` (6 + 6 format).
+  [`docs/submission/ActionProof_deck.pdf`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/docs/submission/ActionProof_deck.pdf).
+- **Paper.** [`paper/main_v4.pdf`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/paper/main_v4.pdf) (6 + 6 format).
 
 ## Documentation and reproduction
 
 - **Environment requirements.** Python with the repository's `requirements`; the checks below run on a CPU. Training
   needs one 80 GB GPU per run.
-- **Repo layout.** `actionproof/` (simulator, verifier, training code), `scripts/` (statistics, figures, checks),
-  `slurm/tasks/` (one file per registered run), `results/` (every result file), `paper/` (the paper), `space_live/`
-  (the live demo), `PREREGISTRATION_*.md` (registrations and addenda).
+- **Repo layout.** [`actionproof/`](https://github.com/atharvgaur1845/actionproof-v2/tree/submission-candidate/actionproof) (simulator, verifier, training code), [`scripts/`](https://github.com/atharvgaur1845/actionproof-v2/tree/submission-candidate/scripts) (statistics, figures, checks),
+  [`slurm/tasks/`](https://github.com/atharvgaur1845/actionproof-v2/tree/submission-candidate/slurm/tasks) (one file per registered run), [`results/`](https://github.com/atharvgaur1845/actionproof-v2/tree/submission-candidate/results) (every result file), [`paper/`](https://github.com/atharvgaur1845/actionproof-v2/tree/submission-candidate/paper) (the paper), [`space_live/`](https://github.com/atharvgaur1845/actionproof-v2/tree/submission-candidate/space_live)
+  (the live demo), [`PREREGISTRATION_*.md`](https://github.com/atharvgaur1845/actionproof-v2/tree/submission-candidate/.) (registrations and addenda).
 - **Run instructions.**
-  - `pytest tests/theory`: the theory's tests.
-  - `python scripts/s2_numcheck.py`: checks every reported number against its result file.
-  - `python scripts/ad/c1_stats.py` and `python scripts/ad/c2_stats.py`: the registered analyses.
-  - `python scripts/paper/v4_figures.py`: regenerates the figures.
+  - [`pytest tests/theory`](https://github.com/atharvgaur1845/actionproof-v2/tree/submission-candidate/tests/theory): the theory's tests.
+  - [`python scripts/s2_numcheck.py`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/scripts/s2_numcheck.py): checks every reported number against its result file.
+  - [`python scripts/ad/c1_stats.py`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/scripts/ad/c1_stats.py) and [`python scripts/ad/c2_stats.py`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/scripts/ad/c2_stats.py): the registered analyses.
+  - [`python scripts/paper/v4_figures.py`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/scripts/paper/v4_figures.py): regenerates the figures.
 
 ## Declaration of work done outside the hackathon
 
@@ -373,7 +387,7 @@ the Aya models.
 - AgentTune: arXiv 2610.13335. AuditKIT: arXiv 2610.22511. CuratorKIT: arXiv 2606.21631.
 - Tiny Aya: arXiv 2603.11510. Aya Expanse: arXiv 2412.04261.
 - GRPO (DeepSeekMath): arXiv 2402.03300. Dr. GRPO: arXiv 2503.20783. RLOO: Ahmadian et al., 2024.
-- The full list is in `paper/refs_v4.bib`.
+- The full list is in [`paper/refs_v4.bib`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/paper/refs_v4.bib).
 
 ## LLM usage statement
 
@@ -382,11 +396,11 @@ Claude (Anthropic) was used to help write code and to help with writing.
 ## Changelog
 
 - **29 November 2026.** Rewritten around the main paper; adds Test 3 (cost test) results. Replaces the Stage 1
-  article, kept as `docs/HF_ARTICLE_stage1.md`.
+  article, kept as [`docs/HF_ARTICLE_stage1.md`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/docs/HF_ARTICLE_stage1.md).
 
 ## Appendix
 
-- **Prompts.** The agent's system prompt is `data/bench/proc/system_prompt.txt`; the judge prompts are under
-  `evaluation/llm_judge_committee/`.
-- **Extra tables.** Per-run results for Test 2 are in `results/ad/conf_summaries/`; Test 1's ten estimators are in the
+- **Prompts.** The agent's system prompt is [`data/bench/proc/system_prompt.txt`](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/data/bench/proc/system_prompt.txt); the judge prompts are under
+  [`evaluation/llm_judge_committee/`](https://github.com/atharvgaur1845/actionproof-v2/tree/submission-candidate/evaluation/llm_judge_committee).
+- **Extra tables.** Per-run results for Test 2 are in [`results/ad/conf_summaries/`](https://github.com/atharvgaur1845/actionproof-v2/tree/submission-candidate/results/ad/conf_summaries); Test 1's ten estimators are in the
   paper's appendix.

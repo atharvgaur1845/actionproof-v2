@@ -12,6 +12,13 @@ short_description: A Cohere Labs agent live in simulated procurement
 
 # ActionProof live
 
+**Everything in one place:** [HF collection: all models, adapters, data](https://huggingface.co/collections/atharvgaur18/actionproof-everything-lexsi-2026-track-3-6b0b3bda152727794d53e5a3)
+· [paper](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/paper/main_v4.pdf) · [code](https://github.com/atharvgaur1845/actionproof-v2/tree/submission-candidate)
+· [paper's adapters](https://huggingface.co/atharvgaur18/actionproof-hidden-world-adapters)
+· [episodes and splits](https://huggingface.co/datasets/atharvgaur18/actionproof-traces)
+· [video](https://github.com/atharvgaur1845/actionproof-v2/releases/tag/video-v4) · [slides](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/docs/submission/ActionProof_deck.pdf)
+· [write-up](https://github.com/atharvgaur1845/actionproof-v2/blob/submission-candidate/docs/HF_ARTICLE.md)
+
 Run a real Cohere Labs model as a tool-using agent in ProcureSim, ActionProof's simulated procurement environment,
 and see what the systems of record actually hold after it says "done".
 
