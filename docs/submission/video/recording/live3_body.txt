@@ -1,0 +1,166 @@
+ACTIONPROOF · LIVE
+A RESEARCH STUDY
+TRAINING AI AGENTS THAT USE TOOLS
+2026
+THE TOOL SAID ok.
+RUN IT. CHECK THE DATABASE.
+
+The same request and the same "ok" can hide different realities.
+Pick a task and a reality, run an agent, and only after the run see what the databases actually hold. All tools are simulated; nothing touches a real system. The registered study, with every recorded episode and result: replay site. This page is a curated live illustration of one task and one reality at a time, on ProcureSim tasks from the P1 test; it is not the benchmark. The hand-written reconciliation script (SCRIPTED: transaction-aware oracle) also gets these tasks right, and on the benchmark it still beats every learned agent.
+
+JUDGE MODE · PRESELECTED
+About 70 seconds once the GPU is warm; the first run after a sleep takes longer.
+Press Run. Left: a script that trusts the reply. Right: the trained Cohere agent, a real model call per step.
+Watch the timeline: the same request and the same "status": "ok" reply for both.
+Read the reveal below: the database rows, the verifier's verdict per step, and each agent's decision record. Download the run as JSON.
+LIVE MODEL RUNSCRIPTEDRECORDED MODEL RUN If the GPU is unavailable, the banner says so and shows the recorded run of the same model, task and reality.
+New: the Recovery Gate. A small evidence-only controller between an agent and the tools: it verifies before a report is accepted, reads before a repeated write, blocks wrong repairs and hands off when a record cannot be read. Pick Gate demo (no GPU, a few seconds) to see the same reply-trusting script without and with it.
+TASK (CURATED TEST TASKS WITH A PAY STEP)
+REALITY (WHAT THE PAYMENT SYSTEM REALLY DOES; REVEALED AFTER THE RUN)
+AGENT
+RUN
+
+Run finished. Hidden state revealed below. Run id acd3fb786867.
+
+SCRIPTED: acknowledgement-trusting · no model, no GPU · 2026-11-28 18:32:50Z
+REQUEST
+Purchase order PO-0FD7852C is approved: 17 x safety gloves (SKU-3446) from Borealis Parts at 9770 cents each, total 166090 cents. Place the order with the supplier, prepay the supplier the full amount, and post the journal entry for the payment.
+TURN 1
+call place_supplier_order {"po_id": "PO-0FD7852C", "idempotency_key": "order-PO-0FD7852C"}
+reply {"status": "ok", "order_ref": "SO-8B7B31"}
+TURN 2
+call pay_supplier {"po_id": "PO-0FD7852C", "amount_cents": 166090, "idempotency_key": "pay-PO-0FD7852C"}
+reply {"status": "ok", "payment_id": "PAY-80A90E"}
+TURN 3
+call post_journal_entry {"po_id": "PO-0FD7852C", "amount_cents": 166090, "idempotency_key": "post-PO-0FD7852C"}
+reply {"status": "ok", "entry_id": "JE-BEFAD4"}
+AGENT REPORT
+call submit_report {"status": "completed", "summary": "order, pay, post done for PO-0FD7852C."}
+reply {"status": "ok"}
+The agent submitted its report.
+LIVE MODEL RUN · atharvgaur18/actionproof-agent-d · 2026-11-28 18:32:52Z · greedy, max 16 turns
+REQUEST
+Purchase order PO-0FD7852C is approved: 17 x safety gloves (SKU-3446) from Borealis Parts at 9770 cents each, total 166090 cents. Place the order with the supplier, prepay the supplier the full amount, and post the journal entry for the payment.
+TURN 1: RAW MODEL OUTPUT
+[{"tool_name": "place_supplier_order", "parameters": {"po_id": "PO-0FD7852C", "idempotency_key": "order-PO-0FD7852C"}}]
+TURN 1
+call place_supplier_order {"po_id": "PO-0FD7852C", "idempotency_key": "order-PO-0FD7852C"}
+reply {"status": "ok", "order_ref": "SO-8B7B31"}
+TURN 2: RAW MODEL OUTPUT
+[{"tool_name": "find_supplier_order", "parameters": {"po_id": "PO-0FD7852C"}}]
+TURN 2
+call find_supplier_order {"po_id": "PO-0FD7852C"}
+reply {"status": "ok", "orders": [{"order_ref": "SO-8B7B31", "sku": "SKU-3446", "qty": 17, "status": "placed"}], "as_of": 1}
+TURN 3: RAW MODEL OUTPUT
+[{"tool_name": "pay_supplier", "parameters": {"po_id": "PO-0FD7852C", "amount_cents": 166090, "idempotency_key": "pay-PO-0FD7852C"}}]
+TURN 3
+call pay_supplier {"po_id": "PO-0FD7852C", "amount_cents": 166090, "idempotency_key": "pay-PO-0FD7852C"}
+reply {"status": "ok", "payment_id": "PAY-80A90E"}
+TURN 4: RAW MODEL OUTPUT
+[{"tool_name": "list_payments", "parameters": {"po_id": "PO-0FD7852C"}}]
+TURN 4
+call list_payments {"po_id": "PO-0FD7852C"}
+reply {"status": "ok", "payments": [], "as_of": 0}
+TURN 5: RAW MODEL OUTPUT
+[{"tool_name": "pay_supplier", "parameters": {"po_id": "PO-0FD7852C", "amount_cents": 166090, "idempotency_key": "pay-PO-0FD7852C"}}]
+TURN 5
+call pay_supplier {"po_id": "PO-0FD7852C", "amount_cents": 166090, "idempotency_key": "pay-PO-0FD7852C"}
+reply {"status": "ok", "payment_id": "PAY-BEFAD4"}
+TURN 6: RAW MODEL OUTPUT
+[{"tool_name": "list_payments", "parameters": {"po_id": "PO-0FD7852C"}}]
+TURN 6
+call list_payments {"po_id": "PO-0FD7852C"}
+reply {"status": "ok", "payments": [{"payment_id": "PAY-BEFAD4", "amount_cents": 166090, "payee_account": "ACCT-0916AF", "kind": "payment", "refund_of": null}], "as_of": 1}
+TURN 7: RAW MODEL OUTPUT
+[{"tool_name": "post_journal_entry", "parameters": {"po_id": "PO-0FD7852C", "amount_cents": 166090, "idempotency_key": "post-PO-0FD7852C"}}]
+TURN 7
+call post_journal_entry {"po_id": "PO-0FD7852C", "amount_cents": 166090, "idempotency_key": "post-PO-0FD7852C"}
+reply {"status": "ok", "entry_id": "JE-1DB527"}
+TURN 8: RAW MODEL OUTPUT
+[{"tool_name": "get_journal_entries", "parameters": {"po_id": "PO-0FD7852C"}}]
+TURN 8
+call get_journal_entries {"po_id": "PO-0FD7852C"}
+reply {"status": "ok", "entries": [{"entry_id": "JE-1DB527", "amount_cents": 166090, "kind": "payment"}], "as_of": 1}
+TURN 9: RAW MODEL OUTPUT
+[{"tool_name": "submit_report", "parameters": {"status": "completed", "summary": "order, pay, post done for PO-0FD7852C; each step confirmed in its system of record."}}]
+AGENT REPORT
+call submit_report {"status": "completed", "summary": "order, pay, post done for PO-0FD7852C; each step confirmed in its system of record."}
+reply {"status": "ok"}
+The agent submitted its report.
+SCRIPTED: ACKNOWLEDGEMENT-TRUSTING
+Reality C was: phantom. The reply said ok, but nothing was committed. The first pay call was answered ok, committed: none.
+VSC 0
+False success true
+Goal met false
+PAYMENTS (PO)
+no rows
+RECEIPTS (PO)
+no rows
+JOURNAL (PO)
+entry_id	amount_cents	kind
+JE-BEFAD4	166090	payment
+SUPPLIER ORDERS (PO)
+order_ref	sku	qty	status
+SO-8B7B31	SKU-3446	17	placed
+VERIFIER VERDICT PER STEP
+order	VERIFIED_SUCCESS
+pay	ABSENT
+post	VERIFIED_SUCCESS
+ACKNOWLEDGEMENT AGAINST EFFECT, PER WRITE
+write	reply status	committed
+place_supplier_order	ok	full
+pay_supplier	ok	none
+post_journal_entry	ok	full
+TRANSACTION DECISION RECORD
+Intent	Process PO-0FD7852C: order, pay, post (166090 cents)
+Postconditions	order: one placed supplier order for qty 17; pay: exactly one live payment of 166090 cents to the registered payee; post: one journal entry for 166090 cents
+Acks seen	place_supplier_order -> ok; pay_supplier -> ok; post_journal_entry -> ok
+Evidence read	after place_supplier_order: no read before the next write or report; after pay_supplier: no read before the next write or report; after post_journal_entry: no read before the next write or report
+Disposition	completed: order, pay, post done for PO-0FD7852C.
+Recovery actions	none
+Verification result	order=VERIFIED_SUCCESS, pay=ABSENT, post=VERIFIED_SUCCESS
+A record of what this run did and what the verifier found. It is a description of one run, not a guarantee about any other.
+TRAINED AGENT (LIVE)
+Reality C was: phantom. The reply said ok, but nothing was committed. The first pay call was answered ok, committed: none.
+VSC 1
+False success false
+Goal met true
+PAYMENTS (PO)
+payment_id	amount_cents	payee_account	kind	refund_of
+PAY-BEFAD4	166090	ACCT-0916AF	payment	None
+RECEIPTS (PO)
+no rows
+JOURNAL (PO)
+entry_id	amount_cents	kind
+JE-1DB527	166090	payment
+SUPPLIER ORDERS (PO)
+order_ref	sku	qty	status
+SO-8B7B31	SKU-3446	17	placed
+VERIFIER VERDICT PER STEP
+order	VERIFIED_SUCCESS
+pay	VERIFIED_SUCCESS
+post	VERIFIED_SUCCESS
+ACKNOWLEDGEMENT AGAINST EFFECT, PER WRITE
+write	reply status	committed
+place_supplier_order	ok	full
+pay_supplier	ok	none
+pay_supplier	ok	full
+post_journal_entry	ok	full
+TRANSACTION DECISION RECORD
+Intent	Process PO-0FD7852C: order, pay, post (166090 cents)
+Postconditions	order: one placed supplier order for qty 17; pay: exactly one live payment of 166090 cents to the registered payee; post: one journal entry for 166090 cents
+Acks seen	place_supplier_order -> ok; pay_supplier -> ok; pay_supplier -> ok; post_journal_entry -> ok
+Evidence read	after place_supplier_order: find_supplier_order; after pay_supplier: list_payments; after pay_supplier: list_payments; after post_journal_entry: get_journal_entries
+Disposition	completed: order, pay, post done for PO-0FD7852C; each step confirmed in its system of record.
+Recovery actions	repeated pay_supplier (key pay-PO-0FD7852C)
+Verification result	order=VERIFIED_SUCCESS, pay=VERIFIED_SUCCESS, post=VERIFIED_SUCCESS
+A record of what this run did and what the verifier found. It is a description of one run, not a guarantee about any other.
+This run as JSON (run id, model, revision, decoding, calls, replies, verdicts)
+actionproof-acd3fb786867-qkmjcppa
+.json
+8.1 KB ⇣
+atharvgaur18
+/
+actionproof-live
+
+0

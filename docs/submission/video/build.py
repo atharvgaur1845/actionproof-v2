@@ -1,6 +1,6 @@
 """Render the ActionProof video: camera moves over 4K stills, annotations, captions, narration.
 Low-memory: 3 workers, each caching one source image; frames stream straight into ffmpeg."""
-import json, re, subprocess, sys
+import bisect, json, re, subprocess, sys
 from multiprocessing import Pool
 from PIL import Image, ImageDraw, ImageFont
 sys.path.insert(0, '.')
@@ -30,7 +30,14 @@ def t_at_char(wc, idx):
     for i, s, e in wc:
         if i >= idx: return s
     return wc[-1][1]
+CLIPS = {}
+def clip(name):
+    if name not in CLIPS:
+        fr = json.load(open(f'rec/{name}_events.json'))['frames']
+        CLIPS[name] = ([t for _, t in fr], [f for f, _ in fr])
+    return CLIPS[name]
 def img_size(name):
+    if name.startswith('clip:'): return (1920, 1080)
     with Image.open(f'shots/{name}.png') as im: return im.size
 def fit(rect, iw, ih, pad=0.14, minw=1500):
     x0, y0, x1, y1 = rect
@@ -52,9 +59,10 @@ for seg in SEGMENTS:
         else:
             idx = seg['text'].find(cue, cpos); assert idx >= 0, (seg['id'], cue); cpos = idx
             ct = LEAD + t_at_char(wc, idx)
+        mw = seg.get('minw', 1500)
         if rect == 'full': r = (0, 0, iw, min(ih, iw * 9 / 16))
-        elif isinstance(rect, str): r = fit(cb[rect], iw, ih, pad=0.06)
-        else: r = fit(rect, iw, ih)
+        elif isinstance(rect, str): r = fit(cb[rect], iw, ih, pad=0.06, minw=mw)
+        else: r = fit(rect, iw, ih, pad=seg.get('pad', 0.14), minw=mw)
         keys.append(dict(t=ct, cam=r, ann=[(cb[a], '') if isinstance(a, str) else a for a in ann]))
     caps, cur, start = [], '', 0
     for m in re.finditer(r'\S+', seg['text']):
@@ -65,15 +73,37 @@ for seg in SEGMENTS:
     if cur: caps.append((start, cur))
     capt = [(LEAD + t_at_char(wc, s), c) for s, c in caps]
     capt = [(a, capt[i + 1][0] if i + 1 < len(capt) else LEAD + words[-1][1] + 0.4, c) for i, (a, c) in enumerate(capt)]
-    timeline.append(dict(seg=seg, t0=t, dur=dur, keys=keys, caps=capt)); t += dur
+    tm = None
+    if 'tmap' in seg:
+        tm, cp = [], 0
+        for cue, rt in seg['tmap']:
+            if cue is None: nt = 0.0
+            elif cue == 'END': nt = dur
+            else:
+                idx = seg['text'].find(cue, cp); assert idx >= 0, (seg['id'], cue); cp = idx; nt = LEAD + t_at_char(wc, idx)
+            tm.append((nt, rt))
+    timeline.append(dict(seg=seg, t0=t, dur=dur, keys=keys, caps=capt, tmap=tm)); t += dur
 TOTAL = t
 
 def ease(x): x = min(max(x, 0), 1); return 4 * x**3 if x < .5 else 1 - (-2 * x + 2)**3 / 2
 def lerp(a, b, k): return tuple(p + (q - p) * k for p, q in zip(a, b))
 _cache = {}
 def load(name):
-    if name not in _cache: _cache.clear(); _cache[name] = Image.open(f'shots/{name}.png').convert('RGB')
+    if name not in _cache:
+        _cache.clear()
+        _cache[name] = Image.open(name if name.startswith('rec/') else f'shots/{name}.png').convert('RGB')
     return _cache[name]
+def rec_time(tm, lt):
+    if lt <= tm[0][0]: return tm[0][1]
+    for (a, ra), (b, rb) in zip(tm, tm[1:]):
+        if lt <= b: return ra + (rb - ra) * ((lt - a) / (b - a) if b > a else 1)
+    return tm[-1][1]
+def source(item, lt):
+    img = item['seg']['img']
+    if not img.startswith('clip:'): return img
+    ts, fs = clip(img[5:]); rt = rec_time(item['tmap'], lt)
+    i = max(bisect.bisect_right(ts, rt) - 1, 0)
+    return f'rec/{img[5:]}_frames/{fs[i]}'
 
 def render(fi):
     T = fi / FPS
@@ -83,11 +113,11 @@ def render(fi):
     cam = keys[k]['cam']
     if k > 0: cam = lerp(keys[k - 1]['cam'], keys[k]['cam'], ease((lt - keys[k]['t'] + 0.15) / MOVE))
     settle = keys[k]['t'] + MOVE if k > 0 else 0
-    drift = 0.018 * min(max((lt - settle) / 8, 0), 1)
+    drift = (0 if item['seg'].get('nodrift') else 0.018) * min(max((lt - settle) / 8, 0), 1)
     cx, cy = (cam[0] + cam[2]) / 2, (cam[1] + cam[3]) / 2
     hw, hh = (cam[2] - cam[0]) / 2 * (1 - drift), (cam[3] - cam[1]) / 2 * (1 - drift)
     cam = (cx - hw, cy - hh, cx + hw, cy + hh)
-    fr = load(item['seg']['img']).resize((W, H), Image.BICUBIC, box=cam, reducing_gap=2.0).convert('RGBA')
+    fr = load(source(item, lt)).resize((W, H), Image.BICUBIC, box=cam, reducing_gap=2.0).convert('RGBA')
     sx = W / (cam[2] - cam[0])
     def m(b): return (int((b[0] - cam[0]) * sx) - 12, int((b[1] - cam[1]) * sx) - 10, int((b[2] - cam[0]) * sx) + 12, int((b[3] - cam[1]) * sx) + 10)
     ann = keys[k]['ann']; a = ease((lt - (keys[k]['t'] + (MOVE * 0.8 if k > 0 else 0.3))) / 0.35)
