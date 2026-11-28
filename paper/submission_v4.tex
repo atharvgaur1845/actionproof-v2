@@ -1,0 +1,48 @@
+\section{Submission details (hackathon template)}\label{app4:submission}
+{\small
+\begin{description}\setlength{\itemsep}{1pt}
+\item[Track and problem.] Track 3 (agentic fine-tuning), problem statement 9 (Measure $\rightarrow$ Understand
+$\rightarrow$ Fix).
+\item[One-line claim.] When the rollouts of a GRPO group share a hidden environment state, group-std normalisation
+makes a costly check follow a vote of state-wise signs instead of its value; removing the std restores reading in a
+3.35B Cohere tool agent.
+\item[Before $\rightarrow$ after, same model.] Tiny Aya Global warm start 0.687 $\rightarrow$ std-free GRPO 0.807
+verified safe completion (mean of 5 seeds; 300 unseen tasks), while standard GRPO from the same warm start stays at
+0.687 in all 5 seeds (\S\ref{sec:llm}, Table~\ref{tab:track3}).
+\item[Base model and method.] \texttt{CohereLabs/tiny-aya-global} (3.35B, CC-BY-NC-4.0), LoRA SFT warm start, then
+GRPO through AgentTune's \texttt{TrlAgenticGrpo}, with and without the group std, read cost $c=0.05$.
+\item[Real use case.] Agents that write to payment, order or deployment systems can read the record back before
+reporting success; whether that check is learned depends on how training scales rewards inside a group.
+\item[Hackathon kits.] AgentTune trains every GRPO policy and supplies the parser and prompt used in rollouts and
+evaluation. AuditKIT gave the Stage~1 judge audit and secondary scores of the practical study's episodes. CuratorKIT
+deduplicated the recovery demonstrations before SFT (0 removed). CircuitKIT was tried and did not run; AlignTune and
+SafeTune were not used.
+\item[Data and splits.] TH1: an analytical testbed with a held-out split frozen by hash
+(\path{scripts/theory/freeze_th1.py}). Language agent: \texttt{cw\_train}, \texttt{cw\_dev}, \texttt{cw\_conf} (300
+tasks, 121 faulted) and the sealed \texttt{cw\_c2} (300 tasks, 120 faulted); \path{scripts/ad/c2_split.py} asserts
+that no task is shared across splits. Everything is generated in ProcureSim, an in-memory simulator; no real system is
+touched.
+\item[Metrics.] Verified safe completion (VSC: the final database meets every postcondition with no invariant
+violation or duplicate, and the agent's report matches the expected status; \path{actionproof/env/verifier.py}), false success, reads per episode, tool-call validity; Table~\ref{tab:track3} gives the Track~3
+set per subset.
+\item[Declaration of work done outside the hackathon.] No part of this work predates 1 November 2026 (confirmed by the
+author). Stage~1 (1--15 Nov): SupportSim and reward studies. Stage~2 (20--28 Nov): ProcureSim, the TXN benchmark and
+the trained agents. The theory, TH1 (registered 24 Nov), AD-C1 (registered 23 Nov) and AD-C2 (registered 28 Nov) were
+all done in the final round. The kits are the hackathon's own repositories at the stated revisions.
+\item[With more credits.] The planned factorial: 2 estimators $\times$ 3 costs $\times$ 2 group laws (shared and
+iid) $\times$ 5 seeds, plus a second model family. The theory predicts that GRPO's read rate stays flat in cost under
+the shared law and responds to cost under the iid law, and that std-free tracks cost under both. These are
+predictions, not results.
+\item[Compute.] Training and evaluation ran on the BITS Pilani sharanga cluster (one H100 per run; each AD-C2 training
+run was budgeted 150 minutes). TH1 ran on CPU (Appendix~\ref{app3:compute}).
+\item[Use of AI.] Claude (Anthropic) wrote about 95\% of the code and drafted about 90\% of the text (author's
+estimate). The research direction, the approval of every registration before its run, and the review of every claim
+were the author's. Language-model judges are instruments and never replace the database verifier.
+\item[Artefacts and running it.] Code: \url{https://github.com/atharvgaur1845/actionproof-v2} (branch
+\texttt{submission-candidate}); live Space \texttt{atharvgaur18/actionproof-live}; traces
+\texttt{atharvgaur18/actionproof-traces}. Commands: \texttt{pytest tests/theory};
+\texttt{python scripts/s2\_numcheck.py}; \texttt{python scripts/ad/freeze\_c2.py --check};
+\texttt{python scripts/ad/c1\_stats.py}; \texttt{python scripts/paper/v4\_figures.py};
+\texttt{python scripts/paper/v4\_track3\_table.py}.
+\end{description}}
+

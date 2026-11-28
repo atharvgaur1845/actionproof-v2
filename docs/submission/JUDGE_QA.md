@@ -40,7 +40,7 @@ closest works).
 - Read-back and idempotency keys as fixes. LIMBO, Verified Tool Calls and Stripe's own documentation describe them.
   Verified Tool Calls is a scripted wrapper, close to our reference script B4.
 - Removing the standard deviation from GRPO's advantage. That is Dr. GRPO's centred advantage.
-- Learned stopping or escalation. Competitor 02 (Escalation-Safe Aya) and SURE-Act train it.
+- Learned stopping or escalation. SURE-Act and a concurrent hackathon entry (Escalation-Safe Aya) train it.
 
 **What we can support.**
 1. **Registered, multi-seed training evidence where the write's outcome is hidden.**
@@ -316,9 +316,10 @@ failed to run in the job environment, and no result is claimed from it.
 
 ## 14. How does the paper relate to the hackathon product?
 
-It is a separate, labelled companion. The submission does not rest on it.
-- **What it is.** `paper/main_v3.pdf` (source `paper/main_v3.tex`) is a theory note: "When Group Rollouts Share a
-  Hidden State: Group Normalisation Cannot See the Stakes of Verification". It analyses GRPO when a group's rollouts
+*Revised 2026-11-28: the theory paper is now the main research paper (see Q0); the text below records why it was
+first kept separate.*
+- **What it is.** `paper/main_v4.pdf` (source `paper/main_v4.tex`; earlier draft `paper/archive/main_v3.pdf`) is
+  the theory paper "The Hidden World in the Group". It analyses GRPO when a group's rollouts
   share one hidden fault state. Its own registered evidence is TH1 and AD-C1.
 - **Why it is separate.**
   - The theory concerns costly verification. In ProcureSim, reads are free.

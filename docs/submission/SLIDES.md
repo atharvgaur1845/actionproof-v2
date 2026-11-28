@@ -189,6 +189,6 @@ D $2,902, B4 $164.
   - Reward information (A12, ID1): a database reward makes read-back the default in 5 of 5 seeds; it selects
     checking, it does not create it.
   - Judges (J1): the best judge with a database snapshot reaches 0.989, the committee 0.897.
-  - The companion theory paper is `paper/main_v3.pdf` (a separate claim).
+  - The main research paper is `paper/main_v4.pdf` (the group-normalisation theory, TH1, AD-C1, AD-C2).
   - Not claimed: a new optimizer, a novel benchmark design, safety or generalisation beyond the stated splits,
     real-system validation, an independent verifier, a mechanistic circuit.

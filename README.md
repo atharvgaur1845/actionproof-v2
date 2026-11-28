@@ -80,8 +80,11 @@ procurement simulator (ProcureSim); nothing touches a real payment system.
 - **Agents.** A is recovery-start GRPO. D is recovery SFT then GRPO, and is the recommended agent. Dw is D’s SFT warm
   start. Dw_aug is the P4 randomised warm start. SEL and CTL are SEL1’s two arms.
 
-**Status (2026-11-27).**
-- This round’s work is on branch `stage2-superiority-sprint`, to be merged into `submission-candidate` at the freeze.
+**Status (2026-11-28).**
+- The submission is branch `submission-candidate` (the repository's default branch). The submitted paper is
+  `paper/main_v4.pdf`.
+- Internal working notes (`research_audit/`) are not part of the submission branch. Paths to them in older documents
+  refer to the git history (commit `055767e`). The clean-room logs moved to `docs/reproducibility/cleanroom/`.
 - How to read a status:
   - *registered, supported / not supported*: a test decided by a preregistered rule;
   - *descriptive*: no test;
@@ -314,7 +317,9 @@ What the supported tests show, and what they do not (scope from `PREREGISTRATION
 | Dw_aug warm starts (P4, seeds 0 to 2) | https://huggingface.co/atharvgaur18/actionproof-warmstart-dwaug |
 | SEL1 adapters (SEL and CTL, seeds 0 to 2; registered SEL1) | https://huggingface.co/atharvgaur18/actionproof-sel1-adapters |
 | Episode traces, frozen splits, judge cases | https://huggingface.co/datasets/atharvgaur18/actionproof-traces |
-| Companion theory paper (a separate claim: group normalisation under a shared hidden state) | `paper/main_v3.pdf` (source `paper/main_v3.tex`) |
+| **Submitted paper** (main research paper) | `paper/main_v4.pdf` (source `paper/main_v4.tex`, `paper/appendix_v4.tex`) |
+| Supporting technical report on the instrument (benchmark, agent, demo) | `paper/actionproof_main.pdf` |
+| Superseded drafts (not the submission) | `paper/archive/` |
 | Write-up | `docs/submission/WRITEUP.md` |
 | Final-round deck (PDF/PPTX export) | source `docs/submission/deck/`, mirrored by `docs/submission/SLIDES.md` |
 | Code | https://github.com/atharvgaur1845/actionproof-v2 |

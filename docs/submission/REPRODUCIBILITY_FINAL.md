@@ -22,10 +22,10 @@ Each run used:
 | Tracked files changed by the run | 0 | 0 |
 | Post-hoc validity analysis (`scripts/audit/txn_validity.py`) | — | recomputed byte-identically |
 | SEL1-registered training rows against their pre-training hashes | — | match (task 1861, below) |
-| Log | `research_audit/cleanroom/cleanroom_1830.log` | `research_audit/cleanroom/cleanroom_1860_final.log` |
+| Log | `docs/reproducibility/cleanroom/cleanroom_1830.log` | `docs/reproducibility/cleanroom/cleanroom_1860_final.log` |
 
 Package versions (both runs): numpy 2.5.5, scipy 1.18.1, PyYAML 6.0.4, huggingface_hub 2.5.0, pytest 9.2.0,
-hypothesis 6.170.17, pydantic 2.14.4 (`research_audit/cleanroom/pip_freeze_and_head.txt`).
+hypothesis 6.170.17, pydantic 2.14.4 (`docs/reproducibility/cleanroom/pip_freeze_and_head.txt`).
 
 **The training-row hash check.**
 - Run 2's last step downloads the SEL1-registered training rows and checks them against `results/sel1_hashes.json`
@@ -113,4 +113,4 @@ warmstart-dwaug), and so does the dataset card.
 Cloned from the public GitHub repository (branch `submission-candidate`; ), fresh virtualenv, anonymous Hugging Face
 cache. `smoke_check.py` passed; `verify_numbers.sh` passed in 234 s and now also recomputes RG1, RG1 addendum 1 and
 RG2 from the released episodes, byte-identically; claims ledger 899 numbers, 0 failures; no tracked file changed. Log:
-`research_audit/cleanroom/cleanroom_1970_rg.log`.
+`docs/reproducibility/cleanroom/cleanroom_1970_rg.log`.

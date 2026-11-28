@@ -1,0 +1,90 @@
+{
+  "source": "results/ad/conf_summaries (AD-C1, greedy, cw_conf, 300 tasks: 179 clean, 121 faulted)",
+  "rows": [
+    {
+      "arm": "Warm start",
+      "seeds": 1,
+      "vsc": 0.6866666666666666,
+      "vsc_min": 0.6866666666666666,
+      "vsc_max": 0.6866666666666666,
+      "vsc_faulted": 0.2231404958677686,
+      "vsc_clean": 1.0,
+      "false_success": 0.31333333333333335,
+      "tool_call_validity": 1.0,
+      "calls": 3.7333333333333334,
+      "reads": 0.0,
+      "batch_seconds_300": 14
+    },
+    {
+      "arm": "GRPO",
+      "seeds": 5,
+      "vsc": 0.6866666666666666,
+      "vsc_min": 0.6866666666666666,
+      "vsc_max": 0.6866666666666666,
+      "vsc_faulted": 0.2231404958677686,
+      "vsc_clean": 1.0,
+      "false_success": 0.31333333333333335,
+      "tool_call_validity": 1.0,
+      "calls": 3.7333333333333334,
+      "reads": 0.0,
+      "batch_seconds_300": 14
+    },
+    {
+      "arm": "Std-free",
+      "seeds": 5,
+      "vsc": 0.8066666666666666,
+      "vsc_min": 0.7433333333333333,
+      "vsc_max": 0.8433333333333334,
+      "vsc_faulted": 0.5206611570247934,
+      "vsc_clean": 1.0,
+      "false_success": 0.19133333333333336,
+      "tool_call_validity": 1.0,
+      "calls": 5.460666666666667,
+      "reads": 1.6239999999999999,
+      "batch_seconds_300": 21.6
+    },
+    {
+      "arm": "AWRB",
+      "seeds": 5,
+      "vsc": 0.8786666666666667,
+      "vsc_min": 0.8766666666666667,
+      "vsc_max": 0.88,
+      "vsc_faulted": 0.6991735537190082,
+      "vsc_clean": 1.0,
+      "false_success": 0.12,
+      "tool_call_validity": 1.0,
+      "calls": 6.612666666666667,
+      "reads": 2.6946666666666665,
+      "batch_seconds_300": 23.8
+    },
+    {
+      "arm": "AWRB-centred",
+      "seeds": 5,
+      "vsc": 0.7186666666666667,
+      "vsc_min": 0.6866666666666666,
+      "vsc_max": 0.7433333333333333,
+      "vsc_faulted": 0.30247933884297523,
+      "vsc_clean": 1.0,
+      "false_success": 0.2793333333333333,
+      "tool_call_validity": 1.0,
+      "calls": 4.314,
+      "reads": 0.562,
+      "batch_seconds_300": 16.4
+    }
+  ],
+  "latency_batch1": {
+    "warm_start": {
+      "n": 40,
+      "mean": 2.442894735200025,
+      "p50": 2.4068929459990613,
+      "p95": 3.0463613129995792
+    },
+    "rv_s0": {
+      "n": 40,
+      "mean": 3.8189291319998575,
+      "p50": 3.6166050399988308,
+      "p95": 4.675096683000447
+    }
+  },
+  "latency_source": "results/s2/latency_*.json (batch 1, proc_dev, 40 episodes, same Tiny Aya Global base)"
+}

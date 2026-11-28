@@ -18,7 +18,7 @@ No placeholders left. The paper PDF is built from paper/main_v3.tex and committe
 | Dw_aug warm starts (P4, seeds 0 to 2) | https://huggingface.co/atharvgaur18/actionproof-warmstart-dwaug |
 | SEL1 adapters (SEL and CTL, seeds 0 to 2; registered SEL1) | https://huggingface.co/atharvgaur18/actionproof-sel1-adapters |
 | Episode traces, frozen splits, judge cases | https://huggingface.co/datasets/atharvgaur18/actionproof-traces |
-| Paper | `paper/main_v3.pdf` (source `paper/main_v3.tex`) |
+| Paper | `paper/main_v4.pdf` (source `paper/main_v4.tex`) |
 | Write-up | `docs/submission/WRITEUP.md` |
 | Code | https://github.com/atharvgaur1845/actionproof-v2 |
 

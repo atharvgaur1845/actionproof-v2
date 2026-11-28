@@ -1,5 +1,11 @@
 # ActionProof: training small agents to reconcile transactions when "ok" does not mean it happened
 
+> **Read this first (2026-11-28).** The submitted paper is `paper/main_v4.pdf`, *The Hidden World in the Group: How
+> GRPO Mislearns Costly Verification in Agentic RL*. This write-up is the long-form technical report on the
+> **instrument** that paper uses (the TXN benchmark, the trained recovery agent and the live demo); its own claims
+> below are unchanged and still hold. Where this file calls the theory a separate or companion claim, that text is
+> superseded by `docs/submission/FINAL_STORY_DECISION.md` (revision of 2026-11-28).
+
 **One-line claim.** On a locked benchmark where identical "ok" and "timeout" replies hide committed and uncommitted
 payments:
 - recovery demonstrations followed by GRPO raise a 3.35B Cohere agent from 0.513 to 0.819 verified completion on 450
@@ -14,7 +20,7 @@ payments:
 - **The spine:** the TXN benchmark and the trained recovery agent.
 - **Supporting findings:** selective escalation (SEL1, registered in this round) and the reward's information source
   (Stage 2, §2).
-- **Separate claim:** the group-normalisation theory is a companion paper (`paper/main_v3.pdf`).
+- **Main research paper:** the group-normalisation theory, `paper/main_v4.pdf`, which uses this instrument.
 
 | | |
 |---|---|
@@ -593,4 +599,4 @@ LLM judges (§15) are evaluation instruments whose outputs never replace the dat
 | ROI | `docs/upgrade/ROI.md` |
 | Toolkits | `docs/upgrade/TOOLKITS.md` |
 | Traces | `docs/submission/TRACES.md` |
-| LaTeX paper | `paper/main_v3.tex`, `paper/appendix_v3.tex` (earlier versions: `paper/main.tex`, `paper/main_v2.tex`) |
+| Submitted paper | `paper/main_v4.tex`, `paper/appendix_v4.tex` (superseded drafts' PDFs in `paper/archive/`) |

@@ -1,7 +1,6 @@
 \pdfoutput=1
 % main_v4 (branch research/v4-hidden-world, 2026-11-28). Theory-led main paper; main.tex, main_v2.tex, main_v3.tex and
 % actionproof_main.tex are untouched. Every number resolves to a file named here or in paper/EVIDENCE_LEDGER_V4.md.
-% \pend{} marks AD-C2 results that do not exist yet: fill from results/ad/c2/c2_summary.json or remove before release.
 \documentclass[11pt]{article}
 \usepackage{emnlp2023}
 \usepackage{times}
@@ -44,7 +43,8 @@ why decorrelating states within groups need not remove it. In a preregistered an
 (four group laws, group sizes 2--16, ten estimators), the theory predicts GRPO's learned decision in 721 of 721 decided
 cells, including all 77 where the vote and the value disagree; one registered hypothesis fails and one is untestable.
 In a registered five-seed study of a 3.35B tool agent, every GRPO seed ends at the warm start's no-read behaviour while
-a std-free estimator reads and improves verified completion by 12.0 points (95\% CI [8.8, 15.3]); the GRPO arm is
+a std-free estimator reads and improves verified completion from 0.687 to 0.807, $+12.0$ points (registered
+task-bootstrap 95\% CI [8.8, 15.3]; [7.5, 16.7] when seeds are also resampled); the GRPO arm is
 degenerate, so this is the strongest result the test can return. A registered cost intervention on the language agent,
 one seed per arm, is reported with its limits in \S\ref{sec:llm}. We claim neither a new optimiser nor a universal GRPO failure: we identify a latent-state
 regime in which group-local scaling misaligns learning with the value of information.
@@ -205,7 +205,8 @@ of the theorems themselves.
 hypotheses; the theory's predictions T1--T7 were frozen before any confirmatory output
 (\path{docs/research/AD_C1_THEORY_PREDICTION.md}). Outcome (\path{results/ad/c1_summary.json}):
 \begin{itemize}
-\item Std-free beats GRPO by $+0.120$ [0.088, 0.153], Holm $p=0.016$, positive in 5/5 seeds; the whole gain is on
+\item Std-free beats GRPO by $+0.120$ [0.088, 0.153] (the registered seed-averaged task bootstrap; the two-level
+interval, resampling seeds then tasks, is [0.075, 0.167]), Holm $p=0.016$, positive in 5/5 seeds; the whole gain is on
 faulted tasks (clean-task difference 0.000) and the false-success gap is 0.122.
 \item Every GRPO seed reads 0 times per episode and scores 0.687; std-free reads 0.93--2.02 times (Figure~\ref{fig:c1}).
 \item All seven testable frozen predictions hold. T8, cost-blindness on the language agent, was untestable (no GRPO run
@@ -336,4 +337,5 @@ credits; BITS Pilani HPC (sharanga) for GPU time; Cohere Labs for Tiny Aya
 
 \appendix
 \input{appendix_v4}
+\input{submission_v4}
 \end{document}

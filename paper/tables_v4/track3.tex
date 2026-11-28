@@ -1,0 +1,12 @@
+\begin{table*}[t]\centering\small
+\begin{tabular}{lcccccccc}\toprule
+Arm (seeds) & \multicolumn{3}{c}{Task success (VSC)} & False & Tool-call & Calls & Reads & Eval s \\
+ & all & faulted & clean & success & validity & /ep & /ep & /300 tasks \\\midrule
+Warm start (1) & 0.687 & 0.223 & 1.000 & 0.313 & 1.000 & 3.73 & 0.00 & 14 \\
+GRPO (5) & 0.687 {\scriptsize [0.687, 0.687]} & 0.223 & 1.000 & 0.313 & 1.000 & 3.73 & 0.00 & 14 \\
+Std-free (5) & 0.807 {\scriptsize [0.743, 0.843]} & 0.521 & 1.000 & 0.191 & 1.000 & 5.46 & 1.62 & 22 \\
+AWRB (5) & 0.879 {\scriptsize [0.877, 0.880]} & 0.699 & 1.000 & 0.120 & 1.000 & 6.61 & 2.69 & 24 \\
+AWRB-centred (5) & 0.719 {\scriptsize [0.687, 0.743]} & 0.302 & 1.000 & 0.279 & 1.000 & 4.31 & 0.56 & 16 \\
+\bottomrule\end{tabular}
+\caption{Track 3 metrics for the AD-C1 arms (descriptive; means over seeds, greedy decoding, 300 unseen \texttt{cw\_conf} tasks: 121 faulted, 179 clean; range over seeds in brackets). Eval seconds are wall time for the whole batched split on one GPU, not per-request latency. Batch-1 latency was measured on the same Tiny Aya Global base with a LoRA adapter (40 ProcureSim dev episodes): warm start 2.44\,s per episode (p95 3.05\,s), database-reward GRPO agent 3.82\,s (p95 4.68\,s), whose episodes include read-backs. Sources: \path{results/ad/track3_metrics.json}, \path{scripts/paper/v4_track3_table.py}.}\label{tab:track3}
+\end{table*}

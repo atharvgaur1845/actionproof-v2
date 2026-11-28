@@ -29,7 +29,7 @@ git status --short                      # must print nothing
 
 **Software.** Python 3.12. Package versions used in both clean rooms: numpy 2.5.5, scipy 1.18.1, PyYAML 6.0.4,
 huggingface_hub 2.5.0, pytest 9.2.0, hypothesis 6.170.17, pydantic 2.14.4
-(`research_audit/cleanroom/pip_freeze_and_head.txt`).
+(`docs/reproducibility/cleanroom/pip_freeze_and_head.txt`).
 
 ```bash
 python3.12 -m venv .venv && . .venv/bin/activate

@@ -192,7 +192,9 @@ The simulator used here comes from a larger practical study, reported separately
 (\path{paper/actionproof_main.pdf}). Its registered results, with their limits:
 \begin{itemize}
 \item \textbf{P1} (450 frozen tasks, 3 seeds): recovery SFT reaches 0.772 and recovery SFT then GRPO 0.819 sampled VSC
-against 0.513 for the reference arm; the arms are not nested checkpoints, so the difference is not GRPO's alone.
+against 0.513 for the reference arm A, itself a trained agent (recovery-start GRPO); the untrained Tiny Aya Global
+base scores 0.01 on the same test (\path{results/p5/p5_summary.json}). The arms are not nested checkpoints, so the
+difference is not GRPO's alone.
 \item \textbf{TXN v1} (440 locked counterfactual tasks): trusting the reply falsely completes 0.864 of tasks; the
 trained agent 0.121; a hand-written reconciliation script beats every learned agent (VTC 0.864, no false completion).
 A post-hoc review found construct limits: a read-free same-key double send reaches 308 of 440, and the duplicate
@@ -206,6 +208,7 @@ construction (a consistent read is a perfect oracle in the simulator); most of i
 failures; the script still completes more. It is not a learned-policy contribution.
 \end{itemize}
 
+\input{tables_v4/track3}
 \section{Literature comparison: what was read}\label{app4:lit}
 Full text (2026-11-28): \citet{fontana-etal-2026-hidden} (Props.~1--3: shared-prefix weighting; AdamW invariance to
 global reward scale; momentum overshoot past the clip); \citet{bay2026grpodrgrpodapo} (Thm.~1: for binary rewards the

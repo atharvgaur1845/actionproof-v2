@@ -50,7 +50,7 @@ passes; transfer to a held-out step is seed-fragile.
 - Forcing it into the main story would make the claim incoherent.
 
 It stays a labelled companion artefact, with its own registered evidence (TH1, AD-C1). The landing page says:
-"Companion theory paper (separate claim): `paper/main_v3.pdf`."
+"Companion theory paper (separate claim): `paper/main_v3.pdf`." *(Superseded by the revision above; that PDF is now in `paper/archive/`.)*
 
 ## 1. Primary research question
 
