@@ -83,6 +83,7 @@ procurement simulator (ProcureSim); nothing touches a real payment system.
 **Status (2026-11-28).**
 - The submission is branch `submission-candidate` (the repository's default branch). The submitted paper is
   `paper/main_v4.pdf`.
+- Video: https://github.com/atharvgaur1845/actionproof-v2/releases/tag/video-v4 · slides: `docs/submission/ActionProof_deck.pdf`.
 - Internal working notes (`research_audit/`) are not part of the submission branch. Paths to them in older documents
   refer to the git history (commit `055767e`). The clean-room logs moved to `docs/reproducibility/cleanroom/`.
 - How to read a status:
@@ -318,6 +319,8 @@ What the supported tests show, and what they do not (scope from `PREREGISTRATION
 | SEL1 adapters (SEL and CTL, seeds 0 to 2; registered SEL1) | https://huggingface.co/atharvgaur18/actionproof-sel1-adapters |
 | Episode traces, frozen splits, judge cases | https://huggingface.co/datasets/atharvgaur18/actionproof-traces |
 | **Submitted paper** (main research paper) | `paper/main_v4.pdf` (source `paper/main_v4.tex`, `paper/appendix_v4.tex`) |
+| Video (2:33, v4 story, captions burned in) | https://github.com/atharvgaur1845/actionproof-v2/releases/tag/video-v4 (source and `.srt` in `docs/submission/video/`) |
+| Slides (PDF, 12 slides) | `docs/submission/ActionProof_deck.pdf` |
 | Supporting technical report on the instrument (benchmark, agent, demo) | `paper/actionproof_main.pdf` |
 | Superseded drafts (not the submission) | `paper/archive/` |
 | Write-up | `docs/submission/WRITEUP.md` |

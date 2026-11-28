@@ -131,7 +131,7 @@ if __name__ == '__main__':
     n, srt = 0, []
     for it in timeline:
         for a0, a1, c in it['caps']: n += 1; srt.append(f"{n}\n{ts(it['t0']+a0)} --> {ts(it['t0']+a1)}\n{c}\n")
-    open('actionproof_video.srt', 'w').write('\n'.join(srt))
+    open('captions/actionproof_video.srt', 'w').write('\n'.join(srt))
     if len(sys.argv) > 1:
         for f in map(int, sys.argv[1].split(',')): Image.frombytes('RGB', (W, H), render(f)).save(f'prev_frame_{f}.png')
         sys.exit()

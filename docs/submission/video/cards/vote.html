@@ -1,0 +1,11 @@
+<section id="vote" class="dark foot">
+<p class="eyebrow">THE MECHANISM · paper/main_v4.pdf §3 · stated assumptions</p>
+<h2>One task, one hidden world, one group.</h2>
+<div class="tiles3">
+<div class="st" id="s1"><p class="n">1</p><p class="k">GRPO samples a group</p><p class="b">All rollouts of one task share its fault plan: the same database, the same silent fault.</p></div>
+<div class="st" id="s2"><p class="n">2</p><p class="k">Standardise inside the group</p><p class="b">Rewards are divided by the group's own spread, so each hidden state's stakes (how much a missed fault costs) cancel out.</p></div>
+<div class="st" id="s3"><p class="n">3</p><p class="k">What survives is a vote</p><p class="b">The decision to check follows <span class="m">Σ w(z)·sign β<sub>z</sub></span>: which states prefer checking, not by how much.</p></div>
+</div>
+<div class="honest" id="ex"><b>Why it matters.</b> A rare, costly fault says “check”; the common clean state says “skip, reads cost”. The value of checking can be large while the vote still says skip. Exact as ε → 0 with a shared group law; the vote form needs deterministic returns within each state.</div>
+<p class="footer">Theorem 1, Corollary 2 and their assumptions: paper/main_v4.pdf §3 and Appendix B. No new optimiser is claimed.</p>
+</section>

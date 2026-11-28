@@ -11,285 +11,233 @@ The tool replies: ok.
 Did the money actually move?
 
 4
-00:00:06,402 --> 00:00:08,772
-Here is the catch. The same request can get the
+00:00:06,402 --> 00:00:08,501
+The same request can get the same reply in
 
 5
-00:00:08,772 --> 00:00:11,272
-same reply in four different realities.
+00:00:08,501 --> 00:00:09,892
+different hidden worlds.
 
 6
-00:00:11,272 --> 00:00:13,760
+00:00:09,892 --> 00:00:12,381
 Sometimes ok means nothing was paid at all.
 
 7
-00:00:13,760 --> 00:00:16,319
+00:00:12,381 --> 00:00:14,940
 Sometimes a timeout means you already paid, and
 
 8
-00:00:16,319 --> 00:00:18,901
+00:00:14,940 --> 00:00:17,521
 a blind retry pays the supplier twice.
 
 9
-00:00:19,701 --> 00:00:22,434
-We built ActionProof to measure exactly this.
+00:00:18,321 --> 00:00:20,680
+So we built ActionProof, a benchmark of these
 
 10
-00:00:22,434 --> 00:00:25,594
-On 440 locked tasks, an agent that trusts the
+00:00:20,680 --> 00:00:24,356
+silent faults. On 440 locked tasks, an agent
 
 11
-00:00:25,594 --> 00:00:28,566
-reply falsely reports success 86 percent of the
+00:00:24,356 --> 00:00:26,986
+that trusts the reply falsely reports success
 
 12
-00:00:28,566 --> 00:00:31,266
-time. Retrying with idempotency keys stops
+00:00:26,986 --> 00:00:28,637
+86 percent of the time.
 
 13
-00:00:31,266 --> 00:00:33,590
-double payments, but it still reports phantom
+00:00:28,637 --> 00:00:30,099
+The fix is obvious:
 
 14
-00:00:33,590 --> 00:00:34,862
-payments as done.
+00:00:30,099 --> 00:00:32,244
+read the record back before you say done.
 
 15
-00:00:35,662 --> 00:00:37,938
-So we trained a three billion parameter Cohere
+00:00:33,044 --> 00:00:35,403
+And a three billion parameter Cohere model can
 
 16
-00:00:37,938 --> 00:00:39,716
-model to behave like an auditor.
+00:00:35,403 --> 00:00:37,605
+learn it. Here is a recorded run on our live
 
 17
-00:00:39,716 --> 00:00:41,332
-Here is its run on our Space:
+00:00:37,605 --> 00:00:40,424
+Space. The tool says ok, but nothing was
 
 18
-00:00:41,332 --> 00:00:43,041
-the labelled recording of the same greedy
+00:00:40,424 --> 00:00:42,605
+written. The reply-trusting script reports
 
 19
-00:00:43,041 --> 00:00:45,093
-model, task and reality.
+00:00:42,605 --> 00:00:44,858
+done. Our trained agent reads the payment
 
 20
-00:00:45,093 --> 00:00:46,508
-The payment is a phantom:
+00:00:44,858 --> 00:00:47,145
+ledger, finds it empty, pays again with the
 
 21
-00:00:46,508 --> 00:00:49,091
-the tool says ok, but nothing is written.
+00:00:47,145 --> 00:00:50,235
+same idempotency key, and confirms exactly one
 
 22
-00:00:49,091 --> 00:00:51,249
-The reply-trusting script believes it, and
-
-23
-00:00:51,249 --> 00:00:53,761
-reports done. Our agent does not.
-
-24
-00:00:53,761 --> 00:00:55,329
-It reads the payment ledger.
-
-25
-00:00:55,329 --> 00:00:57,983
-Empty. So it pays again, with the same
-
-26
-00:00:57,983 --> 00:01:00,648
-idempotency key, so a real first payment could
-
-27
-00:01:00,648 --> 00:01:02,240
-never be charged twice.
-
-28
-00:01:02,240 --> 00:01:04,810
-Then it reads again, and confirms exactly one
-
-29
-00:01:04,810 --> 00:01:05,623
+00:00:50,235 --> 00:00:51,036
 payment.
 
+23
+00:00:51,836 --> 00:00:53,640
+But training that habit exposed something
+
+24
+00:00:53,640 --> 00:00:55,642
+deeper about how we train agents.
+
+25
+00:00:55,642 --> 00:00:58,543
+With GRPO, standard GRPO, the agent should
+
+26
+00:00:58,543 --> 00:01:00,182
+learn to check whenever checking is worth its
+
+27
+00:01:00,182 --> 00:01:02,576
+cost. Often, it does not.
+
+28
+00:01:02,576 --> 00:01:04,345
+And the cause is not the reward.
+
+29
+00:01:04,345 --> 00:01:07,056
+It is how rewards are scaled inside the group.
+
 30
-00:01:06,423 --> 00:01:08,487
-Only after the run does the Space reveal the
+00:01:07,856 --> 00:01:10,474
+In GRPO, all the rollouts of one task share the
 
 31
-00:01:08,487 --> 00:01:10,772
-hidden database. The script:
+00:01:10,474 --> 00:01:13,245
+same hidden world: the same database, the same
 
 32
-00:01:10,772 --> 00:01:13,201
-false success, and no payment at all.
+00:01:13,245 --> 00:01:15,813
+silent fault. Rewards are then standardised
 
 33
-00:01:13,201 --> 00:01:15,996
-The trained agent: exactly one payment, goal
+00:01:15,813 --> 00:01:18,172
+inside that group. That division cancels each
 
 34
-00:01:15,996 --> 00:01:18,555
-met, every step verified against the system of
+00:01:18,172 --> 00:01:20,306
+hidden state's stakes, how much a missed fault
 
 35
-00:01:18,555 --> 00:01:19,320
-record.
+00:01:20,306 --> 00:01:23,125
+actually costs. What survives is a vote:
 
 36
-00:01:20,120 --> 00:01:22,252
-The skill is learned, not prompted.
+00:01:23,125 --> 00:01:25,860
+which states prefer checking, not by how much.
 
 37
-00:01:22,252 --> 00:01:24,492
-Recovery demonstrations, then reinforcement
+00:01:25,860 --> 00:01:28,561
+So a rare, expensive fault can be outvoted by a
 
 38
-00:01:24,492 --> 00:01:27,134
-learning with GRPO, lift verified completion
+00:01:28,561 --> 00:01:30,624
+cheap, common clean case.
 
 39
-00:01:27,134 --> 00:01:33,042
-from 0.513 to 0.819 on 450 frozen tasks, across
+00:01:31,424 --> 00:01:33,428
+We registered the predictions before testing
 
 40
-00:01:33,042 --> 00:01:35,684
-three seeds. And the same recipe transfers to
+00:01:33,428 --> 00:01:36,374
+them, on 731 held-out cells.
 
 41
-00:01:35,684 --> 00:01:37,392
-four more Cohere models.
+00:01:36,374 --> 00:01:39,876
+The theory predicts what GRPO learns in all 721
 
 42
-00:01:38,192 --> 00:01:40,666
-But we hold ourselves to a hostile standard.
+00:01:39,876 --> 00:01:43,142
+decided cells, including all 77 where the vote
 
 43
-00:01:40,666 --> 00:01:42,694
-A hand-written reconciliation script still
+00:01:43,142 --> 00:01:44,569
+and the value disagree.
 
 44
-00:01:42,694 --> 00:01:44,263
-beats every learned agent.
+00:01:44,569 --> 00:01:47,105
+One registered hypothesis failed, and one could
 
 45
-00:01:44,263 --> 00:01:45,890
-And when our own review found where the
+00:01:47,105 --> 00:01:49,616
+not be tested. We report both.
 
 46
-00:01:45,890 --> 00:01:48,367
-benchmark is weaker than designed, we published
+00:01:50,416 --> 00:01:52,845
+Then we tested it on the real agent, five seeds
 
 47
-00:01:48,367 --> 00:01:50,489
-it, in dated addenda, right next to the
+00:01:52,845 --> 00:01:55,684
+per arm. Every GRPO seed ends exactly where it
 
 48
-00:01:50,489 --> 00:01:51,432
-results.
+00:01:55,684 --> 00:01:57,476
+started: it never reads.
 
 49
-00:01:52,232 --> 00:01:53,986
-Which raised the real question.
+00:01:57,476 --> 00:01:59,729
+Remove the group standard deviation, and the
 
 50
-00:01:53,986 --> 00:01:55,566
-What if you never had to trust the agent at
+00:01:59,729 --> 00:02:01,462
+same model learns to check:
 
 51
-00:01:55,566 --> 00:01:58,467
-all? The Recovery Gate sits between any agent
+00:02:01,462 --> 00:02:06,887
+verified completion rises from 0.687 to 0.807.
 
 52
-00:01:58,467 --> 00:02:00,955
-and its tools, and sees only evidence.
+00:02:06,887 --> 00:02:08,290
+Plus twelve points.
 
 53
-00:02:00,955 --> 00:02:03,172
-Here, the same reply-trusting script claims
+00:02:08,290 --> 00:02:10,165
+And we say what this does not show:
 
 54
-00:02:03,172 --> 00:02:05,672
-completion. The gate rejects the report.
+00:02:10,165 --> 00:02:12,972
+the GRPO arm is degenerate, so the p value is
 
 55
-00:02:05,672 --> 00:02:07,229
-It reads the ledger itself:
+00:02:12,972 --> 00:02:14,138
+the test's floor.
 
 56
-00:02:07,229 --> 00:02:09,894
-no payment. And it hands the order to a human,
-
-57
-00:02:09,894 --> 00:02:11,355
-with the evidence attached.
-
-58
-00:02:12,155 --> 00:02:14,971
-Then we put it to a sealed, preregistered test.
-
-59
-00:02:14,971 --> 00:02:18,143
-440 new tasks, three seeds, around our trained
-
-60
-00:02:18,143 --> 00:02:21,445
-agent. False completion fell from 0.112 to
-
-61
-00:02:21,445 --> 00:02:24,558
-zero. Unsafe episodes on solvable tasks, from
-
-62
-00:02:24,558 --> 00:02:28,733
-482 to 34. And verified completion went up, not
-
-63
-00:02:28,733 --> 00:02:32,730
-down, from 0.824 to 0.892.
-
-64
-00:02:32,730 --> 00:02:34,900
-We also say what this does not show:
-
-65
-00:02:34,900 --> 00:02:37,648
-in this simulator, zero is nearly guaranteed by
-
-66
-00:02:37,648 --> 00:02:40,077
-design, most of the hand-off gain relabels
-
-67
-00:02:40,077 --> 00:02:42,223
-honest failures, and the hand-written script
-
-68
-00:02:42,223 --> 00:02:43,614
-still completes more.
-
-69
-00:02:44,414 --> 00:02:46,760
+00:02:14,938 --> 00:02:17,285
 Every number you have seen resolves to one file
 
-70
-00:02:46,760 --> 00:02:49,045
-and one command. No GPU.
+57
+00:02:17,285 --> 00:02:19,428
+and one command. A fresh public clone
 
-71
-00:02:49,045 --> 00:02:52,607
-A fresh public clone re-derived all 899 claims
+58
+00:02:19,428 --> 00:02:23,367
+re-derived all 899 claims, with zero failures,
 
-72
-00:02:52,607 --> 00:02:55,294
-in under four minutes, with zero failures.
+59
+00:02:23,367 --> 00:02:24,734
+and no GPU.
 
-73
-00:02:56,094 --> 00:02:58,568
-ActionProof. Don't trust the ok.
+60
+00:02:25,534 --> 00:02:28,267
+ActionProof. When you train agents to check,
 
-74
-00:02:58,568 --> 00:03:00,041
-Verify the effect.
+61
+00:02:28,267 --> 00:02:29,693
+keep the stakes in the group.
