@@ -43,6 +43,15 @@ force-pushed; `main.tex`, `main_v2.tex`, `main_v3.tex` and `actionproof_main.tex
   (`scripts/paper/v4_figures.py`).
 - **No human labels** exist for any judge evaluation.
 
+## Clean room for v4 (2026-11-28, pushed commit 28e0b01)
+- Fresh clone of `submission-candidate` on sharanga: `pytest tests/theory` 44 passed; `freeze_c2.py --check` OK;
+  `s2_numcheck.py` 899 numbers, 0 failures; `scripts/paper/v4_figures.py` regenerates both figures byte-identical
+  except the PDF creation date.
+- Sparse clone of `paper/` (sharanga has no LaTeX): `main_v4` builds with 0 errors, 0 undefined references, 10 pages,
+  no "pending" text.
+- A full local clone was attempted first and filled the local disk (0 bytes free); it was deleted at once, and the
+  clean room moved to the cluster.
+
 ## Remaining gaps
 - AD-C2 outcome (running on sharanga); one seed per arm; one group law.
 - The language-model evidence is one model family and one simulator.
