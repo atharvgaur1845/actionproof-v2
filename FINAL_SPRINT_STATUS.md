@@ -88,3 +88,14 @@ staging (4270efb) and live. Rollback target bac5889.
 
 **Next.** Integrate the results into README, write-up, paper, slides, deck, judge Q&A, pitch, impact page, figures,
 claims ledger, replay site and Space. Then release, run the clean room, a final hostile review, and the freeze.
+
+## Checkpoint 4 — 2026-11-28 15:56 IST
+
+- All 41 RG tasks finished, none failed. RG1 supported (H1–H4), read with addendum 2; addendum 1's prediction held;
+  RG2 supported as a mechanism check.
+- Integrated into the claims ledger, README, write-up, slides, deck, judge Q&A, pitch, REPRODUCE.md and paper.
+- Released the RG episodes and D's warm-start rows to the traces dataset. Space card redeployed (c85a8db).
+- Clean room 1970 from the public repo: PASS.
+- Pushed: `submission-candidate` = `final-sprint/winning-submission`.
+- Open: video (author's go-ahead), J1 human labels (author), HF_TOKEN secret on the live Space (author),
+  portal submission (author).

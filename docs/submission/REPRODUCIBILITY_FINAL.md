@@ -107,3 +107,10 @@ warmstart-dwaug), and so does the dataset card.
 - No tracked file changed.
 - One cosmetic error was printed after the result: the task's claim marker used a relative path after changing
   directory. It does not affect the check.
+
+## Final-sprint clean room (task 1970, 2026-11-28 15:56 IST)
+
+Cloned from the public GitHub repository (branch `submission-candidate`; ), fresh virtualenv, anonymous Hugging Face
+cache. `smoke_check.py` passed; `verify_numbers.sh` passed in 234 s and now also recomputes RG1, RG1 addendum 1 and
+RG2 from the released episodes, byte-identically; claims ledger 899 numbers, 0 failures; no tracked file changed. Log:
+`research_audit/cleanroom/cleanroom_1970_rg.log`.
