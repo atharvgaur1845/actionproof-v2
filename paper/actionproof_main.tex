@@ -2,7 +2,7 @@
 % ActionProof main-result paper (Lexsi Labs hackathon, Stage 2). Written 2026-11-28 on branch final-sprint/winning-submission.
 % Every number resolves to claims/claims.yaml (key given in a comment) or to a named result file.
 % \rgpending{} marks RG1 results that do not exist yet; the coordinator fills them from results/rg1/rg1_summary.json.
-% Companion theory paper: paper/main_v3.tex (a separate claim).
+% Main research paper: paper/main_v4.tex. This file is the supporting report on the instrument.
 \documentclass[11pt]{article}
 \usepackage{emnlp2023}
 \usepackage{times}
@@ -31,20 +31,20 @@
 \maketitle
 
 \begin{abstract}
-A payment tool can answer ``ok'' to a payment that was never stored, or time out on one that was. An agent that
-trusts the reply reports false completions; an agent that retries blindly pays twice. We study this as
-\emph{transaction-aware recovery under ambiguous execution}, entirely in a procurement simulator. We release TXN, a
-locked benchmark of 440 tasks whose counterfactual quadruples hide committed and uncommitted writes behind
-byte-identical replies, with a deterministic verifier. Recovery demonstrations followed by GRPO raise a 3.35B Cohere
-Tiny Aya agent from 0.513 to 0.819 verified completion on 450 frozen tasks (registered, 3 seeds; +0.306 [+0.276,
-+0.337]). On TXN, trusting the reply falsely completes 0.864 of tasks; the trained agent D, 0.121 (seed 0). A
-registered follow-up (SEL1) teaches hand-off after repeated outage errors (escalation 0.972 against 0.002 for a matched
-control) at no completion cost, but where hand-off is the only safe action it helps in only 164 of 432 episodes, and
-the effect varies by seed. A hand-written reconciliation script still beats every trained agent (0.864 verified
-completion), and a post-hoc review found the benchmark weaker than designed: a read-free same-key double send reaches
-308 of 440. We therefore register a third experiment (RG1): an evidence-only runtime gate around the trained agent,
-evaluated on a fresh sealed split. It removes false completion (0.112 to 0.000) and raises verified completion on resolvable tasks (0.824 to 0.892), but most of its hand-off gain relabels honest failure reports, and the script still completes more (1.000). All numbers trace to a claims
-ledger that a one-command check recomputes from released episodes.
+A payment tool can answer ``ok'' to a payment that was never stored, or time out on one that was. The agent sees
+the same reply either way; only the system of record knows. This paper asks one question: can a small language agent
+learn to tell an acknowledged action from a verified one, and if not, what makes it safe? We answer it in four steps,
+all inside a procurement simulator. First, we build a locked benchmark of 440 tasks in which identical replies hide
+committed and uncommitted writes; an agent that trusts the reply falsely reports success on 0.864 of them. Second,
+training helps but does not make the agent reliable: recovery demonstrations followed by GRPO raise a 3.35B Cohere
+Tiny Aya agent from 0.513 to 0.819 verified completion on 450 frozen tasks (registered, 3 seeds), yet the trained agent
+still falsely completes 0.121 of benchmark tasks, and a hand-written reconciliation script beats it (0.864 against
+0.724). Third, an evidence-only gate placed around the trained agent, tested on a fresh sealed split, removes false
+completion (0.112 to 0.000) and raises verified completion on solvable tasks (0.824 to 0.892). Fourth, that guarantee
+comes from rules that encode this simulator's invariants, not from learning, and our own review found the benchmark
+weaker than designed (a policy that never reads but resends with the same key completes 308 of 440 tasks). The
+result is a clear division of labour: learning improves recovery, and correctness is enforced by checks outside the
+model. Every number is recomputed from released episodes by one command.
 \end{abstract}
 % abstract numbers: P1.a_mean, P1.d_mean, P1.d_delta/d_lo/d_hi; TXN-DESC.fcr_b0, fcr_d_s0, vtc_b4; SEL1.h1_sel, h1_ctl;
 % VALID1.sel_unk_esc (164 of 432 episodes: 48 unkeyed tasks x 3 seeds x 3 episodes); VALID1.bd_vtc.
@@ -74,6 +74,14 @@ quadruples, B4 hands off in 60 of 60 episodes and D in 15 of 540. Source:
 \url{figures/final/fig1_counterfactual.caption.md}.}
 \label{fig:quad}
 \end{figure*}
+
+\paragraph{The story in four steps, and what is learned against what is enforced.}
+\S\ref{sec:naive}--\ref{sec:bench} show the mismatch and the benchmark that measures it. \S\ref{sec:train}--\ref{sec:sel1}
+show what training achieves: better recovery and some selective hand-off, but not reliability. \S\ref{sec:rg1} shows
+what an external evidence gate achieves: zero false completion, \emph{by construction}. \S\ref{sec:fails} collects what
+does not work. Throughout, results of a \textbf{trained model} (D, SEL) are kept apart from results \textbf{enforced by
+rules} (the script B4 and the Recovery Gate); the second kind does not generalise beyond the rules written into it.
+Appendix~\ref{app:glossary} lists every short name used.
 
 \paragraph{Contributions.}
 (1) A locked counterfactual benchmark of ambiguous writes (TXN v1, 440 tasks) with a scripted reference ladder
@@ -299,7 +307,7 @@ in the registration (\S4 and \S6).
 \toprule
  & rg1\_test tasks & NG (D, no gate) & RG (D + gate) & RG$-$NG [95\% CI] & Holm $p$ & Supported \\
 \midrule
-H1 false completion (FCR) & all 440 & 0.112 & 0.000 & $-$0.112 [$-$0.084, $-$0.148] & $<0.001$ & yes \\
+H1 false completion (FCR) & all 440 & 0.112 & 0.000 & $-$0.112 [$-$0.148, $-$0.084] & $<0.001$ & yes \\
 H2 hand-off & 60 unresolvable & 0.011 & 1.000 & 0.989 [0.976, 0.998] & $<0.001$ & yes \\
 H3 safe resolution (STR) & all 440 & 0.726 & 0.907 & 0.181 [0.129, 0.231] & $<0.001$ & yes \\
 H4 verified completion (VTC) & 380 resolvable & 0.824 & 0.892 & 0.068 [0.046, 0.091] & n/a & yes \\
@@ -331,6 +339,7 @@ a registered follow-up, RG2, lets the gate re-read up to three times and raises 
 \section{What does not work}
 \label{sec:fails}
 
+The full list of caveats is in Appendix~\ref{app:caveats}; the main ones are here.
 \begin{itemize}
 \item \textbf{The scripted reference wins.} B4 reaches 0.864 VTC with no false completion and no duplicate. D reaches
 0.724; SEL1's arms 0.830 (SEL) and 0.871 (CTL, which passes B4 only by settling unresolvable tasks with same-key
@@ -368,17 +377,19 @@ the database afterwards. Released models derive from Tiny Aya and carry CC-BY-NC
 \label{sec:related}
 
 \textbf{Ambiguous execution.} The observation-equivalent paired design, two hidden commit states behind one timeout,
-is due to the ``Did It Happen?'' preprint (Research Square rs-10730245, 2026; authors not listed on the page we could retrieve); TXN's quadruples reuse it and add \code{ok} with phantom writes, partial and
+is due to the ``Did It Happen?'' preprint \citep{didithappen2026}; TXN's quadruples reuse it and add \code{ok} with phantom writes, partial and
 duplicate effects, and an unresolvable regime. LIMBO \citep{li2026limbo} shows across nine models that read-back and
 idempotency keys cut duplicates and that agents claim success on duplicates; Verified Tool Calls
 \citep{mansoor2026verified} is the scripted-wrapper version of our B4; Evidence-Guided Recovery \citep{zhu2026evidence}
 plans over states consistent with the evidence with a prompted adjudicator. These are evaluations or scripted
 controllers; ActionProof trains a 3.35B agent under registered contrasts and measures the gap to the script.
-\textbf{Learning under tool failure.} Bench2Robust \citep{chen2026bench2robust} (DAPO) and NoisyAgent
+\textbf{Learning under tool failure.} Bench2Robust \citep{chen2026bench2robust} (DAPO) and Learning to Act under Noise
 \citep{chen2026noisyagent} (GRPO) train recovery from visible failures or silent output corruption, scored by a task
 evaluator or an LLM verifier; neither models a silent write commit with duplicate risk. SURE-Act
 \citep{liu2026sureact} trains a controller to choose among acting, asking and escalating; SEL1's narrowed claim is
-not new against it. \textbf{Optimisation.} GRPO \citep{shao2024deepseekmath}; our no-std variant is Dr.~GRPO's
+not new against it. \textbf{Runtime guards.} Our Recovery Gate belongs with scripted controllers such as Verified Tool
+Calls: its guarantee is a property of its rules, and what we add is a registered measurement of how much it helps a
+trained agent and where it does not (renamed tools, unseen workflows). \textbf{Optimisation.} GRPO \citep{shao2024deepseekmath}; our no-std variant is Dr.~GRPO's
 advantage \citep{liu2025drgrpo}, not a new optimiser.
 
 \paragraph{Main research paper.} The submitted paper (\url{paper/main_v4.pdf}) analyses group normalisation when a GRPO
@@ -557,6 +568,33 @@ The same script behind the Recovery Gate (Space option ``Gate demo'') has its co
 rule (``list\_payments shows no live payment''); the gate reads every step, finds no payment, and hands the order to a
 human with the evidence bundle. One episode illustrates the behaviour; the rates are in the tables above.
 
+\section{Names used in this paper}
+\label{app:glossary}
+\begin{center}\footnotesize
+\begin{tabular}{@{}p{0.16\textwidth}p{0.78\textwidth}@{}}
+\toprule
+Name & Meaning \\
+\midrule
+ProcureSim & our in-memory procurement simulator (orders, receipts, payments, journal) \\
+TXN v1 & the locked 440-task benchmark of ambiguous writes built on ProcureSim \\
+B0--B4 & scripted policies: B0 trusts the reply, B1 checks only the final state, B3 retries with an idempotency key, B4 fully reconciles (reference ceiling) \\
+A1--A6 & B4 with one check switched off: A1 read-back, A2 consistent reads, A3 same-key retry, A4 partial repair, A5 hand-off; A6 is B4 re-run as a control \\
+A, C, D & trained agents of P1: A recovery-start GRPO (reference), C recovery fine-tuning only, D recovery fine-tuning then GRPO (our main agent) \\
+Dw, Dw\_aug & D's supervised warm start; and the same with randomised demonstrations (P4) \\
+P1, P3, P4, P5 & registered training studies: P1 recovery training, P3 GRPO without the group std, P4 randomised demonstrations, P5 other Cohere bases \\
+SEL1 (SEL, CTL) & registered selective hand-off study: SEL learns to hand off, CTL is a matched control \\
+RG1, RG2 & registered Recovery Gate studies: RG1 the gate around D, RG2 a gate that re-reads up to three times \\
+VTC & verified transaction completion: every requested write happened exactly once and the report matches (higher is better) \\
+FCR & false completion rate: success reported while the state disagrees (lower is better) \\
+DMR & duplicate mutation rate: a duplicate write left in the final state (lower is better) \\
+URR & unnecessary retry rate: a retry after a write that had committed (lower is better) \\
+STR & safe terminal resolution: VTC, or a hand-off on a task that cannot be resolved (higher is better) \\
+CER, $J$ & hand-off rate on unresolvable tasks; selectivity $J$ = hand-off on unresolvable minus on resolvable tasks \\
+H1, H2, \dots & the numbered hypotheses of each registration, stated in words next to each result table \\
+\bottomrule
+\end{tabular}
+\end{center}
+
 \section{Caveats kept next to the numbers}
 \label{app:caveats}
 \begin{itemize}
@@ -567,7 +605,7 @@ human with the evidence bundle. One episode illustrates the behaviour; the rates
 \item D rarely hands off under unresolvable evidence; Dw\_aug never does. Safe abstention is not solved by training.
 \item B4 is a scripted reference with the fault taxonomy written in, not a trained general agent.
 \item LLM judges are not verifier-grade; without human labels, judge results are model against verifier only.
-\item The companion theory analyses one group-normalisation question; it is not a new optimiser.
+\item The main research paper (\url{paper/main_v4.pdf}) analyses one group-normalisation question; it is not a new optimiser.
 \item The experiments are simulated procurement workflows, not real payment systems.
 \item The second verifier was written from the same specification as the first.
 \end{itemize}
