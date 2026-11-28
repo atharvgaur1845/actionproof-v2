@@ -123,59 +123,96 @@ def model_stream(model_key: str, task_id: str, reality: str):
 
 # ------------------------------------------------------------------ UI
 CSS = """
-:root { --accent: #1f5fbf; --ink: #1c2330; --muted: #5b6577; --line: #dde1e8; --soft: #f5f6f9; }
-.gradio-container { max-width: 1180px !important; color: var(--ink); }
-h1 { font-weight: 650; letter-spacing: -0.01em; margin-bottom: 4px; }
-.lede { color: var(--muted); margin: 0 0 14px 0; }
-.banner { padding: 8px 12px; border-radius: 6px; font-family: ui-monospace, Menlo, monospace; font-size: 13px; }
-.banner.live { background: var(--accent); color: #fff; }
-.banner.scripted { background: #fff; color: var(--ink); border: 1.5px solid var(--ink); }
-.banner.recorded { background: #fdf1d6; color: #5a3d00; border: 1.5px dashed #8a5a00; }
-.guide { border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 6px; padding: 10px 14px; margin: 6px 0 12px 0; background: var(--soft); }
-.guide ol { margin: 4px 0 4px 18px; padding: 0; } .guide li { margin: 2px 0; }
-.legend span { display: inline-block; padding: 1px 8px; margin-right: 8px; border-radius: 4px; font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
-.req, .step, .tbl, .note { border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; margin: 8px 0; background: #fff; }
-.req { background: var(--soft); }
-.hd, .tt { font-size: 12px; font-weight: 650; color: var(--muted); margin-bottom: 4px; }
-.step.report { border-left: 3px solid var(--accent); }
-.step.raw pre { margin: 0; white-space: pre-wrap; font-size: 12px; }
-.lbl { display: inline-block; width: 42px; color: var(--muted); font-size: 12px; }
-code { font-size: 12.5px; background: transparent; word-break: break-word; }
-mark.ack { background: #dbe7fa; color: var(--accent); font-weight: 650; padding: 0 3px; border-radius: 3px; }
-.note { background: var(--soft); }
-.verdict { display: flex; gap: 24px; padding: 10px 12px; border: 1px solid var(--ink); border-radius: 6px; margin: 8px 0; }
-.verdict b { font-size: 18px; color: var(--accent); }
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap");
+:root { --paper:#F1EFE7; --ink:#171815; --min:#E3E0D6; --ver:#F05236; --ver-t:#C8381F; --chr:#D5F36A; --gr:#777A72;
+  --dk:#171A18; --dk2:#222624; --hair:rgba(23,24,21,.16); --hair2:rgba(23,24,21,.08); --card:#FBFAF5;
+  --disp:"Archivo Black","Arial Black",Impact,sans-serif; --ser:"Instrument Serif",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace; --sans:"DM Sans",system-ui,-apple-system,sans-serif;
+  --accent: var(--ink); --muted: var(--gr); --line: var(--hair); --soft: var(--min); }
+body, gradio-app, .gradio-container { background: var(--paper) !important; }
+.gradio-container { max-width: 1240px !important; color: var(--ink); font-family: var(--sans) !important; }
+footer { display: none !important; }
+.topbar { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; letter-spacing: .08em;
+  text-transform: uppercase; border-bottom: 1px solid var(--hair); padding: 6px 0 12px; margin-bottom: 28px; color: var(--ink); }
+.hero { font-family: var(--disp); text-transform: uppercase; font-size: clamp(40px, 6.2vw, 78px); line-height: .92;
+  letter-spacing: -.01em; margin: 0 0 18px; color: var(--ink); }
+.hero .ok { font-family: var(--ser); font-style: italic; text-transform: none; font-weight: 400; letter-spacing: 0;
+  text-decoration: line-through; text-decoration-color: var(--ver); text-decoration-thickness: .08em; }
+.hero .red { color: var(--ver); }
+.lede { color: var(--ink); font-size: 16.5px; line-height: 1.55; max-width: 860px; margin: 0 0 22px; }
+.lede .pull { font-family: var(--ser); font-style: italic; font-size: 24px; line-height: 1.2; display: block; margin-bottom: 10px; }
+.lede a { color: var(--ver-t); }
+.guide { background: var(--dk); color: var(--paper); border-radius: 2px; padding: 18px 22px; margin: 6px 0 18px; }
+.guide .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--chr); margin-bottom: 8px; }
+.guide, .guide li, .guide p, .guide i, .guide div, .guide span:not([class]) { color: var(--paper) !important; }
+.guide b { color: #fff !important; } .guide code { color: var(--chr) !important; background: transparent; }
+.guide .eyebrow { color: var(--chr) !important; } .guide .legend .l-live { color: var(--ink) !important; }
+.guide .legend .l-rec { color: var(--ver) !important; }
+.guide ol { margin: 6px 0 10px 18px; padding: 0; } .guide li { margin: 3px 0; }
+.guide li::marker { font-family: var(--mono); color: var(--chr); }
+.legend { margin: 6px 0; font-size: 13.5px; }
+.legend span { display: inline-block; padding: 2px 8px; margin-right: 8px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .04em; }
+.legend .l-live { background: var(--chr); color: var(--ink); }
+.legend .l-scr { border: 1px solid var(--paper); color: var(--paper); }
+.legend .l-rec { border: 1px dashed var(--ver); color: var(--ver); }
+.banner { padding: 9px 12px; border-radius: 2px; font-family: var(--mono); font-size: 12px; letter-spacing: .02em; }
+.banner.live { background: var(--dk); color: var(--chr); }
+.banner.scripted { background: var(--card); color: var(--ink); border: 1px solid var(--ink); }
+.banner.recorded { background: var(--min); color: var(--ver-t); border: 1px dashed var(--ver); }
+h1, h2, h3, h4 { font-family: var(--disp); font-weight: 400; color: var(--ink); text-transform: uppercase; letter-spacing: .01em; }
+.req, .step, .tbl, .note { border: 1px solid var(--hair); border-radius: 2px; padding: 10px 12px; margin: 8px 0; background: var(--card); }
+.req { background: var(--min); }
+.hd, .tt { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--gr); margin-bottom: 4px; }
+.step.report { border-left: 3px solid var(--ink); }
+.step.raw pre { margin: 0; white-space: pre-wrap; font-size: 12px; font-family: var(--mono); }
+.lbl { display: inline-block; width: 42px; color: var(--gr); font-family: var(--mono); font-size: 11px; }
+code { font-family: var(--mono); font-size: 12.5px; background: transparent; word-break: break-word; }
+mark.ack { background: var(--chr); color: var(--ink); font-weight: 500; padding: 0 3px; border-radius: 1px; }
+.note { background: var(--min); }
+.verdict { display: flex; gap: 24px; padding: 10px 12px; border: 1px solid var(--ink); border-radius: 2px; margin: 8px 0; background: var(--card); }
+.verdict b { font-family: var(--disp); font-weight: 400; font-size: 20px; color: var(--ver); }
 table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
-th, td { text-align: left; padding: 3px 8px 3px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
-table.kv th { width: 150px; color: var(--muted); font-weight: 600; }
-.empty, .fine { color: var(--muted); font-size: 12px; }
+th, td { text-align: left; padding: 3px 8px 3px 0; border-bottom: 1px solid var(--hair2); vertical-align: top; }
+th { font-family: var(--mono); font-weight: 500; font-size: 11px; color: var(--gr); }
+table.kv th { width: 150px; }
+.empty, .fine { color: var(--gr); font-size: 12px; }
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
 .cmp { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 16px; }
 .cmp h4 { margin: 8px 0 0 0; }
 .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.step.gate { border-left: 3px solid #0f766e; background: #f0faf8; }
-.step.blocked { border-left: 3px solid #b42318; }
-.gnote { color: #0f766e; font-size: 12.5px; font-weight: 600; margin: 2px 0; }
-@media (max-width: 760px) { .cols, .cmp, .grid2 { grid-template-columns: 1fr; grid-auto-flow: row; } }
+.step.gate { border-left: 3px solid var(--ink); background: #EEF3D8; }
+.step.blocked { border-left: 3px solid var(--ver); }
+.gnote { color: var(--ink); font-size: 12.5px; font-weight: 700; margin: 2px 0; }
+.gradio-container label span, .gradio-container .label-wrap span { font-family: var(--mono) !important; font-size: 11px !important;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--gr) !important; }
+button.primary { font-family: var(--mono) !important; text-transform: uppercase; letter-spacing: .12em; border-radius: 2px !important; }
+@media (max-width: 760px) { .cols, .cmp, .grid2 { grid-template-columns: 1fr; grid-auto-flow: row; } .topbar span:nth-child(2) { display: none; } }
 """
 
-THEME = gr.themes.Base(primary_hue="blue", neutral_hue="slate").set(
-    button_primary_background_fill="#1f5fbf", button_primary_background_fill_hover="#194f9f",
-    button_primary_text_color="#ffffff", body_background_fill="#ffffff", block_background_fill="#ffffff")
+THEME = gr.themes.Base(primary_hue="orange", neutral_hue="stone",
+                       font=[gr.themes.GoogleFont("DM Sans"), "system-ui", "sans-serif"],
+                       font_mono=[gr.themes.GoogleFont("IBM Plex Mono"), "ui-monospace", "monospace"]).set(
+    button_primary_background_fill="#171815", button_primary_background_fill_hover="#F05236",
+    button_primary_text_color="#F1EFE7", button_primary_text_color_hover="#171815",
+    body_background_fill="#F1EFE7", background_fill_primary="#FBFAF5", background_fill_secondary="#E3E0D6",
+    block_background_fill="#FBFAF5", block_border_color="rgba(23,24,21,.16)", block_radius="2px",
+    input_background_fill="#FBFAF5", border_color_primary="rgba(23,24,21,.16)", color_accent="#F05236")
 
 INTRO = f"""
-# ActionProof live
-<p class="lede">The same request and the same "ok" can hide different realities. Pick a task and a reality, run an agent,
+<div class="topbar"><span>ActionProof · live</span><span>a research study</span><span>training AI agents that use tools</span><span>2026</span></div>
+<h1 class="hero">The tool said <span class="ok">ok.</span><br>Run it. <span class="red">Check the database.</span></h1>
+<p class="lede"><span class="pull">The same request and the same "ok" can hide different realities.</span>
+Pick a task and a reality, run an agent,
 and only after the run see what the databases actually hold. All tools are simulated; nothing touches a real system.
 The registered study, with every recorded episode and result: <a href="{REPLAY_URL}" target="_blank">replay site</a>. This page is a
 curated live illustration of one task and one reality at a time, on ProcureSim tasks from the P1 test; it is not the benchmark.
 The hand-written reconciliation script (<i>SCRIPTED: transaction-aware oracle</i>) also gets these tasks right, and on the
 benchmark it still beats every learned agent.</p>
-<div class="guide"><b>Judge mode (preselected): about 70 seconds once the GPU is warm; the first run after a sleep takes longer.</b>
+<div class="guide"><div class="eyebrow">Judge mode · preselected</div><b>About 70 seconds once the GPU is warm; the first run after a sleep takes longer.</b>
 <ol><li>Press <b>Run</b>. Left: a script that trusts the reply. Right: the trained Cohere agent, a real model call per step.</li>
 <li>Watch the timeline: the same request and the same <code>"status": "ok"</code> reply for both.</li>
 <li>Read the reveal below: the database rows, the verifier's verdict per step, and each agent's decision record. Download the run as JSON.</li></ol>
-<div class="legend"><span style="background:#1f5fbf;color:#fff">LIVE MODEL RUN</span><span style="border:1.5px solid #1c2330">SCRIPTED</span><span style="background:#fdf1d6;border:1.5px dashed #8a5a00">RECORDED MODEL RUN</span>
+<div class="legend"><span class="l-live">LIVE MODEL RUN</span><span class="l-scr">SCRIPTED</span><span class="l-rec">RECORDED MODEL RUN</span>
 If the GPU is unavailable, the banner says so and shows the recorded run of the same model, task and reality.</div>
 <b>New: the Recovery Gate.</b> A small evidence-only controller between an agent and the tools: it verifies before a
 report is accepted, reads before a repeated write, blocks wrong repairs and hands off when a record cannot be read.
