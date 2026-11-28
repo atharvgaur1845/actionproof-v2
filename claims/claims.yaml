@@ -26,6 +26,8 @@ documents:   # scanned by s2_numcheck.py
   - paper/appendix_v2.tex
   - paper/main_v3.tex
   - paper/appendix_v3.tex
+  - docs/submission/T3_METRICS.md
+  - paper/t3_metrics_table.tex
 
 claims:
   - id: C1
@@ -1651,6 +1653,196 @@ claims:
       sel_unk_esc_s2: {value: 3, file: results/audit/txn_validity.json, key: ["unresolvable", "sel1:SEL_s2|sel1_test", "unkeyed:escalated"]}
       net_episodes: {value: 74000, file: results/audit/txn_validity.json, key: [["net_money", "A_s0|txn_test", "episodes"], ["net_money", "A_s1|txn_test", "episodes"], ["net_money", "A_s2|txn_test", "episodes"], ["net_money", "D_s0|txn_test", "episodes"], ["net_money", "D_s1|txn_test", "episodes"], ["net_money", "D_s2|txn_test", "episodes"], ["net_money", "Dn_s0|txn_test", "episodes"], ["net_money", "Dn_s1|txn_test", "episodes"], ["net_money", "Dn_s2|txn_test", "episodes"], ["net_money", "Dwaug_s0|txn_test", "episodes"], ["net_money", "Dwaug_s1|txn_test", "episodes"], ["net_money", "Dwaug_s2|txn_test", "episodes"], ["net_money", "Dw|txn_test", "episodes"], ["net_money", "W|txn_test", "episodes"], ["net_money", "aya32b_bf16|txn_test", "episodes"], ["net_money", "aya8b|txn_test", "episodes"], ["net_money", "p1:A_s0", "episodes"], ["net_money", "p1:A_s1", "episodes"], ["net_money", "p1:A_s2", "episodes"], ["net_money", "p1:B_s0", "episodes"], ["net_money", "p1:B_s1", "episodes"], ["net_money", "p1:B_s2", "episodes"], ["net_money", "p1:C_s0", "episodes"], ["net_money", "p1:C_s1", "episodes"], ["net_money", "p1:C_s2", "episodes"], ["net_money", "p1:D_s0", "episodes"], ["net_money", "p1:D_s1", "episodes"], ["net_money", "p1:D_s2", "episodes"], ["net_money", "p1:Dn_s0", "episodes"], ["net_money", "p1:Dn_s1", "episodes"], ["net_money", "p1:Dn_s2", "episodes"], ["net_money", "p1:Dw", "episodes"], ["net_money", "qwen|txn_test", "episodes"], ["net_money", "sel1:CTL_s0|sel1_test", "episodes"], ["net_money", "sel1:CTL_s0|txn_test", "episodes"], ["net_money", "sel1:CTL_s1|sel1_test", "episodes"], ["net_money", "sel1:CTL_s1|txn_test", "episodes"], ["net_money", "sel1:CTL_s2|sel1_test", "episodes"], ["net_money", "sel1:CTL_s2|txn_test", "episodes"], ["net_money", "sel1:D_s0|sel1_test", "episodes"], ["net_money", "sel1:Dwaug_s0|sel1_test", "episodes"], ["net_money", "sel1:Dwaug_s1|sel1_test", "episodes"], ["net_money", "sel1:Dwaug_s2|sel1_test", "episodes"], ["net_money", "sel1:SEL_s0|sel1_test", "episodes"], ["net_money", "sel1:SEL_s0|txn_test", "episodes"], ["net_money", "sel1:SEL_s1|sel1_test", "episodes"], ["net_money", "sel1:SEL_s1|txn_test", "episodes"], ["net_money", "sel1:SEL_s2|sel1_test", "episodes"], ["net_money", "sel1:SEL_s2|txn_test", "episodes"], ["net_money", "tag_base|txn_test", "episodes"]], agg: sum, shown: ["74,000"]}
       net_wrong: {value: 3, file: results/audit/txn_validity.json, key: [["net_money", "A_s0|txn_test", "vtc_but_net_wrong"], ["net_money", "A_s1|txn_test", "vtc_but_net_wrong"], ["net_money", "A_s2|txn_test", "vtc_but_net_wrong"], ["net_money", "D_s0|txn_test", "vtc_but_net_wrong"], ["net_money", "D_s1|txn_test", "vtc_but_net_wrong"], ["net_money", "D_s2|txn_test", "vtc_but_net_wrong"], ["net_money", "Dn_s0|txn_test", "vtc_but_net_wrong"], ["net_money", "Dn_s1|txn_test", "vtc_but_net_wrong"], ["net_money", "Dn_s2|txn_test", "vtc_but_net_wrong"], ["net_money", "Dwaug_s0|txn_test", "vtc_but_net_wrong"], ["net_money", "Dwaug_s1|txn_test", "vtc_but_net_wrong"], ["net_money", "Dwaug_s2|txn_test", "vtc_but_net_wrong"], ["net_money", "Dw|txn_test", "vtc_but_net_wrong"], ["net_money", "W|txn_test", "vtc_but_net_wrong"], ["net_money", "aya32b_bf16|txn_test", "vtc_but_net_wrong"], ["net_money", "aya8b|txn_test", "vtc_but_net_wrong"], ["net_money", "p1:A_s0", "vsc_but_net_wrong"], ["net_money", "p1:A_s1", "vsc_but_net_wrong"], ["net_money", "p1:A_s2", "vsc_but_net_wrong"], ["net_money", "p1:B_s0", "vsc_but_net_wrong"], ["net_money", "p1:B_s1", "vsc_but_net_wrong"], ["net_money", "p1:B_s2", "vsc_but_net_wrong"], ["net_money", "p1:C_s0", "vsc_but_net_wrong"], ["net_money", "p1:C_s1", "vsc_but_net_wrong"], ["net_money", "p1:C_s2", "vsc_but_net_wrong"], ["net_money", "p1:D_s0", "vsc_but_net_wrong"], ["net_money", "p1:D_s1", "vsc_but_net_wrong"], ["net_money", "p1:D_s2", "vsc_but_net_wrong"], ["net_money", "p1:Dn_s0", "vsc_but_net_wrong"], ["net_money", "p1:Dn_s1", "vsc_but_net_wrong"], ["net_money", "p1:Dn_s2", "vsc_but_net_wrong"], ["net_money", "p1:Dw", "vsc_but_net_wrong"], ["net_money", "qwen|txn_test", "vtc_but_net_wrong"], ["net_money", "sel1:CTL_s0|sel1_test", "vtc_but_net_wrong"], ["net_money", "sel1:CTL_s0|txn_test", "vtc_but_net_wrong"], ["net_money", "sel1:CTL_s1|sel1_test", "vtc_but_net_wrong"], ["net_money", "sel1:CTL_s1|txn_test", "vtc_but_net_wrong"], ["net_money", "sel1:CTL_s2|sel1_test", "vtc_but_net_wrong"], ["net_money", "sel1:CTL_s2|txn_test", "vtc_but_net_wrong"], ["net_money", "sel1:D_s0|sel1_test", "vtc_but_net_wrong"], ["net_money", "sel1:Dwaug_s0|sel1_test", "vtc_but_net_wrong"], ["net_money", "sel1:Dwaug_s1|sel1_test", "vtc_but_net_wrong"], ["net_money", "sel1:Dwaug_s2|sel1_test", "vtc_but_net_wrong"], ["net_money", "sel1:SEL_s0|sel1_test", "vtc_but_net_wrong"], ["net_money", "sel1:SEL_s0|txn_test", "vtc_but_net_wrong"], ["net_money", "sel1:SEL_s1|sel1_test", "vtc_but_net_wrong"], ["net_money", "sel1:SEL_s1|txn_test", "vtc_but_net_wrong"], ["net_money", "sel1:SEL_s2|sel1_test", "vtc_but_net_wrong"], ["net_money", "sel1:SEL_s2|txn_test", "vtc_but_net_wrong"], ["net_money", "tag_base|txn_test", "vtc_but_net_wrong"]], agg: sum}
+
+  # >>> T3M (generated by scripts/t3_metrics.py; do not edit by hand)
+  - id: T3M
+    statement: "Track 3 trajectory metrics (descriptive, not registered): task success (VSC or VTC), tool-call accuracy, policy calls and turns per episode, and batched evaluation wall time per episode, recomputed by scripts/t3_metrics.py from stored evaluation episodes."
+    status: supported
+    eval: [results/t3_metrics/t3_metrics.json, results/t3_metrics/gpu_provenance.json]
+    stats: scripts/t3_metrics.py
+    numbers:
+      r00_greedy_success: {value: 0.842, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|Dw", "greedy", "success"], shown: ["0.842"]}
+      r00_sampled_success: {value: 0.706, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|Dw", "sampled", "success"], shown: ["0.706"]}
+      r00_tool_acc: {value: 1.000, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|Dw", "all", "tool_call_accuracy"], shown: ["1.000"]}
+      r00_calls: {value: 6.5, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|Dw", "all", "calls_per_episode"], shown: ["6.5"]}
+      r00_turns: {value: 6.5, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|Dw", "all", "turns_per_episode"], shown: ["6.5"]}
+      r00_wall_min: {value: 0.11, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|Dw", "wall_s_per_episode", "min"], shown: ["0.11"]}
+      r00_wall_max: {value: 0.11, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|Dw", "wall_s_per_episode", "max"], shown: ["0.11"]}
+      r01_greedy_success: {value: 0.831, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|A", "greedy", "success"], shown: ["0.831"]}
+      r01_sampled_success: {value: 0.706, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|A", "sampled", "success"], shown: ["0.706"]}
+      r01_tool_acc: {value: 0.985, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|A", "all", "tool_call_accuracy"], shown: ["0.985"]}
+      r01_calls: {value: 7.0, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|A", "all", "calls_per_episode"], shown: ["7.0"]}
+      r01_turns: {value: 7.0, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|A", "all", "turns_per_episode"], shown: ["7.0"]}
+      r01_wall_min: {value: 0.12, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|A", "wall_s_per_episode", "min"], shown: ["0.12"]}
+      r01_wall_max: {value: 0.21, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|A", "wall_s_per_episode", "max"], shown: ["0.21"]}
+      r03_greedy_success: {value: 0.842, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|D", "greedy", "success"], shown: ["0.842"]}
+      r03_sampled_success: {value: 0.810, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|D", "sampled", "success"], shown: ["0.810"]}
+      r03_tool_acc: {value: 1.000, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|D", "all", "tool_call_accuracy"], shown: ["1.000"]}
+      r03_calls: {value: 7.4, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|D", "all", "calls_per_episode"], shown: ["7.4"]}
+      r03_turns: {value: 7.4, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|D", "all", "turns_per_episode"], shown: ["7.4"]}
+      r03_wall_min: {value: 0.08, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|D", "wall_s_per_episode", "min"], shown: ["0.08"]}
+      r03_wall_max: {value: 0.22, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_full|D", "wall_s_per_episode", "max"], shown: ["0.22"]}
+      r05_greedy_success: {value: 1.000, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|Dw", "greedy", "success"], shown: ["1.000"]}
+      r05_sampled_success: {value: 0.614, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|Dw", "sampled", "success"], shown: ["0.614"]}
+      r05_tool_acc: {value: 0.999, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|Dw", "all", "tool_call_accuracy"], shown: ["0.999"]}
+      r05_calls: {value: 8.3, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|Dw", "all", "calls_per_episode"], shown: ["8.3"]}
+      r05_turns: {value: 8.3, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|Dw", "all", "turns_per_episode"], shown: ["8.3"]}
+      r05_wall_min: {value: 0.15, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|Dw", "wall_s_per_episode", "min"], shown: ["0.15"]}
+      r05_wall_max: {value: 0.15, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|Dw", "wall_s_per_episode", "max"], shown: ["0.15"]}
+      r06_greedy_success: {value: 0.648, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|A", "greedy", "success"], shown: ["0.648"]}
+      r06_sampled_success: {value: 0.319, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|A", "sampled", "success"], shown: ["0.319"]}
+      r06_tool_acc: {value: 0.988, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|A", "all", "tool_call_accuracy"], shown: ["0.988"]}
+      r06_calls: {value: 8.0, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|A", "all", "calls_per_episode"], shown: ["8.0"]}
+      r06_turns: {value: 8.0, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|A", "all", "turns_per_episode"], shown: ["8.0"]}
+      r06_wall_min: {value: 0.15, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|A", "wall_s_per_episode", "min"], shown: ["0.15"]}
+      r06_wall_max: {value: 0.24, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|A", "wall_s_per_episode", "max"], shown: ["0.24"]}
+      r08_greedy_success: {value: 1.000, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|D", "greedy", "success"], shown: ["1.000"]}
+      r08_sampled_success: {value: 0.931, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|D", "sampled", "success"], shown: ["0.931"]}
+      r08_tool_acc: {value: 0.998, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|D", "all", "tool_call_accuracy"], shown: ["0.998"]}
+      r08_calls: {value: 10.0, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|D", "all", "calls_per_episode"], shown: ["10.0"]}
+      r08_turns: {value: 10.0, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|D", "all", "turns_per_episode"], shown: ["10.0"]}
+      r08_wall_min: {value: 0.12, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|D", "wall_s_per_episode", "min"], shown: ["0.12"]}
+      r08_wall_max: {value: 0.31, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_pp|D", "wall_s_per_episode", "max"], shown: ["0.31"]}
+      r10_greedy_success: {value: 0.925, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|Dw", "greedy", "success"], shown: ["0.925"]}
+      r10_sampled_success: {value: 0.881, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|Dw", "sampled", "success"], shown: ["0.881"]}
+      r10_tool_acc: {value: 0.997, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|Dw", "all", "tool_call_accuracy"], shown: ["0.997"]}
+      r10_calls: {value: 5.1, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|Dw", "all", "calls_per_episode"], shown: ["5.1"]}
+      r10_turns: {value: 5.1, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|Dw", "all", "turns_per_episode"], shown: ["5.1"]}
+      r10_wall_min: {value: 0.10, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|Dw", "wall_s_per_episode", "min"], shown: ["0.10"]}
+      r10_wall_max: {value: 0.10, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|Dw", "wall_s_per_episode", "max"], shown: ["0.10"]}
+      r11_greedy_success: {value: 0.828, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|A", "greedy", "success"], shown: ["0.828"]}
+      r11_sampled_success: {value: 0.624, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|A", "sampled", "success"], shown: ["0.624"]}
+      r11_tool_acc: {value: 0.949, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|A", "all", "tool_call_accuracy"], shown: ["0.949"]}
+      r11_calls: {value: 5.1, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|A", "all", "calls_per_episode"], shown: ["5.1"]}
+      r11_turns: {value: 5.1, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|A", "all", "turns_per_episode"], shown: ["5.1"]}
+      r11_wall_min: {value: 0.10, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|A", "wall_s_per_episode", "min"], shown: ["0.10"]}
+      r11_wall_max: {value: 0.17, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|A", "wall_s_per_episode", "max"], shown: ["0.17"]}
+      r13_greedy_success: {value: 0.933, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|D", "greedy", "success"], shown: ["0.933"]}
+      r13_sampled_success: {value: 0.909, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|D", "sampled", "success"], shown: ["0.909"]}
+      r13_tool_acc: {value: 0.998, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|D", "all", "tool_call_accuracy"], shown: ["0.998"]}
+      r13_calls: {value: 5.4, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|D", "all", "calls_per_episode"], shown: ["5.4"]}
+      r13_turns: {value: 5.4, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|D", "all", "turns_per_episode"], shown: ["5.4"]}
+      r13_wall_min: {value: 0.07, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|D", "wall_s_per_episode", "min"], shown: ["0.07"]}
+      r13_wall_max: {value: 0.17, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_rec|D", "wall_s_per_episode", "max"], shown: ["0.17"]}
+      r15_greedy_success: {value: 0.067, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|Dw", "greedy", "success"], shown: ["0.067"]}
+      r15_sampled_success: {value: 0.325, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|Dw", "sampled", "success"], shown: ["0.325"]}
+      r15_tool_acc: {value: 0.993, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|Dw", "all", "tool_call_accuracy"], shown: ["0.993"]}
+      r15_calls: {value: 8.2, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|Dw", "all", "calls_per_episode"], shown: ["8.2"]}
+      r15_turns: {value: 8.2, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|Dw", "all", "turns_per_episode"], shown: ["8.2"]}
+      r15_wall_min: {value: 0.16, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|Dw", "wall_s_per_episode", "min"], shown: ["0.16"]}
+      r15_wall_max: {value: 0.16, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|Dw", "wall_s_per_episode", "max"], shown: ["0.16"]}
+      r16_greedy_success: {value: 0.017, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|A", "greedy", "success"], shown: ["0.017"]}
+      r16_sampled_success: {value: 0.174, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|A", "sampled", "success"], shown: ["0.174"]}
+      r16_tool_acc: {value: 0.954, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|A", "all", "tool_call_accuracy"], shown: ["0.954"]}
+      r16_calls: {value: 9.4, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|A", "all", "calls_per_episode"], shown: ["9.4"]}
+      r16_turns: {value: 9.4, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|A", "all", "turns_per_episode"], shown: ["9.4"]}
+      r16_wall_min: {value: 0.18, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|A", "wall_s_per_episode", "min"], shown: ["0.18"]}
+      r16_wall_max: {value: 0.29, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|A", "wall_s_per_episode", "max"], shown: ["0.29"]}
+      r18_greedy_success: {value: 0.733, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|D", "greedy", "success"], shown: ["0.733"]}
+      r18_sampled_success: {value: 0.486, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|D", "sampled", "success"], shown: ["0.486"]}
+      r18_tool_acc: {value: 0.991, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|D", "all", "tool_call_accuracy"], shown: ["0.991"]}
+      r18_calls: {value: 10.4, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|D", "all", "calls_per_episode"], shown: ["10.4"]}
+      r18_turns: {value: 10.4, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|D", "all", "turns_per_episode"], shown: ["10.4"]}
+      r18_wall_min: {value: 0.13, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|D", "wall_s_per_episode", "min"], shown: ["0.13"]}
+      r18_wall_max: {value: 0.32, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_wf4|D", "wall_s_per_episode", "max"], shown: ["0.32"]}
+      r20_greedy_success: {value: 0.883, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|Dw", "greedy", "success"], shown: ["0.883"]}
+      r20_sampled_success: {value: 0.671, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|Dw", "sampled", "success"], shown: ["0.671"]}
+      r20_tool_acc: {value: 1.000, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|Dw", "all", "tool_call_accuracy"], shown: ["1.000"]}
+      r20_calls: {value: 8.3, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|Dw", "all", "calls_per_episode"], shown: ["8.3"]}
+      r20_turns: {value: 8.3, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|Dw", "all", "turns_per_episode"], shown: ["8.3"]}
+      r20_wall_min: {value: 0.16, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|Dw", "wall_s_per_episode", "min"], shown: ["0.16"]}
+      r20_wall_max: {value: 0.16, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|Dw", "wall_s_per_episode", "max"], shown: ["0.16"]}
+      r21_greedy_success: {value: 0.689, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|A", "greedy", "success"], shown: ["0.689"]}
+      r21_sampled_success: {value: 0.535, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|A", "sampled", "success"], shown: ["0.535"]}
+      r21_tool_acc: {value: 0.974, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|A", "all", "tool_call_accuracy"], shown: ["0.974"]}
+      r21_calls: {value: 8.2, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|A", "all", "calls_per_episode"], shown: ["8.2"]}
+      r21_turns: {value: 8.2, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|A", "all", "turns_per_episode"], shown: ["8.2"]}
+      r21_wall_min: {value: 0.15, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|A", "wall_s_per_episode", "min"], shown: ["0.15"]}
+      r21_wall_max: {value: 0.26, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|A", "wall_s_per_episode", "max"], shown: ["0.26"]}
+      r23_greedy_success: {value: 0.878, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|D", "greedy", "success"], shown: ["0.878"]}
+      r23_sampled_success: {value: 0.824, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|D", "sampled", "success"], shown: ["0.824"]}
+      r23_tool_acc: {value: 0.997, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|D", "all", "tool_call_accuracy"], shown: ["0.997"]}
+      r23_calls: {value: 9.4, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|D", "all", "calls_per_episode"], shown: ["9.4"]}
+      r23_turns: {value: 9.4, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|D", "all", "turns_per_episode"], shown: ["9.4"]}
+      r23_wall_min: {value: 0.11, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|D", "wall_s_per_episode", "min"], shown: ["0.11"]}
+      r23_wall_max: {value: 0.30, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P1|p1_test_combo|D", "wall_s_per_episode", "max"], shown: ["0.30"]}
+      r25_greedy_success: {value: 0.184, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_api|Dw", "greedy", "success"], shown: ["0.184"]}
+      r25_sampled_success: {value: 0.137, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_api|Dw", "sampled", "success"], shown: ["0.137"]}
+      r25_tool_acc: {value: 0.416, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_api|Dw", "all", "tool_call_accuracy"], shown: ["0.416"]}
+      r25_calls: {value: 10.0, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_api|Dw", "all", "calls_per_episode"], shown: ["10.0"]}
+      r25_turns: {value: 10.1, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_api|Dw", "all", "turns_per_episode"], shown: ["10.1"]}
+      r25_wall_min: {value: 0.17, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_api|Dw", "wall_s_per_episode", "min"], shown: ["0.17"]}
+      r25_wall_max: {value: 0.36, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_api|Dw", "wall_s_per_episode", "max"], shown: ["0.36"]}
+      r26_greedy_success: {value: 0.793, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_api|Dw_aug", "greedy", "success"], shown: ["0.793"]}
+      r26_sampled_success: {value: 0.741, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_api|Dw_aug", "sampled", "success"], shown: ["0.741"]}
+      r26_tool_acc: {value: 0.990, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_api|Dw_aug", "all", "tool_call_accuracy"], shown: ["0.990"]}
+      r26_calls: {value: 8.1, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_api|Dw_aug", "all", "calls_per_episode"], shown: ["8.1"]}
+      r26_turns: {value: 8.1, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_api|Dw_aug", "all", "turns_per_episode"], shown: ["8.1"]}
+      r26_wall_min: {value: 0.24, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_api|Dw_aug", "wall_s_per_episode", "min"], shown: ["0.24"]}
+      r26_wall_max: {value: 0.25, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_api|Dw_aug", "wall_s_per_episode", "max"], shown: ["0.25"]}
+      r27_greedy_success: {value: 0.343, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_wf4|Dw", "greedy", "success"], shown: ["0.343"]}
+      r27_sampled_success: {value: 0.261, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_wf4|Dw", "sampled", "success"], shown: ["0.261"]}
+      r27_tool_acc: {value: 0.991, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_wf4|Dw", "all", "tool_call_accuracy"], shown: ["0.991"]}
+      r27_calls: {value: 8.3, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_wf4|Dw", "all", "calls_per_episode"], shown: ["8.3"]}
+      r27_turns: {value: 8.3, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_wf4|Dw", "all", "turns_per_episode"], shown: ["8.3"]}
+      r27_wall_min: {value: 0.15, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_wf4|Dw", "wall_s_per_episode", "min"], shown: ["0.15"]}
+      r27_wall_max: {value: 0.27, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_wf4|Dw", "wall_s_per_episode", "max"], shown: ["0.27"]}
+      r28_greedy_success: {value: 0.910, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_wf4|Dw_aug", "greedy", "success"], shown: ["0.910"]}
+      r28_sampled_success: {value: 0.809, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_wf4|Dw_aug", "sampled", "success"], shown: ["0.809"]}
+      r28_tool_acc: {value: 0.996, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_wf4|Dw_aug", "all", "tool_call_accuracy"], shown: ["0.996"]}
+      r28_calls: {value: 10.1, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_wf4|Dw_aug", "all", "calls_per_episode"], shown: ["10.1"]}
+      r28_turns: {value: 10.1, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_wf4|Dw_aug", "all", "turns_per_episode"], shown: ["10.1"]}
+      r28_wall_min: {value: 0.31, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_wf4|Dw_aug", "wall_s_per_episode", "min"], shown: ["0.31"]}
+      r28_wall_max: {value: 0.32, file: results/t3_metrics/t3_metrics.json, key: ["cells", "P4|s4_wf4|Dw_aug", "wall_s_per_episode", "max"], shown: ["0.32"]}
+      r29_greedy_success: {value: 0.136, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|B0", "greedy", "success"], shown: ["0.136"]}
+      r29_tool_acc: {value: 1.000, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|B0", "all", "tool_call_accuracy"], shown: ["1.000"]}
+      r29_calls: {value: 4.2, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|B0", "all", "calls_per_episode"], shown: ["4.2"]}
+      r30_greedy_success: {value: 0.864, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|B4", "greedy", "success"], shown: ["0.864"]}
+      r30_tool_acc: {value: 1.000, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|B4", "all", "tool_call_accuracy"], shown: ["1.000"]}
+      r30_calls: {value: 7.6, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|B4", "all", "calls_per_episode"], shown: ["7.6"]}
+      r31_greedy_success: {value: 0.652, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|Dw", "greedy", "success"], shown: ["0.652"]}
+      r31_sampled_success: {value: 0.570, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|Dw", "sampled", "success"], shown: ["0.570"]}
+      r31_tool_acc: {value: 0.956, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|Dw", "all", "tool_call_accuracy"], shown: ["0.956"]}
+      r31_calls: {value: 6.7, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|Dw", "all", "calls_per_episode"], shown: ["6.7"]}
+      r31_turns: {value: 6.7, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|Dw", "all", "turns_per_episode"], shown: ["6.7"]}
+      r31_wall_min: {value: 0.29, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|Dw", "wall_s_per_episode", "min"], shown: ["0.29"]}
+      r31_wall_max: {value: 0.29, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|Dw", "wall_s_per_episode", "max"], shown: ["0.29"]}
+      r33_greedy_success: {value: 0.767, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|D", "greedy", "success"], shown: ["0.767"]}
+      r33_sampled_success: {value: 0.702, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|D", "sampled", "success"], shown: ["0.702"]}
+      r33_tool_acc: {value: 0.978, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|D", "all", "tool_call_accuracy"], shown: ["0.978"]}
+      r33_calls: {value: 7.8, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|D", "all", "calls_per_episode"], shown: ["7.8"]}
+      r33_turns: {value: 7.8, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|D", "all", "turns_per_episode"], shown: ["7.8"]}
+      r33_wall_min: {value: 0.21, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|D", "wall_s_per_episode", "min"], shown: ["0.21"]}
+      r33_wall_max: {value: 0.43, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|D", "wall_s_per_episode", "max"], shown: ["0.43"]}
+      r35_greedy_success: {value: 0.733, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|Dw_aug", "greedy", "success"], shown: ["0.733"]}
+      r35_sampled_success: {value: 0.680, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|Dw_aug", "sampled", "success"], shown: ["0.680"]}
+      r35_tool_acc: {value: 0.990, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|Dw_aug", "all", "tool_call_accuracy"], shown: ["0.990"]}
+      r35_calls: {value: 6.6, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|Dw_aug", "all", "calls_per_episode"], shown: ["6.6"]}
+      r35_turns: {value: 6.6, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|Dw_aug", "all", "turns_per_episode"], shown: ["6.6"]}
+      r35_wall_min: {value: 0.26, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|Dw_aug", "wall_s_per_episode", "min"], shown: ["0.26"]}
+      r35_wall_max: {value: 0.28, file: results/t3_metrics/t3_metrics.json, key: ["cells", "TXN|txn_test|Dw_aug", "wall_s_per_episode", "max"], shown: ["0.28"]}
+      r36_greedy_success: {value: 0.687, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|warm start", "greedy", "success"], shown: ["0.687"]}
+      r36_sampled_success: {value: 0.694, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|warm start", "sampled", "success"], shown: ["0.694"]}
+      r36_tool_acc: {value: 0.998, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|warm start", "all", "tool_call_accuracy"], shown: ["0.998"]}
+      r36_calls: {value: 3.9, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|warm start", "all", "calls_per_episode"], shown: ["3.9"]}
+      r36_turns: {value: 3.9, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|warm start", "all", "turns_per_episode"], shown: ["3.9"]}
+      r36_wall_min: {value: 0.04, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|warm start", "wall_s_per_episode", "min"], shown: ["0.04"]}
+      r36_wall_max: {value: 0.05, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|warm start", "wall_s_per_episode", "max"], shown: ["0.05"]}
+      r37_greedy_success: {value: 0.687, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|GRPO", "greedy", "success"], shown: ["0.687"]}
+      r37_sampled_success: {value: 0.685, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|GRPO", "sampled", "success"], shown: ["0.685"]}
+      r37_tool_acc: {value: 0.997, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|GRPO", "all", "tool_call_accuracy"], shown: ["0.997"]}
+      r37_calls: {value: 3.7, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|GRPO", "all", "calls_per_episode"], shown: ["3.7"]}
+      r37_turns: {value: 3.7, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|GRPO", "all", "turns_per_episode"], shown: ["3.7"]}
+      r37_wall_min: {value: 0.04, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|GRPO", "wall_s_per_episode", "min"], shown: ["0.04"]}
+      r37_wall_max: {value: 0.05, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|GRPO", "wall_s_per_episode", "max"], shown: ["0.05"]}
+      r38_greedy_success: {value: 0.807, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|std-free", "greedy", "success"], shown: ["0.807"]}
+      r38_sampled_success: {value: 0.738, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|std-free", "sampled", "success"], shown: ["0.738"]}
+      r38_tool_acc: {value: 0.970, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|std-free", "all", "tool_call_accuracy"], shown: ["0.970"]}
+      r38_calls: {value: 5.3, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|std-free", "all", "calls_per_episode"], shown: ["5.3"]}
+      r38_turns: {value: 5.3, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|std-free", "all", "turns_per_episode"], shown: ["5.3"]}
+      r38_wall_min: {value: 0.05, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|std-free", "wall_s_per_episode", "min"], shown: ["0.05"]}
+      r38_wall_max: {value: 0.09, file: results/t3_metrics/t3_metrics.json, key: ["cells", "AD-C1|cw_conf|std-free", "wall_s_per_episode", "max"], shown: ["0.09"]}
+  # <<< T3M
 
 allow: ["0.95", "1.0", "1e-9", "2.0", "+0.05",  # paper v3: a stated pi threshold, cost and table parameters, Apache 2.0, a registered prediction bound
        "1,000", "10,000", "95%", "1e-4", "2e-5", "8,192", "2503.20783", "2508.11800", "62,892", "251,570", "87,180", "116,240", "2.0%", "0.90",  # write-up constants: sample sizes, hyperparameters, arXiv ids, task amounts, a cited survey range, a registered threshold
