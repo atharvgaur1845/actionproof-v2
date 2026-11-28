@@ -172,21 +172,6 @@ per-component norm.\ (GDPO-style) & 0.222 & 1.914 & 0.509 & 1.537 & 2.197\\\bott
 (\path{results/theory/th1_heldout_summary.json}, \texttt{descriptive}). Mean regret is dominated by high-severity cells.}\label{tab:est}
 \end{table*}
 
-\section{Test 2, run by run}\label{app4:seeds}
-\begin{table*}[t]\centering\small
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{@{}lccccc@{}}\toprule
-Arm ($c=0.05$) & seed & VSC & reads/ep & false success & faulted VSC\\\midrule
-warm start & -- & 0.687 & 0.000 & 0.313 & --\\
-GRPO & 0--4 & 0.687 (all) & 0.000 (all) & 0.313 & 0.223\\
-std-free & 0/1/2/3/4 & .827/.797/.823/.743/.843 & 1.80/1.57/1.80/0.93/2.02 & .173/.200/.173/.253/.157 & .570/.496/.562/.364/.612\\
-AWRB & 0--4 & 0.877--0.880 & 2.69--2.70 & 0.120 & 0.694--0.702\\
-AWRB-centred & 0/1/2/3/4 & .743/.743/.703/.687/.717 & .96/.93/.42/.00/.50 & .253/.253/.293/.313/.283 & --\\\bottomrule
-\end{tabular}}
-\caption{AD-C1 greedy evaluations on cw\_conf (300 tasks, 121 faulted) (\path{results/ad/conf_summaries/},
-\path{docs/research/AD_C1_ANALYSIS.md}). Test 3 (AD-C2) per-arm results are in Table~\ref{tab:c2} and \path{results/ad/c2/c2_summary.json}.}\label{tab:seeds}
-\end{table*}
-
 \section{The practical ActionProof study (context)}\label{app4:practical}
 The simulator used here comes from a larger practical study, reported separately
 (\path{paper/actionproof_main.pdf}). Its registered results, with their limits:
@@ -209,7 +194,6 @@ failures; the script still completes more. It is not a learned-policy contributi
 \end{itemize}
 
 \input{tables_v4/track3}
-\input{t3_metrics_table}
 \section{Literature comparison: what was read}\label{app4:lit}
 Full text (2026-11-28): \citet{fontana-etal-2026-hidden} (Props.~1--3: shared-prefix weighting; AdamW invariance to
 global reward scale; momentum overshoot past the clip); \citet{bay2026grpodrgrpodapo} (Thm.~1: for binary rewards the

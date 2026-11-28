@@ -66,7 +66,7 @@ def main():
               r"the same Tiny Aya Global base with a LoRA adapter (40 ProcureSim dev episodes): warm start "
               f"{w['mean']:.2f}\\,s per episode (p95 {w['p95']:.2f}\\,s), database-reward GRPO agent "
               f"{v['mean']:.2f}\\,s (p95 {v['p95']:.2f}\\,s), whose episodes include read-backs. "
-              r"Sources: \path{results/ad/track3_metrics.json}, \path{scripts/paper/v4_track3_table.py}.}"
+              r"Per-run values: \path{results/ad/conf_summaries/}, \path{docs/research/AD_C1_ANALYSIS.md}. Sources: \path{results/ad/track3_metrics.json}, \path{scripts/paper/v4_track3_table.py}.}"
               r"\label{tab:track3}",
               r"\end{table*}"]
     p = ROOT / "paper/tables_v4/track3.tex"
