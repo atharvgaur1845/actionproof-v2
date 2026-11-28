@@ -1,5 +1,22 @@
 # Final story decision
 
+**Revision 2026-11-28 (evening): the theory paper becomes the main research paper.** This supersedes the table
+below where they conflict; the earlier decision is kept as written for the record.
+- **Main paper:** `paper/main_v4.pdf`, *The Hidden World in the Group: How GRPO Mislearns Costly Verification in
+  Agentic RL* (story E, rebuilt). Thesis: when the rollouts of a GRPO group share an unobserved environment state,
+  group-local standardisation removes state-specific stakes, and a costly verification decision follows a vote of
+  signs instead of the value gap. Evidence: exact theory with stated assumptions, the registered 731-cell TH1 testbed
+  (5 of 7 hypotheses supported, H6 not supported, H7 untestable), the registered AD-C1 language-agent comparison (with
+  its degenerate GRPO arm disclosed), and the registered limited cost intervention AD-C2.
+- **Supporting artifact:** the practical ActionProof study (stories C, B, D, A): the TXN benchmark, the trained recovery
+  agent, SEL1 and the Recovery Gate, `paper/actionproof_main.pdf`. It is the instrument the theory paper uses and the
+  live demo, not the main scientific claim.
+- **Why:** the practical story's ceiling is low by its own honest results (the script B4 beats every learned agent;
+  benchmark construct limits; weak escalation and OOD transfer; the gate's zero false completion is by construction).
+  The theory asks a general question about agent RL and its main predictions were registered before their outcomes.
+- **What is not claimed:** a new optimiser, a universal GRPO failure, or that the language agent is cost-blind beyond
+  what AD-C1, AD-C2 and the counterfactual re-score show. See `paper/RESEARCH_DECISIONS_V4.md`.
+
 2026-11-27 (Phase B of the Stage 2 sprint). Inputs:
 - `research_audit/CURRENT_BRANCH_FORENSIC_REVIEW.md`
 - `research_audit/NOVELTY_POSITIONING_FINAL.md`

@@ -34,17 +34,19 @@
 Group-relative policy optimisation (GRPO) is widely used to train tool-using language agents, yet its rollout groups
 need not contain independent environment states: in a stateful environment the rollouts of one task can share an
 unobserved fault, commit status or world snapshot, while the policy sees only partial tool evidence. We study how
-this dependence interacts with within-group reward standardisation when an agent can pay to acquire information. Under
-a shared latent state, GRPO's expected update is invariant to state-specific positive affine transformations of the
-reward; for a deterministic binary decision it reduces, exactly at finite group size, to a probability-weighted vote of
-state-wise preference signs rather than the magnitude-weighted action-value gap. We delimit when this holds and show
+this dependence interacts with within-group reward standardisation when an agent can pay to acquire information. When
+all rollouts of a group share the latent state, GRPO's expected update is invariant to state-specific positive affine
+transformations of the reward, exactly in the small-$\epsilon$ limit of its standardisation and up to a factor
+$\lambda\hat\sigma/(\lambda\hat\sigma+\epsilon)$ otherwise; when, in addition, returns are deterministic within each
+state, a binary decision's update reduces, exactly at finite group size, to a probability-weighted vote of state-wise
+preference signs rather than the magnitude-weighted action-value gap. We delimit when this holds and show
 why decorrelating states within groups need not remove it. In a preregistered analytical testbed of 731 held-out cells
 (four group laws, group sizes 2--16, ten estimators), the theory predicts GRPO's learned decision in 721 of 721 decided
 cells, including all 77 where the vote and the value disagree; one registered hypothesis fails and one is untestable.
 In a registered five-seed study of a 3.35B tool agent, every GRPO seed ends at the warm start's no-read behaviour while
 a std-free estimator reads and improves verified completion by 12.0 points (95\% CI [8.8, 15.3]); the GRPO arm is
-degenerate, so this is the strongest result the test can return. A registered cost intervention on the language agent
-\pend{AD-C2 one-sentence outcome}. We claim neither a new optimiser nor a universal GRPO failure: we identify a latent-state
+degenerate, so this is the strongest result the test can return. A registered cost intervention on the language agent,
+one seed per arm, is reported with its limits in \S\ref{sec:llm}. We claim neither a new optimiser nor a universal GRPO failure: we identify a latent-state
 regime in which group-local scaling misaligns learning with the value of information.
 \end{abstract}
 
@@ -107,7 +109,8 @@ $\lambda\hat\sigma/(\lambda\hat\sigma+\epsilon)$.
 Full proof in Appendix~\ref{app3:proofs}. $\square$
 
 \begin{corollary}[the vote; exact at finite $G$]\label{cor:vote}
-If returns are deterministic within a state, $R=\alpha_z+\beta_zr$, then $U_{\rm GRPO}=(G-1)m_G(\pi)\,\mathcal V+O(\epsilon)$
+Under the shared law, if returns are deterministic within a state (no rollout randomness in repair or detection, no
+exogenous failure), $R=\alpha_z+\beta_zr$, then $U_{\rm GRPO}=(G-1)m_G(\pi)\,\mathcal V+O(\epsilon)$
 with $\mathcal V=\sum_zw(z)\sgn\beta_z$ and $m_G=\mathbb E[\sqrt{k(G-k)/(G(G-1))};\,0<k<G]$, $k\sim{\rm Bin}(G,\pi)$.
 The sign of the update is $\sgn\mathcal V$ at every $\pi$.
 \end{corollary}
@@ -123,13 +126,13 @@ a state and the threshold depends on $c$ (0.654, 0.667, 0.706 at $s=0.6$, $c=0.0
 (iii) exogenous within-state noise can restore cost sensitivity (Appendix~\ref{app3:counter}).
 
 \begin{proposition}[Bernstein form; law-invariance of centring]\label{prop:bern}
-For any centred estimator, $U(\pi)=\sum_kC(G,k)\pi^k(1-\pi)^{G-k}b_k$ with $b_k$ independent of $\pi$ and
+Under A1 (the decision is independent of $z$ given $h$), A2 and A3, for any centred estimator, $U(\pi)=\sum_kC(G,k)\pi^k(1-\pi)^{G-k}b_k$ with $b_k$ independent of $\pi$ and
 $b_0=b_G=0$. For the std-free estimator $b_k=\tfrac{k(G-k)}{G}\Delta Q$, so $U=(G-1)\pi(1-\pi)\Delta Q$ under
 \emph{every} exchangeable law.
 \end{proposition}
 
 \begin{corollary}[endogenous homogeneity]\label{cor:homog}
-If a read makes the return state-independent and skip returns are deterministic within a state, then under every
+Under A1--A3 and $\epsilon\to0$, if a read makes the return state-independent (perfect detection, certain repair) and skip returns are deterministic within a state, then under every
 exchangeable law $U'(1)=-(G-1)\sqrt G\,\mathcal V$. For $\mathcal V<0<\Delta Q$, always-verify is unstable however
 the sampler decorrelates states.
 \end{corollary}
@@ -187,6 +190,16 @@ clean). The reward is the verifier's $R_V\in\{0,1\}$ minus $c$ per read. Trainin
 and 200 steps. The fault plan is fixed per task, so every group shares its hidden state: we checked the code and 800 of
 800 logged groups per run.
 
+\paragraph{What carries over from the theory, and what does not.} The testbed trains one verify logit with plain SGD;
+the agent is a LoRA-adapted transformer trained by TRL with token-level aggregation, many decisions per episode, KL
+and a learned repair skill. Theorem~\ref{thm:inv} needs only the shared law and a spread large against $\epsilon$, so
+it applies to the agent's groups; Corollary~\ref{cor:vote} does not apply exactly, because repair after a read succeeds
+by rollout randomness, so faulted-state returns are not deterministic. In that regime the theory's own enumeration gives
+a GRPO threshold that moves slightly with cost (0.654, 0.667, 0.706 at $s=0.6$, $c=0.01,0.05,0.2$), far less than the
+centred estimator's ($c/s$). Clean states, which dominate the agent's groups, do have deterministic returns
+($\beta_{\rm clean}=-c$). The language-model results are therefore tests of predictions derived from the theory, not
+of the theorems themselves.
+
 \paragraph{AD-C1: registered five-seed comparison.} \path{PREREGISTRATION_AD_C1.md} compared verified safe completion
 (VSC) on 300 unseen tasks (121 faulted) at $c=0.05$, five seeds per arm, permutation test with Holm over four
 hypotheses; the theory's predictions T1--T7 were frozen before any confirmatory output
@@ -223,11 +236,15 @@ seeds never reads. More verification is not the goal; calibrated verification is
 \paragraph{AD-C2: a registered cost intervention (limited).} \path{PREREGISTRATION_AD_C2.md} (registered 2026-11-28
 17:50 IST, before any output) retrains GRPO and std-free at $c=0.01$, and GRPO at $c=0$, one seed each, with the AD-C1
 recipe otherwise unchanged and the same shared group law, and evaluates them with the $c=0.05$ seed-0 models on a new
-sealed split of 300 tasks. The theory predicts that GRPO at $c=0.01$ stays at the no-read corner (P1; the vote has the
-same sign at both costs and $c\gg\epsilon/\hat\sigma$), that std-free reads (P2) and beats GRPO (P3), and, as a boundary
-check, that GRPO \emph{reads} at $c=0$, where clean groups that differ only in reads have zero spread and the vote is
-carried by faulted states (P4). Outcome: \pend{AD-C2 table and verdicts}. One seed per
-arm and one group law: this is a limited intervention, not the planned factorial (2 estimators $\times$ 3 costs
+sealed split of 300 tasks. Registered predictions: GRPO at $c=0.01$ stays at the no-read corner (P1), std-free reads
+(P2) and beats GRPO (P3), and, as a boundary check, GRPO \emph{reads} at $c=0$, where clean groups that differ only in
+reads have zero spread and the vote is carried by faulted states (P4). A dated addendum written before any output
+(\path{PREREGISTRATION_AD_C2_ADDENDUM1.md}) narrows P1's basis: with stochastic repair the theory predicts
+\emph{approximate} cost-blindness (a small GRPO response, far below std-free's), not exact invariance.
+\textbf{Status:} the runs had not completed when this version was frozen; no AD-C2 outcome is reported or implied
+here, and the paper's cost-blindness claim for the language agent rests on AD-C1 and the counterfactual re-score
+(\S\ref{sec:mech}). Results will be added from \path{results/ad/c2/c2_summary.json} without changing the analysis. One
+seed per arm and one group law: a limited intervention, not the planned factorial (2 estimators $\times$ 3 costs
 $\times$ 2 laws $\times$ seeds), which did not fit the time available.
 
 \section{Mechanism diagnostics and boundaries}\label{sec:mech}

@@ -1,6 +1,18 @@
 # ActionProof
 
-**Training small agents to reconcile transactions when “ok” does not mean it happened.** A payment tool can answer
+> **Main research paper (2026-11-28): [The Hidden World in the Group: How GRPO Mislearns Costly Verification in
+> Agentic RL](paper/main_v4.pdf)** ([source](paper/main_v4.tex), [evidence ledger](paper/EVIDENCE_LEDGER_V4.md),
+> [decisions](paper/RESEARCH_DECISIONS_V4.md)).
+> When the rollouts of a GRPO group share an unobserved environment state (one fault plan, one database snapshot),
+> group-local reward standardisation removes the state-specific stakes: a costly verification decision then follows a
+> vote of state-wise signs, not the value of checking. We prove this under stated assumptions, test it in a registered
+> held-out testbed of 731 problems (the theory predicts GRPO's decision in 721/721 cells; one registered hypothesis
+> fails, one is untestable), and in a registered five-seed study of a 3.35B Cohere tool agent (std-free +0.120 verified
+> completion; every GRPO seed ends at the warm start's no-read behaviour, so that arm is degenerate). No new optimiser
+> is claimed. The rest of this README describes the **instrument** that paper uses: the ActionProof benchmark, the
+> trained recovery agent and the live demo ([practical paper](paper/actionproof_main.pdf)).
+
+**The instrument: training small agents to reconcile transactions when “ok” does not mean it happened.** A payment tool can answer
 “ok” to a payment that never happened, or time out on one that did. ActionProof is a benchmark of such ambiguous
 writes (TXN, 440 locked tasks) and a trained 3.35B Cohere agent that must tell committed, missing, partial and
 ambiguous outcomes apart, then complete, repair, retry or hand off. Outcomes are scored by a deterministic verifier

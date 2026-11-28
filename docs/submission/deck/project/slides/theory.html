@@ -1,0 +1,12 @@
+<section id="theory" class="dark foot">
+<p class="eyebrow">THE MAIN RESEARCH RESULT · paper/main_v4.pdf</p>
+<h2>When a GRPO group shares a hidden world, the update counts votes, not stakes.</h2>
+<div class="row">
+<div class="col grow"><h3>Theory (stated assumptions)</h3><p class="mut">Rollouts of one task share its fault plan. Group-std normalisation then cancels each state's reward scale (exact as ε → 0). With deterministic within-state returns, a costly verify decision follows a vote of signs, not the value of checking.</p></div>
+<div class="col grow"><h3>Registered testbed: 731 cells</h3><p class="mut">GRPO's learned decision predicted in 721 of 721; it follows the vote in all 77 cells where vote and value disagree. H6 not supported (53/75); H7 untestable.</p></div>
+<div class="col grow"><h3>3.35B Cohere tool agent (AD-C1)</h3><p class="mut">Std-free beats GRPO by +0.120 verified completion [0.088, 0.153]. Every GRPO seed ends at the warm start's no-read behaviour: a degenerate arm, so p = 0.016 is the test's floor.</p></div>
+</div>
+<p class="kicker">Not a new optimiser and not a universal GRPO failure: a warning about a common training setup, and evidence for when existing centred estimators keep the value of information.</p>
+<p class="footer">Registered: PREREGISTRATION_TH1.md, PREREGISTRATION_AD_C1.md. Cost intervention AD-C2: one seed per arm, results reported separately. Simulator only.</p>
+<aside>This is the research claim; the payments benchmark that follows is the instrument it was found with. Say the assumptions out loud: shared hidden state inside a group, small epsilon, and for the vote, deterministic returns within a state. Lead with the caveat on AD-C1: the GRPO arm equals the warm start, so the p-value is the floor of the test. Sampled episodes show GRPO did suppress reading: 0.189 reads per episode at the warm start, about zero after GRPO.</aside>
+</section>

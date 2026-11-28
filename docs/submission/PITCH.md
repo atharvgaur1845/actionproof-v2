@@ -11,6 +11,21 @@ Three lengths of the same story. They follow the thesis of `README.md`, `docs/su
 
 ---
 
+## Main story, 60 seconds (2026-11-28; the research paper `paper/main_v4.pdf`)
+
+> ActionProof began by measuring whether agents verify their own writes. It revealed something about how we train
+> them. In GRPO, the rollouts of one task usually share one hidden world: the same database, the same silent fault.
+> Normalising rewards inside that group removes how much each hidden state matters, so the agent learns a vote of
+> signs instead of the value of checking. We prove when this holds, and when it does not. In a registered test on 731
+> held-out problems, the theory predicts GRPO's learned decision in all 721 decided cells. In a registered study of a
+> 3-billion-parameter Cohere tool agent, removing the group std adds 12 points of verified completion; the GRPO seeds
+> never read. That GRPO arm is degenerate, and we say so. It is not a new optimiser: it is a warning about a common
+> training setup, and evidence for when existing centred estimators keep the value of information.
+
+The practical pitches below describe the instrument (the benchmark, the agent and the live demo).
+
+---
+
 ## 30 seconds (about 80 words)
 
 > A payment tool can say "ok" when nothing was paid, or time out when the payment went through. Agents that trust

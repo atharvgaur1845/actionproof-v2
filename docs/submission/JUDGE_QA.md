@@ -13,6 +13,23 @@ system.
 
 ---
 
+## 0. Which paper is the main submission, and what does it claim? (2026-11-28)
+
+The main research paper is `paper/main_v4.pdf` (*The Hidden World in the Group*); the practical paper
+`paper/actionproof_main.pdf` describes the instrument it uses. The claim is narrow: when the rollouts of a GRPO group
+share an unobserved environment state, group-local standardisation removes state-specific stakes, so a costly
+verification decision follows a vote of signs rather than the value gap. It is exact under stated assumptions (shared
+law, small $\epsilon$, and, for the vote, deterministic within-state returns).
+- **Registered evidence:** TH1, 731 held-out cells: H1–H5 supported (GRPO's decision predicted in 721/721), H6 not
+  supported (53/75), H7 untestable (`results/theory/th1_heldout_summary.json`). AD-C1: std-free +0.120 [0.088, 0.153]
+  over GRPO (`results/ad/c1_summary.json`).
+- **The caveat to lead with:** every GRPO seed in AD-C1 has the warm start's greedy outcome (0 reads, VSC 0.687), so
+  Holm p = 0.016 is the floor of the 5-vs-5 permutation test, not five independent replications. Sampled episodes
+  (post hoc) show GRPO did suppress reading: warm start 0.189 reads per episode, GRPO 0.000–0.001.
+- **Not claimed:** a new optimiser (Dr. GRPO and RLOO already exist); priority for "GRPO normalisation biases
+  learning" (Fontana et al., ACL 2026; Bay & Yearick; GDPO cover other forms); that the language agent is cost-blind
+  in general. AD-C2, the direct cost intervention, is one seed per arm (`PREREGISTRATION_AD_C2.md` and its addendum 1).
+
 ## 1. What is genuinely new here?
 
 Less than the topic suggests. We say what is not ours first (`research_audit/NOVELTY_POSITIONING_FINAL.md`, 15
