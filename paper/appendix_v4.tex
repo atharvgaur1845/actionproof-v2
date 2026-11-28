@@ -16,9 +16,9 @@ scalar per step.
 
 \section{Statements and proofs}\label{app3:proofs}
 Notation as in \S\ref{sec:theory}. Assumptions:
-\textbf{A1} the decision is aliased ($r\perp z$ given $h$);
-\textbf{A2} rollouts are conditionally independent given the states;
-\textbf{A3} the group law is exchangeable with marginal $w$.
+These are the three assumptions of \S\ref{sec:setup}, numbered: \textbf{A1} (aliasing) the decision is aliased ($r\perp z$ given $h$);
+\textbf{A2} (independence) rollouts are conditionally independent given the states;
+\textbf{A3} (exchangeability) the group law is exchangeable with marginal $w$.
 
 \paragraph{Proposition 1 (Bernstein form).} For a centred estimator ($\sum_iA_i=0$),
 $\sum_iA_i(r_i-\pi)=\sum_{i:r_i=1}A_i$. Given the reader set $S$ with $|S|=k$, A1 and A3 make the law of
@@ -93,7 +93,7 @@ by 1000;
 \item per-component normalisation, which never verifies.
 \end{itemize}
 
-\section{TH1: held-out analytical testbed}\label{app3:th1}
+\section{Test 1 (TH1): held-out analytical testbed}\label{app3:th1}
 \textbf{Registration:} \path{PREREGISTRATION_TH1.md}, frozen before any held-out output
 (\path{results/th1_hashes.json}). The design is in \S\ref{sec:th1}. Full criteria and descriptive results are in
 \path{results/theory/th1_heldout_summary.json} and \path{docs/research/TESTBED_RESULTS.md}. Per-seed values are in
@@ -109,9 +109,9 @@ the shard files.
 \item the counterfactual cost sweep.
 \end{itemize}
 
-\section{AD-C1}\label{app3:c1}
+\section{Test 2 (AD-C1): the language-agent comparison}\label{app3:c1}
 \textbf{Registration:} \path{PREREGISTRATION_AD_C1.md} with addendum~1 and notes~2--3, unchanged. The theory's
-predictions T1--T8 were frozen before any confirmatory output in \path{docs/research/AD_C1_THEORY_PREDICTION.md}.
+predictions T1--T8 (the eight frozen predictions of \S\ref{sec:llm}) were frozen before any confirmatory output in \path{docs/research/AD_C1_THEORY_PREDICTION.md}.
 Result: \path{results/ad/c1_summary.json} (Slurm 469851). The per-seed table and the T1--T8 comparison are in
 \path{docs/research/AD_C1_ANALYSIS.md}: T1--T7 are met and T8 is untestable.
 
@@ -152,7 +152,7 @@ python scripts/theory/llm_mechanism.py \
   --rollouts <dir>
 \end{verbatim}}
 
-\section{TH1: all ten estimators}\label{app4:est}
+\section{Test 1: all ten estimators}\label{app4:est}
 \begin{table*}[t]\centering\small
 \resizebox{0.9\textwidth}{!}{%
 \begin{tabular}{@{}lccccc@{}}\toprule
@@ -172,7 +172,7 @@ per-component norm.\ (GDPO-style) & 0.222 & 1.914 & 0.509 & 1.537 & 2.197\\\bott
 (\path{results/theory/th1_heldout_summary.json}, \texttt{descriptive}). Mean regret is dominated by high-severity cells.}\label{tab:est}
 \end{table*}
 
-\section{AD-C1 and AD-C2 per seed}\label{app4:seeds}
+\section{Test 2, run by run}\label{app4:seeds}
 \begin{table*}[t]\centering\small
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{@{}lccccc@{}}\toprule
@@ -191,19 +191,19 @@ AWRB-centred & 0/1/2/3/4 & .743/.743/.703/.687/.717 & .96/.93/.42/.00/.50 & .253
 The simulator used here comes from a larger practical study, reported separately
 (\path{paper/actionproof_main.pdf}). Its registered results, with their limits:
 \begin{itemize}
-\item \textbf{P1} (450 frozen tasks, 3 seeds): recovery SFT reaches 0.772 and recovery SFT then GRPO 0.819 sampled VSC
+\item \textbf{P1}, the registered recovery-training comparison (450 frozen tasks, 3 seeds): recovery supervised fine-tuning (SFT) reaches 0.772 and recovery SFT then GRPO 0.819 sampled VSC
 against 0.513 for the reference arm A, itself a trained agent (recovery-start GRPO); the untrained Tiny Aya Global
 base scores 0.01 on the same test (\path{results/p5/p5_summary.json}). The arms are not nested checkpoints, so the
 difference is not GRPO's alone.
-\item \textbf{TXN v1} (440 locked counterfactual tasks): trusting the reply falsely completes 0.864 of tasks; the
-trained agent 0.121; a hand-written reconciliation script beats every learned agent (VTC 0.864, no false completion).
+\item \textbf{TXN v1}, the transaction benchmark (440 locked counterfactual tasks): trusting the reply falsely completes 0.864 of tasks; the
+trained agent 0.121; a hand-written reconciliation script beats every learned agent (verified task completion, VTC, 0.864; no false completion).
 A post-hoc review found construct limits: a read-free same-key double send reaches 308 of 440, and the duplicate
 metric counts injected duplicates.
-\item \textbf{P4 / P5}: randomised demonstrations improve the SFT warm start on renamed tools (+0.604) and an unseen
+\item \textbf{P4 and P5}, the transfer studies: randomised demonstrations improve the SFT warm start on renamed tools (+0.604) and an unseen
 workflow (+0.574), not shown after GRPO; the recipe lifts four more Cohere bases (one SFT seed each).
-\item \textbf{SEL1}: supervised hand-off after repeated outage errors (0.972 against 0.002); where hand-off is the only
+\item \textbf{SEL1}, the selective hand-off study: supervised hand-off after repeated outage errors (0.972 against 0.002); where hand-off is the only
 safe action it helps in 164 of 432 episodes.
-\item \textbf{RG1 / RG2}: a rules-based runtime gate takes false completion from 0.112 to 0.000 on a sealed split, by
+\item \textbf{RG1 and RG2}, the Recovery Gate studies: a rules-based runtime gate takes false completion from 0.112 to 0.000 on a sealed split, by
 construction (a consistent read is a perfect oracle in the simulator); most of its hand-off gain relabels honest
 failures; the script still completes more. It is not a learned-policy contribution.
 \end{itemize}

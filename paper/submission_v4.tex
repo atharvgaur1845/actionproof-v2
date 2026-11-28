@@ -1,48 +1,98 @@
-\section{Submission details (hackathon template)}\label{app4:submission}
+\section{Submission details, in the hackathon template's order}\label{app4:submission}
 {\small
-\begin{description}\setlength{\itemsep}{1pt}
-\item[Track and problem.] Track 3 (agentic fine-tuning), problem statement 9 (Measure $\rightarrow$ Understand
-$\rightarrow$ Fix).
-\item[One-line claim.] When the rollouts of a GRPO group share a hidden environment state, group-std normalisation
-makes a costly check follow a vote of state-wise signs instead of its value; removing the std restores reading in a
-3.35B Cohere tool agent.
-\item[Before $\rightarrow$ after, same model.] Tiny Aya Global warm start 0.687 $\rightarrow$ std-free GRPO 0.807
-verified safe completion (mean of 5 seeds; 300 unseen tasks), while standard GRPO from the same warm start stays at
-0.687 in all 5 seeds (\S\ref{sec:llm}, Table~\ref{tab:track3}).
-\item[Base model and method.] \texttt{CohereLabs/tiny-aya-global} (3.35B, CC-BY-NC-4.0), LoRA SFT warm start, then
-GRPO through AgentTune's \texttt{TrlAgenticGrpo}, with and without the group std, read cost $c=0.05$.
-\item[Real use case.] Agents that write to payment, order or deployment systems can read the record back before
-reporting success; whether that check is learned depends on how training scales rewards inside a group.
-\item[Hackathon kits.] AgentTune trains every GRPO policy and supplies the parser and prompt used in rollouts and
-evaluation. AuditKIT gave the Stage~1 judge audit and secondary scores of the practical study's episodes. CuratorKIT
-deduplicated the recovery demonstrations before SFT (0 removed). CircuitKIT was tried and did not run; AlignTune and
-SafeTune were not used.
-\item[Data and splits.] TH1: an analytical testbed with a held-out split frozen by hash
-(\path{scripts/theory/freeze_th1.py}). Language agent: \texttt{cw\_train}, \texttt{cw\_dev}, \texttt{cw\_conf} (300
-tasks, 121 faulted) and the sealed \texttt{cw\_c2} (300 tasks, 120 faulted); \path{scripts/ad/c2_split.py} asserts
-that no task is shared across splits. Everything is generated in ProcureSim, an in-memory simulator; no real system is
-touched.
-\item[Metrics.] Verified safe completion (VSC: the final database meets every postcondition with no invariant
-violation or duplicate, and the agent's report matches the expected status; \path{actionproof/env/verifier.py}), false success, reads per episode, tool-call validity; Table~\ref{tab:track3} gives the Track~3
-set per subset.
-\item[Declaration of work done outside the hackathon.] No part of this work predates 1 November 2026 (confirmed by the
-author). Stage~1 (1--15 Nov): SupportSim and reward studies. Stage~2 (20--28 Nov): ProcureSim, the TXN benchmark and
-the trained agents. The theory, TH1 (registered 24 Nov), AD-C1 (registered 23 Nov) and AD-C2 (registered 28 Nov) were
-all done in the final round. The kits are the hackathon's own repositories at the stated revisions.
-\item[With more credits.] The planned factorial: 2 estimators $\times$ 3 costs $\times$ 2 group laws (shared and
-iid) $\times$ 5 seeds, plus a second model family. The theory predicts that GRPO's read rate stays flat in cost under
-the shared law and responds to cost under the iid law, and that std-free tracks cost under both. These are
-predictions, not results.
-\item[Compute.] Training and evaluation ran on the BITS Pilani sharanga cluster (one H100 per run; each AD-C2 training
-run was budgeted 150 minutes). TH1 ran on CPU (Appendix~\ref{app3:compute}).
-\item[Use of AI.] Claude (Anthropic) wrote about 95\% of the code and drafted about 90\% of the text (author's
-estimate). The research direction, the approval of every registration before its run, and the review of every claim
-were the author's. Language-model judges are instruments and never replace the database verifier.
-\item[Artefacts and running it.] Code: \url{https://github.com/atharvgaur1845/actionproof-v2} (branch
-\texttt{submission-candidate}); live Space \texttt{atharvgaur18/actionproof-live}; traces
-\texttt{atharvgaur18/actionproof-traces}. Commands: \texttt{pytest tests/theory};
-\texttt{python scripts/s2\_numcheck.py}; \texttt{python scripts/ad/freeze\_c2.py --check};
-\texttt{python scripts/ad/c1\_stats.py}; \texttt{python scripts/paper/v4\_figures.py};
-\texttt{python scripts/paper/v4\_track3\_table.py}.
-\end{description}}
+\paragraph{Title and one-line claim.} \emph{The Hidden World in the Group.} When all attempts in a GRPO group share a
+hidden world, GRPO teaches a costly check by vote instead of by value; removing the group standard deviation brings
+the value back.
 
+\paragraph{Tracks and problem statements.} Track 3, agentic fine-tuning: problem statement 9 (measure, understand,
+fix).
+
+\paragraph{Content warning.} None. All tasks are synthetic purchase orders; no harmful text appears.
+
+\paragraph{Headline before $\rightarrow$ after.} On 300 unseen tasks, verified safe completion goes from 0.687 (the
+warm start) to 0.807 (std-free training, mean of 5 runs). Standard GRPO from the same warm start stays at 0.687 in all
+5 runs (Table~\ref{tab:track3}).
+
+\paragraph{Base model and method in one line.} \texttt{CohereLabs/tiny-aya-global} (3.35B) with LoRA, a supervised warm
+start on recovery demonstrations, then GRPO through AgentTune with and without dividing by the group standard
+deviation.
+
+\paragraph{Why this problem.} Agents that pay suppliers, refund customers or deploy services get replies that do not
+prove what happened. Whether they learn to check before reporting success depends on how training scores their
+attempts, which is the question this paper answers.
+
+\paragraph{Threat model.} The environment, not an attacker: tool replies can be wrong (a phantom write answers ``ok'';
+a timeout hides a write that did happen), partial or duplicated. The agent never sees the true state; a verifier that
+reads the final database does.
+
+\paragraph{Hackathon toolkits, one by one.}
+\textbf{AgentTune} trains every GRPO run (\texttt{TrlAgenticGrpo}); its tool-call parser and prompt format are used in
+training and evaluation. \textbf{CuratorKIT} deduplicated the 554 recovery demonstrations before the warm start (exact
+and MinHash: \texttt{ExactDeduplicator}, \texttt{MinHashDeduplicator}); none was removed. \textbf{AuditKIT} scored
+episodes with LLM judges (\texttt{TaskCompletion}, \texttt{AgentEvalRunner}) as a secondary check, never as an outcome.
+\textbf{CircuitKIT} was tried for an interpretability probe but did not run in our job environment, so it gives no
+result. \textbf{AlignTune} and \textbf{SafeTune} were not used.
+\emph{How they connect:} CuratorKIT cleans the demonstrations, the warm start learns from them, AgentTune runs GRPO in
+the simulator, the database verifier scores every episode, and AuditKIT cross-checks a sample with LLM judges.
+
+\paragraph{Models and licences.} Policy: Tiny Aya Global, 3.35B, bf16, LoRA adapters, CC-BY-NC-4.0 (released adapters
+inherit it). Aya Expanse 8B and 32B: untrained comparison agents and a judge, CC-BY-NC-4.0. No teacher model and no
+closed-model baseline enter this paper's results.
+
+\paragraph{Data.} Source: synthetic tasks generated by ProcureSim (supplier order, goods receipt, payment, journal
+entry), each with one hidden fault plan; 60\% of tasks are clean. Language: English. Splits: a training split, 300
+unseen evaluation tasks (121 faulted), and a sealed 300-task split (120 faulted) for the cost test;
+\path{scripts/ad/c2_split.py} asserts that no task identifier appears in two splits (a direct-match leak check). The
+analytical test's 731 problems were frozen by hash before any output.
+
+\paragraph{Metrics, and what should not get worse.} Verified safe completion (VSC, higher is better), false success
+(lower is better), reads per episode, tool-call validity (higher is better) and wall time. Clean-task VSC is the
+``should not get worse'' check: checking must not break clean tasks, and it stays at 1.000 for every arm. LLM judges
+were compared with the database verifier, not with human labels; no human labels exist.
+
+\paragraph{Training setup.} AgentTune/TRL GRPO: 4 tasks $\times$ 8 attempts per step, 200 steps, learning rate
+$2\times10^{-5}$, KL weight 0.02, temperature 1.0, up to 16 turns of 256 tokens, LoRA rank 16 and alpha 32, gradient
+clipping 0.5, bf16. The only change between arms is TRL's \texttt{scale\_rewards} (group standard deviation for GRPO,
+none for std-free). Seeds 0 to 4 for each arm; read cost $c=0.05$.
+
+\paragraph{Ablations.} The estimator is the ablation: GRPO against std-free, plus two alternative returns (AWRB and its
+mean-only version) in Test~2, and ten estimators in Test~1.
+
+\paragraph{What did not work.} The sixth and seventh registered predictions of Test~1 (one failed, one untestable).
+AWRB's mean-only version did not beat std-free ($-0.088$). With free reads, removing the standard deviation did not help
+($-0.007$). The cost test had not finished at freeze.
+
+\paragraph{Sample input and output.} A live run on the public Space (Task 0004, hidden world ``phantom payment''): the
+agent places the order and reads it back, pays and gets ``ok'', reads the payment list and finds it empty, pays again
+with the same idempotency key, reads again and finds exactly one payment, posts and checks the journal entry, then
+reports success. The verifier marks every step verified. A script that trusts the reply reports success with no payment
+made.
+
+\paragraph{Compute and cost.} Training and evaluation ran on the BITS Pilani sharanga cluster, one H100 per run (each
+run budgeted 150 minutes); the analytical test ran on CPU. Serving the trained agent costs under \$0.50 per 1{,}000
+workflows (\path{docs/upgrade/ROI.md}).
+
+\paragraph{With more credits.} \emph{Plan:} 2 estimators $\times$ 3 costs $\times$ 2 group laws (shared, independent)
+$\times$ 5 runs, then a second Cohere model and a second simulator. \emph{Expected:} under shared groups GRPO's read
+rate stays nearly flat as cost changes, under independent groups it responds, and std-free follows cost under both.
+These are predictions, not results.
+
+\paragraph{Artifacts.} Code: \url{https://github.com/atharvgaur1845/actionproof-v2} (branch
+\texttt{submission-candidate}). Models: \texttt{atharvgaur18/actionproof-agent-d} and sibling adapters. Data and traces:
+\texttt{atharvgaur18/actionproof-traces}. Live demo: \texttt{atharvgaur18/actionproof-live}. Video and slides: linked
+from the repository README.
+
+\paragraph{Reproduction.} On a CPU: \texttt{pytest tests/theory}; \texttt{python scripts/s2\_numcheck.py} (checks every
+reported number against its file); \texttt{python scripts/ad/c1\_stats.py}; \texttt{python scripts/paper/v4\_figures.py};
+\texttt{python scripts/paper/v4\_track3\_table.py}. Training: \texttt{slurm/tasks/*.sh}, one file per registered run.
+
+\paragraph{Declaration of work done outside the hackathon.} None of this work predates 1 November 2026. Stage 1 (1 to
+15 November): an earlier simulator and reward studies. Stage 2 (20 to 28 November): ProcureSim, the benchmark, the
+trained agents, the theory, Test~1 (registered 24 November), Test~2 (registered 23 November) and the cost test
+(registered 28 November).
+
+\paragraph{Author contributions and LLM usage.} Atharv: research direction, hypotheses, approval of every registration
+before its run, and review of every claim. Claude (Anthropic) wrote about 95\% of the code and drafted about 90\% of the
+text.
+
+\paragraph{Changelog.} 29 November: rewritten in plain language in the template's order; results unchanged.}

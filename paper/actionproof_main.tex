@@ -21,10 +21,12 @@
 
 \title{ActionProof: Training Small Agents to Reconcile Transactions\\When ``ok'' Does Not Mean It Happened}
 
-\author{Atharv Gaur \\
+\author{Atharv \\
   Lexsi Labs hackathon, Track 3 (Stage 2 submission) \\
   \texttt{github.com/atharvgaur1845/actionproof-v2}}
 
+\raggedbottom
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}\setlength{\floatsep}{8pt plus 2pt minus 2pt}\setlength{\dbltextfloatsep}{8pt plus 2pt minus 2pt}
 \begin{document}
 \maketitle
 
@@ -75,7 +77,7 @@ quadruples, B4 hands off in 60 of 60 episodes and D in 15 of 540. Source:
 
 \paragraph{Contributions.}
 (1) A locked counterfactual benchmark of ambiguous writes (TXN v1, 440 tasks) with a scripted reference ladder
-(B0--B4, ablations A1--A6), a deterministic verifier, and a post-hoc account of its validity limits
+(scripts B0 to B4, from ``trust the reply'' to full reconciliation; and ablations A1 to A6, where A1 to A5 each switch off one of the full script's checks: read-back, consistent reads, same-key retry, partial repair and hand-off, and A6 re-runs the full script as a control), a deterministic verifier, and a post-hoc account of its validity limits
 (\S\ref{sec:bench}). (2) Registered, multi-seed evidence that recovery demonstrations followed by GRPO train a 3.35B
 agent to reconcile such writes (\S\ref{sec:train}). (3) A registered test of supervised selective hand-off, with its
 narrowed scope (\S\ref{sec:sel1}). (4) A registered test, on a fresh sealed split, of an evidence-only runtime Recovery Gate around the trained agent:
@@ -300,10 +302,10 @@ in the registration (\S4 and \S6).
 H1 false completion (FCR) & all 440 & 0.112 & 0.000 & $-$0.112 [$-$0.084, $-$0.148] & $<0.001$ & yes \\
 H2 hand-off & 60 unresolvable & 0.011 & 1.000 & 0.989 [0.976, 0.998] & $<0.001$ & yes \\
 H3 safe resolution (STR) & all 440 & 0.726 & 0.907 & 0.181 [0.129, 0.231] & $<0.001$ & yes \\
-H4 verified completion (VTC) & 380 resolvable & 0.824 & 0.892 & 0.068 [0.046, 0.091] & --- & yes \\
+H4 verified completion (VTC) & 380 resolvable & 0.824 & 0.892 & 0.068 [0.046, 0.091] & n/a & yes \\
 \midrule
-S1 RG vs B4 (script), VTC & 380 resolvable & B4: 1.000 & 0.892 & RG$-$B4: $-$0.108 & --- & --- \\
-S1 RG vs B4 (script), STR & all 440 & B4: 1.000 & 0.907 & RG$-$B4: $-$0.093 & --- & --- \\
+S1 RG vs B4 (script), VTC & 380 resolvable & B4: 1.000 & 0.892 & RG$-$B4: $-$0.108 & n/a & n/a \\
+S1 RG vs B4 (script), STR & all 440 & B4: 1.000 & 0.907 & RG$-$B4: $-$0.093 & n/a & n/a \\
 \bottomrule
 \end{tabular}}
 \caption{RG1 registered results (\url{results/rg1/rg1_summary.json}; interpretation in \url{PREREGISTRATION_RG1_ADDENDUM2.md}: H1 is close to guaranteed by construction and H2 is mostly relabelling). Seeds

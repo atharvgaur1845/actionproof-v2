@@ -122,6 +122,12 @@ def model_stream(model_key: str, task_id: str, reality: str):
 
 
 # ------------------------------------------------------------------ UI
+FORCE_LIGHT_JS = """() => {
+  const keepLight = () => { for (const el of [document.body, document.documentElement]) el.classList.remove('dark'); };
+  keepLight();
+  new MutationObserver(keepLight).observe(document.body, {attributes: true, attributeFilter: ['class']});
+}"""
+
 CSS = """
 @import url("https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap");
 :root { --paper:#F1EFE7; --ink:#171815; --min:#E3E0D6; --ver:#F05236; --ver-t:#C8381F; --chr:#D5F36A; --gr:#777A72;
@@ -137,6 +143,12 @@ body, gradio-app, .gradio-container { background: var(--paper) !important; }
 .dark .gradio-container .block, .dark .gradio-container input, .dark .gradio-container .wrap,
 .dark .gradio-container .secondary-wrap { background: var(--card) !important; color: var(--ink) !important; }
 .hd, .tt, .lbl, .empty, .fine, th, .args { color: var(--gr) !important; }
+/* Dropdown option lists and block labels: always paper and ink, whatever the browser's colour scheme. */
+.gradio-container ul.options { background: var(--card) !important; border: 1px solid var(--hair) !important; box-shadow: 0 8px 24px rgba(23,24,21,.12) !important; }
+.gradio-container ul.options li, .gradio-container ul.options li * { color: var(--ink) !important; background: transparent; }
+.gradio-container ul.options li:hover, .gradio-container ul.options li.active, .gradio-container ul.options li.selected { background: var(--min) !important; }
+.gradio-container [data-testid="block-label"], .gradio-container .block-label { background: var(--min) !important; color: var(--ink) !important; border: none !important; }
+.gradio-container [data-testid="block-label"] *, .gradio-container .block-label * { color: var(--ink) !important; }
 .banner.live { color: var(--chr) !important; } .banner.recorded { color: var(--ver-t) !important; }
 .verdict b { color: var(--ver) !important; } mark.ack { color: var(--ink) !important; }
 .hero .red { color: var(--ver) !important; } .lede a { color: var(--ver-t) !important; }
@@ -237,7 +249,7 @@ Pick <i>Gate demo</i> (no GPU, a few seconds) to see the same reply-trusting scr
 
 def build_ui(stream=model_stream) -> gr.Blocks:
     tasks = task_choices()
-    with gr.Blocks(theme=THEME, css=CSS, title="ActionProof live") as demo:
+    with gr.Blocks(theme=THEME, css=CSS, title="ActionProof live", js=FORCE_LIGHT_JS) as demo:
         gr.HTML(INTRO)
         state = gr.State({"runs": 0})
         with gr.Row():
@@ -257,7 +269,8 @@ def build_ui(stream=model_stream) -> gr.Blocks:
                 ban_r = gr.HTML()
                 right = gr.HTML()
         reveal = gr.HTML()
-        export = gr.File(label="This run as JSON (run id, model, revision, decoding, calls, replies, verdicts)")
+        export = gr.File(label="This run as JSON (run id, model, revision, decoding, calls, replies, verdicts)",
+                         visible=False)
 
         def go(agent_key, task_label, reality_key, st):
             try:
@@ -267,10 +280,11 @@ def build_ui(stream=model_stream) -> gr.Blocks:
                         fd, path = tempfile.mkstemp(prefix=f"actionproof-{ui['export']['run_id']}-", suffix=".json")
                         with os.fdopen(fd, "w") as f:
                             json.dump(ui["export"], f, indent=1, default=str)
-                    yield (ui["banner_l"], ui["left"], ui["banner_r"], ui["right"], ui["reveal"], ui["status"], st, path)
+                    yield (ui["banner_l"], ui["left"], ui["banner_r"], ui["right"], ui["reveal"], ui["status"], st,
+                           gr.update(value=path, visible=path is not None))
             except Exception as e:  # a failure with no recording to fall back on
                 yield ("", "", "", "", "", f"Run failed: {type(e).__name__}: {e}. Scripted agents need no GPU; "
-                       f"the replay site has every recorded episode.", st, None)
+                       f"the replay site has every recorded episode.", st, gr.update(value=None, visible=False))
 
         run.click(go, [agent, task, reality, state], [ban_l, left, ban_r, right, reveal, status, state, export],
                   concurrency_limit=1, concurrency_id="run")
